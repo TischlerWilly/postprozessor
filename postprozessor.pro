@@ -29,6 +29,9 @@ HEADERS  += mainwindow.h \
     eigeneFunktionen/myfunktion.h \
     eigeneFunktionen/runden.h \
     eigeneFunktionen/text.h \
-    eigeneFunktionen/umwandeln.h
+    eigeneFunktionen/umwandeln.h \
+    ToDo.h \
+    Definitionen/dateinamen.h \
+    Definitionen/werkzeug.h
 
 FORMS    += mainwindow.ui
