@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     eigeneFunktionen/myfunktion.cpp \
     eigeneFunktionen/runden.cpp \
     eigeneFunktionen/text.cpp \
-    eigeneFunktionen/umwandeln.cpp
+    eigeneFunktionen/umwandeln.cpp \
+    KlassenWst/werkstueck.cpp \
+    KlassenWst/werkstuecke.cpp
 
 HEADERS  += mainwindow.h \
     allgemKlassen/formel.h \
@@ -32,6 +34,8 @@ HEADERS  += mainwindow.h \
     eigeneFunktionen/umwandeln.h \
     ToDo.h \
     Definitionen/dateinamen.h \
-    Definitionen/werkzeug.h
+    Definitionen/werkzeug.h \
+    KlassenWst/werkstueck.h \
+    KlassenWst/werkstuecke.h
 
 FORMS    += mainwindow.ui

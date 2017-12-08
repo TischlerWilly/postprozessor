@@ -402,6 +402,66 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
     ui->plainTextEdit_eldungen->setPlainText(vortext);
 }
 
+void MainWindow::on_pushButton_start_clicked()
+{
+    wste.clear();
+    dateien_erfassen();
+    QString fmc = FMC;
+    QString fmcA = FMC_PRGA;
+    QString fmcB = FMC_PRGB;
+
+    for(uint i=1; i<=dateien_alle.zeilenanzahl() ;i++)
+    {
+        if(dateien_alle.zeile(i).right(fmc.length()) == FMC)
+        {
+            QString nam_ohn_end = dateien_alle.zeile(i).left(dateien_alle.zeile(i).length()-fmc.length());
+
+            if(nam_ohn_end.right(fmcA.length()) == FMC_PRGA)
+            {
+                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcA.length());
+                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
+                {
+                    QMessageBox mb;
+                    mb.setText("Das Teil gibt es bereits");
+                    mb.exec();
+                    //Bearbeitungen auf der Wst-Unterseite importieren
+
+
+
+                }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+                {
+                    //Bearbeitungen auf der Wst-Obererseite importieren
+
+
+
+                }
+            }else if(nam_ohn_end.right(fmcB.length()) == FMC_PRGB)
+            {
+                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcB.length());
+                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
+                {
+                    QMessageBox mb;
+                    mb.setText("Das Teil gibt es bereits");
+                    mb.exec();
+                    //Bearbeitungen auf der Wst-Unterseite importieren
+
+
+
+                }
+            }else//Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+            {
+                //Bearbeitungen auf der Wst-Obererseite importieren
+
+
+
+            }
+
+
+        }
+    }
+
+}
+
 //-----------------------------------------------------------------------
 void MainWindow::dateien_erfassen()
 {
@@ -512,6 +572,8 @@ QString MainWindow::get_wkz_vorschub(text_zeilenweise wkz_magazin, QString wkz_n
     }
     return returntext;
 }
+
+
 
 
 

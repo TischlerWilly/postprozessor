@@ -15,6 +15,7 @@
 
 #include "eigeneFunktionen/text.h"
 #include "allgemKlassen/text_zeilenweise.h"
+#include "KlassenWst/werkstuecke.h"
 
 namespace Ui {
 class MainWindow;
@@ -41,12 +42,10 @@ private slots:
     void on_radioButton_drehung_180_toggled(bool checked);
     void on_radioButton_drehung_270_toggled(bool checked);
     void on_radioButton_drehung_autom_toggled(bool checked);
-
     void on_actionWerkzeug_ganx_anzeigen_triggered();
-
     void on_actionInfo_triggered();
-
     void on_pushButton_dateien_auflisten_clicked();
+    void on_pushButton_start_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -68,6 +67,7 @@ private:
     //Variablen:
     QString tz; //Trennzeichen für Pfade (Linux '/'  Windows '\')
     text_zeilenweise dateien_alle;
+    werkstuecke wste;
     //double bezugsmass;
 
     //Funktionen:

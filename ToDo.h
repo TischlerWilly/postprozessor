@@ -3,7 +3,15 @@
 
 /*
 
+hier muss ich weiter machen:
+void MainWindow::on_pushButton_start_clicked()
 
+
+
+
+Benötigte Funktionen:
+
+-->identische Bearbeitungen beim Import unterdrücken
 
 
 
