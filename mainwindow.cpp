@@ -401,7 +401,6 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
 */
     ui->plainTextEdit_eldungen->setPlainText(vortext);
 }
-
 void MainWindow::on_pushButton_start_clicked()
 {
     wste.clear();
@@ -431,9 +430,18 @@ void MainWindow::on_pushButton_start_clicked()
                 }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
                 {
                     //Bearbeitungen auf der Wst-Obererseite importieren
+                    QString pfad = ui->lineEdit_quelle->text() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
 
 
-
+                    }
                 }
             }else if(nam_ohn_end.right(fmcB.length()) == FMC_PRGB)
             {
@@ -447,19 +455,29 @@ void MainWindow::on_pushButton_start_clicked()
 
 
 
+                }else//Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+                {
+                    //Bearbeitungen auf der Wst-Obererseite importieren
+                    QString pfad = ui->lineEdit_quelle->text() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
+
+                        //ui->plainTextEdit_eldungen->setPlainText(pfad);//nur erst einmal zum Testen
+                        //ui->plainTextEdit_eldungen->setPlainText(inhalt);//nur erst einmal zum Testen
+                    }
                 }
-            }else//Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+            }else //Ober und Unterseite sind bereits in einem Programm zusammengeführt
             {
-                //Bearbeitungen auf der Wst-Obererseite importieren
-
-
-
+                //Dieser Fall wird vorerst nicht berücksichtigt
             }
-
-
         }
     }
-
 }
 
 //-----------------------------------------------------------------------

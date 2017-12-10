@@ -36,6 +36,7 @@ HEADERS  += mainwindow.h \
     Definitionen/dateinamen.h \
     Definitionen/werkzeug.h \
     KlassenWst/werkstueck.h \
-    KlassenWst/werkstuecke.h
+    KlassenWst/werkstuecke.h \
+    Definitionen/def_fmc.h
 
 FORMS    += mainwindow.ui
