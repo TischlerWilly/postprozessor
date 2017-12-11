@@ -2,7 +2,13 @@
 #define WERKSTUECK_H
 
 #include <QString>
+
+#include "Definitionen/werkzeug.h"
+
 #include "../eigeneFunktionen/umwandeln.h"
+#include "../Definitionen/def_fmc.h"
+#include "../allgemKlassen/text_zeilenweise.h"
+
 
 class werkstueck
 {
@@ -41,10 +47,19 @@ public:
         return double_to_qstring(dicke);
     }
 
+    QString get_fmc(text_zeilenweise werkzeugmagazin);
+    QString get_ganx(text_zeilenweise werkzeugmagazin);
+
 private:
+    //Variabeln:
     double laenge;
     double breite;
     double dicke;
+
+    //Funktionen:
+    QString get_wkz_nummer(text_zeilenweise wkz_magazin, QString wkz_typ, double dm = 0, double bearbeitungstiefe = 0);
+    QString get_wkz_dm(text_zeilenweise wkz_magazin, QString wkz_nr);
+    QString get_wkz_vorschub(text_zeilenweise wkz_magazin, QString wkz_nr);
 
 
 };

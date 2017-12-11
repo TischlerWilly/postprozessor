@@ -4,6 +4,7 @@
 
 #define INIFILE             "ascii_assistent.ini"
 #define WERKZEUGDATEI_GANX  "wkz_magazin_ganx.csv"
+#define WERKZEUGDATEI_FMC   "wkz_magazin_fmc.csv"
 
 #define GANX        ".ganx"
 

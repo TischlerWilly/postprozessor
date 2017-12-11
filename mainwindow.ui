@@ -86,7 +86,7 @@
      <item>
       <widget class="QCheckBox" name="checkBox_quelldat_erhalt">
        <property name="text">
-        <string>Quelldateien erhelten</string>
+        <string>Quelldateien erhalten</string>
        </property>
       </widget>
      </item>
@@ -197,7 +197,7 @@
       <x>770</x>
       <y>100</y>
       <width>111</width>
-      <height>51</height>
+      <height>75</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -212,6 +212,13 @@
       <widget class="QCheckBox" name="checkBox_af_ganx">
        <property name="text">
         <string>*.ganx</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_af_fmc">
+       <property name="text">
+        <string>*.fmc</string>
        </property>
       </widget>
      </item>
@@ -232,6 +239,7 @@
      <string>Werkzeug</string>
     </property>
     <addaction name="actionWerkzeug_ganx_anzeigen"/>
+    <addaction name="actionWerkzeug_fmc_anzeigen"/>
    </widget>
    <widget class="QMenu" name="menuExtras">
     <property name="title">
@@ -250,6 +258,11 @@
   <action name="actionInfo">
    <property name="text">
     <string>Info</string>
+   </property>
+  </action>
+  <action name="actionWerkzeug_fmc_anzeigen">
+   <property name="text">
+    <string>Werkzeug fmc anzeigen</string>
    </property>
   </action>
  </widget>

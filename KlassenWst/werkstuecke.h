@@ -20,6 +20,13 @@ public:
     bool neu(QString Werkstueckname, QString Quellformat);
     void clear();
     bool import_fmc_oberseite(QString Werkstueckname, QString importtext);
+    inline uint anzahl()
+    {
+        return namen.zeilenanzahl();
+    }
+
+    werkstueck get_wst(uint index);
+    QString get_name(uint index);
 
 private:
     //Variabeln:

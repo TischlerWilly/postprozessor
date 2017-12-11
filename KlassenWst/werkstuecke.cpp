@@ -65,6 +65,27 @@ QString werkstuecke::wert_nach_istgleich(QString text)
         return "";
     }
 }
+werkstueck werkstuecke::get_wst(uint index)
+{
+    if(index > 0 && index <= namen.zeilenanzahl())
+    {
+        return wste.at(index-1);
+    }else
+    {
+        werkstueck w;   //leeres Wst
+        return w;
+    }
+}
+QString werkstuecke::get_name(uint index)
+{
+    if(index > 0 && index <= namen.zeilenanzahl())
+    {
+        return namen.zeile(index);
+    }else
+    {
+        return "";
+    }
+}
 
 //---------------------------------------------------------------Import-Funktionen:
 bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtext)
@@ -115,7 +136,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
     return 0;
 }
 
-//---------------------------------------------------------------Export-Funktionen:
+
 
 
 
