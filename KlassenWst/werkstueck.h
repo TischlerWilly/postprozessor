@@ -8,6 +8,7 @@
 #include "../eigeneFunktionen/umwandeln.h"
 #include "../Definitionen/def_fmc.h"
 #include "../allgemKlassen/text_zeilenweise.h"
+#include "bohrung.h"
 
 
 class werkstueck
@@ -21,6 +22,7 @@ public:
     void set_breite(QString b);
     void set_dicke(double d);
     void set_dicke(QString d);
+    void neue_bearbeitung(QString text);
 
     inline double get_laenge() const
     {
@@ -47,14 +49,15 @@ public:
         return double_to_qstring(dicke);
     }
 
-    QString get_fmc(text_zeilenweise werkzeugmagazin);
-    QString get_ganx(text_zeilenweise werkzeugmagazin);
+    QString get_fmc(text_zeilenweise werkzeugmagazin, QString drehwinkel = "0");
+    QString get_ganx(text_zeilenweise werkzeugmagazin, QString drehwinkel = "0");
 
 private:
     //Variabeln:
     double laenge;
     double breite;
     double dicke;
+    text_zeilenweise bearbeitungen;
 
     //Funktionen:
     QString get_wkz_nummer(text_zeilenweise wkz_magazin, QString wkz_typ, double dm = 0, double bearbeitungstiefe = 0);

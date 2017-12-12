@@ -40,9 +40,13 @@ void werkstueck::set_dicke(QString d)
 {
     set_dicke(d.toDouble());
 }
+void werkstueck::neue_bearbeitung(QString text)
+{
+    bearbeitungen.zeilen_anhaengen(text);
+}
 
 //-------------------------------------------------------------------------Export:
-QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin)
+QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString drehwinkel)
 {
     QString msg;
 
@@ -56,7 +60,7 @@ QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin)
 
     return msg;
 }
-QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin)
+QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString drehwinkel)
 {
     QString msg;
 

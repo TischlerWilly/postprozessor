@@ -333,7 +333,7 @@ void MainWindow::on_pushButton_ziel_clicked()
     {
         verzeichnis_ziel = "./";
     }
-    QString tmp = QFileDialog::getExistingDirectory(this, tr("Zielverzeichniss ascii"), verzeichnis_ziel);
+    QString tmp = QFileDialog::getExistingDirectory(this, tr("Zielverzeichniss"), verzeichnis_ziel);
     if(!tmp.isEmpty())
     {
         verzeichnis_ziel = tmp;
@@ -586,7 +586,7 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
             }else
             {
-                QString tmp = wste.get_wst(i).get_ganx(wkz_magazin_ganx);
+                QString tmp = wste.get_wst(i).get_ganx(wkz_magazin_ganx, drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
             }
             datei.close();
@@ -602,7 +602,7 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
             }else
             {
-                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc);
+                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
             }
             datei.close();

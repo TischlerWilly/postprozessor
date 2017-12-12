@@ -66,7 +66,7 @@ private:
     QString erzeuge_fmc;            // "ja" | "nein"
 
     //Radio Buttons:
-    QString drehung_des_bauteils; // 0 | 90 | 180 | AUTO
+    QString drehung_des_bauteils; // 0 | 90 | 180 | 270 | AUTO
 
 
     //Variablen:

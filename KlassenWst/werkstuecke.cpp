@@ -114,9 +114,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 {
                     if(zeile.contains(FMC_PRGKOPF_LAENGE))
                     {
-                        werkstueck w = wste.at(i-1);
+                        werkstueck w = wste.at(index-1);
                         w.set_laenge(wert_nach_istgleich(zeile));
-                        wste.replace(i-1, w);
+                        wste.replace(index-1, w);
                     }else if(zeile.contains(FMC_PRGKOPF_BREITE))
                     {
                         werkstueck w = wste.at(i-1);
@@ -130,6 +130,41 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }
                 }
             }
+        }else if(zeile.contains(FMC_BOHR_DM))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_OBSEI);
+
+            for(uint ii=i; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(zeile == "\n")//Ende des Abschnittes
+                {
+                    i=ii;
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_BOHR_DM_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_BOHR_DM_DM))
+                    {
+                        bo.set_dm(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_BOHR_DM_TIEFE))
+                    {
+                        bo.set_tiefe(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_BOHR_DM_X))
+                    {
+                        bo.set_x(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_BOHR_DM_Y))
+                    {
+                        bo.set_y(wert_nach_istgleich(zeile));
+                    }
+                }
+            }
+            werkstueck w = wste.at(index-1);
+            w.neue_bearbeitung(bo.get_text());
+            wste.replace(index-1, w);
         }
     }
 
