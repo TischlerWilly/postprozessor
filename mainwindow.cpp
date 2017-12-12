@@ -23,6 +23,7 @@ void MainWindow::setup()
 {
     bool inifile_gefunden = false;
     bool wkz_ganx_gefunden = false;
+    bool wkz_fmc_gefunden = false;
     QDir programmordner("./");
     QStringList ordnerinhalt;
     ordnerinhalt = programmordner.entryList(QDir::Files);
@@ -36,6 +37,10 @@ void MainWindow::setup()
         if(name.contains(WERKZEUGDATEI_GANX))
         {
             wkz_ganx_gefunden = true;
+        }
+        if(name.contains(WERKZEUGDATEI_FMC))
+        {
+            wkz_fmc_gefunden = true;
         }
     }
     if(inifile_gefunden == false)
@@ -62,6 +67,14 @@ void MainWindow::setup()
 
             ui->radioButton_drehung_0->setChecked(true);
             file.write("drehung_des_bauteils:0");
+            file.write("\n");
+
+            ui->checkBox_af_ganx->setChecked(false);
+            file.write("erzeuge_ganx:nein");
+            file.write("\n");
+
+            ui->checkBox_af_fmc->setChecked(false);
+            file.write("erzeuge_fmc:nein");
             file.write("\n");
 
         }
@@ -114,6 +127,16 @@ void MainWindow::setup()
                     }else
                     {
                         ui->checkBox_af_ganx->setChecked(false);
+                    }
+                }else if(zeile.contains("erzeuge_fmc:"))
+                {
+                    erzeuge_fmc = text_mitte(zeile, "erzeuge_fmc:", "\n");
+                    if(erzeuge_fmc == "ja")
+                    {
+                        ui->checkBox_af_fmc->setChecked(true);
+                    }else
+                    {
+                        ui->checkBox_af_fmc->setChecked(false);
                     }
                 }else if(zeile.contains("drehung_des_bauteils:"))
                 {
@@ -177,6 +200,44 @@ void MainWindow::setup()
         }
         file.close();
     }
+    if(wkz_fmc_gefunden == false)
+    {
+        QFile file(WERKZEUGDATEI_FMC);
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+        }else
+        {
+            //----------------------------------------------Tabellenkopf:
+            file.write("Typ");
+            file.write("\t");
+            file.write("Nummer");
+            file.write("\t");
+            file.write("Durchmesser");
+            file.write("\t");
+            file.write("Nutzlaenge");
+            file.write("\t");
+            file.write("Vorschub");
+            file.write("\t");
+            file.write("Zustellmass");
+            file.write("\t");
+            file.write(" ");
+
+            //file.write("\n");
+        }
+        file.close();
+    }else
+    {
+        QFile file(WERKZEUGDATEI_FMC);
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+        }else
+        {
+            wkz_magazin_fmc.set_text(file.readAll());
+        }
+        file.close();
+    }
 }
 
 void MainWindow::schreibe_ini()
@@ -208,6 +269,10 @@ void MainWindow::schreibe_ini()
 
         file.write("erzeuge_ganx:");
         file.write(erzeuge_ganx.toUtf8());
+        file.write("\n");
+
+        file.write("erzeuge_fmc:");
+        file.write(erzeuge_fmc.toUtf8());
         file.write("\n");
 
         //-------------------------------------------Radio-Buttons:
@@ -311,6 +376,17 @@ void MainWindow::on_checkBox_af_ganx_stateChanged()
     }
     schreibe_ini();
 }
+void MainWindow::on_checkBox_af_fmc_stateChanged()
+{
+    if(ui->checkBox_af_fmc->isChecked() == true)
+    {
+        erzeuge_fmc = "ja";
+    }else
+    {
+        erzeuge_fmc = "nein";
+    }
+    schreibe_ini();
+}
 
 //-----------------------------------------------------------------------Radio-Buttons:
 void MainWindow::on_radioButton_drehung_0_toggled(bool checked)
@@ -368,6 +444,10 @@ void MainWindow::on_actionWerkzeug_ganx_anzeigen_triggered()
 {
     ui->plainTextEdit_eldungen->setPlainText(wkz_magazin_ganx.get_text());
 }
+void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
+{
+    ui->plainTextEdit_eldungen->setPlainText(wkz_magazin_fmc.get_text());
+}
 
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
@@ -401,6 +481,134 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
 */
     ui->plainTextEdit_eldungen->setPlainText(vortext);
 }
+void MainWindow::on_pushButton_start_clicked()
+{
+    wste.clear();
+    dateien_erfassen();
+    QString fmc = FMC;
+    QString fmcA = FMC_PRGA;
+    QString fmcB = FMC_PRGB;
+
+    //Dateien einlesen:
+    for(uint i=1; i<=dateien_alle.zeilenanzahl() ;i++)
+    {
+        if(dateien_alle.zeile(i).right(fmc.length()) == FMC)
+        {
+            QString nam_ohn_end = dateien_alle.zeile(i).left(dateien_alle.zeile(i).length()-fmc.length());
+
+            if(nam_ohn_end.right(fmcA.length()) == FMC_PRGA)
+            {
+                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcA.length());
+                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
+                {
+                    QMessageBox mb;
+                    mb.setText("Das Teil gibt es bereits");
+                    mb.exec();
+                    //Bearbeitungen auf der Wst-Unterseite importieren
+
+
+
+                }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+                {
+                    //Bearbeitungen auf der Wst-Obererseite importieren
+                    QString pfad = ui->lineEdit_quelle->text() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
+
+
+                    }
+                }
+            }else if(nam_ohn_end.right(fmcB.length()) == FMC_PRGB)
+            {
+                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcB.length());
+                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
+                {
+                    QMessageBox mb;
+                    mb.setText("Das Teil gibt es bereits");
+                    mb.exec();
+                    //Bearbeitungen auf der Wst-Unterseite importieren
+
+
+
+                }else//Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+                {
+                    //Bearbeitungen auf der Wst-Obererseite importieren
+                    QString pfad = ui->lineEdit_quelle->text() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
+
+                        //ui->plainTextEdit_eldungen->setPlainText(pfad);//nur erst einmal zum Testen
+                        //ui->plainTextEdit_eldungen->setPlainText(inhalt);//nur erst einmal zum Testen
+                    }
+                }
+            }else //Ober und Unterseite sind bereits in einem Programm zusammengeführt
+            {
+                //Dieser Fall wird vorerst nicht berücksichtigt
+            }
+        }
+    }
+
+    //Datein exportieren:
+    QDir dir_ganx;
+    QString pfad_ganx = verzeichnis_ziel + QDir::separator() + "ganx";
+    if(erzeuge_ganx == "ja")
+    {
+        dir_ganx.mkpath(pfad_ganx);
+    }
+    QDir dir_fmc;
+    QString pfad_fmc = verzeichnis_ziel + QDir::separator() + "fmc";
+    if(erzeuge_fmc == "ja")
+    {
+        dir_fmc.mkpath(pfad_fmc);
+    }
+    for(uint i=1; i<=wste.anzahl() ;i++)
+    {
+        if(erzeuge_ganx == "ja")
+        {
+            QString teilname = wste.get_name(i);
+            teilname += GANX;
+
+            QFile datei(pfad_ganx + QDir::separator() + teilname);
+            if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
+            {
+                QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            }else
+            {
+                QString tmp = wste.get_wst(i).get_ganx(wkz_magazin_ganx);
+                datei.write(tmp.toUtf8());
+            }
+            datei.close();
+        }
+        if(erzeuge_fmc == "ja")
+        {
+            QString teilname = wste.get_name(i);
+            teilname += FMC;
+
+            QFile datei(pfad_fmc + QDir::separator() + teilname);
+            if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
+            {
+                QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            }else
+            {
+                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc);
+                datei.write(tmp.toUtf8());
+            }
+            datei.close();
+        }
+    }
+}
 
 //-----------------------------------------------------------------------
 void MainWindow::dateien_erfassen()
@@ -417,101 +625,11 @@ void MainWindow::dateien_erfassen()
     dateien_alle = tz;
 }
 
-QString MainWindow::get_wkz_nummer(text_zeilenweise wkz_magazin, QString wkz_typ, double dm, double bearbeitungstiefe)
-{
-    QString returntext = "";
-    text_zeilenweise zeile;
-    zeile.set_trennzeichen('\t');
-    double wkz_dm_tmp = 0;
 
-    for(uint i = 2; i<=wkz_magazin.zeilenanzahl() ;i++)
-    {
-        zeile.set_text(wkz_magazin.zeile(i));
-        if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
-        {
-            if(zeile.zeile(3).toDouble() == dm)
-            {
-                if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
-                {
-                    returntext = zeile.zeile(2);
-                }
-            }
-        }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_SAEGE)  )
-        {
-            returntext = zeile.zeile(2);
-        }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
-        {
-            double wkz_dm = zeile.zeile(3).toDouble();
-            if(  (wkz_dm <= dm-4)  &&  (wkz_dm > wkz_dm_tmp)  )
-            {
-                if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
-                {
-                    wkz_dm_tmp = wkz_dm;
-                    returntext = zeile.zeile(2);
-                }
-            }
-        }
-    }
-    if(returntext.isEmpty())
-    {
-        wkz_dm_tmp = 0;
-        for(uint i = 2; i<=wkz_magazin.zeilenanzahl() ;i++)
-        {
-            zeile.set_text(wkz_magazin.zeile(i));
-            if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
-            {
-                double wkz_dm = zeile.zeile(3).toDouble();
-                if(  (wkz_dm <= dm-1)  &&  (wkz_dm > wkz_dm_tmp)  )
-                {
-                    if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
-                    {
-                        wkz_dm_tmp = wkz_dm;
-                        returntext = zeile.zeile(2);
-                    }
-                }
-            }
-        }
-    }
-    return returntext;
-}
 
-QString MainWindow::get_wkz_dm(text_zeilenweise wkz_magazin, QString wkz_nr)
-{
-    QString returntext = "";
-    text_zeilenweise zeile;
-    zeile.set_trennzeichen('\t');
 
-    for(uint i = 2; i<=wkz_magazin.zeilenanzahl() ;i++)
-    {
-        zeile.set_text(wkz_magazin.zeile(i));
 
-        if(zeile.zeile(2) == wkz_nr)
-        {
-            returntext = zeile.zeile(3);
-        }
 
-    }
-    return returntext;
-}
-
-QString MainWindow::get_wkz_vorschub(text_zeilenweise wkz_magazin, QString wkz_nr)
-{
-    QString returntext = "";
-    text_zeilenweise zeile;
-    zeile.set_trennzeichen('\t');
-
-    for(uint i = 2; i<=wkz_magazin.zeilenanzahl() ;i++)
-    {
-        zeile.set_text(wkz_magazin.zeile(i));
-
-        if(zeile.zeile(2) == wkz_nr)
-        {
-            returntext = zeile.zeile(5);
-        }
-
-    }
-    return returntext;
-}
 
 
 

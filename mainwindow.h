@@ -11,10 +11,11 @@
 #include <QFileDialog>
 
 #include "Definitionen/dateinamen.h"
-#include "Definitionen/werkzeug.h"
+
 
 #include "eigeneFunktionen/text.h"
 #include "allgemKlassen/text_zeilenweise.h"
+#include "KlassenWst/werkstuecke.h"
 
 namespace Ui {
 class MainWindow;
@@ -41,16 +42,18 @@ private slots:
     void on_radioButton_drehung_180_toggled(bool checked);
     void on_radioButton_drehung_270_toggled(bool checked);
     void on_radioButton_drehung_autom_toggled(bool checked);
-
     void on_actionWerkzeug_ganx_anzeigen_triggered();
-
     void on_actionInfo_triggered();
-
     void on_pushButton_dateien_auflisten_clicked();
+    void on_pushButton_start_clicked();
+    void on_checkBox_af_fmc_stateChanged();
+
+    void on_actionWerkzeug_fmc_anzeigen_triggered();
 
 private:
     Ui::MainWindow *ui;
     text_zeilenweise wkz_magazin_ganx;
+    text_zeilenweise wkz_magazin_fmc;
 
     //Pfade:
     QString verzeichnis_quelle;
@@ -60,6 +63,7 @@ private:
     QString quelldateien_erhalten;  // "ja" | "nein"
     QString std_namen;              // "ja" | "nein"
     QString erzeuge_ganx;           // "ja" | "nein"
+    QString erzeuge_fmc;            // "ja" | "nein"
 
     //Radio Buttons:
     QString drehung_des_bauteils; // 0 | 90 | 180 | AUTO
@@ -68,15 +72,14 @@ private:
     //Variablen:
     QString tz; //Trennzeichen für Pfade (Linux '/'  Windows '\')
     text_zeilenweise dateien_alle;
+    werkstuecke wste;
     //double bezugsmass;
 
     //Funktionen:
     void setup();
     void schreibe_ini();
     void dateien_erfassen();
-    QString get_wkz_nummer(text_zeilenweise wkz_magazin, QString wkz_typ, double dm = 0, double bearbeitungstiefe = 0);
-    QString get_wkz_dm(text_zeilenweise wkz_magazin, QString wkz_nr);
-    QString get_wkz_vorschub(text_zeilenweise wkz_magazin, QString wkz_nr);
+
 
 
 
