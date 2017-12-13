@@ -47,8 +47,9 @@ private slots:
     void on_pushButton_dateien_auflisten_clicked();
     void on_pushButton_start_clicked();
     void on_checkBox_af_fmc_stateChanged();
-
     void on_actionWerkzeug_fmc_anzeigen_triggered();
+    void on_checkBox_af_eigen_stateChanged();
+    void on_actionStandard_Namen_anzeigen_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -64,6 +65,7 @@ private:
     QString std_namen;              // "ja" | "nein"
     QString erzeuge_ganx;           // "ja" | "nein"
     QString erzeuge_fmc;            // "ja" | "nein"
+    QString erzeuge_eigenes_format; // "ja" | "nein"
 
     //Radio Buttons:
     QString drehung_des_bauteils; // 0 | 90 | 180 | 270 | AUTO
@@ -73,6 +75,8 @@ private:
     QString tz; //Trennzeichen für Pfade (Linux '/'  Windows '\')
     text_zeilenweise dateien_alle;
     werkstuecke wste;
+    text_zeilenweise namen_std_vor;         //Standard-Dateinamen von CAD
+    text_zeilenweise namen_std_nach;        //Standard-Dateinamen eigen
     //double bezugsmass;
 
     //Funktionen:

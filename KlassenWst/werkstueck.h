@@ -51,6 +51,7 @@ public:
 
     QString get_fmc(text_zeilenweise werkzeugmagazin, QString drehwinkel = "0");
     QString get_ganx(text_zeilenweise werkzeugmagazin, QString drehwinkel = "0");
+    QString get_eigenses_format();
 
 private:
     //Variabeln:

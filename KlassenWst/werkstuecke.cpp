@@ -98,36 +98,33 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
     }
     text_zeilenweise tz;
     tz.set_text(importtext);
+
+    werkstueck w = wste.at(index-1);
+
     for(uint i=1; i<=tz.zeilenanzahl() ;i++)
     {
         QString zeile = tz.zeile(i);
         if(zeile.contains(FMC_PRGKOPF))
         {
-            for(uint ii=i; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
             {
                 zeile = tz.zeile(ii);
-                if(zeile == "\n")//Ende des Programmpopfes
+                if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii;
                     break;
                 }else
                 {
                     if(zeile.contains(FMC_PRGKOPF_LAENGE))
-                    {
-                        werkstueck w = wste.at(index-1);
+                    { 
                         w.set_laenge(wert_nach_istgleich(zeile));
-                        wste.replace(index-1, w);
                     }else if(zeile.contains(FMC_PRGKOPF_BREITE))
                     {
-                        werkstueck w = wste.at(i-1);
                         w.set_breite(wert_nach_istgleich(zeile));
-                        wste.replace(i-1, w);
                     }else if(zeile.contains(FMC_PRGKOPF_DICKE))
                     {
-                        werkstueck w = wste.at(i-1);
                         w.set_dicke(wert_nach_istgleich(zeile));
-                        wste.replace(i-1, w);
-                    }
+                    }                    
                 }
             }
         }else if(zeile.contains(FMC_BOHR_DM))
@@ -135,15 +132,16 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             bohrung bo;
             bo.set_bezug(WST_BEZUG_OBSEI);
 
-            for(uint ii=i; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
             {
                 zeile = tz.zeile(ii);
-                if(zeile == "\n")//Ende des Abschnittes
+                if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii;
+                    w.neue_bearbeitung(bo.get_text());
                     break;
                 }else
-                {
+                {                    
                     if(zeile.contains(FMC_BOHR_DM_AFB))
                     {
                         bo.set_afb(wert_nach_istgleich(zeile));
@@ -162,16 +160,73 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }
                 }
             }
-            werkstueck w = wste.at(index-1);
-            w.neue_bearbeitung(bo.get_text());
-            wste.replace(index-1, w);
         }
     }
+
+    wste.replace(index-1, w);
 
     return 0;
 }
 
+bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importtext)
+{
+    uint index = get_index(Werkstueckname);
+    if(index == 0)
+    {
+        return 1;   //Die Bearbeitung soll nur auf die Unterseite importiert werden,
+                    //wenn bereits die Bearbeitung auf der Oberseite importiert wurde
+    }
+    text_zeilenweise tz;
+    tz.set_text(importtext);
 
+    werkstueck w = wste.at(index-1);
+
+    for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+    {
+        QString zeile = tz.zeile(i);
+
+        if(zeile.contains(FMC_BOHR_DM))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_UNSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(bo.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_BOHR_DM_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_BOHR_DM_DM))
+                    {
+                        bo.set_dm(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_BOHR_DM_TIEFE))
+                    {
+                        bo.set_tiefe(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_BOHR_DM_X))
+                    {
+                        double x = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        x = w.get_laenge()-x;
+                        bo.set_x(x);
+                    }else if(zeile.contains(FMC_BOHR_DM_Y))
+                    {
+                        bo.set_y(wert_nach_istgleich(zeile));
+                    }
+                }
+            }
+        }
+    }
+
+    wste.replace(index-1, w);
+
+    return 0;
+}
 
 
 

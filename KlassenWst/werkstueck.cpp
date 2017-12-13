@@ -68,6 +68,27 @@ QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString drehwinke
 
     return msg;
 }
+QString werkstueck::get_eigenses_format()
+{
+    QString msg;
+
+    //Programmkopf:
+    msg = "L: ";
+    msg += get_laenge_qstring();
+    msg += "\n";
+    msg += "B: ";
+    msg += get_breite_qstring();
+    msg += "\n";
+    msg += "D: ";
+    msg += get_dicke_qstring();
+    msg += "\n";
+    msg += "---------------";
+    msg += "\n";
+
+    msg += bearbeitungen.get_text();
+
+    return msg;
+}
 
 //-------------------------------------------------------------------------Werkzeug:
 QString werkstueck::get_wkz_nummer(text_zeilenweise wkz_magazin, QString wkz_typ, double dm, double bearbeitungstiefe)

@@ -9,6 +9,8 @@ void MainWindow::on_pushButton_start_clicked()
  -->QString werkstueck::get_fmc()
  -->QString werkstueck::get_ganx()
 
+Funktion zum tauschen der std-Dateinamen schreiben
+
 
 
 

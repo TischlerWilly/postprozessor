@@ -9,8 +9,8 @@
 #define WST_BEZUG_OB        "bez_ob"        //Bezugsfläche Wst-Schmalfläche oben
 #define WST_BEZUG_UN        "bez_un"        //Bezugsfläche Wst-Schmalfläche unten
 
-#define TRENNZ_BEARB_PARAM  '#'             //Trennzeichen zur Trennung der einzelnen Parameter einer Bearbeitung
-#define TRENNZ_BEARB_PARAM_ "#"
+#define TRENNZ_BEARB_PARAM  '\t'             //Trennzeichen zur Trennung der einzelnen Parameter einer Bearbeitung
+#define TRENNZ_BEARB_PARAM_ "\t"
 
 #define BEARBART_BOHR       "bohrung"       //Bearbeitungsart Bohrung
 /*
