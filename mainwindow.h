@@ -50,6 +50,7 @@ private slots:
     void on_actionWerkzeug_fmc_anzeigen_triggered();
     void on_checkBox_af_eigen_stateChanged();
     void on_actionStandard_Namen_anzeigen_triggered();
+    void on_pushButton_zielordner_leeren_clicked();
 
 private:
     Ui::MainWindow *ui;

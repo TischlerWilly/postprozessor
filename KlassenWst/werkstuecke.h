@@ -26,6 +26,7 @@ public:
     {
         return namen.zeilenanzahl();
     }
+    void stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
 
     werkstueck get_wst(uint index);
     QString get_name(uint index);

@@ -531,6 +531,8 @@ void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     if(verzeichnis_quelle.isEmpty())
     {
         QMessageBox::warning(this,"Abbruch","Quellverzeichniss nicht angegeben!",QMessageBox::Ok);
@@ -559,9 +561,13 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
     }
 */
     ui->plainTextEdit_eldungen->setPlainText(vortext);
+
+    QApplication::restoreOverrideCursor();
 }
 void MainWindow::on_pushButton_start_clicked()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     wste.clear();
     dateien_erfassen();
     QString fmc = FMC;
@@ -590,6 +596,11 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
                     }
                 }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
                 {
@@ -603,6 +614,11 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
                     }
                 }
             }else if(nam_ohn_end.right(fmcB.length()) == FMC_PRGB)
@@ -620,6 +636,11 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
                     }
                 }else//Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
                 {
@@ -633,6 +654,11 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
                     }
                 }
             }else //Ober und Unterseite sind bereits in einem Programm zusammengeführt
@@ -640,6 +666,13 @@ void MainWindow::on_pushButton_start_clicked()
                 //Dieser Fall wird vorerst nicht berücksichtigt
             }
         }
+    }
+
+
+
+    if(std_namen == "ja")
+    {
+        wste.stdnamen(namen_std_vor, namen_std_nach);
     }
 
     QString msg;
@@ -721,6 +754,12 @@ void MainWindow::on_pushButton_start_clicked()
 
         }
     }
+
+    QApplication::restoreOverrideCursor();
+}
+void MainWindow::on_pushButton_zielordner_leeren_clicked()
+{
+
 }
 
 //-----------------------------------------------------------------------
@@ -737,6 +776,9 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
+
+
 
 
 

@@ -86,6 +86,22 @@ QString werkstuecke::get_name(uint index)
         return "";
     }
 }
+void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu)
+{
+    for(uint i = 1; i<=namen.zeilenanzahl() ;i++)
+    {
+        QString tmp = namen.zeile(i);
+        for(uint ii=1; ii<=namen_alt.zeilenanzahl();ii++)
+        {
+            if(tmp.contains(namen_alt.zeile(ii)))
+            {
+                tmp.replace(namen_alt.zeile(ii), namen_neu.zeile(ii));
+                namen.zeile_ersaetzen(i, tmp);
+                break;
+            }
+        }
+    }
+}
 
 //---------------------------------------------------------------Import-Funktionen:
 bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtext)
