@@ -1,7 +1,7 @@
 #ifndef MYFUNKTION_H
 #define MYFUNKTION_H
 
-#include <QString>"
+#include <QString>
 #include "../allgemKlassen/wenndannsonst.h"
 #include "text.h"
 

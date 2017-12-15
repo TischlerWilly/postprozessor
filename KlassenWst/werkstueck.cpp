@@ -40,9 +40,27 @@ void werkstueck::set_dicke(QString d)
 {
     set_dicke(d.toDouble());
 }
+void werkstueck::neue_bearbeitung(QString text)
+{
+    bool bereits_vorhanden = false;
+
+    for(uint i=0; i<=bearbeitungen.zeilenanzahl() ;i++)
+    {
+        if(bearbeitungen.zeile(i) == text)
+        {
+            bereits_vorhanden = true;
+            break;
+        }
+    }
+
+    if(bereits_vorhanden == false)
+    {
+        bearbeitungen.zeilen_anhaengen(text);
+    }
+}
 
 //-------------------------------------------------------------------------Export:
-QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin)
+QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString drehwinkel)
 {
     QString msg;
 
@@ -56,11 +74,32 @@ QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin)
 
     return msg;
 }
-QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin)
+QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString drehwinkel)
 {
     QString msg;
 
     msg = "jo";
+
+    return msg;
+}
+QString werkstueck::get_eigenses_format()
+{
+    QString msg;
+
+    //Programmkopf:
+    msg = "L: ";
+    msg += get_laenge_qstring();
+    msg += "\n";
+    msg += "B: ";
+    msg += get_breite_qstring();
+    msg += "\n";
+    msg += "D: ";
+    msg += get_dicke_qstring();
+    msg += "\n";
+    msg += "---------------";
+    msg += "\n";
+
+    msg += bearbeitungen.get_text();
 
     return msg;
 }

@@ -10,6 +10,7 @@
 #include "../Definitionen/dateinamen.h"
 #include "../Definitionen/def_fmc.h"
 #include "../eigeneFunktionen/text.h"
+#include "../eigeneFunktionen/myfunktion.h"
 
 class werkstuecke
 {
@@ -20,13 +21,23 @@ public:
     bool neu(QString Werkstueckname, QString Quellformat);
     void clear();
     bool import_fmc_oberseite(QString Werkstueckname, QString importtext);
+    bool import_fmc_unterseite(QString Werkstueckname, QString importtext);
     inline uint anzahl()
     {
         return namen.zeilenanzahl();
     }
+    void stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
 
     werkstueck get_wst(uint index);
     QString get_name(uint index);
+    inline QString get_namen()
+    {
+        return namen.get_text();
+    }
+    inline text_zeilenweise get_namen_tz()
+    {
+        return namen;
+    }
 
 private:
     //Variabeln:

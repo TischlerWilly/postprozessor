@@ -24,6 +24,7 @@ void MainWindow::setup()
     bool inifile_gefunden = false;
     bool wkz_ganx_gefunden = false;
     bool wkz_fmc_gefunden = false;
+    bool namen_std_gefunden = false;
     QDir programmordner("./");
     QStringList ordnerinhalt;
     ordnerinhalt = programmordner.entryList(QDir::Files);
@@ -41,6 +42,10 @@ void MainWindow::setup()
         if(name.contains(WERKZEUGDATEI_FMC))
         {
             wkz_fmc_gefunden = true;
+        }
+        if(name.contains(NAMEN_STD_INI))
+        {
+            namen_std_gefunden = true;
         }
     }
     if(inifile_gefunden == false)
@@ -75,6 +80,10 @@ void MainWindow::setup()
 
             ui->checkBox_af_fmc->setChecked(false);
             file.write("erzeuge_fmc:nein");
+            file.write("\n");
+
+            ui->checkBox_af_eigen->setChecked(false);
+            file.write("erzeuge_eigen:nein");
             file.write("\n");
 
         }
@@ -138,6 +147,16 @@ void MainWindow::setup()
                     {
                         ui->checkBox_af_fmc->setChecked(false);
                     }
+                }else if(zeile.contains("erzeuge_eigen:"))
+                {
+                    erzeuge_eigenes_format = text_mitte(zeile, "erzeuge_eigen:", "\n");
+                    if(erzeuge_eigenes_format == "ja")
+                    {
+                        ui->checkBox_af_eigen->setChecked(true);
+                    }else
+                    {
+                        ui->checkBox_af_eigen->setChecked(false);
+                    }
                 }else if(zeile.contains("drehung_des_bauteils:"))
                 {
                     drehung_des_bauteils = text_mitte(zeile, "drehung_des_bauteils:", "\n");
@@ -162,6 +181,38 @@ void MainWindow::setup()
         }
         file.close();
     }
+
+    if(namen_std_gefunden == false)
+    {
+        QFile file(NAMEN_STD_INI);
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+        }else
+        {
+            file.write("Namen original");
+            file.write(NAMEN_STD_INI_TZ_);
+            file.write("Namen neu");
+        }
+        file.close();
+    }else
+    {
+        QFile file(NAMEN_STD_INI);
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+        }else
+        {
+            while(!file.atEnd())
+            {
+                QString zeile = QLatin1String(  file.readLine()  );
+                namen_std_vor.zeile_anhaengen(text_links(zeile,NAMEN_STD_INI_TZ_));
+                namen_std_nach.zeile_anhaengen(text_rechts(zeile,NAMEN_STD_INI_TZ_));
+            }
+        }
+        file.close();
+    }
+
     if(wkz_ganx_gefunden == false)
     {
         QFile file(WERKZEUGDATEI_GANX);
@@ -200,6 +251,7 @@ void MainWindow::setup()
         }
         file.close();
     }
+
     if(wkz_fmc_gefunden == false)
     {
         QFile file(WERKZEUGDATEI_FMC);
@@ -275,6 +327,10 @@ void MainWindow::schreibe_ini()
         file.write(erzeuge_fmc.toUtf8());
         file.write("\n");
 
+        file.write("erzeuge_eigen:");
+        file.write(erzeuge_eigenes_format.toUtf8());
+        file.write("\n");
+
         //-------------------------------------------Radio-Buttons:
         file.write("drehung_des_bauteils:");
         file.write(drehung_des_bauteils.toUtf8());
@@ -333,7 +389,7 @@ void MainWindow::on_pushButton_ziel_clicked()
     {
         verzeichnis_ziel = "./";
     }
-    QString tmp = QFileDialog::getExistingDirectory(this, tr("Zielverzeichniss ascii"), verzeichnis_ziel);
+    QString tmp = QFileDialog::getExistingDirectory(this, tr("Zielverzeichniss"), verzeichnis_ziel);
     if(!tmp.isEmpty())
     {
         verzeichnis_ziel = tmp;
@@ -384,6 +440,17 @@ void MainWindow::on_checkBox_af_fmc_stateChanged()
     }else
     {
         erzeuge_fmc = "nein";
+    }
+    schreibe_ini();
+}
+void MainWindow::on_checkBox_af_eigen_stateChanged()
+{
+    if(ui->checkBox_af_eigen->isChecked() == true)
+    {
+        erzeuge_eigenes_format = "ja";
+    }else
+    {
+        erzeuge_eigenes_format = "nein";
     }
     schreibe_ini();
 }
@@ -448,10 +515,24 @@ void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
 {
     ui->plainTextEdit_eldungen->setPlainText(wkz_magazin_fmc.get_text());
 }
+void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
+{
+    QString msg = "";
+    for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
+    {
+        msg += namen_std_vor.zeile(i);
+        msg += "   -->   ";
+        msg += namen_std_nach.zeile(i);
+        msg += "\n";
+    }
+    ui->plainTextEdit_eldungen->setPlainText(msg);
+}
 
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     if(verzeichnis_quelle.isEmpty())
     {
         QMessageBox::warning(this,"Abbruch","Quellverzeichniss nicht angegeben!",QMessageBox::Ok);
@@ -463,7 +544,7 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
         return;
     }
     dateien_erfassen();
-    QString vortext = "-----------------gefundene Dateien:\n";
+    QString vortext = int_to_qstring(dateien_alle.zeilenanzahl()) + " Dateien gefunden:\n";
     vortext += dateien_alle.get_text();
 /*
     QString nachtext;
@@ -480,9 +561,13 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
     }
 */
     ui->plainTextEdit_eldungen->setPlainText(vortext);
+
+    QApplication::restoreOverrideCursor();
 }
 void MainWindow::on_pushButton_start_clicked()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     wste.clear();
     dateien_erfassen();
     QString fmc = FMC;
@@ -501,13 +586,22 @@ void MainWindow::on_pushButton_start_clicked()
                 QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcA.length());
                 if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
                 {
-                    QMessageBox mb;
-                    mb.setText("Das Teil gibt es bereits");
-                    mb.exec();
                     //Bearbeitungen auf der Wst-Unterseite importieren
-
-
-
+                    QString pfad = ui->lineEdit_quelle->text() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
                 }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
                 {
                     //Bearbeitungen auf der Wst-Obererseite importieren
@@ -520,8 +614,11 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-
-
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
                     }
                 }
             }else if(nam_ohn_end.right(fmcB.length()) == FMC_PRGB)
@@ -529,13 +626,22 @@ void MainWindow::on_pushButton_start_clicked()
                 QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcB.length());
                 if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
                 {
-                    QMessageBox mb;
-                    mb.setText("Das Teil gibt es bereits");
-                    mb.exec();
                     //Bearbeitungen auf der Wst-Unterseite importieren
-
-
-
+                    QString pfad = ui->lineEdit_quelle->text() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
                 }else//Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
                 {
                     //Bearbeitungen auf der Wst-Obererseite importieren
@@ -548,9 +654,11 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-
-                        //ui->plainTextEdit_eldungen->setPlainText(pfad);//nur erst einmal zum Testen
-                        //ui->plainTextEdit_eldungen->setPlainText(inhalt);//nur erst einmal zum Testen
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
                     }
                 }
             }else //Ober und Unterseite sind bereits in einem Programm zusammengeführt
@@ -560,6 +668,18 @@ void MainWindow::on_pushButton_start_clicked()
         }
     }
 
+
+
+    if(std_namen == "ja")
+    {
+        wste.stdnamen(namen_std_vor, namen_std_nach);
+    }
+
+    QString msg;
+    msg = int_to_qstring(wste.get_namen_tz().zeilenanzahl()) + " eingelesene Werkstuecke:\n";
+    msg += wste.get_namen();
+    ui->plainTextEdit_eldungen->setPlainText(msg);
+
     //Datein exportieren:
     QDir dir_ganx;
     QString pfad_ganx = verzeichnis_ziel + QDir::separator() + "ganx";
@@ -567,12 +687,21 @@ void MainWindow::on_pushButton_start_clicked()
     {
         dir_ganx.mkpath(pfad_ganx);
     }
+
     QDir dir_fmc;
     QString pfad_fmc = verzeichnis_ziel + QDir::separator() + "fmc";
     if(erzeuge_fmc == "ja")
     {
         dir_fmc.mkpath(pfad_fmc);
     }
+
+    QDir dir_eigen;
+    QString pfad_eigen = verzeichnis_ziel + QDir::separator() + "eigen";
+    if(erzeuge_eigenes_format == "ja")
+    {
+        dir_eigen.mkpath(pfad_eigen);
+    }
+
     for(uint i=1; i<=wste.anzahl() ;i++)
     {
         if(erzeuge_ganx == "ja")
@@ -586,7 +715,7 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
             }else
             {
-                QString tmp = wste.get_wst(i).get_ganx(wkz_magazin_ganx);
+                QString tmp = wste.get_wst(i).get_ganx(wkz_magazin_ganx, drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
             }
             datei.close();
@@ -602,12 +731,78 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
             }else
             {
-                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc);
+                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
             }
             datei.close();
         }
+        if(erzeuge_eigenes_format == "ja")
+        {
+            QString teilname = wste.get_name(i);
+            teilname += EIGENES_FORMAT;
+
+            QFile datei(pfad_eigen + QDir::separator() + teilname);
+            if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
+            {
+                QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            }else
+            {
+                QString tmp = wste.get_wst(i).get_eigenses_format();
+                datei.write(tmp.toUtf8());
+            }
+            datei.close();
+
+        }
     }
+
+    QApplication::restoreOverrideCursor();
+}
+void MainWindow::on_pushButton_zielordner_leeren_clicked()
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    QString pfad = verzeichnis_ziel + QDir::separator() + "eigen";
+    QDir dir_eigen(pfad);
+    if(dir_eigen.exists())
+    {
+        QStringList ordnerinhalt;
+        ordnerinhalt = dir_eigen.entryList(QDir::Files);
+        for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
+        {
+            QString name = *it;
+            QFile tmp(pfad + QDir::separator() + name);
+            tmp.remove();
+        }
+    }
+
+    pfad = verzeichnis_ziel + QDir::separator() + "fmc";
+    QDir dir_fmc(pfad);
+    if(dir_fmc.exists())
+    {
+        QStringList ordnerinhalt;
+        ordnerinhalt = dir_fmc.entryList(QDir::Files);
+        for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
+        {
+            QString name = *it;
+            QFile tmp(pfad + QDir::separator() + name);
+            tmp.remove();
+        }
+    }
+
+    pfad = verzeichnis_ziel + QDir::separator() + "ganx";
+    QDir dir_ganx(pfad);
+    if(dir_ganx.exists())
+    {
+        QStringList ordnerinhalt;
+        ordnerinhalt = dir_ganx.entryList(QDir::Files);
+        for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
+        {
+            QString name = *it;
+            QFile tmp(pfad + QDir::separator() + name);
+            tmp.remove();
+        }
+    }
+    QApplication::restoreOverrideCursor();
 }
 
 //-----------------------------------------------------------------------
@@ -624,6 +819,13 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
+
+
+
+
+
+
 
 
 
