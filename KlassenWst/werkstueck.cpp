@@ -42,7 +42,21 @@ void werkstueck::set_dicke(QString d)
 }
 void werkstueck::neue_bearbeitung(QString text)
 {
-    bearbeitungen.zeilen_anhaengen(text);
+    bool bereits_vorhanden = false;
+
+    for(uint i=0; i<=bearbeitungen.zeilenanzahl() ;i++)
+    {
+        if(bearbeitungen.zeile(i) == text)
+        {
+            bereits_vorhanden = true;
+            break;
+        }
+    }
+
+    if(bereits_vorhanden == false)
+    {
+        bearbeitungen.zeilen_anhaengen(text);
+    }
 }
 
 //-------------------------------------------------------------------------Export:

@@ -759,7 +759,50 @@ void MainWindow::on_pushButton_start_clicked()
 }
 void MainWindow::on_pushButton_zielordner_leeren_clicked()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
+    QString pfad = verzeichnis_ziel + QDir::separator() + "eigen";
+    QDir dir_eigen(pfad);
+    if(dir_eigen.exists())
+    {
+        QStringList ordnerinhalt;
+        ordnerinhalt = dir_eigen.entryList(QDir::Files);
+        for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
+        {
+            QString name = *it;
+            QFile tmp(pfad + QDir::separator() + name);
+            tmp.remove();
+        }
+    }
+
+    pfad = verzeichnis_ziel + QDir::separator() + "fmc";
+    QDir dir_fmc(pfad);
+    if(dir_fmc.exists())
+    {
+        QStringList ordnerinhalt;
+        ordnerinhalt = dir_fmc.entryList(QDir::Files);
+        for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
+        {
+            QString name = *it;
+            QFile tmp(pfad + QDir::separator() + name);
+            tmp.remove();
+        }
+    }
+
+    pfad = verzeichnis_ziel + QDir::separator() + "ganx";
+    QDir dir_ganx(pfad);
+    if(dir_ganx.exists())
+    {
+        QStringList ordnerinhalt;
+        ordnerinhalt = dir_ganx.entryList(QDir::Files);
+        for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
+        {
+            QString name = *it;
+            QFile tmp(pfad + QDir::separator() + name);
+            tmp.remove();
+        }
+    }
+    QApplication::restoreOverrideCursor();
 }
 
 //-----------------------------------------------------------------------
