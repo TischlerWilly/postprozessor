@@ -21,6 +21,8 @@ public:
     void set_x(QString x);
     void set_y(double y);
     void set_y(QString y);
+    void set_z(double z);
+    void set_z(QString z);
     void set_bezug(QString bezugsflaeche);
     void set_afb(QString ausfuehrbedingung);
 
@@ -32,6 +34,8 @@ public:
     QString get_x_qstring();
     double get_y();
     QString get_y_qstring();
+    double get_z();
+    QString get_z_qstring();
     QString get_bezug();
     QString get_afb();
 
@@ -44,6 +48,7 @@ private:
     double tiefe;
     double pos_x;
     double pos_y;
+    double pos_z;
     QString bezug;
     QString afb;
 
