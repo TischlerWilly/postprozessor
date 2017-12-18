@@ -12,6 +12,7 @@
 #define GANX        ".ganx"
 
 #define FMC         ".fmc"
+#define FMC_        ".FMC"
 #define FMC_PRGA    "_H"        //Bearbeitungen für die 1. Seite des Teils.
 #define FMC_PRGB    "_N"        //Bearbeitungen für die 2. Seite des Teils
 

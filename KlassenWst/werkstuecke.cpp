@@ -515,7 +515,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         }
                     }
 
-                    if(x2 > 0)
+                    if(x2 >= 0)
                     {
                         bo.set_bezug(WST_BEZUG_LI);
                         bo.set_tiefe(x2 + bohrtiefe);
@@ -1077,7 +1077,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         }
                     }
 
-                    if(x2 > 0)
+                    if(x2 >= 0)
                     {
                         bo.set_bezug(WST_BEZUG_RE);//Bearbeitung von Unterseite auf Oberseite bringen (drehen um l/2)
                         bo.set_tiefe(x2 + bohrtiefe);

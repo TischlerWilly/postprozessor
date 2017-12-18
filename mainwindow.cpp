@@ -577,7 +577,9 @@ void MainWindow::on_pushButton_start_clicked()
     //Dateien einlesen:
     for(uint i=1; i<=dateien_alle.zeilenanzahl() ;i++)
     {
-        if(dateien_alle.zeile(i).right(fmc.length()) == FMC)
+
+        if(dateien_alle.zeile(i).right(fmc.length()) == FMC  || \
+           dateien_alle.zeile(i).right(fmc.length()) == FMC_     )
         {
             QString nam_ohn_end = dateien_alle.zeile(i).left(dateien_alle.zeile(i).length()-fmc.length());
 
@@ -663,7 +665,45 @@ void MainWindow::on_pushButton_start_clicked()
                 }
             }else //Ober und Unterseite sind bereits in einem Programm zusammengeführt
             {
-                //Dieser Fall wird vorerst nicht berücksichtigt
+                //Import von händisch geschriebenen Programmen:
+                QString nam_ohn_pref = nam_ohn_end;
+                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
+                {
+                    //Bearbeitungen auf der Wst-Unterseite importieren
+                    QString pfad = ui->lineEdit_quelle->text() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
+                }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+                {
+                    //Bearbeitungen auf der Wst-Obererseite importieren
+                    QString pfad = ui->lineEdit_quelle->text() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
+                        if(quelldateien_erhalten == "nein")
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
+                }
             }
         }
     }
