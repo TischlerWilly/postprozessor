@@ -45,6 +45,40 @@
 #define FMC_HBEXM_X1            "X1"
 #define FMC_HBEXM_X2            "X2"
 
+#define FMC_HBEYP               "[HBYPLU40]"    //HBE Y plus
+#define FMC_HBEYP_AFB           "AFB"
+#define FMC_HBEYP_X1            "X1"
+#define FMC_HBEYP_X2            "X2"
+#define FMC_HBEYP_X3            "X3"
+#define FMC_HBEYP_X4            "X4"
+#define FMC_HBEYP_X5            "X5"
+#define FMC_HBEYP_X6            "X6"
+#define FMC_HBEYP_TI            "TI"
+#define FMC_HBEYP_Z             "Z"             //Z-Position
+#define FMC_HBEYP_DM            "DM"
+#define FMC_HBEYP_KM            "KETTE"         //Kenntenmaß
+#define FMC_HBEYP_Y1            "Y1"
+#define FMC_HBEYP_Y2            "Y2"
+
+#define FMC_HBEYM               "[HBYMIN40]"    //HBE Y minus
+#define FMC_HBEYM_AFB           "AFB"
+#define FMC_HBEYM_X1            "X1"
+#define FMC_HBEYM_X2            "X2"
+#define FMC_HBEYM_X3            "X3"
+#define FMC_HBEYM_X4            "X4"
+#define FMC_HBEYM_X5            "X5"
+#define FMC_HBEYM_X6            "X6"
+#define FMC_HBEYM_TI            "TI"
+#define FMC_HBEYM_Z             "Z"             //Z-Position
+#define FMC_HBEYM_DM            "DM"
+#define FMC_HBEYM_KM            "KETTE"         //Kenntenmaß
+#define FMC_HBEYM_Y1            "Y1"
+#define FMC_HBEYM_Y2            "Y2"
+
+
+
+
+
 
 
 #endif // DEF_FMC_H
