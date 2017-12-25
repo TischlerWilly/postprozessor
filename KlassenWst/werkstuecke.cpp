@@ -1334,6 +1334,57 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }
                 }
             }
+        }else if(zeile.contains(FMC_NUT))
+        {
+            nut n;
+            n.set_bezug(WST_BEZUG_OBSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(n.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_NUT_AFB))
+                    {
+                        n.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_NUT_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_NUT_BR))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_breite(tmp);
+                    }else if(zeile.contains(FMC_NUT_XS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_xs(tmp);
+                    }else if(zeile.contains(FMC_NUT_YS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_ys(tmp);
+                    }else if(zeile.contains(FMC_NUT_XE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_xe(tmp);
+                    }else if(zeile.contains(FMC_NUT_YE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_ye(tmp);
+                    }
+                }
+            }
         }
 
     }
@@ -2535,6 +2586,61 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         rt.set_ausraeumen(tmp);
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_NUT))
+        {
+            nut n;
+            n.set_bezug(WST_BEZUG_UNSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(n.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_NUT_AFB))
+                    {
+                        n.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_NUT_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_NUT_BR))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_breite(tmp);
+                    }else if(zeile.contains(FMC_NUT_XS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
+                        x = w.get_laenge()-x;
+                        n.set_xs(x);
+                    }else if(zeile.contains(FMC_NUT_YS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_ys(tmp);
+                    }else if(zeile.contains(FMC_NUT_XE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
+                        x = w.get_laenge()-x;
+                        n.set_xe(x);
+                    }else if(zeile.contains(FMC_NUT_YE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_ye(tmp);
                     }
                 }
             }

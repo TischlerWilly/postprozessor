@@ -10,6 +10,7 @@
 #include "../allgemKlassen/text_zeilenweise.h"
 #include "bohrung.h"
 #include "rechtecktasche.h"
+#include "nut.h"
 
 
 class werkstueck

@@ -95,7 +95,14 @@
 #define FMC_RTA_RAEUM           "RAEUMEN"
 #define FMC_RTA_AFB             "AFB"
 
-
+#define FMC_NUT                 "[ZYSNUT40]"    //Nut
+#define FMC_NUT_XS              "SPX"
+#define FMC_NUT_XE              "EPX"
+#define FMC_NUT_YS              "SPY"
+#define FMC_NUT_YE              "EPY"
+#define FMC_NUT_TI              "TI"
+#define FMC_NUT_BR              "NB"
+#define FMC_NUT_AFB             "AFB"
 
 
 

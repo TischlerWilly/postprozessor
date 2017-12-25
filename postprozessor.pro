@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     KlassenWst/werkstueck.cpp \
     KlassenWst/werkstuecke.cpp \
     KlassenWst/bohrung.cpp \
-    KlassenWst/rechtecktasche.cpp
+    KlassenWst/rechtecktasche.cpp \
+    KlassenWst/nut.cpp
 
 HEADERS  += mainwindow.h \
     allgemKlassen/formel.h \
@@ -42,6 +43,7 @@ HEADERS  += mainwindow.h \
     Definitionen/def_fmc.h \
     KlassenWst/bohrung.h \
     Definitionen/def_bearbeitungen.h \
-    KlassenWst/rechtecktasche.h
+    KlassenWst/rechtecktasche.h \
+    KlassenWst/nut.h
 
 FORMS    += mainwindow.ui

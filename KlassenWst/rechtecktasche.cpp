@@ -268,7 +268,7 @@ void rechtecktasche::set_text(QString text)
     text_zeilenweise tz;
     tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
     tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_BOHR)
+    if(tz.zeile(1) == BEARBART_RTA)
     {
         set_bezug(tz.zeile(2));
         set_laenge(tz.zeile(3));
