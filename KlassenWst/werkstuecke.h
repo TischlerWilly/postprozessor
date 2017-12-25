@@ -44,7 +44,7 @@ private:
     text_zeilenweise namen;         //namen der Wst
     text_zeilenweise quellformate;  //aus welchem Dateiformat wurde das Wst eingelesen
     QVector<werkstueck> wste;       //hier werden alle Werkstücke gespeichert
-
+    QString var_einsetzen(werkstueck w, QString formel);
 
     //Funktionen:
     uint get_index(QString Werkstueckname);

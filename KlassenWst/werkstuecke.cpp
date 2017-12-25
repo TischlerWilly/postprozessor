@@ -102,6 +102,26 @@ void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_ne
         }
     }
 }
+QString werkstuecke::var_einsetzen(werkstueck w, QString formel)
+{
+    if(formel.contains("'"))
+    {
+        formel.replace("'", ".");
+    }
+    if(formel.contains("B"))
+    {
+        formel.replace("B", w.get_breite_qstring());
+    }
+    if(formel.contains("L"))
+    {
+        formel.replace("L", w.get_laenge_qstring());
+    }
+    if(formel.contains("D"))
+    {
+        formel.replace("D", w.get_dicke_qstring());
+    }
+    return formel;
+}
 
 //---------------------------------------------------------------Import-Funktionen:
 bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtext)
@@ -163,16 +183,22 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         bo.set_afb(wert_nach_istgleich(zeile));
                     }else if(zeile.contains(FMC_BOHR_DM_DM))
                     {
-                        bo.set_dm(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
                     }else if(zeile.contains(FMC_BOHR_DM_TIEFE))
                     {
                         bo.set_tiefe(wert_nach_istgleich(zeile));
                     }else if(zeile.contains(FMC_BOHR_DM_X))
                     {
-                        bo.set_x(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_x(tmp);
                     }else if(zeile.contains(FMC_BOHR_DM_Y))
                     {
-                        bo.set_y(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_y(tmp);
                     }
                 }
             }
@@ -343,29 +369,27 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         bo.set_afb(wert_nach_istgleich(zeile));
                     }else if(zeile.contains(FMC_HBEXP_DM))
                     {
-                        bo.set_dm(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
                     }else if(zeile.contains(FMC_HBEXP_TI))
                     {
                         bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
-                        if(tmp.contains("D"))
-                        {
-                            tmp.replace("D", w.get_dicke_qstring());
-                        }
+                        tmp = var_einsetzen(w, tmp);
                         double z = ausdruck_auswerten(tmp).toDouble();
                         bo.set_z(z);
                     }else if(zeile.contains(FMC_HBEXP_X1))
                     {
-                        x1 = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        x1 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_X2))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
-                        if(tmp.contains("L"))
-                        {
-                            tmp.replace("L", w.get_laenge_qstring());
-                        }
+                        tmp = var_einsetzen(w, tmp);
                         x2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_KM))
                     {
@@ -377,6 +401,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y1 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y2))
@@ -386,6 +411,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y2 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y3))
@@ -395,6 +421,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y3 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y4))
@@ -404,6 +431,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y4 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y5))
@@ -413,6 +441,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y5 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y6))
@@ -422,6 +451,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y6 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }
@@ -515,7 +545,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         }
                     }
 
-                    if(x2 > 0)
+                    if(x2 >= 0)
                     {
                         bo.set_bezug(WST_BEZUG_LI);
                         bo.set_tiefe(x2 + bohrtiefe);
@@ -594,29 +624,27 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         bo.set_afb(wert_nach_istgleich(zeile));
                     }else if(zeile.contains(FMC_HBEXP_DM))
                     {
-                        bo.set_dm(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
                     }else if(zeile.contains(FMC_HBEXP_TI))
                     {
                         bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
-                        if(tmp.contains("D"))
-                        {
-                            tmp.replace("D", w.get_dicke_qstring());
-                        }
+                        tmp = var_einsetzen(w, tmp);
                         double z = ausdruck_auswerten(tmp).toDouble();
                         bo.set_z(z);
                     }else if(zeile.contains(FMC_HBEXP_X2))
                     {
-                        x2 = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        x2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_X1))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
-                        if(tmp.contains("L"))
-                        {
-                            tmp.replace("L", w.get_laenge_qstring());
-                        }
+                        tmp = var_einsetzen(w, tmp);
                         x1 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_KM))
                     {
@@ -628,6 +656,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y1 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y2))
@@ -637,6 +666,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y2 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y3))
@@ -646,6 +676,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y3 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y4))
@@ -655,6 +686,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y4 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y5))
@@ -664,6 +696,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y5 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y6))
@@ -673,12 +706,636 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y6 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }
                 }
             }
+        }else if(zeile.contains(FMC_HBEYP))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_VO);
+            double bohrtiefe = 0;
+            double y1 = 0;
+            double y2 = -1;
+            bool kettenmass = false;
+            double x1 = 0;
+            double x2 = 0;
+            double x3 = 0;
+            double x4 = 0;
+            double x5 = 0;
+            double x6 = 0;
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    bo.set_tiefe(y1 + bohrtiefe);
+                    if(x1)
+                    {
+                        bo.set_x(x1);
+                        w.neue_bearbeitung(bo.get_text());
+                    }
+                    if(x2)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x2);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x3)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x3);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x4)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x4);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x5)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x5);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4+x5);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x6)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x6);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4+x5+x6);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+
+                    if(y2 > 0)
+                    {
+                        bo.set_bezug(WST_BEZUG_HI);
+                        bo.set_tiefe(w.get_breite() - y2 + bohrtiefe);
+
+                        if(x1)
+                        {
+                            bo.set_x(x1);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                        if(x2)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x2);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x3)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x3);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x4)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x4);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x5)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x5);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4+x5);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x6)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x6);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4+x5+x6);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                    }
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_HBEYP_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_HBEYP_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
+                    }else if(zeile.contains(FMC_HBEYP_TI))
+                    {
+                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_Z))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double z = ausdruck_auswerten(tmp).toDouble();
+                        bo.set_z(z);
+                    }else if(zeile.contains(FMC_HBEXP_Y1))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_HBEXP_Y2))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_KM))
+                    {
+                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_X1))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x1 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X2))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x2 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X3))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x3 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X4))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x4 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X5))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x5 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X6))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x6 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_HBEYM))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_HI);
+            double bohrtiefe = 0;
+            double y1 = 0;
+            double y2 = -1;
+            bool kettenmass = false;
+            double x1 = 0;
+            double x2 = 0;
+            double x3 = 0;
+            double x4 = 0;
+            double x5 = 0;
+            double x6 = 0;
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    bo.set_tiefe(w.get_breite() - y1 + bohrtiefe);
+                    if(x1)
+                    {
+                        bo.set_x(x1);
+                        w.neue_bearbeitung(bo.get_text());
+                    }
+                    if(x2)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x2);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x3)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x3);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x4)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x4);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x5)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x5);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4+x5);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x6)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x6);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4+x5+x6);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+
+                    if(y2 >= 0)
+                    {
+                        bo.set_bezug(WST_BEZUG_VO);
+                        bo.set_tiefe(y2 + bohrtiefe);
+
+                        if(x1)
+                        {
+                            bo.set_x(x1);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                        if(x2)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x2);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x3)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x3);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x4)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x4);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x5)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x5);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4+x5);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x6)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x6);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4+x5+x6);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                    }
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_HBEYP_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_HBEYP_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
+                    }else if(zeile.contains(FMC_HBEYP_TI))
+                    {
+                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_Z))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double z = ausdruck_auswerten(tmp).toDouble();
+                        bo.set_z(z);
+                    }else if(zeile.contains(FMC_HBEXP_Y1))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_HBEXP_Y2))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_KM))
+                    {
+                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_X1))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x1 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X2))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x2 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X3))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x3 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X4))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x4 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X5))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x5 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X6))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x6 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_KTA))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_OBSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(bo.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_KTA_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_KTA_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
+                    }else if(zeile.contains(FMC_KTA_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_KTA_X))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_x(tmp);
+                    }else if(zeile.contains(FMC_KTA_Y))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_y(tmp);
+                    }else if(zeile.contains(FMC_KTA_ZUST))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_zustellmass(tmp);
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_RTA))
+        {
+            rechtecktasche rt;
+            rt.set_bezug(WST_BEZUG_OBSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(rt.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_RTA_AFB))
+                    {
+                        rt.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_RTA_L))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_laenge(tmp);
+                    }else if(zeile.contains(FMC_RTA_B))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_breite(tmp);
+                    }else if(zeile.contains(FMC_RTA_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_RTA_X))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_x(tmp);
+                    }else if(zeile.contains(FMC_RTA_Y))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_y(tmp);
+                    }else if(zeile.contains(FMC_RTA_ZUST))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_zustellmass(tmp);
+                    }else if(zeile.contains(FMC_RTA_WI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_drewi(tmp);
+                    }else if(zeile.contains(FMC_RTA_RAD))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_rad(tmp);
+                    }else if(zeile.contains(FMC_RTA_RAEUM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_ausraeumen(tmp);
+                    }
+                }
+            }
         }
+
     }
 
     wste.replace(index-1, w);
@@ -723,18 +1380,24 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         bo.set_afb(wert_nach_istgleich(zeile));
                     }else if(zeile.contains(FMC_BOHR_DM_DM))
                     {
-                        bo.set_dm(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
                     }else if(zeile.contains(FMC_BOHR_DM_TIEFE))
                     {
                         bo.set_tiefe(wert_nach_istgleich(zeile));
                     }else if(zeile.contains(FMC_BOHR_DM_X))
                     {
-                        double x = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
                         x = w.get_laenge()-x;
                         bo.set_x(x);
                     }else if(zeile.contains(FMC_BOHR_DM_Y))
                     {
-                        bo.set_y(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_y(tmp);
                     }
                 }
             }
@@ -905,29 +1568,27 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         bo.set_afb(wert_nach_istgleich(zeile));
                     }else if(zeile.contains(FMC_HBEXP_DM))
                     {
-                        bo.set_dm(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
                     }else if(zeile.contains(FMC_HBEXP_TI))
                     {
                         bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
-                        if(tmp.contains("D"))
-                        {
-                            tmp.replace("D", w.get_dicke_qstring());
-                        }
+                        tmp = var_einsetzen(w, tmp);
                         double z = w.get_dicke() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
                         bo.set_z(z);
                     }else if(zeile.contains(FMC_HBEXP_X1))
                     {
-                        x1 = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        x1 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_X2))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
-                        if(tmp.contains("L"))
-                        {
-                            tmp.replace("L", w.get_laenge_qstring());
-                        }
+                        tmp = var_einsetzen(w, tmp);
                         x2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_KM))
                     {
@@ -939,6 +1600,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y1 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y2))
@@ -948,6 +1610,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y2 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y3))
@@ -957,6 +1620,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y3 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y4))
@@ -966,6 +1630,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y4 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y5))
@@ -975,6 +1640,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y5 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y6))
@@ -984,6 +1650,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y6 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }
@@ -1077,7 +1744,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         }
                     }
 
-                    if(x2 > 0)
+                    if(x2 >= 0)
                     {
                         bo.set_bezug(WST_BEZUG_RE);//Bearbeitung von Unterseite auf Oberseite bringen (drehen um l/2)
                         bo.set_tiefe(x2 + bohrtiefe);
@@ -1156,29 +1823,27 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         bo.set_afb(wert_nach_istgleich(zeile));
                     }else if(zeile.contains(FMC_HBEXP_DM))
                     {
-                        bo.set_dm(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
                     }else if(zeile.contains(FMC_HBEXP_TI))
                     {
                         bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
-                        if(tmp.contains("D"))
-                        {
-                            tmp.replace("D", w.get_dicke_qstring());
-                        }
+                        tmp = var_einsetzen(w, tmp);
                         double z = w.get_dicke() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
                         bo.set_z(z);
                     }else if(zeile.contains(FMC_HBEXP_X2))
                     {
-                        x2 = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        x2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_X1))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
-                        if(tmp.contains("L"))
-                        {
-                            tmp.replace("L", w.get_laenge_qstring());
-                        }
+                        tmp = var_einsetzen(w, tmp);
                         x1 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_KM))
                     {
@@ -1190,6 +1855,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y1 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y2))
@@ -1199,6 +1865,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y2 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y3))
@@ -1208,6 +1875,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y3 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y4))
@@ -1217,6 +1885,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y4 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y5))
@@ -1226,6 +1895,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y5 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }else if(zeile.contains(FMC_HBEXP_Y6))
@@ -1235,12 +1905,641 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                            tmp != "(NULL)" && \
                            !tmp.isEmpty())
                         {
+                            tmp = var_einsetzen(w, tmp);
                             y6 = ausdruck_auswerten(tmp).toDouble();
                         }
                     }
                 }
             }
+        }else if(zeile.contains(FMC_HBEYP))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_VO);
+            double bohrtiefe = 0;
+            double y1 = 0;
+            double y2 = -1;
+            bool kettenmass = false;
+            double x1 = 0;
+            double x2 = 0;
+            double x3 = 0;
+            double x4 = 0;
+            double x5 = 0;
+            double x6 = 0;
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    bo.set_tiefe(y1 + bohrtiefe);
+                    if(x1)
+                    {
+                        bo.set_x(x1);
+                        w.neue_bearbeitung(bo.get_text());
+                    }
+                    if(x2)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x2);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x3)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x3);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x4)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x4);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x5)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x5);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4+x5);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x6)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x6);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4+x5+x6);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+
+                    if(y2 > 0)
+                    {
+                        bo.set_bezug(WST_BEZUG_HI);
+                        bo.set_tiefe(w.get_breite() - y2 + bohrtiefe);
+
+                        if(x1)
+                        {
+                            bo.set_x(x1);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                        if(x2)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x2);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x3)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x3);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x4)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x4);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x5)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x5);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4+x5);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x6)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x6);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4+x5+x6);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                    }
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_HBEYP_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_HBEYP_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
+                    }else if(zeile.contains(FMC_HBEYP_TI))
+                    {
+                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_Z))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double z = w.get_dicke() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        z = w.get_dicke()-z;
+                        bo.set_z(z);
+                    }else if(zeile.contains(FMC_HBEXP_Y1))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_HBEXP_Y2))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_KM))
+                    {
+                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_X1))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x1 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X2))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x2 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X3))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x3 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X4))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x4 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X5))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x5 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X6))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x6 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_HBEYM))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_HI);
+            double bohrtiefe = 0;
+            double y1 = 0;
+            double y2 = -1;
+            bool kettenmass = false;
+            double x1 = 0;
+            double x2 = 0;
+            double x3 = 0;
+            double x4 = 0;
+            double x5 = 0;
+            double x6 = 0;
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    bo.set_tiefe(w.get_breite() - y1 + bohrtiefe);
+                    if(x1)
+                    {
+                        bo.set_x(x1);
+                        w.neue_bearbeitung(bo.get_text());
+                    }
+                    if(x2)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x2);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x3)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x3);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x4)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x4);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x5)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x5);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4+x5);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+                    if(x6)
+                    {
+                        if(kettenmass == false)
+                        {
+                            bo.set_x(x6);
+                            w.neue_bearbeitung(bo.get_text());
+                        }else
+                        {
+                            bo.set_x(x1+x2+x3+x4+x5+x6);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                    }
+
+                    if(y2 >= 0)
+                    {
+                        bo.set_bezug(WST_BEZUG_VO);
+                        bo.set_tiefe(y2 + bohrtiefe);
+
+                        if(x1)
+                        {
+                            bo.set_x(x1);
+                            w.neue_bearbeitung(bo.get_text());
+                        }
+                        if(x2)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x2);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x3)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x3);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x4)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x4);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x5)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x5);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4+x5);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                        if(x6)
+                        {
+                            if(kettenmass == false)
+                            {
+                                bo.set_x(x6);
+                                w.neue_bearbeitung(bo.get_text());
+                            }else
+                            {
+                                bo.set_x(x1+x2+x3+x4+x5+x6);
+                                w.neue_bearbeitung(bo.get_text());
+                            }
+                        }
+                    }
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_HBEYP_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_HBEYP_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
+                    }else if(zeile.contains(FMC_HBEYP_TI))
+                    {
+                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_Z))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double z = w.get_dicke() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        bo.set_z(z);
+                    }else if(zeile.contains(FMC_HBEXP_Y1))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_HBEXP_Y2))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_KM))
+                    {
+                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                    }else if(zeile.contains(FMC_HBEYP_X1))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x1 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X2))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x2 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X3))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x3 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X4))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x4 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X5))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x5 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }else if(zeile.contains(FMC_HBEYP_X6))
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            x6 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
+                        }
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_KTA))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_UNSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(bo.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_KTA_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_KTA_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
+                    }else if(zeile.contains(FMC_KTA_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_KTA_X))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
+                        x = w.get_laenge()-x;
+                        bo.set_x(x);
+                    }else if(zeile.contains(FMC_KTA_Y))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_y(tmp);
+                    }else if(zeile.contains(FMC_KTA_ZUST))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_zustellmass(tmp);
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_RTA))
+        {
+            rechtecktasche rt;
+            rt.set_bezug(WST_BEZUG_UNSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(rt.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_RTA_AFB))
+                    {
+                        rt.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_RTA_L))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_laenge(tmp);
+                    }else if(zeile.contains(FMC_RTA_B))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_breite(tmp);
+                    }else if(zeile.contains(FMC_RTA_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_RTA_X))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
+                        x = w.get_laenge()-x;
+                        rt.set_x(x);
+                    }else if(zeile.contains(FMC_RTA_Y))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_y(tmp);
+                    }else if(zeile.contains(FMC_RTA_ZUST))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_zustellmass(tmp);
+                    }else if(zeile.contains(FMC_RTA_WI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_drewi(tmp);
+                    }else if(zeile.contains(FMC_RTA_RAD))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_rad(tmp);
+                    }else if(zeile.contains(FMC_RTA_RAEUM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_ausraeumen(tmp);
+                    }
+                }
+            }
         }
+
 
     }
 
