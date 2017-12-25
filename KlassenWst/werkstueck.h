@@ -9,6 +9,7 @@
 #include "../Definitionen/def_fmc.h"
 #include "../allgemKlassen/text_zeilenweise.h"
 #include "bohrung.h"
+#include "rechtecktasche.h"
 
 
 class werkstueck

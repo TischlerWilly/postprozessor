@@ -75,6 +75,25 @@
 #define FMC_HBEYM_Y1            "Y1"
 #define FMC_HBEYM_Y2            "Y2"
 
+#define FMC_KTA                 "[ZYKTFR40]"    //Kreistasche
+#define FMC_KTA_X               "MPX"
+#define FMC_KTA_Y               "MPY"
+#define FMC_KTA_DM              "DM"
+#define FMC_KTA_TI              "TI"
+#define FMC_KTA_ZUST            "LGEZU"
+#define FMC_KTA_AFB             "AFB"
+
+#define FMC_RTA                 "[ZYRTFR40]"    //Rechtecktasche
+#define FMC_RTA_X               "MPX"
+#define FMC_RTA_Y               "MPY"
+#define FMC_RTA_L               "LGET1"
+#define FMC_RTA_B               "LGET2"
+#define FMC_RTA_TI              "TI"
+#define FMC_RTA_RAD             "R"
+#define FMC_RTA_ZUST            "LGEZU"
+#define FMC_RTA_WI              "WKL"
+#define FMC_RTA_RAEUM           "RAEUMEN"
+#define FMC_RTA_AFB             "AFB"
 
 
 

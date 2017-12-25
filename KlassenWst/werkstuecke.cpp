@@ -1222,6 +1222,118 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }
                 }
             }
+        }else if(zeile.contains(FMC_KTA))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_OBSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(bo.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_KTA_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_KTA_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
+                    }else if(zeile.contains(FMC_KTA_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_KTA_X))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_x(tmp);
+                    }else if(zeile.contains(FMC_KTA_Y))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_y(tmp);
+                    }else if(zeile.contains(FMC_KTA_ZUST))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_zustellmass(tmp);
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_RTA))
+        {
+            rechtecktasche rt;
+            rt.set_bezug(WST_BEZUG_OBSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(rt.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_RTA_AFB))
+                    {
+                        rt.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_RTA_L))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_laenge(tmp);
+                    }else if(zeile.contains(FMC_RTA_B))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_breite(tmp);
+                    }else if(zeile.contains(FMC_RTA_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_RTA_X))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_x(tmp);
+                    }else if(zeile.contains(FMC_RTA_Y))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_y(tmp);
+                    }else if(zeile.contains(FMC_RTA_ZUST))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_zustellmass(tmp);
+                    }else if(zeile.contains(FMC_RTA_WI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_drewi(tmp);
+                    }else if(zeile.contains(FMC_RTA_RAD))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_rad(tmp);
+                    }else if(zeile.contains(FMC_RTA_RAEUM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_ausraeumen(tmp);
+                    }
+                }
+            }
         }
 
     }
@@ -2307,6 +2419,122 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             tmp = var_einsetzen(w, tmp);
                             x6 = w.get_laenge() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
                         }
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_KTA))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_UNSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(bo.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_KTA_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_KTA_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(tmp);
+                    }else if(zeile.contains(FMC_KTA_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_KTA_X))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
+                        x = w.get_laenge()-x;
+                        bo.set_x(x);
+                    }else if(zeile.contains(FMC_KTA_Y))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_y(tmp);
+                    }else if(zeile.contains(FMC_KTA_ZUST))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_zustellmass(tmp);
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_RTA))
+        {
+            rechtecktasche rt;
+            rt.set_bezug(WST_BEZUG_UNSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(rt.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_RTA_AFB))
+                    {
+                        rt.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_RTA_L))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_laenge(tmp);
+                    }else if(zeile.contains(FMC_RTA_B))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_breite(tmp);
+                    }else if(zeile.contains(FMC_RTA_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_tiefe(tmp);
+                    }else if(zeile.contains(FMC_RTA_X))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
+                        x = w.get_laenge()-x;
+                        rt.set_x(x);
+                    }else if(zeile.contains(FMC_RTA_Y))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_y(tmp);
+                    }else if(zeile.contains(FMC_RTA_ZUST))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_zustellmass(tmp);
+                    }else if(zeile.contains(FMC_RTA_WI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_drewi(tmp);
+                    }else if(zeile.contains(FMC_RTA_RAD))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_rad(tmp);
+                    }else if(zeile.contains(FMC_RTA_RAEUM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_ausraeumen(tmp);
                     }
                 }
             }

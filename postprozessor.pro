@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     eigeneFunktionen/umwandeln.cpp \
     KlassenWst/werkstueck.cpp \
     KlassenWst/werkstuecke.cpp \
-    KlassenWst/bohrung.cpp
+    KlassenWst/bohrung.cpp \
+    KlassenWst/rechtecktasche.cpp
 
 HEADERS  += mainwindow.h \
     allgemKlassen/formel.h \
@@ -40,6 +41,7 @@ HEADERS  += mainwindow.h \
     KlassenWst/werkstuecke.h \
     Definitionen/def_fmc.h \
     KlassenWst/bohrung.h \
-    Definitionen/def_bearbeitungen.h
+    Definitionen/def_bearbeitungen.h \
+    KlassenWst/rechtecktasche.h
 
 FORMS    += mainwindow.ui

@@ -19,6 +19,7 @@ void bohrung::setup()
     pos_z = 0;
     bezug = WST_BEZUG_OBSEI;
     afb = "1";
+    zustellmass = 0;
 }
 
 void bohrung::set_dm(double dm)
@@ -66,6 +67,17 @@ void bohrung::set_z(double z)
 void bohrung::set_z(QString z)
 {
     set_z(z.toDouble());
+}
+void bohrung::set_zustellmass(double mass)
+{
+    if(mass >= 0)
+    {
+        zustellmass = mass;
+    }
+}
+void bohrung::set_zustellmass(QString mass)
+{
+    set_zustellmass(mass.toDouble());
 }
 void bohrung::set_bezug(QString bezugsflaeche)
 {
@@ -116,6 +128,14 @@ QString bohrung::get_z_qstring()
 {
     return double_to_qstring(pos_z);
 }
+double bohrung::get_zustellmass()
+{
+    return zustellmass;
+}
+QString bohrung::get_zustellmass_qstring()
+{
+    return double_to_qstring(zustellmass);
+}
 QString bohrung::get_bezug()
 {
     return bezug;
@@ -142,6 +162,8 @@ QString bohrung::get_text()
     msg += get_z_qstring();         //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
     msg += get_afb();               //Zeile 8
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += get_zustellmass_qstring();               //Zeile 9
 
     return msg;
 }
@@ -159,6 +181,7 @@ void bohrung::set_text(QString text)
         set_y(tz.zeile(6));
         set_z(tz.zeile(7));
         set_afb(tz.zeile(8));
+        set_zustellmass(tz.zeile(9));
     }
 }
 

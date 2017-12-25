@@ -16,7 +16,7 @@
 #define BEARBART_BOHR       "bohrung"       //Bearbeitungsart Bohrung
 /*
     Reihenfolge der Parameter:
-    1: Bearbeitungsart
+    1: Bearbeitungsart: "bohrung"
     2: Bezugsfläche
     3: Durchmesser
     4: Tiefe
@@ -24,6 +24,25 @@
     6: Position in Y
     7: Position in Z
     8: Ausführbedingung
+    9: Zustellmaß           //optionaler Parameter, wenn Werk 0 ist, dann Zustellung gem Wkz-Magazin
+*/
+
+#define BEARBART_RTA        "rechtecktasche"    //Bearbeitungsart Rechtecktasche und Stulpfräsung
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "rechtecktasche"
+    2 : Bezugsfläche
+    3 : Taschenlänge
+    4 : Taschenbreite
+    5 : Tiefe
+    6 : Posision in X
+    7 : Position in Y
+    8 : Position in Z
+    9 : Drehwinkel              //im Uhrzeigersinn
+    10: Eckenradius
+    11: Ausräumen
+    12: Ausführbedingung
+    13: Zustellmaß              //optionaler Parameter, wenn Werk 0 ist, dann Zustellung gem Wkz-Magazin
 */
 
 
