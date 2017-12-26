@@ -2,6 +2,7 @@
 #define WERKSTUECK_H
 
 #include <QString>
+#include <QMessageBox>
 
 #include "Definitionen/werkzeug.h"
 
@@ -51,8 +52,8 @@ public:
         return double_to_qstring(dicke);
     }
 
-    QString get_fmc(text_zeilenweise werkzeugmagazin, QString drehwinkel = "0");
-    QString get_ganx(text_zeilenweise werkzeugmagazin, QString drehwinkel = "0");
+    QString get_fmc(text_zeilenweise werkzeugmagazin, QString& info, QString drehwinkel = "0");
+    QString get_ganx(text_zeilenweise werkzeugmagazin, QString& info ,QString drehwinkel = "0");
     QString get_eigenses_format();
 
 private:
@@ -66,6 +67,14 @@ private:
     QString get_wkz_nummer(text_zeilenweise wkz_magazin, QString wkz_typ, double dm = 0, double bearbeitungstiefe = 0);
     QString get_wkz_dm(text_zeilenweise wkz_magazin, QString wkz_nr);
     QString get_wkz_vorschub(text_zeilenweise wkz_magazin, QString wkz_nr);
+
+    QString warnungen_ganx(text_zeilenweise bearbeit, QString drehwinkel);
+    QString fehler_ganx(text_zeilenweise bearbeit, QString drehwinkel);
+    QString warnungen_fmc(text_zeilenweise bearbeit, QString drehwinkel);
+    QString fehler_fmc(text_zeilenweise bearbeit, QString drehwinkel);
+
+    void bearb_sortieren();
+    text_zeilenweise bearb_drehen_90(text_zeilenweise bearb);
 
 
 };

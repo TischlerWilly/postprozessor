@@ -10,6 +10,8 @@ void MainWindow::on_pushButton_start_clicked()
  -->QString werkstueck::get_fmc()
  -->QString werkstueck::get_ganx()
 
+ -->void werkstueck::bearb_sortieren()
+ -->text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb)
 
 
 

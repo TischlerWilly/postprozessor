@@ -59,27 +59,118 @@ void werkstueck::neue_bearbeitung(QString text)
     }
 }
 
-//-------------------------------------------------------------------------Export:
-QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString drehwinkel)
+QString werkstueck::fehler_ganx(text_zeilenweise bearbeit, QString drehwinkel)
 {
-    QString msg;
+    QString msg = "";
 
-    //Programmkopf:
-    msg = FMC_PRGKOPF;
-    msg += "\n";
+    //Wst-Maße prüfen:
+    if(drehwinkel == "0" || drehwinkel == "180")
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        double tmp_d = dicke;
+        if(tmp_l > 1)
+        {
+            msg += "  !! Werkstueck-Laenge zu gross\n";
+        }
+        if(tmp_b > 1)
+        {
+            msg += "  !! Werkstueck-Breite zu gross\n";
+        }
+        if(tmp_d > 1)
+        {
+            msg += "  !! Werkstueck-Dicke zu gross\n";
+        }
+    }else if(drehwinkel == "90" || drehwinkel == "270")
+    {
 
-
-    //Programmende:
-
+    }
 
     return msg;
 }
-QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString drehwinkel)
+QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit, QString drehwinkel)
+{
+    QString msg = "";
+
+    return msg;
+}
+QString werkstueck::fehler_fmc(text_zeilenweise bearbeit, QString drehwinkel)
+{
+    QString msg = "";
+
+    return msg;
+}
+QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit, QString drehwinkel)
+{
+    QString msg = "";
+
+    return msg;
+}
+
+void werkstueck::bearb_sortieren()
+{
+    text_zeilenweise tz_bohr_vert;
+    text_zeilenweise tz_bohr_hori;
+    text_zeilenweise tz_rta;            //Rechtecktaschen
+
+    //in for-Schleife bearb aufsplitten:
+    //....
+
+    //Reihenfolge der Bearbeitungen festlegen:
+    //bearbeitungen.clear();
+    //bearbeitungen.zeilen_anhaengen(tz_bohr_vert);
+}
+text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb)
+{
+    //diese Funktion dreht die Bearbeitungen um 90° im Uhrzeigersinn
+    text_zeilenweise tz;
+
+
+    return tz;
+}
+
+//-------------------------------------------------------------------------Export:
+QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString& info , QString drehwinkel)
 {
     QString msg;
 
-    msg = "jo";
+    if(drehwinkel == "0")
+    {
+        QString warnungen = warnungen_fmc(bearbeitungen, drehwinkel);
+        QString fehler = fehler_fmc(bearbeitungen, drehwinkel);
+        info = warnungen + fehler;
 
+        //Programmkopf:
+        msg = FMC_PRGKOPF;
+        msg += "\n";
+
+
+        //Programmende:
+
+    }else
+    {
+        msg = "Derzeit wird nur Drehwinkel 0 = unterstuetzt.";
+    }
+    return msg;
+}
+QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString& info , QString drehwinkel)
+{
+    QString msg;
+
+    if(drehwinkel == "0")
+    {
+        QString warnungen = warnungen_ganx(bearbeitungen, drehwinkel);
+        QString fehler = fehler_ganx(bearbeitungen, drehwinkel);
+        info = warnungen + fehler;
+
+        double tmp_l = breite;
+        double tmp_b = laenge;
+        text_zeilenweise tmp_bearb = bearb_drehen_90(bearbeitungen);
+
+    }else
+    {
+        msg = "Derzeit wird nur Drehwinkel 0 = unterstuetzt.";
+    }
     return msg;
 }
 QString werkstueck::get_eigenses_format()
@@ -103,6 +194,7 @@ QString werkstueck::get_eigenses_format()
 
     return msg;
 }
+
 
 //-------------------------------------------------------------------------Werkzeug:
 QString werkstueck::get_wkz_nummer(text_zeilenweise wkz_magazin, QString wkz_typ, double dm, double bearbeitungstiefe)
