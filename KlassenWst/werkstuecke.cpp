@@ -224,6 +224,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 {
                     i=ii;
                     bo.set_tiefe(x1 + bohrtiefe);
+                    bo.set_x(x1);
                     if(y1)
                     {
                         bo.set_y(y1);
@@ -294,6 +295,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         bo.set_bezug(WST_BEZUG_RE);
                         bo.set_tiefe(w.get_laenge() - x2 + bohrtiefe);
+                        bo.set_x(x2);
 
                         if(y1)
                         {
@@ -462,7 +464,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             bohrung bo;
             bo.set_bezug(WST_BEZUG_RE);
             double bohrtiefe = 0;
-            double x1 = 0;
+            double x1 = w.get_laenge();
             double x2 = -1;
             bool kettenmass = false;
             double y1 = 0;
@@ -479,6 +481,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 {
                     i=ii;
                     bo.set_tiefe(w.get_laenge() - x1 + bohrtiefe);
+                    bo.set_x(x1);
                     if(y1)
                     {
                         bo.set_y(y1);
@@ -549,6 +552,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         bo.set_bezug(WST_BEZUG_LI);
                         bo.set_tiefe(x2 + bohrtiefe);
+                        bo.set_x(x2);
 
                         if(y1)
                         {
@@ -734,6 +738,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 {
                     i=ii;
                     bo.set_tiefe(y1 + bohrtiefe);
+                    bo.set_y(y1);
                     if(x1)
                     {
                         bo.set_x(x1);
@@ -804,6 +809,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         bo.set_bezug(WST_BEZUG_HI);
                         bo.set_tiefe(w.get_breite() - y2 + bohrtiefe);
+                        bo.set_y(y2);
 
                         if(x1)
                         {
@@ -989,6 +995,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 {
                     i=ii;
                     bo.set_tiefe(w.get_breite() - y1 + bohrtiefe);
+                    bo.set_y(y1);
                     if(x1)
                     {
                         bo.set_x(x1);
@@ -1059,6 +1066,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         bo.set_bezug(WST_BEZUG_VO);
                         bo.set_tiefe(y2 + bohrtiefe);
+                        bo.set_y(y2);
 
                         if(x1)
                         {
@@ -1474,6 +1482,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 {
                     i=ii;
                     bo.set_tiefe(x1 + bohrtiefe);
+                    bo.set_x(x1);
                     if(y1)
                     {
                         bo.set_y(y1);
@@ -1544,6 +1553,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         bo.set_bezug(WST_BEZUG_LI);//Bearbeitung von Unterseite auf Oberseite bringen (drehen um l/2)
                         bo.set_tiefe(w.get_laenge() - x2 + bohrtiefe);
+                        bo.set_x(x2);
 
                         if(y1)
                         {
@@ -1712,7 +1722,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             bohrung bo;
             bo.set_bezug(WST_BEZUG_LI);//Bearbeitung von Unterseite auf Oberseite bringen (drehen um l/2)
             double bohrtiefe = 0;
-            double x1 = 0;
+            double x1 = w.get_laenge();
             double x2 = -1;
             bool kettenmass = false;
             double y1 = 0;
@@ -1729,6 +1739,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 {
                     i=ii;
                     bo.set_tiefe(w.get_laenge() - x1 + bohrtiefe);
+                    bo.set_x(x1);
                     if(y1)
                     {
                         bo.set_y(y1);
@@ -1799,6 +1810,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         bo.set_bezug(WST_BEZUG_RE);//Bearbeitung von Unterseite auf Oberseite bringen (drehen um l/2)
                         bo.set_tiefe(x2 + bohrtiefe);
+                        bo.set_x(x2);
 
                         if(y1)
                         {
@@ -1984,6 +1996,8 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 {
                     i=ii;
                     bo.set_tiefe(y1 + bohrtiefe);
+                    bo.set_y(y1);
+
                     if(x1)
                     {
                         bo.set_x(x1);
@@ -2054,6 +2068,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         bo.set_bezug(WST_BEZUG_HI);
                         bo.set_tiefe(w.get_breite() - y2 + bohrtiefe);
+                        bo.set_y(y2);
 
                         if(x1)
                         {
@@ -2240,6 +2255,8 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 {
                     i=ii;
                     bo.set_tiefe(w.get_breite() - y1 + bohrtiefe);
+                    bo.set_y(y1);
+
                     if(x1)
                     {
                         bo.set_x(x1);
@@ -2310,6 +2327,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         bo.set_bezug(WST_BEZUG_VO);
                         bo.set_tiefe(y2 + bohrtiefe);
+                        bo.set_y(y2);
 
                         if(x1)
                         {

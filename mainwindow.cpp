@@ -799,7 +799,8 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
             }else
             {
-                QString tmp = wste.get_wst(i).get_eigenses_format();
+                QString info = "";
+                QString tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;

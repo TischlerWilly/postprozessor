@@ -54,7 +54,7 @@ public:
 
     QString get_fmc(text_zeilenweise werkzeugmagazin, QString& info, QString drehwinkel = "0");
     QString get_ganx(text_zeilenweise werkzeugmagazin, QString& info ,QString drehwinkel = "0");
-    QString get_eigenses_format();
+    QString get_eigenses_format(QString drehwinkel);
 
 private:
     //Variabeln:
@@ -68,14 +68,16 @@ private:
     QString get_wkz_dm(text_zeilenweise wkz_magazin, QString wkz_nr);
     QString get_wkz_vorschub(text_zeilenweise wkz_magazin, QString wkz_nr);
 
-    QString warnungen_ganx(text_zeilenweise bearbeit, QString drehwinkel);
-    QString fehler_ganx(text_zeilenweise bearbeit, QString drehwinkel);
-    QString warnungen_fmc(text_zeilenweise bearbeit, QString drehwinkel);
-    QString fehler_fmc(text_zeilenweise bearbeit, QString drehwinkel);
+    QString warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b);
+    QString warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b);
 
     void bearb_sortieren();
-    text_zeilenweise bearb_drehen_90(text_zeilenweise bearb);
+    text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
+    text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
 
+    QString get_fmc_dateitext(text_zeilenweise werkzeugmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
+    QString get_ganx_dateitext(text_zeilenweise werkzeugmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
+    QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b);
 
 };
 
