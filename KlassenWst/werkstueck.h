@@ -8,6 +8,7 @@
 
 #include "../eigeneFunktionen/umwandeln.h"
 #include "../Definitionen/def_fmc.h"
+#include "../Definitionen/def_ganx.h"
 #include "../allgemKlassen/text_zeilenweise.h"
 #include "bohrung.h"
 #include "rechtecktasche.h"
@@ -58,9 +59,9 @@ public:
 
 private:
     //Variabeln:
-    double laenge;
-    double breite;
-    double dicke;
+    double laenge;  //X-Wert
+    double breite;  //Y-Wert
+    double dicke;   //Z-Wert
     text_zeilenweise bearbeitungen;
 
     //Funktionen:

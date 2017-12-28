@@ -44,6 +44,7 @@ HEADERS  += mainwindow.h \
     KlassenWst/bohrung.h \
     Definitionen/def_bearbeitungen.h \
     KlassenWst/rechtecktasche.h \
-    KlassenWst/nut.h
+    KlassenWst/nut.h \
+    Definitionen/def_ganx.h
 
 FORMS    += mainwindow.ui
