@@ -9,7 +9,7 @@ werkzeugmagazin::werkzeugmagazin(text_zeilenweise neues_magazin)
     magazin = neues_magazin;
 }
 
-QString werkzeugmagazin::get_wkznummer(QString wkz_typ, double dm, double bearbeitungstiefe)
+QString werkzeugmagazin::get_wkznummer(QString wkz_typ, double dm, double bearbeitungstiefe, double werkstueckdicke)
 {
     QString returntext = "";
     text_zeilenweise zeile;
@@ -21,11 +21,22 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, double dm, double bearbe
         zeile.set_text(magazin.zeile(i));
         if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
         {
-            if(zeile.zeile(3).toDouble() == dm)
+            if(zeile.zeile(7).toDouble() == dm)//Durchmesser aus Import == gesuchter DM?
             {
-                if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
+                if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
                 {
-                    returntext = zeile.zeile(2);
+                    if(bearbeitungstiefe >= werkstueckdicke)
+                    {
+                        if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
+                        {
+                            returntext = zeile.zeile(2);
+                        }
+                    }else
+                    {
+                        return zeile.zeile(2);
+                        //ist im WKZ-Magazin ein Durchgangsbohrer und in Nicht-Durchgangsbohrer
+                        //mit dem selben DM, so muss Nicht-Durchgangsbohrer vor dem Durchgangsbohrer stehen
+                    }
                 }
             }
         }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_SAEGE)  )
@@ -64,6 +75,7 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, double dm, double bearbe
             }
         }
     }
+
     return returntext;
 }
 QString werkzeugmagazin::get_dm(QString wkz_nr)

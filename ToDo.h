@@ -23,7 +23,8 @@
     ->Funktionen und Aufrufe überarbeiten
 
 
-
+BUG:
+-->Alle Bohrungen im ganx-Export werden mit Tiefe 0 ausgegeben
 
 
 

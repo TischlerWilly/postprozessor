@@ -700,7 +700,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double laenge_y = tmp_b;
             QString bezug = bo.get_bezug();
 
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, z);
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, z, dicke);
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
@@ -725,7 +725,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
                     msg += "</CntID>";
                     msg += "\n";
                     msg += "    <Plane>Top</Plane>";
@@ -765,7 +765,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm);
+                    msg += wkzmag.get_dm(tnummer);
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -845,7 +845,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm);
+                    msg += wkzmag.get_dm(tnummer);
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -916,7 +916,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm);
+                    msg += wkzmag.get_dm(tnummer);
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -987,7 +987,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm);
+                    msg += wkzmag.get_dm(tnummer);
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -1058,7 +1058,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm);
+                    msg += wkzmag.get_dm(tnummer);
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -1128,7 +1128,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm);
+                    msg += wkzmag.get_dm(tnummer);
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -1610,14 +1610,14 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
             bohrung bo(zeile.get_text());
-            double x = zeile.zeile(4).toDouble();
-            double y = zeile.zeile(5).toDouble();
-            double z = zeile.zeile(6).toDouble();
-            double dm = zeile.zeile(7).toDouble();
+            double x = bo.get_x();
+            double y = bo.get_y();
+            double z = bo.get_z();
+            double dm = bo.get_dm();
             double laenge_y = tmp_b;
             QString bezug = bo.get_bezug();
 
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, z);
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, z, dicke);
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
@@ -1686,7 +1686,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += wkzmag.get_dm(tnummer).replace(".",",");
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -1781,7 +1781,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += wkzmag.get_dm(tnummer).replace(".",",");
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -1875,7 +1875,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += wkzmag.get_dm(tnummer).replace(".",",");
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -1969,7 +1969,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += wkzmag.get_dm(tnummer).replace(".",",");
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -2056,7 +2056,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += wkzmag.get_dm(tnummer).replace(".",",");
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------
@@ -2142,7 +2142,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Diameter>";
-                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += wkzmag.get_dm(tnummer).replace(".",",");
                     msg += "</Diameter>";
                     msg += "\n";
                     //----------------------

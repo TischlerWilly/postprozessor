@@ -234,6 +234,10 @@ void MainWindow::setup()
             file.write("\t");
             file.write("Zustellmass");
             file.write("\t");
+            file.write("DM_CAD");
+            file.write("\t");
+            file.write("Ist Durchgangsbohrer");
+            file.write("\t");
             file.write(" ");
 
             //file.write("\n");
@@ -272,6 +276,10 @@ void MainWindow::setup()
             file.write("Vorschub");
             file.write("\t");
             file.write("Zustellmass");
+            file.write("\t");
+            file.write("DM_CAD");
+            file.write("\t");
+            file.write("Ist Durchgangsbohrer");
             file.write("\t");
             file.write(" ");
 

@@ -190,7 +190,12 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_tiefe(ausdruck_auswerten(tmp));
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_BOHR_DM_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -1275,7 +1280,12 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_tiefe(ausdruck_auswerten(tmp));
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_KTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -1326,7 +1336,12 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_tiefe(ausdruck_auswerten(tmp));
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        rt.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_RTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -1464,7 +1479,12 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_tiefe(ausdruck_auswerten(tmp));
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_BOHR_DM_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -2554,7 +2574,12 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_tiefe(ausdruck_auswerten(tmp));
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_KTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -2607,7 +2632,12 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_tiefe(ausdruck_auswerten(tmp));
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        rt.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_RTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);

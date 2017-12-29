@@ -23,6 +23,9 @@
       <height>461</height>
      </rect>
     </property>
+    <property name="lineWrapMode">
+     <enum>QPlainTextEdit::NoWrap</enum>
+    </property>
     <property name="readOnly">
      <bool>true</bool>
     </property>
