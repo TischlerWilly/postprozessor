@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     KlassenWst/werkstuecke.cpp \
     KlassenWst/bohrung.cpp \
     KlassenWst/rechtecktasche.cpp \
-    KlassenWst/nut.cpp
+    KlassenWst/nut.cpp \
+    werkzeugmagazin.cpp
 
 HEADERS  += mainwindow.h \
     allgemKlassen/formel.h \
@@ -45,6 +46,7 @@ HEADERS  += mainwindow.h \
     Definitionen/def_bearbeitungen.h \
     KlassenWst/rechtecktasche.h \
     KlassenWst/nut.h \
-    Definitionen/def_ganx.h
+    Definitionen/def_ganx.h \
+    werkzeugmagazin.h
 
 FORMS    += mainwindow.ui

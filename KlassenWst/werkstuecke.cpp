@@ -27,7 +27,7 @@ bool werkstuecke::neu(QString Werkstueckname, QString Quellformat)
     {
         namen.zeile_anhaengen(Werkstueckname);
         quellformate.zeile_anhaengen(Quellformat);
-        werkstueck w;
+        werkstueck w(Werkstueckname);
         wste.append(w);
     }
     return false;

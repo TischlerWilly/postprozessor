@@ -18,7 +18,10 @@
     ->Warnung für KTA die zu dicht am Rand sind möglich machen
         >(Bohrungen, für die kein Bohrer gefunden wird)
 
--->Ausgabe soll mit Benachrichtigung (mb) abbrechen, wenn kein WKZ für eine Bearbeitung gefunden wird.
+
+-->werkzeugmagazin erweitern um DM-gezeichnet:
+    ->Funktionen und Aufrufe überarbeiten
+
 
 
 

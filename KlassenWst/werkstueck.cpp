@@ -2,10 +2,18 @@
 
 werkstueck::werkstueck()
 {
-    laenge=0;
-    breite=0;
-    dicke=0;
+    laenge  = 0;
+    breite  = 0;
+    dicke   = 0;
 }
+werkstueck::werkstueck(QString neuer_name)
+{
+    name    = neuer_name;
+    laenge  = 0;
+    breite  = 0;
+    dicke   = 0;
+}
+
 
 void werkstueck::set_laenge(double l)
 {
@@ -463,7 +471,7 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
 }
 
 //-------------------------------------------------------------------------Export:
-QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString& info , QString drehwinkel)
+QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel)
 {
     QString msg;
     bearb_sortieren();
@@ -473,7 +481,7 @@ QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString& info , QS
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_fmc_dateitext(werkzeugmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b);
         info = warnungen;
     }else if(drehwinkel == "90")
@@ -482,7 +490,7 @@ QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString& info , QS
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(werkzeugmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b);
         info = warnungen;
     }else if(drehwinkel == "180")
@@ -492,7 +500,7 @@ QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString& info , QS
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(werkzeugmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b);
         info = warnungen;
     }else if(drehwinkel == "270")
@@ -503,7 +511,7 @@ QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString& info , QS
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(werkzeugmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b);
         info = warnungen;
     }else
@@ -513,7 +521,7 @@ QString werkstueck::get_fmc(text_zeilenweise werkzeugmagazin, QString& info , QS
     }
     return msg;
 }
-QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString& info , QString drehwinkel)
+QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel)
 {
     QString msg;
     bearb_sortieren();
@@ -524,7 +532,7 @@ QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString& info , Q
         double tmp_b = laenge;
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
-        msg = get_ganx_dateitext(werkzeugmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b);
         info = warnungen;
     }else if(drehwinkel == "90")
@@ -534,7 +542,7 @@ QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString& info , Q
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_ganx_dateitext(werkzeugmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b);
         info = warnungen;
     }else if(drehwinkel == "180")
@@ -545,7 +553,7 @@ QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString& info , Q
         tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_ganx_dateitext(werkzeugmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b);
         info = warnungen;
     }else if(drehwinkel == "270")
@@ -557,7 +565,7 @@ QString werkstueck::get_ganx(text_zeilenweise werkzeugmagazin, QString& info , Q
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_ganx_dateitext(werkzeugmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b);
         info = warnungen;
     }else
@@ -609,12 +617,13 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
     return msg;
 }
 
-QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_zeilenweise bearb, double tmp_l, double tmp_b)
+QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, double tmp_l, double tmp_b)
 {
     QString msg;
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
     double bezugsmass = 40;    //Referenzmaß zum Erkennen der Bezugskante
+    werkzeugmagazin wkzmag(wkzmagazin);
 
     //-------------------------1.Vorspann:
     {
@@ -628,7 +637,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
     msg += "  <PrgrSet>";
     msg += "\n";
     msg += "    <PrgrName>";
-    msg += "ppf";
+    msg += name;
     msg += "</PrgrName>";
     msg += "\n";
     msg += "    <Description>";
@@ -678,7 +687,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
     msg += "\n";
     }
     //-------------------------Bearbeitungen <PrgrFileWork>:
-    for(uint i=1 ; i<=baerb.zeilenanzahl() ; i++)
+    for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
     {
         zeile.set_text(bearb.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
@@ -691,526 +700,632 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
             double laenge_y = tmp_b;
             QString bezug = bo.get_bezug();
 
-            if(bezug == WST_BEZUG_OBSEI)
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, z);
+            if(!tnummer.isEmpty())
             {
-                //x = Breite
-                //y = Länge
-                //z = Tiefe
-                msg += "  <PrgrFileWork>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</CntID>";
-                msg += "\n";
-                msg += "    <Plane>Top</Plane>";
-                msg += "\n";
-                //----------------------Bezugskante festlegen:
-                msg += "    <Ref>";
-                //y < 40 -> TL
-                //Länge - y < 40 ->BL
-                QString ref;
-                if(laenge_y - y < bezugsmass)
+                //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+
+                //Anzahl der Zustellungen berechnen:
+                double zustmass = bo.get_zustellmass();
+                if(zustmass <= 0)
                 {
-                    ref += GANX_REF_UNTEN_LINKS;
+                    zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+                }
+                int zustellungen = aufrunden(bo.get_tiefe() / zustmass);
+                if(zustellungen <= 0)
+                {
+                    zustellungen = 1;
+                }
+                //-------------------------------
+                if(bezug == WST_BEZUG_OBSEI)
+                {
+                    //x = Breite
+                    //y = Länge
+                    //z = Tiefe
+                    msg += "  <PrgrFileWork>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    msg += "    <Plane>Top</Plane>";
+                    msg += "\n";
+                    //----------------------Bezugskante festlegen:
+                    msg += "    <Ref>";
+                    //y < 40 -> TL
+                    //Länge - y < 40 ->BL
+                    QString ref;
+                    if(laenge_y - y < bezugsmass)
+                    {
+                        ref += GANX_REF_UNTEN_LINKS;
+                    }else
+                    {
+                        ref += GANX_REF_OBEN_LINKS;
+                    }
+                    msg += ref;
+                    msg += "</Ref>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Typ>B</Typ>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <X>";
+                    msg += double_to_qstring(x);
+                    msg += "</X>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Y>";
+                    msg += double_to_qstring(y);
+                    msg += "</Y>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Z>";
+                    msg += double_to_qstring(0);
+                    msg += "</Z>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm);
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(z);
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <OldID>";
+                    msg += GANX_WST_BEZUG_OBSEI;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</OldID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <KleiGeTei>";    //Tiefe???
+                    msg += double_to_qstring(z);
+                    msg += "</KleiGeTei>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFileWork>";
+                    msg += "\n";
+
+                }else if(bezug == WST_BEZUG_UNSEI)
+                {
+                    //x = Breite
+                    //y = Länge
+                    //z = Tiefe
+                    msg += "  <PrgrFileWork>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    msg += "    <Plane>Bottom</Plane>";
+                    msg += "\n";
+                    //----------------------Bezugskante festlegen:
+                    msg += "    <Ref>";
+                    //y < 40 -> TL
+                    //Länge - y < 40 ->BL
+                    QString ref;
+                    if(laenge_y - y < bezugsmass)
+                    {
+                        ref = GANX_REF_UNTEN_LINKS;
+                    }else
+                    {
+                        ref = GANX_REF_OBEN_LINKS;
+                    }
+                    msg += ref;
+                    msg += "</Ref>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Typ>B</Typ>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <X>";
+                    msg += double_to_qstring(x);
+                    msg += "</X>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Y>";
+                    msg += double_to_qstring(y);
+                    msg += "</Y>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Z>";
+                    msg += double_to_qstring(0);
+                    msg += "</Z>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm);
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(z);
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <OldID>";
+                    msg += GANX_WST_BEZUG_UNSEI;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</OldID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <KleiGeTei>";    //Tiefe???
+                    msg += double_to_qstring(z);
+                    msg += "</KleiGeTei>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFileWork>";
+                    msg += "\n";
+
+                }else if(bezug == WST_BEZUG_LI)
+                {
+                    //x = Tiefe
+                    //y = Y-Pos
+                    //z = Z-Pos
+                    msg += "  <PrgrFileWork>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    msg += "    <Plane>Left</Plane>";
+                    msg += "\n";
+                    //----------------------Bezugskante festlegen:
+                    msg += "    <Ref>";
+                    QString ref = GANX_REF_OBEN_LINKS;
+                    msg += ref;
+                    msg += "</Ref>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Typ>B</Typ>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <X>";
+                    msg += double_to_qstring(0);
+                    msg += "</X>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Y>";
+                    msg += double_to_qstring(y);
+                    msg += "</Y>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Z>";
+                    msg += double_to_qstring(z);
+                    msg += "</Z>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm);
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(x);
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <OldID>";
+                    msg += GANX_WST_BEZUG_LI;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</OldID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <KleiGeTei>";    //Tiefe???
+                    msg += double_to_qstring(x);
+                    msg += "</KleiGeTei>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFileWork>";
+                    msg += "\n";
+
+                }else if(bezug == WST_BEZUG_RE)
+                {
+                    //x = Tiefe
+                    //y = Y-Pos
+                    //z = Z-Pos
+                    msg += "  <PrgrFileWork>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    msg += "    <Plane>Right</Plane>";
+                    msg += "\n";
+                    //----------------------Bezugskante festlegen:
+                    msg += "    <Ref>";
+                    QString ref = GANX_REF_OBEN_RECHTS;
+                    msg += ref;
+                    msg += "</Ref>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Typ>B</Typ>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <X>";
+                    msg += double_to_qstring(0);
+                    msg += "</X>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Y>";
+                    msg += double_to_qstring(y);
+                    msg += "</Y>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Z>";
+                    msg += double_to_qstring(z);
+                    msg += "</Z>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm);
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(x);
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <OldID>";
+                    msg += GANX_WST_BEZUG_RE;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</OldID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <KleiGeTei>";    //Tiefe???
+                    msg += double_to_qstring(x);
+                    msg += "</KleiGeTei>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFileWork>";
+                    msg += "\n";
+
+                }else if(bezug == WST_BEZUG_VO)
+                {
+                    //x = X-Pos
+                    //y = Tiefe
+                    //z = Z-Pos
+                    msg += "  <PrgrFileWork>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    msg += "    <Plane>Front</Plane>";
+                    msg += "\n";
+                    //----------------------Bezugskante festlegen:
+                    msg += "    <Ref>";
+                    QString ref = GANX_REF_UNTEN_LINKS;
+                    msg += ref;
+                    msg += "</Ref>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Typ>B</Typ>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <X>";
+                    msg += double_to_qstring(x);
+                    msg += "</X>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Y>";
+                    msg += double_to_qstring(0);
+                    msg += "</Y>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Z>";
+                    msg += double_to_qstring(z);
+                    msg += "</Z>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm);
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(y);
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <OldID>";
+                    msg += GANX_WST_BEZUG_VO;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</OldID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <KleiGeTei>";    //Tiefe???
+                    msg += double_to_qstring(y);
+                    msg += "</KleiGeTei>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFileWork>";
+                    msg += "\n";
+                }else if(bezug == WST_BEZUG_HI)
+                {
+                    //x = X-Pos
+                    //y = Tiefe
+                    //z = Z-Pos
+                    msg += "  <PrgrFileWork>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    msg += "    <Plane>Rear</Plane>";
+                    msg += "\n";
+                    //----------------------Bezugskante festlegen:
+                    msg += "    <Ref>";
+                    QString ref = GANX_REF_OBEN_LINKS;
+                    msg += ref;
+                    msg += "</Ref>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Typ>B</Typ>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <X>";
+                    msg += double_to_qstring(x);
+                    msg += "</X>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Y>";
+                    msg += double_to_qstring(0);
+                    msg += "</Y>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Z>";
+                    msg += double_to_qstring(z);
+                    msg += "</Z>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm);
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(y);
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <OldID>";
+                    msg += GANX_WST_BEZUG_HI;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</OldID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <KleiGeTei>";    //Tiefe???
+                    msg += double_to_qstring(y);
+                    msg += "</KleiGeTei>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFileWork>";
+                    msg += "\n";
+                }
+
+            }else
+            {
+                //Kein Werkzeug wurde gefunden.
+                //Kann Bohrung als Kreistasche gefräst werden?:
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, z);
+
+                if(!tnummer.isEmpty())
+                {
+                    //Werkzeug wurde gefunden, Kreistasche kann gefräst werden:
+
+                    //Anzahl der Zustellungen berechnen:
+                    double zustmass = bo.get_zustellmass();
+                    if(zustmass <= 0)
+                    {
+                        zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+                    }
+                    int zustellungen = aufrunden(bo.get_tiefe() / zustmass);
+
+                    if(zustellungen <= 0)
+                    {
+                        zustellungen = 1;
+                    }
+
+
+                    msg += "  <PrgrFileWork>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Plane>";
+                    if(bo.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        msg += GANX_WST_BEZUG_OBSEI;
+                    }else
+                    {
+                        msg += GANX_WST_BEZUG_UNSEI;
+                    }
+                    msg += "</Plane>";
+                    msg += "\n";
+                    //----------------------Bezugskante festlegen:
+                    QString ref = GANX_REF_OBEN_LINKS;
+                    //y < 40 -> TL
+                    //Länge - y < 40 ->BL
+                    if(laenge_y - y < bezugsmass)
+                    {
+                        ref = GANX_REF_UNTEN_LINKS;
+                    }
+                    msg += "    <Ref>";
+                    msg += ref;
+                    msg += "</Ref>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Typ>M</Typ>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <X>";
+                    msg += double_to_qstring(x);
+                    msg += "</X>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Y>";
+                    msg += double_to_qstring(y);
+                    msg += "</Y>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Z>";
+                    msg += double_to_qstring(0);
+                    msg += "</Z>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Mill>";
+                    msg += "2";                      //Kreistasche
+                    msg += ";";
+                    msg += double_to_qstring(dm);
+                    msg += ";";
+                    msg += double_to_qstring(z);     //TaTi
+                    msg += ";";
+                    msg += "2";                      //Variante der Kreistasche (2 = ausgeräumt)
+                    msg += ";";
+                    msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
+                    msg += ";";
+                    msg += wkzmag.get_vorschub(tnummer);
+                    msg += ";";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Mill>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>KR</ImageKey>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <OldID>";
+                    if(bo.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        msg += GANX_WST_BEZUG_OBSEI;
+                    }else
+                    {
+                        msg += GANX_WST_BEZUG_UNSEI;
+                    }
+                    msg += "\\";
+                    msg += GANX_REF_OBEN_LINKS;
+                    msg += "\\";
+                    msg += "M-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</OldID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <KleiGeTei>";
+                    msg += "0";
+                    msg += "</KleiGeTei>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFileWork>";
+                    msg += "\n";
+
                 }else
                 {
-                    ref += GANX_REF_OBEN_LINKS;
-                }
-                msg += ref;
-                msg += "</Ref>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Typ>B</Typ>";
-                msg += "\n";
-                //----------------------
-                msg += "    <X>";
-                msg += double_to_qstring(x);
-                msg += "</X>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Y>";
-                msg += double_to_qstring(y);
-                msg += "</Y>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Z>";
-                msg += double_to_qstring(0);
-                msg += "</Z>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm);
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(z);
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
+                    //Mit Fehlermeldung abbrechen:
+                    QString msg = "";
+                    msg += "Fehler bei Export ganx!\n";
+                    msg += "Teilname: ";
+                    msg += name;
+                    msg += "\n";
+                    msg += "Kein Werkzeug fuer:\n";
+                    msg += zeile.get_text();
 
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, z);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
                     QMessageBox mb;
                     mb.setText(msg);
                     mb.exec();
                     return msg;
                 }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <OldID>";
-                msg += GANX_WST_BEZUG_OBSEI;
-                msg += "\\";
-                msg += ref;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</OldID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <KleiGeTei>";    //Tiefe???
-                msg += double_to_qstring(z);
-                msg += "</KleiGeTei>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFileWork>";
-                msg += "\n";
-
-            }else if(bezug == WST_BEZUG_UNSEI)
-            {
-                //x = Breite
-                //y = Länge
-                //z = Tiefe
-                msg += "  <PrgrFileWork>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</CntID>";
-                msg += "\n";
-                msg += "    <Plane>Bottom</Plane>";
-                msg += "\n";
-                //----------------------Bezugskante festlegen:
-                msg += "    <Ref>";
-                //y < 40 -> TL
-                //Länge - y < 40 ->BL
-                QString ref;
-                if(laenge_y - y < bezugsmass)
-                {
-                    ref = GANX_REF_UNTEN_LINKS;
-                }else
-                {
-                    ref = GANX_REF_OBEN_LINKS;
-                }
-                msg += ref;
-                msg += "</Ref>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Typ>B</Typ>";
-                msg += "\n";
-                //----------------------
-                msg += "    <X>";
-                msg += double_to_qstring(x);
-                msg += "</X>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Y>";
-                msg += double_to_qstring(y);
-                msg += "</Y>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Z>";
-                msg += double_to_qstring(0);
-                msg += "</Z>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm);
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(z);
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, z);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <OldID>";
-                msg += GANX_WST_BEZUG_UNSEI;
-                msg += "\\";
-                msg += ref;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</OldID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <KleiGeTei>";    //Tiefe???
-                msg += double_to_qstring(z);
-                msg += "</KleiGeTei>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFileWork>";
-                msg += "\n";
-
-            }else if(bezug == WST_BEZUG_LI)
-            {
-                //x = Tiefe
-                //y = Y-Pos
-                //z = Z-Pos
-                msg += "  <PrgrFileWork>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
-                msg += "</CntID>";
-                msg += "\n";
-                msg += "    <Plane>Left</Plane>";
-                msg += "\n";
-                //----------------------Bezugskante festlegen:
-                msg += "    <Ref>";
-                QString ref = GANX_REF_OBEN_LINKS;
-                msg += ref;
-                msg += "</Ref>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Typ>B</Typ>";
-                msg += "\n";
-                //----------------------
-                msg += "    <X>";
-                msg += double_to_qstring(0);
-                msg += "</X>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Y>";
-                msg += double_to_qstring(y);
-                msg += "</Y>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Z>";
-                msg += double_to_qstring(z);
-                msg += "</Z>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm);
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(x);
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, x);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <OldID>";
-                msg += GANX_WST_BEZUG_LI;
-                msg += "\\";
-                msg += ref;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</OldID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <KleiGeTei>";    //Tiefe???
-                msg += double_to_qstring(x);
-                msg += "</KleiGeTei>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFileWork>";
-                msg += "\n";
-
-            }else if(bezug == WST_BEZUG_RE)
-            {
-                //x = Tiefe
-                //y = Y-Pos
-                //z = Z-Pos
-                msg += "  <PrgrFileWork>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
-                msg += "</CntID>";
-                msg += "\n";
-                msg += "    <Plane>Right</Plane>";
-                msg += "\n";
-                //----------------------Bezugskante festlegen:
-                msg += "    <Ref>";
-                QString ref = GANX_REF_OBEN_RECHTS;
-                msg += ref;
-                msg += "</Ref>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Typ>B</Typ>";
-                msg += "\n";
-                //----------------------
-                msg += "    <X>";
-                msg += double_to_qstring(0);
-                msg += "</X>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Y>";
-                msg += double_to_qstring(y);
-                msg += "</Y>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Z>";
-                msg += double_to_qstring(z);
-                msg += "</Z>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm);
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(x);
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, x);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <OldID>";
-                msg += GANX_WST_BEZUG_RE;
-                msg += "\\";
-                msg += ref;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</OldID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <KleiGeTei>";    //Tiefe???
-                msg += double_to_qstring(x);
-                msg += "</KleiGeTei>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFileWork>";
-                msg += "\n";
-
-            }else if(bezug == WST_BEZUG_VO)
-            {
-                //x = X-Pos
-                //y = Tiefe
-                //z = Z-Pos
-                msg += "  <PrgrFileWork>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
-                msg += "</CntID>";
-                msg += "\n";
-                msg += "    <Plane>Front</Plane>";
-                msg += "\n";
-                //----------------------Bezugskante festlegen:
-                msg += "    <Ref>";
-                QString ref = GANX_REF_UNTEN_LINKS;
-                msg += ref;
-                msg += "</Ref>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Typ>B</Typ>";
-                msg += "\n";
-                //----------------------
-                msg += "    <X>";
-                msg += double_to_qstring(x);
-                msg += "</X>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Y>";
-                msg += double_to_qstring(0);
-                msg += "</Y>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Z>";
-                msg += double_to_qstring(z);
-                msg += "</Z>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm);
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(y);
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, y);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <OldID>";
-                msg += GANX_WST_BEZUG_VO;
-                msg += "\\";
-                msg += ref;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</OldID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <KleiGeTei>";    //Tiefe???
-                msg += double_to_qstring(y);
-                msg += "</KleiGeTei>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFileWork>";
-                msg += "\n";
-            }else if(bezug == WST_BEZUG_HI)
-            {
-                //x = X-Pos
-                //y = Tiefe
-                //z = Z-Pos
-                msg += "  <PrgrFileWork>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
-                msg += "</CntID>";
-                msg += "\n";
-                msg += "    <Plane>Rear</Plane>";
-                msg += "\n";
-                //----------------------Bezugskante festlegen:
-                msg += "    <Ref>";
-                QString ref = GANX_REF_OBEN_LINKS;
-                msg += ref;
-                msg += "</Ref>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Typ>B</Typ>";
-                msg += "\n";
-                //----------------------
-                msg += "    <X>";
-                msg += double_to_qstring(x);
-                msg += "</X>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Y>";
-                msg += double_to_qstring(0);
-                msg += "</Y>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Z>";
-                msg += double_to_qstring(z);
-                msg += "</Z>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm);
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(y);
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, y);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <OldID>";
-                msg += GANX_WST_BEZUG_HI;
-                msg += "\\";
-                msg += ref;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</OldID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <KleiGeTei>";    //Tiefe???
-                msg += double_to_qstring(y);
-                msg += "</KleiGeTei>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFileWork>";
-                msg += "\n";
             }
-        }else if(zeile.zeile(1)==BEARBEITUNG_NUT)
+        }else if(zeile.zeile(1)==BEARBART_NUT)
         {
-            double x = zeile.zeile(4).toDouble();
-            double y = zeile.zeile(5).toDouble();
+            /*
+            nut nu(zeile.get_text());
+            double x = nu.get_xs();
+            double y = nu.get_ys();
             double z = zeile.zeile(6).toDouble();
             double l = zeile.zeile(7).toDouble();
-            QString wkztyp = WKZ_TYP_SAEGE;
-            QString wkz_nr = get_wkz_nummer(wkztyp);
-            if(wkz_nr.isEmpty())
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
+            if(tnummer.isEmpty())
             {
-                QString msg = "Fehler!\nKeine Saege im Werkzeugmagazin für:\n" + zeile.get_text();
+                //Mit Fehlermeldung abbrechen:
+                QString msg = "";
+                msg += "Fehler bei Export ganx!\n";
+                msg += "Teilname: ";
+                msg += name;
+                msg += "\n";
+                msg += "Kein Werkzeug fuer:\n";
+                msg += zeile.get_text();
+
                 QMessageBox mb;
                 mb.setText(msg);
                 mb.exec();
                 return msg;
             }
-            double wkz_dm = get_wkz_dm(wkz_nr).toDouble();
+            double wkz_dm = wkzmag.get_dm(tnummer);
             double nutvariante = zeile.zeile(9).toDouble();
             QString nutvariante_qstring = "";
             if(nutvariante == 1)
@@ -1240,17 +1355,17 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
                 msg += "\n";
                 //----------------------
                 msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
+                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
                 msg += "</CntID>";
                 msg += "\n";
                 //----------------------
                 msg += "    <Plane>";
-                if(zeile.zeile(2)==BEZUG_FLAECHE_OBEN_ASCII)
+                if(bo.get_bezug() == WST_BEZUG_OBSEI)
                 {
-                    msg += "Top";
+                    msg += GANX_WST_BEZUG_OBSEI;
                 }else
                 {
-                    msg += "Bottom";
+                    msg += GANX_WST_BEZUG_UNSEI;
                 }
                 msg += "</Plane>";
                 msg += "\n";
@@ -1309,18 +1424,18 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
                 msg += "\n";
                 //----------------------
                 msg += "    <OldID>";
-                if(zeile.zeile(2)==BEZUG_FLAECHE_OBEN_ASCII)
+                if(bo.get_bezug() == WST_BEZUG_OBSEI)
                 {
-                    msg += "Top";
+                    msg += GANX_WST_BEZUG_OBSEI;
                 }else
                 {
-                    msg += "Bottom";
+                    msg += GANX_WST_BEZUG_UNSEI;
                 }
                 msg += "\\";
                 msg += GANX_REF_OBEN_LINKS;
                 msg += "\\";
                 msg += "S-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
+                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
                 msg += "</OldID>";
                 msg += "\n";
                 //----------------------
@@ -1331,280 +1446,170 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
                 //----------------------
                 msg += "  </PrgrFileWork>";
                 msg += "\n";
-
-        }else if(zeile.zeile(1)==BEARBEITUNG_FRAES)//Alle arten von Fräsarbeiten
+*/
+        }else if(zeile.zeile(1)==BEARBART_RTA)
         {
-            if(zeile.zeile(3).toDouble() == 101)//Rechtecktaschen
+            rechtecktasche rt(zeile.get_text());
+            double x = rt.get_x();
+            double y = rt.get_y();
+            double z = rt.get_z();
+            double lx = rt.get_laenge();
+            double by = rt.get_breite();
+            double laenge_y = tmp_b;
+            double minmass = lx;
+            if(by < minmass)
             {
-                double x = zeile.zeile(4).toDouble();
-                double y = zeile.zeile(5).toDouble();
-                double z = zeile.zeile(6).toDouble();
-                double lx = zeile.zeile(7).toDouble();
-                double by = zeile.zeile(8).toDouble();
-                double minmass = lx;
-                if(by < minmass)
-                {
-                    minmass = by;
-                }
-                QString wkztyp = WKZ_TYP_FRAESER;
-                QString wkz_nr = get_wkz_nummer(wkztyp, minmass, z);
-                if(wkz_nr.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Fraeser im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                double wkz_dm = get_wkz_dm(wkz_nr).toDouble();
-                double eckenradius = zeile.zeile(9).toDouble();
-                if(eckenradius < wkz_dm/2)
-                {
-                    eckenradius = wkz_dm/2;
-                }
-                double wkz_vorschub = get_wkz_vorschub(wkz_nr).toDouble();
-                int zustellungen = zeile.zeile(10).toInt();
-                if(zustellungen <= 0)
-                {
-                    zustellungen = 1;
-                }
-
-                msg += "  <PrgrFileWork>";
-                msg += "\n";
-                //----------------------
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Plane>";
-                if(zeile.zeile(2)==BEZUG_FLAECHE_OBEN_ASCII)
-                {
-                    msg += "Top";
-                }else
-                {
-                    msg += "Bottom";
-                }
-                msg += "</Plane>";
-                msg += "\n";
-                //----------------------Bezugskante festlegen:
-                QString bezug = GANX_REF_OBEN_LINKS;
-                //y < 40 -> TL
-                //Länge - y < 40 ->BL
-                if(laenge_y - y < bezugsmass)
-                {
-                    bezug = GANX_REF_UNTEN_LINKS;
-                }
-                msg += "    <Ref>";
-                msg += bezug;
-                msg += "</Ref>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Typ>M</Typ>";
-                msg += "\n";
-                //----------------------
-                msg += "    <X>";
-                msg += double_to_qstring(x);
-                msg += "</X>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Y>";
-                msg += double_to_qstring(y);
-                msg += "</Y>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Z>";
-                msg += double_to_qstring(0);
-                msg += "</Z>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Tool>";
-                msg += wkz_nr;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Mill>";
-                msg += "3";                      //Rechtecktasche
-                msg += ";";
-                msg += double_to_qstring(by);    //TAB
-                msg += ";";
-                msg += double_to_qstring(lx);    //TAL
-                msg += ";";
-                msg += double_to_qstring(eckenradius); //Eckenradius Tasche
-                msg += ";";
-                msg += double_to_qstring(z);     //TaTi
-                msg += ";";
-                msg += "1";                      //Variante der Rechtecktasche (1 = ausgeräumt)
-                msg += ";";
-                msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
-                msg += ";";
-                msg += double_to_qstring(wkz_vorschub);
-                msg += ";";
-                msg += int_to_qstring(zustellungen);
-                msg += "</Mill>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>RE</ImageKey>";
-                msg += "\n";
-                //----------------------
-                msg += "    <OldID>";
-                if(zeile.zeile(2)==BEZUG_FLAECHE_OBEN_ASCII)
-                {
-                    msg += "Top";
-                }else
-                {
-                    msg += "Bottom";
-                }
-                msg += "\\";
-                msg += GANX_REF_OBEN_LINKS;
-                msg += "\\";
-                msg += "M-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
-                msg += "</OldID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <KleiGeTei>";
-                msg += "0";
-                msg += "</KleiGeTei>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFileWork>";
-                msg += "\n";
-
-
-
-            }else if(zeile.zeile(3).toDouble() == 102)//Kreistaschen
-            {
-                double x = zeile.zeile(4).toDouble();
-                double y = zeile.zeile(5).toDouble();
-                double z = zeile.zeile(6).toDouble();
-                double dm = zeile.zeile(7).toDouble();
-                QString wkztyp = WKZ_TYP_FRAESER;
-                QString wkz_nr = get_wkz_nummer(wkztyp, dm, z);
-                if(wkz_nr.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Fraeser im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                //double wkz_dm = get_wkz_dm(wkz_nr).toDouble();
-                double wkz_vorschub = get_wkz_vorschub(wkz_nr).toDouble();
-                int zustellungen = zeile.zeile(8).toInt();
-                if(zustellungen <= 0)
-                {
-                    zustellungen = 1;
-                }
-
-
-                msg += "  <PrgrFileWork>";
-                msg += "\n";
-                //----------------------
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Plane>";
-                if(zeile.zeile(2)==BEZUG_FLAECHE_OBEN_ASCII)
-                {
-                    msg += "Top";
-                }else
-                {
-                    msg += "Bottom";
-                }
-                msg += "</Plane>";
-                msg += "\n";
-                //----------------------Bezugskante festlegen:
-                QString bezug = GANX_REF_OBEN_LINKS;
-                //y < 40 -> TL
-                //Länge - y < 40 ->BL
-                if(laenge_y - y < bezugsmass)
-                {
-                    bezug = GANX_REF_UNTEN_LINKS;
-                }
-                msg += "    <Ref>";
-                msg += bezug;
-                msg += "</Ref>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Typ>M</Typ>";
-                msg += "\n";
-                //----------------------
-                msg += "    <X>";
-                msg += double_to_qstring(x);
-                msg += "</X>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Y>";
-                msg += double_to_qstring(y);
-                msg += "</Y>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Z>";
-                msg += double_to_qstring(0);
-                msg += "</Z>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Tool>";
-                msg += wkz_nr;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Mill>";
-                msg += "2";                      //Kreistasche
-                msg += ";";
-                msg += double_to_qstring(dm);
-                msg += ";";
-                msg += double_to_qstring(z);     //TaTi
-                msg += ";";
-                msg += "2";                      //Variante der Kreistasche (2 = ausgeräumt)
-                msg += ";";
-                msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
-                msg += ";";
-                msg += double_to_qstring(wkz_vorschub);
-                msg += ";";
-                msg += int_to_qstring(zustellungen);
-                msg += "</Mill>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>KR</ImageKey>";
-                msg += "\n";
-                //----------------------
-                msg += "    <OldID>";
-                if(zeile.zeile(2)==BEZUG_FLAECHE_OBEN_ASCII)
-                {
-                    msg += "Top";
-                }else
-                {
-                    msg += "Bottom";
-                }
-                msg += "\\";
-                msg += GANX_REF_OBEN_LINKS;
-                msg += "\\";
-                msg += "M-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
-                msg += "</OldID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <KleiGeTei>";
-                msg += "0";
-                msg += "</KleiGeTei>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFileWork>";
-                msg += "\n";
+                minmass = by;
             }
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, z);
+            if(tnummer.isEmpty())
+            {
+                //Mit Fehlermeldung abbrechen:
+                QString msg = "";
+                msg += "Fehler bei Export ganx!\n";
+                msg += "Teilname: ";
+                msg += name;
+                msg += "\n";
+                msg += "Kein Werkzeug fuer Rechtecktasche:\n";
+                msg += zeile.get_text();
+
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                return msg;
+            }
+            double wkz_dm = wkzmag.get_dm(tnummer).toDouble();
+            double eckenradius = rt.get_rad();
+            if(eckenradius < wkz_dm/2)
+            {
+                eckenradius = wkz_dm/2;
+            }
+            double wkz_vorschub = wkzmag.get_vorschub(tnummer).toDouble();
+            //Anzahl der Zustellungen berechnen:
+            double zustmass = rt.get_zustellmass();
+            if(zustmass <= 0)
+            {
+                zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+            }
+            int zustellungen = aufrunden(rt.get_tiefe() / zustmass);
+
+            if(zustellungen <= 0)
+            {
+                zustellungen = 1;
+            }
+
+            //----------------------------------------------
+            msg += "  <PrgrFileWork>";
+            msg += "\n";
+            //----------------------
+            msg += "    <CntID>";
+            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+            msg += "</CntID>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Plane>";
+            if(rt.get_bezug() == WST_BEZUG_OBSEI)
+            {
+                msg += GANX_WST_BEZUG_OBSEI;
+            }else
+            {
+                msg += GANX_WST_BEZUG_UNSEI;
+            }
+            msg += "</Plane>";
+            msg += "\n";
+            //----------------------Bezugskante festlegen:
+            QString ref = GANX_REF_OBEN_LINKS;
+            //y < 40 -> TL
+            //Länge - y < 40 ->BL
+            if(laenge_y - y < bezugsmass)
+            {
+                ref = GANX_REF_UNTEN_LINKS;
+            }
+            msg += "    <Ref>";
+            msg += ref;
+            msg += "</Ref>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Typ>M</Typ>";
+            msg += "\n";
+            //----------------------
+            msg += "    <X>";
+            msg += double_to_qstring(x);
+            msg += "</X>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Y>";
+            msg += double_to_qstring(y);
+            msg += "</Y>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Z>";
+            msg += double_to_qstring(0);
+            msg += "</Z>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Tool>";
+            msg += tnummer;
+            msg += "</Tool>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Mill>";
+            msg += "3";                      //Rechtecktasche
+            msg += ";";
+            msg += double_to_qstring(by);    //TAB
+            msg += ";";
+            msg += double_to_qstring(lx);    //TAL
+            msg += ";";
+            msg += double_to_qstring(eckenradius); //Eckenradius Tasche
+            msg += ";";
+            msg += double_to_qstring(z);     //TaTi
+            msg += ";";
+            msg += "1";                      //Variante der Rechtecktasche (1 = ausgeräumt)
+            msg += ";";
+            msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
+            msg += ";";
+            msg += double_to_qstring(wkz_vorschub);
+            msg += ";";
+            msg += int_to_qstring(zustellungen);
+            msg += "</Mill>";
+            msg += "\n";
+            //----------------------
+            msg += "    <ImageKey>RE</ImageKey>";
+            msg += "\n";
+            //----------------------
+            msg += "    <OldID>";
+            if(rt.get_bezug() == WST_BEZUG_OBSEI)
+            {
+                msg += GANX_WST_BEZUG_OBSEI;
+            }else
+            {
+                msg += GANX_WST_BEZUG_UNSEI;
+            }
+            msg += "\\";
+            msg += GANX_REF_OBEN_LINKS;
+            msg += "\\";
+            msg += "M-";
+            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+            msg += "</OldID>";
+            msg += "\n";
+            //----------------------
+            msg += "    <KleiGeTei>";
+            msg += "0";
+            msg += "</KleiGeTei>";
+            msg += "\n";
+            //----------------------
+            msg += "  </PrgrFileWork>";
+            msg += "\n";
         }
     }
 
     //-------------------------Bearbeitungen <PrgrFile>:
-    for(uint i=4 ; i<=tz.zeilenanzahl() ; i++)
+    for(uint i=4 ; i<=bearb.zeilenanzahl() ; i++)
     {
-        zeile.set_text(tz.zeile(i));
+        zeile.set_text(bearb.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
+            bohrung bo(zeile.get_text());
             double x = zeile.zeile(4).toDouble();
             double y = zeile.zeile(5).toDouble();
             double z = zeile.zeile(6).toDouble();
@@ -1612,626 +1617,741 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
             double laenge_y = tmp_b;
             QString bezug = bo.get_bezug();
 
-            //int ref = zeile.zeile(3).toInt();       //Referenzkante 1 = TL / 4 = BL
-
-            if(bezug == WST_BEZUG_OBSEI)
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, z);
+            if(!tnummer.isEmpty())
             {
-                //x = Breite
-                //y = Länge
-                //z = Tiefe
-                msg += "  <PrgrFile>";
-                msg += "\n";
-                //----------------------
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                //y < 40 -> TL
-                //Länge - y < 40 ->BL
-                QString ref;
-                if(laenge_y - y < bezugsmass)
+                //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+
+                //Anzahl der Zustellungen berechnen:
+                double zustmass = bo.get_zustellmass();
+                if(zustmass <= 0)
                 {
-                    ref += GANX_REF_UNTEN_LINKS;
+                    zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+                }
+                int zustellungen = aufrunden(bo.get_tiefe() / zustmass);
+                if(zustellungen <= 0)
+                {
+                    zustellungen = 1;
+                }
+                //-------------------------------
+
+                if(bezug == WST_BEZUG_OBSEI)
+                {
+                    //x = Breite
+                    //y = Länge
+                    //z = Tiefe
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    //y < 40 -> TL
+                    //Länge - y < 40 ->BL
+                    QString ref;
+                    if(laenge_y - y < bezugsmass)
+                    {
+                        ref += GANX_REF_UNTEN_LINKS;
+                    }else
+                    {
+                        ref += GANX_REF_OBEN_LINKS;
+                    }
+                    msg += ref;
+                    //----------------------
+                    msg += "    <ID>";
+                    msg += GANX_WST_BEZUG_OBSEI;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefLVL>";
+                    msg += double_to_qstring(0).replace(".",",");
+                    msg += "</RefLVL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(z).replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <UsedDbl>ERR</UsedDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblB>true</DblB>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <MFLage>B</MFLage>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>B</ImageKey>>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+
+                }else if(bezug == WST_BEZUG_UNSEI)
+                {
+                    //x = Breite
+                    //y = Länge
+                    //z = Tiefe
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    QString ref;
+                    if(laenge_y - y < bezugsmass)
+                    {
+                        ref = GANX_REF_UNTEN_LINKS;
+                    }else
+                    {
+                        ref = GANX_REF_OBEN_LINKS;
+                    }
+                    msg += ref;
+                    //----------------------
+                    msg += "    <ID>";
+                    msg += GANX_WST_BEZUG_UNSEI;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefLVL>";
+                    msg += double_to_qstring(0).replace(".",",");
+                    msg += "</RefLVL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(z).replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <UsedDbl>ERR</UsedDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblB>true</DblB>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <MFLage>B</MFLage>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>B</ImageKey>>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+
+                }else if(bezug == WST_BEZUG_LI)
+                {
+                    //x = Tiefe
+                    //y = Y-Pos
+                    //z = Z-Pos
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    QString ref;
+                    if(laenge_y - y < bezugsmass)
+                    {
+                        ref += GANX_REF_UNTEN_LINKS;
+                    }else
+                    {
+                        ref += GANX_REF_OBEN_LINKS;
+                    }
+                    //----------------------
+                    msg += "    <ID>";
+                    msg += GANX_WST_BEZUG_LI;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(z).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefLVL>";
+                    msg += double_to_qstring(0).replace(".",",");
+                    msg += "</RefLVL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <UsedDbl>ERR</UsedDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblB>true</DblB>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <MFLage>B</MFLage>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>B</ImageKey>>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+
+                }else if(bezug == WST_BEZUG_RE)
+                {
+                    //x = Tiefe
+                    //y = Y-Pos
+                    //z = Z-Pos
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    QString ref;
+                    if(laenge_y - y < bezugsmass)
+                    {
+                        ref += GANX_REF_UNTEN_LINKS;
+                    }else
+                    {
+                        ref += GANX_REF_OBEN_LINKS;
+                    }
+                    //----------------------
+                    msg += "    <ID>";
+                    msg += GANX_WST_BEZUG_RE;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(z).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefLVL>";
+                    msg += double_to_qstring(0).replace(".",",");
+                    msg += "</RefLVL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <UsedDbl>ERR</UsedDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblB>true</DblB>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <MFLage>B</MFLage>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>B</ImageKey>>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+
+                }else if(bezug == WST_BEZUG_VO)
+                {
+                    //x = x-Pos
+                    //y = Tiefe
+                    //z = Z-Pos
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    QString ref = GANX_REF_UNTEN_LINKS;
+                    //----------------------
+                    msg += "    <ID>";
+                    msg += GANX_WST_BEZUG_VO;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(z).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefLVL>";
+                    msg += double_to_qstring(0).replace(".",",");
+                    msg += "</RefLVL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <UsedDbl>ERR</UsedDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblB>true</DblB>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <MFLage>B</MFLage>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>B</ImageKey>>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+                }else if(bezug == WST_BEZUG_HI)
+                {
+                    //x = x-Pos
+                    //y = Tiefe
+                    //z = Z-Pos
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    QString ref = GANX_REF_OBEN_LINKS;
+                    //----------------------
+                    msg += "    <ID>";
+                    msg += GANX_WST_BEZUG_HI;
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "B-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(z).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefLVL>";
+                    msg += double_to_qstring(0).replace(".",",");
+                    msg += "</RefLVL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(dm).replace(".",",");
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <UsedDbl>ERR</UsedDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblB>true</DblB>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <MFLage>B</MFLage>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>B</ImageKey>>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+                }
+            }else
+            {
+                //Kein Werkzeug wurde gefunden.
+                //Kann Bohrung als Kreistasche gefräst werden?:
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, z);
+
+                if(!tnummer.isEmpty())
+                {
+                    //Werkzeug wurde gefunden, Kreistasche kann gefräst werden:
+
+                    //Anzahl der Zustellungen berechnen:
+                    double zustmass = bo.get_zustellmass();
+                    if(zustmass <= 0)
+                    {
+                        zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+                    }
+                    int zustellungen = aufrunden(bo.get_tiefe() / zustmass);
+
+                    if(zustellungen <= 0)
+                    {
+                        zustellungen = 1;
+                    }
+                    //---------------------------------------
+                    QString wkz_nr = tnummer;
+                    double wkz_vorschub = wkzmag.get_vorschub(tnummer).toDouble();
+
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    QString ref = GANX_REF_OBEN_LINKS;
+                    //y < 40 -> TL
+                    //Länge - y < 40 ->BL
+                    if(laenge_y - y < bezugsmass)
+                    {
+                        ref = GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y;
+                    }
+                    //----------------------
+                    msg += "    <ID>";
+                    if(bo.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        msg += GANX_WST_BEZUG_OBSEI;
+                    }else
+                    {
+                        msg += GANX_WST_BEZUG_UNSEI;
+                    }
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "M-";
+                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += "0";
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Depth>";
+                    msg += double_to_qstring(z).replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <UsedDbl>ERR</UsedDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblB>false</DblB>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += wkz_nr;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Cyclic>0</Cyclic>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Mill>";
+                    msg += "2";                      //Kreistasche
+                    msg += ";";
+                    msg += double_to_qstring(dm);
+                    msg += ";";
+                    msg += double_to_qstring(z);     //TaTi
+                    msg += ";";
+                    msg += "2";                      //Variante der Kreistasche (2 = ausgeräumt)
+                    msg += ";";
+                    msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
+                    msg += ";";
+                    msg += double_to_qstring(wkz_vorschub);
+                    msg += ";";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Mill>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>KR</ImageKey>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Clause>0</Clause>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+
+
+
+
                 }else
                 {
-                    ref += GANX_REF_OBEN_LINKS;
-                }
-                msg += ref;
-                //----------------------
-                msg += "    <ID>";
-                msg += GANX_WST_BEZUG_OBSEI;
-                msg += "\\";
-                msg += ref;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</ID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal1>";
-                msg += double_to_qstring(y).replace(".",",");
-                msg += "</RefVal1>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal2>";
-                msg += double_to_qstring(x).replace(".",",");
-                msg += "</RefVal2>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefLVL>";
-                msg += double_to_qstring(0).replace(".",",");
-                msg += "</RefLVL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm).replace(".",",");
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(z).replace(".",",");
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoDbl>false</DoDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <UsedDbl>ERR</UsedDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblB>true</DblB>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblL>false</DblL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblE>false</DblE>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoMF>false</DoMF>";
-                msg += "\n";
-                //----------------------
-                msg += "    <MFLage>B</MFLage>";
-                msg += "\n";
-                //----------------------
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
+                    //Diese Stelle des Codes wird theoretisch niemals erreicht,
+                    //da die Funktion bereits in er ersten For-Schleife abbricht.
 
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, z);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
+                    //Mit Fehlermeldung abbrechen:
+                    QString msg = "";
+                    msg += "Fehler bei Export ganx!\n";
+                    msg += "Teilname: ";
+                    msg += name;
+                    msg += "\n";
+                    msg += "Kein Werkzeug fuer:\n";
+                    msg += zeile.get_text();
+
                     QMessageBox mb;
                     mb.setText(msg);
                     mb.exec();
                     return msg;
                 }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Cyclic>1</Cyclic>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>B</ImageKey>>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Step>1</Step>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFile>";
-                msg += "\n";
-
-            }else if(bezug == WST_BEZUG_UNSEI)
-            {
-                //x = Breite
-                //y = Länge
-                //z = Tiefe
-                msg += "  <PrgrFile>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                QString ref;
-                if(laenge_y - y < bezugsmass)
-                {
-                    ref = GANX_REF_UNTEN_LINKS;
-                }else
-                {
-                    ref = GANX_REF_OBEN_LINKS;
-                }
-                msg += ref;
-                //----------------------
-                msg += "    <ID>";
-                msg += GANX_WST_BEZUG_UNSEI;
-                msg += "\\";
-                msg += ref;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</ID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal1>";
-                msg += double_to_qstring(y).replace(".",",");
-                msg += "</RefVal1>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal2>";
-                msg += double_to_qstring(x).replace(".",",");
-                msg += "</RefVal2>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefLVL>";
-                msg += double_to_qstring(0).replace(".",",");
-                msg += "</RefLVL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm).replace(".",",");
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(z).replace(".",",");
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoDbl>false</DoDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <UsedDbl>ERR</UsedDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblB>true</DblB>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblL>false</DblL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblE>false</DblE>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoMF>false</DoMF>";
-                msg += "\n";
-                //----------------------
-                msg += "    <MFLage>B</MFLage>";
-                msg += "\n";
-                //----------------------
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, z);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Cyclic>1</Cyclic>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>B</ImageKey>>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Step>1</Step>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFile>";
-                msg += "\n";
-
-            }else if(bezug == WST_BEZUG_LI)
-            {
-                //x = Tiefe
-                //y = Y-Pos
-                //z = Z-Pos
-                msg += "  <PrgrFile>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                QString bezug = GANX_REF_OBEN_LINKS;
-                if(ref == 4)//BL
-                {
-                    y = laenge_y - y; //Maß hat jetzt Bezug TL
-                }
-                //----------------------
-                msg += "    <ID>";
-                msg += GANX_WST_BEZUG_LI;
-                msg += "\\";
-                msg += bezug;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
-                msg += "</ID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal1>";
-                msg += double_to_qstring(y).replace(".",",");
-                msg += "</RefVal1>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal2>";
-                msg += double_to_qstring(z).replace(".",",");
-                msg += "</RefVal2>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefLVL>";
-                msg += double_to_qstring(0).replace(".",",");
-                msg += "</RefLVL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm).replace(".",",");
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(x).replace(".",",");
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoDbl>false</DoDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <UsedDbl>ERR</UsedDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblB>true</DblB>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblL>false</DblL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblE>false</DblE>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoMF>false</DoMF>";
-                msg += "\n";
-                //----------------------
-                msg += "    <MFLage>B</MFLage>";
-                msg += "\n";
-                //----------------------
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, x);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Cyclic>1</Cyclic>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>B</ImageKey>>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Step>1</Step>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFile>";
-                msg += "\n";
-
-            }else if(bezug == WST_BEZUG_RE
-            {
-                //x = Tiefe
-                //y = Y-Pos
-                //z = Z-Pos
-                msg += "  <PrgrFile>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer in der ASCII-Datei
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                QString bezug = GANX_REF_OBEN_RECHTS;
-                if(ref == 4)//BL
-                {
-                    y = laenge_y - y; //Maß hat jetzt Bezug TL
-                }
-                //----------------------
-                msg += "    <ID>";
-                msg += "Right";
-                msg += "\\";
-                msg += bezug;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer in der ASCII-Datei
-                msg += "</ID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal1>";
-                msg += double_to_qstring(y).replace(".",",");
-                msg += "</RefVal1>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal2>";
-                msg += double_to_qstring(z).replace(".",",");
-                msg += "</RefVal2>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefLVL>";
-                msg += double_to_qstring(0).replace(".",",");
-                msg += "</RefLVL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm).replace(".",",");
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(x).replace(".",",");
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoDbl>false</DoDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <UsedDbl>ERR</UsedDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblB>true</DblB>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblL>false</DblL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblE>false</DblE>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoMF>false</DoMF>";
-                msg += "\n";
-                //----------------------
-                msg += "    <MFLage>B</MFLage>";
-                msg += "\n";
-                //----------------------
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, x);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Cyclic>1</Cyclic>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>B</ImageKey>>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Step>1</Step>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFile>";
-                msg += "\n";
-
-            }else if(bezug == WST_BEZUG_VO)
-            {
-                //x = x-Pos
-                //y = Tiefe
-                //z = Z-Pos
-                msg += "  <PrgrFile>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer in der ASCII-Datei
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                QString bezug = GANX_REF_UNTEN_LINKS;
-                //----------------------
-                msg += "    <ID>";
-                msg += "Front";
-                msg += "\\";
-                msg += bezug;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer in der ASCII-Datei
-                msg += "</ID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal1>";
-                msg += double_to_qstring(z).replace(".",",");
-                msg += "</RefVal1>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal2>";
-                msg += double_to_qstring(x).replace(".",",");
-                msg += "</RefVal2>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefLVL>";
-                msg += double_to_qstring(0).replace(".",",");
-                msg += "</RefLVL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm).replace(".",",");
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(y).replace(".",",");
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoDbl>false</DoDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <UsedDbl>ERR</UsedDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblB>true</DblB>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblL>false</DblL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblE>false</DblE>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoMF>false</DoMF>";
-                msg += "\n";
-                //----------------------
-                msg += "    <MFLage>B</MFLage>";
-                msg += "\n";
-                //----------------------
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, y);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Cyclic>1</Cyclic>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>B</ImageKey>>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Step>1</Step>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFile>";
-                msg += "\n";
-            }else if(bezug == WST_BEZUG_HI)
-            {
-                //x = x-Pos
-                //y = Tiefe
-                //z = Z-Pos
-                msg += "  <PrgrFile>";
-                msg += "\n";
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer in der ASCII-Datei
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                QString bezug = GANX_REF_OBEN_LINKS;
-                //----------------------
-                msg += "    <ID>";
-                msg += "Rear";
-                msg += "\\";
-                msg += bezug;
-                msg += "\\";
-                msg += "B-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer in der ASCII-Datei
-                msg += "</ID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal1>";
-                msg += double_to_qstring(z).replace(".",",");
-                msg += "</RefVal1>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal2>";
-                msg += double_to_qstring(x).replace(".",",");
-                msg += "</RefVal2>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefLVL>";
-                msg += double_to_qstring(0).replace(".",",");
-                msg += "</RefLVL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(dm).replace(".",",");
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "   <Depth>";
-                msg += double_to_qstring(y).replace(".",",");
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoDbl>false</DoDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <UsedDbl>ERR</UsedDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblB>true</DblB>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblL>false</DblL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblE>false</DblE>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoMF>false</DoMF>";
-                msg += "\n";
-                //----------------------
-                msg += "    <MFLage>B</MFLage>";
-                msg += "\n";
-                //----------------------
-                //----------------------Werkzeugnummer:
-                msg += "    <Tool>";
-
-                QString tnummer = get_wkz_nummer(WKZ_TYP_BOHRER, dm, y);
-                if(tnummer.isEmpty())
-                {
-                    QString msg = "Fehler!\nKein Bohrer im Werkzeugmagazin für:\n" + zeile.get_text();
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Cyclic>1</Cyclic>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>B</ImageKey>>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Step>1</Step>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFile>";
-                msg += "\n";
             }
-        }else if(zeile.zeile(1)==BEARBEITUNG_NUT)
+        }else if(zeile.zeile(1) == BEARBART_NUT)
         {
-            double x = zeile.zeile(4).toDouble();
-            double y = zeile.zeile(5).toDouble();
+            /*
+            nut nu(zeile.get_text());
+            double x = nu.get_xs();
+            double y = nu.get_ys();
             double z = zeile.zeile(6).toDouble();
             double l = zeile.zeile(7).toDouble();
             QString wkztyp = WKZ_TYP_SAEGE;
@@ -2266,23 +2386,23 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
             msg += "\n";
             //----------------------
             msg += "    <CntID>";
-            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
+            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
             msg += "</CntID>";
             msg += "\n";
             //----------------------
             msg += "    <ID>";
-            if(zeile.zeile(2)==BEZUG_FLAECHE_OBEN_ASCII)
+            if(bo.get_bezug() == WST_BEZUG_OBSEI)
             {
-                msg += "Top";
+                msg += GANX_WST_BEZUG_OBSEI;
             }else
             {
-                msg += "Bottom";
+                msg += GANX_WST_BEZUG_UNSEI;
             }
             msg += "\\";
             msg += GANX_REF_OBEN_LINKS;
             msg += "\\";
             msg += "S-";
-            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
+            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
             msg += "</ID>";
             msg += "\n";
             //----------------------
@@ -2353,272 +2473,156 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
             msg += "  </PrgrFile>";
             msg += "\n";
             //----------------------
-
-        }else if(zeile.zeile(1)==BEARBEITUNG_FRAES)//Alle arten von Fräsarbeiten
+*/
+        }else if(zeile.zeile(1) == BEARBART_RTA)
         {
-            if(zeile.zeile(3).toDouble() == 101)//Rechtecktaschen
+            rechtecktasche rt(zeile.get_text());
+            double x = rt.get_x();
+            double y = rt.get_y();
+            double z = rt.get_z();
+            double lx = rt.get_laenge();
+            double by = rt.get_breite();
+            double laenge_y = tmp_b;
+            double minmass = lx;
+            if(by < minmass)
             {
-                double x = zeile.zeile(4).toDouble();
-                double y = zeile.zeile(5).toDouble();
-                double z = zeile.zeile(6).toDouble();
-                double lx = zeile.zeile(7).toDouble();
-                double by = zeile.zeile(8).toDouble();
-                double minmass = lx;
-                if(by < minmass)
-                {
-                    minmass = by;
-                }
-                QString wkztyp = WKZ_TYP_FRAESER;
-                QString wkz_nr = get_wkz_nummer(wkztyp, minmass, z);
-                double wkz_dm = get_wkz_dm(wkz_nr).toDouble();
-                double eckenradius = zeile.zeile(9).toDouble();
-                if(eckenradius < wkz_dm/2)
-                {
-                    eckenradius = wkz_dm/2;
-                }
-                double wkz_vorschub = get_wkz_vorschub(wkz_nr).toDouble();
-                int zustellungen = zeile.zeile(10).toInt();
-                if(zustellungen <= 0)
-                {
-                    zustellungen = 1;
-                }
-
-                msg += "  <PrgrFile>";
-                msg += "\n";
-                //----------------------
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                QString bezug = GANX_REF_OBEN_LINKS;
-                //y < 40 -> TL
-                //Länge - y < 40 ->BL
-                if(laenge_y - y < bezugsmass)
-                {
-                    bezug = GANX_REF_UNTEN_LINKS;
-                    y = laenge_y - y;
-                }
-                //----------------------
-                msg += "    <ID>";
-                if(zeile.zeile(2)==BEZUG_FLAECHE_OBEN_ASCII)
-                {
-                    msg += "Top";
-                }else
-                {
-                    msg += "Bottom";
-                }
-                msg += "\\";
-                msg += bezug;
-                msg += "\\";
-                msg += "M-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer in der ASCII-Datei
-                msg += "</ID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal1>";
-                msg += double_to_qstring(y).replace(".",",");
-                msg += "</RefVal1>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal2>";
-                msg += double_to_qstring(x).replace(".",",");
-                msg += "</RefVal2>";
-                msg += "\n";
-                //----------------------
-                //----------------------
-                msg += "    <Diameter>";
-                msg += "0";
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Depth>";
-                msg += double_to_qstring(z).replace(".",",");
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoDbl>false</DoDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <UsedDbl>ERR</UsedDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblB>false</DblB>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblL>false</DblL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblE>false</DblE>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoMF>false</DoMF>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Tool>";
-                msg += wkz_nr;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Cyclic>0</Cyclic>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Mill>";
-                msg += "3";                      //Rechtecktasche
-                msg += ";";
-                msg += double_to_qstring(by);    //TAB
-                msg += ";";
-                msg += double_to_qstring(lx);    //TAL
-                msg += ";";
-                msg += double_to_qstring(eckenradius); //Eckenradius Tasche
-                msg += ";";
-                msg += double_to_qstring(z);     //TaTi
-                msg += ";";
-                msg += "1";                      //Variante der Rechtecktasche (1 = ausgeräumt)
-                msg += ";";
-                msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
-                msg += ";";
-                msg += double_to_qstring(wkz_vorschub);
-                msg += ";";
-                msg += int_to_qstring(zustellungen);
-                msg += "</Mill>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>RE</ImageKey>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Step>1</Step>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Clause>0</Clause>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFile>";
-                msg += "\n";
-            }else if(zeile.zeile(3).toDouble() == 102)//Kreistaschen
-            {
-                double x = zeile.zeile(4).toDouble();
-                double y = zeile.zeile(5).toDouble();
-                double z = zeile.zeile(6).toDouble();
-                double dm = zeile.zeile(7).toDouble();
-                QString wkztyp = WKZ_TYP_FRAESER;
-                QString wkz_nr = get_wkz_nummer(wkztyp, dm, z);
-                //double wkz_dm = get_wkz_dm(wkz_nr).toDouble();
-                double wkz_vorschub = get_wkz_vorschub(wkz_nr).toDouble();
-                int zustellungen = zeile.zeile(8).toInt();
-                if(zustellungen <= 0)
-                {
-                    zustellungen = 1;
-                }
-
-                msg += "  <PrgrFile>";
-                msg += "\n";
-                //----------------------
-                msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer in der ASCII-Datei
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                QString bezug = GANX_REF_OBEN_LINKS;
-                //y < 40 -> TL
-                //Länge - y < 40 ->BL
-                if(laenge_y - y < bezugsmass)
-                {
-                    bezug = GANX_REF_UNTEN_LINKS;
-                    y = laenge_y - y;
-                }
-                //----------------------
-                msg += "    <ID>";
-                if(zeile.zeile(2)==BEZUG_FLAECHE_OBEN_ASCII)
-                {
-                    msg += "Top";
-                }else
-                {
-                    msg += "Bottom";
-                }
-                msg += "\\";
-                msg += bezug;
-                msg += "\\";
-                msg += "M-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer in der ASCII-Datei
-                msg += "</ID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal1>";
-                msg += double_to_qstring(y).replace(".",",");
-                msg += "</RefVal1>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal2>";
-                msg += double_to_qstring(x).replace(".",",");
-                msg += "</RefVal2>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += "0";
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Depth>";
-                msg += double_to_qstring(z).replace(".",",");
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoDbl>false</DoDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <UsedDbl>ERR</UsedDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblB>false</DblB>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblL>false</DblL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblE>false</DblE>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoMF>false</DoMF>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Tool>";
-                msg += wkz_nr;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Cyclic>0</Cyclic>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Mill>";
-                msg += "2";                      //Kreistasche
-                msg += ";";
-                msg += double_to_qstring(dm);
-                msg += ";";
-                msg += double_to_qstring(z);     //TaTi
-                msg += ";";
-                msg += "2";                      //Variante der Kreistasche (2 = ausgeräumt)
-                msg += ";";
-                msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
-                msg += ";";
-                msg += double_to_qstring(wkz_vorschub);
-                msg += ";";
-                msg += int_to_qstring(zustellungen);
-                msg += "</Mill>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>KR</ImageKey>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Step>1</Step>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Clause>0</Clause>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFile>";
-                msg += "\n";
+                minmass = by;
             }
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, z);
+            double wkz_dm = wkzmag.get_dm(tnummer).toDouble();
+            double eckenradius = rt.get_rad();
+            if(eckenradius < wkz_dm/2)
+            {
+                eckenradius = wkz_dm/2;
+            }
+            double wkz_vorschub = wkzmag.get_vorschub(tnummer).toDouble();
+            //Anzahl der Zustellungen berechnen:
+            double zustmass = rt.get_zustellmass();
+            if(zustmass <= 0)
+            {
+                zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+            }
+            int zustellungen = aufrunden(rt.get_tiefe() / zustmass);
+            if(zustellungen <= 0)
+            {
+                zustellungen = 1;
+            }
+
+            //----------------------------------------------
+
+            msg += "  <PrgrFile>";
+            msg += "\n";
+            //----------------------
+            msg += "    <CntID>";
+            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+            msg += "</CntID>";
+            msg += "\n";
+            //----------------------
+            QString ref = GANX_REF_OBEN_LINKS;
+            //y < 40 -> TL
+            //Länge - y < 40 ->BL
+            if(laenge_y - y < bezugsmass)
+            {
+                ref = GANX_REF_UNTEN_LINKS;
+                y = laenge_y - y;
+            }
+            //----------------------
+            msg += "    <ID>";
+            if(rt.get_bezug() == WST_BEZUG_OBSEI)
+            {
+                msg += GANX_WST_BEZUG_OBSEI;
+            }else
+            {
+                msg += GANX_WST_BEZUG_UNSEI;
+            }
+            msg += "\\";
+            msg += ref;
+            msg += "\\";
+            msg += "M-";
+            msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+            msg += "</ID>";
+            msg += "\n";
+            //----------------------
+            msg += "    <RefVal1>";
+            msg += double_to_qstring(y).replace(".",",");
+            msg += "</RefVal1>";
+            msg += "\n";
+            //----------------------
+            msg += "    <RefVal2>";
+            msg += double_to_qstring(x).replace(".",",");
+            msg += "</RefVal2>";
+            msg += "\n";
+            //----------------------
+            //----------------------
+            msg += "    <Diameter>";
+            msg += "0";
+            msg += "</Diameter>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Depth>";
+            msg += double_to_qstring(z).replace(".",",");
+            msg += "</Depth>";
+            msg += "\n";
+            //----------------------
+            msg += "    <DoDbl>false</DoDbl>";
+            msg += "\n";
+            //----------------------
+            msg += "    <UsedDbl>ERR</UsedDbl>";
+            msg += "\n";
+            //----------------------
+            msg += "    <DblB>false</DblB>";
+            msg += "\n";
+            //----------------------
+            msg += "    <DblL>false</DblL>";
+            msg += "\n";
+            //----------------------
+            msg += "    <DblE>false</DblE>";
+            msg += "\n";
+            //----------------------
+            msg += "    <DoMF>false</DoMF>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Tool>";
+            msg += tnummer;
+            msg += "</Tool>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Cyclic>0</Cyclic>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Mill>";
+            msg += "3";                      //Rechtecktasche
+            msg += ";";
+            msg += double_to_qstring(by);    //TAB
+            msg += ";";
+            msg += double_to_qstring(lx);    //TAL
+            msg += ";";
+            msg += double_to_qstring(eckenradius); //Eckenradius Tasche
+            msg += ";";
+            msg += double_to_qstring(z);     //TaTi
+            msg += ";";
+            msg += "1";                      //Variante der Rechtecktasche (1 = ausgeräumt)
+            msg += ";";
+            msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
+            msg += ";";
+            msg += double_to_qstring(wkz_vorschub);
+            msg += ";";
+            msg += int_to_qstring(zustellungen);
+            msg += "</Mill>";
+            msg += "\n";
+            //----------------------
+            msg += "    <ImageKey>RE</ImageKey>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Step>1</Step>";
+            msg += "\n";
+            //----------------------
+            msg += "    <Clause>0</Clause>";
+            msg += "\n";
+            //----------------------
+            msg += "  </PrgrFile>";
+            msg += "\n";
+
         }
     }
 
@@ -2628,9 +2632,10 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise werkzeugmagazin, text_ze
 
     return msg;
 }
-QString werkstueck::get_fmc_dateitext(text_zeilenweise werkzeugmagazin, text_zeilenweise bearb, double tmp_l, double tmp_b)
+QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, double tmp_l, double tmp_b)
 {
     QString msg;
+    werkzeugmagazin wkzmag(wkzmagazin);
 
     //Programmkopf:
     msg = FMC_PRGKOPF;
@@ -2665,97 +2670,5 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
 }
 
 //-------------------------------------------------------------------------Werkzeug:
-QString werkstueck::get_wkz_nummer(text_zeilenweise wkz_magazin, QString wkz_typ, double dm, double bearbeitungstiefe)
-{
-    QString returntext = "";
-    text_zeilenweise zeile;
-    zeile.set_trennzeichen('\t');
-    double wkz_dm_tmp = 0;
 
-    for(uint i = 2; i<=wkz_magazin.zeilenanzahl() ;i++)
-    {
-        zeile.set_text(wkz_magazin.zeile(i));
-        if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
-        {
-            if(zeile.zeile(3).toDouble() == dm)
-            {
-                if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
-                {
-                    returntext = zeile.zeile(2);
-                }
-            }
-        }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_SAEGE)  )
-        {
-            returntext = zeile.zeile(2);
-        }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
-        {
-            double wkz_dm = zeile.zeile(3).toDouble();
-            if(  (wkz_dm <= dm-4)  &&  (wkz_dm > wkz_dm_tmp)  )
-            {
-                if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
-                {
-                    wkz_dm_tmp = wkz_dm;
-                    returntext = zeile.zeile(2);
-                }
-            }
-        }
-    }
-    if(returntext.isEmpty())
-    {
-        wkz_dm_tmp = 0;
-        for(uint i = 2; i<=wkz_magazin.zeilenanzahl() ;i++)
-        {
-            zeile.set_text(wkz_magazin.zeile(i));
-            if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
-            {
-                double wkz_dm = zeile.zeile(3).toDouble();
-                if(  (wkz_dm <= dm-1)  &&  (wkz_dm > wkz_dm_tmp)  )
-                {
-                    if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
-                    {
-                        wkz_dm_tmp = wkz_dm;
-                        returntext = zeile.zeile(2);
-                    }
-                }
-            }
-        }
-    }
-    return returntext;
-}
-QString werkstueck::get_wkz_dm(text_zeilenweise wkz_magazin, QString wkz_nr)
-{
-    QString returntext = "";
-    text_zeilenweise zeile;
-    zeile.set_trennzeichen('\t');
-
-    for(uint i = 2; i<=wkz_magazin.zeilenanzahl() ;i++)
-    {
-        zeile.set_text(wkz_magazin.zeile(i));
-
-        if(zeile.zeile(2) == wkz_nr)
-        {
-            returntext = zeile.zeile(3);
-        }
-
-    }
-    return returntext;
-}
-QString werkstueck::get_wkz_vorschub(text_zeilenweise wkz_magazin, QString wkz_nr)
-{
-    QString returntext = "";
-    text_zeilenweise zeile;
-    zeile.set_trennzeichen('\t');
-
-    for(uint i = 2; i<=wkz_magazin.zeilenanzahl() ;i++)
-    {
-        zeile.set_text(wkz_magazin.zeile(i));
-
-        if(zeile.zeile(2) == wkz_nr)
-        {
-            returntext = zeile.zeile(5);
-        }
-
-    }
-    return returntext;
-}
 
