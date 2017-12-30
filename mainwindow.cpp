@@ -12,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent) :
     tz = QDir::separator(); //Systemspezifischer Separator (Linux: Ordner/Unterordner/...)
     setup();
     on_actionInfo_triggered();
+
+    connect(this, SIGNAL(sendDialogDataWKZ(QString,text_zeilenweise)), \
+            &dlg_wkz, SLOT(getDialogDataWKZ(QString,text_zeilenweise)) );
 }
 
 MainWindow::~MainWindow()
@@ -517,11 +520,11 @@ void MainWindow::on_actionInfo_triggered()
 }
 void MainWindow::on_actionWerkzeug_ganx_anzeigen_triggered()
 {
-    ui->plainTextEdit_eldungen->setPlainText(wkz_magazin_ganx.get_text());
+    emit sendDialogDataWKZ("Werkzeug GANX", wkz_magazin_ganx);
 }
 void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
 {
-    ui->plainTextEdit_eldungen->setPlainText(wkz_magazin_fmc.get_text());
+    emit sendDialogDataWKZ("Werkzeug FMC", wkz_magazin_fmc);
 }
 void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
 {

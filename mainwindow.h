@@ -11,6 +11,7 @@
 #include <QFileDialog>
 
 #include "Definitionen/dateinamen.h"
+#include "dialog_wkz.h"
 
 
 #include "eigeneFunktionen/text.h"
@@ -85,7 +86,11 @@ private:
     void schreibe_ini();
     void dateien_erfassen();
 
+    //Dialoge:
+    Dialog_WKZ dlg_wkz;
 
+signals:
+    void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
 
 
 };
