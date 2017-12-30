@@ -45,7 +45,19 @@
     13: Zustellmaß              //optionaler Parameter, wenn Werk 0 ist, dann Zustellung gem Wkz-Magazin
 */
 
-
+#define BEARBART_NUT        "nut"    //Bearbeitungsart Nut
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "nut"
+    2 : Bezugsfläche
+    3 : Startpunkt in X
+    4 : Startpunkt in Y
+    5 : Endpunkt in X
+    6 : Endpunkt in Y
+    7 : Nuttiefe
+    8 : Nutbreite
+    9 : Ausführbedingung
+*/
 
 
 

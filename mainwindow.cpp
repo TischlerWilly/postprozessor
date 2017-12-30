@@ -234,6 +234,10 @@ void MainWindow::setup()
             file.write("\t");
             file.write("Zustellmass");
             file.write("\t");
+            file.write("DM_CAD");
+            file.write("\t");
+            file.write("Ist Durchgangsbohrer");
+            file.write("\t");
             file.write(" ");
 
             //file.write("\n");
@@ -272,6 +276,10 @@ void MainWindow::setup()
             file.write("Vorschub");
             file.write("\t");
             file.write("Zustellmass");
+            file.write("\t");
+            file.write("DM_CAD");
+            file.write("\t");
+            file.write("Ist Durchgangsbohrer");
             file.write("\t");
             file.write(" ");
 
@@ -717,7 +725,7 @@ void MainWindow::on_pushButton_start_clicked()
 
     QString msg;
     msg = int_to_qstring(wste.get_namen_tz().zeilenanzahl()) + " eingelesene Werkstuecke:\n";
-    msg += wste.get_namen();
+    //msg += wste.get_namen();
     ui->plainTextEdit_eldungen->setPlainText(msg);
 
     //Datein exportieren:
@@ -755,8 +763,14 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
             }else
             {
-                QString tmp = wste.get_wst(i).get_ganx(wkz_magazin_ganx, drehung_des_bauteils);
+                QString info = "";
+                QString tmp = wste.get_wst(i).get_ganx(wkz_magazin_ganx, info, drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
+                QString output;
+                output = teilname;
+                output += "\n";
+                output += info;
+                ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();
         }
@@ -771,8 +785,14 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
             }else
             {
-                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, drehung_des_bauteils);
+                QString info = "";
+                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
+                QString output;
+                output = teilname;
+                output += "\n";
+                output += info;
+                ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();
         }
@@ -787,8 +807,13 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
             }else
             {
-                QString tmp = wste.get_wst(i).get_eigenses_format();
+                QString info = "";
+                QString tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
+                QString output;
+                output = teilname;
+                output += "\n";
+                ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();
 

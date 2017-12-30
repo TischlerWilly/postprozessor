@@ -27,7 +27,7 @@ bool werkstuecke::neu(QString Werkstueckname, QString Quellformat)
     {
         namen.zeile_anhaengen(Werkstueckname);
         quellformate.zeile_anhaengen(Quellformat);
-        werkstueck w;
+        werkstueck w(Werkstueckname);
         wste.append(w);
     }
     return false;
@@ -185,20 +185,27 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_BOHR_DM_TIEFE))
                     {
-                        bo.set_tiefe(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_BOHR_DM_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_x(tmp);
+                        bo.set_x(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_BOHR_DM_Y))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_y(tmp);
+                        bo.set_y(ausdruck_auswerten(tmp));
                     }
                 }
             }
@@ -224,6 +231,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 {
                     i=ii;
                     bo.set_tiefe(x1 + bohrtiefe);
+                    bo.set_x(x1);
                     if(y1)
                     {
                         bo.set_y(y1);
@@ -294,6 +302,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         bo.set_bezug(WST_BEZUG_RE);
                         bo.set_tiefe(w.get_laenge() - x2 + bohrtiefe);
+                        bo.set_x(x2);
 
                         if(y1)
                         {
@@ -371,10 +380,12 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_HBEXP_TI))
                     {
-                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bohrtiefe = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -393,7 +404,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         x2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_KM))
                     {
-                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Y1))
                     {
                         QString tmp = (wert_nach_istgleich(zeile));
@@ -462,7 +475,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             bohrung bo;
             bo.set_bezug(WST_BEZUG_RE);
             double bohrtiefe = 0;
-            double x1 = 0;
+            double x1 = w.get_laenge();
             double x2 = -1;
             bool kettenmass = false;
             double y1 = 0;
@@ -479,6 +492,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 {
                     i=ii;
                     bo.set_tiefe(w.get_laenge() - x1 + bohrtiefe);
+                    bo.set_x(x1);
                     if(y1)
                     {
                         bo.set_y(y1);
@@ -549,6 +563,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         bo.set_bezug(WST_BEZUG_LI);
                         bo.set_tiefe(x2 + bohrtiefe);
+                        bo.set_x(x2);
 
                         if(y1)
                         {
@@ -626,10 +641,12 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_HBEXP_TI))
                     {
-                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bohrtiefe = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -648,7 +665,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         x1 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_KM))
                     {
-                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Y1))
                     {
                         QString tmp = (wert_nach_istgleich(zeile));
@@ -734,6 +753,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 {
                     i=ii;
                     bo.set_tiefe(y1 + bohrtiefe);
+                    bo.set_y(y1);
                     if(x1)
                     {
                         bo.set_x(x1);
@@ -804,6 +824,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         bo.set_bezug(WST_BEZUG_HI);
                         bo.set_tiefe(w.get_breite() - y2 + bohrtiefe);
+                        bo.set_y(y2);
 
                         if(x1)
                         {
@@ -881,10 +902,12 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_HBEYP_TI))
                     {
-                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bohrtiefe = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -903,7 +926,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         y2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_KM))
                     {
-                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_X1))
                     {
                         QString tmp = (wert_nach_istgleich(zeile));
@@ -989,6 +1014,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 {
                     i=ii;
                     bo.set_tiefe(w.get_breite() - y1 + bohrtiefe);
+                    bo.set_y(y1);
                     if(x1)
                     {
                         bo.set_x(x1);
@@ -1059,6 +1085,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         bo.set_bezug(WST_BEZUG_VO);
                         bo.set_tiefe(y2 + bohrtiefe);
+                        bo.set_y(y2);
 
                         if(x1)
                         {
@@ -1136,10 +1163,12 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_HBEYP_TI))
                     {
-                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bohrtiefe = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -1158,7 +1187,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         y2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_KM))
                     {
-                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_X1))
                     {
                         QString tmp = (wert_nach_istgleich(zeile));
@@ -1244,27 +1275,32 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_KTA_TI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_tiefe(tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_KTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_x(tmp);
+                        bo.set_x(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_KTA_Y))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_y(tmp);
+                        bo.set_y(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_KTA_ZUST))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_zustellmass(tmp);
+                        bo.set_zustellmass(ausdruck_auswerten(tmp));
                     }
                 }
             }
@@ -1290,47 +1326,103 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_laenge(tmp);
+                        rt.set_laenge(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_B))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_breite(tmp);
+                        rt.set_breite(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_TI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_tiefe(tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        rt.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_RTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_x(tmp);
+                        rt.set_x(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_Y))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_y(tmp);
+                        rt.set_y(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_ZUST))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_zustellmass(tmp);
+                        rt.set_zustellmass(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_WI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_drewi(tmp);
+                        rt.set_drewi(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_RAD))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_rad(tmp);
+                        rt.set_rad(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_RAEUM))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_ausraeumen(tmp);
+                        rt.set_ausraeumen(ausdruck_auswerten(tmp));
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_NUT))
+        {
+            nut n;
+            n.set_bezug(WST_BEZUG_OBSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(n.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_NUT_AFB))
+                    {
+                        n.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_NUT_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_tiefe(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_NUT_BR))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_breite(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_NUT_XS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_xs(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_NUT_YS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_ys(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_NUT_XE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_xe(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_NUT_YE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_ye(ausdruck_auswerten(tmp));
                     }
                 }
             }
@@ -1382,10 +1474,17 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_BOHR_DM_TIEFE))
                     {
-                        bo.set_tiefe(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_BOHR_DM_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -1397,7 +1496,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_y(tmp);
+                        bo.set_y(ausdruck_auswerten(tmp));
                     }
                 }
             }
@@ -1423,6 +1522,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 {
                     i=ii;
                     bo.set_tiefe(x1 + bohrtiefe);
+                    bo.set_x(x1);
                     if(y1)
                     {
                         bo.set_y(y1);
@@ -1493,6 +1593,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         bo.set_bezug(WST_BEZUG_LI);//Bearbeitung von Unterseite auf Oberseite bringen (drehen um l/2)
                         bo.set_tiefe(w.get_laenge() - x2 + bohrtiefe);
+                        bo.set_x(x2);
 
                         if(y1)
                         {
@@ -1570,10 +1671,12 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_HBEXP_TI))
                     {
-                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bohrtiefe = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -1592,7 +1695,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         x2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_KM))
                     {
-                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Y1))
                     {
                         QString tmp = (wert_nach_istgleich(zeile));
@@ -1661,7 +1766,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             bohrung bo;
             bo.set_bezug(WST_BEZUG_LI);//Bearbeitung von Unterseite auf Oberseite bringen (drehen um l/2)
             double bohrtiefe = 0;
-            double x1 = 0;
+            double x1 = w.get_laenge();
             double x2 = -1;
             bool kettenmass = false;
             double y1 = 0;
@@ -1678,6 +1783,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 {
                     i=ii;
                     bo.set_tiefe(w.get_laenge() - x1 + bohrtiefe);
+                    bo.set_x(x1);
                     if(y1)
                     {
                         bo.set_y(y1);
@@ -1748,6 +1854,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         bo.set_bezug(WST_BEZUG_RE);//Bearbeitung von Unterseite auf Oberseite bringen (drehen um l/2)
                         bo.set_tiefe(x2 + bohrtiefe);
+                        bo.set_x(x2);
 
                         if(y1)
                         {
@@ -1825,10 +1932,12 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_HBEXP_TI))
                     {
-                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bohrtiefe = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -1847,7 +1956,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         x1 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_KM))
                     {
-                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEXP_Y1))
                     {
                         QString tmp = (wert_nach_istgleich(zeile));
@@ -1933,6 +2044,8 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 {
                     i=ii;
                     bo.set_tiefe(y1 + bohrtiefe);
+                    bo.set_y(y1);
+
                     if(x1)
                     {
                         bo.set_x(x1);
@@ -2003,6 +2116,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         bo.set_bezug(WST_BEZUG_HI);
                         bo.set_tiefe(w.get_breite() - y2 + bohrtiefe);
+                        bo.set_y(y2);
 
                         if(x1)
                         {
@@ -2080,10 +2194,12 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_HBEYP_TI))
                     {
-                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bohrtiefe = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -2103,7 +2219,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         y2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_KM))
                     {
-                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_X1))
                     {
                         QString tmp = (wert_nach_istgleich(zeile));
@@ -2189,6 +2307,8 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 {
                     i=ii;
                     bo.set_tiefe(w.get_breite() - y1 + bohrtiefe);
+                    bo.set_y(y1);
+
                     if(x1)
                     {
                         bo.set_x(x1);
@@ -2259,6 +2379,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         bo.set_bezug(WST_BEZUG_VO);
                         bo.set_tiefe(y2 + bohrtiefe);
+                        bo.set_y(y2);
 
                         if(x1)
                         {
@@ -2336,10 +2457,12 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_HBEYP_TI))
                     {
-                        bohrtiefe = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bohrtiefe = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_Z))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -2358,7 +2481,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         y2 = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_KM))
                     {
-                        kettenmass = ausdruck_auswerten(wert_nach_istgleich(zeile)).toDouble();
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
                     }else if(zeile.contains(FMC_HBEYP_X1))
                     {
                         QString tmp = (wert_nach_istgleich(zeile));
@@ -2444,12 +2569,17 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_KTA_TI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_tiefe(tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_KTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -2461,12 +2591,12 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_y(tmp);
+                        bo.set_y(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_KTA_ZUST))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_zustellmass(tmp);
+                        bo.set_zustellmass(ausdruck_auswerten(tmp));
                     }
                 }
             }
@@ -2492,17 +2622,22 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_laenge(tmp);
+                        rt.set_laenge(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_B))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_breite(tmp);
+                        rt.set_breite(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_TI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_tiefe(tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        rt.set_tiefe(tiefe);
                     }else if(zeile.contains(FMC_RTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -2514,27 +2649,82 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_y(tmp);
+                        rt.set_y(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_ZUST))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_zustellmass(tmp);
+                        rt.set_zustellmass(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_WI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_drewi(tmp);
+                        rt.set_drewi(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_RAD))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_rad(tmp);
+                        rt.set_rad(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_RAEUM))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_ausraeumen(tmp);
+                        rt.set_ausraeumen(ausdruck_auswerten(tmp));
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_NUT))
+        {
+            nut n;
+            n.set_bezug(WST_BEZUG_UNSEI);
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    w.neue_bearbeitung(n.get_text());
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_NUT_AFB))
+                    {
+                        n.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_NUT_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_tiefe(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_NUT_BR))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_breite(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_NUT_XS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
+                        x = w.get_laenge()-x;
+                        n.set_xs(x);
+                    }else if(zeile.contains(FMC_NUT_YS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_ys(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_NUT_XE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
+                        x = w.get_laenge()-x;
+                        n.set_xe(x);
+                    }else if(zeile.contains(FMC_NUT_YE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_ye(ausdruck_auswerten(tmp));
                     }
                 }
             }

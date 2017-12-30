@@ -2,20 +2,26 @@
 #define WERKSTUECK_H
 
 #include <QString>
+#include <QMessageBox>
 
 #include "Definitionen/werkzeug.h"
 
 #include "../eigeneFunktionen/umwandeln.h"
+#include "../eigeneFunktionen/runden.h"
 #include "../Definitionen/def_fmc.h"
+#include "../Definitionen/def_ganx.h"
 #include "../allgemKlassen/text_zeilenweise.h"
+#include "../werkzeugmagazin.h"
 #include "bohrung.h"
 #include "rechtecktasche.h"
+#include "nut.h"
 
 
 class werkstueck
 {
 public:
     werkstueck();
+    werkstueck(QString neuer_name);
 
     void set_laenge(double l);
     void set_laenge(QString l);
@@ -49,23 +55,36 @@ public:
     {
         return double_to_qstring(dicke);
     }
+    inline QString get_name()
+    {
+        return name;
+    }
 
-    QString get_fmc(text_zeilenweise werkzeugmagazin, QString drehwinkel = "0");
-    QString get_ganx(text_zeilenweise werkzeugmagazin, QString drehwinkel = "0");
-    QString get_eigenses_format();
+    QString get_fmc(text_zeilenweise wkzmagazin, QString& info, QString drehwinkel = "0");
+    QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
+    QString get_eigenses_format(QString drehwinkel);
 
 private:
     //Variabeln:
-    double laenge;
-    double breite;
-    double dicke;
+    double laenge;  //X-Wert
+    double breite;  //Y-Wert
+    double dicke;   //Z-Wert
     text_zeilenweise bearbeitungen;
+    QString name;
 
     //Funktionen:
-    QString get_wkz_nummer(text_zeilenweise wkz_magazin, QString wkz_typ, double dm = 0, double bearbeitungstiefe = 0);
-    QString get_wkz_dm(text_zeilenweise wkz_magazin, QString wkz_nr);
-    QString get_wkz_vorschub(text_zeilenweise wkz_magazin, QString wkz_nr);
 
+
+    QString warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
+    QString warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b);
+
+    void bearb_sortieren();
+    text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
+    text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
+
+    QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
+    QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
+    QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b);
 
 };
 
