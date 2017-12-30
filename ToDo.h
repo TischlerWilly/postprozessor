@@ -11,20 +11,29 @@
 -->QString werkstueck::get_fmc()
 -->QString werkstueck::get_ganx()
 
--->void werkstueck::bearb_sortieren()
+-->void werkstueck::bearb_sortieren()  mit Leben füllen / evtl nicht nötig? Testen!
+
+-->Die Option "Drehung Automaisch" aus dem UI mit leben füllen
 
 
--->QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b)
-    ->Warnung für KTA die zu dicht am Rand sind möglich machen
-        >(Bohrungen, für die kein Bohrer gefunden wird)
+Testen:
+-->muss die Reihenfolge der Bearbeitungen verändert werden?
+    ->Sollte bei der Ganner egal sein, da die Maschie die Reihenfolge ohnehinn selbst bestimmt
+    ->Reihenfolge bei FMc-Export wichtig, passt das soweit?
+
+-->Zustelltiefe / Anz der Zustellungen bei Rechtecktaschen ganx?
+
+-->Drehwinkel bzw. L/B der Rechtecktaschen ganx korrekt?
+
+-->Nut Ganx-Export überall da wo Testen im Quelltext dahinter steht!
+    ->Nutvariante
+    ->Nutrichtung
+    ->Zustellung
 
 
--->werkzeugmagazin erweitern um DM-gezeichnet:
-    ->Funktionen und Aufrufe überarbeiten
 
 
-BUG:
--->Alle Bohrungen im ganx-Export werden mit Tiefe 0 ausgegeben
+
 
 
 

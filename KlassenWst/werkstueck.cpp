@@ -67,7 +67,7 @@ void werkstueck::neue_bearbeitung(QString text)
     }
 }
 
-QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b)
+QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin)
 {
     QString msg = "";
     double wst_x = tmp_l;
@@ -106,6 +106,8 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
         msg += "     Dicke = " + double_to_qstring(tmp_d) + "\n";
     }
 
+    werkzeugmagazin wkzmag(wkzmagazin);
+
     for(uint i=1; i<=bearbeit.zeilenanzahl() ;i++)
     {
         text_zeilenweise zeile;
@@ -115,11 +117,13 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
         QString art = zeile.zeile(1);
         if(art == BEARBART_BOHR)
         {
-            QString bezug = zeile.zeile(2);
+            bohrung bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
 
+            //Warnung für HBEs:
             if(bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
             {
-                double x = zeile.zeile(5).toDouble();
+                double x = bo.get_x();
                 if( x<18 )
                 {
                     msg += "  !! HBE zu dicht am Rand!\n";
@@ -129,6 +133,29 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                     msg += "mm\n";
                 }
             }
+
+            //Warnung für Kreistaschen di zu dicht am Rand sind:
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+            if(tnummer.isEmpty())//Bohren nicht möglich weil kein passendes Werkzeug
+            {
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                if(!tnummer.isEmpty())//Kreistasche kann gefräst werden
+                {
+                    double xmin = bo.get_x() - bo.get_dm()/2;
+                    if(xmin < 40)
+                    {
+                        msg += "  !! Kreistasche zu dicht am Rand!\n";
+                        msg += "     X-Abstand muss mind 40mm sein\n";
+                        msg += "     X-Abstand ist ";
+                        msg += double_to_qstring(xmin);
+                        msg += "mm\n";
+                    }
+                }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
+                {
+                    msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
+                }
+            }
+
         }else if(art == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
@@ -533,7 +560,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info = warnungen;
     }else if(drehwinkel == "90")
     {
@@ -543,7 +570,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info = warnungen;
     }else if(drehwinkel == "180")
     {
@@ -554,7 +581,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info = warnungen;
     }else if(drehwinkel == "270")
     {
@@ -566,12 +593,17 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info = warnungen;
     }else
     {
         info = "Die Option AUTOMATISCH wird derzeit noch nicht unterstuetzt\n";
         msg = "";
+
+        //double tmp_l = breite;
+        //double tmp_b = laenge;
+        //text_zeilenweise tmp_bearb;
+        //tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
     }
     return msg;
 }
@@ -700,7 +732,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double laenge_y = tmp_b;
             QString bezug = bo.get_bezug();
 
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, z, dicke);
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, bo.get_tiefe(), dicke, bezug);
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
@@ -770,7 +802,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(z);
+                    msg += bo.get_tiefe_qstring();
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -850,7 +882,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(z);
+                    msg += bo.get_tiefe_qstring();
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -921,7 +953,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(x);
+                    msg += bo.get_tiefe_qstring();
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -992,7 +1024,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(x);
+                    msg += bo.get_tiefe_qstring();
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -1063,7 +1095,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(y);
+                    msg += bo.get_tiefe_qstring();
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -1133,7 +1165,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(y);
+                    msg += bo.get_tiefe_qstring();
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -1165,7 +1197,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, z);
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
 
                 if(!tnummer.isEmpty())
                 {
@@ -1302,12 +1334,38 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             }
         }else if(zeile.zeile(1)==BEARBART_NUT)
         {
-            /*
+
             nut nu(zeile.get_text());
+            if(nu.get_xs() != nu.get_xe())
+            {
+                //Warnung ausgeben und Nut unterdrücken:
+                QString msg = "";
+                msg += "Achtung bei Export ganx!\n";
+                msg += "Teilname: ";
+                msg += name;
+                msg += "\n";
+                msg += "Nut ist nicht parallel zur X-Achse:\n";
+                msg += zeile.get_text();
+                msg += "\n";
+                msg += "Bearbeitung wird unterdrueckt.";
+
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                continue;
+            }
             double x = nu.get_xs();
             double y = nu.get_ys();
-            double z = zeile.zeile(6).toDouble();
-            double l = zeile.zeile(7).toDouble();
+            double z = nu.get_tiefe(); //Tiefe
+            double l = 0;
+            //Nutlänge berechnen:
+            if(nu.get_ys() < nu.get_ye())
+            {
+                l = nu.get_ye() - nu.get_ys();
+            }else
+            {
+                l = nu.get_ys() - nu.get_ye();
+            }
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
             {
@@ -1325,31 +1383,16 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 mb.exec();
                 return msg;
             }
-            double wkz_dm = wkzmag.get_dm(tnummer);
-            double nutvariante = zeile.zeile(9).toDouble();
-            QString nutvariante_qstring = "";
-            if(nutvariante == 1)
-            {
-                nutvariante_qstring = "Var2";
-            }else if(nutvariante == 2)
-            {
-                nutvariante_qstring = "Var1";
-            }else
-            {
-                QString msg = "Fehler!\nKeine keine Nut-Variante angegeben:\n" + zeile.get_text();
-                QMessageBox mb;
-                mb.setText(msg);
-                mb.exec();
-                return msg;
-            }
-            QString nutrichtung;
-            if (zeile.zeile(8).toDouble() == 1)
-            {
-                nutrichtung = "X";
-            }else
-            {
-                nutrichtung = "Y";
-            }
+            double wkz_dm = wkzmag.get_dm(tnummer).toDouble();
+
+            QString nutvariante_qstring = "Var2"; //Testen!!!
+            //ASCII "1" = GANX "Var2" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+            //ASCII "2" = GANX "Var1" = Nut beginnt beim Startmaß und endet am Endmaß
+
+            QString nutrichtung = "Y"; //Testen!!!
+            //Mögliche Werte:
+            //"X" = Nut von links nach rechts = entlang der Y-Achse
+            //"Y" = Nut von vorne nach hinten = entlang der X-Achse
 
                 msg += "  <PrgrFileWork>";
                 msg += "\n";
@@ -1360,7 +1403,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "\n";
                 //----------------------
                 msg += "    <Plane>";
-                if(bo.get_bezug() == WST_BEZUG_OBSEI)
+                if(nu.get_bezug() == WST_BEZUG_OBSEI)
                 {
                     msg += GANX_WST_BEZUG_OBSEI;
                 }else
@@ -1404,7 +1447,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "\n";
                 //----------------------
                 msg += "    <Tool>";
-                msg += wkz_nr;
+                msg += tnummer;
                 msg += "</Tool>";
                 msg += "\n";
                 //----------------------
@@ -1424,7 +1467,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "\n";
                 //----------------------
                 msg += "    <OldID>";
-                if(bo.get_bezug() == WST_BEZUG_OBSEI)
+                if(nu.get_bezug() == WST_BEZUG_OBSEI)
                 {
                     msg += GANX_WST_BEZUG_OBSEI;
                 }else
@@ -1446,22 +1489,48 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 //----------------------
                 msg += "  </PrgrFileWork>";
                 msg += "\n";
-*/
+
         }else if(zeile.zeile(1)==BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
             double x = rt.get_x();
             double y = rt.get_y();
             double z = rt.get_z();
-            double lx = rt.get_laenge();
-            double by = rt.get_breite();
+            double lx = 0;
+            double by = 0;
+            if(rt.get_drewi() == 0 || rt.get_drewi() == 180)
+            {
+                lx = rt.get_laenge();
+                by = rt.get_breite();
+            }else if(rt.get_drewi() == 90 || rt.get_drewi() == 270)
+            {
+                lx = rt.get_breite();
+                by = rt.get_laenge();
+            }else
+            {
+                //Warnung ausgeben und RTA unterdrücken:
+                QString msg = "";
+                msg += "Achtung bei Export ganx!\n";
+                msg += "Teilname: ";
+                msg += name;
+                msg += "\n";
+                msg += "Drehwinkel der Rechtecktasche wird nicht unterstuetzt:\n";
+                msg += zeile.get_text();
+                msg += "\n";
+                msg += "Bearbeitung wird unterdrueckt.";
+
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                continue;
+            }
             double laenge_y = tmp_b;
             double minmass = lx;
             if(by < minmass)
             {
                 minmass = by;
             }
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, z);
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
             if(tnummer.isEmpty())
             {
                 //Mit Fehlermeldung abbrechen:
@@ -1604,7 +1673,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
     }
 
     //-------------------------Bearbeitungen <PrgrFile>:
-    for(uint i=4 ; i<=bearb.zeilenanzahl() ; i++)
+    for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
     {
         zeile.set_text(bearb.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
@@ -1617,7 +1686,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double laenge_y = tmp_b;
             QString bezug = bo.get_bezug();
 
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, z, dicke);
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, bo.get_tiefe(), dicke, bezug);
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
@@ -1691,7 +1760,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(z).replace(".",",");
+                    msg += bo.get_tiefe_qstring().replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -1721,7 +1790,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</Tool>";
                     msg += "\n";
                     //----------------------
-                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "    <Cyclic>";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Cyclic>";
                     msg += "\n";
                     //----------------------
                     msg += "    <ImageKey>B</ImageKey>>";
@@ -1786,7 +1857,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(z).replace(".",",");
+                    msg += bo.get_tiefe_qstring().replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -1816,7 +1887,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</Tool>";
                     msg += "\n";
                     //----------------------
-                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "    <Cyclic>";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Cyclic>";
                     msg += "\n";
                     //----------------------
                     msg += "    <ImageKey>B</ImageKey>>";
@@ -1880,7 +1953,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(x).replace(".",",");
+                    msg += bo.get_tiefe_qstring().replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -1910,7 +1983,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</Tool>";
                     msg += "\n";
                     //----------------------
-                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "    <Cyclic>";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Cyclic>";
                     msg += "\n";
                     //----------------------
                     msg += "    <ImageKey>B</ImageKey>>";
@@ -1974,7 +2049,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(x).replace(".",",");
+                    msg += bo.get_tiefe_qstring().replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -2004,7 +2079,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</Tool>";
                     msg += "\n";
                     //----------------------
-                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "    <Cyclic>";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Cyclic>";
                     msg += "\n";
                     //----------------------
                     msg += "    <ImageKey>B</ImageKey>>";
@@ -2061,7 +2138,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(y).replace(".",",");
+                    msg += bo.get_tiefe_qstring().replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -2091,7 +2168,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</Tool>";
                     msg += "\n";
                     //----------------------
-                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "    <Cyclic>";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Cyclic>";
                     msg += "\n";
                     //----------------------
                     msg += "    <ImageKey>B</ImageKey>>";
@@ -2147,7 +2226,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += double_to_qstring(y).replace(".",",");
+                    msg += bo.get_tiefe_qstring().replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -2177,7 +2256,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</Tool>";
                     msg += "\n";
                     //----------------------
-                    msg += "    <Cyclic>1</Cyclic>";
+                    msg += "    <Cyclic>";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Cyclic>";
                     msg += "\n";
                     //----------------------
                     msg += "    <ImageKey>B</ImageKey>>";
@@ -2193,7 +2274,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, z);
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
 
                 if(!tnummer.isEmpty())
                 {
@@ -2348,39 +2429,67 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             }
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {
-            /*
+
             nut nu(zeile.get_text());
+            if(nu.get_xs() != nu.get_xe())
+            {
+                /*
+                //Warnung ausgeben und Nut unterdrücken:
+                QString msg = "";
+                msg += "Achtung bei Export ganx!\n";
+                msg += "Teilname: ";
+                msg += name;
+                msg += "\n";
+                msg += "Nut ist nicht parallel zur X-Achse:\n";
+                msg += zeile.get_text();
+                msg += "\n";
+                msg += "Bearbeitung wird unterdrueckt.";
+
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                */
+                continue;
+            }
             double x = nu.get_xs();
             double y = nu.get_ys();
-            double z = zeile.zeile(6).toDouble();
-            double l = zeile.zeile(7).toDouble();
-            QString wkztyp = WKZ_TYP_SAEGE;
-            QString wkz_nr = get_wkz_nummer(wkztyp);
-            //double wkz_dm = get_wkz_dm(wkz_nr).toDouble();
-            double nutvariante = zeile.zeile(9).toDouble();
-            QString nutvariante_qstring = "";
-            if(nutvariante == 1)
+            double z = nu.get_tiefe(); //Tiefe
+            double l = 0;
+            //Nutlänge berechnen:
+            if(nu.get_ys() < nu.get_ye())
             {
-                nutvariante_qstring = "Var2";
-            }else if(nutvariante == 2)
-            {
-                nutvariante_qstring = "Var1";
+                l = nu.get_ye() - nu.get_ys();
             }else
             {
-                QString msg = "Fehler!\nKeine keine Nut-Variante angegeben:\n" + zeile.get_text();
+                l = nu.get_ys() - nu.get_ye();
+            }
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
+            if(tnummer.isEmpty())
+            {
+                //Mit Fehlermeldung abbrechen:
+                QString msg = "";
+                msg += "Fehler bei Export ganx!\n";
+                msg += "Teilname: ";
+                msg += name;
+                msg += "\n";
+                msg += "Kein Werkzeug fuer:\n";
+                msg += zeile.get_text();
+
                 QMessageBox mb;
                 mb.setText(msg);
                 mb.exec();
                 return msg;
             }
-            QString nutrichtung;
-            if (zeile.zeile(8).toDouble() == 1)
-            {
-                nutrichtung = "X";
-            }else
-            {
-                nutrichtung = "Y";
-            }
+            //double wkz_dm = wkzmag.get_dm(tnummer).toDouble();
+
+            QString nutvariante_qstring = "Var2"; //Testen!!!
+            //ASCII "1" = GANX "Var2" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+            //ASCII "2" = GANX "Var1" = Nut beginnt beim Startmaß und endet am Endmaß
+
+            QString nutrichtung = "Y"; //Testen!!!
+            //Mögliche Werte:
+            //"X" = Nut von links nach rechts = entlang der Y-Achse
+            //"Y" = Nut von vorne nach hinten = entlang der X-Achse
 
             msg += "  <PrgrFile>";
             msg += "\n";
@@ -2391,7 +2500,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += "\n";
             //----------------------
             msg += "    <ID>";
-            if(bo.get_bezug() == WST_BEZUG_OBSEI)
+            if(nu.get_bezug() == WST_BEZUG_OBSEI)
             {
                 msg += GANX_WST_BEZUG_OBSEI;
             }else
@@ -2442,7 +2551,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += "\n";
             //----------------------
             msg += "    <Tool>";
-            msg += wkz_nr;
+            msg += tnummer;
             msg += "</Tool>";
             msg += "\n";
             //----------------------
@@ -2461,7 +2570,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += "</SGrooveLength>";
             msg += "\n";
             //----------------------
-            msg += "    <Cyclic>0</Cyclic>";
+            msg += "    <Cyclic>0</Cyclic>";//Zustellung?? Testen!!!
             msg += "\n";
             //----------------------
             msg += "    <ImageKey>S</ImageKey>";
@@ -2473,22 +2582,51 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += "  </PrgrFile>";
             msg += "\n";
             //----------------------
-*/
+
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
             double x = rt.get_x();
             double y = rt.get_y();
             double z = rt.get_z();
-            double lx = rt.get_laenge();
-            double by = rt.get_breite();
+            double lx = 0;
+            double by = 0;
+            if(rt.get_drewi() == 0 || rt.get_drewi() == 180)
+            {
+                lx = rt.get_laenge();
+                by = rt.get_breite();
+            }else if(rt.get_drewi() == 90 || rt.get_drewi() == 270)
+            {
+                lx = rt.get_breite();
+                by = rt.get_laenge();
+            }else
+            {
+                /*Diese Warnung wird bereits durch die vorherige For-Schleife ausgegeben:
+                 *
+                //Warnung ausgeben und RTA unterdrücken:
+                QString msg = "";
+                msg += "Achtung bei Export ganx!\n";
+                msg += "Teilname: ";
+                msg += name;
+                msg += "\n";
+                msg += "Drehwinkel der Rechtecktasche wird nicht unterstuetzt:\n";
+                msg += zeile.get_text();
+                msg += "\n";
+                msg += "Bearbeitung wird unterdrueckt.";
+
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                */
+                continue;
+            }
             double laenge_y = tmp_b;
             double minmass = lx;
             if(by < minmass)
             {
                 minmass = by;
             }
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, z);
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
             double wkz_dm = wkzmag.get_dm(tnummer).toDouble();
             double eckenradius = rt.get_rad();
             if(eckenradius < wkz_dm/2)

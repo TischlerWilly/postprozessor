@@ -1,0 +1,13 @@
+Typ	Nummer	Durchmesser	Nutzlaenge	Vorschub	Zustellmass	DM_CAD	Ist Durchgangsbohrer	 
+B	T50	5	35		5	5	0	
+B	T51	5.1	40		5	5	1	
+B	T60	6	35		5	6		
+B	T80	8	35		5	8		
+B	T80	8	35		5	8.2		
+B	T100	10	35		5	10		
+B	T150	15	35		5	15		
+B	T200	20	35		5	20		
+B	T350	35	35		5	35.3		
+S	S426	125			10			
+M	R602	18	46	7000	12			
+M	R608	8	20	4500	5			

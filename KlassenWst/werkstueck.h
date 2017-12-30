@@ -75,7 +75,7 @@ private:
     //Funktionen:
 
 
-    QString warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b);
+    QString warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
     QString warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b);
 
     void bearb_sortieren();

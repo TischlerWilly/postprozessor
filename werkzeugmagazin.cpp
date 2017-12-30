@@ -9,7 +9,9 @@ werkzeugmagazin::werkzeugmagazin(text_zeilenweise neues_magazin)
     magazin = neues_magazin;
 }
 
-QString werkzeugmagazin::get_wkznummer(QString wkz_typ, double dm, double bearbeitungstiefe, double werkstueckdicke)
+QString werkzeugmagazin::get_wkznummer(QString wkz_typ, double dm, \
+                                       double bearbeitungstiefe, double werkstueckdicke, \
+                                       QString bezugskante)
 {
     QString returntext = "";
     text_zeilenweise zeile;
@@ -23,19 +25,29 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, double dm, double bearbe
         {
             if(zeile.zeile(7).toDouble() == dm)//Durchmesser aus Import == gesuchter DM?
             {
-                if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
+                if(bezugskante == WST_BEZUG_OBSEI || \
+                   bezugskante == WST_BEZUG_UNSEI)
                 {
-                    if(bearbeitungstiefe >= werkstueckdicke)
+                    if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
                     {
-                        if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
+                        if(bearbeitungstiefe >= werkstueckdicke)
                         {
-                            returntext = zeile.zeile(2);
+                            if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
+                            {
+                                returntext = zeile.zeile(2);
+                            }
+                        }else
+                        {
+                            return zeile.zeile(2);
+                            //ist im WKZ-Magazin ein Durchgangsbohrer und in Nicht-Durchgangsbohrer
+                            //mit dem selben DM, so muss Nicht-Durchgangsbohrer vor dem Durchgangsbohrer stehen
                         }
-                    }else
+                    }
+                }else
+                {
+                    if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
                     {
                         return zeile.zeile(2);
-                        //ist im WKZ-Magazin ein Durchgangsbohrer und in Nicht-Durchgangsbohrer
-                        //mit dem selben DM, so muss Nicht-Durchgangsbohrer vor dem Durchgangsbohrer stehen
                     }
                 }
             }
