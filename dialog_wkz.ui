@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog_WKZ</class>
+ <widget class="QDialog" name="Dialog_WKZ">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>771</width>
+    <height>523</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QListWidget" name="listWidget_wkz">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>751</width>
+     <height>471</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>490</y>
+     <width>761</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="pushButton_bearbeiten">
+      <property name="text">
+       <string>Bearbeiten</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_entfernen">
+      <property name="text">
+       <string>Entfernen</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_neu_bohrer">
+      <property name="text">
+       <string>neuer Bohrer</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_neu_fraeser">
+      <property name="text">
+       <string>neuer Fraeser</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_neu_saege">
+      <property name="text">
+       <string>neue Saege</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_abbrechen">
+      <property name="text">
+       <string>Abbrechen</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_speichern">
+      <property name="text">
+       <string>Speichern</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>listWidget_wkz</tabstop>
+  <tabstop>pushButton_bearbeiten</tabstop>
+  <tabstop>pushButton_entfernen</tabstop>
+  <tabstop>pushButton_neu_bohrer</tabstop>
+  <tabstop>pushButton_neu_fraeser</tabstop>
+  <tabstop>pushButton_neu_saege</tabstop>
+  <tabstop>pushButton_abbrechen</tabstop>
+  <tabstop>pushButton_speichern</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

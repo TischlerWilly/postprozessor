@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog_fraeser</class>
+ <widget class="QDialog" name="Dialog_fraeser">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>267</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Fraeser</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>230</y>
+     <width>231</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="pushButton_abbrechen">
+      <property name="text">
+       <string>Abbrechen</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_ok">
+      <property name="text">
+       <string>OK</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>371</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_nr">
+      <property name="text">
+       <string>Werkzeugnummer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_nr"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_dm">
+      <property name="text">
+       <string>Durchmesser</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_nutzl">
+      <property name="text">
+       <string>Nutzlaenge</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_zustm">
+      <property name="text">
+       <string>Zustellmass</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_vors">
+      <property name="text">
+       <string>Vorschub</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_nutzl"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_zustm"/>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit_voers"/>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>pushButton_ok</tabstop>
+  <tabstop>lineEdit_nr</tabstop>
+  <tabstop>lineEdit_dm</tabstop>
+  <tabstop>lineEdit_nutzl</tabstop>
+  <tabstop>lineEdit_zustm</tabstop>
+  <tabstop>lineEdit_voers</tabstop>
+  <tabstop>pushButton_abbrechen</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

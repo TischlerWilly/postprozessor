@@ -270,7 +270,7 @@
   </widget>
   <action name="actionWerkzeug_ganx_anzeigen">
    <property name="text">
-    <string>Werkzeug ganx anzeigen</string>
+    <string>Werkzeug ganx bearbeiten</string>
    </property>
   </action>
   <action name="actionInfo">
@@ -280,7 +280,7 @@
   </action>
   <action name="actionWerkzeug_fmc_anzeigen">
    <property name="text">
-    <string>Werkzeug fmc anzeigen</string>
+    <string>Werkzeug fmc bearbeiten</string>
    </property>
   </action>
   <action name="actionStandard_Namen_anzeigen">

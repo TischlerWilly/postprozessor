@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog_bohrer</class>
+ <widget class="QDialog" name="Dialog_bohrer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>386</width>
+    <height>265</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Bohrer</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>361</width>
+     <height>200</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_nr">
+      <property name="text">
+       <string>Werkzeugnummer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_dm_real">
+      <property name="text">
+       <string>Durchmesser real</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_dm_cad">
+      <property name="text">
+       <string>Durchmesser CAD</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_nutzlaenge">
+      <property name="text">
+       <string>Nutzlaenge</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_zustmass">
+      <property name="text">
+       <string>Zustellmass</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_dubo">
+      <property name="text">
+       <string>Ist ein Durchgangsbohrer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_nr"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm_real"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm_cad"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit__nutzlaenge"/>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit__zustmass"/>
+    </item>
+    <item row="5" column="1">
+     <widget class="QComboBox" name="comboBox_dubo"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>230</y>
+     <width>211</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="pushButton_abbrechen">
+      <property name="text">
+       <string>Abbrechen</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_ok">
+      <property name="text">
+       <string>OK</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>pushButton_ok</tabstop>
+  <tabstop>lineEdit_nr</tabstop>
+  <tabstop>lineEdit_dm_real</tabstop>
+  <tabstop>lineEdit_dm_cad</tabstop>
+  <tabstop>lineEdit__nutzlaenge</tabstop>
+  <tabstop>lineEdit__zustmass</tabstop>
+  <tabstop>comboBox_dubo</tabstop>
+  <tabstop>pushButton_abbrechen</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
