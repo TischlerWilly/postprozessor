@@ -27,7 +27,10 @@ SOURCES += main.cpp\
     KlassenWst/rechtecktasche.cpp \
     KlassenWst/nut.cpp \
     werkzeugmagazin.cpp \
-    dialog_wkz.cpp
+    dialog_wkz.cpp \
+    dialog_bohrer.cpp \
+    dialog_fraeser.cpp \
+    dialog_saege.cpp
 
 HEADERS  += mainwindow.h \
     allgemKlassen/formel.h \
@@ -49,7 +52,13 @@ HEADERS  += mainwindow.h \
     KlassenWst/nut.h \
     Definitionen/def_ganx.h \
     werkzeugmagazin.h \
-    dialog_wkz.h
+    dialog_wkz.h \
+    dialog_bohrer.h \
+    dialog_fraeser.h \
+    dialog_saege.h
 
 FORMS    += mainwindow.ui \
-    dialog_wkz.ui
+    dialog_wkz.ui \
+    dialog_bohrer.ui \
+    dialog_fraeser.ui \
+    dialog_saege.ui

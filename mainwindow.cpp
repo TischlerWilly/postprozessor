@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, SIGNAL(sendDialogDataWKZ(QString,text_zeilenweise)), \
             &dlg_wkz, SLOT(getDialogDataWKZ(QString,text_zeilenweise)) );
+    connect(&dlg_wkz, SIGNAL(sendData_wkzmagazin(QString,text_zeilenweise)), \
+            this, SLOT(getDialogDataWKZ(QString,text_zeilenweise))     );
 }
 
 MainWindow::~MainWindow()
@@ -351,6 +353,35 @@ void MainWindow::schreibe_ini()
     file.close();
 }
 
+void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin)
+{
+    if(fenstertitel.contains("GANX"))
+    {
+        QFile file(WERKZEUGDATEI_GANX);
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+        }else
+        {
+            wkz_magazin_ganx = werkzeugmagazin;
+            file.write(werkzeugmagazin.get_text().toUtf8());
+        }
+        file.close();
+    }else if(fenstertitel.contains("FMC"))
+    {
+        QFile file(WERKZEUGDATEI_FMC);
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+        }else
+        {
+            wkz_magazin_fmc = werkzeugmagazin;
+            file.write(werkzeugmagazin.get_text().toUtf8());
+        }
+        file.close();
+    }
+}
+
 //-----------------------------------------------------------------------Pfade:
 void MainWindow::on_lineEdit_quelle_editingFinished()
 {
@@ -515,6 +546,14 @@ void MainWindow::on_actionInfo_triggered()
     tmp = "Postprozessor";
     tmp += "\t\tProgrammversion: ";
     tmp += PROGRAMMVERSION;
+    tmp += "\n\n";
+
+    tmp += "Moegliche Importformate:\n";
+    tmp += "  *.FMC / *.fmc (IMAWOP4)\n";
+    tmp += "\n";
+
+    tmp += "Hinweis zum GANX-Export:\n";
+    tmp += "  Fraeskonturen werden ignoriert.";
 
     ui->plainTextEdit_eldungen->setPlainText(tmp);
 }
