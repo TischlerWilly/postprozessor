@@ -770,6 +770,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     if(laenge_y - y < bezugsmass)
                     {
                         ref += GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y;
                     }else
                     {
                         ref += GANX_REF_OBEN_LINKS;
@@ -850,6 +851,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     if(laenge_y - y < bezugsmass)
                     {
                         ref = GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y;
                     }else
                     {
                         ref = GANX_REF_OBEN_LINKS;
@@ -1242,6 +1244,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     if(laenge_y - y < bezugsmass)
                     {
                         ref = GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y;
                     }
                     msg += "    <Ref>";
                     msg += ref;
@@ -1385,15 +1388,19 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             }
             double wkz_dm = wkzmag.get_dm(tnummer).toDouble();
 
-            QString nutvariante_qstring = "Var2"; //Testen!!!
-            //ASCII "1" = GANX "Var2" = Nuttiefe wird beim Startmaß und Endmaß erreicht
-            //ASCII "2" = GANX "Var1" = Nut beginnt beim Startmaß und endet am Endmaß
+            QString nutvariante_qstring = "Var2";
+            //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+            //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
 
-            QString nutrichtung = "Y"; //Testen!!!
+            QString nutrichtung = "Y";
             //Mögliche Werte:
             //"X" = Nut von links nach rechts = entlang der Y-Achse
             //"Y" = Nut von vorne nach hinten = entlang der X-Achse
 
+            double nutblattbreite = 5;
+
+            if(nu.get_breite() == nutblattbreite)
+            {
                 msg += "  <PrgrFileWork>";
                 msg += "\n";
                 //----------------------
@@ -1489,6 +1496,133 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 //----------------------
                 msg += "  </PrgrFileWork>";
                 msg += "\n";
+            }else if(nu.get_breite() > nutblattbreite)
+            {
+                //Wir müssen mehrere Nuten fahren Nuten
+                uint anz_nuten = aufrunden(nu.get_breite() / nutblattbreite);
+
+                for(uint ii=1; ii<=anz_nuten ;ii++)
+                {
+                    //Beispiel:
+                    //Nutbreite = 8,5
+                    //blattbreite = 5
+                    //Anzahl Nuten = 2
+                    //x-Versatz  Nut:
+                    //8,5/2 - 5/2 = 1,75
+                    //Versatz = +-1,75
+
+                    double versatz = nu.get_breite()/2 - nutblattbreite/2 ;
+
+                    if(ii == 1)
+                    {
+                        x = x - versatz;
+
+                    }else if(ii==anz_nuten)
+                    {
+                        x = x + versatz*2;
+                    }else
+                    {
+                        x = x + (  (anz_nuten-2)*nutblattbreite  );
+                    }
+
+                    msg += "  <PrgrFileWork>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i+500+ii);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Plane>";
+                    if(nu.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        msg += GANX_WST_BEZUG_OBSEI;
+                    }else
+                    {
+                        msg += GANX_WST_BEZUG_UNSEI;
+                    }
+                    msg += "</Plane>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Ref>";
+                    msg += GANX_REF_OBEN_LINKS;
+                    msg += "</Ref>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Typ>S</Typ>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <X>";
+                    msg += double_to_qstring(x);
+                    msg += "</X>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Y>";
+                    msg += double_to_qstring(y);
+                    msg += "</Y>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Z>";
+                    msg += double_to_qstring(0);
+                    msg += "</Z>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += double_to_qstring(wkz_dm);
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Depth>";
+                    msg += double_to_qstring(z);
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SVar>";
+                    msg += nutvariante_qstring;
+                    msg += "</SVar>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SParallel>";
+                    msg += nutrichtung;
+                    msg += "</SParallel>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SGrooveLength>";
+                    msg += double_to_qstring(l);
+                    msg += "</SGrooveLength>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <OldID>";
+                    if(nu.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        msg += GANX_WST_BEZUG_OBSEI;
+                    }else
+                    {
+                        msg += GANX_WST_BEZUG_UNSEI;
+                    }
+                    msg += "\\";
+                    msg += GANX_REF_OBEN_LINKS;
+                    msg += "\\";
+                    msg += "S-";
+                    msg += int_to_qstring(i+500+ii);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</OldID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <KleiGeTei>";
+                    msg += "0";
+                    msg += "</KleiGeTei>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFileWork>";
+                    msg += "\n";
+                }
+            }
+
 
         }else if(zeile.zeile(1)==BEARBART_RTA)
         {
@@ -1593,6 +1727,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             if(laenge_y - y < bezugsmass)
             {
                 ref = GANX_REF_UNTEN_LINKS;
+                y = laenge_y - y;
             }
             msg += "    <Ref>";
             msg += ref;
@@ -1723,11 +1858,12 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     if(laenge_y - y < bezugsmass)
                     {
                         ref += GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y;
                     }else
                     {
                         ref += GANX_REF_OBEN_LINKS;
                     }
-                    msg += ref;
+                    //msg += ref;
                     //----------------------
                     msg += "    <ID>";
                     msg += GANX_WST_BEZUG_OBSEI;
@@ -1820,11 +1956,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     if(laenge_y - y < bezugsmass)
                     {
                         ref = GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y;
                     }else
                     {
                         ref = GANX_REF_OBEN_LINKS;
                     }
-                    msg += ref;
                     //----------------------
                     msg += "    <ID>";
                     msg += GANX_WST_BEZUG_UNSEI;
@@ -1917,6 +2053,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     if(laenge_y - y < bezugsmass)
                     {
                         ref += GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y;
                     }else
                     {
                         ref += GANX_REF_OBEN_LINKS;
@@ -2013,6 +2150,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     if(laenge_y - y < bezugsmass)
                     {
                         ref += GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y;
                     }else
                     {
                         ref += GANX_REF_OBEN_LINKS;
@@ -2482,106 +2620,226 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             }
             //double wkz_dm = wkzmag.get_dm(tnummer).toDouble();
 
-            QString nutvariante_qstring = "Var2"; //Testen!!!
-            //ASCII "1" = GANX "Var2" = Nuttiefe wird beim Startmaß und Endmaß erreicht
-            //ASCII "2" = GANX "Var1" = Nut beginnt beim Startmaß und endet am Endmaß
+            QString nutvariante_qstring = "Var2";
+            //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+            //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
 
-            QString nutrichtung = "Y"; //Testen!!!
+            QString nutrichtung = "Y";
             //Mögliche Werte:
             //"X" = Nut von links nach rechts = entlang der Y-Achse
             //"Y" = Nut von vorne nach hinten = entlang der X-Achse
 
-            msg += "  <PrgrFile>";
-            msg += "\n";
-            //----------------------
-            msg += "    <CntID>";
-            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
-            msg += "</CntID>";
-            msg += "\n";
-            //----------------------
-            msg += "    <ID>";
-            if(nu.get_bezug() == WST_BEZUG_OBSEI)
+            double nutblattbreite = 5;
+
+            if(nu.get_breite() == nutblattbreite)
             {
-                msg += GANX_WST_BEZUG_OBSEI;
-            }else
+                msg += "  <PrgrFile>";
+                msg += "\n";
+                //----------------------
+                msg += "    <CntID>";
+                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                msg += "</CntID>";
+                msg += "\n";
+                //----------------------
+                msg += "    <ID>";
+                if(nu.get_bezug() == WST_BEZUG_OBSEI)
+                {
+                    msg += GANX_WST_BEZUG_OBSEI;
+                }else
+                {
+                    msg += GANX_WST_BEZUG_UNSEI;
+                }
+                msg += "\\";
+                msg += GANX_REF_OBEN_LINKS;
+                msg += "\\";
+                msg += "S-";
+                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                msg += "</ID>";
+                msg += "\n";
+                //----------------------
+                msg += "    <RefVal1>";
+                msg += double_to_qstring(y).replace(".",",");
+                msg += "</RefVal1>";
+                msg += "\n";
+                //----------------------
+                msg += "    <RefVal2>";
+                msg += double_to_qstring(x).replace(".",",");
+                msg += "</RefVal2>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Diameter>";
+                msg += "0";
+                msg += "</Diameter>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Depth>";
+                msg += double_to_qstring(z).replace(".",",");
+                msg += "</Depth>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DoDbl>false</DoDbl>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DblB>false</DblB>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DblL>false</DblL>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DblE>false</DblE>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DoMF>false</DoMF>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Tool>";
+                msg += tnummer;
+                msg += "</Tool>";
+                msg += "\n";
+                //----------------------
+                msg += "    <SVar>";
+                msg += nutvariante_qstring;
+                msg += "</SVar>";
+                msg += "\n";
+                //----------------------
+                msg += "    <SParallel>";
+                msg += nutrichtung;
+                msg += "</SParallel>";
+                msg += "\n";
+                //----------------------
+                msg += "    <SGrooveLength>";
+                msg += double_to_qstring(l);
+                msg += "</SGrooveLength>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Cyclic>0</Cyclic>";//Zustellung?? Testen!!!
+                msg += "\n";
+                //----------------------
+                msg += "    <ImageKey>S</ImageKey>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Step>1</Step>";
+                msg += "\n";
+                //----------------------
+                msg += "  </PrgrFile>";
+                msg += "\n";
+                //----------------------
+            }else if(nu.get_breite() > nutblattbreite)
             {
-                msg += GANX_WST_BEZUG_UNSEI;
+                //Wir müssen mehrere Nuten fahren Nuten
+                uint anz_nuten = aufrunden(nu.get_breite() / nutblattbreite);
+                for(uint ii=1; ii<=anz_nuten ;ii++)
+                {
+                    double versatz = nu.get_breite()/2 - nutblattbreite/2 ;
+
+                    if(ii == 1)
+                    {
+                        x = x - versatz;
+
+                    }else if(ii==anz_nuten)
+                    {
+                        x = x + versatz*2;
+                    }else
+                    {
+                        x = x + (  (anz_nuten-2)*nutblattbreite  );
+                    }
+
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(i+500+ii);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ID>";
+                    if(nu.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        msg += GANX_WST_BEZUG_OBSEI;
+                    }else
+                    {
+                        msg += GANX_WST_BEZUG_UNSEI;
+                    }
+                    msg += "\\";
+                    msg += GANX_REF_OBEN_LINKS;
+                    msg += "\\";
+                    msg += "S-";
+                    msg += int_to_qstring(i+500+ii);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += "0";
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Depth>";
+                    msg += double_to_qstring(z).replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblB>false</DblB>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SVar>";
+                    msg += nutvariante_qstring;
+                    msg += "</SVar>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SParallel>";
+                    msg += nutrichtung;
+                    msg += "</SParallel>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SGrooveLength>";
+                    msg += double_to_qstring(l);
+                    msg += "</SGrooveLength>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Cyclic>0</Cyclic>";//Zustellung?? Testen!!!
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>S</ImageKey>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+                    //----------------------
+
+                }
             }
-            msg += "\\";
-            msg += GANX_REF_OBEN_LINKS;
-            msg += "\\";
-            msg += "S-";
-            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
-            msg += "</ID>";
-            msg += "\n";
-            //----------------------
-            msg += "    <RefVal1>";
-            msg += double_to_qstring(y).replace(".",",");
-            msg += "</RefVal1>";
-            msg += "\n";
-            //----------------------
-            msg += "    <RefVal2>";
-            msg += double_to_qstring(x).replace(".",",");
-            msg += "</RefVal2>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Diameter>";
-            msg += "0";
-            msg += "</Diameter>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Depth>";
-            msg += double_to_qstring(z).replace(".",",");
-            msg += "</Depth>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DoDbl>false</DoDbl>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DblB>false</DblB>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DblL>false</DblL>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DblE>false</DblE>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DoMF>false</DoMF>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Tool>";
-            msg += tnummer;
-            msg += "</Tool>";
-            msg += "\n";
-            //----------------------
-            msg += "    <SVar>";
-            msg += nutvariante_qstring;
-            msg += "</SVar>";
-            msg += "\n";
-            //----------------------
-            msg += "    <SParallel>";
-            msg += nutrichtung;
-            msg += "</SParallel>";
-            msg += "\n";
-            //----------------------
-            msg += "    <SGrooveLength>";
-            msg += double_to_qstring(l);
-            msg += "</SGrooveLength>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Cyclic>0</Cyclic>";//Zustellung?? Testen!!!
-            msg += "\n";
-            //----------------------
-            msg += "    <ImageKey>S</ImageKey>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Step>1</Step>";
-            msg += "\n";
-            //----------------------
-            msg += "  </PrgrFile>";
-            msg += "\n";
-            //----------------------
+
+
 
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
