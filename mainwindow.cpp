@@ -648,7 +648,8 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
-                        if(quelldateien_erhalten == "nein")
+                        datei.close();
+                        if(quelldateien_erhalten.contains("nein"))
                         {
                             QFile originaldatei(pfad);
                             originaldatei.remove();
@@ -666,7 +667,8 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-                        if(quelldateien_erhalten == "nein")
+                        datei.close();
+                        if(quelldateien_erhalten.contains("nein"))
                         {
                             QFile originaldatei(pfad);
                             originaldatei.remove();
@@ -688,7 +690,8 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
-                        if(quelldateien_erhalten == "nein")
+                        datei.close();
+                        if(quelldateien_erhalten.contains("nein"))
                         {
                             QFile originaldatei(pfad);
                             originaldatei.remove();
@@ -706,7 +709,8 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-                        if(quelldateien_erhalten == "nein")
+                        datei.close();
+                        if(quelldateien_erhalten.contains("nein"))
                         {
                             QFile originaldatei(pfad);
                             originaldatei.remove();
@@ -747,7 +751,8 @@ void MainWindow::on_pushButton_start_clicked()
                     {
                         QString inhalt = datei.readAll();
                         wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-                        if(quelldateien_erhalten == "nein")
+                        datei.close();
+                        if(quelldateien_erhalten.contains("nein"))
                         {
                             QFile originaldatei(pfad);
                             originaldatei.remove();
