@@ -769,11 +769,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     QString ref;
                     if(laenge_y - y < bezugsmass)
                     {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        ref += GANX_REF_OBEN_LINKS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref += GANX_REF_OBEN_LINKS;
+                        ref += GANX_REF_UNTEN_LINKS;
                     }
                     msg += ref;
                     msg += "</Ref>";
@@ -850,11 +850,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     QString ref;
                     if(laenge_y - y < bezugsmass)
                     {
-                        ref = GANX_REF_UNTEN_LINKS;
+                        ref = GANX_REF_OBEN_LINKS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref = GANX_REF_OBEN_LINKS;
+                        ref = GANX_REF_UNTEN_LINKS;
                     }
                     msg += ref;
                     msg += "</Ref>";
@@ -926,7 +926,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------Bezugskante festlegen:
                     msg += "    <Ref>";
-                    QString ref = GANX_REF_OBEN_LINKS;
+                    QString ref = GANX_REF_UNTEN_LINKS;
                     msg += ref;
                     msg += "</Ref>";
                     msg += "\n";
@@ -997,7 +997,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------Bezugskante festlegen:
                     msg += "    <Ref>";
-                    QString ref = GANX_REF_OBEN_RECHTS;
+                    QString ref = GANX_REF_UNTEN_RECHTS;
                     msg += ref;
                     msg += "</Ref>";
                     msg += "\n";
@@ -1238,12 +1238,12 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</Plane>";
                     msg += "\n";
                     //----------------------Bezugskante festlegen:
-                    QString ref = GANX_REF_OBEN_LINKS;
+                    QString ref = GANX_REF_UNTEN_LINKS;
                     //y < 40 -> TL
                     //Länge - y < 40 ->BL
                     if(laenge_y - y < bezugsmass)
                     {
-                        ref = GANX_REF_UNTEN_LINKS;
+                        ref = GANX_REF_OBEN_LINKS;
                         y = laenge_y - y;
                     }
                     msg += "    <Ref>";
@@ -1421,7 +1421,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "\n";
                 //----------------------
                 msg += "    <Ref>";
-                msg += GANX_REF_OBEN_LINKS;
+                msg += GANX_REF_UNTEN_LINKS;
                 msg += "</Ref>";
                 msg += "\n";
                 //----------------------
@@ -1545,7 +1545,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Ref>";
-                    msg += GANX_REF_OBEN_LINKS;
+                    msg += GANX_REF_UNTEN_LINKS;
                     msg += "</Ref>";
                     msg += "\n";
                     //----------------------
@@ -1721,12 +1721,12 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += "</Plane>";
             msg += "\n";
             //----------------------Bezugskante festlegen:
-            QString ref = GANX_REF_OBEN_LINKS;
+            QString ref = GANX_REF_UNTEN_LINKS;
             //y < 40 -> TL
             //Länge - y < 40 ->BL
             if(laenge_y - y < bezugsmass)
             {
-                ref = GANX_REF_UNTEN_LINKS;
+                ref = GANX_REF_OBEN_LINKS;
                 y = laenge_y - y;
             }
             msg += "    <Ref>";
@@ -1857,11 +1857,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     QString ref;
                     if(laenge_y - y < bezugsmass)
                     {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        ref += GANX_REF_OBEN_LINKS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref += GANX_REF_OBEN_LINKS;
+                        ref += GANX_REF_UNTEN_LINKS;
                     }
                     //msg += ref;
                     //----------------------
@@ -1955,11 +1955,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     QString ref;
                     if(laenge_y - y < bezugsmass)
                     {
-                        ref = GANX_REF_UNTEN_LINKS;
+                        ref = GANX_REF_OBEN_LINKS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref = GANX_REF_OBEN_LINKS;
+                        ref = GANX_REF_UNTEN_LINKS;
                     }
                     //----------------------
                     msg += "    <ID>";
@@ -2052,11 +2052,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     QString ref;
                     if(laenge_y - y < bezugsmass)
                     {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        ref += GANX_REF_OBEN_LINKS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref += GANX_REF_OBEN_LINKS;
+                        ref += GANX_REF_UNTEN_LINKS;
                     }
                     //----------------------
                     msg += "    <ID>";
@@ -2149,11 +2149,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     QString ref;
                     if(laenge_y - y < bezugsmass)
                     {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        ref += GANX_REF_OBEN_LINKS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref += GANX_REF_OBEN_LINKS;
+                        ref += GANX_REF_UNTEN_LINKS;
                     }
                     //----------------------
                     msg += "    <ID>";
@@ -2442,12 +2442,12 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
-                    QString ref = GANX_REF_OBEN_LINKS;
+                    QString ref = GANX_REF_UNTEN_LINKS;
                     //y < 40 -> TL
                     //Länge - y < 40 ->BL
                     if(laenge_y - y < bezugsmass)
                     {
-                        ref = GANX_REF_UNTEN_LINKS;
+                        ref = GANX_REF_OBEN_LINKS;
                         y = laenge_y - y;
                     }
                     //----------------------
@@ -2650,7 +2650,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += GANX_WST_BEZUG_UNSEI;
                 }
                 msg += "\\";
-                msg += GANX_REF_OBEN_LINKS;
+                msg += GANX_REF_UNTEN_LINKS;
                 msg += "\\";
                 msg += "S-";
                 msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
@@ -2761,7 +2761,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                         msg += GANX_WST_BEZUG_UNSEI;
                     }
                     msg += "\\";
-                    msg += GANX_REF_OBEN_LINKS;
+                    msg += GANX_REF_UNTEN_LINKS;
                     msg += "\\";
                     msg += "S-";
                     msg += int_to_qstring(i+500+ii);               //ID-Nummer, wir nehemen einfach die Zeilennummer
@@ -2914,12 +2914,12 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += "</CntID>";
             msg += "\n";
             //----------------------
-            QString ref = GANX_REF_OBEN_LINKS;
+            QString ref = GANX_REF_UNTEN_LINKS;
             //y < 40 -> TL
             //Länge - y < 40 ->BL
             if(laenge_y - y < bezugsmass)
             {
-                ref = GANX_REF_UNTEN_LINKS;
+                ref = GANX_REF_OBEN_LINKS;
                 y = laenge_y - y;
             }
             //----------------------
