@@ -719,6 +719,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
     msg += "\n";
     }
     //-------------------------Bearbeitungen <PrgrFileWork>:
+    uint id = 1;
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
     {
         zeile.set_text(bearb.zeile(i));
@@ -757,7 +758,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     msg += "    <Plane>Top</Plane>";
@@ -818,7 +819,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -830,6 +831,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFileWork>";
                     msg += "\n";
 
+                    id++;
+
                 }else if(bezug == WST_BEZUG_UNSEI)
                 {
                     //x = Breite
@@ -838,7 +841,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     msg += "    <Plane>Bottom</Plane>";
@@ -899,7 +902,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -911,6 +914,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFileWork>";
                     msg += "\n";
 
+                    id++;
+
                 }else if(bezug == WST_BEZUG_LI)
                 {
                     //x = Tiefe
@@ -919,7 +924,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     msg += "    <Plane>Left</Plane>";
@@ -970,7 +975,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -982,6 +987,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFileWork>";
                     msg += "\n";
 
+                    id++;
+
                 }else if(bezug == WST_BEZUG_RE)
                 {
                     //x = Tiefe
@@ -990,7 +997,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     msg += "    <Plane>Right</Plane>";
@@ -1041,7 +1048,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -1053,6 +1060,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFileWork>";
                     msg += "\n";
 
+                    id++;
+
                 }else if(bezug == WST_BEZUG_VO)
                 {
                     //x = X-Pos
@@ -1061,7 +1070,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     msg += "    <Plane>Front</Plane>";
@@ -1112,7 +1121,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -1123,6 +1132,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //----------------------
                     msg += "  </PrgrFileWork>";
                     msg += "\n";
+
+                    id++;
+
                 }else if(bezug == WST_BEZUG_HI)
                 {
                     //x = X-Pos
@@ -1131,7 +1143,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     msg += "    <Plane>Rear</Plane>";
@@ -1182,7 +1194,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -1193,6 +1205,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //----------------------
                     msg += "  </PrgrFileWork>";
                     msg += "\n";
+
+                    id++;
+
                 }
 
             }else
@@ -1223,7 +1238,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -1306,7 +1321,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += GANX_REF_OBEN_LINKS;
                     msg += "\\";
                     msg += "M-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -1317,6 +1332,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //----------------------
                     msg += "  </PrgrFileWork>";
                     msg += "\n";
+
+                    id++;
 
                 }else
                 {
@@ -1405,7 +1422,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "\n";
                 //----------------------
                 msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                msg += int_to_qstring(id);               //ID-Nummer
                 msg += "</CntID>";
                 msg += "\n";
                 //----------------------
@@ -1485,7 +1502,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += GANX_REF_OBEN_LINKS;
                 msg += "\\";
                 msg += "S-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                msg += int_to_qstring(id);               //ID-Nummer
                 msg += "</OldID>";
                 msg += "\n";
                 //----------------------
@@ -1496,10 +1513,14 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 //----------------------
                 msg += "  </PrgrFileWork>";
                 msg += "\n";
+
+                id++;
+
             }else if(nu.get_breite() > nutblattbreite)
             {
                 //Wir müssen mehrere Nuten fahren Nuten
                 uint anz_nuten = aufrunden(nu.get_breite() / nutblattbreite);
+                double x = nu.get_xs();
 
                 for(uint ii=1; ii<=anz_nuten ;ii++)
                 {
@@ -1529,7 +1550,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i+500+ii);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -1609,7 +1630,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += GANX_REF_OBEN_LINKS;
                     msg += "\\";
                     msg += "S-";
-                    msg += int_to_qstring(i+500+ii);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -1620,6 +1641,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //----------------------
                     msg += "  </PrgrFileWork>";
                     msg += "\n";
+
+                    id++;
+
                 }
             }
 
@@ -1706,7 +1730,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += "\n";
             //----------------------
             msg += "    <CntID>";
-            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+            msg += int_to_qstring(id);               //ID-Nummer
             msg += "</CntID>";
             msg += "\n";
             //----------------------
@@ -1793,7 +1817,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += GANX_REF_OBEN_LINKS;
             msg += "\\";
             msg += "M-";
-            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+            msg += int_to_qstring(id);               //ID-Nummer
             msg += "</OldID>";
             msg += "\n";
             //----------------------
@@ -1804,10 +1828,14 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             //----------------------
             msg += "  </PrgrFileWork>";
             msg += "\n";
+
+            id++;
+
         }
     }
 
     //-------------------------Bearbeitungen <PrgrFile>:
+    id = 1;
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
     {
         zeile.set_text(bearb.zeile(i));
@@ -1848,7 +1876,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -1871,7 +1899,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</ID>";
                     msg += "\n";
                     //----------------------
@@ -1940,6 +1968,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFile>";
                     msg += "\n";
 
+                    id++;
+
                 }else if(bezug == WST_BEZUG_UNSEI)
                 {
                     //x = Breite
@@ -1948,7 +1978,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFile>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -1968,7 +1998,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</ID>";
                     msg += "\n";
                     //----------------------
@@ -2037,6 +2067,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFile>";
                     msg += "\n";
 
+                    id++;
+
                 }else if(bezug == WST_BEZUG_LI)
                 {
                     //x = Tiefe
@@ -2045,7 +2077,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFile>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -2065,7 +2097,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</ID>";
                     msg += "\n";
                     //----------------------
@@ -2134,6 +2166,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFile>";
                     msg += "\n";
 
+                    id++;
+
                 }else if(bezug == WST_BEZUG_RE)
                 {
                     //x = Tiefe
@@ -2142,7 +2176,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFile>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -2162,7 +2196,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</ID>";
                     msg += "\n";
                     //----------------------
@@ -2231,6 +2265,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFile>";
                     msg += "\n";
 
+                    id++;
+
                 }else if(bezug == WST_BEZUG_VO)
                 {
                     //x = x-Pos
@@ -2239,7 +2275,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFile>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -2251,7 +2287,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</ID>";
                     msg += "\n";
                     //----------------------
@@ -2319,6 +2355,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //----------------------
                     msg += "  </PrgrFile>";
                     msg += "\n";
+
+                    id++;
+
                 }else if(bezug == WST_BEZUG_HI)
                 {
                     //x = x-Pos
@@ -2327,7 +2366,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  <PrgrFile>";
                     msg += "\n";
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -2339,7 +2378,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "B-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</ID>";
                     msg += "\n";
                     //----------------------
@@ -2407,6 +2446,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //----------------------
                     msg += "  </PrgrFile>";
                     msg += "\n";
+
+                    id++;
+
                 }
             }else
             {
@@ -2438,7 +2480,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -2463,7 +2505,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ref;
                     msg += "\\";
                     msg += "M-";
-                    msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</ID>";
                     msg += "\n";
                     //----------------------
@@ -2542,8 +2584,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFile>";
                     msg += "\n";
 
-
-
+                    id++;
 
                 }else
                 {
@@ -2637,7 +2678,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "\n";
                 //----------------------
                 msg += "    <CntID>";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                msg += int_to_qstring(id);               //ID-Nummer
                 msg += "</CntID>";
                 msg += "\n";
                 //----------------------
@@ -2653,7 +2694,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += GANX_REF_UNTEN_LINKS;
                 msg += "\\";
                 msg += "S-";
-                msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                msg += int_to_qstring(id);               //ID-Nummer
                 msg += "</ID>";
                 msg += "\n";
                 //----------------------
@@ -2724,10 +2765,15 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "  </PrgrFile>";
                 msg += "\n";
                 //----------------------
+
+                id++;
+
             }else if(nu.get_breite() > nutblattbreite)
             {
                 //Wir müssen mehrere Nuten fahren Nuten
                 uint anz_nuten = aufrunden(nu.get_breite() / nutblattbreite);
+                double x = nu.get_xs();
+
                 for(uint ii=1; ii<=anz_nuten ;ii++)
                 {
                     double versatz = nu.get_breite()/2 - nutblattbreite/2 ;
@@ -2748,7 +2794,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <CntID>";
-                    msg += int_to_qstring(i+500+ii);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
@@ -2764,7 +2810,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += GANX_REF_UNTEN_LINKS;
                     msg += "\\";
                     msg += "S-";
-                    msg += int_to_qstring(i+500+ii);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+                    msg += int_to_qstring(id);               //ID-Nummer
                     msg += "</ID>";
                     msg += "\n";
                     //----------------------
@@ -2835,6 +2881,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "  </PrgrFile>";
                     msg += "\n";
                     //----------------------
+
+                    id++;
 
                 }
             }
@@ -2910,7 +2958,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += "\n";
             //----------------------
             msg += "    <CntID>";
-            msg += int_to_qstring(i);               //ID-Nummer, wir nehemen einfach die Zeilennummer
+            msg += int_to_qstring(id);               //ID-Nummer
             msg += "</CntID>";
             msg += "\n";
             //----------------------
@@ -2935,7 +2983,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += ref;
             msg += "\\";
             msg += "M-";
-            msg += int_to_qstring(i);               //ID-Nummer, wir nehemn einfach die Zeilennummer
+            msg += int_to_qstring(id);               //ID-Nummer
             msg += "</ID>";
             msg += "\n";
             //----------------------
@@ -3018,6 +3066,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             //----------------------
             msg += "  </PrgrFile>";
             msg += "\n";
+
+            id++;
 
         }
     }
