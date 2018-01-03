@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>170</height>
+    <height>204</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,26 +19,15 @@
      <x>20</x>
      <y>10</y>
      <width>371</width>
-     <height>111</height>
+     <height>161</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_nr">
-      <property name="text">
-       <string>Werkzeugnummer</string>
-      </property>
-     </widget>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_zustm"/>
     </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit_nr"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_dm">
-      <property name="text">
-       <string>Durchmesser</string>
-      </property>
-     </widget>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_zustm">
@@ -47,11 +36,32 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_dm"/>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_dm">
+      <property name="text">
+       <string>Durchmesser</string>
+      </property>
+     </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_zustm"/>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_nr"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_nr">
+      <property name="text">
+       <string>Werkzeugnummer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_breite">
+      <property name="text">
+       <string>Schnittbreite</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_breite"/>
     </item>
    </layout>
   </widget>
@@ -59,9 +69,9 @@
    <property name="geometry">
     <rect>
      <x>167</x>
-     <y>130</y>
+     <y>170</y>
      <width>221</width>
-     <height>29</height>
+     <height>31</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
