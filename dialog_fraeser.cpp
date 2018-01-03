@@ -69,6 +69,8 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(ui->lineEdit_zustm->text());        //6 : Zustellmaß
     wkz.zeile_anhaengen(" ");                               //7 : Durchmesser aus Import
     wkz.zeile_anhaengen(" ");                               //8 : ist Durchgangsbohrer
+    wkz.zeile_anhaengen(" ");                               //9 : Sägeblattbreite
+    wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);           //10: Lage
 
     emit sendData(wkz, wkz_ist_neu);
 }

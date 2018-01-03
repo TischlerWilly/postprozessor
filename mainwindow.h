@@ -17,6 +17,7 @@
 #include "eigeneFunktionen/text.h"
 #include "allgemKlassen/text_zeilenweise.h"
 #include "KlassenWst/werkstuecke.h"
+#include "werkzeugmagazin.h"
 
 namespace Ui {
 class MainWindow;

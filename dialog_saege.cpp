@@ -22,6 +22,7 @@ void Dialog_saege::getData(text_zeilenweise msg)
     ui->lineEdit_nr->setText(msg.zeile(2));
     ui->lineEdit_dm->setText(msg.zeile(3));
     ui->lineEdit_zustm->setText(msg.zeile(6));
+    ui->lineEdit_breite->setText(msg.zeile(9));
 
     this->show();
 }
@@ -39,6 +40,7 @@ void Dialog_saege::clear()
     ui->lineEdit_dm->clear();
     ui->lineEdit_nr->clear();
     ui->lineEdit_zustm->clear();
+    ui->lineEdit_breite->clear();
 }
 
 void Dialog_saege::setup()
@@ -65,6 +67,8 @@ void Dialog_saege::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(ui->lineEdit_zustm->text());        //6 : Zustellmaß
     wkz.zeile_anhaengen(" ");                               //7 : Durchmesser aus Import
     wkz.zeile_anhaengen(" ");                               //8 : ist Durchgangsbohrer
+    wkz.zeile_anhaengen(ui->lineEdit_breite->text());       //9 : Sägeblattbreite
+    wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);           //10: Lage
 
     emit sendData(wkz, wkz_ist_neu);
 }

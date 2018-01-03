@@ -1414,9 +1414,26 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             //"X" = Nut von links nach rechts = entlang der Y-Achse
             //"Y" = Nut von vorne nach hinten = entlang der X-Achse
 
-            double nutblattbreite = 5;
+            double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
 
-            if(nu.get_breite() == nutblattbreite)
+            if(nu.get_breite() < nutblattbreite)
+            {
+                //Warnung ausgeben und Nut unterdrücken:
+                QString msg = "";
+                msg += "Achtung bei Export ganx!\n";
+                msg += "Teilname: ";
+                msg += name;
+                msg += "\n";
+                msg += "Saegeblatt zu breit fuer Nut:\n";
+                msg += zeile.get_text();
+                msg += "\n";
+                msg += "Bearbeitung wird unterdrueckt.";
+
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                continue;
+            }else if(nu.get_breite() == nutblattbreite)
             {
                 msg += "  <PrgrFileWork>";
                 msg += "\n";
@@ -2670,9 +2687,28 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             //"X" = Nut von links nach rechts = entlang der Y-Achse
             //"Y" = Nut von vorne nach hinten = entlang der X-Achse
 
-            double nutblattbreite = 5;
+            double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
 
-            if(nu.get_breite() == nutblattbreite)
+            if(nu.get_breite() < nutblattbreite)
+            {
+                /*
+                //Warnung ausgeben und Nut unterdrücken:
+                QString msg = "";
+                msg += "Achtung bei Export ganx!\n";
+                msg += "Teilname: ";
+                msg += name;
+                msg += "\n";
+                msg += "Saegeblatt zu breit fuer Nut:\n";
+                msg += zeile.get_text();
+                msg += "\n";
+                msg += "Bearbeitung wird unterdrueckt.";
+
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                */
+                continue;
+            }else if(nu.get_breite() == nutblattbreite)
             {
                 msg += "  <PrgrFile>";
                 msg += "\n";

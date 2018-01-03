@@ -247,6 +247,9 @@ void MainWindow::setup()
         }else
         {
             //----------------------------------------------Tabellenkopf:
+            werkzeugmagazin wm;
+            file.write(wm.get_tabellenkopf().toUtf8());
+            /*
             file.write("Typ");
             file.write("\t");
             file.write("Nummer");
@@ -264,7 +267,7 @@ void MainWindow::setup()
             file.write("Ist Durchgangsbohrer");
             file.write("\t");
             file.write(" ");
-
+            */
             //file.write("\n");
         }
         file.close();
@@ -298,6 +301,9 @@ void MainWindow::setup()
         }else
         {
             //----------------------------------------------Tabellenkopf:
+            werkzeugmagazin wm;
+            file.write(wm.get_tabellenkopf().toUtf8());
+            /*
             file.write("Typ");
             file.write("\t");
             file.write("Nummer");
@@ -315,7 +321,7 @@ void MainWindow::setup()
             file.write("Ist Durchgangsbohrer");
             file.write("\t");
             file.write(" ");
-
+            */
             //file.write("\n");
         }
         file.close();
@@ -839,8 +845,8 @@ void MainWindow::on_pushButton_start_clicked()
     }
 
     QString msg;
-    msg = int_to_qstring(wste.get_namen_tz().zeilenanzahl()) + " eingelesene Werkstuecke:\n";
-    //msg += wste.get_namen();
+    msg = int_to_qstring(wste.get_namen_tz().zeilenanzahl()) + " eingelesene Dateien\n\n";
+    msg += "------------------\n";
     ui->plainTextEdit_eldungen->setPlainText(msg);
 
     //Datein exportieren:

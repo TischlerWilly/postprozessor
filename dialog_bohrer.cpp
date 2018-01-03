@@ -33,6 +33,14 @@ void Dialog_bohrer::getData(text_zeilenweise msg)
         ui->comboBox_dubo->setCurrentIndex(1);  //nein
     }
 
+    if(msg.zeile(10) == "0")
+    {
+        ui->comboBox_lage->setCurrentIndex(0);  //vertikal
+    }else
+    {
+        ui->comboBox_lage->setCurrentIndex(1);  //horizontal
+    }
+
     this->show();
 }
 void Dialog_bohrer::neuerBohrer()
@@ -51,11 +59,15 @@ void Dialog_bohrer::clear()
     ui->lineEdit__nutzlaenge->clear();
     ui->lineEdit__zustmass->clear();
     ui->comboBox_dubo->clear();
+    ui->comboBox_lage->clear();
 }
 void Dialog_bohrer::setup()
 {
     ui->comboBox_dubo->addItem("ja");
     ui->comboBox_dubo->addItem("nein");
+
+    ui->comboBox_lage->addItem("vertikal");
+    ui->comboBox_lage->addItem("horizontal");
 }
 
 void Dialog_bohrer::on_pushButton_abbrechen_clicked()
@@ -76,6 +88,7 @@ void Dialog_bohrer::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(" ");                               //5 : Vorschub
     wkz.zeile_anhaengen(ui->lineEdit__zustmass->text());    //6 : Zustellmaß
     wkz.zeile_anhaengen(ui->lineEdit_dm_cad->text());       //7 : Durchmesser aus Import
+
     //8 : ist Durchgangsbohrer:
     if(ui->comboBox_dubo->currentIndex() == 0)//"ja"
     {
@@ -83,6 +96,17 @@ void Dialog_bohrer::on_pushButton_ok_clicked()
     }else
     {
         wkz.zeile_anhaengen("0");
+    }
+
+    wkz.zeile_anhaengen(" ");                               //9 : Sägeblattbreite
+
+    //10: Lage:
+    if(ui->comboBox_lage->currentIndex() == 0)//vertikal
+    {
+        wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);
+    }else
+    {
+        wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_HORI);
     }
 
     emit sendData(wkz, wkz_ist_neu);
