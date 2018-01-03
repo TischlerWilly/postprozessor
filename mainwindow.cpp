@@ -58,7 +58,11 @@ void MainWindow::setup()
         QFile file(INIFILE);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += INIFILE;
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             file.write("verzeichnis_quelle:");
@@ -98,7 +102,11 @@ void MainWindow::setup()
         QFile file(INIFILE);
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += INIFILE;
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             while(!file.atEnd())
@@ -192,7 +200,11 @@ void MainWindow::setup()
         QFile file(NAMEN_STD_INI);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += NAMEN_STD_INI;
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             file.write("Namen original");
@@ -205,7 +217,11 @@ void MainWindow::setup()
         QFile file(NAMEN_STD_INI);
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += NAMEN_STD_INI;
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             while(!file.atEnd())
@@ -223,7 +239,11 @@ void MainWindow::setup()
         QFile file(WERKZEUGDATEI_GANX);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += WERKZEUGDATEI_GANX;
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             //----------------------------------------------Tabellenkopf:
@@ -253,7 +273,11 @@ void MainWindow::setup()
         QFile file(WERKZEUGDATEI_GANX);
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += WERKZEUGDATEI_GANX;
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             wkz_magazin_ganx.set_text(file.readAll());
@@ -266,7 +290,11 @@ void MainWindow::setup()
         QFile file(WERKZEUGDATEI_FMC);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += WERKZEUGDATEI_FMC;
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             //----------------------------------------------Tabellenkopf:
@@ -296,7 +324,11 @@ void MainWindow::setup()
         QFile file(WERKZEUGDATEI_FMC);
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += WERKZEUGDATEI_FMC;
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             wkz_magazin_fmc.set_text(file.readAll());
@@ -311,7 +343,11 @@ void MainWindow::schreibe_ini()
     file.remove();
     if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+        QString tmp = "Fehler beim Dateizugriff!\n";
+        tmp += INIFILE;
+        tmp += "\n";
+        tmp += "in der Funktion schreibe_ini";
+        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
     }else
     {
         //-------------------------------------------Verzeichnisse:
@@ -360,7 +396,11 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
         QFile file(WERKZEUGDATEI_GANX);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += WERKZEUGDATEI_GANX;
+            tmp += "\n";
+            tmp += "in der Funktion getDialogDataWKZ";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             wkz_magazin_ganx = werkzeugmagazin;
@@ -372,7 +412,11 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
         QFile file(WERKZEUGDATEI_FMC);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += WERKZEUGDATEI_FMC;
+            tmp += "\n";
+            tmp += "in der Funktion getDialogDataWKZ";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             wkz_magazin_fmc = werkzeugmagazin;
@@ -643,7 +687,11 @@ void MainWindow::on_pushButton_start_clicked()
                     QFile datei(pfad);
                     if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
                     {
-                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
                     }else
                     {
                         QString inhalt = datei.readAll();
@@ -662,7 +710,11 @@ void MainWindow::on_pushButton_start_clicked()
                     QFile datei(pfad);
                     if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
                     {
-                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
                     }else
                     {
                         QString inhalt = datei.readAll();
@@ -685,7 +737,11 @@ void MainWindow::on_pushButton_start_clicked()
                     QFile datei(pfad);
                     if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
                     {
-                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
                     }else
                     {
                         QString inhalt = datei.readAll();
@@ -704,7 +760,11 @@ void MainWindow::on_pushButton_start_clicked()
                     QFile datei(pfad);
                     if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
                     {
-                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
                     }else
                     {
                         QString inhalt = datei.readAll();
@@ -728,7 +788,11 @@ void MainWindow::on_pushButton_start_clicked()
                     QFile datei(pfad);
                     if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
                     {
-                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
                     }else
                     {
                         QString inhalt = datei.readAll();
@@ -746,7 +810,11 @@ void MainWindow::on_pushButton_start_clicked()
                     QFile datei(pfad);
                     if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
                     {
-                        QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
                     }else
                     {
                         QString inhalt = datei.readAll();
@@ -807,7 +875,11 @@ void MainWindow::on_pushButton_start_clicked()
             QFile datei(pfad_ganx + QDir::separator() + teilname);
             if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
             {
-                QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad_ganx + QDir::separator() + teilname;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_start_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
                 QString info = "";
@@ -829,7 +901,11 @@ void MainWindow::on_pushButton_start_clicked()
             QFile datei(pfad_fmc + QDir::separator() + teilname);
             if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
             {
-                QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad_fmc + QDir::separator() + teilname;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_start_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
                 QString info = "";
@@ -851,7 +927,11 @@ void MainWindow::on_pushButton_start_clicked()
             QFile datei(pfad_eigen + QDir::separator() + teilname);
             if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
             {
-                QMessageBox::warning(this,"Fehler","Fehler beim Dateizugriff!",QMessageBox::Ok);
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad_eigen + QDir::separator() + teilname;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_start_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
                 QString info = "";
