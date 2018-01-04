@@ -3130,11 +3130,13 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
 }
 QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b)
 {
-    QString msg;
+    QString msg = "";
     bearb_sortieren();
 
     //Programmkopf:
-    msg = "L: ";
+    msg += get_name();
+    msg += "\n";
+    msg += "L: ";
     msg += double_to_qstring(tmp_l);
     msg += "\n";
     msg += "B: ";

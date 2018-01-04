@@ -88,6 +88,7 @@ QString werkstuecke::get_name(uint index)
 }
 void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu)
 {
+    //erster Durchlauf: Namen tauschen
     for(uint i = 1; i<=namen.zeilenanzahl() ;i++)
     {
         QString tmp = namen.zeile(i);
@@ -100,6 +101,79 @@ void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_ne
                 break;
             }
         }
+    }
+    //zweiter Durchlauf: Schranknummer löschen wenn möglich
+    QString tmp = namen.zeile(1);
+    if(tmp.contains("_"))
+    {
+        tmp = text_links(tmp, "_");
+        bool identisch = true;
+        for(uint i = 2; i<=namen.zeilenanzahl() ;i++)
+        {
+            if(  tmp != text_links(namen.zeile(i), "_")  )
+            {
+                identisch = false;
+                break;
+            }
+        }
+        if(identisch == true)
+        {
+            for(uint i = 1; i<=namen.zeilenanzahl() ;i++)
+            {
+                namen.zeile_ersaetzen(  i, text_rechts(namen.zeile(i),"_")  );
+            }
+        }
+    }
+    //dritter Durchlauf: Nummer hinter Teilenamen löschen wenn möglich
+    text_zeilenweise bekannte_namen;
+    for(uint i = 1; i<=namen.zeilenanzahl() ;i++)//Name für Name durchgehen
+    {
+        tmp = namen.zeile(i);
+        QString name_bis_ziffer ="";
+        //Namen und Ziffer trennen:
+        for(int ii=0; ii<tmp.count() ;ii++)//Namen zeichenweise durchgehen
+        {
+            if(!ist_ziffer(tmp.at(ii)))
+            {
+                name_bis_ziffer += tmp.at(ii);
+            }else
+            {
+                break;
+            }
+        }
+        //Prüfen, ob es diesen Namen bereits gibt:
+        bool bekannt = false;
+        for(uint iii=1; iii<=bekannte_namen.zeilenanzahl() ;iii++)//bekannte Namen nacheinander durchgehen
+        {
+            if(bekannte_namen.zeile(iii) == name_bis_ziffer)
+            {
+                bekannt = true;
+                break;
+            }
+        }
+        if(bekannt == false)//Wenn der Name noch nicht vergeben war
+        {
+            namen.zeile_ersaetzen(i, name_bis_ziffer);
+            bekannte_namen.zeile_anhaengen(name_bis_ziffer);
+        }
+    }
+
+    //Nameninformatione in den einzenen werkstücken aktualisieren:
+    for(uint i=1; i<=namen.zeilenanzahl() ;i++)
+    {
+        werkstueck w = wste.at(i-1);
+        w.set_name(namen.zeile(i));
+        wste.replace(i-1, w);
+    }
+}
+bool werkstuecke::ist_ziffer(const QChar zeichen)
+{
+    if(zeichen == '0' || zeichen == '1' || zeichen == '2' || zeichen == '2' || zeichen == '3' || zeichen == '4' || zeichen == '5' || zeichen == '6' || zeichen == '7' || zeichen == '8' || zeichen == '9')
+    {
+        return true;
+    }else
+    {
+        return false;
     }
 }
 QString werkstuecke::var_einsetzen(werkstueck w, QString formel)
