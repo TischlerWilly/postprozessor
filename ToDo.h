@@ -25,10 +25,7 @@ Testen:
 
 -->Drehwinkel bzw. L/B der Rechtecktaschen ganx korrekt?
 
--->Nut Ganx-Export überall da wo Testen im Quelltext dahinter steht!
-    ->Nutvariante
-    ->Nutrichtung
-    ->Zustellung
+
 
 
 

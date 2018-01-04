@@ -49,6 +49,7 @@ private:
     //Funktionen:
     uint get_index(QString Werkstueckname);
     QString wert_nach_istgleich(QString text);
+    bool ist_ziffer(const QChar zeichen);
 
 };
 

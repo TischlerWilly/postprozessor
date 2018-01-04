@@ -31,6 +31,11 @@ public:
     void set_dicke(QString d);
     void neue_bearbeitung(QString text);
 
+    inline void set_name(QString neuer_name)
+    {
+        name = neuer_name;
+    }
+
     inline double get_laenge() const
     {
         return laenge;
