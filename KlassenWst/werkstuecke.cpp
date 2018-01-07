@@ -1500,6 +1500,215 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }
                 }
             }
+        }else if(zeile.contains(FMC_LORAE))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_OBSEI);
+            double xs = 0;
+            double xe = 0;
+            double y1 = 0;
+            double y2 = 0;
+            double raster = 32;
+
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+
+                    if(xe < xs)
+                    {
+                        double tmp;
+                        tmp = xe;
+                        xe = xs;
+                        xs = tmp;
+                    }
+                    if(y1 != 0)
+                    {
+                        bo.set_y(y1);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.get_text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+                    if(y2 != 0)
+                    {
+                        bo.set_y(y2);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.get_text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+
+
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_LORAE_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_LORAE_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_LORAE_DM_))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_LORAE_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
+                    }else if(zeile.contains(FMC_LORAE_XS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xs = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAE_XE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xe = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAE_Y1))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAE_Y2))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAE_RASTER))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        raster = ausdruck_auswerten(tmp).toDouble();
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_LORAM))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_OBSEI);
+            double xs = 0;
+            double xm = 0;
+            double y1 = 0;
+            double y2 = 0;
+            double raster = 32;
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+
+                    double diff = xm - xs;
+                    double xe = xm + diff;
+
+                    if(xe < xs)
+                    {
+                        double tmp;
+                        tmp = xe;
+                        xe = xs;
+                        xs = tmp;
+                    }
+                    if(y1 != 0)
+                    {
+                        bo.set_y(y1);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.get_text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+                    if(y2 != 0)
+                    {
+                        bo.set_y(y2);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.get_text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_LORAM_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_LORAM_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_LORAM_DM_))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_LORAM_TI)   || \
+                             zeile.contains(FMC_LORAM_TI_)     )
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
+                    }else if(zeile.contains(FMC_LORAM_XS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xs = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAM_XM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xm = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAM_Y1))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAM_Y2))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAM_RASTER)  || \
+                             zeile.contains(FMC_LORAM_RASTER_))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        raster = ausdruck_auswerten(tmp).toDouble();
+                    }
+                }
+            }
         }
 
     }
@@ -2799,6 +3008,219 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         n.set_ye(ausdruck_auswerten(tmp));
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_LORAE))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_UNSEI);
+            double xs = 0;
+            double xe = 0;
+            double y1 = 0;
+            double y2 = 0;
+            double raster = 32;
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+
+                    if(xe < xs)
+                    {
+                        double tmp;
+                        tmp = xe;
+                        xe = xs;
+                        xs = tmp;
+                    }
+                    if(y1 != 0)
+                    {
+                        bo.set_y(y1);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.get_text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+                    if(y2 != 0)
+                    {
+                        bo.set_y(y2);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.get_text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+
+
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_LORAE_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_LORAE_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_LORAE_DM_))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_LORAE_TI))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
+                    }else if(zeile.contains(FMC_LORAE_XS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xs = ausdruck_auswerten(tmp).toDouble();
+                        xs = w.get_laenge()-xs;
+                    }else if(zeile.contains(FMC_LORAE_XE))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xe = ausdruck_auswerten(tmp).toDouble();
+                        xe = w.get_laenge()-xe;
+                    }else if(zeile.contains(FMC_LORAE_Y1))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAE_Y2))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAE_RASTER))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        raster = ausdruck_auswerten(tmp).toDouble();
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_LORAM))
+        {
+            bohrung bo;
+            bo.set_bezug(WST_BEZUG_UNSEI);
+            double xs = 0;
+            double xm = 0;
+            double y1 = 0;
+            double y2 = 0;
+            double raster = 32;
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+
+                    double diff = xm - xs;
+                    double xe = xm + diff;
+
+                    if(xe < xs)
+                    {
+                        double tmp;
+                        tmp = xe;
+                        xe = xs;
+                        xs = tmp;
+                    }
+                    if(y1 != 0)
+                    {
+                        bo.set_y(y1);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.get_text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+                    if(y2 != 0)
+                    {
+                        bo.set_y(y2);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.get_text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+
+
+                    break;
+                }else
+                {
+                    if(zeile.contains(FMC_LORAM_AFB))
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(zeile.contains(FMC_LORAM_DM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_LORAM_DM_))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(zeile.contains(FMC_LORAM_TI)   || \
+                             zeile.contains(FMC_LORAM_TI_)     )
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.get_dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
+                    }else if(zeile.contains(FMC_LORAM_XS))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xs = ausdruck_auswerten(tmp).toDouble();
+                        xs = w.get_laenge()-xs;
+                    }else if(zeile.contains(FMC_LORAM_XM))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xm = ausdruck_auswerten(tmp).toDouble();
+                        xm = w.get_laenge()-xm;
+                    }else if(zeile.contains(FMC_LORAM_Y1))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAM_Y2))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(zeile.contains(FMC_LORAM_RASTER)  || \
+                             zeile.contains(FMC_LORAM_RASTER_))
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        raster = ausdruck_auswerten(tmp).toDouble();
                     }
                 }
             }
