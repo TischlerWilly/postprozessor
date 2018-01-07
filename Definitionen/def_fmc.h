@@ -104,6 +104,40 @@
 #define FMC_NUT_BR              "NB"
 #define FMC_NUT_AFB             "AFB"
 
+#define FMC_LORAE               "[VBLAEN40]"    //Lochreihe Anfang Ende
+#define FMC_LORAE_XS            "SPX"
+#define FMC_LORAE_XE            "EPX"
+#define FMC_LORAE_Y1            "Y1"
+#define FMC_LORAE_Y2            "Y2"
+#define FMC_LORAE_RASTER        "RASTER"
+#define FMC_LORAE_TI            "TI"
+#define FMC_LORAE_DM            "DM"
+#define FMC_LORAE_DM_           "D"
+#define FMC_LORAE_AFB           "AFB"
+
+#define FMC_LORAM               "[VBLMIT40]"    //Lochreihe Anfang Mitte
+#define FMC_LORAM_XM            "MPX"
+#define FMC_LORAM_XS            "SPX"
+#define FMC_LORAM_Y1            "Y1"
+#define FMC_LORAM_Y2            "Y2"
+#define FMC_LORAM_RASTER        "RASTER"
+#define FMC_LORAM_RASTER_       "LR"
+#define FMC_LORAM_TI            "TI"
+#define FMC_LORAM_TI_           "BT"
+#define FMC_LORAM_DM            "DM"
+#define FMC_LORAM_DM_           "D"
+#define FMC_LORAM_AFB           "AFB"
+
+
+
+
+
+
+
+
+
+
+
 
 
 

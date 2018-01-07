@@ -2200,11 +2200,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     QString ref;
                     if(laenge_y - y < bezugsmass)
                     {
-                        ref += GANX_REF_OBEN_LINKS;
+                        ref += GANX_REF_OBEN_RECHTS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        ref += GANX_REF_UNTEN_RECHTS;
                     }
                     //----------------------
                     msg += "    <ID>";
