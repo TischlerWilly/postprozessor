@@ -1692,6 +1692,14 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double x = rt.get_x();
             double y = rt.get_y();
             double z = rt.get_z();
+            QString ti = rt.get_tiefe_qstring();
+            if(ti.toDouble() > get_dicke())
+            {
+                QString tmp = "{LZ}+";
+                double dif = ti.toDouble() - get_dicke();
+                tmp += double_to_qstring(dif);
+                ti = tmp;
+            }
             double lx = 0;
             double by = 0;
             if(rt.get_drewi() == 0 || rt.get_drewi() == 180)
@@ -1828,7 +1836,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += ";";
             msg += double_to_qstring(eckenradius); //Eckenradius Tasche
             msg += ";";
-            msg += double_to_qstring(z);     //TaTi
+            msg += ti;                       //TaTi
             msg += ";";
             msg += "1";                      //Variante der Rechtecktasche (1 = ausgeräumt)
             msg += ";";
@@ -2974,6 +2982,14 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double x = rt.get_x();
             double y = rt.get_y();
             double z = rt.get_z();
+            QString ti = rt.get_tiefe_qstring();
+            if(ti.toDouble() > get_dicke())
+            {
+                QString tmp = "{LZ}+";
+                double dif = ti.toDouble() - get_dicke();
+                tmp += double_to_qstring(dif);
+                ti = tmp;
+            }
             double lx = 0;
             double by = 0;
             if(rt.get_drewi() == 0 || rt.get_drewi() == 180)
@@ -3122,7 +3138,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += ";";
             msg += double_to_qstring(eckenradius); //Eckenradius Tasche
             msg += ";";
-            msg += double_to_qstring(z);     //TaTi
+            msg += ti;                       //TaTi
             msg += ";";
             msg += "1";                      //Variante der Rechtecktasche (1 = ausgeräumt)
             msg += ";";
