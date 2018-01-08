@@ -104,6 +104,7 @@ void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_ne
     }
     //zweiter Durchlauf: Schranknummer löschen wenn möglich
     QString tmp = namen.zeile(1);
+    bool schranknummer_wurde_entfernt = false;//wird gebraucht als Prüfung für den 3. Durchlauf
     if(tmp.contains("_"))
     {
         tmp = text_links(tmp, "_");
@@ -122,39 +123,43 @@ void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_ne
             {
                 namen.zeile_ersaetzen(  i, text_rechts(namen.zeile(i),"_")  );
             }
+            schranknummer_wurde_entfernt = true;
         }
     }
     //dritter Durchlauf: Nummer hinter Teilenamen löschen wenn möglich
     text_zeilenweise bekannte_namen;
-    for(uint i = 1; i<=namen.zeilenanzahl() ;i++)//Name für Name durchgehen
+    if(schranknummer_wurde_entfernt)
     {
-        tmp = namen.zeile(i);
-        QString name_bis_ziffer ="";
-        //Namen und Ziffer trennen:
-        for(int ii=0; ii<tmp.count() ;ii++)//Namen zeichenweise durchgehen
+        for(uint i = 1; i<=namen.zeilenanzahl() ;i++)//Name für Name durchgehen
         {
-            if(!ist_ziffer(tmp.at(ii)))
+            tmp = namen.zeile(i);
+            QString name_bis_ziffer ="";
+            //Namen und Ziffer trennen:
+            for(int ii=0; ii<tmp.count() ;ii++)//Namen zeichenweise durchgehen
             {
-                name_bis_ziffer += tmp.at(ii);
-            }else
-            {
-                break;
+                if(!ist_ziffer(tmp.at(ii)))
+                {
+                    name_bis_ziffer += tmp.at(ii);
+                }else
+                {
+                    break;
+                }
             }
-        }
-        //Prüfen, ob es diesen Namen bereits gibt:
-        bool bekannt = false;
-        for(uint iii=1; iii<=bekannte_namen.zeilenanzahl() ;iii++)//bekannte Namen nacheinander durchgehen
-        {
-            if(bekannte_namen.zeile(iii) == name_bis_ziffer)
+            //Prüfen, ob es diesen Namen bereits gibt:
+            bool bekannt = false;
+            for(uint iii=1; iii<=bekannte_namen.zeilenanzahl() ;iii++)//bekannte Namen nacheinander durchgehen
             {
-                bekannt = true;
-                break;
+                if(bekannte_namen.zeile(iii) == name_bis_ziffer)
+                {
+                    bekannt = true;
+                    break;
+                }
             }
-        }
-        if(bekannt == false)//Wenn der Name noch nicht vergeben war
-        {
-            namen.zeile_ersaetzen(i, name_bis_ziffer);
-            bekannte_namen.zeile_anhaengen(name_bis_ziffer);
+            if(bekannt == false)//Wenn der Name noch nicht vergeben war
+            {
+                namen.zeile_ersaetzen(i, name_bis_ziffer);
+                bekannte_namen.zeile_anhaengen(name_bis_ziffer);
+            }
         }
     }
 
