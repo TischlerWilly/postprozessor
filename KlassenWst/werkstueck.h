@@ -8,6 +8,7 @@
 
 #include "../eigeneFunktionen/umwandeln.h"
 #include "../eigeneFunktionen/runden.h"
+#include "../eigeneFunktionen/myfunktion.h"
 #include "../Definitionen/def_fmc.h"
 #include "../Definitionen/def_ganx.h"
 #include "../allgemKlassen/text_zeilenweise.h"

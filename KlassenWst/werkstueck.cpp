@@ -726,6 +726,18 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
             bohrung bo(zeile.get_text());
+
+            QString afb_text = bo.get_afb();
+            afb_text.replace("L", get_laenge_qstring());
+            afb_text.replace("B", get_breite_qstring());
+            afb_text.replace("D", get_dicke_qstring());
+            afb_text.replace(",", ".");
+            afb_text = ausdruck_auswerten(afb_text);
+            if(afb_text.toDouble() == 0)
+            {
+                continue;
+            }
+
             double x = bo.get_x();
             double y = bo.get_y();
             double z = bo.get_z();
@@ -1220,6 +1232,15 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 {
                     //Werkzeug wurde gefunden, Kreistasche kann gefräst werden:
 
+                    QString ti = bo.get_tiefe_qstring();
+                    if(ti.toDouble() > get_dicke())
+                    {
+                        QString tmp = "{LZ}+";
+                        double dif = ti.toDouble() - get_dicke();
+                        tmp += double_to_qstring(dif);
+                        ti = tmp;
+                    }
+
                     //Anzahl der Zustellungen berechnen:
                     double zustmass = bo.get_zustellmass();
                     if(zustmass <= 0)
@@ -1294,7 +1315,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ";";
                     msg += double_to_qstring(dm);
                     msg += ";";
-                    msg += double_to_qstring(z);     //TaTi
+                    msg += ti;                       //TaTi
                     msg += ";";
                     msg += "2";                      //Variante der Kreistasche (2 = ausgeräumt)
                     msg += ";";
@@ -1859,9 +1880,22 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
             bohrung bo(zeile.get_text());
+
+            QString afb_text = bo.get_afb();
+            afb_text.replace("L", get_laenge_qstring());
+            afb_text.replace("B", get_breite_qstring());
+            afb_text.replace("D", get_dicke_qstring());
+            afb_text.replace(",", ".");
+            afb_text = ausdruck_auswerten(afb_text);
+            if(afb_text.toDouble() == 0)
+            {
+                continue;
+            }
+
             double x = bo.get_x();
             double y = bo.get_y();
             double z = bo.get_z();
+
             double dm = bo.get_dm();
             double laenge_y = tmp_b;
             QString bezug = bo.get_bezug();
@@ -2477,6 +2511,15 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 {
                     //Werkzeug wurde gefunden, Kreistasche kann gefräst werden:
 
+                    QString ti = bo.get_tiefe_qstring();
+                    if(ti.toDouble() > get_dicke())
+                    {
+                        QString tmp = "{LZ}+";
+                        double dif = ti.toDouble() - get_dicke();
+                        tmp += double_to_qstring(dif);
+                        ti = tmp;
+                    }
+
                     //Anzahl der Zustellungen berechnen:
                     double zustmass = bo.get_zustellmass();
                     if(zustmass <= 0)
@@ -2577,7 +2620,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += ";";
                     msg += double_to_qstring(dm);
                     msg += ";";
-                    msg += double_to_qstring(z);     //TaTi
+                    msg += ti;                       //TaTi
                     msg += ";";
                     msg += "2";                      //Variante der Kreistasche (2 = ausgeräumt)
                     msg += ";";

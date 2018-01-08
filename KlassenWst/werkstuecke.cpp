@@ -1348,11 +1348,14 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }else if(zeile.contains(FMC_KTA_DM))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
-                        bo.set_dm(ausdruck_auswerten(tmp));
+                        tmp = ausdruck_auswerten(tmp);
+                        bo.set_dm(tmp);
                     }else if(zeile.contains(FMC_KTA_TI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         double tiefe = ausdruck_auswerten(tmp).toDouble();
                         if(tiefe < 0)
@@ -1363,16 +1366,19 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }else if(zeile.contains(FMC_KTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         bo.set_x(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_KTA_Y))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         bo.set_y(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_KTA_ZUST))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         bo.set_zustellmass(ausdruck_auswerten(tmp));
                     }
@@ -1399,16 +1405,19 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }else if(zeile.contains(FMC_RTA_L))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_laenge(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_B))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_breite(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_TI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         double tiefe = ausdruck_auswerten(tmp).toDouble();
                         if(tiefe < 0)
@@ -1419,31 +1428,37 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }else if(zeile.contains(FMC_RTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_x(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_Y))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_y(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_ZUST))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_zustellmass(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_WI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_drewi(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_RAD))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_rad(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_RAEUM))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_ausraeumen(ausdruck_auswerten(tmp));
                     }
@@ -2851,11 +2866,13 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     }else if(zeile.contains(FMC_KTA_DM))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         bo.set_dm(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_KTA_TI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         double tiefe = ausdruck_auswerten(tmp).toDouble();
                         if(tiefe < 0)
@@ -2866,6 +2883,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     }else if(zeile.contains(FMC_KTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         double x = ausdruck_auswerten(tmp).toDouble();
                         x = w.get_laenge()-x;
@@ -2873,11 +2891,13 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     }else if(zeile.contains(FMC_KTA_Y))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         bo.set_y(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_KTA_ZUST))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         bo.set_zustellmass(ausdruck_auswerten(tmp));
                     }
@@ -2904,16 +2924,19 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     }else if(zeile.contains(FMC_RTA_L))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_laenge(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_B))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_breite(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_TI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         double tiefe = ausdruck_auswerten(tmp).toDouble();
                         if(tiefe < 0)
@@ -2924,6 +2947,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     }else if(zeile.contains(FMC_RTA_X))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         double x = ausdruck_auswerten(tmp).toDouble();
                         x = w.get_laenge()-x;
@@ -2931,26 +2955,31 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     }else if(zeile.contains(FMC_RTA_Y))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_y(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_ZUST))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_zustellmass(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_WI))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_drewi(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_RAD))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_rad(ausdruck_auswerten(tmp));
                     }else if(zeile.contains(FMC_RTA_RAEUM))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_ausraeumen(ausdruck_auswerten(tmp));
                     }
