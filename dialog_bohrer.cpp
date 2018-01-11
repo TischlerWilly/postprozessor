@@ -33,7 +33,7 @@ void Dialog_bohrer::getData(text_zeilenweise msg)
         ui->comboBox_dubo->setCurrentIndex(1);  //nein
     }
 
-    if(msg.zeile(10) == "0")
+    if(msg.zeile(10) == WKZ_PARAMETER_LAGE_VERT)
     {
         ui->comboBox_lage->setCurrentIndex(0);  //vertikal
     }else

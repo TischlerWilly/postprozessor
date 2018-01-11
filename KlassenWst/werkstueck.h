@@ -92,6 +92,7 @@ private:
     QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
     QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b);
 
+    QString kommentar_fmc(QString kom);
 };
 
 #endif // WERKSTUECK_H

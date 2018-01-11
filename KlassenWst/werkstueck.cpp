@@ -3430,15 +3430,187 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 }
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, double tmp_l, double tmp_b)
 {
-    QString msg;
-    werkzeugmagazin wkzmag(wkzmagazin);
+    QString msg;   
+    text_zeilenweise zeile;
+    zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+     werkzeugmagazin wkzmag(wkzmagazin);
 
-    //Programmkopf:
+    //---------------------------------------Programmkopf:
     msg = FMC_PRGKOPF;
     msg += "\n";
+    msg += "ABSTS=";                //Sicherheitsabstand
+    msg += "20";
+    msg += "\n";
+    msg += "AFB=1\n";
+    msg += "AXV=";                  //Y-Versatz
+    if(tmp_b < 240)
+    {
+        msg += "210";
+    }else
+    {
+        msg += "0";
+    }
+    msg += "\n";
+    msg += "AYV=";                  //X-Veratz
+    msg += "0";
+    msg += "\n";
+    msg += "BEZB=";                 //Bezeichnung
+    msg += "Programmkopf";
+    msg += "\n";
+    msg += "FTL=";                  //Länge
+    msg += double_to_qstring(tmp_l);
+    msg += "\n";
+    msg += "FTB=";                  //Breite
+    msg += double_to_qstring(tmp_b);
+    msg += "\n";
+    msg += "FTD=";                  //Dicke
+    msg += get_dicke_qstring();
+    msg += "\n";
+    msg += "HOLKA=-1\n";            //Hole Kante Nr
+    msg += "KOM1=";                 //Kommentar 1
+    msg += "(NULL)";
+    msg += "\n";
+    msg += "KOM2=";                 //Kommentar 2
+    msg += "(NULL)";
+    msg += "\n";
+    msg += "LOESEN=";               //Automatisch lösen
+    msg += "1";
+    msg += "\n";
+    msg += "MPB=";                  //Mehrplatzbelegungsart
+    msg += "0";
+    msg += "\n";
+    msg += "RTB=B+(2*AY)\n";        //Rohteillänge
+    msg += "RTL=L+(2*AX)\n";        //Rohteilbreite
+    msg += "SPGLWKS=";              //Spiegeln
+    msg += "0";
+    msg += "\n";
+    msg += "WKDS=";                 //Fünf Seiten
+    msg += "0";
+    msg += "\n";
+    msg += "ZSCHABLO=";             //Schablonenhöhe
+    msg += "0";
+    msg += "\n";
+    msg += "\n";
+    //---------------------------------------ggf. Y-Versatz kennlich machen:
+    if(tmp_b < 210)
+    {
+        kommentar_fmc("--------------------");
+        kommentar_fmc("ay 210");
+        kommentar_fmc("--------------------");
+    }
+    //---------------------------------------Bearbeitungen Oberseite und Hirnseiten:
+    for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+    {
+        zeile.set_text(bearb.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                if(bezug == WST_BEZUG_OBSEI)
+                {
+                    double tiefe;
+                    if(bo.get_tiefe() <= get_dicke())
+                    {
+                        tiefe = bo.get_tiefe();
+                    }else
+                    {
+                        tiefe = get_dicke() - bo.get_tiefe();
+                    }
+                    msg += FMC_BOHR_DM;
+                    msg += "\n";
+                    msg += FMC_BOHR_DM_AFB;
+                    msg += "=";
+                    msg += bo.get_afb();
+                    msg += "\n";
+                    msg += "BEZ=";
+                    msg += "Bohrung DM";
+                    msg += bo.get_dm_qstring();
+                    msg += " T";
+                    msg += double_to_qstring(tiefe);
+                    msg += "\n";
+                    msg += FMC_BOHR_DM_DM;
+                    msg += "=";
+                    msg += bo.get_dm_qstring();
+                    msg += "\n";
+                    msg += "GRP=";                  //Bohrgruppe
+                    msg += "1";
+                    msg += "\n";
+                    msg += "MRICHT=0\n";
+                    msg += "TASTEIN=-1\n";
+                    msg += FMC_BOHR_DM_TIEFE;
+                    msg += "=";
+                    msg += double_to_qstring(tiefe);
+                    msg += "\n";
+                    msg += FMC_BOHR_DM_X;
+                    msg += "=";
+                    msg += double_to_qstring(bo.get_x());
+                    msg += "\n";
+                    msg += FMC_BOHR_DM_Y;
+                    msg += "=";
+                    msg += double_to_qstring(bo.get_y());
+                    msg += "\n";
+                    msg += "\n";
+                }else if(bezug == WST_BEZUG_LI)
+                {
+
+                }else if(bezug == WST_BEZUG_RE)
+                {
+
+                }else if(bezug == WST_BEZUG_VO)
+                {
+
+                }else if(bezug == WST_BEZUG_HI)
+                {
+
+                }
 
 
-    //Programmende:
+            }else
+            {
+                //Kein Werkzeug wurde gefunden.
+                //Kann Bohrung als Kreistasche gefräst werden?:
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                if(!tnummer.isEmpty())
+                {
+
+                }else
+                {
+                    //Mit Fehlermeldung abbrechen:
+                    QString msg = "";
+                    msg += "Fehler bei Export ganx!\n";
+                    msg += "Teilname: ";
+                    msg += name;
+                    msg += "\n";
+                    msg += "Kein Werkzeug fuer:\n";
+                    msg += zeile.get_text();
+
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    return msg;
+                }
+            }
+        }else if(zeile.zeile(1) == BEARBART_NUT)
+        {
+
+        }else if(zeile.zeile(1) == BEARBART_RTA)
+        {
+
+        }
+    }
+    //---------------------------------------Bearbeitungen Unterseite:
+
+
+    //---------------------------------------Programmende:
+    msg += FMC_ENDE;
+    msg += "\n";
+    msg += "AFB=1\n";
+    msg += "PP=2\n";                //Parkposition
+    msg += "BEZB=Programm-Ende";
 
     return msg;
 }
@@ -3465,6 +3637,18 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
     msg += bearb.get_text();
 
     return msg;
+}
+
+QString werkstueck::kommentar_fmc(QString kom)
+{
+    QString text;
+    text = FMC_KOMMENTAR;
+    text += "\n";
+    text += FMC_KOMMENTAR_TEXT;
+    text += kom;
+    text += "\n";
+    text += "\n";
+    return text;
 }
 
 //-------------------------------------------------------------------------Werkzeug:
