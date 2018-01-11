@@ -989,6 +989,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double laenge_y = tmp_b;
             QString bezug = bo.get_bezug();
 
+            //Y-Maß bezieht sich hier immer auf den Nullpunkt der Wst oben links
+            //die Maße intern beziehen sich immer auf Nullpunkt unten links
+            //das heißt, die Y-Maße müssen an dieser Stelle gegengerechnet werden:
+            y = tmp_b - y;
+
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, bo.get_tiefe(), dicke, bezug);
             if(!tnummer.isEmpty())
             {
@@ -1011,6 +1016,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //x = Breite
                     //y = Länge
                     //z = Tiefe
+
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     msg += "    <CntID>";
@@ -1027,7 +1033,6 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     if(laenge_y - y < bezugsmass)
                     {
                         ref += GANX_REF_OBEN_LINKS;
-                        y = laenge_y - y;
                     }else
                     {
                         ref += GANX_REF_UNTEN_LINKS;
@@ -1094,6 +1099,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //x = Breite
                     //y = Länge
                     //z = Tiefe
+
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     msg += "    <CntID>";
@@ -1110,7 +1116,6 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     if(laenge_y - y < bezugsmass)
                     {
                         ref = GANX_REF_OBEN_LINKS;
-                        y = laenge_y - y;
                     }else
                     {
                         ref = GANX_REF_UNTEN_LINKS;
@@ -1935,6 +1940,12 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             rechtecktasche rt(zeile.get_text());
             double x = rt.get_x();
             double y = rt.get_y();
+
+            //Y-Maß bezieht sich hier immer auf den Nullpunkt der Wst oben links
+            //die Maße intern beziehen sich immer auf Nullpunkt unten links
+            //das heißt, die Y-Maße müssen an dieser Stelle gegengerechnet werden:
+            y = tmp_b - y;
+
             //double z = rt.get_z();
             QString ti = rt.get_tiefe_qstring();
             if(ti.toDouble() > get_dicke())
