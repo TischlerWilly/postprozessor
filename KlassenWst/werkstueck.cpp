@@ -3526,7 +3526,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "=";
                     msg += bo.get_afb();
                     msg += "\n";
-                    msg += "BEZ=";
+                    msg += "BEZB=";
                     msg += "Bohrung DM";
                     msg += bo.get_dm_qstring();
                     msg += " T";
