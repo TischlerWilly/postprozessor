@@ -132,8 +132,7 @@
 #define FMC_KOMMENTAR_TEXT      "BEZB="
 
 #define FMC_ENDE                "[PGENDE40]"
-
-
+#define FMC_HALT                "[SNHALT40]"
 
 
 
