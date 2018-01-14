@@ -183,16 +183,23 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
         }else if(art == BEARBART_NUT)
         {
             nut nu(zeile.get_text());
+            QString bezug = nu.get_bezug();
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
             if(nu.get_xs() != nu.get_xe())
             {
                 msg += "  !! Nutrichutng auf der der Maschine nicht moeglich!\n";
+            }
+            double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
+            if(nu.get_breite() < nutblattbreite)
+            {
+                msg += "  !! Nutbreite ist kleiner als Blattbreite!\n";
             }
         }
     }
 
     return msg;
 }
-QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b)
+QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin)
 {
     QString msg = "";
 
@@ -223,6 +230,8 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
         msg += "  !! Werkstueck ist sehr duenn\n";
     }
 
+    werkzeugmagazin wkzmag(wkzmagazin);
+
     for(uint i=1; i<=bearbeit.zeilenanzahl() ;i++)
     {
         text_zeilenweise zeile;
@@ -238,11 +247,135 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
             //...
         }else if(art == BEARBART_NUT)
         {
-            //...
+            nut nu(zeile.get_text());
+            QString bezug = nu.get_bezug();
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
+            double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
+            if(nu.get_breite() < nutblattbreite)
+            {
+                msg += "  !! Nutbreite ist kleiner als Blattbreite!\n";
+            }
         }
     }
 
     return msg;
+}
+QString werkstueck::fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbeitung)
+{
+    QString fehlermeldung;
+
+    fehlermeldung += "Fehler bei ";
+    fehlermeldung += exportformat;
+    fehlermeldung += "-Export!\n";
+
+    fehlermeldung += "Teilname: ";
+    fehlermeldung += name;
+    fehlermeldung += "\n";
+
+    fehlermeldung += "Kein Werkzeug fuer ";
+
+    fehlermeldung += get_bearb_menschlich_lesbar(bearbeitung);
+
+    return fehlermeldung;
+}
+QString werkstueck::get_bearb_menschlich_lesbar(text_zeilenweise bearbeitung)
+{
+    QString daten;
+    if(bearbeitung.zeile(1) == BEARBART_BOHR)
+    {
+        daten += "Bohrung oder Kreistasche:\n";
+        daten += "Bezugsflaeche: ";
+        daten += bearbeitung.zeile(2);
+        daten += "\n";
+        daten += "Durchmesser: ";
+        daten += bearbeitung.zeile(3);
+        daten += "\n";
+        daten += "Tiefe: ";
+        daten += bearbeitung.zeile(4);
+        daten += "\n";
+        daten += "Pos X: ";
+        daten += bearbeitung.zeile(5);
+        daten += "\n";
+        daten += "Pos Y: ";
+        daten += bearbeitung.zeile(6);
+        daten += "\n";
+        daten += "Pos Z: ";
+        daten += bearbeitung.zeile(7);
+        daten += "\n";
+        daten += "AFB: ";
+        daten += bearbeitung.zeile(8);
+        daten += "\n";
+        daten += "Zustellmass: ";
+        daten += bearbeitung.zeile(9);
+        daten += "\n";
+    }else if(bearbeitung.zeile(1) == BEARBART_RTA)
+    {
+        daten += "Rechtecktasche:\n";
+        daten += "Bezugsflaeche: ";
+        daten += bearbeitung.zeile(2);
+        daten += "\n";
+        daten += "Taschenleange: ";
+        daten += bearbeitung.zeile(3);
+        daten += "\n";
+        daten += "Taschenbreite: ";
+        daten += bearbeitung.zeile(4);
+        daten += "\n";
+        daten += "Taschentiefe: ";
+        daten += bearbeitung.zeile(5);
+        daten += "\n";
+        daten += "Pos X: ";
+        daten += bearbeitung.zeile(6);
+        daten += "\n";
+        daten += "Pos Y: ";
+        daten += bearbeitung.zeile(7);
+        daten += "\n";
+        daten += "Pos Z: ";
+        daten += bearbeitung.zeile(8);
+        daten += "\n";
+        daten += "Drehwinkel im UZS: ";
+        daten += bearbeitung.zeile(9);
+        daten += "\n";
+        daten += "Eckenradius: ";
+        daten += bearbeitung.zeile(10);
+        daten += "\n";
+        daten += "Ausraeumen: ";
+        daten += bearbeitung.zeile(11);
+        daten += "\n";
+        daten += "AFB: ";
+        daten += bearbeitung.zeile(12);
+        daten += "\n";
+        daten += "Zustellmass: ";
+        daten += bearbeitung.zeile(13);
+        daten += "\n";
+    }else if(bearbeitung.zeile(1) == BEARBART_NUT)
+    {
+        daten += "Nut:\n";
+        daten += "Bezugsflaeche: ";
+        daten += bearbeitung.zeile(2);
+        daten += "\n";
+        daten += "Startpunkt in X: ";
+        daten += bearbeitung.zeile(3);
+        daten += "\n";
+        daten += "Startpunkt in Y: ";
+        daten += bearbeitung.zeile(4);
+        daten += "\n";
+        daten += "Endpunkt in X: ";
+        daten += bearbeitung.zeile(5);
+        daten += "\n";
+        daten += "Endpunkt in Y: ";
+        daten += bearbeitung.zeile(6);
+        daten += "\n";
+        daten += "Nuttiefe: ";
+        daten += bearbeitung.zeile(7);
+        daten += "\n";
+        daten += "Nutbreite: ";
+        daten += bearbeitung.zeile(8);
+        daten += "\n";
+        daten += "AFB: ";
+        daten += bearbeitung.zeile(9);
+        daten += "\n";
+    }
+    return daten;
 }
 
 void werkstueck::bearb_sortieren()
@@ -509,7 +642,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info = warnungen;
     }else if(drehwinkel == "90")
     {
@@ -518,7 +651,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info = warnungen;
     }else if(drehwinkel == "180")
     {
@@ -528,7 +661,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info = warnungen;
     }else if(drehwinkel == "270")
     {
@@ -539,7 +672,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info = warnungen;
     }else
     {
@@ -1607,15 +1740,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 
                 }else
                 {
-                    //Mit Fehlermeldung abbrechen:
-                    QString msg = "";
-                    msg += "Fehler bei Export ganx!\n";
-                    msg += "Teilname: ";
-                    msg += name;
-                    msg += "\n";
-                    msg += "Kein Werkzeug fuer:\n";
-                    msg += zeile.get_text();
-
+                    QString msg = fehler_kein_WKZ("ganx", zeile);
                     QMessageBox mb;
                     mb.setText(msg);
                     mb.exec();
@@ -1630,12 +1755,12 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 //Warnung ausgeben und Nut unterdrücken:
                 QString msg = "";
-                msg += "Achtung bei Export ganx!\n";
+                msg += "Achtung bei ganx-Export!\n";
                 msg += "Teilname: ";
                 msg += name;
                 msg += "\n";
                 msg += "Nut ist nicht parallel zur X-Achse:\n";
-                msg += zeile.get_text();
+                msg += get_bearb_menschlich_lesbar(zeile);
                 msg += "\n";
                 msg += "Bearbeitung wird unterdrueckt.";
 
@@ -1659,15 +1784,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
             {
-                //Mit Fehlermeldung abbrechen:
-                QString msg = "";
-                msg += "Fehler bei Export ganx!\n";
-                msg += "Teilname: ";
-                msg += name;
-                msg += "\n";
-                msg += "Kein Werkzeug fuer:\n";
-                msg += zeile.get_text();
-
+                QString msg = fehler_kein_WKZ("ganx", zeile);
                 QMessageBox mb;
                 mb.setText(msg);
                 mb.exec();
@@ -1690,12 +1807,12 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 //Warnung ausgeben und Nut unterdrücken:
                 QString msg = "";
-                msg += "Achtung bei Export ganx!\n";
+                msg += "Achtung bei ganx-Export!\n";
                 msg += "Teilname: ";
                 msg += name;
                 msg += "\n";
-                msg += "Saegeblatt zu breit fuer Nut:\n";
-                msg += zeile.get_text();
+                msg += "Saegeblatt zu breit fuer ";
+                msg += get_bearb_menschlich_lesbar(zeile);
                 msg += "\n";
                 msg += "Bearbeitung wird unterdrueckt.";
 
@@ -1992,15 +2109,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
             if(tnummer.isEmpty())
             {
-                //Mit Fehlermeldung abbrechen:
-                QString msg = "";
-                msg += "Fehler bei Export ganx!\n";
-                msg += "Teilname: ";
-                msg += name;
-                msg += "\n";
-                msg += "Kein Werkzeug fuer Rechtecktasche:\n";
-                msg += zeile.get_text();
-
+                QString msg = fehler_kein_WKZ("ganx", zeile);
                 QMessageBox mb;
                 mb.setText(msg);
                 mb.exec();
@@ -2914,15 +3023,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //Diese Stelle des Codes wird theoretisch niemals erreicht,
                     //da die Funktion bereits in er ersten For-Schleife abbricht.
 
-                    //Mit Fehlermeldung abbrechen:
-                    QString msg = "";
-                    msg += "Fehler bei Export ganx!\n";
-                    msg += "Teilname: ";
-                    msg += name;
-                    msg += "\n";
-                    msg += "Kein Werkzeug fuer:\n";
-                    msg += zeile.get_text();
-
+                    QString msg = fehler_kein_WKZ("ganx", zeile);
                     QMessageBox mb;
                     mb.setText(msg);
                     mb.exec();
@@ -2968,15 +3069,10 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
             {
-                //Mit Fehlermeldung abbrechen:
-                QString msg = "";
-                msg += "Fehler bei Export ganx!\n";
-                msg += "Teilname: ";
-                msg += name;
-                msg += "\n";
-                msg += "Kein Werkzeug fuer:\n";
-                msg += zeile.get_text();
+                //Diese Stelle des Codes wird theoretisch niemals erreicht,
+                //da die Funktion bereits in er ersten For-Schleife abbricht.
 
+                QString msg = fehler_kein_WKZ("ganx", zeile);
                 QMessageBox mb;
                 mb.setText(msg);
                 mb.exec();
@@ -3283,6 +3379,17 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 minmass = by;
             }
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+            if(tnummer.isEmpty())
+            {
+                //Diese Stelle des Codes wird theoretisch niemals erreicht,
+                //da die Funktion bereits in er ersten For-Schleife abbricht.
+
+                QString msg = fehler_kein_WKZ("ganx", zeile);
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                return msg;
+            }
             double wkz_dm = wkzmag.get_dm(tnummer).toDouble();
             double eckenradius = rt.get_rad();
             if(eckenradius < wkz_dm/2)
@@ -3569,7 +3676,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "\n";
                 }else if(bezug == WST_BEZUG_LI)
                 {
-                    msg += FMC_HBEYP;
+                    msg += FMC_HBEXP;
                     msg += "\n";
                     msg += "Y1=";
                     msg += bo.get_y_qstring();
@@ -3610,13 +3717,127 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "\n";
                 }else if(bezug == WST_BEZUG_RE)
                 {
+                    msg += FMC_HBEXM;
+                    msg += "\n";
+                    msg += "Y1=";
+                    msg += bo.get_y_qstring();
+                    msg += "\n";
+                    msg += "Y2=(NULL)\n";
+                    msg += "Y3=(NULL)\n";
+                    msg += "Y4=(NULL)\n";
+                    msg += "Y5=(NULL)\n";
+                    msg += "Y6=(NULL)\n";
+                    msg += "TI=";
+                    msg += bo.get_tiefe_qstring();
+                    msg += "\n";
+                    msg += "Z=";
+                    msg += bo.get_z_qstring();
+                    msg += "\n";
+                    msg += "DM=";
+                    msg += bo.get_dm_qstring();
+                    msg += "\n";
+                    msg += "KETTE=0\n";
+                    msg += "GRP=1\n";           //Bohrgruppe
+                    msg += "X2=-1\n";
+                    msg += "X1=L\n";
 
+                    //Anbohrtiefe gem. Voreinstellung IMAWOP
+                    //Anbohrvorschub gem. Voreinstellung IMAWOP
+                    //Bohrvorschub gem. Voreinstellung IMAWOP
+                    //Drehzahl gem. Voreinstellung IMAWOP
+
+                    msg += "BEZB=";
+                    msg += "HBE X- DM";
+                    msg += bo.get_dm_qstring();
+                    msg += " T";
+                    msg += bo.get_tiefe_qstring();
+                    msg += "\n";
+                    msg += "AFB=";
+                    msg += bo.get_afb();
+                    msg += "\n";
+                    msg += "\n";
                 }else if(bezug == WST_BEZUG_VO)
                 {
+                    msg += FMC_HBEYP;
+                    msg += "\n";
+                    msg += "X1=";
+                    msg += bo.get_x_qstring();
+                    msg += "\n";
+                    msg += "X2=(NULL)\n";
+                    msg += "X3=(NULL)\n";
+                    msg += "X4=(NULL)\n";
+                    msg += "X5=(NULL)\n";
+                    msg += "X6=(NULL)\n";
+                    msg += "TI=";
+                    msg += bo.get_tiefe_qstring();
+                    msg += "\n";
+                    msg += "Z=";
+                    msg += bo.get_z_qstring();
+                    msg += "\n";
+                    msg += "DM=";
+                    msg += bo.get_dm_qstring();
+                    msg += "\n";
+                    msg += "KETTE=0\n";
+                    msg += "GRP=1\n";           //Bohrgruppe
+                    msg += "Y2=-1\n";
+                    msg += "Y1=0\n";
 
+                    //Anbohrtiefe gem. Voreinstellung IMAWOP
+                    //Anbohrvorschub gem. Voreinstellung IMAWOP
+                    //Bohrvorschub gem. Voreinstellung IMAWOP
+                    //Drehzahl gem. Voreinstellung IMAWOP
+
+                    msg += "BEZB=";
+                    msg += "HBE Y+ DM";
+                    msg += bo.get_dm_qstring();
+                    msg += " T";
+                    msg += bo.get_tiefe_qstring();
+                    msg += "\n";
+                    msg += "AFB=";
+                    msg += bo.get_afb();
+                    msg += "\n";
+                    msg += "\n";
                 }else if(bezug == WST_BEZUG_HI)
                 {
+                    msg += FMC_HBEYM;
+                    msg += "\n";
+                    msg += "X1=";
+                    msg += bo.get_x_qstring();
+                    msg += "\n";
+                    msg += "X2=(NULL)\n";
+                    msg += "X3=(NULL)\n";
+                    msg += "X4=(NULL)\n";
+                    msg += "X5=(NULL)\n";
+                    msg += "X6=(NULL)\n";
+                    msg += "TI=";
+                    msg += bo.get_tiefe_qstring();
+                    msg += "\n";
+                    msg += "Z=";
+                    msg += bo.get_z_qstring();
+                    msg += "\n";
+                    msg += "DM=";
+                    msg += bo.get_dm_qstring();
+                    msg += "\n";
+                    msg += "KETTE=0\n";
+                    msg += "GRP=1\n";           //Bohrgruppe
+                    msg += "Y2=-1\n";
+                    msg += "Y1=B\n";
 
+                    //Anbohrtiefe gem. Voreinstellung IMAWOP
+                    //Anbohrvorschub gem. Voreinstellung IMAWOP
+                    //Bohrvorschub gem. Voreinstellung IMAWOP
+                    //Drehzahl gem. Voreinstellung IMAWOP
+
+                    msg += "BEZB=";
+                    msg += "HBE Y- DM";
+                    msg += bo.get_dm_qstring();
+                    msg += " T";
+                    msg += bo.get_tiefe_qstring();
+                    msg += "\n";
+                    msg += "AFB=";
+                    msg += bo.get_afb();
+                    msg += "\n";
+                    msg += "\n";
                 }
             }else
             {
@@ -3625,18 +3846,60 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
                 if(!tnummer.isEmpty())
                 {
+                    double zustellmas = bo.get_zustellmass();
+                    if(zustellmas <= 0)
+                    {
+                        zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
+                    }
+                    double tiefe;
+                    if(bo.get_tiefe() <= get_dicke())
+                    {
+                        tiefe = bo.get_tiefe();
+                    }else
+                    {
+                        tiefe = get_dicke() - bo.get_tiefe();
+                    }
+                    msg += FMC_KTA;
+                    msg += "\n";
+                    msg += "SWKZID=";           //WKZ-Nummer
+                    msg += tnummer;
+                    msg += "\n";
+                    msg += "MPX=";
+                    msg += bo.get_x_qstring();
+                    msg += "\n";
+                    msg += "MPY=";
+                    msg += bo.get_y_qstring();
+                    msg += "\n";
+                    msg += "DM=";
+                    msg += bo.get_dm_qstring();
+                    msg += "\n";
+                    msg += "TI=";
+                    msg += double_to_qstring(tiefe);
+                    msg += "\n";
+                    msg += "LGEZU=";            //Zustellmaß
+                    msg += double_to_qstring(zustellmas);
+                    msg += "\n";
+                    msg += "GEGENL=1\n";        //Gegenlauf
+                    msg += "RAEUMEN=1\n";       //Ausräumen
 
+                    //Eintauchvorschub gem. Voreinstellung IMAWOP
+                    //Vorschub gem. Voreinstellung IMAWOP
+                    //Drehzahl gem. Voreinstellung IMAWOP
+
+                    msg += "BEZB=";
+                    msg += "Kreistasche DM";
+                    msg += bo.get_dm_qstring();
+                    msg += " T";
+                    msg += double_to_qstring(tiefe);
+                    msg += "\n";
+                    msg += "AFB=";
+                    msg += bo.get_afb();
+                    msg += "\n";
+                    msg += "\n";
                 }else
                 {
                     //Mit Fehlermeldung abbrechen:
-                    QString msg = "";
-                    msg += "Fehler bei Export ganx!\n";
-                    msg += "Teilname: ";
-                    msg += name;
-                    msg += "\n";
-                    msg += "Kein Werkzeug fuer:\n";
-                    msg += zeile.get_text();
-
+                    QString msg = fehler_kein_WKZ("fmc", zeile);
                     QMessageBox mb;
                     mb.setText(msg);
                     mb.exec();
@@ -3645,10 +3908,124 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             }
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {
+            nut nu(zeile.get_text());
+            QString bezug = nu.get_bezug();
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
+                if(nu.get_breite() < nutblattbreite)
+                {
+                    //Warnung ausgeben und Nut unterdrücken:
+                    QString msg = "";
+                    msg += "Achtung bei fmc-Export!\n";
+                    msg += "Teilname: ";
+                    msg += name;
+                    msg += "\n";
+                    msg += "Saegeblatt zu breit fuer ";
+                    msg += get_bearb_menschlich_lesbar(zeile);
+                    msg += "\n";
+                    msg += "Bitte FMC-Programm pruefen und schmaleres Nutblatt zuweisen.";
 
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                }
+                if(bezug == WST_BEZUG_OBSEI)
+                {
+                    msg += FMC_NUT;
+                    msg += "\n";
+                    msg += "SWKZID=";               //WKZ-Nummer
+                    msg += tnummer;
+                    msg += "\n";
+                    msg += "SPX=";
+                    msg += nu.get_xs_qstring();
+                    msg += "\n";
+                    msg += "SPY=";
+                    msg += nu.get_ys_qstring();
+                    msg += "\n";
+                    msg += "EPX=";
+                    msg += nu.get_xe_qstring();
+                    msg += "\n";
+                    msg += "EPY=";
+                    msg += nu.get_ye_qstring();
+                    msg += "\n";
+                    msg += "TI=";
+                    msg += nu.get_tiefe_qstring();
+                    msg += "\n";
+                    msg += "NB=";
+                    msg += nu.get_breite_qstring();
+                    msg += "\n";
+                    msg += "TYPA=1\n";              //Auslauf
+                    msg += "TRKOR=0\n";             //KOrrektur/Bezugskante
+                    msg += "GEGENL=0\n";            //Genenlauf
+                    msg += "TWKL=0\n";              //Neigungswinkel
+                    msg += "TYPN=1\n";              //Neigungstyp
+                    msg += "ABSTN=10\n";            //Abstand auf Neigung
+                    msg += "Z=D/2\n";               //POs in Z
+
+                    //Eintauchvorschub gem. Voreinstellung IMAWOP
+                    //Vorschub gem. Voreinstellung IMAWOP
+                    //Drehzahl gem. Voreinstellung IMAWOP
+
+                    msg += "BEZB=";
+                    msg += "Nut B";
+                    msg += nu.get_breite_qstring();
+                    msg += " T";
+                    msg += nu.get_tiefe_qstring();
+                    msg += "\n";
+                    msg += FMC_BOHR_DM_AFB;
+                    msg += "=";
+                    msg += nu.get_afb();
+                    msg += "\n";
+                    msg += "\n";
+                }
+            }else
+            {
+                //Mit Fehlermeldung abbrechen:
+                QString msg = fehler_kein_WKZ("fmc", zeile);
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                return msg;
+            }
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
+            rechtecktasche rt(zeile.get_text());
+            QString bezug = rt.get_bezug();
+            double minmass = 0;
+            if(rt.get_laenge() < rt.get_breite())
+            {
+                minmass = rt.get_laenge();
+            }else
+            {
+                minmass = get_breite();
+            }
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+            if(!tnummer.isEmpty())
+            {
 
+
+
+
+
+
+
+
+
+
+
+
+
+            }else
+            {
+                //Mit Fehlermeldung abbrechen:
+                QString msg = fehler_kein_WKZ("fmc", zeile);
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                return msg;
+            }
         }
     }
     //---------------------------------------Bearbeitungen Unterseite:
@@ -3755,7 +4132,56 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
                     if(!tnummer.isEmpty())
                     {
+                        double zustellmas = bo.get_zustellmass();
+                        if(zustellmas <= 0)
+                        {
+                            zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
+                        }
+                        double tiefe;
+                        if(bo.get_tiefe() <= get_dicke())
+                        {
+                            tiefe = bo.get_tiefe();
+                        }else
+                        {
+                            tiefe = get_dicke() - bo.get_tiefe();
+                        }
+                        msg += FMC_KTA;
+                        msg += "\n";
+                        msg += "SWKZID=";           //WKZ-Nummer
+                        msg += tnummer;
+                        msg += "\n";
+                        msg += "MPX=";
+                        msg += bo.get_x_qstring();
+                        msg += "\n";
+                        msg += "MPY=";
+                        msg += bo.get_y_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bo.get_dm_qstring();
+                        msg += "\n";
+                        msg += "TI=";
+                        msg += double_to_qstring(tiefe);
+                        msg += "\n";
+                        msg += "LGEZU=";            //Zustellmaß
+                        msg += double_to_qstring(zustellmas);
+                        msg += "\n";
+                        msg += "GEGENL=1\n";        //Gegenlauf
+                        msg += "RAEUMEN=1\n";       //Ausräumen
 
+                        //Eintauchvorschub gem. Voreinstellung IMAWOP
+                        //Vorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
+
+                        msg += "BEZB=";
+                        msg += "Kreistasche DM";
+                        msg += bo.get_dm_qstring();
+                        msg += " T";
+                        msg += double_to_qstring(tiefe);
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bo.get_afb();
+                        msg += "\n";
+                        msg += "\n";
                     }else
                     {
                         //Mit Fehlermeldung abbrechen:
@@ -3775,7 +4201,94 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 }
             }else if(zeile.zeile(1) == BEARBART_NUT)
             {
+                nut nu(zeile.get_text());
+                QString bezug = nu.get_bezug();
+                if(bezug == WST_BEZUG_UNSEI)
+                {
+                    bezug = WST_BEZUG_OBSEI;
+                    nu.set_bezug(WST_BEZUG_OBSEI);
+                    nu.set_ys(  tmp_b - nu.get_ys()  );
+                    nu.set_ye(  tmp_b - nu.get_ye()  );
+                }
+                QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
+                if(!tnummer.isEmpty())
+                {
+                    double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
+                    if(nu.get_breite() < nutblattbreite)
+                    {
+                        //Warnung ausgeben und Nut unterdrücken:
+                        QString msg = "";
+                        msg += "Achtung bei fmc-Export!\n";
+                        msg += "Teilname: ";
+                        msg += name;
+                        msg += "\n";
+                        msg += "Saegeblatt zu breit fuer ";
+                        msg += get_bearb_menschlich_lesbar(zeile);
+                        msg += "\n";
+                        msg += "Bitte FMC-Programm pruefen und schmaleres Nutblatt zuweisen.";
 
+                        QMessageBox mb;
+                        mb.setText(msg);
+                        mb.exec();
+                    }
+                    if(bezug == WST_BEZUG_OBSEI)
+                    {
+                        msg += FMC_NUT;
+                        msg += "\n";
+                        msg += "SWKZID=";               //WKZ-Nummer
+                        msg += tnummer;
+                        msg += "\n";
+                        msg += "SPX=";
+                        msg += nu.get_xs_qstring();
+                        msg += "\n";
+                        msg += "SPY=";
+                        msg += nu.get_ys_qstring();
+                        msg += "\n";
+                        msg += "EPX=";
+                        msg += nu.get_xe_qstring();
+                        msg += "\n";
+                        msg += "EPY=";
+                        msg += nu.get_ye_qstring();
+                        msg += "\n";
+                        msg += "TI=";
+                        msg += nu.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "NB=";
+                        msg += nu.get_breite_qstring();
+                        msg += "\n";
+                        msg += "TYPA=1\n";              //Auslauf
+                        msg += "TRKOR=0\n";             //KOrrektur/Bezugskante
+                        msg += "GEGENL=0\n";            //Genenlauf
+                        msg += "TWKL=0\n";              //Neigungswinkel
+                        msg += "TYPN=1\n";              //Neigungstyp
+                        msg += "ABSTN=10\n";            //Abstand auf Neigung
+                        msg += "Z=D/2\n";               //POs in Z
+
+                        //Eintauchvorschub gem. Voreinstellung IMAWOP
+                        //Vorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
+
+                        msg += "BEZB=";
+                        msg += "Nut B";
+                        msg += nu.get_breite_qstring();
+                        msg += " T";
+                        msg += nu.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += FMC_BOHR_DM_AFB;
+                        msg += "=";
+                        msg += nu.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
+                }else
+                {
+                    //Mit Fehlermeldung abbrechen:
+                    QString msg = fehler_kein_WKZ("fmc", zeile);
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    return msg;
+                }
             }else if(zeile.zeile(1) == BEARBART_RTA)
             {
 

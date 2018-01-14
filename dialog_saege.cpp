@@ -70,5 +70,10 @@ void Dialog_saege::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(ui->lineEdit_breite->text());       //9 : Sägeblattbreite
     wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);           //10: Lage
 
+    //deutsche Zahlen in englische Zahlen umwandeln:
+    for(uint i=3; i<=wkz.zeilenanzahl() ;i++)
+    {
+        wkz.zeile_ersaetzen(i, wkz.zeile(i).replace(",","."));
+    }
     emit sendData(wkz, wkz_ist_neu);
 }

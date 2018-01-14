@@ -82,7 +82,9 @@ private:
 
 
     QString warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
-    QString warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b);
+    QString warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
+    QString fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbeitung);
+    QString get_bearb_menschlich_lesbar(text_zeilenweise bearbeitung);
 
     void bearb_sortieren();
     text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
