@@ -9,8 +9,6 @@
     ->weitere Dialoge importierbar von FMC machen
 
 -->QString werkstueck::get_fmc_dateitext(...)
-    ->fmc-Ausgabe RTA Oberseite
-    ->fmc-Ausgabe RTA Unterseite
 
 -->void werkstueck::bearb_sortieren()  mit Leben füllen / evtl nicht nötig? Testen!
 

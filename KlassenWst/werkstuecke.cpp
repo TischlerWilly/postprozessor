@@ -1454,7 +1454,8 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_drewi(ausdruck_auswerten(tmp));
-                    }else if(zeile.contains(FMC_RTA_RAD))
+                    }else if(zeile.contains(FMC_RTA_RAD)  && \
+                             !zeile.contains(FMC_RTA_RAEUM))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp.replace(",",".");
@@ -2974,8 +2975,21 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_drewi(ausdruck_auswerten(tmp));
-                    }else if(zeile.contains(FMC_RTA_RAD))
+                        tmp = ausdruck_auswerten(tmp);
+                        double winkel = tmp.toDouble();
+                        //Der Winkel hau einen Werk zwischen 0 und 360°
+                        //1° entspricht 181° usw.
+                        //das heißt, der Winkel kann bei Bedarf gekürzt werden:
+                        if(winkel > 180)
+                        {
+                            winkel = winkel -180;
+                        }
+                        //Auf die Unterseite drehen, weil Drehen um L/2
+                        //Bei drehen um B/2 verhällt sich der winkel genauso:
+                        winkel = 180 - winkel;
+                        rt.set_drewi(winkel);
+                    }else if(zeile.contains(FMC_RTA_RAD)  && \
+                             !zeile.contains(FMC_RTA_RAEUM))
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp.replace(",",".");

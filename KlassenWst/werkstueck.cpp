@@ -2058,6 +2058,22 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double x = rt.get_x();
             double y = rt.get_y();
 
+            bool ausraeumen = true;
+            if(rt.get_tiefe() >= dicke  || \
+               rt.get_tiefe() <  0 )
+            {
+                ausraeumen = true;
+            }else
+            {
+                if(rt.get_ausraeumen() == false)
+                {
+                    ausraeumen = false;
+                }else
+                {
+                    ausraeumen = true;
+                }
+            }
+
             //Y-Maß bezieht sich hier immer auf den Nullpunkt der Wst oben links
             //die Maße intern beziehen sich immer auf Nullpunkt unten links
             //das heißt, die Y-Maße müssen an dieser Stelle gegengerechnet werden:
@@ -2202,7 +2218,14 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += ";";
             msg += ti;                       //TaTi
             msg += ";";
-            msg += "1";                      //Variante der Rechtecktasche (1 = ausgeräumt)
+            //Variante der Rechtecktasche (1 = ausgeräumt):
+            if(ausraeumen == true)
+            {
+                msg += "1";
+            }else
+            {
+                msg += "0";
+            }
             msg += ";";
             msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
             msg += ";";
@@ -3333,6 +3356,21 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double x = rt.get_x();
             double y = rt.get_y();
             double z = rt.get_z();
+            bool ausraeumen = true;
+            if(rt.get_tiefe() >= dicke  || \
+               rt.get_tiefe() <  0 )
+            {
+                ausraeumen = true;
+            }else
+            {
+                if(rt.get_ausraeumen() == false)
+                {
+                    ausraeumen = false;
+                }else
+                {
+                    ausraeumen = true;
+                }
+            }
             QString ti = rt.get_tiefe_qstring();
             if(ti.toDouble() > get_dicke())
             {
@@ -3502,7 +3540,14 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += ";";
             msg += ti;                       //TaTi
             msg += ";";
-            msg += "1";                      //Variante der Rechtecktasche (1 = ausgeräumt)
+            //Variante der Rechtecktasche (1 = ausgeräumt):
+            if(ausraeumen == true)
+            {
+                msg += "1";
+            }else
+            {
+                msg += "0";
+            }
             msg += ";";
             msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
             msg += ";";
@@ -4001,22 +4046,81 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             {
                 minmass = get_breite();
             }
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
             if(!tnummer.isEmpty())
             {
+                double zustellmas = rt.get_zustellmass();
+                if(zustellmas <= 0)
+                {
+                    zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
+                }
+                double tiefe;
+                if(rt.get_tiefe() <= get_dicke())
+                {
+                    tiefe = rt.get_tiefe();
+                }else
+                {
+                    tiefe = get_dicke() - rt.get_tiefe();
+                }
+                double radius = rt.get_rad();
+                //double radius_wkz = wkzmag.get_dm(tnummer).toDouble()/2;
+                //if(radius < radius_wkz)
+                //{
+                    //radius = radius_wkz;
+                //}
+                msg += FMC_RTA;
+                msg += "\n";
+                msg += "WKZID=";            //Werkzeugnummer
+                msg += tnummer;
+                msg += "\n";
+                msg += "MPX=";
+                msg += rt.get_x_qstring();
+                msg += "\n";
+                msg += "MPY=";
+                msg += rt.get_y_qstring();
+                msg += "\n";
+                msg += "LGET1=";
+                msg += rt.get_laenge_qstring();
+                msg += "\n";
+                msg += "LGET2=";
+                msg += rt.get_breite_qstring();
+                msg += "\n";
+                msg += "TI=";                   //Tiefe
+                msg += double_to_qstring(tiefe);
+                msg += "\n";
+                msg += "R=";
+                msg += double_to_qstring(radius);
+                msg += "\n";
+                msg += "LGET1=";
+                msg += rt.get_laenge_qstring();
+                msg += "\n";
+                msg += "LGEZU=";                //Zustellmaß
+                msg += double_to_qstring(zustellmas);
+                msg += "\n";
+                msg += "GEGENL=";               //Gegenslauf
+                msg += "1";
+                msg += "\n";
+                msg += "WKL=";
+                msg += rt.get_drewi_qstring();
+                msg += "\n";
+                msg += "RAEUMEN=";              //Ausräumen
+                msg += rt.get_ausraeumen_qstring();
+                msg += "\n";
 
+                //Eintauchvorschub gem. Voreinstellung IMAWOP
+                //Vorschub gem. Voreinstellung IMAWOP
+                //Drehzahl gem. Voreinstellung IMAWOP
 
-
-
-
-
-
-
-
-
-
-
-
+                msg += "BEZB=";
+                msg += "Rechtecktasche L";
+                msg += rt.get_laenge_qstring();
+                msg += " B";
+                msg += rt.get_breite_qstring();
+                msg += "\n";
+                msg += "AFB=";
+                msg += rt.get_afb();
+                msg += "\n";
+                msg += "\n";
             }else
             {
                 //Mit Fehlermeldung abbrechen:
@@ -4291,7 +4395,105 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 }
             }else if(zeile.zeile(1) == BEARBART_RTA)
             {
+                rechtecktasche rt(zeile.get_text());
+                QString bezug = rt.get_bezug();
+                double minmass = 0;
+                if(rt.get_laenge() < rt.get_breite())
+                {
+                    minmass = rt.get_laenge();
+                }else
+                {
+                    minmass = get_breite();
+                }
+                QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
 
+                //Beareitung auf die Oberseite drehen:
+                rt.set_y(  tmp_b - rt.get_y()  );
+                rt.set_drewi(  180 - rt.get_drewi()  );
+
+                if(!tnummer.isEmpty())
+                {
+                    double zustellmas = rt.get_zustellmass();
+                    if(zustellmas <= 0)
+                    {
+                        zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
+                    }
+                    double tiefe;
+                    if(rt.get_tiefe() <= get_dicke())
+                    {
+                        tiefe = rt.get_tiefe();
+                    }else
+                    {
+                        tiefe = get_dicke() - rt.get_tiefe();
+                    }
+                    double radius = rt.get_rad();
+                    //double radius_wkz = wkzmag.get_dm(tnummer).toDouble()/2;
+                    //if(radius < radius_wkz)
+                    //{
+                        //radius = radius_wkz;
+                    //}
+                    msg += FMC_RTA;
+                    msg += "\n";
+                    msg += "WKZID=";            //Werkzeugnummer
+                    msg += tnummer;
+                    msg += "\n";
+                    msg += "MPX=";
+                    msg += rt.get_x_qstring();
+                    msg += "\n";
+                    msg += "MPY=";
+                    msg += rt.get_y_qstring();
+                    msg += "\n";
+                    msg += "LGET1=";
+                    msg += rt.get_laenge_qstring();
+                    msg += "\n";
+                    msg += "LGET2=";
+                    msg += rt.get_breite_qstring();
+                    msg += "\n";
+                    msg += "TI=";                   //Tiefe
+                    msg += double_to_qstring(tiefe);
+                    msg += "\n";
+                    msg += "R=";
+                    msg += double_to_qstring(radius);
+                    msg += "\n";
+                    msg += "LGET1=";
+                    msg += rt.get_laenge_qstring();
+                    msg += "\n";
+                    msg += "LGEZU=";                //Zustellmaß
+                    msg += double_to_qstring(zustellmas);
+                    msg += "\n";
+                    msg += "GEGENL=";               //Gegenslauf
+                    msg += "1";
+                    msg += "\n";
+                    msg += "WKL=";
+                    msg += rt.get_drewi_qstring();
+                    msg += "\n";
+                    msg += "RAEUMEN=";              //Ausräumen
+                    msg += rt.get_ausraeumen_qstring();
+                    msg += "\n";
+
+                    //Eintauchvorschub gem. Voreinstellung IMAWOP
+                    //Vorschub gem. Voreinstellung IMAWOP
+                    //Drehzahl gem. Voreinstellung IMAWOP
+
+                    msg += "BEZB=";
+                    msg += "Rechtecktasche L";
+                    msg += rt.get_laenge_qstring();
+                    msg += " B";
+                    msg += rt.get_breite_qstring();
+                    msg += "\n";
+                    msg += "AFB=";
+                    msg += rt.get_afb();
+                    msg += "\n";
+                    msg += "\n";
+                }else
+                {
+                    //Mit Fehlermeldung abbrechen:
+                    QString msg = fehler_kein_WKZ("fmc", zeile);
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    return msg;
+                }
             }
         }
     }
