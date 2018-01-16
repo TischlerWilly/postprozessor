@@ -86,6 +86,10 @@ void rechtecktasche::set_z(QString z)
 }
 void rechtecktasche::set_drewi(double wi)
 {
+    while(wi > 180)
+    {
+        wi = wi -180;
+    }
     drewinkel = wi;
 }
 void rechtecktasche::set_drewi(QString wi)

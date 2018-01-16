@@ -38,6 +38,7 @@ public:
     {
         return namen;
     }
+    QString suche_cad_fehler();
 
 private:
     //Variabeln:

@@ -1,3 +1,10 @@
 Typ	Nr	DM	Nutzl	Vorschub	Zustellm	DM_CAD	DuBo	Saegebr	Lage	 
-M	R602	18	46	7000	12	 	 	 	vert
-M	R608	8	20	4500	5	 	 	 	vert
+M	IMA602	18	46	7000	12	 	 	 	vert
+M	IMA608	8	20	4500	5	 	 	 	vert
+B	B5a	5	35	 	8	5	1	 	vert
+B	B6a	6	35	 	8	6	0	 	vert
+B	B8a	8	35	 	8	8	0	 	vert
+B	B8b	8.2	35	 	8	8.2	0	 	hori
+B	B10a	10	35	 	8	10	0	 	vert
+B	B15a	15	35	 	8	15	0	 	vert
+S	Saege425	200	 	 	10	 	 	4	vert

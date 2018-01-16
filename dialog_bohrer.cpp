@@ -33,7 +33,7 @@ void Dialog_bohrer::getData(text_zeilenweise msg)
         ui->comboBox_dubo->setCurrentIndex(1);  //nein
     }
 
-    if(msg.zeile(10) == "0")
+    if(msg.zeile(10) == WKZ_PARAMETER_LAGE_VERT)
     {
         ui->comboBox_lage->setCurrentIndex(0);  //vertikal
     }else
@@ -109,5 +109,10 @@ void Dialog_bohrer::on_pushButton_ok_clicked()
         wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_HORI);
     }
 
+    //deutsche Zahlen in englische Zahlen umwandeln:
+    for(uint i=3; i<=wkz.zeilenanzahl() ;i++)
+    {
+        wkz.zeile_ersaetzen(i, wkz.zeile(i).replace(",","."));
+    }
     emit sendData(wkz, wkz_ist_neu);
 }
