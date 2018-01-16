@@ -630,6 +630,38 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
     return bearb;
 }
 
+QString werkstueck::suche_cad_fehler()
+{
+    QString msg;
+
+    if(name.contains("Tuer") || \
+       name.contains("Tur")      )
+    {
+        uint anz_asd = 0; //Anzahl Aufschlagdämpfer
+
+        for(uint i=1; i<bearbeitungen.zeilenanzahl() ;i++)
+        {
+            if(bearbeitungen.zeile(i).contains(BEARBART_BOHR))
+            {
+                bohrung bo(bearbeitungen.zeile(i));
+                if(bo.get_dm() == 6 && bo.get_tiefe() < get_dicke())
+                {
+                    anz_asd++;
+                }
+            }
+        }
+        if(anz_asd < 2)
+        {
+            msg += get_name();
+            msg += ": keine Aufschlagdaempfer";
+            msg += "\n";
+        }
+    }
+
+
+    return msg;
+}
+
 //-------------------------------------------------------------------------Export:
 QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel)
 {

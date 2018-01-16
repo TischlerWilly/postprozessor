@@ -70,6 +70,8 @@ public:
     QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
     QString get_eigenses_format(QString drehwinkel);
 
+    QString suche_cad_fehler();
+
 private:
     //Variabeln:
     double laenge;  //X-Wert

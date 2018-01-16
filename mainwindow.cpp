@@ -606,6 +606,13 @@ void MainWindow::on_actionInfo_triggered()
     tmp += "  Fraeskonturen werden ignoriert.";
 
     ui->plainTextEdit_eldungen->setPlainText(tmp);
+
+    //----------------------------------------------------------
+
+    tmp  = "Der Postpozessor versucht fehlerhaft ausgegebene Bauteile zu erkennen.\n";
+    tmp += "In diesem Textfeld werden die gefundenen Auffaelligkeiten aufgelistet.";
+
+    ui->plainTextEdit_zusatzinfo->setPlainText(tmp);
 }
 void MainWindow::on_actionWerkzeug_ganx_anzeigen_triggered()
 {
@@ -618,10 +625,32 @@ void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
 void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
 {
     QString msg = "";
+    //Längsten Namen finden:
+    uint anz_zeichen = 0;
     for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
     {
-        msg += namen_std_vor.zeile(i);
-        msg += "   -->   ";
+        if(namen_std_vor.zeile(i).count() > anz_zeichen)
+        {
+            anz_zeichen = namen_std_vor.zeile(i).count();
+        }
+    }
+    //Allen Namen die gleiche Länge geben:
+    text_zeilenweise tz;
+    for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
+    {
+        QString tmp = namen_std_vor.zeile(i);
+        while(tmp.count() < anz_zeichen)
+        {
+            tmp += " ";
+        }
+        tz.zeile_anhaengen(tmp);
+    }
+    //Auflistung erstellen:
+    for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
+    {
+        //msg += namen_std_vor.zeile(i);
+        msg += tz.zeile(i);
+        msg += "\t";
         msg += namen_std_nach.zeile(i);
         msg += "\n";
     }
@@ -646,21 +675,8 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
     dateien_erfassen();
     QString vortext = int_to_qstring(dateien_alle.zeilenanzahl()) + " Dateien gefunden:\n";
     vortext += dateien_alle.get_text();
-/*
-    QString nachtext;
-    if(std_namen == "ja")
-    {
-        nachtext += "\n-----------------Standard-Dateinamen:\n";
-        for(uint i=1;i<=postfixe.zeilenanzahl();i++)
-        {
-            nachtext += postfixe.zeile(i);
-            nachtext += "      -->      ";
-            nachtext += namen_durch_std_namen_tauschen(postfixe.zeile(i));
-            nachtext += "\n";
-        }
-    }
-*/
     ui->plainTextEdit_eldungen->setPlainText(vortext);
+    ui->plainTextEdit_zusatzinfo->clear();
 
     QApplication::restoreOverrideCursor();
 }
@@ -848,6 +864,7 @@ void MainWindow::on_pushButton_start_clicked()
     msg = int_to_qstring(wste.get_namen_tz().zeilenanzahl()) + " eingelesene Dateien\n\n";
     msg += "------------------\n";
     ui->plainTextEdit_eldungen->setPlainText(msg);
+    ui->plainTextEdit_zusatzinfo->setPlainText(wste.suche_cad_fehler());
 
     //Datein exportieren:
     QDir dir_ganx;
@@ -1000,6 +1017,8 @@ void MainWindow::on_pushButton_zielordner_leeren_clicked()
             tmp.remove();
         }
     }
+    ui->plainTextEdit_eldungen->setPlainText("Zielordner wurden geleert.");
+    ui->plainTextEdit_zusatzinfo->clear();
     QApplication::restoreOverrideCursor();
 }
 

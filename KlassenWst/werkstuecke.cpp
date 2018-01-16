@@ -201,6 +201,18 @@ QString werkstuecke::var_einsetzen(werkstueck w, QString formel)
     }
     return formel;
 }
+QString werkstuecke::suche_cad_fehler()
+{
+    QString msg;
+
+    for(uint i=1; i<=anzahl() ;i++)
+    {
+        werkstueck teil = wste.at(i-1);
+        msg += teil.suche_cad_fehler();
+    }
+
+    return msg;
+}
 
 //---------------------------------------------------------------Import-Funktionen:
 bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtext)
