@@ -41,7 +41,6 @@ private slots:
     void on_pushButton_entfernen_clicked();
     void on_pushButton_neu_fraeser_clicked();
     void on_pushButton_neu_saege_clicked();
-
     void on_pushButton_bearbeiten_clicked();
 
 signals:

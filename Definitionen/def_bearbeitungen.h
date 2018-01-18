@@ -59,11 +59,25 @@
     9 : Ausführbedingung
 */
 
+#define BEARBART_FRAESERAUFRUF  "fraufr"    //Bearbeitungsart Fräser-Aufruf
 
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "fraufr"
+    2 : Bezugsfläche
+    3 : Startpunkt in X
+    4 : Startpunkt in Y
+    5 : Startpunkt in Z     //für Horizuntale Fräseraufrufe
+    6 : Tiefe
+    7 : Korrektur       L | M | R
+    8 : Werkzeugnummer
+    9 : Ausführbedingung
+*/
 
-
-
-
+//Fräser-Radius-Korrektur:
+#define FRKOR_L     "L"
+#define FRKOR_M     "M"
+#define FRKOR_R     "R"
 
 
 

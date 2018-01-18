@@ -10,17 +10,14 @@
 
 -->QString werkstueck::get_fmc_dateitext(...)
 
--->void werkstueck::bearb_sortieren()  mit Leben füllen / evtl nicht nötig? Testen!
-
--->Prüfung ob Türen ohne Aufschlagdämpfer programmiert sind / ob diese vergessen worden sind
-    ->ggf. Warnung ausgeben
-    ->Diese Art von Warnungen evtl. in neuem GUI-Element
+-->void werkstueck::bearb_sortieren()  mit Leben füllen / evtl. nicht nötig? Testen!
 
 
 
 
-
+-------------------------------------------------------
 Testen:
+
 -->muss die Reihenfolge der Bearbeitungen verändert werden?
     ->Sollte bei der Ganner egal sein, da die Maschie die Reihenfolge ohnehinn selbst bestimmt
     ->Reihenfolge bei FMC-Export wichtig, passt das soweit?

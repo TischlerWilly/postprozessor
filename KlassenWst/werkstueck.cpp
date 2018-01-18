@@ -657,6 +657,29 @@ QString werkstueck::suche_cad_fehler()
             msg += "\n";
         }
     }
+    if(name.contains("SchubFront") || \
+       name.contains("Schubfront")      )
+    {
+        uint anz_asd = 0; //Anzahl Aufschlagdämpfer
+
+        for(uint i=1; i<bearbeitungen.zeilenanzahl() ;i++)
+        {
+            if(bearbeitungen.zeile(i).contains(BEARBART_BOHR))
+            {
+                bohrung bo(bearbeitungen.zeile(i));
+                if(bo.get_dm() == 6 && bo.get_tiefe() < get_dicke())
+                {
+                    anz_asd++;
+                }
+            }
+        }
+        if(anz_asd < 4)
+        {
+            msg += get_name();
+            msg += ": keine Aufschlagdaempfer";
+            msg += "\n";
+        }
+    }
 
 
     return msg;

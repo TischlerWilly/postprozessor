@@ -626,7 +626,7 @@ void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
 {
     QString msg = "";
     //Längsten Namen finden:
-    uint anz_zeichen = 0;
+    int anz_zeichen = 0;
     for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
     {
         if(namen_std_vor.zeile(i).count() > anz_zeichen)

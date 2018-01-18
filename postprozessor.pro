@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     dialog_wkz.cpp \
     dialog_bohrer.cpp \
     dialog_fraeser.cpp \
-    dialog_saege.cpp
+    dialog_saege.cpp \
+    KlassenWst/fraueseraufruf.cpp
 
 HEADERS  += mainwindow.h \
     allgemKlassen/formel.h \
@@ -55,7 +56,8 @@ HEADERS  += mainwindow.h \
     dialog_wkz.h \
     dialog_bohrer.h \
     dialog_fraeser.h \
-    dialog_saege.h
+    dialog_saege.h \
+    KlassenWst/fraueseraufruf.h
 
 FORMS    += mainwindow.ui \
     dialog_wkz.ui \

@@ -24,6 +24,7 @@
     9 : Sägeblattbreite
     10: Lage
         hori | verti
+    11: Alias-Name
 
 */
 
@@ -39,6 +40,7 @@ public:
                           double bearbeitungstiefe = 0, \
                           double werkstueckdicke = 0, \
                           QString bezugskante = WST_BEZUG_OBSEI);
+    QString get_wkznummer_von_alias(QString alias);
     QString get_dm(QString wkz_nr);
     QString get_vorschub(QString wkz_nr);
     QString get_zustellmass(QString wkz_nr);
