@@ -12,7 +12,8 @@
 
 -->void werkstueck::bearb_sortieren()  mit Leben füllen / evtl. nicht nötig? Testen!
 
-
+-->Ausgabe fmc feiner einstellen:
+    ->Kreistaschen nicht ausräumen wenn sie einen gewissen DM haben
 
 
 -------------------------------------------------------

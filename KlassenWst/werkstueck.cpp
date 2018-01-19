@@ -733,6 +733,15 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
     {
         info = "  -->Die Option AUTOMATISCH wird derzeit noch nicht unterstuetzt\n";
         msg = "";
+
+
+        //Erst einmal mit Drehung 0 ausgeben, bis Automatisch drehen bei GANX getestet ist und läuft:
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += warnungen;
     }
     return msg;
 }
