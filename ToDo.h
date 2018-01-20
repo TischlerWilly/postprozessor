@@ -15,6 +15,10 @@
 -->Ausgabe fmc feiner einstellen:
     ->Kreistaschen nicht ausräumen wenn sie einen gewissen DM haben
 
+-->Import zu kurzer Fräs-Geraden untersrücken
+-->zusätzliche Export-Option:
+    ->Zustellungen für Fräskunturen ausgeben
+    ->Tiefe der Fräskunturen gem CAD
 
 -------------------------------------------------------
 Testen:
