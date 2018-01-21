@@ -83,6 +83,10 @@ void MainWindow::setup()
             file.write("drehung_des_bauteils:0");
             file.write("\n");
 
+            ui->radioButton_fkon_ti_quell->setChecked(true);
+            file.write("tiefenzustellung_fkon:orgi");
+            file.write("\n");
+
             ui->checkBox_af_ganx->setChecked(false);
             file.write("erzeuge_ganx:nein");
             file.write("\n");
@@ -188,6 +192,16 @@ void MainWindow::setup()
                     }else if(drehung_des_bauteils == "AUTO")
                     {
                         ui->radioButton_drehung_autom->setChecked(true);
+                    }
+                }else if(zeile.contains("tiefenzustellung_fkon:"))
+                {
+                    option_fkon_ti = text_mitte(zeile, "tiefenzustellung_fkon:", "\n");
+                    if(option_fkon_ti == "orgi")
+                    {
+                        ui->radioButton_fkon_ti_quell->setChecked(true);
+                    }else if(option_fkon_ti == "wkz")
+                    {
+                        ui->radioButton_fkon_ti_wkz->setChecked(true);
                     }
                 }
             }
@@ -391,6 +405,9 @@ void MainWindow::schreibe_ini()
         file.write(drehung_des_bauteils.toUtf8());
         file.write("\n");
 
+        file.write("tiefenzustellung_fkon:");
+        file.write(option_fkon_ti.toUtf8());
+        file.write("\n");
     }
     file.close();
 }
@@ -585,6 +602,23 @@ void MainWindow::on_radioButton_drehung_autom_toggled(bool checked)
     if(checked)
     {
         drehung_des_bauteils = "AUTO";
+    }
+    schreibe_ini();
+}
+
+void MainWindow::on_radioButton_fkon_ti_quell_toggled(bool checked)
+{
+    if(checked)
+    {
+        option_fkon_ti = "orgi";
+    }
+    schreibe_ini();
+}
+void MainWindow::on_radioButton_fkon_ti_wkz_toggled(bool checked)
+{
+    if(checked)
+    {
+        option_fkon_ti = "wkz";
     }
     schreibe_ini();
 }
@@ -1036,6 +1070,7 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
 
 
 

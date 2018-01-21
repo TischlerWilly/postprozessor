@@ -139,3 +139,70 @@ void Dialog_WKZ::on_pushButton_bearbeiten_clicked()
 {
     on_listWidget_wkz_itemDoubleClicked(ui->listWidget_wkz->currentItem());
 }
+
+void Dialog_WKZ::on_pushButton_hoch_clicked()
+{
+    if(ui->listWidget_wkz->currentRow() != 0  && \
+       ui->listWidget_wkz->currentRow() != 1  && \
+       ui->listWidget_wkz->currentRow() != ui->listWidget_wkz->count()-1     )
+    {
+        text_zeilenweise tz;
+        QString aktueller_eintrag;
+        int aktive_zeile = ui->listWidget_wkz->currentRow();
+        for(int i = 0; i<ui->listWidget_wkz->count() ;i++)
+        {
+            if(i != aktive_zeile)
+            {
+                tz.zeile_anhaengen(ui->listWidget_wkz->item(i)->text());
+            }else
+            {
+                aktueller_eintrag = ui->listWidget_wkz->item(i)->text();
+            }
+        }
+        tz.zeile_einfuegen(aktive_zeile-1, aktueller_eintrag);
+        ui->listWidget_wkz->clear();
+        for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+        {
+            ui->listWidget_wkz->addItem(tz.zeile(i));
+        }
+        ui->listWidget_wkz->item(aktive_zeile-1)->setSelected(true);
+        ui->listWidget_wkz->setCurrentRow(aktive_zeile-1);
+    }
+}
+
+void Dialog_WKZ::on_pushButton_runter_clicked()
+{
+    if(ui->listWidget_wkz->currentRow() != 0  && \
+       ui->listWidget_wkz->currentRow() != ui->listWidget_wkz->count()  && \
+       ui->listWidget_wkz->currentRow() != ui->listWidget_wkz->count()-1     )
+    {
+        text_zeilenweise tz;
+        QString aktueller_eintrag;
+        int aktive_zeile = ui->listWidget_wkz->currentRow();
+        for(int i = 0; i<ui->listWidget_wkz->count() ;i++)
+        {
+            if(i != aktive_zeile)
+            {
+                tz.zeile_anhaengen(ui->listWidget_wkz->item(i)->text());
+            }else
+            {
+                aktueller_eintrag = ui->listWidget_wkz->item(i)->text();
+            }
+        }
+        tz.zeile_einfuegen(aktive_zeile+1, aktueller_eintrag);
+        ui->listWidget_wkz->clear();
+        for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+        {
+            ui->listWidget_wkz->addItem(tz.zeile(i));
+        }
+        if(!ui->listWidget_wkz->item(aktive_zeile+1)->text().isEmpty())
+        {
+            ui->listWidget_wkz->item(aktive_zeile+1)->setSelected(true);
+            ui->listWidget_wkz->setCurrentRow(aktive_zeile+1);
+        }else
+        {
+            ui->listWidget_wkz->item(aktive_zeile)->setSelected(true);
+            ui->listWidget_wkz->setCurrentRow(aktive_zeile);
+        }
+    }
+}

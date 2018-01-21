@@ -3651,6 +3651,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
      werkzeugmagazin wkzmag(wkzmagazin);
 
+     int min_kta_dm_ausraeumen_false = 200; //Durchmesser ab dem Kreistaschen nicht ausgeräumt werden
+
     //---------------------------------------Programmkopf:
     msg = FMC_PRGKOPF;
     msg += "\n";
@@ -3968,6 +3970,18 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     {
                         tiefe = get_dicke() - bo.get_tiefe();
                     }
+                    bool ausraeumen = true;
+                    if(bo.get_dm() > 2*wkzmag.get_dm(tnummer).toDouble()+20)
+                    {
+                        if(bo.get_tiefe() < 0  ||  bo.get_tiefe() > get_dicke())
+                        {
+                            ausraeumen = false;
+                        }
+                    }
+                    if(bo.get_dm() > min_kta_dm_ausraeumen_false)
+                    {
+                        ausraeumen = false;
+                    }
                     msg += FMC_KTA;
                     msg += "\n";
                     msg += "SWKZID=";           //WKZ-Nummer
@@ -3989,7 +4003,15 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += double_to_qstring(zustellmas);
                     msg += "\n";
                     msg += "GEGENL=1\n";        //Gegenlauf
-                    msg += "RAEUMEN=1\n";       //Ausräumen
+                    msg += "RAEUMEN=";          //Ausräumen
+                    if(ausraeumen == true)
+                    {
+                        msg += "1";
+                    }else
+                    {
+                        msg += "0";
+                    }
+                    msg += "\n";
 
                     //Eintauchvorschub gem. Voreinstellung IMAWOP
                     //Vorschub gem. Voreinstellung IMAWOP
@@ -4313,6 +4335,18 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         {
                             tiefe = get_dicke() - bo.get_tiefe();
                         }
+                        bool ausraeumen = true;
+                        if(bo.get_dm() > 2*wkzmag.get_dm(tnummer).toDouble()+20)
+                        {
+                            if(bo.get_tiefe() < 0  ||  bo.get_tiefe() > get_dicke())
+                            {
+                                ausraeumen = false;
+                            }
+                        }
+                        if(bo.get_dm() > min_kta_dm_ausraeumen_false)
+                        {
+                            ausraeumen = false;
+                        }
                         msg += FMC_KTA;
                         msg += "\n";
                         msg += "SWKZID=";           //WKZ-Nummer
@@ -4334,7 +4368,15 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += double_to_qstring(zustellmas);
                         msg += "\n";
                         msg += "GEGENL=1\n";        //Gegenlauf
-                        msg += "RAEUMEN=1\n";       //Ausräumen
+                        msg += "RAEUMEN=";          //Ausräumen
+                        if(ausraeumen == true)
+                        {
+                            msg += "1";
+                        }else
+                        {
+                            msg += "0";
+                        }
+                        msg += "\n";
 
                         //Eintauchvorschub gem. Voreinstellung IMAWOP
                         //Vorschub gem. Voreinstellung IMAWOP
