@@ -46,7 +46,7 @@ private:
     double pos_x;
     double pos_y;
     double pos_z;   //für horizontale Fräseraufrufe
-    double tiefe;
+    double tiefe;   //ist die Eintauchtiefe = Oberfläche-Wst bis gesamte Bahntiefe
     QString bezug;
     QString afb;
     QString korrektur;

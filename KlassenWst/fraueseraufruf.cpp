@@ -49,10 +49,7 @@ void fraueseraufruf::set_z(QString z)
 }
 void fraueseraufruf::set_tiefe(double ti)
 {
-    if(ti > 0)
-    {
-        tiefe = ti;
-    }
+    tiefe = ti;
 }
 void fraueseraufruf::set_tiefe(QString ti)
 {

@@ -16,6 +16,7 @@
 #include "bohrung.h"
 #include "rechtecktasche.h"
 #include "nut.h"
+#include "fraueseraufruf.h"
 
 
 class werkstueck

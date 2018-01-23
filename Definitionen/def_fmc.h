@@ -134,7 +134,16 @@
 #define FMC_ENDE                "[PGENDE40]"
 #define FMC_HALT                "[SNHALT40]"
 
-
+#define FMC_FKON                "[KAFRAE40]"    //Aufruf Fräser
+#define FMC_FKON_WKZ            "WKZID"
+#define FMC_FKON_X              "X"
+#define FMC_FKON_Y              "Y"
+#define FMC_FKON_Z              "Z"
+#define FMC_FKON_RAD            "EBG"
+#define FMC_FKON_KADI           "KD"
+#define FMC_FKON_KOR            "TRKOR"
+#define FMC_FKON_BEZ            "BEZB"
+#define FMC_FKON_AFB            "AFB"
 
 
 
