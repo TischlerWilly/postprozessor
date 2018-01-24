@@ -145,7 +145,11 @@
 #define FMC_FKON_BEZ            "BEZB"
 #define FMC_FKON_AFB            "AFB"
 
-
+#define FMC_FKONG               "[G1]"
+#define FMC_FKONG_XE            "X"
+#define FMC_FKONG_YE            "Y"
+#define FMC_FKONG_ZE            "Z"
+#define FMC_FKONG_AFB           "AFB"
 
 
 

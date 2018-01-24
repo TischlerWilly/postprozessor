@@ -79,9 +79,20 @@
 #define FRKOR_M     "M"
 #define FRKOR_R     "R"
 
+#define BEARBART_FRAESERGERADE  "frgrad"    //Bearbeitungsart Fräser-Gerade
 
-
-
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "frgrad"
+    2 : Bezugsfläche
+    3 : Startpunkt in X
+    4 : Startpunkt in Y
+    5 : Startpunkt in Z
+    6 : Endtpunkt in X
+    7 : Endtpunkt in Y
+    8 : Endtpunkt in Z
+    9 : Ausführbedingung
+*/
 
 
 
