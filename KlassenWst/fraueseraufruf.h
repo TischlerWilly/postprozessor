@@ -6,6 +6,7 @@
 #include "../allgemKlassen/text_zeilenweise.h"
 #include "../Definitionen/def_bearbeitungen.h"
 #include "../eigeneFunktionen/umwandeln.h"
+#include "../geometrie/punkt3d.h"
 
 class fraueseraufruf
 {
@@ -38,6 +39,7 @@ public:
     QString get_afb();
     QString get_radkor();
     QString get_wkznum();
+    punkt3d get_pos_vertikal();
 
     QString get_text();
     void set_text(QString text);

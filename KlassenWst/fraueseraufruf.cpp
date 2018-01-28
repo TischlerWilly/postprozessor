@@ -126,6 +126,14 @@ QString fraueseraufruf::get_wkznum()
 {
     return werkzeugnummer;
 }
+punkt3d fraueseraufruf::get_pos_vertikal()
+{
+    punkt3d p;
+    p.set_x(pos_x);
+    p.set_y(pos_y);
+    p.set_z(tiefe);
+    return p;
+}
 
 QString fraueseraufruf::get_text()
 {

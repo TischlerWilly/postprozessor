@@ -1,18 +1,19 @@
-#ifndef FRAESERGERADE_H
-#define FRAESERGERADE_H
+#ifndef FRAESERBOGEN_H
+#define FRAESERBOGEN_H
 
 #include <QString>
 
 #include "../allgemKlassen/text_zeilenweise.h"
-#include "../geometrie/strecke.h"
+//#include "../geometrie/bogen.h"
+#include "../geometrie/punkt3d.h"
 #include "../eigeneFunktionen/umwandeln.h"
 #include "../Definitionen/def_bearbeitungen.h"
 
-class fraesergerade
+class fraeserbogen
 {
 public:
-    fraesergerade();
-    fraesergerade(QString text);
+    fraeserbogen();
+    fraeserbogen(QString text);
 
     void set_xs(double x);
     void set_xs(QString x);
@@ -28,6 +29,10 @@ public:
     void set_ze(QString z);
     void set_bezug(QString bezugsflaeche);
     void set_afb(QString ausfuehrbedingung);
+    void set_rad(double rad);
+    void set_rad(QString rad);
+    void set_uzs(bool ist_im_uzs);
+    void set_uzs(QString ist_im_uzs);
 
     inline void set_startpunkt(punkt3d p)
     {
@@ -52,21 +57,25 @@ public:
     QString get_ze_qstring();
     punkt3d get_sp();
     punkt3d get_ep();
-    double get_laenge_2d();
     QString get_bezug();
     QString get_afb();
+    double get_rad();
+    QString get_rad_qstring();
+    bool get_uzs();
+    QString get_uzs_qstring();
 
     QString get_text();
     void set_text(QString text);
 
 private:
-    punkt3d startpunkt, endpunkt; //das Z-Maß ist die Frästiefe bezogen auf die WST-Oberfläche
+    punkt3d startpunkt, endpunkt;  //das Z-Maß ist die Frästiefe bezogen auf die WST-Oberfläche
+    bool uzs;
+    double radius;
     QString afb;
     QString bezug;
 
     void setup();
 
-
 };
 
-#endif // FRAESERGERADE_H
+#endif // FRAESERBOGEN_H

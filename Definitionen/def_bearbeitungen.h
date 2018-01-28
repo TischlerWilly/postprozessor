@@ -79,7 +79,7 @@
 #define FRKOR_M     "M"
 #define FRKOR_R     "R"
 
-#define BEARBART_FRAESERGERADE  "frgrad"    //Bearbeitungsart Fräser-Gerade
+#define BEARBART_FRAESERGERADE  "frgradv"    //Bearbeitungsart Fräser-Gerade für vertikale Fräser
 
 /*
     Reihenfolge der Parameter:
@@ -87,14 +87,31 @@
     2 : Bezugsfläche
     3 : Startpunkt in X
     4 : Startpunkt in Y
-    5 : Startpunkt in Z
+    5 : Startpunkt Tiefe
     6 : Endtpunkt in X
     7 : Endtpunkt in Y
-    8 : Endtpunkt in Z
+    8 : Endtpunkt Tiefe
     9 : Ausführbedingung
 */
 
+#define BEARBART_FRAESERBOGEN  "frbogv"    //Bearbeitungsart Fräser-Bogen für vertikale Fräser
 
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "frbog"
+    2 : Bezugsfläche
+    3 : Startpunkt in X
+    4 : Startpunkt in Y
+    5 : Startpunkt Tiefe
+    6 : Endtpunkt in X
+    7 : Endtpunkt in Y
+    8 : Endtpunkt Tiefe
+    9 : Radius
+    10: im Urhreigersinn
+        1 = uzs
+        0 = guzs
+    11: Ausführbedingung
+*/
 
 
 

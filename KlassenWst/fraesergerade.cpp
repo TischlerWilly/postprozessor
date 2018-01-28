@@ -182,7 +182,7 @@ void fraesergerade::set_text(QString text)
     text_zeilenweise tz;
     tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
     tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_FRAESERAUFRUF)
+    if(tz.zeile(1) == BEARBART_FRAESERGERADE)
     {
         set_bezug(tz.zeile(2));
         set_xs(tz.zeile(3));

@@ -17,6 +17,8 @@
 #include "rechtecktasche.h"
 #include "nut.h"
 #include "fraueseraufruf.h"
+#include "fraesergerade.h"
+#include "fraeserbogen.h"
 
 
 class werkstueck
@@ -65,6 +67,10 @@ public:
     inline QString get_name()
     {
         return name;
+    } 
+    inline text_zeilenweise get_bearb()
+    {
+        return bearbeitungen;
     }
 
     QString get_fmc(text_zeilenweise wkzmagazin, QString& info, QString drehwinkel = "0");

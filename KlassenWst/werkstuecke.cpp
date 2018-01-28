@@ -1789,7 +1789,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         tmp = ausdruck_auswerten(tmp);
-                        werkstueck w = wste.at(index-1);
+                        //werkstueck w = wste.at(index-1);  //w ist bereits bekannt
                         double tiefe = w.get_dicke() - tmp.toDouble();
                         fa.set_tiefe(tiefe);//Tiefe, nicht Z-Wert!!
                                             //Z-Wert ist für horizontale Fräseraufrufe gedacht
@@ -1807,6 +1807,78 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 }
             }
 
+        }else if(zeile.contains(FMC_FKONG))
+        {
+            fraesergerade fg;
+            fg.set_bezug(WST_BEZUG_OBSEI);
+
+            //Startpunkt aus der vorherigen Bearbeitung heraus einlesen:
+            text_zeilenweise bearb;
+            bearb = w.get_bearb();
+            text_zeilenweise letzte_bearb;
+            letzte_bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
+            if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
+            {
+                fraueseraufruf tmp(letzte_bearb.get_text());
+                fg.set_startpunkt(tmp.get_pos_vertikal());
+            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
+            {
+                fraesergerade tmp(letzte_bearb.get_text());
+                fg.set_startpunkt(tmp.get_ep());
+            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+            {
+                fraeserbogen tmp(letzte_bearb.get_text());
+                fg.set_startpunkt(tmp.get_ep());
+            }
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    if(fg.get_laenge_2d() > 1 || \
+                       fg.get_zs() != fg.get_ze())
+                    {
+                        w.neue_bearbeitung(fg.get_text());
+                    }
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_FKONG_AFB)
+                    {
+                        fg.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_FKONG_XE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        fg.set_xe(tmp);
+                    }else if(schluessel == FMC_FKONG_YE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        fg.set_ye(tmp);
+                    }else if(schluessel == FMC_FKONG_ZE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        if(tmp == "Z")
+                        {
+                            fg.set_ze(fg.get_zs());//Der Z-Wert gibt die Tiefe an
+                        }else
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            tmp = ausdruck_auswerten(tmp);
+                            //werkstueck w = wste.at(index-1); //w ist bereits bekannt
+                            double tiefe = w.get_dicke() - tmp.toDouble();
+                            fg.set_ze(tiefe);//Der Z-Wert gibt die Tiefe an
+                        }
+                    }
+                }
+            }
         }
 
     }
@@ -3415,6 +3487,80 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 }
             }
 
+        }else if(zeile.contains(FMC_FKONG))
+        {
+            fraesergerade fg;
+            fg.set_bezug(WST_BEZUG_UNSEI);
+
+            //Startpunkt aus der vorherigen Bearbeitung heraus einlesen:
+            text_zeilenweise bearb;
+            bearb = w.get_bearb();
+            text_zeilenweise letzte_bearb;
+            letzte_bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
+            if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
+            {
+                fraueseraufruf tmp(letzte_bearb.get_text());
+                fg.set_startpunkt(tmp.get_pos_vertikal());
+            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
+            {
+                fraesergerade tmp(letzte_bearb.get_text());
+                fg.set_startpunkt(tmp.get_ep());
+            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+            {
+                fraeserbogen tmp(letzte_bearb.get_text());
+                fg.set_startpunkt(tmp.get_ep());
+            }
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    if(fg.get_laenge_2d() > 1 || \
+                       fg.get_zs() != fg.get_ze())
+                    {
+                        w.neue_bearbeitung(fg.get_text());
+                    }
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_FKONG_AFB)
+                    {
+                        fg.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_FKONG_XE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        double x = tmp.toDouble();
+                        x = w.get_laenge()-x;
+                        fg.set_xe(x);
+                    }else if(schluessel == FMC_FKONG_YE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        fg.set_ye(tmp);
+                    }else if(schluessel == FMC_FKONG_ZE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        if(tmp == "Z")
+                        {
+                            fg.set_ze(fg.get_zs());//Der Z-Wert gibt die Tiefe an
+                        }else
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            tmp = ausdruck_auswerten(tmp);
+                            //werkstueck w = wste.at(index-1); //w ist bereits bekannt
+                            double tiefe = w.get_dicke() - tmp.toDouble();
+                            fg.set_ze(tiefe);//Der Z-Wert gibt die Tiefe an
+                        }
+                    }
+                }
+            }
         }
 
 

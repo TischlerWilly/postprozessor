@@ -151,6 +151,13 @@
 #define FMC_FKONG_ZE            "Z"
 #define FMC_FKONG_AFB           "AFB"
 
+#define FMC_FKONBOGUZS          "[G2]"
+#define FMC_FKONBOGGUZS         "[G3]"
+#define FMC_FKONBOG_XE          "X"
+#define FMC_FKONBOG_YE          "Y"
+#define FMC_FKONBOG_ZE          "Z"
+#define FMC_FKONBOG_RAD         "RAD"
+#define FMC_FKONBOG_AFB         "AFB"
 
 
 

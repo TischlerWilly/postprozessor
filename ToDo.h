@@ -12,7 +12,7 @@
 
 -->void werkstueck::bearb_sortieren()  mit Leben füllen / evtl. nicht nötig? Testen!
 
--->Import zu kurzer Fräs-Geraden untersrücken
+
 
 -->Hinweis geben wenn fkon-tiefe > nutzlänge wkz
 
