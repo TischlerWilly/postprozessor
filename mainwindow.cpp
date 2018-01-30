@@ -966,7 +966,7 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";
-                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils);
+                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils, option_fkon_ti);
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;
