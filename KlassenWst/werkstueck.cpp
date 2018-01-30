@@ -4294,8 +4294,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 msg += "TYPAN=1\n";     //Anfahrtyp
                 msg += "TYPAB=1\n";     //Abfahrtyp
                 msg += "TYPEIN=1\n";    //Eintauchtp
-                msg += "LGEAN=AUTO\n";  //Anfahrwert
-                msg += "LGEAB=AUTO\n";  //Abfahrwert
+                msg += "LGEAN=2*WKZR\n";    //Anfahrwert
+                msg += "LGEAB=2*WKZR\n";    //Abfahrwert
                 msg += "FAN=AUTO\n";    //Anfahrvorschub
                 msg += "F=AUTO\n";      //Vorschub
                 //msg += "N=AUTO\n";      //Drehzahl
@@ -4305,7 +4305,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 msg += "\n";
                 msg += "\n";
                 //--------------------------------------------
-
+                //Fräsbahnen:
                 while(i+1<=bearb.zeilenanzahl())
                 {
                     zeile.set_text(bearb.zeile(i+1));
@@ -4394,22 +4394,23 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "\n";
                     }else
                     {
-                        //Abfahren Fräser:
-                        msg += "[KO'AB_N2]";
-                        msg += "\n";
-                        msg += "AFB=1";
-                        msg += "\n";
-                        msg += "AGGD=AGGDREHBAR";
-                        msg += "\n";
-                        msg += "AGGFWKL=AGGFWKL";
-                        msg += "\n";
-                        msg += "AGGO=AGGOFFSET";
-                        msg += "\n";
-                        msg += "\n";
-
                         break;
                     }
                 }
+                //--------------------------------------------
+                //Abfahren Fräser:
+                msg += "[KO'AB_N2]";
+                msg += "\n";
+                msg += "AFB=1";
+                msg += "\n";
+                msg += "AGGD=AGGDREHBAR";
+                msg += "\n";
+                msg += "AGGFWKL=AGGFWKL";
+                msg += "\n";
+                msg += "AGGO=AGGOFFSET";
+                msg += "\n";
+                msg += "\n";
+                //--------------------------------------------
 
             }else
             {
