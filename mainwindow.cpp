@@ -83,6 +83,10 @@ void MainWindow::setup()
             file.write("drehung_des_bauteils:0");
             file.write("\n");
 
+            ui->radioButton_fkon_ti_quell->setChecked(true);
+            file.write("tiefenzustellung_fkon:orgi");
+            file.write("\n");
+
             ui->checkBox_af_ganx->setChecked(false);
             file.write("erzeuge_ganx:nein");
             file.write("\n");
@@ -188,6 +192,16 @@ void MainWindow::setup()
                     }else if(drehung_des_bauteils == "AUTO")
                     {
                         ui->radioButton_drehung_autom->setChecked(true);
+                    }
+                }else if(zeile.contains("tiefenzustellung_fkon:"))
+                {
+                    option_fkon_ti = text_mitte(zeile, "tiefenzustellung_fkon:", "\n");
+                    if(option_fkon_ti == "orgi")
+                    {
+                        ui->radioButton_fkon_ti_quell->setChecked(true);
+                    }else if(option_fkon_ti == "wkz")
+                    {
+                        ui->radioButton_fkon_ti_wkz->setChecked(true);
                     }
                 }
             }
@@ -391,6 +405,9 @@ void MainWindow::schreibe_ini()
         file.write(drehung_des_bauteils.toUtf8());
         file.write("\n");
 
+        file.write("tiefenzustellung_fkon:");
+        file.write(option_fkon_ti.toUtf8());
+        file.write("\n");
     }
     file.close();
 }
@@ -589,6 +606,23 @@ void MainWindow::on_radioButton_drehung_autom_toggled(bool checked)
     schreibe_ini();
 }
 
+void MainWindow::on_radioButton_fkon_ti_quell_toggled(bool checked)
+{
+    if(checked)
+    {
+        option_fkon_ti = "orgi";
+    }
+    schreibe_ini();
+}
+void MainWindow::on_radioButton_fkon_ti_wkz_toggled(bool checked)
+{
+    if(checked)
+    {
+        option_fkon_ti = "wkz";
+    }
+    schreibe_ini();
+}
+
 //-----------------------------------------------------------------------Menüs:
 void MainWindow::on_actionInfo_triggered()
 {
@@ -626,7 +660,7 @@ void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
 {
     QString msg = "";
     //Längsten Namen finden:
-    uint anz_zeichen = 0;
+    int anz_zeichen = 0;
     for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
     {
         if(namen_std_vor.zeile(i).count() > anz_zeichen)
@@ -932,7 +966,7 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";
-                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils);
+                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils, option_fkon_ti);
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;
@@ -1036,6 +1070,7 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
 
 
 

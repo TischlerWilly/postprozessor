@@ -16,6 +16,9 @@
 #include "bohrung.h"
 #include "rechtecktasche.h"
 #include "nut.h"
+#include "fraueseraufruf.h"
+#include "fraesergerade.h"
+#include "fraeserbogen.h"
 
 
 class werkstueck
@@ -64,9 +67,13 @@ public:
     inline QString get_name()
     {
         return name;
+    } 
+    inline text_zeilenweise get_bearb()
+    {
+        return bearbeitungen;
     }
 
-    QString get_fmc(text_zeilenweise wkzmagazin, QString& info, QString drehwinkel = "0");
+    QString get_fmc(text_zeilenweise wkzmagazin, QString& info, QString drehwinkel = "0", QString zust_fkon = "orgi");
     QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
     QString get_eigenses_format(QString drehwinkel);
 
@@ -92,7 +99,8 @@ private:
     text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
     text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
 
-    QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
+    QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
+                              double tmp_l, double tmp_b, QString zust_fkon);
     QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
     QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b);
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>771</width>
+    <width>897</width>
     <height>523</height>
    </rect>
   </property>
@@ -68,6 +68,51 @@
       </property>
      </widget>
     </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>770</x>
+     <y>17</y>
+     <width>121</width>
+     <height>461</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="pushButton_hoch">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die Reihenfolge der Werkzeuge legt ihre Priorität fest. Ein weiter oben stehendes  Werkzeug wird bevorzugt.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>hoch</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_runter">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die Reihenfolge der Werkzeuge legt ihre Priorität fest. Ein weiter oben stehendes  Werkzeug wird bevorzugt.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>runter</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item>
      <widget class="QPushButton" name="pushButton_abbrechen">
       <property name="text">
@@ -92,8 +137,6 @@
   <tabstop>pushButton_neu_bohrer</tabstop>
   <tabstop>pushButton_neu_fraeser</tabstop>
   <tabstop>pushButton_neu_saege</tabstop>
-  <tabstop>pushButton_abbrechen</tabstop>
-  <tabstop>pushButton_speichern</tabstop>
  </tabstops>
  <resources/>
  <connections/>

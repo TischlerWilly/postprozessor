@@ -59,17 +59,59 @@
     9 : Ausführbedingung
 */
 
+#define BEARBART_FRAESERAUFRUF  "fraufr"    //Bearbeitungsart Fräser-Aufruf
 
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "fraufr"
+    2 : Bezugsfläche
+    3 : Startpunkt in X
+    4 : Startpunkt in Y
+    5 : Startpunkt in Z     //für Horizuntale Fräseraufrufe
+    6 : Tiefe
+    7 : Korrektur       L | M | R
+    8 : Werkzeugnummer
+    9 : Ausführbedingung
+*/
 
+//Fräser-Radius-Korrektur:
+#define FRKOR_L     "L"
+#define FRKOR_M     "M"
+#define FRKOR_R     "R"
 
+#define BEARBART_FRAESERGERADE  "frgradv"    //Bearbeitungsart Fräser-Gerade für vertikale Fräser
 
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "frgrad"
+    2 : Bezugsfläche
+    3 : Startpunkt in X
+    4 : Startpunkt in Y
+    5 : Startpunkt Tiefe
+    6 : Endtpunkt in X
+    7 : Endtpunkt in Y
+    8 : Endtpunkt Tiefe
+    9 : Ausführbedingung
+*/
 
+#define BEARBART_FRAESERBOGEN  "frbogv"    //Bearbeitungsart Fräser-Bogen für vertikale Fräser
 
-
-
-
-
-
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "frbog"
+    2 : Bezugsfläche
+    3 : Startpunkt in X
+    4 : Startpunkt in Y
+    5 : Startpunkt Tiefe
+    6 : Endtpunkt in X
+    7 : Endtpunkt in Y
+    8 : Endtpunkt Tiefe
+    9 : Radius
+    10: im Urhreigersinn
+        1 = uzs
+        0 = guzs
+    11: Ausführbedingung
+*/
 
 
 

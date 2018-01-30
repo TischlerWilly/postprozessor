@@ -101,6 +101,24 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
 
     return returntext;
 }
+QString werkzeugmagazin::get_wkznummer_von_alias(QString alias)
+{
+    QString returntext = "";
+    text_zeilenweise zeile;
+    zeile.set_trennzeichen('\t');
+
+    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    {
+        zeile.set_text(magazin.zeile(i));
+        if(zeile.zeile(11) == alias)
+        {
+            returntext = zeile.zeile(2);
+        }
+    }
+
+    return returntext;
+}
+
 QString werkzeugmagazin::get_dm(QString wkz_nr)
 {
     QString returntext = "";
@@ -181,6 +199,8 @@ QString werkzeugmagazin::get_tabellenkopf()
     tmp += "Saegebr";
     tmp += "\t";
     tmp += "Lage";
+    tmp += "\t";
+    tmp += "Alias";
     tmp += "\t";
 
     tmp += " ";

@@ -30,7 +30,16 @@ SOURCES += main.cpp\
     dialog_wkz.cpp \
     dialog_bohrer.cpp \
     dialog_fraeser.cpp \
-    dialog_saege.cpp
+    dialog_saege.cpp \
+    KlassenWst/fraueseraufruf.cpp \
+    geometrie/bogen.cpp \
+    geometrie/punkt3d.cpp \
+    geometrie/strecke.cpp \
+    KlassenWst/fraesergerade.cpp \
+    geometrie/darstellungsatribute.cpp \
+    geometrie/geometrie.cpp \
+    geometrie/punkt2d.cpp \
+    KlassenWst/fraeserbogen.cpp
 
 HEADERS  += mainwindow.h \
     allgemKlassen/formel.h \
@@ -55,7 +64,18 @@ HEADERS  += mainwindow.h \
     dialog_wkz.h \
     dialog_bohrer.h \
     dialog_fraeser.h \
-    dialog_saege.h
+    dialog_saege.h \
+    KlassenWst/fraueseraufruf.h \
+    geometrie/bogen.h \
+    geometrie/punkt3d.h \
+    geometrie/strecke.h \
+    KlassenWst/fraesergerade.h \
+    geometrie/darstellungsatribute.h \
+    geometrie/geometrie.h \
+    Definitionen/def_geometrie.h \
+    geometrie/makro_geometrie.h \
+    geometrie/punkt2d.h \
+    KlassenWst/fraeserbogen.h
 
 FORMS    += mainwindow.ui \
     dialog_wkz.ui \

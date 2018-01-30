@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.18.1.16"
+#define PROGRAMMVERSION "1.18.1.30"
 #endif //PROGRAMMVERSION
 
 #include <QMainWindow>
@@ -53,6 +53,8 @@ private slots:
     void on_checkBox_af_eigen_stateChanged();
     void on_actionStandard_Namen_anzeigen_triggered();
     void on_pushButton_zielordner_leeren_clicked();
+    void on_radioButton_fkon_ti_quell_toggled(bool checked);
+    void on_radioButton_fkon_ti_wkz_toggled(bool checked);
 
 private:
     Ui::MainWindow *ui;
@@ -72,6 +74,9 @@ private:
 
     //Radio Buttons:
     QString drehung_des_bauteils; // 0 | 90 | 180 | 270 | AUTO
+    QString option_fkon_ti;
+        //orgi = Tiefe gemäß Importdatei aus CAD
+        //wkz  = Tiefe gemäß Zustellung aus dem WKZ-Magazin = evtl. mehrere Zustellungen
 
 
     //Variablen:

@@ -23,7 +23,8 @@ void Dialog_fraeser::getData(text_zeilenweise msg)
     ui->lineEdit_dm->setText(msg.zeile(3));
     ui->lineEdit_nutzl->setText(msg.zeile(4));
     ui->lineEdit_zustm->setText(msg.zeile(6));
-    ui->lineEdit_voers->setText((msg.zeile(5)));
+    ui->lineEdit_voers->setText(msg.zeile(5));
+    ui->lineEdit_alias->setText(msg.zeile(11));
 
     this->show();
 }
@@ -43,6 +44,7 @@ void Dialog_fraeser::clear()
     ui->lineEdit_nutzl->clear();
     ui->lineEdit_voers->clear();
     ui->lineEdit_zustm->clear();
+    ui->lineEdit_alias->clear();
 }
 
 void Dialog_fraeser::setup()
@@ -71,6 +73,7 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(" ");                               //8 : ist Durchgangsbohrer
     wkz.zeile_anhaengen(" ");                               //9 : Sägeblattbreite
     wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);           //10: Lage
+    wkz.zeile_anhaengen(ui->lineEdit_alias->text());        //11: Alias-Name
 
     //deutsche Zahlen in englische Zahlen umwandeln:
     for(uint i=3; i<=wkz.zeilenanzahl() ;i++)
