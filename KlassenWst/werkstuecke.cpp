@@ -2009,7 +2009,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     w.neue_bearbeitung(bo.get_text());
                     break;
                 }else
@@ -2068,7 +2068,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     bo.set_tiefe(x1 + bohrtiefe);
                     bo.set_x(x1);
                     if(y1)
@@ -2330,7 +2330,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     bo.set_tiefe(w.get_laenge() - x1 + bohrtiefe);
                     bo.set_x(x1);
                     if(y1)
@@ -2592,7 +2592,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     bo.set_tiefe(y1 + bohrtiefe);
                     bo.set_y(y1);
 
@@ -2856,7 +2856,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     bo.set_tiefe(w.get_breite() - y1 + bohrtiefe);
                     bo.set_y(y1);
 
@@ -3109,7 +3109,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     w.neue_bearbeitung(bo.get_text());
                     break;
                 }else
@@ -3168,7 +3168,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     w.neue_bearbeitung(rt.get_text());
                     break;
                 }else
@@ -3263,7 +3263,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     w.neue_bearbeitung(n.get_text());
                     break;
                 }else
@@ -3324,7 +3324,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
 
                     if(xe < xs)
                     {
@@ -3429,7 +3429,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
 
                     double diff = xm - xs;
                     double xe = xm + diff;
@@ -3534,7 +3534,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     w.neue_bearbeitung(fa.get_text());
                     break;
                 }else
@@ -3619,7 +3619,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     if(fg.get_laenge_2d() > min_fkon_gerade_laenge || \
                        fg.get_zs() != fg.get_ze())
                     {
@@ -3702,7 +3702,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
-                    i=ii+1;
+                    i=ii-1;
                     w.neue_bearbeitung(fb.get_text());
                     break;
                 }else
