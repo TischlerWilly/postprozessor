@@ -4019,7 +4019,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     }
                     msg += FMC_KTA;
                     msg += "\n";
-                    msg += "SWKZID=";           //WKZ-Nummer
+                    msg += "WKZID=";           //WKZ-Nummer
                     msg += tnummer;
                     msg += "\n";
                     msg += "MPX=";
@@ -4590,7 +4590,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         }
                         msg += FMC_KTA;
                         msg += "\n";
-                        msg += "SWKZID=";           //WKZ-Nummer
+                        msg += "WKZID=";           //WKZ-Nummer
                         msg += tnummer;
                         msg += "\n";
                         msg += "MPX=";
