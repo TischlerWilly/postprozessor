@@ -14,15 +14,10 @@
 
 
 
--->Was tun bei Kreisbögen, bei denen VW keine Radius ausgibt?????
--->fmc-Export für die Option "Tiefenzustellung gem Werkzeugmagazin" erstellen
--->fmc-Export FKONs von der WST-Unterseite
 
 
--->Hinweis geben wenn fkon-tiefe > nutzlänge wkz
+-->Hinweis geben wenn KTA-tiefe > nutzlänge wkz
 
--->QString werkstueck::get_bearb_menschlich_lesbar(text_zeilenweise bearbeitung)
-   ->funktion ergänzen um die FKONs
 -------------------------------------------------------
 Testen:
 

@@ -87,6 +87,10 @@ void bohrung::set_afb(QString ausfuehrbedingung)
 {
     afb = ausfuehrbedingung;
 }
+void bohrung::set_wkznum(QString nummer)
+{
+    werkzeugnummer = nummer;
+}
 
 double bohrung::get_dm()
 {
@@ -144,6 +148,10 @@ QString bohrung::get_afb()
 {
     return afb;
 }
+QString bohrung::get_wkznum()
+{
+    return werkzeugnummer;
+}
 
 QString bohrung::get_text()
 {
@@ -164,6 +172,8 @@ QString bohrung::get_text()
     msg += get_afb();               //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
     msg += get_zustellmass_qstring();               //Zeile 9
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += get_wkznum();            //Zeile 10
 
     return msg;
 }
@@ -182,6 +192,7 @@ void bohrung::set_text(QString text)
         set_z(tz.zeile(7));
         set_afb(tz.zeile(8));
         set_zustellmass(tz.zeile(9));
+        set_wkznum(tz.zeile(10));
     }
 }
 

@@ -82,6 +82,7 @@
 #define FMC_KTA_TI              "TI"
 #define FMC_KTA_ZUST            "LGEZU"
 #define FMC_KTA_AFB             "AFB"
+#define FMC_KTA_WKZ             "WKZID"
 
 #define FMC_RTA                 "[ZYRTFR40]"    //Rechtecktasche
 #define FMC_RTA_X               "MPX"
@@ -94,6 +95,7 @@
 #define FMC_RTA_WI              "WKL"
 #define FMC_RTA_RAEUM           "RAEUMEN"
 #define FMC_RTA_AFB             "AFB"
+#define FMC_RTA_WKZ             "WKZID"
 
 #define FMC_NUT                 "[ZYSNUT40]"    //Nut
 #define FMC_NUT_XS              "SPX"

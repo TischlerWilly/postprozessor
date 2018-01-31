@@ -716,6 +716,8 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
 }
 void MainWindow::on_pushButton_start_clicked()
 {
+    on_pushButton_zielordner_leeren_clicked();
+
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     wste.clear();

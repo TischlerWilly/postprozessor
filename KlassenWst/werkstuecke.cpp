@@ -1407,6 +1407,10 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         bo.set_zustellmass(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_KTA_WKZ)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        bo.set_wkznum(tmp);
                     }
                 }
             }
@@ -1488,6 +1492,10 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_ausraeumen(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_RTA_WKZ)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        rt.set_wkznum(tmp);
                     }
                 }
             }

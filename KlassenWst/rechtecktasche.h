@@ -36,6 +36,7 @@ public:
     void set_ausraeumen(QString ja);
     void set_bezug(QString bezugsflaeche);
     void set_afb(QString ausfuehrbedingung);
+    void set_wkznum(QString nummer);
 
     double get_laenge();
     QString get_laenge_qstring();
@@ -59,6 +60,7 @@ public:
     QString get_ausraeumen_qstring();
     QString get_bezug();
     QString get_afb();
+    QString get_wkznum();
 
     QString get_text();
     void set_text(QString text);
@@ -76,6 +78,7 @@ private:
     bool ausraeumen;
     QString bezug;
     QString afb;
+    QString werkzeugnummer;
 
     void setup();
 
