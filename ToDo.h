@@ -16,8 +16,6 @@
 
 
 
--->Hinweis geben wenn KTA-tiefe > nutzlänge wkz
-
 -------------------------------------------------------
 Testen:
 

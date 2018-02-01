@@ -150,7 +150,12 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                         msg += double_to_qstring(xmin);
                         msg += "mm\n";
                     }
-                }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
+                    //Nutzlänge Fräser und Tati prüfen:
+                    if(bo.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
+                    {
+                        msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                    }
+                }else//Es ist auch kein passender Fräser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
                     msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
                 }
@@ -159,6 +164,7 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
         }else if(art == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
+            //Prüfen ob Tasche zu dicht am WST-Rand ist:
             double xmin = rt.get_x();
             if(rt.get_drewi() == 0 || rt.get_drewi() == 180)
             {
@@ -180,6 +186,31 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                 msg += "mm\n";
             }
 
+            //-----------------------------------------------
+
+            //Prüfen ob Nutzlänge ausreichend für Tati ist:
+            QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+            if(tnummer.isEmpty())
+            {
+                QString bezug = rt.get_bezug();
+                double minmass = 0;
+                if(rt.get_laenge() < rt.get_breite())
+                {
+                    minmass = rt.get_laenge();
+                }else
+                {
+                    minmass = get_breite();
+                }
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
+            }
+            if(!tnummer.isEmpty())
+            {
+                //Nutzlänge Fräser und Tati prüfen
+                if(rt.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
+                {
+                    msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                }
+            }
         }else if(art == BEARBART_NUT)
         {
             nut nu(zeile.get_text());
@@ -241,10 +272,36 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
         QString art = zeile.zeile(1);
         if(art == BEARBART_BOHR)
         {
-            //...
+            bohrung bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
+
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+            if(tnummer.isEmpty())//Bohren nicht möglich weil kein passendes Werkzeug
+            {
+                tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                }
+                if(!tnummer.isEmpty())//Kreistasche kann gefräst werden
+                {
+                    //Nutzlänge Fräser und Tati prüfen:
+                    if(bo.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
+                    {
+                        msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                    }
+
+                }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
+                {
+                    msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
+                }
+            }
+
         }else if(art == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
+
+            //Prüfen ob Nutzlänge ausreichend für Tati ist:
             QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
             if(tnummer.isEmpty())
             {
@@ -261,6 +318,7 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
             }
             if(!tnummer.isEmpty())
             {
+                //Nutzlänge Fräser und Tati prüfen
                 if(rt.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
                 {
                     msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
@@ -903,10 +961,6 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         info = warnungen;
     }else
     {
-        info = "  -->Die Option AUTOMATISCH wird derzeit noch nicht unterstuetzt\n";
-        msg = "";
-
-
         //Erst einmal mit Drehung 0 ausgeben, bis Automatisch drehen bei GANX getestet ist und läuft:
         double tmp_l = laenge;
         double tmp_b = breite;
@@ -1849,7 +1903,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
+                tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
+                }
 
                 if(!tnummer.isEmpty())
                 {
@@ -2363,7 +2421,13 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 minmass = by;
             }
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+
+            QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+            if(tnummer.isEmpty())
+            {
+                 tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+            }
+
             if(tnummer.isEmpty())
             {
                 QString msg = fehler_kein_WKZ("ganx", zeile);
@@ -3141,7 +3205,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
+                tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
+                }
 
                 if(!tnummer.isEmpty())
                 {
@@ -3657,7 +3725,13 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 minmass = by;
             }
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+
+            QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+            if(tnummer.isEmpty())
+            {
+                 tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+            }
+
             if(tnummer.isEmpty())
             {
                 //Diese Stelle des Codes wird theoretisch niemals erreicht,
