@@ -806,7 +806,7 @@ QString werkstueck::suche_cad_fehler()
     {
         uint anz_asd = 0; //Anzahl Aufschlagdämpfer
 
-        for(uint i=1; i<bearbeitungen.zeilenanzahl() ;i++)
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
         {
             if(bearbeitungen.zeile(i).contains(BEARBART_BOHR))
             {
@@ -820,7 +820,9 @@ QString werkstueck::suche_cad_fehler()
         if(anz_asd < 2)
         {
             msg += get_name();
-            msg += ": keine Aufschlagdaempfer";
+            msg += ": ";
+            msg += double_to_qstring(anz_asd);
+            msg += " Aufschlagdaempfer";
             msg += "\n";
         }
     }
@@ -829,7 +831,7 @@ QString werkstueck::suche_cad_fehler()
     {
         uint anz_asd = 0; //Anzahl Aufschlagdämpfer
 
-        for(uint i=1; i<bearbeitungen.zeilenanzahl() ;i++)
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
         {
             if(bearbeitungen.zeile(i).contains(BEARBART_BOHR))
             {
@@ -843,7 +845,9 @@ QString werkstueck::suche_cad_fehler()
         if(anz_asd < 4)
         {
             msg += get_name();
-            msg += ": keine Aufschlagdaempfer";
+            msg += ": ";
+            msg += double_to_qstring(anz_asd);
+            msg += " Aufschlagdaempfer";
             msg += "\n";
         }
     }
