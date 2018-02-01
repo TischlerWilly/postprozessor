@@ -4382,9 +4382,6 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 msg += "R=";
                 msg += double_to_qstring(radius);
                 msg += "\n";
-                msg += "LGET1=";
-                msg += rt.get_laenge_qstring();
-                msg += "\n";
                 msg += "LGEZU=";                //Zustellmaß
                 msg += double_to_qstring(zustellmas);
                 msg += "\n";
@@ -4397,6 +4394,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 msg += "RAEUMEN=";              //Ausräumen
                 msg += rt.get_ausraeumen_qstring();
                 msg += "\n";
+                msg += "WKZAKTUELL=1\n";
 
                 //Eintauchvorschub gem. Voreinstellung IMAWOP
                 //Vorschub gem. Voreinstellung IMAWOP
@@ -5003,9 +5001,6 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "R=";
                     msg += double_to_qstring(radius);
                     msg += "\n";
-                    msg += "LGET1=";
-                    msg += rt.get_laenge_qstring();
-                    msg += "\n";
                     msg += "LGEZU=";                //Zustellmaß
                     msg += double_to_qstring(zustellmas);
                     msg += "\n";
@@ -5018,6 +5013,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "RAEUMEN=";              //Ausräumen
                     msg += rt.get_ausraeumen_qstring();
                     msg += "\n";
+                    msg += "WKZAKTUELL=1\n";
 
                     //Eintauchvorschub gem. Voreinstellung IMAWOP
                     //Vorschub gem. Voreinstellung IMAWOP
