@@ -1253,7 +1253,11 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
         msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
     }else
     {
-        msg = "";
+        //drehung 0:
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
     }
     return msg;
 }
