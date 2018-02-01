@@ -4424,7 +4424,13 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 double zustelltiefe;
                 if(zust_fkon == "wkz")
                 {
-                    zustelltiefe = zustellmass;
+                    if(zustellmass < gesamttiefe)
+                    {
+                        zustelltiefe = zustellmass;
+                    }else
+                    {
+                        zustelltiefe = gesamttiefe;
+                    }
                 }else // == "orgi"
                 {
                     zustelltiefe = gesamttiefe;
@@ -4445,7 +4451,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 msg += kommentar_fmc("--------------------");
 
                 double backup_i = i;
-                while(zustelltiefe <= gesamttiefe)
+                while(1)//abbruch durch breake
                 {
                     i = backup_i;
                     double pos_z = get_dicke()-zustelltiefe;
@@ -5042,7 +5048,13 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     double zustelltiefe;
                     if(zust_fkon == "wkz")
                     {
-                        zustelltiefe = zustellmass;
+                        if(zustellmass < gesamttiefe)
+                        {
+                            zustelltiefe = zustellmass;
+                        }else
+                        {
+                            zustelltiefe = gesamttiefe;
+                        }
                     }else // == "orgi"
                     {
                         zustelltiefe = gesamttiefe;
@@ -5063,7 +5075,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += kommentar_fmc("--------------------");
 
                     double backup_i = i;
-                    while(zustelltiefe <= gesamttiefe)
+                    while(1)//abbruch durch breake
                     {
                         i = backup_i;
                         double pos_z = get_dicke()-zustelltiefe;
