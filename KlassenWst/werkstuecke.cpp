@@ -247,13 +247,22 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     QString schluessel = text_links(zeile, "=");
                     if(schluessel == FMC_PRGKOPF_LAENGE)
                     { 
-                        w.set_laenge(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        w.set_laenge(tmp);
                     }else if(schluessel == FMC_PRGKOPF_BREITE)
                     {
-                        w.set_breite(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        w.set_breite(tmp);
                     }else if(schluessel == FMC_PRGKOPF_DICKE)
                     {
-                        w.set_dicke(wert_nach_istgleich(zeile));
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        w.set_dicke(tmp);
                     }                    
                 }
             }
