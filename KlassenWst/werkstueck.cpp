@@ -3912,17 +3912,17 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     msg += "20";
     msg += "\n";
     msg += "AFB=1\n";
-    msg += "AXV=";                  //Y-Versatz
-    if(tmp_b < 240)
+    msg += "AXV=";                  //X-Versatz
+    msg += "0";
+    msg += "\n";
+    msg += "AYV=";                  //Y-Veratz
+    if(tmp_b < 230)
     {
         msg += "210";
     }else
     {
         msg += "0";
     }
-    msg += "\n";
-    msg += "AYV=";                  //X-Veratz
-    msg += "0";
     msg += "\n";
     msg += "BEZB=";                 //Bezeichnung
     msg += "Programmkopf";
@@ -3962,7 +3962,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     msg += "\n";
     msg += "\n";
     //---------------------------------------ggf. Y-Versatz kennlich machen:
-    if(tmp_b < 210)
+    if(tmp_b < 230)
     {
         kommentar_fmc("--------------------");
         kommentar_fmc("ay 210");
