@@ -1561,10 +1561,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double y2 = 0;
             double raster = 32;
 
-
             for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
             {
-                zeile = tz.zeile(ii-1);
+                zeile = tz.zeile(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii;
@@ -1638,7 +1637,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         tmp = var_einsetzen(w, tmp);
                         xe = ausdruck_auswerten(tmp).toDouble();
                     }else if(schluessel == FMC_LORAE_Y1)
-                    {
+                    {                        
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         y1 = ausdruck_auswerten(tmp).toDouble();
