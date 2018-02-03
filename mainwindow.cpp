@@ -639,11 +639,6 @@ void MainWindow::on_actionInfo_triggered()
     tmp += "Hinweis zum GANX-Export:\n";
     tmp += "  Fraeskonturen werden nicht ausgegeben.\n";
 
-    tmp += "\n";
-    tmp += "Hinweis zum FMC-Export:\n";
-    tmp += "  Die Funktion Drehen-automatisch ist derzeit nicht aktiv.\n";
-    tmp += "  Das Programm wird mit Drehwinkel \"0\" exportiert.\n";
-
     ui->plainTextEdit_eldungen->setPlainText(tmp);
 
     //----------------------------------------------------------
