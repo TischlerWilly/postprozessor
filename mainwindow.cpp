@@ -637,7 +637,7 @@ void MainWindow::on_actionInfo_triggered()
     tmp += "\n";
 
     tmp += "Hinweis zum GANX-Export:\n";
-    tmp += "  Fraeskonturen werden ignoriert.";
+    tmp += "  Fraeskonturen werden nicht ausgegeben.\n";
 
     ui->plainTextEdit_eldungen->setPlainText(tmp);
 
@@ -716,6 +716,8 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
 }
 void MainWindow::on_pushButton_start_clicked()
 {
+    on_pushButton_zielordner_leeren_clicked();
+
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     wste.clear();

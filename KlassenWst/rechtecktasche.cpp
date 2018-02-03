@@ -140,6 +140,10 @@ void rechtecktasche::set_afb(QString ausfuehrbedingung)
 {
     afb = ausfuehrbedingung;
 }
+void rechtecktasche::set_wkznum(QString nummer)
+{
+    werkzeugnummer = nummer;
+}
 
 double rechtecktasche::get_laenge()
 {
@@ -227,7 +231,6 @@ QString rechtecktasche::get_ausraeumen_qstring()
         return "0";
     }
 }
-
 QString rechtecktasche::get_bezug()
 {
     return bezug;
@@ -235,6 +238,10 @@ QString rechtecktasche::get_bezug()
 QString rechtecktasche::get_afb()
 {
     return afb;
+}
+QString rechtecktasche::get_wkznum()
+{
+    return werkzeugnummer;
 }
 
 QString rechtecktasche::get_text()
@@ -264,6 +271,8 @@ QString rechtecktasche::get_text()
     msg += get_afb();               //Zeile 12
     msg += TRENNZ_BEARB_PARAM_;
     msg += get_zustellmass_qstring();//Zeile 13
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += get_wkznum();            //Zeile 14
 
     return msg;
 }
@@ -286,6 +295,7 @@ void rechtecktasche::set_text(QString text)
         set_ausraeumen(tz.zeile(11));
         set_afb(tz.zeile(12));
         set_zustellmass(tz.zeile(13));
+        set_wkznum(tz.zeile(14));
     }
 }
 

@@ -75,6 +75,34 @@
 #define FMC_HBEYM_Y1            "Y1"
 #define FMC_HBEYM_Y2            "Y2"
 
+#define FMC_BOBIY               "[VBY_40]"
+#define FMC_BOBIY_AFB           "AFB"
+#define FMC_BOBIY_X1            "X"
+#define FMC_BOBIY_X2            "X2"
+#define FMC_BOBIY_Y1            "Y1"
+#define FMC_BOBIY_Y2            "Y2"
+#define FMC_BOBIY_Y3            "Y3"
+#define FMC_BOBIY_Y4            "Y4"
+#define FMC_BOBIY_Y5            "Y5"
+#define FMC_BOBIY_Y6            "Y6"
+#define FMC_BOBIY_TI            "TI"
+#define FMC_BOBIY_DM            "DM"
+#define FMC_BOBIY_KM            "KETTE"
+
+#define FMC_BOBIX               "[VBX_40]"
+#define FMC_BOBIX_AFB           "AFB"
+#define FMC_BOBIX_Y1            "Y"
+#define FMC_BOBIX_Y2            "Y2"
+#define FMC_BOBIX_X1            "X1"
+#define FMC_BOBIX_X2            "X2"
+#define FMC_BOBIX_X3            "X3"
+#define FMC_BOBIX_X4            "X4"
+#define FMC_BOBIX_X5            "X5"
+#define FMC_BOBIX_X6            "X6"
+#define FMC_BOBIX_TI            "TI"
+#define FMC_BOBIX_DM            "DM"
+#define FMC_BOBIX_KM            "KETTE"
+
 #define FMC_KTA                 "[ZYKTFR40]"    //Kreistasche
 #define FMC_KTA_X               "MPX"
 #define FMC_KTA_Y               "MPY"
@@ -82,6 +110,7 @@
 #define FMC_KTA_TI              "TI"
 #define FMC_KTA_ZUST            "LGEZU"
 #define FMC_KTA_AFB             "AFB"
+#define FMC_KTA_WKZ             "WKZID"
 
 #define FMC_RTA                 "[ZYRTFR40]"    //Rechtecktasche
 #define FMC_RTA_X               "MPX"
@@ -94,6 +123,7 @@
 #define FMC_RTA_WI              "WKL"
 #define FMC_RTA_RAEUM           "RAEUMEN"
 #define FMC_RTA_AFB             "AFB"
+#define FMC_RTA_WKZ             "WKZID"
 
 #define FMC_NUT                 "[ZYSNUT40]"    //Nut
 #define FMC_NUT_XS              "SPX"
@@ -159,7 +189,17 @@
 #define FMC_FKONBOG_RAD         "RAD"
 #define FMC_FKONBOG_AFB         "AFB"
 
-
+#define FMC_FALZ                "[ZYFALZ40]"        //Falz
+#define FMC_FALZ_XS             "SPX"
+#define FMC_FALZ_XE             "EPX"
+#define FMC_FALZ_YS             "SPY"
+#define FMC_FALZ_YE             "EPY"
+#define FMC_FALZ_Z              "TI"
+#define FMC_FALZ_KADI           "KD"
+#define FMC_FALZ_KOR            "TRKOR"
+#define FMC_FALZ_WKZ            "WKZID"
+#define FMC_FALZ_BEZ            "BEZB"
+#define FMC_FALZ_AFB            "AFB"
 
 
 

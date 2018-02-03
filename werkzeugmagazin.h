@@ -46,6 +46,7 @@ public:
     QString get_zustellmass(QString wkz_nr);
     QString get_tabellenkopf();
     QString get_saegeblattbreite(QString wkz_nr);
+    QString get_nutzlaenge(QString wkz_nr);
 
 
 private:

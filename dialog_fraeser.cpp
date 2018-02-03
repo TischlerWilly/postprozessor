@@ -63,17 +63,18 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     text_zeilenweise wkz;
     wkz.set_trennzeichen('\t');
 
-    wkz.zeile_anhaengen(WKZ_TYP_FRAESER);                   //1 : Werkzeigtyp
-    wkz.zeile_anhaengen(ui->lineEdit_nr->text());           //2 : Nummer
-    wkz.zeile_anhaengen(ui->lineEdit_dm->text());           //3 : Durchmesser des realen Werkzeuges
-    wkz.zeile_anhaengen(ui->lineEdit_nutzl->text());        //4 : Nutzlänge
-    wkz.zeile_anhaengen(ui->lineEdit_voers->text());        //5 : Vorschub
-    wkz.zeile_anhaengen(ui->lineEdit_zustm->text());        //6 : Zustellmaß
-    wkz.zeile_anhaengen(" ");                               //7 : Durchmesser aus Import
-    wkz.zeile_anhaengen(" ");                               //8 : ist Durchgangsbohrer
-    wkz.zeile_anhaengen(" ");                               //9 : Sägeblattbreite
-    wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);           //10: Lage
-    wkz.zeile_anhaengen(ui->lineEdit_alias->text());        //11: Alias-Name
+    wkz.zeile_anhaengen(WKZ_TYP_FRAESER);                       //1 : Werkzeigtyp
+    wkz.zeile_anhaengen(ui->lineEdit_nr->text());               //2 : Nummer
+    wkz.zeile_anhaengen(ui->lineEdit_dm->text());               //3 : Durchmesser des realen Werkzeuges
+    wkz.zeile_anhaengen(ui->lineEdit_nutzl->text());            //4 : Nutzlänge
+    wkz.zeile_anhaengen(ui->lineEdit_voers->text());            //5 : Vorschub
+    wkz.zeile_anhaengen(ui->lineEdit_zustm->text());            //6 : Zustellmaß
+    wkz.zeile_anhaengen(" ");                                   //7 : Durchmesser aus Import
+    wkz.zeile_anhaengen(" ");                                   //8 : ist Durchgangsbohrer
+    wkz.zeile_anhaengen(" ");                                   //9 : Sägeblattbreite
+    wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);               //10: Lage
+    wkz.zeile_anhaengen(ui->lineEdit_alias->text().toUpper());  //11: Alias-Name
+                          //Beim Einlesen der FMC-Datei werden alle kleinen Buchstaben durch große ersetzt
 
     //deutsche Zahlen in englische Zahlen umwandeln:
     for(uint i=3; i<=wkz.zeilenanzahl() ;i++)

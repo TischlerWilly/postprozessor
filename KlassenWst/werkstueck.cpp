@@ -150,7 +150,12 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                         msg += double_to_qstring(xmin);
                         msg += "mm\n";
                     }
-                }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
+                    //Nutzlänge Fräser und Tati prüfen:
+                    if(bo.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
+                    {
+                        msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                    }
+                }else//Es ist auch kein passender Fräser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
                     msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
                 }
@@ -159,6 +164,7 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
         }else if(art == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
+            //Prüfen ob Tasche zu dicht am WST-Rand ist:
             double xmin = rt.get_x();
             if(rt.get_drewi() == 0 || rt.get_drewi() == 180)
             {
@@ -180,6 +186,31 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                 msg += "mm\n";
             }
 
+            //-----------------------------------------------
+
+            //Prüfen ob Nutzlänge ausreichend für Tati ist:
+            QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+            if(tnummer.isEmpty())
+            {
+                QString bezug = rt.get_bezug();
+                double minmass = 0;
+                if(rt.get_laenge() < rt.get_breite())
+                {
+                    minmass = rt.get_laenge();
+                }else
+                {
+                    minmass = get_breite();
+                }
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
+            }
+            if(!tnummer.isEmpty())
+            {
+                //Nutzlänge Fräser und Tati prüfen
+                if(rt.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
+                {
+                    msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                }
+            }
         }else if(art == BEARBART_NUT)
         {
             nut nu(zeile.get_text());
@@ -188,6 +219,13 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
             if(nu.get_xs() != nu.get_xe())
             {
                 msg += "  !! Nutrichutng auf der der Maschine nicht moeglich!\n";
+            }else if(nu.get_xs() < 10)
+            {
+                msg += "  !! Nut zu dicht am Rand/zu dicht an Spannzange!\n";
+                msg += "     X-Mass Nutmitte muss mind 10mm sein\n";
+                msg += "     X ist ca ";
+                msg += nu.get_xe_qstring();
+                msg += "mm\n";
             }
             double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
             if(nu.get_breite() < nutblattbreite)
@@ -241,10 +279,58 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
         QString art = zeile.zeile(1);
         if(art == BEARBART_BOHR)
         {
-            //...
+            bohrung bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
+
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+            if(tnummer.isEmpty())//Bohren nicht möglich weil kein passendes Werkzeug
+            {
+                tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                }
+                if(!tnummer.isEmpty())//Kreistasche kann gefräst werden
+                {
+                    //Nutzlänge Fräser und Tati prüfen:
+                    if(bo.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
+                    {
+                        msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                    }
+
+                }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
+                {
+                    msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
+                }
+            }
+
         }else if(art == BEARBART_RTA)
         {
-            //...
+            rechtecktasche rt(zeile.get_text());
+
+            //Prüfen ob Nutzlänge ausreichend für Tati ist:
+            QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+            if(tnummer.isEmpty())
+            {
+                QString bezug = rt.get_bezug();
+                double minmass = 0;
+                if(rt.get_laenge() < rt.get_breite())
+                {
+                    minmass = rt.get_laenge();
+                }else
+                {
+                    minmass = get_breite();
+                }
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
+            }
+            if(!tnummer.isEmpty())
+            {
+                //Nutzlänge Fräser und Tati prüfen
+                if(rt.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
+                {
+                    msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                }
+            }
         }else if(art == BEARBART_NUT)
         {
             nut nu(zeile.get_text());
@@ -255,6 +341,21 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
             {
                 msg += "  !! Nutbreite ist kleiner als Blattbreite!\n";
             }
+        }else if(art == BEARBART_FRAESERAUFRUF)
+        {
+            fraueseraufruf fa(zeile.get_text());
+            QString tnummer = wkzmag.get_wkznummer_von_alias(fa.get_wkznum());
+            if(tnummer.isEmpty())
+            {
+                msg += "  !! Keine Werkzeugnummer vergeben bei Fraeseraufruf!\n";
+            }else
+            {
+                if(fa.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
+                {
+                    msg += "  !! Nutzlaenge < Fraestiefe    bei Fraeseraufruf!\n";
+                }
+            }
+
         }
     }
 
@@ -308,6 +409,9 @@ QString werkstueck::get_bearb_menschlich_lesbar(text_zeilenweise bearbeitung)
         daten += "Zustellmass: ";
         daten += bearbeitung.zeile(9);
         daten += "\n";
+        daten += "Werkzeug: ";
+        daten += bearbeitung.zeile(10);
+        daten += "\n";
     }else if(bearbeitung.zeile(1) == BEARBART_RTA)
     {
         daten += "Rechtecktasche:\n";
@@ -347,6 +451,9 @@ QString werkstueck::get_bearb_menschlich_lesbar(text_zeilenweise bearbeitung)
         daten += "Zustellmass: ";
         daten += bearbeitung.zeile(13);
         daten += "\n";
+        daten += "Werkzeug: ";
+        daten += bearbeitung.zeile(14);
+        daten += "\n";
     }else if(bearbeitung.zeile(1) == BEARBART_NUT)
     {
         daten += "Nut:\n";
@@ -373,6 +480,99 @@ QString werkstueck::get_bearb_menschlich_lesbar(text_zeilenweise bearbeitung)
         daten += "\n";
         daten += "AFB: ";
         daten += bearbeitung.zeile(9);
+        daten += "\n";
+    }else if(bearbeitung.zeile(1) == BEARBART_FRAESERAUFRUF)
+    {
+        daten += "Aufruf Fraeser:\n";
+        daten += "Bezugsflaeche: ";
+        daten += bearbeitung.zeile(2);
+        daten += "\n";
+        daten += "Startpunkt in X: ";
+        daten += bearbeitung.zeile(3);
+        daten += "\n";
+        daten += "Startpunkt in Y: ";
+        daten += bearbeitung.zeile(4);
+        daten += "\n";
+        daten += "Startpunkt in Z: ";
+        daten += bearbeitung.zeile(5);
+        daten += "\n";
+        daten += "Tiefe: ";
+        daten += bearbeitung.zeile(6);
+        daten += "\n";
+        daten += "Bahnkorrektur: ";
+        daten += bearbeitung.zeile(7);
+        daten += "\n";
+        daten += "Werkzeug: ";
+        daten += bearbeitung.zeile(8);
+        daten += "\n";
+        daten += "AFB: ";
+        daten += bearbeitung.zeile(9);
+        daten += "\n";
+    }else if(bearbeitung.zeile(1) == BEARBART_FRAESERGERADE)
+    {
+        daten += "gerade Fraesbahn:\n";
+        daten += "Bezugsflaeche: ";
+        daten += bearbeitung.zeile(2);
+        daten += "\n";
+        daten += "Startpunkt in X: ";
+        daten += bearbeitung.zeile(3);
+        daten += "\n";
+        daten += "Startpunkt in Y: ";
+        daten += bearbeitung.zeile(4);
+        daten += "\n";
+        daten += "Startpunkt Tiefe: ";
+        daten += bearbeitung.zeile(5);
+        daten += "\n";
+        daten += "Endpunkt in X: ";
+        daten += bearbeitung.zeile(6);
+        daten += "\n";
+        daten += "Endpunkt in Y: ";
+        daten += bearbeitung.zeile(7);
+        daten += "\n";
+        daten += "Endpunkt Tiefe: ";
+        daten += bearbeitung.zeile(8);
+        daten += "\n";
+        daten += "AFB: ";
+        daten += bearbeitung.zeile(9);
+        daten += "\n";
+    }else if(bearbeitung.zeile(1) == BEARBART_FRAESERBOGEN)
+    {
+        daten += "gebogene Fraesbahn:\n";
+        daten += "Bezugsflaeche: ";
+        daten += bearbeitung.zeile(2);
+        daten += "\n";
+        daten += "Startpunkt in X: ";
+        daten += bearbeitung.zeile(3);
+        daten += "\n";
+        daten += "Startpunkt in Y: ";
+        daten += bearbeitung.zeile(4);
+        daten += "\n";
+        daten += "Startpunkt Tiefe: ";
+        daten += bearbeitung.zeile(5);
+        daten += "\n";
+        daten += "Endpunkt in X: ";
+        daten += bearbeitung.zeile(6);
+        daten += "\n";
+        daten += "Endpunkt in Y: ";
+        daten += bearbeitung.zeile(7);
+        daten += "\n";
+        daten += "Endpunkt Tiefe: ";
+        daten += bearbeitung.zeile(8);
+        daten += "\n";
+        daten += "Radius: ";
+        daten += bearbeitung.zeile(9);
+        daten += "\n";
+        daten += "Bogenrichtung: ";
+        if(bearbeitung.zeile(8) == "1")
+        {
+            daten += "Uhrzeigersinn";
+        }else
+        {
+            daten += "Gegen-Uhrzeigersinn";
+        }
+        daten += "\n";
+        daten += "AFB: ";
+        daten += bearbeitung.zeile(11);
         daten += "\n";
     }
     return daten;
@@ -671,7 +871,7 @@ QString werkstueck::suche_cad_fehler()
     {
         uint anz_asd = 0; //Anzahl Aufschlagdämpfer
 
-        for(uint i=1; i<bearbeitungen.zeilenanzahl() ;i++)
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
         {
             if(bearbeitungen.zeile(i).contains(BEARBART_BOHR))
             {
@@ -685,7 +885,9 @@ QString werkstueck::suche_cad_fehler()
         if(anz_asd < 2)
         {
             msg += get_name();
-            msg += ": keine Aufschlagdaempfer";
+            msg += ": ";
+            msg += double_to_qstring(anz_asd);
+            msg += " Aufschlagdaempfer";
             msg += "\n";
         }
     }
@@ -694,7 +896,7 @@ QString werkstueck::suche_cad_fehler()
     {
         uint anz_asd = 0; //Anzahl Aufschlagdämpfer
 
-        for(uint i=1; i<bearbeitungen.zeilenanzahl() ;i++)
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
         {
             if(bearbeitungen.zeile(i).contains(BEARBART_BOHR))
             {
@@ -708,7 +910,9 @@ QString werkstueck::suche_cad_fehler()
         if(anz_asd < 4)
         {
             msg += get_name();
-            msg += ": keine Aufschlagdaempfer";
+            msg += ": ";
+            msg += double_to_qstring(anz_asd);
+            msg += " Aufschlagdaempfer";
             msg += "\n";
         }
     }
@@ -764,17 +968,248 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         info = warnungen;
     }else
     {
-        info = "  -->Die Option AUTOMATISCH wird derzeit noch nicht unterstuetzt\n";
-        msg = "";
+        double tmp_l = breite;
+        double tmp_b = laenge;
+        text_zeilenweise tmp_bearb;
 
+        //Die beste Drehrichtung herausfinden:
+        uint bewertung_0    = 1;
+        uint bewertung_90   = 1;
+        uint bewertung_180  = 1;
+        uint bewertung_270  = 1;
+        //Stufe 1:
+        //heraus bekommen, für welche Lage es Warnungen gibt:
+        QString warnung;
+        text_zeilenweise bearb_kopie = tmp_bearb;
+        double l_kopie = tmp_l;
+        double b_kopie = tmp_b;
+        //------------------------0:
+        warnung = warnungen_fmc(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
+        if(warnung.isEmpty())
+        {
+            bewertung_0 = 100;
+        }else
+        {
+            bewertung_0 = 0;
+        }
+        text_zeilenweise bearb_0 = bearb_kopie;
+        double l_0 = l_kopie;
+        double b_0 = b_kopie;
+        //------------------------90:
+        bearb_kopie = bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+        warnung = warnungen_fmc(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
+        if(warnung.isEmpty())
+        {
+            bewertung_90 = 100;
+        }else
+        {
+            bewertung_90 = 0;
+        }
+        text_zeilenweise bearb_90 = bearb_kopie;
+        double l_90 = l_kopie;
+        double b_90 = b_kopie;
+        //------------------------180:
+        bearb_kopie = bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+        warnung = warnungen_fmc(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
+        if(warnung.isEmpty())
+        {
+            bewertung_180 = 100;
+        }else
+        {
+            bewertung_180 = 0;
+        }
+        text_zeilenweise bearb_180 = bearb_kopie;
+        double l_180 = l_kopie;
+        double b_180 = b_kopie;
+        //------------------------270:
+        bearb_kopie = bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+        warnung = warnungen_fmc(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
+        if(warnung.isEmpty())
+        {
+            bewertung_270 = 100;
+        }else
+        {
+            bewertung_270 = 0;
+        }
+        text_zeilenweise bearb_270 = bearb_kopie;
+        double l_270 = l_kopie;
+        double b_270 = b_kopie;
 
-        //Erst einmal mit Drehung 0 ausgeben, bis Automatisch drehen bei GANX getestet ist und läuft:
-        double tmp_l = laenge;
-        double tmp_b = breite;
-        text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
-        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info += warnungen;
+        //Stufe 2:
+        //heraus bekommen wo vorne ist:
+        for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb_0.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 8 || \
+                   bo.get_dm() == 8.2)
+                {
+                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_0 += 2;
+                    }
+                    if(bo.get_y() == b_0-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    {
+                        bewertung_0 += 2;
+                    }
+                }
+            }
+        }
+        for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb_90.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 8 || \
+                   bo.get_dm() == 8.2)
+                {
+                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_90 += 2;
+                    }
+                    if(bo.get_y() == b_90-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    {
+                        bewertung_90 += 2;
+                    }
+                }
+            }
+        }
+        for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb_180.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 8 || \
+                   bo.get_dm() == 8.2)
+                {
+                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_180 += 2;
+                    }
+                    if(bo.get_y() == b_180-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    {
+                        bewertung_180 += 2;
+                    }
+                }
+            }
+        }
+        for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb_270.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 8 || \
+                   bo.get_dm() == 8.2)
+                {
+                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_270 += 2;
+                    }
+                    if(bo.get_y() == b_270-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    {
+                        bewertung_270 += 2;
+                    }
+                }
+            }
+        }
+
+        //Stufe 3:
+        //Teile bevorzugen, bei bei denen gilt: B > L:
+        if(b_0 > l_0)
+        {
+            bewertung_0 += 2;
+        }
+        if(b_90 > l_90)
+        {
+            bewertung_90 += 2;
+        }
+        if(b_180 > l_180)
+        {
+            bewertung_180 += 2;
+        }
+        if(b_270 > l_270)
+        {
+            bewertung_270 += 2;
+        }
+
+        //Bewertungen auswerten:
+        if(bewertung_0 >= 100 && \
+           bewertung_0 >= bewertung_90 && \
+           bewertung_0 >= bewertung_180 && \
+           bewertung_0 >= bewertung_270 )
+        {
+            //0 ist super:
+            double tmp_l = breite;
+            double tmp_b = laenge;
+            text_zeilenweise tmp_bearb;
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+            info = warnungen;
+        }else if(bewertung_90 >= 100 && \
+                 bewertung_90 >= bewertung_0 && \
+                 bewertung_90 >= bewertung_180 && \
+                 bewertung_90 >= bewertung_270 )
+        {
+            //90 ist super:
+            double tmp_l = breite;
+            double tmp_b = laenge;
+            text_zeilenweise tmp_bearb;
+            tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+            info = warnungen;
+        }else if(bewertung_180 >= 100 && \
+                 bewertung_180 >= bewertung_0 && \
+                 bewertung_180 >= bewertung_90 && \
+                 bewertung_180 >= bewertung_270 )
+        {
+            //180 ist super:
+            double tmp_l = breite;
+            double tmp_b = laenge;
+            text_zeilenweise tmp_bearb;
+            tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+            info = warnungen;
+        }else if(bewertung_270 >= 100 && \
+                 bewertung_270 >= bewertung_0 && \
+                 bewertung_270 >= bewertung_90 && \
+                 bewertung_270 >= bewertung_180 )
+        {
+            //270 ist super:
+            double tmp_l = breite;
+            double tmp_b = laenge;
+            text_zeilenweise tmp_bearb;
+            tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+            info = warnungen;
+        }else
+        {
+            //wir nehmen 0:
+            double tmp_l = breite;
+            double tmp_b = laenge;
+            text_zeilenweise tmp_bearb;
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+            info = warnungen;
+        }
     }
     return msg;
 }
@@ -827,9 +1262,6 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         info = warnungen;
     }else
     {
-        //info = "Die Option AUTOMATISCH wird derzeit noch nicht unterstuetzt\n";
-        //msg = "";
-
         double tmp_l = breite;
         double tmp_b = laenge;
         text_zeilenweise tmp_bearb;
@@ -1118,7 +1550,11 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
         msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
     }else
     {
-        msg = "";
+        //drehung 0:
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
     }
     return msg;
 }
@@ -1706,7 +2142,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
+                tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
+                }
 
                 if(!tnummer.isEmpty())
                 {
@@ -2220,7 +2660,13 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 minmass = by;
             }
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+
+            QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+            if(tnummer.isEmpty())
+            {
+                 tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+            }
+
             if(tnummer.isEmpty())
             {
                 QString msg = fehler_kein_WKZ("ganx", zeile);
@@ -2998,7 +3444,11 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
+                tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, dm, bo.get_tiefe(), dicke, bezug);
+                }
 
                 if(!tnummer.isEmpty())
                 {
@@ -3514,7 +3964,13 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             {
                 minmass = by;
             }
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+
+            QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+            if(tnummer.isEmpty())
+            {
+                 tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, rt.get_bezug());
+            }
+
             if(tnummer.isEmpty())
             {
                 //Diese Stelle des Codes wird theoretisch niemals erreicht,
@@ -3695,17 +4151,17 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     msg += "20";
     msg += "\n";
     msg += "AFB=1\n";
-    msg += "AXV=";                  //Y-Versatz
-    if(tmp_b < 240)
+    msg += "AXV=";                  //X-Versatz
+    msg += "0";
+    msg += "\n";
+    msg += "AYV=";                  //Y-Veratz
+    if(tmp_b < 230)
     {
         msg += "210";
     }else
     {
         msg += "0";
     }
-    msg += "\n";
-    msg += "AYV=";                  //X-Veratz
-    msg += "0";
     msg += "\n";
     msg += "BEZB=";                 //Bezeichnung
     msg += "Programmkopf";
@@ -3745,7 +4201,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     msg += "\n";
     msg += "\n";
     //---------------------------------------ggf. Y-Versatz kennlich machen:
-    if(tmp_b < 210)
+    if(tmp_b < 230)
     {
         kommentar_fmc("--------------------");
         kommentar_fmc("ay 210");
@@ -3989,7 +4445,12 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+
+                tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                }
                 if(!tnummer.isEmpty())
                 {
                     double zustellmas = bo.get_zustellmass();
@@ -3997,14 +4458,23 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     {
                         zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
                     }
-                    double tiefe;
-                    if(bo.get_tiefe() <= get_dicke())
-                    {
-                        tiefe = bo.get_tiefe();
-                    }else
+
+                    double tiefe = 0;
+                    QString tiefe_qstring;
+                    if(bo.get_tiefe() > get_dicke())
                     {
                         tiefe = get_dicke() - bo.get_tiefe();
+                        tiefe_qstring = double_to_qstring(tiefe);
+                    }else if(get_dicke()-bo.get_tiefe() <= 2)
+                    {
+                        tiefe_qstring  = "D-";
+                        tiefe_qstring += double_to_qstring(get_dicke()-bo.get_tiefe());
+                    }else
+                    {
+                        tiefe = bo.get_tiefe();
+                        tiefe_qstring = double_to_qstring(tiefe);
                     }
+
                     bool ausraeumen = true;
                     if(bo.get_dm() > 2*wkzmag.get_dm(tnummer).toDouble()+20)
                     {
@@ -4019,7 +4489,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     }
                     msg += FMC_KTA;
                     msg += "\n";
-                    msg += "SWKZID=";           //WKZ-Nummer
+                    msg += "WKZID=";           //WKZ-Nummer
                     msg += tnummer;
                     msg += "\n";
                     msg += "MPX=";
@@ -4032,7 +4502,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += bo.get_dm_qstring();
                     msg += "\n";
                     msg += "TI=";
-                    msg += double_to_qstring(tiefe);
+                    msg += tiefe_qstring;
                     msg += "\n";
                     msg += "LGEZU=";            //Zustellmaß
                     msg += double_to_qstring(zustellmas);
@@ -4056,7 +4526,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "Kreistasche DM";
                     msg += bo.get_dm_qstring();
                     msg += " T";
-                    msg += double_to_qstring(tiefe);
+                    msg += tiefe_qstring;
                     msg += "\n";
                     msg += "AFB=";
                     msg += bo.get_afb();
@@ -4158,16 +4628,20 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
-            QString bezug = rt.get_bezug();
-            double minmass = 0;
-            if(rt.get_laenge() < rt.get_breite())
+            QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+            if(tnummer.isEmpty())
             {
-                minmass = rt.get_laenge();
-            }else
-            {
-                minmass = get_breite();
+                QString bezug = rt.get_bezug();
+                double minmass = 0;
+                if(rt.get_laenge() < rt.get_breite())
+                {
+                    minmass = rt.get_laenge();
+                }else
+                {
+                    minmass = get_breite();
+                }
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
             }
-            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
             if(!tnummer.isEmpty())
             {
                 double zustellmas = rt.get_zustellmass();
@@ -4175,14 +4649,23 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 {
                     zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
                 }
-                double tiefe;
-                if(rt.get_tiefe() <= get_dicke())
-                {
-                    tiefe = rt.get_tiefe();
-                }else
+
+                double tiefe = 0;
+                QString tiefe_qstring;
+                if(rt.get_tiefe() > get_dicke())
                 {
                     tiefe = get_dicke() - rt.get_tiefe();
+                    tiefe_qstring = double_to_qstring(tiefe);
+                }else if(get_dicke()-rt.get_tiefe() <= 2)
+                {
+                    tiefe_qstring  = "D-";
+                    tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                }else
+                {
+                    tiefe = rt.get_tiefe();
+                    tiefe_qstring = double_to_qstring(tiefe);
                 }
+
                 double radius = rt.get_rad();
                 //double radius_wkz = wkzmag.get_dm(tnummer).toDouble()/2;
                 //if(radius < radius_wkz)
@@ -4207,13 +4690,10 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 msg += rt.get_breite_qstring();
                 msg += "\n";
                 msg += "TI=";                   //Tiefe
-                msg += double_to_qstring(tiefe);
+                msg += tiefe_qstring;
                 msg += "\n";
                 msg += "R=";
                 msg += double_to_qstring(radius);
-                msg += "\n";
-                msg += "LGET1=";
-                msg += rt.get_laenge_qstring();
                 msg += "\n";
                 msg += "LGEZU=";                //Zustellmaß
                 msg += double_to_qstring(zustellmas);
@@ -4227,6 +4707,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 msg += "RAEUMEN=";              //Ausräumen
                 msg += rt.get_ausraeumen_qstring();
                 msg += "\n";
+                msg += "WKZAKTUELL=1\n";
 
                 //Eintauchvorschub gem. Voreinstellung IMAWOP
                 //Vorschub gem. Voreinstellung IMAWOP
@@ -4262,7 +4743,13 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 double zustelltiefe;
                 if(zust_fkon == "wkz")
                 {
-                    zustelltiefe = zustellmass;
+                    if(zustellmass < gesamttiefe)
+                    {
+                        zustelltiefe = zustellmass;
+                    }else
+                    {
+                        zustelltiefe = gesamttiefe;
+                    }
                 }else // == "orgi"
                 {
                     zustelltiefe = gesamttiefe;
@@ -4283,7 +4770,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 msg += kommentar_fmc("--------------------");
 
                 double backup_i = i;
-                while(zustelltiefe <= gesamttiefe)
+                while(1)//abbruch durch breake
                 {
                     i = backup_i;
                     double pos_z = get_dicke()-zustelltiefe;
@@ -4560,7 +5047,11 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 {
                     //Kein Werkzeug wurde gefunden.
                     //Kann Bohrung als Kreistasche gefräst werden?:
-                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                    tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                    if(tnummer.isEmpty())
+                    {
+                        tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                    }
                     if(!tnummer.isEmpty())
                     {
                         double zustellmas = bo.get_zustellmass();
@@ -4568,14 +5059,23 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         {
                             zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
                         }
-                        double tiefe;
-                        if(bo.get_tiefe() <= get_dicke())
-                        {
-                            tiefe = bo.get_tiefe();
-                        }else
+
+                        double tiefe = 0;
+                        QString tiefe_qstring;
+                        if(bo.get_tiefe() > get_dicke())
                         {
                             tiefe = get_dicke() - bo.get_tiefe();
+                            tiefe_qstring = double_to_qstring(tiefe);
+                        }else if(get_dicke()-bo.get_tiefe() <= 2)
+                        {
+                            tiefe_qstring  = "D-";
+                            tiefe_qstring += double_to_qstring(get_dicke()-bo.get_tiefe());
+                        }else
+                        {
+                            tiefe = bo.get_tiefe();
+                            tiefe_qstring = double_to_qstring(tiefe);
                         }
+
                         bool ausraeumen = true;
                         if(bo.get_dm() > 2*wkzmag.get_dm(tnummer).toDouble()+20)
                         {
@@ -4590,7 +5090,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         }
                         msg += FMC_KTA;
                         msg += "\n";
-                        msg += "SWKZID=";           //WKZ-Nummer
+                        msg += "WKZID=";           //WKZ-Nummer
                         msg += tnummer;
                         msg += "\n";
                         msg += "MPX=";
@@ -4603,7 +5103,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += bo.get_dm_qstring();
                         msg += "\n";
                         msg += "TI=";
-                        msg += double_to_qstring(tiefe);
+                        msg += tiefe_qstring;
                         msg += "\n";
                         msg += "LGEZU=";            //Zustellmaß
                         msg += double_to_qstring(zustellmas);
@@ -4627,7 +5127,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "Kreistasche DM";
                         msg += bo.get_dm_qstring();
                         msg += " T";
-                        msg += double_to_qstring(tiefe);
+                        msg += tiefe_qstring;
                         msg += "\n";
                         msg += "AFB=";
                         msg += bo.get_afb();
@@ -4743,17 +5243,20 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             }else if(zeile.zeile(1) == BEARBART_RTA)
             {
                 rechtecktasche rt(zeile.get_text());
-                QString bezug = rt.get_bezug();
-                double minmass = 0;
-                if(rt.get_laenge() < rt.get_breite())
+                QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
                 {
-                    minmass = rt.get_laenge();
-                }else
-                {
-                    minmass = get_breite();
+                    QString bezug = rt.get_bezug();
+                    double minmass = 0;
+                    if(rt.get_laenge() < rt.get_breite())
+                    {
+                        minmass = rt.get_laenge();
+                    }else
+                    {
+                        minmass = get_breite();
+                    }
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
                 }
-                QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
-
                 //Beareitung auf die Oberseite drehen:
                 rt.set_y(  tmp_b - rt.get_y()  );
                 rt.set_drewi(  180 - rt.get_drewi()  );
@@ -4765,14 +5268,23 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     {
                         zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
                     }
-                    double tiefe;
-                    if(rt.get_tiefe() <= get_dicke())
-                    {
-                        tiefe = rt.get_tiefe();
-                    }else
+
+                    double tiefe = 0;
+                    QString tiefe_qstring;
+                    if(rt.get_tiefe() > get_dicke())
                     {
                         tiefe = get_dicke() - rt.get_tiefe();
+                        tiefe_qstring = double_to_qstring(tiefe);
+                    }else if(get_dicke()-rt.get_tiefe() <= 2)
+                    {
+                        tiefe_qstring  = "D-";
+                        tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                    }else
+                    {
+                        tiefe = rt.get_tiefe();
+                        tiefe_qstring = double_to_qstring(tiefe);
                     }
+
                     double radius = rt.get_rad();
                     //double radius_wkz = wkzmag.get_dm(tnummer).toDouble()/2;
                     //if(radius < radius_wkz)
@@ -4797,13 +5309,10 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += rt.get_breite_qstring();
                     msg += "\n";
                     msg += "TI=";                   //Tiefe
-                    msg += double_to_qstring(tiefe);
+                    msg += tiefe_qstring;
                     msg += "\n";
                     msg += "R=";
                     msg += double_to_qstring(radius);
-                    msg += "\n";
-                    msg += "LGET1=";
-                    msg += rt.get_laenge_qstring();
                     msg += "\n";
                     msg += "LGEZU=";                //Zustellmaß
                     msg += double_to_qstring(zustellmas);
@@ -4817,6 +5326,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "RAEUMEN=";              //Ausräumen
                     msg += rt.get_ausraeumen_qstring();
                     msg += "\n";
+                    msg += "WKZAKTUELL=1\n";
 
                     //Eintauchvorschub gem. Voreinstellung IMAWOP
                     //Vorschub gem. Voreinstellung IMAWOP
@@ -4855,7 +5365,13 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     double zustelltiefe;
                     if(zust_fkon == "wkz")
                     {
-                        zustelltiefe = zustellmass;
+                        if(zustellmass < gesamttiefe)
+                        {
+                            zustelltiefe = zustellmass;
+                        }else
+                        {
+                            zustelltiefe = gesamttiefe;
+                        }
                     }else // == "orgi"
                     {
                         zustelltiefe = gesamttiefe;
@@ -4876,7 +5392,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += kommentar_fmc("--------------------");
 
                     double backup_i = i;
-                    while(zustelltiefe <= gesamttiefe)
+                    while(1)//abbruch durch breake
                     {
                         i = backup_i;
                         double pos_z = get_dicke()-zustelltiefe;

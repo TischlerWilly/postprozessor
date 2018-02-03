@@ -27,6 +27,7 @@ public:
     void set_zustellmass(QString mass);
     void set_bezug(QString bezugsflaeche);
     void set_afb(QString ausfuehrbedingung);
+    void set_wkznum(QString nummer);
 
     double get_dm();
     QString get_dm_qstring();
@@ -42,6 +43,7 @@ public:
     QString get_zustellmass_qstring();
     QString get_bezug();
     QString get_afb();
+    QString get_wkznum();
 
     QString get_text();
     void set_text(QString text);
@@ -56,6 +58,7 @@ private:
     QString bezug;
     QString afb;
     double zustellmass;
+    QString werkzeugnummer;
 
     void setup();
 
