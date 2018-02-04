@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Saege</string>
   </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
@@ -32,7 +35,7 @@
     <item row="2" column="0">
      <widget class="QLabel" name="label_zustm">
       <property name="text">
-       <string>Zustellmass</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zustellmaß&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>

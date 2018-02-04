@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
   <widget class="QListWidget" name="listWidget_wkz">
    <property name="geometry">
     <rect>
@@ -34,20 +37,6 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QPushButton" name="pushButton_bearbeiten">
-      <property name="text">
-       <string>Bearbeiten</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton_entfernen">
-      <property name="text">
-       <string>Entfernen</string>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="QPushButton" name="pushButton_neu_bohrer">
       <property name="text">
        <string>neuer Bohrer</string>
@@ -57,14 +46,14 @@
     <item>
      <widget class="QPushButton" name="pushButton_neu_fraeser">
       <property name="text">
-       <string>neuer Fraeser</string>
+       <string>neuer Fräser</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QPushButton" name="pushButton_neu_saege">
       <property name="text">
-       <string>neue Saege</string>
+       <string>neue Säge</string>
       </property>
      </widget>
     </item>
@@ -81,12 +70,46 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QPushButton" name="pushButton_bearbeiten">
+      <property name="text">
+       <string>Bearbeiten</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_duplizieren">
+      <property name="text">
+       <string>Duplizieren</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_entfernen">
+      <property name="text">
+       <string>Entfernen</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
      <widget class="QPushButton" name="pushButton_hoch">
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die Reihenfolge der Werkzeuge legt ihre Priorität fest. Ein weiter oben stehendes  Werkzeug wird bevorzugt.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
-       <string>hoch</string>
+       <string>Hoch</string>
       </property>
      </widget>
     </item>
@@ -96,7 +119,7 @@
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die Reihenfolge der Werkzeuge legt ihre Priorität fest. Ein weiter oben stehendes  Werkzeug wird bevorzugt.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
-       <string>runter</string>
+       <string>Runter</string>
       </property>
      </widget>
     </item>
@@ -131,12 +154,17 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>listWidget_wkz</tabstop>
-  <tabstop>pushButton_bearbeiten</tabstop>
-  <tabstop>pushButton_entfernen</tabstop>
   <tabstop>pushButton_neu_bohrer</tabstop>
   <tabstop>pushButton_neu_fraeser</tabstop>
   <tabstop>pushButton_neu_saege</tabstop>
+  <tabstop>pushButton_bearbeiten</tabstop>
+  <tabstop>pushButton_duplizieren</tabstop>
+  <tabstop>pushButton_entfernen</tabstop>
+  <tabstop>pushButton_hoch</tabstop>
+  <tabstop>pushButton_runter</tabstop>
+  <tabstop>pushButton_abbrechen</tabstop>
+  <tabstop>pushButton_speichern</tabstop>
+  <tabstop>listWidget_wkz</tabstop>
  </tabstops>
  <resources/>
  <connections/>
