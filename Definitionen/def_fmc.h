@@ -201,6 +201,24 @@
 #define FMC_FALZ_BEZ            "BEZB"
 #define FMC_FALZ_AFB            "AFB"
 
+#define FMC_TOPF                "[VBTOPF41]"        //Bohrung Topfband
+#define FMC_TOPF_ABST           "ABSTTPF"           //Topfabstand = MAß von WST-Kante bis mitte Topf
+#define FMC_TOPF_A1             "ABST1"             //Maß von WST-Kante bis zum ersten Topf
+#define FMC_TOPF_A2             "ABST2"
+#define FMC_TOPF_A3             "ABST3"
+#define FMC_TOPF_A4             "ABST4"
+#define FMC_TOPF_A5             "ABST5"
+#define FMC_TOPF_MA             "ABSTA"             //Abstand der beiden Tübellöche zueinander
+#define FMC_TOPF_MB             "ABSTB"             //Abstnd zwischen dem Topf und den Dübellöchern
+#define FMC_TOPF_KM             "KETTE"
+#define FMC_TOPF_SEITE          "BRICHT"
+#define FMC_TOPF_DDM            "DMDUEB"            //Dübeldurchmesser
+#define FMC_TOPF_TODM           "DMTPF"             //Topfdurchmesser
+#define FMC_TOPF_DTI            "TIDUEB"            //Dübeltiefe
+#define FMC_TOPF_TOTI           "TITPF"             //Topftiefe
+#define FMC_TOPF_TOWKZ          "TNR"               //Werkzeugnummer für Topf
+#define FMC_TOPF_AFB            "AFB"
+
 
 
 #endif // DEF_FMC_H

@@ -2592,6 +2592,370 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 }
             }
 
+        }else if(zeile.contains(FMC_TOPF))
+        {
+            bohrung botopf;
+            bohrung boduebel;
+            botopf.set_bezug(WST_BEZUG_OBSEI);
+            boduebel.set_bezug(WST_BEZUG_OBSEI);
+
+            double topfabst = 0;
+            double abst1 = 0;
+            double abst2 = 0;
+            double abst3 = 0;
+            double abst4 = 0;
+            double abst5 = 0;
+            double massA = 0;
+            double massB = 0;
+            bool kettenmass = false;
+            double seite = 0;
+
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+
+                    if(seite == 1)
+                    {
+                        if(abst1 > 0)
+                        {
+                            double abst_tmp = abst1;
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(topfabst+massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                        if(abst2 > 0)
+                        {
+                            double abst_tmp;
+                            if(kettenmass == true)
+                            {
+                                abst_tmp = abst1+abst2;
+                            }else
+                            {
+                                abst_tmp = abst2;
+                            }
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(topfabst+massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                        if(abst3 > 0)
+                        {
+                            double abst_tmp;
+                            if(kettenmass == true)
+                            {
+                                abst_tmp = abst1+abst2+abst3;
+                            }else
+                            {
+                                abst_tmp = abst3;
+                            }
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(topfabst+massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                        if(abst4 > 0)
+                        {
+                            double abst_tmp;
+                            if(kettenmass == true)
+                            {
+                                abst_tmp = abst1+abst2+abst3+abst4;
+                            }else
+                            {
+                                abst_tmp = abst4;
+                            }
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(topfabst+massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                        if(abst5 > 0)
+                        {
+                            double abst_tmp;
+                            if(kettenmass == true)
+                            {
+                                abst_tmp = abst1+abst2+abst3+abst4+abst5;
+                            }else
+                            {
+                                abst_tmp = abst5;
+                            }
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(topfabst+massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                    }else if(seite == 2)
+                    {
+
+                    }else if(seite == 3)
+                    {
+                        if(abst1 > 0)
+                        {
+                            double abst_tmp = abst1;
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(w.get_breite() - topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(w.get_breite() - topfabst - massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                        if(abst2 > 0)
+                        {
+                            double abst_tmp;
+                            if(kettenmass == true)
+                            {
+                                abst_tmp = abst1+abst2;
+                            }else
+                            {
+                                abst_tmp = abst2;
+                            }
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(w.get_breite() - topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(w.get_breite() - topfabst - massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                        if(abst3 > 0)
+                        {
+                            double abst_tmp;
+                            if(kettenmass == true)
+                            {
+                                abst_tmp = abst1+abst2+abst3;
+                            }else
+                            {
+                                abst_tmp = abst3;
+                            }
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(w.get_breite() - topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(w.get_breite() - topfabst - massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                        if(abst4 > 0)
+                        {
+                            double abst_tmp;
+                            if(kettenmass == true)
+                            {
+                                abst_tmp = abst1+abst2+abst3+abst4;
+                            }else
+                            {
+                                abst_tmp = abst4;
+                            }
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(w.get_breite() - topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(w.get_breite() - topfabst - massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                        if(abst5 > 0)
+                        {
+                            double abst_tmp;
+                            if(kettenmass == true)
+                            {
+                                abst_tmp = abst1+abst2+abst3+abst4+abst5;
+                            }else
+                            {
+                                abst_tmp = abst5;
+                            }
+
+                            botopf.set_x(abst_tmp);
+                            botopf.set_y(w.get_breite() - topfabst);
+                            w.neue_bearbeitung(botopf.get_text());
+
+                            boduebel.set_y(w.get_breite() - topfabst - massB);
+                            boduebel.set_x(abst_tmp - massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                            boduebel.set_x(abst_tmp + massA/2);
+                            w.neue_bearbeitung(boduebel.get_text());
+                        }
+                    }else if(seite == 4)
+                    {
+
+                    }
+
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_TOPF_AFB)
+                    {
+                        botopf.set_afb(wert_nach_istgleich(zeile));
+                        boduebel.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_TOPF_TODM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        botopf.set_dm(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_TOPF_DDM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        boduebel.set_dm(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_TOPF_TOTI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        botopf.set_tiefe(tmp);
+                    }else if(schluessel == FMC_TOPF_DTI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        boduebel.set_tiefe(tmp);
+                    }else if(schluessel == FMC_TOPF_KM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_TOPF_ABST)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        topfabst = tmp.toDouble();
+                    }else if(schluessel == FMC_TOPF_MA)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        massA = tmp.toDouble();
+                    }else if(schluessel == FMC_TOPF_MB)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        massB = tmp.toDouble();
+                    }else if(schluessel == FMC_TOPF_A1)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            tmp = ausdruck_auswerten(tmp);
+                            abst1 = tmp.toDouble();
+                        }
+                    }else if(schluessel == FMC_TOPF_A2)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            tmp.replace("A1",double_to_qstring(abst1));
+                            tmp = ausdruck_auswerten(tmp);
+                            abst2 = tmp.toDouble();
+                        }
+                    }else if(schluessel == FMC_TOPF_A3)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            tmp.replace("A1",double_to_qstring(abst1));
+                            tmp.replace("A2",double_to_qstring(abst2));
+                            tmp = ausdruck_auswerten(tmp);
+                            abst3 = tmp.toDouble();
+                        }
+                    }else if(schluessel == FMC_TOPF_A4)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            tmp.replace("A1",double_to_qstring(abst1));
+                            tmp.replace("A2",double_to_qstring(abst2));
+                            tmp.replace("A3",double_to_qstring(abst3));
+                            tmp = ausdruck_auswerten(tmp);
+                            abst4 = tmp.toDouble();
+                        }
+                    }else if(schluessel == FMC_TOPF_A5)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            tmp.replace("A1",double_to_qstring(abst1));
+                            tmp.replace("A2",double_to_qstring(abst2));
+                            tmp.replace("A3",double_to_qstring(abst3));
+                            tmp.replace("A4",double_to_qstring(abst4));
+                            tmp = ausdruck_auswerten(tmp);
+                            abst5 = tmp.toDouble();
+                        }
+                    }else if(schluessel == FMC_TOPF_TOWKZ)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        botopf.set_wkznum(tmp);
+                    }else if(schluessel == FMC_TOPF_SEITE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        seite = tmp.toDouble();
+                    }
+                }
+            }
         }
 
     }

@@ -44,6 +44,7 @@ private slots:
     void on_pushButton_bearbeiten_clicked();    
     void on_pushButton_hoch_clicked();
     void on_pushButton_runter_clicked();
+    void on_pushButton_duplizieren_clicked();
 
 signals:
     void sendData_Bohrer(text_zeilenweise wkz);

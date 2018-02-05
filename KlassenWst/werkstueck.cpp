@@ -692,6 +692,7 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
 
             tmp.set_x(y);
             tmp.set_y(tmp_l - x);
+            zeile_neu = tmp.get_text();
         }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
         {
             fraesergerade tmp(zeile.get_text());
@@ -704,6 +705,7 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
             tmp.set_xe(ye);
             tmp.set_ys(tmp_l - xs);
             tmp.set_ye(tmp_l - xe);
+            zeile_neu = tmp.get_text();
         }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen tmp(zeile.get_text());
@@ -716,6 +718,7 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
             tmp.set_xe(ye);
             tmp.set_ys(tmp_l - xs);
             tmp.set_ye(tmp_l - xe);
+            zeile_neu = tmp.get_text();
         }
 
         bearb.zeile_ersaetzen(i, zeile_neu);
@@ -725,6 +728,7 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
     tmp = tmp_l;
     tmp_l = tmp_b;
     tmp_b = tmp;
+
 
     return bearb;
 }
@@ -968,8 +972,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         info = warnungen;
     }else
     {
-        double tmp_l = breite;
-        double tmp_b = laenge;
+        double tmp_l = laenge;
+        double tmp_b = breite;
         text_zeilenweise tmp_bearb;
 
         //Die beste Drehrichtung herausfinden:
@@ -1127,20 +1131,20 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         }
 
         //Stufe 3:
-        //Teile bevorzugen, bei bei denen gilt: B > L:
-        if(b_0 > l_0)
+        //Teile bevorzugen, bei bei denen gilt: L > B:
+        if(l_0 > b_0)
         {
             bewertung_0 += 2;
         }
-        if(b_90 > l_90)
+        if(l_90 > b_90)
         {
             bewertung_90 += 2;
         }
-        if(b_180 > l_180)
+        if(l_180 > b_180)
         {
             bewertung_180 += 2;
         }
-        if(b_270 > l_270)
+        if(l_270 > b_270)
         {
             bewertung_270 += 2;
         }
@@ -1152,9 +1156,9 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
            bewertung_0 >= bewertung_270 )
         {
             //0 ist super:
-            double tmp_l = breite;
-            double tmp_b = laenge;
-            text_zeilenweise tmp_bearb;
+            double tmp_l = laenge;
+            double tmp_b = breite;
+            text_zeilenweise tmp_bearb = bearbeitungen;
             msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info = warnungen;
@@ -1164,9 +1168,9 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                  bewertung_90 >= bewertung_270 )
         {
             //90 ist super:
-            double tmp_l = breite;
-            double tmp_b = laenge;
-            text_zeilenweise tmp_bearb;
+            double tmp_l = laenge;
+            double tmp_b = breite;
+            text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1177,9 +1181,9 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                  bewertung_180 >= bewertung_270 )
         {
             //180 ist super:
-            double tmp_l = breite;
-            double tmp_b = laenge;
-            text_zeilenweise tmp_bearb;
+            double tmp_l = laenge;
+            double tmp_b = breite;
+            text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
@@ -1191,9 +1195,9 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                  bewertung_270 >= bewertung_180 )
         {
             //270 ist super:
-            double tmp_l = breite;
-            double tmp_b = laenge;
-            text_zeilenweise tmp_bearb;
+            double tmp_l = laenge;
+            double tmp_b = breite;
+            text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1203,9 +1207,9 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         }else
         {
             //wir nehmen 0:
-            double tmp_l = breite;
-            double tmp_b = laenge;
-            text_zeilenweise tmp_bearb;
+            double tmp_l = laenge;
+            double tmp_b = breite;
+            text_zeilenweise tmp_bearb = bearbeitungen;
             msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info = warnungen;
@@ -4141,6 +4145,12 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
      werkzeugmagazin wkzmag(wkzmagazin);
+     double schwellenwert_ay = 230;
+     bool ay = false;
+     if(tmp_b < schwellenwert_ay)
+     {
+         ay = true;
+     }
 
      int min_kta_dm_ausraeumen_false = 200; //Durchmesser ab dem Kreistaschen nicht ausgeräumt werden
 
@@ -4155,7 +4165,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     msg += "0";
     msg += "\n";
     msg += "AYV=";                  //Y-Veratz
-    if(tmp_b < 230)
+    if(ay == true)
     {
         msg += "210";
     }else
@@ -4201,11 +4211,11 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     msg += "\n";
     msg += "\n";
     //---------------------------------------ggf. Y-Versatz kennlich machen:
-    if(tmp_b < 230)
+    if(ay == true)
     {
-        kommentar_fmc("--------------------");
-        kommentar_fmc("ay 210");
-        kommentar_fmc("--------------------");
+        msg += kommentar_fmc("--------------------");
+        msg += kommentar_fmc("ay 210");
+        msg += kommentar_fmc("--------------------");
     }
     //---------------------------------------Bearbeitungen Oberseite und Hirnseiten:
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
@@ -4531,6 +4541,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "AFB=";
                     msg += bo.get_afb();
                     msg += "\n";
+                    msg += "WKZAKTUELL=1\n";
                     msg += "\n";
                 }else
                 {
@@ -4810,6 +4821,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "AFB=";
                     msg += fa.get_afb();
                     msg += "\n";
+                    msg += "WKZAKTUELL=1\n";
                     msg += "\n";
                     //--------------------------------------------
                     //Fräsbahnen:
@@ -5132,6 +5144,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "AFB=";
                         msg += bo.get_afb();
                         msg += "\n";
+                        msg += "WKZAKTUELL=1\n";
                         msg += "\n";
                     }else
                     {
@@ -5432,6 +5445,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "AFB=";
                         msg += fa.get_afb();
                         msg += "\n";
+                        msg += "WKZAKTUELL=1\n";
                         msg += "\n";
                         //--------------------------------------------
                         //Fräsbahnen:
