@@ -972,8 +972,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         info = warnungen;
     }else
     {
-        double tmp_l = breite;
-        double tmp_b = laenge;
+        double tmp_l = laenge;
+        double tmp_b = breite;
         text_zeilenweise tmp_bearb;
 
         //Die beste Drehrichtung herausfinden:
@@ -1131,20 +1131,20 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         }
 
         //Stufe 3:
-        //Teile bevorzugen, bei bei denen gilt: B > L:
-        if(b_0 > l_0)
+        //Teile bevorzugen, bei bei denen gilt: L > B:
+        if(l_0 > b_0)
         {
             bewertung_0 += 2;
         }
-        if(b_90 > l_90)
+        if(l_90 > b_90)
         {
             bewertung_90 += 2;
         }
-        if(b_180 > l_180)
+        if(l_180 > b_180)
         {
             bewertung_180 += 2;
         }
-        if(b_270 > l_270)
+        if(l_270 > b_270)
         {
             bewertung_270 += 2;
         }
