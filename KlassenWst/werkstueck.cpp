@@ -4778,175 +4778,179 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     radkor = "2";
                 }
 
-                msg += kommentar_fmc("--------------------");
-
-                double backup_i = i;
-                while(1)//abbruch durch breake
+                if(fa.get_bezug() == WST_BEZUG_OBSEI)
                 {
-                    i = backup_i;
-                    double pos_z = get_dicke()-zustelltiefe;
-                    //--------------------------------------------
-                    msg += FMC_FKON;
-                    msg += "\n";
-                    msg += "WKZID=";            //Werkzeugnummer
-                    msg += tnummer;
-                    msg += "\n";
-                    msg += FMC_FKON_X;
-                    msg += "=";
-                    msg += fa.get_x_qstring();
-                    msg += "\n";
-                    msg += FMC_FKON_Y;
-                    msg += "=";
-                    msg += fa.get_y_qstring();
-                    msg += "\n";
-                    msg += FMC_FKON_Z;
-                    msg += "=";
-                    msg += double_to_qstring(pos_z);
-                    msg += "\n";
-                    msg += "EBG=0\n";       //Eckenrunden global
-                    msg += "KD=0\n";        //Kantendicke
-                    msg += FMC_FKON_KOR;    //Fräsbaohnkorrektur
-                    msg += "=";
-                    msg += radkor;
-                    msg += "\n";
-                    msg += "TYPAN=1\n";     //Anfahrtyp
-                    msg += "TYPAB=1\n";     //Abfahrtyp
-                    msg += "TYPEIN=1\n";    //Eintauchtp
-                    msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                    msg += "LGEAB=2*WKZR\n";    //Abfahrwert
-                    msg += "FAN=AUTO\n";    //Anfahrvorschub
-                    msg += "F=AUTO\n";      //Vorschub
-                    //msg += "N=AUTO\n";      //Drehzahl
-                    msg += "EVS=0.05\n";    //Ecken-Verschleifen
-                    msg += "AFB=";
-                    msg += fa.get_afb();
-                    msg += "\n";
-                    msg += "WKZAKTUELL=1\n";
-                    msg += "\n";
-                    //--------------------------------------------
-                    //Fräsbahnen:
-                    while(i+1<=bearb.zeilenanzahl())
+                    msg += kommentar_fmc("--------------------");
+
+                    double backup_i = i;
+                    while(1)//abbruch durch breake
                     {
-                        zeile.set_text(bearb.zeile(i+1));
-
-                        if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+                        i = backup_i;
+                        double pos_z = get_dicke()-zustelltiefe;
+                        //--------------------------------------------
+                        msg += FMC_FKON;
+                        msg += "\n";
+                        msg += "WKZID=";            //Werkzeugnummer
+                        msg += tnummer;
+                        msg += "\n";
+                        msg += FMC_FKON_X;
+                        msg += "=";
+                        msg += fa.get_x_qstring();
+                        msg += "\n";
+                        msg += FMC_FKON_Y;
+                        msg += "=";
+                        msg += fa.get_y_qstring();
+                        msg += "\n";
+                        msg += FMC_FKON_Z;
+                        msg += "=";
+                        msg += double_to_qstring(pos_z);
+                        msg += "\n";
+                        msg += "EBG=0\n";       //Eckenrunden global
+                        msg += "KD=0\n";        //Kantendicke
+                        msg += FMC_FKON_KOR;    //Fräsbaohnkorrektur
+                        msg += "=";
+                        msg += radkor;
+                        msg += "\n";
+                        msg += "TYPAN=1\n";     //Anfahrtyp
+                        msg += "TYPAB=1\n";     //Abfahrtyp
+                        msg += "TYPEIN=1\n";    //Eintauchtp
+                        msg += "LGEAN=2*WKZR\n";    //Anfahrwert
+                        msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                        msg += "FAN=AUTO\n";    //Anfahrvorschub
+                        msg += "F=AUTO\n";      //Vorschub
+                        //msg += "N=AUTO\n";      //Drehzahl
+                        msg += "EVS=0.05\n";    //Ecken-Verschleifen
+                        msg += "AFB=";
+                        msg += fa.get_afb();
+                        msg += "\n";
+                        msg += "WKZAKTUELL=1\n";
+                        msg += "\n";
+                        //--------------------------------------------
+                        //Fräsbahnen:
+                        while(i+1<=bearb.zeilenanzahl())
                         {
-                            i++;
-                            zeile.set_text(bearb.zeile(i));
-                            //Gerade fräsen:
-                            fraesergerade fg(zeile.get_text());
-                            QString tiefe_fg = 0;
-                            if(fg.get_ze() == fa.get_tiefe())
+                            zeile.set_text(bearb.zeile(i+1));
+
+                            if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
                             {
-                                tiefe_fg = "Z"; //Tiefe beibehalten
-                                                //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                //fmc-Programme eingelesen wurden, bei denen
-                                                //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                //nicht den selben Z-Wert haben!!!
-                                                //Dieser Fall wird nicht erwartet....
+                                i++;
+                                zeile.set_text(bearb.zeile(i));
+                                //Gerade fräsen:
+                                fraesergerade fg(zeile.get_text());
+                                QString tiefe_fg = 0;
+                                if(fg.get_ze() == fa.get_tiefe())
+                                {
+                                    tiefe_fg = "Z"; //Tiefe beibehalten
+                                                    //Führt zu falschen Ergebissen, wenn manuell geschriebene
+                                                    //fmc-Programme eingelesen wurden, bei denen
+                                                    //die FKONs zwischen dem Fräseraufruf und dieser Gerade
+                                                    //nicht den selben Z-Wert haben!!!
+                                                    //Dieser Fall wird nicht erwartet....
+                                }else
+                                {
+                                    tiefe_fg = double_to_qstring(  get_dicke()-fg.get_ze()  );
+                                }
+
+                                msg += FMC_FKONG;
+                                msg += "\n";
+                                msg += FMC_FKONG_XE;
+                                msg += "=";
+                                msg += fg.get_xe_qstring();
+                                msg += "\n";
+                                msg += FMC_FKONG_YE;
+                                msg += "=";
+                                msg += fg.get_ye_qstring();
+                                msg += "\n";
+                                msg += FMC_FKONG_ZE;
+                                msg += "=";
+                                msg += tiefe_fg;
+                                msg += "\n";
+                                msg += "\n";
+                            }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+                            {
+                                i++;
+                                zeile.set_text(bearb.zeile(i));
+                                //Bogen fräsen:
+                                fraeserbogen fb(zeile.get_text());
+                                QString tiefe_fb = 0;
+                                if(fb.get_ze() == fa.get_tiefe())
+                                {
+                                    tiefe_fb = "Z"; //Tiefe beibehalten
+                                                    //Führt zu falschen Ergebissen, wenn manuell geschriebene
+                                                    //fmc-Programme eingelesen wurden, bei denen
+                                                    //die FKONs zwischen dem Fräseraufruf und dieser Gerade
+                                                    //nicht den selben Z-Wert haben!!!
+                                                    //Dieser Fall wird nicht erwartet....
+                                }else
+                                {
+                                    tiefe_fb = double_to_qstring(  get_dicke()-fb.get_ze()  );
+                                }
+                                QString dlg_name;
+                                if(fb.get_uzs() == true)
+                                {
+                                    dlg_name = FMC_FKONBOGUZS;
+                                }else
+                                {
+                                    dlg_name = FMC_FKONBOGGUZS;
+                                }
+
+                                msg += dlg_name;
+                                msg += "\n";
+                                msg += FMC_FKONBOG_RAD;
+                                msg += "=";
+                                msg += fb.get_rad_qstring();
+                                msg += "\n";
+                                msg += FMC_FKONBOG_XE;
+                                msg += "=";
+                                msg += fb.get_xe_qstring();
+                                msg += "\n";
+                                msg += FMC_FKONBOG_YE;
+                                msg += "=";
+                                msg += fb.get_ye_qstring();
+                                msg += "\n";
+                                msg += FMC_FKONBOG_ZE;
+                                msg += "=";
+                                msg += tiefe_fb;
+                                msg += "\n";
+                                msg += "\n";
                             }else
                             {
-                                tiefe_fg = double_to_qstring(  get_dicke()-fg.get_ze()  );
+                                break;
                             }
-
-                            msg += FMC_FKONG;
-                            msg += "\n";
-                            msg += FMC_FKONG_XE;
-                            msg += "=";
-                            msg += fg.get_xe_qstring();
-                            msg += "\n";
-                            msg += FMC_FKONG_YE;
-                            msg += "=";
-                            msg += fg.get_ye_qstring();
-                            msg += "\n";
-                            msg += FMC_FKONG_ZE;
-                            msg += "=";
-                            msg += tiefe_fg;
-                            msg += "\n";
-                            msg += "\n";
-                        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+                        }
+                        //--------------------------------------------
+                        //Abfahren Fräser:
+                        msg += "[KO'AB_N2]";
+                        msg += "\n";
+                        msg += "AFB=1";
+                        msg += "\n";
+                        msg += "AGGD=AGGDREHBAR";
+                        msg += "\n";
+                        msg += "AGGFWKL=AGGFWKL";
+                        msg += "\n";
+                        msg += "AGGO=AGGOFFSET";
+                        msg += "\n";
+                        msg += "\n";
+                        //--------------------------------------------
+                        if(zustelltiefe == gesamttiefe)
                         {
-                            i++;
-                            zeile.set_text(bearb.zeile(i));
-                            //Bogen fräsen:
-                            fraeserbogen fb(zeile.get_text());
-                            QString tiefe_fb = 0;
-                            if(fb.get_ze() == fa.get_tiefe())
-                            {
-                                tiefe_fb = "Z"; //Tiefe beibehalten
-                                                //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                //fmc-Programme eingelesen wurden, bei denen
-                                                //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                //nicht den selben Z-Wert haben!!!
-                                                //Dieser Fall wird nicht erwartet....
-                            }else
-                            {
-                                tiefe_fb = double_to_qstring(  get_dicke()-fb.get_ze()  );
-                            }
-                            QString dlg_name;
-                            if(fb.get_uzs() == true)
-                            {
-                                dlg_name = FMC_FKONBOGUZS;
-                            }else
-                            {
-                                dlg_name = FMC_FKONBOGGUZS;
-                            }
-
-                            msg += dlg_name;
-                            msg += "\n";
-                            msg += FMC_FKONBOG_RAD;
-                            msg += "=";
-                            msg += fb.get_rad_qstring();
-                            msg += "\n";
-                            msg += FMC_FKONBOG_XE;
-                            msg += "=";
-                            msg += fb.get_xe_qstring();
-                            msg += "\n";
-                            msg += FMC_FKONBOG_YE;
-                            msg += "=";
-                            msg += fb.get_ye_qstring();
-                            msg += "\n";
-                            msg += FMC_FKONBOG_ZE;
-                            msg += "=";
-                            msg += tiefe_fb;
-                            msg += "\n";
-                            msg += "\n";
+                            break; //letzter Schleifendurchlauf
+                        }
+                        if(zustelltiefe != gesamttiefe)
+                        {
+                            msg += kommentar_fmc("---");
+                        }
+                        if(zustelltiefe+zustellmass  <  gesamttiefe)
+                        {
+                            zustelltiefe = zustelltiefe + zustellmass;
                         }else
                         {
-                            break;
+                            zustelltiefe = gesamttiefe;
                         }
                     }
-                    //--------------------------------------------
-                    //Abfahren Fräser:
-                    msg += "[KO'AB_N2]";
-                    msg += "\n";
-                    msg += "AFB=1";
-                    msg += "\n";
-                    msg += "AGGD=AGGDREHBAR";
-                    msg += "\n";
-                    msg += "AGGFWKL=AGGFWKL";
-                    msg += "\n";
-                    msg += "AGGO=AGGOFFSET";
-                    msg += "\n";
-                    msg += "\n";
-                    //--------------------------------------------
-                    if(zustelltiefe == gesamttiefe)
-                    {
-                        break; //letzter Schleifendurchlauf
-                    }
-                    if(zustelltiefe != gesamttiefe)
-                    {
-                        msg += kommentar_fmc("---");
-                    }
-                    if(zustelltiefe+zustellmass  <  gesamttiefe)
-                    {
-                        zustelltiefe = zustelltiefe + zustellmass;
-                    }else
-                    {
-                        zustelltiefe = gesamttiefe;
-                    }
+                    msg += kommentar_fmc("--------------------");
                 }
-                msg += kommentar_fmc("--------------------");
+
             }else
             {
                 //Mit Fehlermeldung abbrechen:
@@ -5402,183 +5406,187 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         radkor = "2";
                     }
 
-                    msg += kommentar_fmc("--------------------");
-
-                    double backup_i = i;
-                    while(1)//abbruch durch breake
+                    if(fa.get_bezug() == WST_BEZUG_UNSEI)
                     {
-                        i = backup_i;
-                        double pos_z = get_dicke()-zustelltiefe;
-                        //--------------------------------------------
-                        msg += FMC_FKON;
-                        msg += "\n";
-                        msg += "WKZID=";            //Werkzeugnummer
-                        msg += tnummer;
-                        msg += "\n";
-                        msg += FMC_FKON_X;
-                        msg += "=";
-                        msg += fa.get_x_qstring();
-                        msg += "\n";
-                        msg += FMC_FKON_Y;
-                        msg += "=";
-                        msg += fa.get_y_qstring();
-                        msg += "\n";
-                        msg += FMC_FKON_Z;
-                        msg += "=";
-                        msg += double_to_qstring(pos_z);
-                        msg += "\n";
-                        msg += "EBG=0\n";       //Eckenrunden global
-                        msg += "KD=0\n";        //Kantendicke
-                        msg += FMC_FKON_KOR;    //Fräsbaohnkorrektur
-                        msg += "=";
-                        msg += radkor;
-                        msg += "\n";
-                        msg += "TYPAN=1\n";     //Anfahrtyp
-                        msg += "TYPAB=1\n";     //Abfahrtyp
-                        msg += "TYPEIN=1\n";    //Eintauchtp
-                        msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                        msg += "LGEAB=2*WKZR\n";    //Abfahrwert
-                        msg += "FAN=AUTO\n";    //Anfahrvorschub
-                        msg += "F=AUTO\n";      //Vorschub
-                        //msg += "N=AUTO\n";      //Drehzahl
-                        msg += "EVS=0.05\n";    //Ecken-Verschleifen
-                        msg += "AFB=";
-                        msg += fa.get_afb();
-                        msg += "\n";
-                        msg += "WKZAKTUELL=1\n";
-                        msg += "\n";
-                        //--------------------------------------------
-                        //Fräsbahnen:
-                        while(i+1<=bearb.zeilenanzahl())
+                        msg += kommentar_fmc("--------------------");
+
+                        double backup_i = i;
+                        while(1)//abbruch durch breake
                         {
-                            zeile.set_text(bearb.zeile(i+1));
-
-                            if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+                            i = backup_i;
+                            double pos_z = get_dicke()-zustelltiefe;
+                            //--------------------------------------------
+                            msg += FMC_FKON;
+                            msg += "\n";
+                            msg += "WKZID=";            //Werkzeugnummer
+                            msg += tnummer;
+                            msg += "\n";
+                            msg += FMC_FKON_X;
+                            msg += "=";
+                            msg += fa.get_x_qstring();
+                            msg += "\n";
+                            msg += FMC_FKON_Y;
+                            msg += "=";
+                            msg += fa.get_y_qstring();
+                            msg += "\n";
+                            msg += FMC_FKON_Z;
+                            msg += "=";
+                            msg += double_to_qstring(pos_z);
+                            msg += "\n";
+                            msg += "EBG=0\n";       //Eckenrunden global
+                            msg += "KD=0\n";        //Kantendicke
+                            msg += FMC_FKON_KOR;    //Fräsbaohnkorrektur
+                            msg += "=";
+                            msg += radkor;
+                            msg += "\n";
+                            msg += "TYPAN=1\n";     //Anfahrtyp
+                            msg += "TYPAB=1\n";     //Abfahrtyp
+                            msg += "TYPEIN=1\n";    //Eintauchtp
+                            msg += "LGEAN=2*WKZR\n";    //Anfahrwert
+                            msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                            msg += "FAN=AUTO\n";    //Anfahrvorschub
+                            msg += "F=AUTO\n";      //Vorschub
+                            //msg += "N=AUTO\n";      //Drehzahl
+                            msg += "EVS=0.05\n";    //Ecken-Verschleifen
+                            msg += "AFB=";
+                            msg += fa.get_afb();
+                            msg += "\n";
+                            msg += "WKZAKTUELL=1\n";
+                            msg += "\n";
+                            //--------------------------------------------
+                            //Fräsbahnen:
+                            while(i+1<=bearb.zeilenanzahl())
                             {
-                                i++;
-                                zeile.set_text(bearb.zeile(i));
-                                //Gerade fräsen:
-                                fraesergerade fg(zeile.get_text());
-                                QString tiefe_fg = 0;
-                                if(fg.get_ze() == fa.get_tiefe())
+                                zeile.set_text(bearb.zeile(i+1));
+
+                                if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
                                 {
-                                    tiefe_fg = "Z"; //Tiefe beibehalten
-                                                    //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                    //fmc-Programme eingelesen wurden, bei denen
-                                                    //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                    //nicht den selben Z-Wert haben!!!
-                                                    //Dieser Fall wird nicht erwartet....
+                                    i++;
+                                    zeile.set_text(bearb.zeile(i));
+                                    //Gerade fräsen:
+                                    fraesergerade fg(zeile.get_text());
+                                    QString tiefe_fg = 0;
+                                    if(fg.get_ze() == fa.get_tiefe())
+                                    {
+                                        tiefe_fg = "Z"; //Tiefe beibehalten
+                                                        //Führt zu falschen Ergebissen, wenn manuell geschriebene
+                                                        //fmc-Programme eingelesen wurden, bei denen
+                                                        //die FKONs zwischen dem Fräseraufruf und dieser Gerade
+                                                        //nicht den selben Z-Wert haben!!!
+                                                        //Dieser Fall wird nicht erwartet....
+                                    }else
+                                    {
+                                        tiefe_fg = double_to_qstring(  get_dicke()-fg.get_ze()  );
+                                    }
+
+                                    //Beareitung auf die Oberseite drehen:
+                                    fg.set_ys(  tmp_b - fg.get_ys()  );
+                                    fg.set_ye(  tmp_b - fg.get_ye()  );
+
+                                    msg += FMC_FKONG;
+                                    msg += "\n";
+                                    msg += FMC_FKONG_XE;
+                                    msg += "=";
+                                    msg += fg.get_xe_qstring();
+                                    msg += "\n";
+                                    msg += FMC_FKONG_YE;
+                                    msg += "=";
+                                    msg += fg.get_ye_qstring();
+                                    msg += "\n";
+                                    msg += FMC_FKONG_ZE;
+                                    msg += "=";
+                                    msg += tiefe_fg;
+                                    msg += "\n";
+                                    msg += "\n";
+                                }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+                                {
+                                    i++;
+                                    zeile.set_text(bearb.zeile(i));
+                                    //Bogen fräsen:
+                                    fraeserbogen fb(zeile.get_text());
+                                    QString tiefe_fb = 0;
+                                    if(fb.get_ze() == fa.get_tiefe())
+                                    {
+                                        tiefe_fb = "Z"; //Tiefe beibehalten
+                                                        //Führt zu falschen Ergebissen, wenn manuell geschriebene
+                                                        //fmc-Programme eingelesen wurden, bei denen
+                                                        //die FKONs zwischen dem Fräseraufruf und dieser Gerade
+                                                        //nicht den selben Z-Wert haben!!!
+                                                        //Dieser Fall wird nicht erwartet....
+                                    }else
+                                    {
+                                        tiefe_fb = double_to_qstring(  get_dicke()-fb.get_ze()  );
+                                    }
+                                    QString dlg_name;
+                                    if(fb.get_uzs() == true)
+                                    {
+                                        dlg_name = FMC_FKONBOGUZS;
+                                    }else
+                                    {
+                                        dlg_name = FMC_FKONBOGGUZS;
+                                    }
+
+                                    //Beareitung auf die Oberseite drehen:
+                                    fb.set_ys(  tmp_b - fb.get_ys()  );
+                                    fb.set_ye(  tmp_b - fb.get_ye()  );
+
+                                    msg += dlg_name;
+                                    msg += "\n";
+                                    msg += FMC_FKONBOG_RAD;
+                                    msg += "=";
+                                    msg += fb.get_rad_qstring();
+                                    msg += "\n";
+                                    msg += FMC_FKONBOG_XE;
+                                    msg += "=";
+                                    msg += fb.get_xe_qstring();
+                                    msg += "\n";
+                                    msg += FMC_FKONBOG_YE;
+                                    msg += "=";
+                                    msg += fb.get_ye_qstring();
+                                    msg += "\n";
+                                    msg += FMC_FKONBOG_ZE;
+                                    msg += "=";
+                                    msg += tiefe_fb;
+                                    msg += "\n";
+                                    msg += "\n";
                                 }else
                                 {
-                                    tiefe_fg = double_to_qstring(  get_dicke()-fg.get_ze()  );
+                                    break;
                                 }
-
-                                //Beareitung auf die Oberseite drehen:
-                                fg.set_ys(  tmp_b - fg.get_ys()  );
-                                fg.set_ye(  tmp_b - fg.get_ye()  );
-
-                                msg += FMC_FKONG;
-                                msg += "\n";
-                                msg += FMC_FKONG_XE;
-                                msg += "=";
-                                msg += fg.get_xe_qstring();
-                                msg += "\n";
-                                msg += FMC_FKONG_YE;
-                                msg += "=";
-                                msg += fg.get_ye_qstring();
-                                msg += "\n";
-                                msg += FMC_FKONG_ZE;
-                                msg += "=";
-                                msg += tiefe_fg;
-                                msg += "\n";
-                                msg += "\n";
-                            }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+                            }
+                            //--------------------------------------------
+                            //Abfahren Fräser:
+                            msg += "[KO'AB_N2]";
+                            msg += "\n";
+                            msg += "AFB=1";
+                            msg += "\n";
+                            msg += "AGGD=AGGDREHBAR";
+                            msg += "\n";
+                            msg += "AGGFWKL=AGGFWKL";
+                            msg += "\n";
+                            msg += "AGGO=AGGOFFSET";
+                            msg += "\n";
+                            msg += "\n";
+                            //--------------------------------------------
+                            if(zustelltiefe == gesamttiefe)
                             {
-                                i++;
-                                zeile.set_text(bearb.zeile(i));
-                                //Bogen fräsen:
-                                fraeserbogen fb(zeile.get_text());
-                                QString tiefe_fb = 0;
-                                if(fb.get_ze() == fa.get_tiefe())
-                                {
-                                    tiefe_fb = "Z"; //Tiefe beibehalten
-                                                    //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                    //fmc-Programme eingelesen wurden, bei denen
-                                                    //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                    //nicht den selben Z-Wert haben!!!
-                                                    //Dieser Fall wird nicht erwartet....
-                                }else
-                                {
-                                    tiefe_fb = double_to_qstring(  get_dicke()-fb.get_ze()  );
-                                }
-                                QString dlg_name;
-                                if(fb.get_uzs() == true)
-                                {
-                                    dlg_name = FMC_FKONBOGUZS;
-                                }else
-                                {
-                                    dlg_name = FMC_FKONBOGGUZS;
-                                }
-
-                                //Beareitung auf die Oberseite drehen:
-                                fb.set_ys(  tmp_b - fb.get_ys()  );
-                                fb.set_ye(  tmp_b - fb.get_ye()  );
-
-                                msg += dlg_name;
-                                msg += "\n";
-                                msg += FMC_FKONBOG_RAD;
-                                msg += "=";
-                                msg += fb.get_rad_qstring();
-                                msg += "\n";
-                                msg += FMC_FKONBOG_XE;
-                                msg += "=";
-                                msg += fb.get_xe_qstring();
-                                msg += "\n";
-                                msg += FMC_FKONBOG_YE;
-                                msg += "=";
-                                msg += fb.get_ye_qstring();
-                                msg += "\n";
-                                msg += FMC_FKONBOG_ZE;
-                                msg += "=";
-                                msg += tiefe_fb;
-                                msg += "\n";
-                                msg += "\n";
+                                break; //letzter Schleifendurchlauf
+                            }
+                            if(zustelltiefe != gesamttiefe)
+                            {
+                                msg += kommentar_fmc("---");
+                            }
+                            if(zustelltiefe+zustellmass  <  gesamttiefe)
+                            {
+                                zustelltiefe = zustelltiefe + zustellmass;
                             }else
                             {
-                                break;
+                                zustelltiefe = gesamttiefe;
                             }
                         }
-                        //--------------------------------------------
-                        //Abfahren Fräser:
-                        msg += "[KO'AB_N2]";
-                        msg += "\n";
-                        msg += "AFB=1";
-                        msg += "\n";
-                        msg += "AGGD=AGGDREHBAR";
-                        msg += "\n";
-                        msg += "AGGFWKL=AGGFWKL";
-                        msg += "\n";
-                        msg += "AGGO=AGGOFFSET";
-                        msg += "\n";
-                        msg += "\n";
-                        //--------------------------------------------
-                        if(zustelltiefe == gesamttiefe)
-                        {
-                            break; //letzter Schleifendurchlauf
-                        }
-                        if(zustelltiefe != gesamttiefe)
-                        {
-                            msg += kommentar_fmc("---");
-                        }
-                        if(zustelltiefe+zustellmass  <  gesamttiefe)
-                        {
-                            zustelltiefe = zustelltiefe + zustellmass;
-                        }else
-                        {
-                            zustelltiefe = gesamttiefe;
-                        }
+                        msg += kommentar_fmc("--------------------");
                     }
-                    msg += kommentar_fmc("--------------------");
+
                 }else
                 {
                     //Mit Fehlermeldung abbrechen:
