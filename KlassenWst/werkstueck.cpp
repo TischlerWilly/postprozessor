@@ -4497,52 +4497,57 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     {
                         ausraeumen = false;
                     }
-                    msg += FMC_KTA;
-                    msg += "\n";
-                    msg += "WKZID=";           //WKZ-Nummer
-                    msg += tnummer;
-                    msg += "\n";
-                    msg += "MPX=";
-                    msg += bo.get_x_qstring();
-                    msg += "\n";
-                    msg += "MPY=";
-                    msg += bo.get_y_qstring();
-                    msg += "\n";
-                    msg += "DM=";
-                    msg += bo.get_dm_qstring();
-                    msg += "\n";
-                    msg += "TI=";
-                    msg += tiefe_qstring;
-                    msg += "\n";
-                    msg += "LGEZU=";            //Zustellmaß
-                    msg += double_to_qstring(zustellmas);
-                    msg += "\n";
-                    msg += "GEGENL=1\n";        //Gegenlauf
-                    msg += "RAEUMEN=";          //Ausräumen
-                    if(ausraeumen == true)
+
+                    if(bo.get_bezug() == WST_BEZUG_OBSEI)
                     {
-                        msg += "1";
-                    }else
-                    {
-                        msg += "0";
+                        msg += FMC_KTA;
+                        msg += "\n";
+                        msg += "WKZID=";           //WKZ-Nummer
+                        msg += tnummer;
+                        msg += "\n";
+                        msg += "MPX=";
+                        msg += bo.get_x_qstring();
+                        msg += "\n";
+                        msg += "MPY=";
+                        msg += bo.get_y_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bo.get_dm_qstring();
+                        msg += "\n";
+                        msg += "TI=";
+                        msg += tiefe_qstring;
+                        msg += "\n";
+                        msg += "LGEZU=";            //Zustellmaß
+                        msg += double_to_qstring(zustellmas);
+                        msg += "\n";
+                        msg += "GEGENL=1\n";        //Gegenlauf
+                        msg += "RAEUMEN=";          //Ausräumen
+                        if(ausraeumen == true)
+                        {
+                            msg += "1";
+                        }else
+                        {
+                            msg += "0";
+                        }
+                        msg += "\n";
+
+                        //Eintauchvorschub gem. Voreinstellung IMAWOP
+                        //Vorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
+
+                        msg += "BEZB=";
+                        msg += "Kreistasche DM";
+                        msg += bo.get_dm_qstring();
+                        msg += " T";
+                        msg += tiefe_qstring;
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bo.get_afb();
+                        msg += "\n";
+                        msg += "WKZAKTUELL=1\n";
+                        msg += "\n";
                     }
-                    msg += "\n";
 
-                    //Eintauchvorschub gem. Voreinstellung IMAWOP
-                    //Vorschub gem. Voreinstellung IMAWOP
-                    //Drehzahl gem. Voreinstellung IMAWOP
-
-                    msg += "BEZB=";
-                    msg += "Kreistasche DM";
-                    msg += bo.get_dm_qstring();
-                    msg += " T";
-                    msg += tiefe_qstring;
-                    msg += "\n";
-                    msg += "AFB=";
-                    msg += bo.get_afb();
-                    msg += "\n";
-                    msg += "WKZAKTUELL=1\n";
-                    msg += "\n";
                 }else
                 {
                     //Mit Fehlermeldung abbrechen:
@@ -5106,52 +5111,57 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         {
                             ausraeumen = false;
                         }
-                        msg += FMC_KTA;
-                        msg += "\n";
-                        msg += "WKZID=";           //WKZ-Nummer
-                        msg += tnummer;
-                        msg += "\n";
-                        msg += "MPX=";
-                        msg += bo.get_x_qstring();
-                        msg += "\n";
-                        msg += "MPY=";
-                        msg += bo.get_y_qstring();
-                        msg += "\n";
-                        msg += "DM=";
-                        msg += bo.get_dm_qstring();
-                        msg += "\n";
-                        msg += "TI=";
-                        msg += tiefe_qstring;
-                        msg += "\n";
-                        msg += "LGEZU=";            //Zustellmaß
-                        msg += double_to_qstring(zustellmas);
-                        msg += "\n";
-                        msg += "GEGENL=1\n";        //Gegenlauf
-                        msg += "RAEUMEN=";          //Ausräumen
-                        if(ausraeumen == true)
+
+                        if(bo.get_bezug() == WST_BEZUG_UNSEI)
                         {
-                            msg += "1";
-                        }else
-                        {
-                            msg += "0";
+                            msg += FMC_KTA;
+                            msg += "\n";
+                            msg += "WKZID=";           //WKZ-Nummer
+                            msg += tnummer;
+                            msg += "\n";
+                            msg += "MPX=";
+                            msg += bo.get_x_qstring();
+                            msg += "\n";
+                            msg += "MPY=";
+                            msg += bo.get_y_qstring();
+                            msg += "\n";
+                            msg += "DM=";
+                            msg += bo.get_dm_qstring();
+                            msg += "\n";
+                            msg += "TI=";
+                            msg += tiefe_qstring;
+                            msg += "\n";
+                            msg += "LGEZU=";            //Zustellmaß
+                            msg += double_to_qstring(zustellmas);
+                            msg += "\n";
+                            msg += "GEGENL=1\n";        //Gegenlauf
+                            msg += "RAEUMEN=";          //Ausräumen
+                            if(ausraeumen == true)
+                            {
+                                msg += "1";
+                            }else
+                            {
+                                msg += "0";
+                            }
+                            msg += "\n";
+
+                            //Eintauchvorschub gem. Voreinstellung IMAWOP
+                            //Vorschub gem. Voreinstellung IMAWOP
+                            //Drehzahl gem. Voreinstellung IMAWOP
+
+                            msg += "BEZB=";
+                            msg += "Kreistasche DM";
+                            msg += bo.get_dm_qstring();
+                            msg += " T";
+                            msg += tiefe_qstring;
+                            msg += "\n";
+                            msg += "AFB=";
+                            msg += bo.get_afb();
+                            msg += "\n";
+                            msg += "WKZAKTUELL=1\n";
+                            msg += "\n";
                         }
-                        msg += "\n";
 
-                        //Eintauchvorschub gem. Voreinstellung IMAWOP
-                        //Vorschub gem. Voreinstellung IMAWOP
-                        //Drehzahl gem. Voreinstellung IMAWOP
-
-                        msg += "BEZB=";
-                        msg += "Kreistasche DM";
-                        msg += bo.get_dm_qstring();
-                        msg += " T";
-                        msg += tiefe_qstring;
-                        msg += "\n";
-                        msg += "AFB=";
-                        msg += bo.get_afb();
-                        msg += "\n";
-                        msg += "WKZAKTUELL=1\n";
-                        msg += "\n";
                     }else
                     {
                         //Mit Fehlermeldung abbrechen:
