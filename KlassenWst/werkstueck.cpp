@@ -4976,6 +4976,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     if(unterseite_hat_bearb == true)
     {
         msg += kommentar_fmc("--------------------");
+        msg += kommentar_fmc("-----------------------------------------");
         msg += FMC_HALT;
         msg += "\n";
         msg += "APX=L+700\n";
@@ -4984,6 +4985,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
         msg += "AFB=1\n";
         msg += "\n";
         msg += kommentar_fmc("drehen um b/2");
+        msg += kommentar_fmc("-----------------------------------------");
         msg += kommentar_fmc("--------------------");
 
         for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
