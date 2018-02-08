@@ -138,7 +138,11 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
             if(tnummer.isEmpty())//Bohren nicht möglich weil kein passendes Werkzeug
             {
-                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                }
                 if(!tnummer.isEmpty())//Kreistasche kann gefräst werden
                 {
                     double xmin = bo.get_x() - bo.get_dm()/2;
@@ -150,10 +154,11 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                         msg += double_to_qstring(xmin);
                         msg += "mm\n";
                     }
+
                     //Nutzlänge Fräser und Tati prüfen:
                     if(bo.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
                     {
-                        msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                        msg += "  !! Nutzlaenge < Fraestiefe    bei Kreistasche!\n";
                     }
                 }else//Es ist auch kein passender Fräser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
@@ -295,7 +300,7 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                     //Nutzlänge Fräser und Tati prüfen:
                     if(bo.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
                     {
-                        msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                        msg += "  !! Nutzlaenge < Fraestiefe    bei Kreistasche!\n";
                     }
 
                 }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
