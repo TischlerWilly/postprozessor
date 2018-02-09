@@ -4688,62 +4688,62 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 }
 
                 double radius = rt.get_rad();
-                //double radius_wkz = wkzmag.get_dm(tnummer).toDouble()/2;
-                //if(radius < radius_wkz)
-                //{
-                    //radius = radius_wkz;
-                //}
-                msg += FMC_RTA;
-                msg += "\n";
-                msg += "WKZID=";            //Werkzeugnummer
-                msg += tnummer;
-                msg += "\n";
-                msg += "MPX=";
-                msg += rt.get_x_qstring();
-                msg += "\n";
-                msg += "MPY=";
-                msg += rt.get_y_qstring();
-                msg += "\n";
-                msg += "LGET1=";
-                msg += rt.get_laenge_qstring();
-                msg += "\n";
-                msg += "LGET2=";
-                msg += rt.get_breite_qstring();
-                msg += "\n";
-                msg += "TI=";                   //Tiefe
-                msg += tiefe_qstring;
-                msg += "\n";
-                msg += "R=";
-                msg += double_to_qstring(radius);
-                msg += "\n";
-                msg += "LGEZU=";                //Zustellmaß
-                msg += double_to_qstring(zustellmas);
-                msg += "\n";
-                msg += "GEGENL=";               //Gegenslauf
-                msg += "1";
-                msg += "\n";
-                msg += "WKL=";
-                msg += rt.get_drewi_qstring();
-                msg += "\n";
-                msg += "RAEUMEN=";              //Ausräumen
-                msg += rt.get_ausraeumen_qstring();
-                msg += "\n";
-                msg += "WKZAKTUELL=1\n";
 
-                //Eintauchvorschub gem. Voreinstellung IMAWOP
-                //Vorschub gem. Voreinstellung IMAWOP
-                //Drehzahl gem. Voreinstellung IMAWOP
+                if(rt.get_bezug() == WST_BEZUG_OBSEI)
+                {
+                    msg += FMC_RTA;
+                    msg += "\n";
+                    msg += "WKZID=";            //Werkzeugnummer
+                    msg += tnummer;
+                    msg += "\n";
+                    msg += "MPX=";
+                    msg += rt.get_x_qstring();
+                    msg += "\n";
+                    msg += "MPY=";
+                    msg += rt.get_y_qstring();
+                    msg += "\n";
+                    msg += "LGET1=";
+                    msg += rt.get_laenge_qstring();
+                    msg += "\n";
+                    msg += "LGET2=";
+                    msg += rt.get_breite_qstring();
+                    msg += "\n";
+                    msg += "TI=";                   //Tiefe
+                    msg += tiefe_qstring;
+                    msg += "\n";
+                    msg += "R=";
+                    msg += double_to_qstring(radius);
+                    msg += "\n";
+                    msg += "LGEZU=";                //Zustellmaß
+                    msg += double_to_qstring(zustellmas);
+                    msg += "\n";
+                    msg += "GEGENL=";               //Gegenslauf
+                    msg += "1";
+                    msg += "\n";
+                    msg += "WKL=";
+                    msg += rt.get_drewi_qstring();
+                    msg += "\n";
+                    msg += "RAEUMEN=";              //Ausräumen
+                    msg += rt.get_ausraeumen_qstring();
+                    msg += "\n";
+                    msg += "WKZAKTUELL=1\n";
 
-                msg += "BEZB=";
-                msg += "Rechtecktasche L";
-                msg += rt.get_laenge_qstring();
-                msg += " B";
-                msg += rt.get_breite_qstring();
-                msg += "\n";
-                msg += "AFB=";
-                msg += rt.get_afb();
-                msg += "\n";
-                msg += "\n";
+                    //Eintauchvorschub gem. Voreinstellung IMAWOP
+                    //Vorschub gem. Voreinstellung IMAWOP
+                    //Drehzahl gem. Voreinstellung IMAWOP
+
+                    msg += "BEZB=";
+                    msg += "Rechtecktasche L";
+                    msg += rt.get_laenge_qstring();
+                    msg += " B";
+                    msg += rt.get_breite_qstring();
+                    msg += "\n";
+                    msg += "AFB=";
+                    msg += rt.get_afb();
+                    msg += "\n";
+                    msg += "\n";
+                }
+
             }else
             {
                 //Mit Fehlermeldung abbrechen:
@@ -5320,62 +5320,62 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     }
 
                     double radius = rt.get_rad();
-                    //double radius_wkz = wkzmag.get_dm(tnummer).toDouble()/2;
-                    //if(radius < radius_wkz)
-                    //{
-                        //radius = radius_wkz;
-                    //}
-                    msg += FMC_RTA;
-                    msg += "\n";
-                    msg += "WKZID=";            //Werkzeugnummer
-                    msg += tnummer;
-                    msg += "\n";
-                    msg += "MPX=";
-                    msg += rt.get_x_qstring();
-                    msg += "\n";
-                    msg += "MPY=";
-                    msg += rt.get_y_qstring();
-                    msg += "\n";
-                    msg += "LGET1=";
-                    msg += rt.get_laenge_qstring();
-                    msg += "\n";
-                    msg += "LGET2=";
-                    msg += rt.get_breite_qstring();
-                    msg += "\n";
-                    msg += "TI=";                   //Tiefe
-                    msg += tiefe_qstring;
-                    msg += "\n";
-                    msg += "R=";
-                    msg += double_to_qstring(radius);
-                    msg += "\n";
-                    msg += "LGEZU=";                //Zustellmaß
-                    msg += double_to_qstring(zustellmas);
-                    msg += "\n";
-                    msg += "GEGENL=";               //Gegenslauf
-                    msg += "1";
-                    msg += "\n";
-                    msg += "WKL=";
-                    msg += rt.get_drewi_qstring();
-                    msg += "\n";
-                    msg += "RAEUMEN=";              //Ausräumen
-                    msg += rt.get_ausraeumen_qstring();
-                    msg += "\n";
-                    msg += "WKZAKTUELL=1\n";
 
-                    //Eintauchvorschub gem. Voreinstellung IMAWOP
-                    //Vorschub gem. Voreinstellung IMAWOP
-                    //Drehzahl gem. Voreinstellung IMAWOP
+                    if(rt.get_bezug() == WST_BEZUG_UNSEI)
+                    {
+                        msg += FMC_RTA;
+                        msg += "\n";
+                        msg += "WKZID=";            //Werkzeugnummer
+                        msg += tnummer;
+                        msg += "\n";
+                        msg += "MPX=";
+                        msg += rt.get_x_qstring();
+                        msg += "\n";
+                        msg += "MPY=";
+                        msg += rt.get_y_qstring();
+                        msg += "\n";
+                        msg += "LGET1=";
+                        msg += rt.get_laenge_qstring();
+                        msg += "\n";
+                        msg += "LGET2=";
+                        msg += rt.get_breite_qstring();
+                        msg += "\n";
+                        msg += "TI=";                   //Tiefe
+                        msg += tiefe_qstring;
+                        msg += "\n";
+                        msg += "R=";
+                        msg += double_to_qstring(radius);
+                        msg += "\n";
+                        msg += "LGEZU=";                //Zustellmaß
+                        msg += double_to_qstring(zustellmas);
+                        msg += "\n";
+                        msg += "GEGENL=";               //Gegenslauf
+                        msg += "1";
+                        msg += "\n";
+                        msg += "WKL=";
+                        msg += rt.get_drewi_qstring();
+                        msg += "\n";
+                        msg += "RAEUMEN=";              //Ausräumen
+                        msg += rt.get_ausraeumen_qstring();
+                        msg += "\n";
+                        msg += "WKZAKTUELL=1\n";
 
-                    msg += "BEZB=";
-                    msg += "Rechtecktasche L";
-                    msg += rt.get_laenge_qstring();
-                    msg += " B";
-                    msg += rt.get_breite_qstring();
-                    msg += "\n";
-                    msg += "AFB=";
-                    msg += rt.get_afb();
-                    msg += "\n";
-                    msg += "\n";
+                        //Eintauchvorschub gem. Voreinstellung IMAWOP
+                        //Vorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
+
+                        msg += "BEZB=";
+                        msg += "Rechtecktasche L";
+                        msg += rt.get_laenge_qstring();
+                        msg += " B";
+                        msg += rt.get_breite_qstring();
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += rt.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
+
                 }else
                 {
                     //Mit Fehlermeldung abbrechen:
