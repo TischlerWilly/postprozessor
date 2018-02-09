@@ -979,7 +979,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
     {
         double tmp_l = laenge;
         double tmp_b = breite;
-        text_zeilenweise tmp_bearb;
+        text_zeilenweise tmp_bearb = bearbeitungen;
 
         //Die beste Drehrichtung herausfinden:
         uint bewertung_0    = 1;
@@ -1056,12 +1056,12 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                 bohrung bo(zeile.get_text());
                 if(bo.get_dm() == 8 || \
                    bo.get_dm() == 8.2)
-                {
-                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {                   
+                    if(bo.get_y() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
                         bewertung_0 += 2;
                     }
-                    if(bo.get_y() == b_0-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
                         bewertung_0 += 2;
                     }
@@ -1083,7 +1083,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                     {
                         bewertung_90 += 2;
                     }
-                    if(bo.get_y() == b_90-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    if(bo.get_y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                     {
                         bewertung_90 += 2;
                     }
@@ -1097,7 +1097,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             zeile.set_text(bearb_180.zeile(i));
             if(zeile.zeile(1) == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+               bohrung bo(zeile.get_text());
                 if(bo.get_dm() == 8 || \
                    bo.get_dm() == 8.2)
                 {
@@ -1105,7 +1105,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                     {
                         bewertung_180 += 2;
                     }
-                    if(bo.get_y() == b_180-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    if(bo.get_y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                     {
                         bewertung_180 += 2;
                     }
@@ -1127,7 +1127,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                     {
                         bewertung_270 += 2;
                     }
-                    if(bo.get_y() == b_270-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    if(bo.get_y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                     {
                         bewertung_270 += 2;
                     }
