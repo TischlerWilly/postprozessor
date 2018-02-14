@@ -1639,6 +1639,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
     msg += "\n";
     }
     //-------------------------Bearbeitungen <PrgrFileWork>:
+    //Dies ist der Teil, den die Maschinen-Steuerung liest
+    //Hier darf nur mit absoluten Zahlen gearbeitet werden
+    //Die Ausgabe von Formeln wird von der Maschinen-steuerung nicht unterstützt
     uint id = 1;
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
     {
@@ -2162,6 +2165,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //Werkzeug wurde gefunden, Kreistasche kann gefräst werden:
 
                     QString ti = bo.get_tiefe_qstring();
+                    /*
+                     * Formeln sind nicht zulässig:
                     if(ti.toDouble() > get_dicke())
                     {
                         QString tmp = "{LZ}+";
@@ -2169,7 +2174,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                         tmp += double_to_qstring(dif);
                         ti = tmp;
                     }
-
+                    */
                     //Anzahl der Zustellungen berechnen:
                     double zustmass = bo.get_zustellmass();
                     if(zustmass <= 0)
@@ -2628,6 +2633,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 
             //double z = rt.get_z();
             QString ti = rt.get_tiefe_qstring();
+            /*
+             * Formeln sind nicht zulässig:
             if(ti.toDouble() > get_dicke())
             {
                 QString tmp = "{LZ}+";
@@ -2635,6 +2642,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 tmp += double_to_qstring(dif);
                 ti = tmp;
             }
+            */
             double lx = 0;
             double by = 0;
             if(rt.get_drewi() == 0 || rt.get_drewi() == 180)
@@ -2821,6 +2829,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
     }
 
     //-------------------------Bearbeitungen <PrgrFile>:
+    //Dies ist der Teil, den die Gannomat-Editor liest
+    //Hier darf nur mit der Syntax entsprechenden Formeln gearbeitet werden
     id = 1;
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
     {
@@ -4221,6 +4231,33 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
         msg += kommentar_fmc("--------------------");
         msg += kommentar_fmc("ay 210");
         msg += kommentar_fmc("--------------------");
+
+        bool kreuzkopf_von_vorne = false;
+        for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb.zeile(i));
+
+            QString art = zeile.zeile(1);
+            if(art == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+
+                if(bo.get_bezug() == WST_BEZUG_VO)
+                {
+                    kreuzkopf_von_vorne = true;
+                }
+            }
+        }
+        if(kreuzkopf_von_vorne == true)
+        {
+            msg += kommentar_fmc("----------------------------------------");
+            msg += kommentar_fmc("Achtung!");
+            msg += kommentar_fmc("Kreuzkopf in Kollision mit");
+            msg += kommentar_fmc("Versatzbrett ay 210");
+            msg += kommentar_fmc("----------------------------------------");
+        }
     }
     //---------------------------------------Bearbeitungen Oberseite und Hirnseiten:
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
