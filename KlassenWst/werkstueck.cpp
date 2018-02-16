@@ -1154,6 +1154,98 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             bewertung_270 += 2;
         }
 
+        //Stufe 4:
+        //Bei schmalen Teilen bevorzugen, wenn HBE nicht aus richtung des Anschlages kommt:
+        if(b_0 <= schwellenwert_ay)
+        {
+            bool bonus = true;
+            for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
+            {
+                text_zeilenweise zeile;
+                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                zeile.set_text(bearb_0.zeile(i));
+                if(zeile.zeile(1) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.get_text());
+                    if(bo.get_bezug() == WST_BEZUG_VO)
+                    {
+                        bonus = false;
+                    }
+                }
+            }
+            if(bonus == true)
+            {
+                bewertung_0 += 1;
+            }
+        }
+        if(b_90 <= schwellenwert_ay)
+        {
+            bool bonus = true;
+            for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
+            {
+                text_zeilenweise zeile;
+                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                zeile.set_text(bearb_90.zeile(i));
+                if(zeile.zeile(1) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.get_text());
+                    if(bo.get_bezug() == WST_BEZUG_VO)
+                    {
+                        bonus = false;
+                    }
+                }
+            }
+            if(bonus == true)
+            {
+                bewertung_90 += 1;
+            }
+        }
+        if(b_180 <= schwellenwert_ay)
+        {
+            bool bonus = true;
+            for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
+            {
+                text_zeilenweise zeile;
+                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                zeile.set_text(bearb_180.zeile(i));
+                if(zeile.zeile(1) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.get_text());
+                    if(bo.get_bezug() == WST_BEZUG_VO)
+                    {
+                        bonus = false;
+                    }
+                }
+            }
+            if(bonus == true)
+            {
+                bewertung_180 += 1;
+            }
+        }
+        if(b_270 <= schwellenwert_ay)
+        {
+            bool bonus = true;
+            for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
+            {
+                text_zeilenweise zeile;
+                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                zeile.set_text(bearb_270.zeile(i));
+                if(zeile.zeile(1) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.get_text());
+                    if(bo.get_bezug() == WST_BEZUG_VO)
+                    {
+                        bonus = false;
+                    }
+                }
+            }
+            if(bonus == true)
+            {
+                bewertung_270 += 1;
+            }
+        }
+
+
         //Bewertungen auswerten:
         if(bewertung_0 >= 100 && \
            bewertung_0 >= bewertung_90 && \
@@ -4160,7 +4252,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
      werkzeugmagazin wkzmag(wkzmagazin);
-     double schwellenwert_ay = 230;
+
      bool ay = false;
      if(tmp_b < schwellenwert_ay)
      {
