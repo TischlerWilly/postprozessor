@@ -86,6 +86,7 @@ private:
     double dicke;   //Z-Wert
     text_zeilenweise bearbeitungen;
     QString name;
+    double schwellenwert_ay = 230; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
 
     //Funktionen:
 
