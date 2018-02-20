@@ -110,7 +110,7 @@ QString werkzeugmagazin::get_wkznummer_von_alias(QString alias)
     for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
     {
         zeile.set_text(magazin.zeile(i));
-        if(zeile.zeile(11) == alias)
+        if(zeile.zeile(11) == alias && zeile.zeile(1) == WKZ_TYP_FRAESER)
         {
             returntext = zeile.zeile(2);
         }
