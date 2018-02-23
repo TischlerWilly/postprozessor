@@ -2871,13 +2871,16 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += ";";
             msg += ti;                       //TaTi
             msg += ";";
-            //Variante der Rechtecktasche (1 = ausgeräumt):
+            //Variante der Rechtecktasche:
+            //  1 = ausgeräumt
+            //  2 = nicht ausgeräumt von der Mitte angefahren
+            //  3 = nicht ausgeräumt entlang der Taschenkante angefahren
             if(ausraeumen == true)
             {
                 msg += "1";
             }else
             {
-                msg += "0";
+                msg += "3";
             }
             msg += ";";
             msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
@@ -4205,13 +4208,16 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             msg += ";";
             msg += ti;                       //TaTi
             msg += ";";
-            //Variante der Rechtecktasche (1 = ausgeräumt):
+            //Variante der Rechtecktasche:
+            //  1 = ausgeräumt
+            //  2 = nicht ausgeräumt von der Mitte angefahren
+            //  3 = nicht ausgeräumt entlang der Taschenkante angefahren
             if(ausraeumen == true)
             {
                 msg += "1";
             }else
             {
-                msg += "0";
+                msg += "3";
             }
             msg += ";";
             msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)

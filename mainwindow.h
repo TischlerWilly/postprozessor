@@ -55,6 +55,8 @@ private slots:
     void on_pushButton_zielordner_leeren_clicked();
     void on_radioButton_fkon_ti_quell_toggled(bool checked);
     void on_radioButton_fkon_ti_wkz_toggled(bool checked);
+    void on_checkBox_geraden_stateChanged();
+    void on_lineEdit_geraden_schwellenwert_editingFinished();
 
 private:
     Ui::MainWindow *ui;
@@ -71,6 +73,7 @@ private:
     QString erzeuge_ganx;           // "ja" | "nein"
     QString erzeuge_fmc;            // "ja" | "nein"
     QString erzeuge_eigenes_format; // "ja" | "nein"
+    QString kurze_geraden_weglassen;// "ja" | "nein"
 
     //Radio Buttons:
     QString drehung_des_bauteils; // 0 | 90 | 180 | 270 | AUTO
@@ -85,6 +88,7 @@ private:
     werkstuecke wste;
     text_zeilenweise namen_std_vor;         //Standard-Dateinamen von CAD
     text_zeilenweise namen_std_nach;        //Standard-Dateinamen eigen
+    QString geraden_schwellenwert;          //Geraden ab dieser Lnge werden nicht importiert
     //double bezugsmass;
 
     //Funktionen:

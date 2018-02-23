@@ -3,7 +3,8 @@
 
 werkstuecke::werkstuecke()
 {
-
+    min_fkon_gerade_laenge = 1;
+    kurze_geraden_import = false;
 }
 
 //---------------------------------------------------------------allgemeine Funktionen:
@@ -213,6 +214,14 @@ QString werkstuecke::suche_cad_fehler()
 
     return msg;
 }
+void werkstuecke::set_fkon_gerade_laenge(double wert)
+{
+    min_fkon_gerade_laenge = wert;
+}
+void werkstuecke::kurze_geraden_importieren(bool wert)
+{
+    kurze_geraden_import = wert;
+}
 
 //---------------------------------------------------------------Import-Funktionen:
 bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtext)
@@ -226,7 +235,6 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
     }
     text_zeilenweise tz;
     tz.set_text(importtext);
-    double min_fkon_gerade_laenge = 2; //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
 
     werkstueck w = wste.at(index-1);
 
@@ -2387,11 +2395,15 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    if(fg.get_laenge_2d() > min_fkon_gerade_laenge || \
-                       fg.get_zs() != fg.get_ze())
+                    if(kurze_geraden_import == true)
+                    {
+                        w.neue_bearbeitung(fg.get_text());
+                    }else if(fg.get_laenge_2d() > min_fkon_gerade_laenge || \
+                             fg.get_zs() != fg.get_ze())
                     {
                         w.neue_bearbeitung(fg.get_text());
                     }
+
                     break;
                 }else
                 {
@@ -2976,7 +2988,6 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
     }
     text_zeilenweise tz;
     tz.set_text(importtext);
-    double min_fkon_gerade_laenge = 2; //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
 
     werkstueck w = wste.at(index-1);
 
@@ -4672,6 +4683,10 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         bo.set_zustellmass(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_KTA_WKZ)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        bo.set_wkznum(tmp);
                     }
                 }
             }
@@ -4767,6 +4782,10 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
                         rt.set_ausraeumen(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_RTA_WKZ)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        rt.set_wkznum(tmp);
                     }
                 }
             }

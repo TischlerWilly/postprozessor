@@ -27,6 +27,8 @@ public:
         return namen.zeilenanzahl();
     }
     void stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
+    void set_fkon_gerade_laenge(double wert);
+    void kurze_geraden_importieren(bool wert);
 
     werkstueck get_wst(uint index);
     QString get_name(uint index);
@@ -46,6 +48,8 @@ private:
     text_zeilenweise quellformate;  //aus welchem Dateiformat wurde das Wst eingelesen
     QVector<werkstueck> wste;       //hier werden alle Werkstücke gespeichert
     QString var_einsetzen(werkstueck w, QString formel);
+    double min_fkon_gerade_laenge;  //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
+    bool kurze_geraden_import;
 
     //Funktionen:
     uint get_index(QString Werkstueckname);
