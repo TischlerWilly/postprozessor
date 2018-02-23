@@ -71,6 +71,12 @@ void MainWindow::setup()
             file.write("verzeichnis_ziel:");
             file.write("\n");
 
+            file.write("geraden_schwellenwert:1");
+            file.write("\n");
+            geraden_schwellenwert = "1";
+            ui->lineEdit_geraden_schwellenwert->setText(geraden_schwellenwert);
+            wste.set_fkon_gerade_laenge(geraden_schwellenwert.toDouble());
+
             ui->checkBox_quelldat_erhalt->setChecked(true);
             file.write("quelldateien_erhalten:ja");
             file.write("\n");
@@ -99,6 +105,11 @@ void MainWindow::setup()
             file.write("erzeuge_eigen:nein");
             file.write("\n");
 
+            ui->checkBox_geraden->setChecked(true);
+            file.write("kurze_geraden_weglassen:ja");
+            file.write("\n");
+            wste.kurze_geraden_importieren(false);
+
         }
         file.close();
     }else
@@ -124,6 +135,11 @@ void MainWindow::setup()
                 {
                     verzeichnis_ziel = text_mitte(zeile, "verzeichnis_ziel:", "\n");
                     ui->lineEdit_ziel->setText(verzeichnis_ziel);
+                }else if(zeile.contains("geraden_schwellenwert:"))
+                {
+                    geraden_schwellenwert = text_mitte(zeile, "geraden_schwellenwert:", "\n");
+                    ui->lineEdit_geraden_schwellenwert->setText(geraden_schwellenwert);
+                    wste.set_fkon_gerade_laenge(geraden_schwellenwert.toDouble());
                 }else if(zeile.contains("quelldateien_erhalten:"))
                 {
                     quelldateien_erhalten = text_mitte(zeile, "quelldateien_erhalten:", "\n");
@@ -173,6 +189,18 @@ void MainWindow::setup()
                     }else
                     {
                         ui->checkBox_af_eigen->setChecked(false);
+                    }
+                }else if(zeile.contains("kurze_geraden_weglassen:"))
+                {
+                    kurze_geraden_weglassen = text_mitte(zeile, "kurze_geraden_weglassen:", "\n");
+                    if(kurze_geraden_weglassen == "ja")
+                    {
+                        ui->checkBox_geraden->setChecked(true);
+                        wste.kurze_geraden_importieren(false);
+                    }else
+                    {
+                        ui->checkBox_geraden->setChecked(false);
+                        wste.kurze_geraden_importieren(true);
                     }
                 }else if(zeile.contains("drehung_des_bauteils:"))
                 {
@@ -370,7 +398,7 @@ void MainWindow::schreibe_ini()
         QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
     }else
     {
-        //-------------------------------------------Verzeichnisse:
+        //-------------------------------------------LineEdits:
         file.write("verzeichnis_quelle:");
         file.write(verzeichnis_quelle.toUtf8());
         file.write("\n");
@@ -378,6 +406,11 @@ void MainWindow::schreibe_ini()
         file.write("verzeichnis_ziel:");
         file.write(verzeichnis_ziel.toUtf8());
         file.write("\n");
+
+        file.write("geraden_schwellenwert:");
+        file.write(geraden_schwellenwert.toUtf8());
+        file.write("\n");
+        wste.set_fkon_gerade_laenge(geraden_schwellenwert.toDouble());
 
         //-------------------------------------------Checkboxen:
         file.write("quelldateien_erhalten:");
@@ -399,6 +432,17 @@ void MainWindow::schreibe_ini()
         file.write("erzeuge_eigen:");
         file.write(erzeuge_eigenes_format.toUtf8());
         file.write("\n");
+
+        file.write("kurze_geraden_weglassen:");
+        file.write(kurze_geraden_weglassen.toUtf8());
+        file.write("\n");
+        if(kurze_geraden_weglassen == "ja")
+        {
+            wste.kurze_geraden_importieren(false);
+        }else
+        {
+            wste.kurze_geraden_importieren(true);
+        }
 
         //-------------------------------------------Radio-Buttons:
         file.write("drehung_des_bauteils:");
@@ -449,7 +493,7 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
     }
 }
 
-//-----------------------------------------------------------------------Pfade:
+//-----------------------------------------------------------------------LineEdits:
 void MainWindow::on_lineEdit_quelle_editingFinished()
 {
     QString eingabe = ui->lineEdit_quelle->text();
@@ -476,7 +520,14 @@ void MainWindow::on_lineEdit_ziel_editingFinished()
         schreibe_ini();
     }
 }
-
+void MainWindow::on_lineEdit_geraden_schwellenwert_editingFinished()
+{
+    QString eingabe = ui->lineEdit_geraden_schwellenwert->text();
+    eingabe.replace(",",".");
+    ui->lineEdit_geraden_schwellenwert->setText(eingabe);
+    geraden_schwellenwert = eingabe;
+    schreibe_ini();
+}
 //-----------------------------------------------------------------------Pfad-Buttons:
 void MainWindow::on_pushButton__quelle_clicked()
 {
@@ -560,6 +611,17 @@ void MainWindow::on_checkBox_af_eigen_stateChanged()
     }else
     {
         erzeuge_eigenes_format = "nein";
+    }
+    schreibe_ini();
+}
+void MainWindow::on_checkBox_geraden_stateChanged()
+{
+    if(ui->checkBox_geraden->isChecked() == true)
+    {
+        kurze_geraden_weglassen = "ja";
+    }else
+    {
+        kurze_geraden_weglassen = "nein";
     }
     schreibe_ini();
 }
@@ -1072,6 +1134,11 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
+
+
+
+
 
 
 
