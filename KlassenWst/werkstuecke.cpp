@@ -226,7 +226,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
     }
     text_zeilenweise tz;
     tz.set_text(importtext);
-    double min_fkon_gerade_laenge = 2; //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
+    double min_fkon_gerade_laenge = 0.5; //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
 
     werkstueck w = wste.at(index-1);
 
@@ -2976,7 +2976,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
     }
     text_zeilenweise tz;
     tz.set_text(importtext);
-    double min_fkon_gerade_laenge = 2; //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
+    double min_fkon_gerade_laenge = 0.5; //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
 
     werkstueck w = wste.at(index-1);
 
