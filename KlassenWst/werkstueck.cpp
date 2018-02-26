@@ -2414,16 +2414,18 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 continue;
             }
             double x = nu.get_xs();
-            double y = nu.get_ys();
+            double y;
             double z = nu.get_tiefe(); //Tiefe
             double l = 0;
             //Nutlänge berechnen:
             if(nu.get_ys() < nu.get_ye())
             {
                 l = nu.get_ye() - nu.get_ys();
+                y = nu.get_ys();
             }else
             {
                 l = nu.get_ys() - nu.get_ye();
+                y = nu.get_ye();
             }
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
@@ -3740,16 +3742,18 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 continue;
             }
             double x = nu.get_xs();
-            double y = nu.get_ys();
+            double y;
             double z = nu.get_tiefe(); //Tiefe
             double l = 0;
             //Nutlänge berechnen:
             if(nu.get_ys() < nu.get_ye())
             {
                 l = nu.get_ye() - nu.get_ys();
+                y = nu.get_ys();
             }else
             {
                 l = nu.get_ys() - nu.get_ye();
+                y = nu.get_ye();
             }
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
@@ -3814,7 +3818,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += GANX_WST_BEZUG_UNSEI;
                 }
                 msg += "\\";
-                msg += GANX_REF_UNTEN_LINKS;
+                msg += GANX_REF_OBEN_LINKS;
                 msg += "\\";
                 msg += "S-";
                 msg += int_to_qstring(id);               //ID-Nummer
