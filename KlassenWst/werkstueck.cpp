@@ -2427,6 +2427,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 l = nu.get_ys() - nu.get_ye();
                 y = nu.get_ye();
             }
+            y = get_laenge() - y;
+            y = y-l;
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
             {
@@ -2488,7 +2490,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "\n";
                 //----------------------
                 msg += "    <Ref>";
-                msg += GANX_REF_UNTEN_LINKS;
+                msg += GANX_REF_OBEN_LINKS;
                 msg += "</Ref>";
                 msg += "\n";
                 //----------------------
@@ -2616,7 +2618,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Ref>";
-                    msg += GANX_REF_UNTEN_LINKS;
+                    msg += GANX_REF_OBEN_LINKS;
                     msg += "</Ref>";
                     msg += "\n";
                     //----------------------
@@ -3755,6 +3757,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 l = nu.get_ys() - nu.get_ye();
                 y = nu.get_ye();
             }
+            y = get_laenge() - y;
+            y = y-l;
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
             {
@@ -3934,7 +3938,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                         msg += GANX_WST_BEZUG_UNSEI;
                     }
                     msg += "\\";
-                    msg += GANX_REF_UNTEN_LINKS;
+                    msg += GANX_REF_OBEN_LINKS;
                     msg += "\\";
                     msg += "S-";
                     msg += int_to_qstring(id);               //ID-Nummer
