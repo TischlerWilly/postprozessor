@@ -1008,7 +1008,7 @@ void MainWindow::on_pushButton_start_clicked()
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;
-                output += "\n";
+                //output += "\n";
                 output += info;
                 ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
@@ -1034,7 +1034,7 @@ void MainWindow::on_pushButton_start_clicked()
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;
-                output += "\n";
+                //output += "\n";
                 output += info;
                 ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
