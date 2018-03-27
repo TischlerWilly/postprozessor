@@ -1258,7 +1258,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             text_zeilenweise tmp_bearb = bearbeitungen;
             msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info  = "  -> Drehung keine\n";
+            info += warnungen;
         }else if(bewertung_90 >= 100 && \
                  bewertung_90 >= bewertung_0 && \
                  bewertung_90 >= bewertung_180 && \
@@ -1271,7 +1272,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info  = "  -> Drehung 90 Grad\n";
+            info += warnungen;
         }else if(bewertung_180 >= 100 && \
                  bewertung_180 >= bewertung_0 && \
                  bewertung_180 >= bewertung_90 && \
@@ -1285,7 +1287,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info  = "  -> Drehung 180 Grad\n";
+            info += warnungen;
         }else if(bewertung_270 >= 100 && \
                  bewertung_270 >= bewertung_0 && \
                  bewertung_270 >= bewertung_90 && \
@@ -1300,7 +1303,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info = "  -> Drehung 270 Grad\n";
+            info += warnungen;
         }else
         {
             //wir nehmen 0:
@@ -1309,7 +1313,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             text_zeilenweise tmp_bearb = bearbeitungen;
             msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info  = "  -> Drehung keine\n";
+            info += warnungen;
         }
     }
     return msg;
@@ -1554,7 +1559,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info  = "  -> Drehung keine\n";
+            info += warnungen;
         }else if(bewertung_90 >= 100 && \
                  bewertung_90 >= bewertung_0 && \
                  bewertung_90 >= bewertung_180 && \
@@ -1568,7 +1574,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info  = "  -> Drehung 90 Grad\n";
+            info += warnungen;
         }else if(bewertung_180 >= 100 && \
                  bewertung_180 >= bewertung_0 && \
                  bewertung_180 >= bewertung_90 && \
@@ -1583,7 +1590,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info  = "  -> Drehung 180 Grad\n";
+            info += warnungen;
         }else if(bewertung_270 >= 100 && \
                  bewertung_270 >= bewertung_0 && \
                  bewertung_270 >= bewertung_90 && \
@@ -1599,7 +1607,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info  = "  -> Drehung 270 Grad\n";
+            info += warnungen;
         }else
         {
             //wir nehmen 0:
@@ -1609,7 +1618,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info = warnungen;
+            info  = "  -> Drehung keine\n";
+            info += warnungen;
         }
     }
     return msg;
@@ -2414,17 +2424,21 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 continue;
             }
             double x = nu.get_xs();
-            double y = nu.get_ys();
+            double y;
             double z = nu.get_tiefe(); //Tiefe
             double l = 0;
             //Nutlänge berechnen:
             if(nu.get_ys() < nu.get_ye())
             {
                 l = nu.get_ye() - nu.get_ys();
+                y = nu.get_ys();
             }else
             {
                 l = nu.get_ys() - nu.get_ye();
+                y = nu.get_ye();
             }
+            y = get_laenge() - y;
+            y = y-l;
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
             {
@@ -2486,7 +2500,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "\n";
                 //----------------------
                 msg += "    <Ref>";
-                msg += GANX_REF_UNTEN_LINKS;
+                msg += GANX_REF_OBEN_LINKS;
                 msg += "</Ref>";
                 msg += "\n";
                 //----------------------
@@ -2614,7 +2628,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //----------------------
                     msg += "    <Ref>";
-                    msg += GANX_REF_UNTEN_LINKS;
+                    msg += GANX_REF_OBEN_LINKS;
                     msg += "</Ref>";
                     msg += "\n";
                     //----------------------
@@ -3740,17 +3754,21 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 continue;
             }
             double x = nu.get_xs();
-            double y = nu.get_ys();
+            double y;
             double z = nu.get_tiefe(); //Tiefe
             double l = 0;
             //Nutlänge berechnen:
             if(nu.get_ys() < nu.get_ye())
             {
                 l = nu.get_ye() - nu.get_ys();
+                y = nu.get_ys();
             }else
             {
                 l = nu.get_ys() - nu.get_ye();
+                y = nu.get_ye();
             }
+            y = get_laenge() - y;
+            y = y-l;
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
             {
@@ -3814,7 +3832,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += GANX_WST_BEZUG_UNSEI;
                 }
                 msg += "\\";
-                msg += GANX_REF_UNTEN_LINKS;
+                msg += GANX_REF_OBEN_LINKS;
                 msg += "\\";
                 msg += "S-";
                 msg += int_to_qstring(id);               //ID-Nummer
@@ -3930,7 +3948,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                         msg += GANX_WST_BEZUG_UNSEI;
                     }
                     msg += "\\";
-                    msg += GANX_REF_UNTEN_LINKS;
+                    msg += GANX_REF_OBEN_LINKS;
                     msg += "\\";
                     msg += "S-";
                     msg += int_to_qstring(id);               //ID-Nummer
