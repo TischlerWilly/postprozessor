@@ -1139,19 +1139,19 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         //Teile bevorzugen, bei bei denen gilt: L > B:
         if(l_0 > b_0)
         {
-            bewertung_0 += 2;
+            bewertung_0 += 10;
         }
         if(l_90 > b_90)
         {
-            bewertung_90 += 2;
+            bewertung_90 += 10;
         }
         if(l_180 > b_180)
         {
-            bewertung_180 += 2;
+            bewertung_180 += 10;
         }
         if(l_270 > b_270)
         {
-            bewertung_270 += 2;
+            bewertung_270 += 10;
         }
 
         //Stufe 4:
