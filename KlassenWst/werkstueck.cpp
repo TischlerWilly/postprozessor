@@ -2602,7 +2602,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 
                     }else if(ii==anz_nuten)
                     {
-                        x = x + versatz*2;
+                        x = nu.get_xs();
+                        x = x + versatz;
                     }else
                     {
                         x = x + (  (anz_nuten-2)*nutblattbreite  );
@@ -3925,7 +3926,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 
                     }else if(ii==anz_nuten)
                     {
-                        x = x + versatz*2;
+                        x = nu.get_xs();
+                        x = x + versatz;
                     }else
                     {
                         x = x + (  (anz_nuten-2)*nutblattbreite  );
