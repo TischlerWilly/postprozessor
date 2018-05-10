@@ -5287,8 +5287,8 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
         {
             fraueseraufruf fa;
             fraesergerade fg;
-            fa.set_bezug(WST_BEZUG_OBSEI);
-            fg.set_bezug(WST_BEZUG_OBSEI);
+            fa.set_bezug(WST_BEZUG_UNSEI);
+            fg.set_bezug(WST_BEZUG_UNSEI);
 
             for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
             {

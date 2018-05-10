@@ -1139,19 +1139,19 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         //Teile bevorzugen, bei bei denen gilt: L > B:
         if(l_0 > b_0)
         {
-            bewertung_0 += 2;
+            bewertung_0 += 10;
         }
         if(l_90 > b_90)
         {
-            bewertung_90 += 2;
+            bewertung_90 += 10;
         }
         if(l_180 > b_180)
         {
-            bewertung_180 += 2;
+            bewertung_180 += 10;
         }
         if(l_270 > b_270)
         {
-            bewertung_270 += 2;
+            bewertung_270 += 10;
         }
 
         //Stufe 4:
@@ -2602,7 +2602,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 
                     }else if(ii==anz_nuten)
                     {
-                        x = x + versatz*2;
+                        x = nu.get_xs();
+                        x = x + versatz;
                     }else
                     {
                         x = x + (  (anz_nuten-2)*nutblattbreite  );
@@ -3925,7 +3926,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 
                     }else if(ii==anz_nuten)
                     {
-                        x = x + versatz*2;
+                        x = nu.get_xs();
+                        x = x + versatz;
                     }else
                     {
                         x = x + (  (anz_nuten-2)*nutblattbreite  );
@@ -4745,8 +4747,16 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 {
                     msg += FMC_NUT;
                     msg += "\n";
-                    msg += "SWKZID=";               //WKZ-Nummer
+                    msg += "WKZID=";                //WKZ-Nummer
                     msg += tnummer;
+                    msg += "\n";
+                    msg += "SWKZID=";               //Spiegel-WKZ-Nummer
+                    msg += tnummer;
+                    msg += "\n";
+                    msg += "WERKZEUGNAME=";         //WKZ-Nummer
+                    msg += tnummer;
+                    msg += "\n";
+                    msg += "WKZAKTUELL=1";
                     msg += "\n";
                     msg += "SPX=";
                     msg += nu.get_xs_qstring();
@@ -5373,8 +5383,16 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     {
                         msg += FMC_NUT;
                         msg += "\n";
-                        msg += "SWKZID=";               //WKZ-Nummer
+                        msg += "WKZID=";                //WKZ-Nummer
                         msg += tnummer;
+                        msg += "\n";
+                        msg += "SWKZID=";               //Spiegel-WKZ-Nummer
+                        msg += tnummer;
+                        msg += "\n";
+                        msg += "WERKZEUGNAME=";         //WKZ-Nummer
+                        msg += tnummer;
+                        msg += "\n";
+                        msg += "WKZAKTUELL=1";
                         msg += "\n";
                         msg += "SPX=";
                         msg += nu.get_xs_qstring();
@@ -5400,7 +5418,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "TWKL=0\n";              //Neigungswinkel
                         msg += "TYPN=1\n";              //Neigungstyp
                         msg += "ABSTN=10\n";            //Abstand auf Neigung
-                        msg += "Z=D/2\n";               //POs in Z
+                        msg += "Z=D/2\n";               //Pos in Z
 
                         //Eintauchvorschub gem. Voreinstellung IMAWOP
                         //Vorschub gem. Voreinstellung IMAWOP
