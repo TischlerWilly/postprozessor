@@ -25,6 +25,7 @@ void Dialog_fraeser::getData(text_zeilenweise msg)
     ui->lineEdit_zustm->setText(msg.zeile(6));
     ui->lineEdit_voers->setText(msg.zeile(5));
     ui->lineEdit_alias->setText(msg.zeile(11));
+    ui->lineEdit_zust_min->setText(msg.zeile(12));
 
     this->show();
 }
@@ -45,6 +46,7 @@ void Dialog_fraeser::clear()
     ui->lineEdit_voers->clear();
     ui->lineEdit_zustm->clear();
     ui->lineEdit_alias->clear();
+    ui->lineEdit_zust_min->clear();
 }
 
 void Dialog_fraeser::setup()
@@ -75,6 +77,7 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);               //10: Lage
     wkz.zeile_anhaengen(ui->lineEdit_alias->text().toUpper());  //11: Alias-Name
                           //Beim Einlesen der FMC-Datei werden alle kleinen Buchstaben durch große ersetzt
+    wkz.zeile_anhaengen(ui->lineEdit_zust_min->text());         //12: Mindest-Zustellmaß
 
     //deutsche Zahlen in englische Zahlen umwandeln:
     for(uint i=3; i<=wkz.zeilenanzahl() ;i++)

@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.18.5.09"
+#define PROGRAMMVERSION "1.18.5.28"
 #endif //PROGRAMMVERSION
 
 #include <QMainWindow>

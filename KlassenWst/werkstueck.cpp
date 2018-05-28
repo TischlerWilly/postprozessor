@@ -160,6 +160,11 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                     {
                         msg += "  !! Nutzlaenge < Fraestiefe    bei Kreistasche!\n";
                     }
+                    //Mindest-Zustellmaß des Fräsers Prüfen:
+                    if(bo.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                    {
+                        msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Kreistasche!\n";
+                    }
                 }else//Es ist auch kein passender Fräser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
                     msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
@@ -214,6 +219,11 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                 if(rt.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
                 {
                     msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                }
+                //Mindest-Zustellmaß des Fräsers Prüfen:
+                if(rt.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                {
+                    msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Rechtecktasche!\n";
                 }
             }
         }else if(art == BEARBART_NUT)
@@ -302,6 +312,11 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                     {
                         msg += "  !! Nutzlaenge < Fraestiefe    bei Kreistasche!\n";
                     }
+                    //Mindest-Zustellmaß des Fräsers Prüfen:
+                    if(bo.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                    {
+                        msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Kreistasche!\n";
+                    }
 
                 }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
@@ -335,6 +350,11 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                 {
                     msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
                 }
+                //Mindest-Zustellmaß des Fräsers Prüfen:
+                if(rt.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                {
+                    msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Rechtecktasche!\n";
+                }
             }
         }else if(art == BEARBART_NUT)
         {
@@ -355,9 +375,15 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                 msg += "  !! Keine Werkzeugnummer vergeben bei Fraeseraufruf!\n";
             }else
             {
+                //Nutzlänge Fräser und Tati prüfen
                 if(fa.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
                 {
                     msg += "  !! Nutzlaenge < Fraestiefe    bei Fraeseraufruf!\n";
+                }
+                //Mindest-Zustellmaß des Fräsers Prüfen:
+                if(fa.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                {
+                    msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Fraeseraufruf!\n";
                 }
             }
 

@@ -180,6 +180,25 @@ QString werkzeugmagazin::get_zustellmass(QString wkz_nr)
     returntext.replace(",",".");
     return returntext;
 }
+QString werkzeugmagazin::get_zustellmass_min(QString wkz_nr)
+{
+    QString returntext = "";
+    text_zeilenweise zeile;
+    zeile.set_trennzeichen('\t');
+
+    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    {
+        zeile.set_text(magazin.zeile(i));
+
+        if(zeile.zeile(2) == wkz_nr)
+        {
+            returntext = zeile.zeile(12);
+        }
+
+    }
+    returntext.replace(",",".");
+    return returntext;
+}
 QString werkzeugmagazin::get_tabellenkopf()
 {
     QString tmp;

@@ -25,6 +25,8 @@
     10: Lage
         hori | verti
     11: Alias-Name
+    12: Mindest Zustellmaß
+        0 | 12 etc (wenn 0 dann nicht relevant)
 
 */
 
@@ -44,6 +46,7 @@ public:
     QString get_dm(QString wkz_nr);
     QString get_vorschub(QString wkz_nr);
     QString get_zustellmass(QString wkz_nr);
+    QString get_zustellmass_min(QString wkz_nr);
     QString get_tabellenkopf();
     QString get_saegeblattbreite(QString wkz_nr);
     QString get_nutzlaenge(QString wkz_nr);
