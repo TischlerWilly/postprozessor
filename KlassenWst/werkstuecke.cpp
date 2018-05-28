@@ -2580,6 +2580,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         fa.set_tiefe(tiefe);//Tiefe, nicht Z-Wert!!
                                             //Z-Wert ist für horizontale Fräseraufrufe gedacht
                         fg.set_zs(tiefe);
+                        fg.set_ze(tiefe);
                     }else if(schluessel == FMC_FALZ_KOR)
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -5346,6 +5347,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         fa.set_tiefe(tiefe);//Tiefe, nicht Z-Wert!!
                                             //Z-Wert ist für horizontale Fräseraufrufe gedacht
                         fg.set_zs(tiefe);
+                        fg.set_ze(tiefe);
                     }else if(schluessel == FMC_FALZ_KOR)
                     {
                         QString tmp = wert_nach_istgleich(zeile);
