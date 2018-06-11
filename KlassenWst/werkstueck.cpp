@@ -5010,11 +5010,22 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "=";
                         msg += radkor;
                         msg += "\n";
-                        msg += "TYPAN=1\n";     //Anfahrtyp
-                        msg += "TYPAB=1\n";     //Abfahrtyp
-                        msg += "TYPEIN=1\n";    //Eintauchtp
-                        msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                        msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                        bool aufwst = punkt_auf_wst(fa.get_x(), fa.get_y(), get_laenge(), get_breite(), 1);
+                        if(aufwst == true)
+                        {
+                            msg += "TYPAN=1\n";     //Anfahrtyp
+                            msg += "TYPAB=1\n";     //Abfahrtyp
+                            msg += "TYPEIN=1\n";    //Eintauchtp
+                            msg += "LGEAN=2*WKZR\n";    //Anfahrwert
+                            msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                        }else
+                        {
+                            msg += "TYPAN=0\n";     //Anfahrtyp
+                            msg += "TYPAB=0\n";     //Abfahrtyp
+                            msg += "TYPEIN=-1\n";   //Eintauchtp
+                            msg += "LGEAN=2*WKZR+5\n";    //Anfahrwert
+                            msg += "LGEAB=2*WKZR+5\n";    //Abfahrwert
+                        }
                         msg += "FAN=AUTO\n";    //Anfahrvorschub
                         msg += "F=AUTO\n";      //Vorschub
                         //msg += "N=AUTO\n";      //Drehzahl
@@ -5653,11 +5664,22 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             msg += "=";
                             msg += radkor;
                             msg += "\n";
-                            msg += "TYPAN=1\n";     //Anfahrtyp
-                            msg += "TYPAB=1\n";     //Abfahrtyp
-                            msg += "TYPEIN=1\n";    //Eintauchtp
-                            msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                            msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                            bool aufwst = punkt_auf_wst(fa.get_x(), fa.get_y(), get_laenge(), get_breite(), 1);
+                            if(aufwst == true)
+                            {
+                                msg += "TYPAN=1\n";     //Anfahrtyp
+                                msg += "TYPAB=1\n";     //Abfahrtyp
+                                msg += "TYPEIN=1\n";    //Eintauchtp
+                                msg += "LGEAN=2*WKZR\n";    //Anfahrwert
+                                msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                            }else
+                            {
+                                msg += "TYPAN=0\n";     //Anfahrtyp
+                                msg += "TYPAB=0\n";     //Abfahrtyp
+                                msg += "TYPEIN=-1\n";   //Eintauchtp
+                                msg += "LGEAN=2*WKZR+5\n";    //Anfahrwert
+                                msg += "LGEAB=2*WKZR+5\n";    //Abfahrwert
+                            }
                             msg += "FAN=AUTO\n";    //Anfahrvorschub
                             msg += "F=AUTO\n";      //Vorschub
                             //msg += "N=AUTO\n";      //Drehzahl
@@ -5858,6 +5880,19 @@ QString werkstueck::kommentar_fmc(QString kom)
     text += "\n";
     text += "\n";
     return text;
+}
+
+bool werkstueck::punkt_auf_wst(double x, double y, double l, double b, double tolleranz)
+{
+    bool returnwert = true;
+    if(x <= 0+tolleranz ||\
+       x >= l-tolleranz ||\
+       y <= 0+tolleranz ||\
+       y >= b-tolleranz)
+    {
+        returnwert = false;
+    }
+    return returnwert;
 }
 
 //-------------------------------------------------------------------------Werkzeug:
