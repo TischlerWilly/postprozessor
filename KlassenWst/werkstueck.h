@@ -106,6 +106,8 @@ private:
     QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b);
 
     QString kommentar_fmc(QString kom);
+
+    bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
 };
 
 #endif // WERKSTUECK_H

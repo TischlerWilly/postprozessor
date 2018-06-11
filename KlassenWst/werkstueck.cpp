@@ -160,6 +160,11 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                     {
                         msg += "  !! Nutzlaenge < Fraestiefe    bei Kreistasche!\n";
                     }
+                    //Mindest-Zustellmaß des Fräsers Prüfen:
+                    if(bo.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                    {
+                        msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Kreistasche!\n";
+                    }
                 }else//Es ist auch kein passender Fräser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
                     msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
@@ -214,6 +219,11 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                 if(rt.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
                 {
                     msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
+                }
+                //Mindest-Zustellmaß des Fräsers Prüfen:
+                if(rt.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                {
+                    msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Rechtecktasche!\n";
                 }
             }
         }else if(art == BEARBART_NUT)
@@ -302,6 +312,11 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                     {
                         msg += "  !! Nutzlaenge < Fraestiefe    bei Kreistasche!\n";
                     }
+                    //Mindest-Zustellmaß des Fräsers Prüfen:
+                    if(bo.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                    {
+                        msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Kreistasche!\n";
+                    }
 
                 }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
@@ -335,6 +350,11 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                 {
                     msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
                 }
+                //Mindest-Zustellmaß des Fräsers Prüfen:
+                if(rt.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                {
+                    msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Rechtecktasche!\n";
+                }
             }
         }else if(art == BEARBART_NUT)
         {
@@ -355,9 +375,15 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                 msg += "  !! Keine Werkzeugnummer vergeben bei Fraeseraufruf!\n";
             }else
             {
+                //Nutzlänge Fräser und Tati prüfen
                 if(fa.get_tiefe() > wkzmag.get_nutzlaenge(tnummer).toDouble())
                 {
                     msg += "  !! Nutzlaenge < Fraestiefe    bei Fraeseraufruf!\n";
+                }
+                //Mindest-Zustellmaß des Fräsers Prüfen:
+                if(fa.get_tiefe() < wkzmag.get_zustellmass_min(tnummer).toDouble())
+                {
+                    msg += "  !! Mindest-Zustellmass < Fraestiefe    bei Fraeseraufruf!\n";
                 }
             }
 
@@ -4984,11 +5010,22 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "=";
                         msg += radkor;
                         msg += "\n";
-                        msg += "TYPAN=1\n";     //Anfahrtyp
-                        msg += "TYPAB=1\n";     //Abfahrtyp
-                        msg += "TYPEIN=1\n";    //Eintauchtp
-                        msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                        msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                        bool aufwst = punkt_auf_wst(fa.get_x(), fa.get_y(), get_laenge(), get_breite(), 1);
+                        if(aufwst == true)
+                        {
+                            msg += "TYPAN=1\n";     //Anfahrtyp
+                            msg += "TYPAB=1\n";     //Abfahrtyp
+                            msg += "TYPEIN=1\n";    //Eintauchtp
+                            msg += "LGEAN=2*WKZR\n";    //Anfahrwert
+                            msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                        }else
+                        {
+                            msg += "TYPAN=0\n";     //Anfahrtyp
+                            msg += "TYPAB=0\n";     //Abfahrtyp
+                            msg += "TYPEIN=-1\n";   //Eintauchtp
+                            msg += "LGEAN=2*WKZR+5\n";    //Anfahrwert
+                            msg += "LGEAB=2*WKZR+5\n";    //Abfahrwert
+                        }
                         msg += "FAN=AUTO\n";    //Anfahrvorschub
                         msg += "F=AUTO\n";      //Vorschub
                         //msg += "N=AUTO\n";      //Drehzahl
@@ -5627,11 +5664,22 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             msg += "=";
                             msg += radkor;
                             msg += "\n";
-                            msg += "TYPAN=1\n";     //Anfahrtyp
-                            msg += "TYPAB=1\n";     //Abfahrtyp
-                            msg += "TYPEIN=1\n";    //Eintauchtp
-                            msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                            msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                            bool aufwst = punkt_auf_wst(fa.get_x(), fa.get_y(), get_laenge(), get_breite(), 1);
+                            if(aufwst == true)
+                            {
+                                msg += "TYPAN=1\n";     //Anfahrtyp
+                                msg += "TYPAB=1\n";     //Abfahrtyp
+                                msg += "TYPEIN=1\n";    //Eintauchtp
+                                msg += "LGEAN=2*WKZR\n";    //Anfahrwert
+                                msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                            }else
+                            {
+                                msg += "TYPAN=0\n";     //Anfahrtyp
+                                msg += "TYPAB=0\n";     //Abfahrtyp
+                                msg += "TYPEIN=-1\n";   //Eintauchtp
+                                msg += "LGEAN=2*WKZR+5\n";    //Anfahrwert
+                                msg += "LGEAB=2*WKZR+5\n";    //Abfahrwert
+                            }
                             msg += "FAN=AUTO\n";    //Anfahrvorschub
                             msg += "F=AUTO\n";      //Vorschub
                             //msg += "N=AUTO\n";      //Drehzahl
@@ -5832,6 +5880,19 @@ QString werkstueck::kommentar_fmc(QString kom)
     text += "\n";
     text += "\n";
     return text;
+}
+
+bool werkstueck::punkt_auf_wst(double x, double y, double l, double b, double tolleranz)
+{
+    bool returnwert = true;
+    if(x <= 0+tolleranz ||\
+       x >= l-tolleranz ||\
+       y <= 0+tolleranz ||\
+       y >= b-tolleranz)
+    {
+        returnwert = false;
+    }
+    return returnwert;
 }
 
 //-------------------------------------------------------------------------Werkzeug:
