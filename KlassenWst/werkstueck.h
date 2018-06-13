@@ -108,6 +108,7 @@ private:
     QString kommentar_fmc(QString kom);
 
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
+    void fraesergeraden_zusammenfassen();
 };
 
 #endif // WERKSTUECK_H

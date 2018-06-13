@@ -195,6 +195,13 @@ void fraesergerade::set_text(QString text)
     }
 }
 
+strecke fraesergerade::get_strecke()
+{
+    strecke s;
+    s.set_start(startpunkt);
+    s.set_ende(endpunkt);
+    return s;
+}
 
 
 

@@ -962,6 +962,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
 {
     QString msg;
     bearb_sortieren();
+    fraesergeraden_zusammenfassen();
 
     if(drehwinkel == "0")
     {
@@ -5941,6 +5942,42 @@ bool werkstueck::punkt_auf_wst(double x, double y, double l, double b, double to
         returnwert = false;
     }
     return returnwert;
+}
+
+void werkstueck::fraesergeraden_zusammenfassen()
+{
+    for(uint i=1 ; i<bearbeitungen.zeilenanzahl() ; i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearbeitungen.zeile(i));
+        text_zeilenweise folgezeile;
+        folgezeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        folgezeile.set_text(bearbeitungen.zeile(i+1));
+
+        if(zeile.zeile(1) == BEARBART_FRAESERGERADE &&\
+           folgezeile.zeile(1) == BEARBART_FRAESERGERADE)
+        {
+            strecke s1, s2;
+            fraesergerade fg1(zeile.get_text());
+            fraesergerade fg2(folgezeile.get_text());
+            s1=fg1.get_strecke();
+            s2=fg2.get_strecke();
+            strecke_bezugspunkt sb = strecke_bezugspunkt_start;
+            s1.set_laenge_2d(s1.laenge2dim()+s2.laenge2dim(), sb );
+            fg1.set_endpunkt(s1.endp());
+            //Vergleich der Strings statt der double da sonst ungleiche Nachkommastellen alles zu genau machen:
+            if(fg1.get_xe_qstring() == fg2.get_xe_qstring() &&\
+               fg1.get_ye_qstring() == fg2.get_ye_qstring() &&\
+               fg1.get_ze_qstring() == fg2.get_ze_qstring()    )
+            {
+                bearbeitungen.zeile_ersaetzen(i, fg1.get_text());
+                bearbeitungen.zeile_loeschen(i+1);
+                i--;
+            }
+        }
+
+    }
 }
 
 //-------------------------------------------------------------------------Werkzeug:
