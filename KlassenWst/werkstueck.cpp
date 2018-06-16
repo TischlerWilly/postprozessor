@@ -4843,7 +4843,13 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += nu.get_xe_qstring();
                     msg += "\n";
                     msg += "EPY=";
-                    msg += nu.get_ye_qstring();
+                    if(nu.get_ys() == nu.get_ye())
+                    {
+                        msg += "SY";
+                    }else
+                    {
+                        msg += nu.get_ye_qstring();
+                    }
                     msg += "\n";
                     msg += "TI=";
                     msg += nu.get_tiefe_qstring();
@@ -5490,7 +5496,13 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += nu.get_xe_qstring();
                         msg += "\n";
                         msg += "EPY=";
-                        msg += nu.get_ye_qstring();
+                        if(nu.get_ys() == nu.get_ye())
+                        {
+                            msg += "SY";
+                        }else
+                        {
+                            msg += nu.get_ye_qstring();
+                        }
                         msg += "\n";
                         msg += "TI=";
                         msg += nu.get_tiefe_qstring();
