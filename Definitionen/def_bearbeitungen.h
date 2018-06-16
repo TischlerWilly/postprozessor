@@ -13,6 +13,10 @@
 #define TRENNZ_BEARB_PARAM  '\t'             //Trennzeichen zur Trennung der einzelnen Parameter einer Bearbeitung
 #define TRENNZ_BEARB_PARAM_ "\t"
 
+#define RASTERRICHTUNG_0_BIS_L  "0_bis_L"
+#define RASTERRICHTUNG_0_BIS_B  "0_bis_B"
+#define RASTERRICHTUNG_0_BIS_D  "0_bis_D"
+
 #define BEARBART_BOHR       "bohrung"       //Bearbeitungsart Bohrung
 /*
     Reihenfolge der Parameter:
@@ -26,6 +30,27 @@
     8 : Ausführbedingung
     9 : Zustellmaß           //optionaler Parameter, wenn Werk 0 ist, dann Zustellung gem Wkz-Magazin
     10: WKZ-Nummer           //optionaler Parameter, für dierekte Fräserzuweisung KTA
+*/
+
+#define BEARBART_BOHRRASTER "bohrraster"    //Bearbeitungsart Bohrraster
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "bohrraster"
+    2 : Bezugsfläche
+    3 : Durchmesser
+    4 : Tiefe
+    5 : Posision in X
+    6 : Position in Y
+    7 : Position in Z
+    8 : Ausführbedingung
+    9 : Zustellmaß           //optionaler Parameter, wenn Werk 0 ist, dann Zustellung gem Wkz-Magazin
+    10: WKZ-Nummer           //optionaler Parameter, für dierekte Fräserzuweisung KTA
+    11: Anzahl der Bohrungen in X
+    12: Anzahl der Bohrungen in Y
+    13: Anzahl der Bohrungen in Z
+    14: Rastermaß in X
+    15: Rastermaß in Y
+    16: Rastermaß in Z
 */
 
 #define BEARBART_RTA        "rechtecktasche"    //Bearbeitungsart Rechtecktasche und Stulpfräsung

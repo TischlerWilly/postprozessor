@@ -19,6 +19,7 @@
 #include "fraueseraufruf.h"
 #include "fraesergerade.h"
 #include "fraeserbogen.h"
+#include "bohrraster.h"
 
 
 class werkstueck
@@ -86,7 +87,7 @@ private:
     double dicke;   //Z-Wert
     text_zeilenweise bearbeitungen;
     QString name;
-    double schwellenwert_ay = 230; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
+    double schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
 
     //Funktionen:
 
@@ -99,6 +100,8 @@ private:
     void bearb_sortieren();
     text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
     text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
+
+    text_zeilenweise rasterbohrungen_finden(text_zeilenweise bearb);
 
     QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
                               double tmp_l, double tmp_b, QString zust_fkon);

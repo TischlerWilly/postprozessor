@@ -5,6 +5,7 @@ werkstueck::werkstueck()
     laenge  = 0;
     breite  = 0;
     dicke   = 0;
+    schwellenwert_ay = 230;
 }
 werkstueck::werkstueck(QString neuer_name)
 {
@@ -12,6 +13,7 @@ werkstueck::werkstueck(QString neuer_name)
     laenge  = 0;
     breite  = 0;
     dicke   = 0;
+    schwellenwert_ay = 230;
 }
 
 
@@ -235,7 +237,7 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
             if(nu.get_xs() != nu.get_xe())
             {
                 msg += "  !! Nutrichutng auf der der Maschine nicht moeglich!\n";
-            }else if(nu.get_xs()-nu.get_breite() < 57,5)
+            }else if(nu.get_xs()-nu.get_breite() < 57.5)
             {
                 msg += "  !! Nut zu dicht am Rand/zu dicht an Spannzange!\n";
                 msg += "     Randabstand in X muss mind 57,5mm sein\n";
@@ -1700,6 +1702,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
 QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                        double tmp_l, double tmp_b)
 {
+    //bearb = rasterbohrungen_finden(bearb);
     QString msg;
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -4349,6 +4352,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                       double tmp_l, double tmp_b, QString zust_fkon)
 {
+    bearb = rasterbohrungen_finden(bearb);
     QString msg;   
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -5990,6 +5994,43 @@ void werkstueck::fraesergeraden_zusammenfassen()
         }
 
     }
+}
+
+text_zeilenweise werkstueck::rasterbohrungen_finden(text_zeilenweise bearb)
+{
+    /*Arten von Lochrastern
+    Lochreihe EB
+        Ausführbedingung:   true
+        DM.                 5
+        Bezug:              Oberseite | Unterseite
+        Richung:            0 bis L
+        Tiefe:              14mm in der Regel / andere Tiefen möglich
+    8er Lochreihe für Dübel
+        Ausführbedingung:   true
+        DM.                 8
+        Bezug:              Oberseite | Unterseite
+        Richung:            0 bis L
+        Tiefe:              verschieden
+    8er Lochreihe für Dübel
+        Ausführbedingung:   true
+        DM.                 8
+        Bezug:              Oberseite | Unterseite
+        Richung:            0 bis B
+        Tiefe:              verschieden
+    8,2er Lochreihe für Dübel (HBE)
+        Ausführbedingung:   true
+        DM.                 8,2
+        Bezug:              links | rechts | vorne | hinten
+        Richung:            0 bis L | 0 bis B
+        Tiefe:              verschieden
+    */
+
+//hier weiter machen mit der Programmierung!!!!!
+//so lange "bool bohrraster::finde_bohrraster(...)" true ergiebt
+//einzelbohrungen in bearb durch bohrraster ersetzen
+
+
+    return bearb;
 }
 
 //-------------------------------------------------------------------------Werkzeug:
