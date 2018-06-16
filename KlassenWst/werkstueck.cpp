@@ -231,18 +231,18 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
             nut nu(zeile.get_text());
             QString bezug = nu.get_bezug();
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
+            double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
             if(nu.get_xs() != nu.get_xe())
             {
                 msg += "  !! Nutrichutng auf der der Maschine nicht moeglich!\n";
-            }else if(nu.get_xs() < 10)
+            }else if(nu.get_xs()-nu.get_breite() < 57,5)
             {
                 msg += "  !! Nut zu dicht am Rand/zu dicht an Spannzange!\n";
-                msg += "     X-Mass Nutmitte muss mind 10mm sein\n";
-                msg += "     X ist ca ";
-                msg += nu.get_xe_qstring();
+                msg += "     Randabstand in X muss mind 57,5mm sein\n";
+                msg += "     Randabstand X ist ca ";
+                msg += double_to_qstring(nu.get_xs()-nu.get_breite());
                 msg += "mm\n";
             }
-            double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
             if(nu.get_breite() < nutblattbreite)
             {
                 msg += "  !! Nutbreite ist kleiner als Blattbreite!\n";
