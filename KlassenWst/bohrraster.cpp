@@ -192,6 +192,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
 
     text_zeilenweise potlora; //potentielles Lochraster
 
+    //potlora füllen:
     for(uint i=1; i<=bearb->zeilenanzahl() ;i++)
     {
         zeile.set_text(bearb->zeile(i));
@@ -283,7 +284,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                         }
                         if(zeilennumer!=0)
                         {
-                            potlora.zeile_loeschen(i);
+                            potlora.zeile_loeschen(zeilennumer);
                         }
                         break;
                     }
@@ -430,7 +431,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                         }
                         if(zeilennumer!=0)
                         {
-                            potlora.zeile_loeschen(i);
+                            potlora.zeile_loeschen(zeilennumer);
                         }
                         break;
                     }
@@ -487,7 +488,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                         }
                     }
                     //Restliche Bohrungen des Rasters finden und löschen
-                    for(uint i = 1; i<anz_x ;i++)
+                    for(uint i = 1; i<anz_y ;i++)
                     {
                         for(uint ii=1; ii<=bearb->zeilenanzahl() ;ii++)
                         {
