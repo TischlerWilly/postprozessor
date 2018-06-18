@@ -1702,7 +1702,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
 QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                        double tmp_l, double tmp_b)
 {
-    //bearb = rasterbohrungen_finden(bearb);
+    //bearb = rasterbohrungen_finden_ganx(bearb);
     QString msg;
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -4352,7 +4352,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                       double tmp_l, double tmp_b, QString zust_fkon)
 {
-    bearb = rasterbohrungen_finden(bearb);
+    //bearb = rasterbohrungen_finden_fmc(bearb);
     QString msg;   
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -5912,6 +5912,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
 }
 QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b)
 {
+    //bearb = rasterbohrungen_finden_ganx(bearb);
     QString msg = "";
     bearb_sortieren();
 
@@ -5996,7 +5997,7 @@ void werkstueck::fraesergeraden_zusammenfassen()
     }
 }
 
-text_zeilenweise werkstueck::rasterbohrungen_finden(text_zeilenweise bearb)
+text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb)
 {
     /*Arten von Lochrastern
     Lochreihe EB
@@ -6028,8 +6029,23 @@ text_zeilenweise werkstueck::rasterbohrungen_finden(text_zeilenweise bearb)
 //hier weiter machen mit der Programmierung!!!!!
 //so lange "bool bohrraster::finde_bohrraster(...)" true ergiebt
 //einzelbohrungen in bearb durch bohrraster ersetzen
+    bohrraster bora;
+    bora.finde_bohrraster(&bearb,\
+                          WST_BEZUG_OBSEI, \
+                          5,\
+                          14,\
+                          RASTERRICHTUNG_0_BIS_L,\
+                          get_laenge(),\
+                          get_breite(),\
+                          get_dicke(),\
+                          3,\
+                          32);
 
+    return bearb;
+}
 
+text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb)
+{
     return bearb;
 }
 

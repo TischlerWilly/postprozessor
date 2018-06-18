@@ -101,7 +101,8 @@ private:
     text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
     text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
 
-    text_zeilenweise rasterbohrungen_finden(text_zeilenweise bearb);
+    text_zeilenweise rasterbohrungen_finden_ganx(text_zeilenweise bearb);
+    text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb);
 
     QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
                               double tmp_l, double tmp_b, QString zust_fkon);

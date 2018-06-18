@@ -8,6 +8,7 @@
 #include "../eigeneFunktionen/umwandeln.h"
 #include "../eigeneFunktionen/myfunktion.h"
 #include "bohrung.h"
+#include "../geometrie/punkt3d.h"
 
 class bohrraster : public bohrung
 {
@@ -30,6 +31,7 @@ public:
     void set_raster_y(QString rastermas);
     void set_raster_z(double rastermas);
     void set_raster_z(QString rastermas);
+    void set_startbohrung(bohrung b);
 
     inline uint get_anz_x()
     {
@@ -80,10 +82,11 @@ public:
         return double_to_qstring(raster_z);
     }
 
-    bool finde_bohrraster(text_zeilenweise bearb, \
+    bool finde_bohrraster(text_zeilenweise *bearb, \
                           QString bezug, double dm, \
                           double tiefe, QString rasterrichtung, \
-                          double wst_L, double wst_B, double wst_D);
+                          double wst_L, double wst_B, double wst_D,\
+                          uint mindanz, double rasterabst);
 
 private:
     uint anz_x;
@@ -95,6 +98,7 @@ private:
     double raster_z;
 
     void setup();
+    void clear();
 };
 
 #endif // BOHRRASTER_H
