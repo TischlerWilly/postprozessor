@@ -667,6 +667,25 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
                 bo.set_y(tmp_l - x);
             }
             zeile_neu = bo.get_text();
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bora(zeile.get_text());
+            double x = bora.get_x();
+            double y = bora.get_y();
+            QString bezug = bora.get_bezug();
+            if(bezug == WST_BEZUG_OBSEI || bezug == WST_BEZUG_UNSEI)
+            {
+                bora.set_x(y);
+                bora.set_y(tmp_l - x);
+                uint anz_x = bora.get_anz_x();
+                uint anz_y = bora.get_anz_y();
+                bora.set_anz_x(anz_y);
+                bora.set_anz_y(anz_x);
+                double raster_x = bora.get_raster_x();
+                double raster_y = bora.get_raster_y();
+                bora.set_raster_x(raster_y);
+                bora.set_raster_y(raster_x);
+            }
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
@@ -820,6 +839,41 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
                 bo.set_z(dicke-z);
             }
             zeile_neu = bo.get_text();
+        }else if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrraster bora(zeile.get_text());
+            double x = bora.get_x();
+            double y = bora.get_y();
+            //double z = bora.get_z();
+            QString bezug = bora.get_bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                bora.set_bezug(WST_BEZUG_UNSEI);
+                bora.set_x(y);
+                bora.set_y(x);
+                uint anz_x = bora.get_anz_x();
+                uint anz_y = bora.get_anz_y();
+                bora.set_anz_x(anz_y);
+                bora.set_anz_y(anz_x);
+                double raster_x = bora.get_raster_x();
+                double raster_y = bora.get_raster_y();
+                bora.set_raster_x(raster_y);
+                bora.set_raster_y(raster_x);
+            }else if(bezug == WST_BEZUG_UNSEI)
+            {
+                bora.set_bezug(WST_BEZUG_OBSEI);
+                bora.set_x(y);
+                bora.set_y(x);
+                uint anz_x = bora.get_anz_x();
+                uint anz_y = bora.get_anz_y();
+                bora.set_anz_x(anz_y);
+                bora.set_anz_y(anz_x);
+                double raster_x = bora.get_raster_x();
+                double raster_y = bora.get_raster_y();
+                bora.set_raster_x(raster_y);
+                bora.set_raster_y(raster_x);
+            }
+            zeile_neu = bora.get_text();
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
@@ -1663,19 +1717,37 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
         msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else if(drehwinkel == "90")
     {
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);        
         msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else if(drehwinkel == "180")
     {
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
@@ -1684,6 +1756,12 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1694,6 +1772,12 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
         msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }
     return msg;
@@ -1702,7 +1786,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
 QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                        double tmp_l, double tmp_b)
 {
-    //bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin);
+    bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin);
     QString msg;
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -3807,6 +3891,189 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     mb.exec();
                     return msg;
                 }
+            }
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bora(zeile.get_text());
+
+            double x = bora.get_x();
+            double y = bora.get_y();
+            //double z = bora.get_z();
+
+            double dm = bora.get_dm();
+            double laenge_y = tmp_b;
+            QString bezug = bora.get_bezug();
+
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, bora.get_tiefe(), dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                //Werkzeug wurde gefunden, Bohrraster kann gebohrt werden:
+
+                //Anzahl der Zustellungen berechnen:
+                double zustmass = bora.get_zustellmass();
+                if(zustmass <= 0)
+                {
+                    zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+                }
+                int zustellungen = aufrunden(bora.get_tiefe() / zustmass);
+                if(zustellungen <= 0)
+                {
+                    zustellungen = 1;
+                }
+                //-------------------------------
+
+                if(bezug == WST_BEZUG_OBSEI  ||  bezug == WST_BEZUG_UNSEI)
+                {
+                    //x = Breite
+                    //y = Länge
+                    //z = Tiefe
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DELMARK>OK</DELMARK>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(id);               //ID-Nummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    //y < 40 -> TL
+                    //Länge - y < 40 ->BL
+                    QString ref;
+                    if(laenge_y - y < bezugsmass)
+                    {
+                        ref += GANX_REF_OBEN_LINKS;
+                        y = laenge_y - y;
+                    }else
+                    {
+                        ref += GANX_REF_UNTEN_LINKS;
+                    }
+                    //msg += ref;
+                    //----------------------
+                    msg += "    <ID>";
+                    if(bezug == WST_BEZUG_OBSEI)
+                    {
+                        msg += GANX_WST_BEZUG_OBSEI;
+                    }else
+                    {
+                        msg += GANX_WST_BEZUG_UNSEI;
+                    }
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "BR-";
+                    msg += int_to_qstring(id);               //ID-Nummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefLVL>";
+                    msg += double_to_qstring(0).replace(".",",");
+                    msg += "</RefLVL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += wkzmag.get_dm(tnummer).replace(".",",");
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += bora.get_tiefe_qstring().replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <UsedDbl>ERR</UsedDbl>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DblB>true</DblB>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <Cols>";
+                    msg += bora.get_anz_x_qstring();    //X oder Y ?? noch ausprobieren!!
+                    msg += "</Cols>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <ColsDistance>";
+                    msg += bora.get_raster_x_qstring();    //X oder Y ?? noch ausprobieren!!
+                    msg += "</ColsDistance>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <Rows>";
+                    msg += bora.get_anz_y_qstring();    //X oder Y ?? noch ausprobieren!!
+                    msg += "</Rows>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <RowsDistance>";
+                    msg += bora.get_raster_y_qstring();    //X oder Y ?? noch ausprobieren!!
+                    msg += "</RowsDistance>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SVar>VAR1</SVar>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <Cyclic>";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Cyclic>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>BR</ImageKey>>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Clause />";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <iClauseState>0</iClauseState>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <IsActivated>true</IsActivated>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <iColor>4294309340</iColor>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+
+                    id++;
+
+                }else if(bezug == WST_BEZUG_UNSEI)
+                {
+
+                }
+            }else
+            {
+                //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
             }
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {

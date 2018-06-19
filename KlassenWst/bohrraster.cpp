@@ -166,12 +166,12 @@ void bohrraster::set_text(QString text)
         set_afb(tz.zeile(8));
         set_zustellmass(tz.zeile(9));
         set_wkznum(tz.zeile(10));
-        set_anz_x(11);
-        set_anz_y(12);
-        set_anz_z(13);
-        set_raster_x(14);
-        set_raster_y(15);
-        set_raster_z(16);
+        set_anz_x(tz.zeile(11));
+        set_anz_y(tz.zeile(12));
+        set_anz_z(tz.zeile(13));
+        set_raster_x(tz.zeile(14));
+        set_raster_y(tz.zeile(15));
+        set_raster_z(tz.zeile(16));
     }
 }
 
