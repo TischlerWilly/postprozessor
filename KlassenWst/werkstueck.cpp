@@ -1653,7 +1653,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
     }
     return msg;
 }
-QString werkstueck::get_eigenses_format(QString drehwinkel)
+QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin)
 {
     QString msg;
     bearb_sortieren();
@@ -1663,14 +1663,14 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else if(drehwinkel == "90")
     {
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else if(drehwinkel == "180")
     {
         double tmp_l = laenge;
@@ -1678,7 +1678,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else if(drehwinkel == "270")
     {
         double tmp_l = laenge;
@@ -1687,14 +1687,14 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else
     {
         //drehung 0:
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }
     return msg;
 }
@@ -1702,7 +1702,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
 QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                        double tmp_l, double tmp_b)
 {
-    //bearb = rasterbohrungen_finden_ganx(bearb);
+    //bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin);
     QString msg;
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -4352,7 +4352,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                       double tmp_l, double tmp_b, QString zust_fkon)
 {
-    //bearb = rasterbohrungen_finden_fmc(bearb);
+    //bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin);
     QString msg;   
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -5910,9 +5910,16 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
 
     return msg;
 }
-QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b)
+QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b, \
+                                        QString ausgabeformat, text_zeilenweise wkzmagazin)
 {
-    bearb = rasterbohrungen_finden_ganx(bearb);
+    if(ausgabeformat == FMC)
+    {
+        bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin);
+    }else if(ausgabeformat == GANX)
+    {
+        bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin);
+    }
     QString msg = "";
     bearb_sortieren();
 
@@ -5997,66 +6004,650 @@ void werkstueck::fraesergeraden_zusammenfassen()
     }
 }
 
-text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb)
+text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin)
 {
-    /*Arten von Lochrastern
-    Lochreihe EB
-        Ausführbedingung:   true
-        DM.                 5
-        Bezug:              Oberseite | Unterseite
-        Richung:            0 bis L
-        Tiefe:              14mm in der Regel / andere Tiefen möglich
-    8er Lochreihe für Dübel
-        Ausführbedingung:   true
-        DM.                 8
-        Bezug:              Oberseite | Unterseite
-        Richung:            0 bis L
-        Tiefe:              verschieden
-    8er Lochreihe für Dübel
-        Ausführbedingung:   true
-        DM.                 8
-        Bezug:              Oberseite | Unterseite
-        Richung:            0 bis B
-        Tiefe:              verschieden
-    8,2er Lochreihe für Dübel (HBE)
-        Ausführbedingung:   true
-        DM.                 8,2
-        Bezug:              links | rechts | vorne | hinten
-        Richung:            0 bis L | 0 bis B
-        Tiefe:              verschieden
-    */
-
-//hier weiter machen mit der Programmierung!!!!!
-//so lange "bool bohrraster::finde_bohrraster(...)" true ergiebt
-//einzelbohrungen in bearb durch bohrraster ersetzen
     bohrraster bora;
-    bora.finde_bohrraster(&bearb,\
-                          WST_BEZUG_OBSEI, \
-                          5,\
-                          14,\
-                          RASTERRICHTUNG_0_BIS_L,\
-                          get_laenge(),\
-                          get_breite(),\
-                          get_dicke(),\
-                          3,\
-                          32);
 
-    bora.finde_bohrraster(&bearb,\
-                          WST_BEZUG_OBSEI, \
-                          5,\
-                          14,\
-                          RASTERRICHTUNG_0_BIS_B,\
-                          get_laenge(),\
-                          get_breite(),\
-                          get_dicke(),\
-                          3,\
-                          32);
+    text_zeilenweise wkzbodm; //Speichert die verschiedenen vorhandenen Bohrdurchmesser
+    werkzeugmagazin magazin(wkzmagazin);
+    int min_rasterbohrungen_anz = 2;
+
+    text_zeilenweise boti;
+    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise param;
+        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        param.set_text(bearb.zeile(i));
+        if(param.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung b(param.get_text());
+            QString tiefe_neu = b.get_tiefe_qstring();
+            bool schon_da = false;
+            for(uint i=1; i<=boti.zeilenanzahl();i++)
+            {
+                if(tiefe_neu == boti.zeile(i))
+                {
+                    schon_da = true;
+                }
+            }
+            if(schon_da == false)
+            {
+                boti.zeile_anhaengen(tiefe_neu);
+            }
+        }
+    }
+
+    //Alle vertikalen Lochraster finden die zu Bohrern im Werkzeugmagazin passen:
+    wkzbodm = magazin.get_alle_bodm(WKZ_PARAMETER_LAGE_VERT);
+
+    for(uint i=1; i<=wkzbodm.zeilenanzahl() ;i++)
+    {
+        double dm = wkzbodm.zeile(i).toDouble();
+
+        for(uint i=1; i<=boti.zeilenanzahl() ; i++)
+        {
+            double tiefe = boti.zeile(i).toDouble();
+            bool raster_gefunden;
+
+            //-------------------------------------------------------------------------------
+            //Oberseite  0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Oberseite  0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Unterseite  0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Unterseite  0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+        }
+
+
+    }
 
     return bearb;
 }
 
-text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb)
+text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin)
 {
+    bohrraster bora;
+
+    text_zeilenweise wkzbodm; //Speichert die verschiedenen vorhandenen Bohrdurchmesser
+    werkzeugmagazin magazin(wkzmagazin);
+    int min_rasterbohrungen_anz = 3;
+
+    text_zeilenweise boti;
+    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise param;
+        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        param.set_text(bearb.zeile(i));
+        if(param.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung b(param.get_text());
+            QString tiefe_neu = b.get_tiefe_qstring();
+            bool schon_da = false;
+            for(uint i=1; i<=boti.zeilenanzahl();i++)
+            {
+                if(tiefe_neu == boti.zeile(i))
+                {
+                    schon_da = true;
+                }
+            }
+            if(schon_da == false)
+            {
+                boti.zeile_anhaengen(tiefe_neu);
+            }
+        }
+    }
+
+    //Alle vertikalen Lochraster finden die zu Bohrern im Werkzeugmagazin passen:
+    wkzbodm = magazin.get_alle_bodm(WKZ_PARAMETER_LAGE_VERT);
+
+    for(uint i=1; i<=wkzbodm.zeilenanzahl() ;i++)
+    {
+        double dm = wkzbodm.zeile(i).toDouble();
+
+        for(uint i=1; i<=boti.zeilenanzahl() ; i++)
+        {
+            double tiefe = boti.zeile(i).toDouble();
+            bool raster_gefunden;
+
+            //-------------------------------------------------------------------------------
+            //Oberseite  0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Oberseite  0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Unterseite  0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Unterseite  0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+        }
+    }
+
+    //HBEs im Raser finden die zu Bohrern im Werkzeugmagazin passen:
+    wkzbodm = magazin.get_alle_bodm(WKZ_PARAMETER_LAGE_HORI);
+
+    for(uint i=1; i<=wkzbodm.zeilenanzahl() ;i++)
+    {
+        double dm = wkzbodm.zeile(i).toDouble();
+
+        for(uint i=1; i<=boti.zeilenanzahl() ; i++)
+        {
+            double tiefe = boti.zeile(i).toDouble();
+            bool raster_gefunden;
+
+            //-------------------------------------------------------------------------------
+            //vorne 0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_VO, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_VO, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_VO, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //hinten 0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_HI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_HI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_HI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //links 0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_LI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_LI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_LI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //rechts 0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_RE, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_RE, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_RE, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        get_laenge(),\
+                                                        get_breite(),\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+        }
+    }
+
     return bearb;
 }
 

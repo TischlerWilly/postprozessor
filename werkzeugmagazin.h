@@ -50,6 +50,7 @@ public:
     QString get_tabellenkopf();
     QString get_saegeblattbreite(QString wkz_nr);
     QString get_nutzlaenge(QString wkz_nr);
+    text_zeilenweise get_alle_bodm(QString hori_oder_vert);
 
 
 private:

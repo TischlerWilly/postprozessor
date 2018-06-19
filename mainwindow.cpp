@@ -1056,7 +1056,19 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";
-                QString tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils);
+                //QString tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils);
+                QString tmp;
+                if(erzeuge_fmc  == "ja"  &&  erzeuge_ganx != "ja")
+                {
+                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, FMC, wkz_magazin_fmc);
+                }else if(erzeuge_fmc  != "ja"  &&  erzeuge_ganx == "ja")
+                {
+                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, GANX, wkz_magazin_ganx);
+                }else
+                {
+                    text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
+                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, EIGENES_FORMAT, wkz_eigen);
+                }
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;

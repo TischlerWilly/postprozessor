@@ -23,9 +23,9 @@ void bohrraster::setup()
     anz_x = 1;
     anz_y = 1;
     anz_z = 1;
-    raster_x = 32;
-    raster_y = 32;
-    raster_z = 32;
+    raster_x = 0;
+    raster_y = 0;
+    raster_z = 0;
     werkzeugnummer = "";
 }
 void bohrraster::clear()
@@ -187,6 +187,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
     //zum Ende der Funktion sind die internen Variablen gesetzt und können ausgelesen werden
     //ggf muss die Funktion erneut aufgerufen werden um ähnliche Raster mit den selben
     //Funktions-Eingabewerten zu finden
+    //bearb wird als Zeiger übergeben und ist somit zum Ende der Funktion auf dem aktuellen Stand
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
 
@@ -227,7 +228,6 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
         {
             if(bezug == WST_BEZUG_OBSEI || bezug == WST_BEZUG_UNSEI)
             {
-
                 bohrung b;
                 punkt3d pvor;
                 punkt3d pnach;
@@ -299,8 +299,8 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
 
                         for(uint i=1; i<=potlora.zeilenanzahl() ;i++)
                         {
-                            pvor.set_x(b.get_x() - rasterabst );
-                            pnach.set_x(b.get_x() + (rasterabst * get_anz_x())  );
+                            pvor.set_x(get_x() - rasterabst );
+                            pnach.set_x(get_x() + (rasterabst * get_anz_x())  );
 
                             bohrung b2(potlora.zeile(i));
 
@@ -322,6 +322,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
 
                 //----------------------------------------------------------------------
                 //Daten zurück speichern / Einzelbohrungen durch Raster ersetzen:
+                set_raster_x(rasterabst);
                 if(anz_x >= mindanz)
                 {
                     //erste Bohrung des Rasters in bearb finden und durch Bohrraster ersetzen (Damit Reihenfolge der Bearbeitungen stimmt):
@@ -334,7 +335,8 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                             if(b.get_x_qstring() == get_x_qstring()  &&\
                                b.get_y_qstring() == get_y_qstring()  &&\
                                b.get_dm_qstring() == get_dm_qstring()  &&\
-                               b.get_tiefe_qstring() == get_tiefe_qstring())
+                               b.get_tiefe_qstring() == get_tiefe_qstring() &&\
+                               b.get_bezug() == get_bezug())
                             {
                                 bearb->zeile_ersaetzen(i, get_text());
                             }
@@ -350,6 +352,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                             {
                                 bohrung beinzeln(zeile.get_text());
                                 bohrung bausraster(zeile.get_text());
+                                bausraster.set_bezug(bezug);
                                 bausraster.set_x(get_x()+i*rasterabst);
                                 if(beinzeln.get_text() == bausraster.get_text())
                                 {
@@ -366,7 +369,145 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                 }
             }else if(bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
             {
+                bohrung b;
+                punkt3d pvor;
+                punkt3d pnach;
+                QString merkdirmal;
 
+                set_raster_x(rasterabst);
+
+                //----------------------------------------------------------------------
+                //Raster suchen:
+                //2 paarige Bohrungen suchen:
+                for(uint i=1; i<=potlora.zeilenanzahl() ;i++)
+                {
+                    b.set_text(potlora.zeile(i));
+                    merkdirmal = potlora.zeile(i);
+                    pvor.set_x(b.get_x() - rasterabst);
+                    pvor.set_y(b.get_y());
+                    pvor.set_z(b.get_z());
+                    pnach.set_x(b.get_x() + rasterabst);
+                    pnach.set_y(b.get_y());
+                    pnach.set_z(b.get_z());
+
+                    for(uint ii=1; ii<=potlora.zeilenanzahl() ;ii++)
+                    {
+                        if(i==ii)
+                        {
+                            continue;
+                        }
+                        bohrung b2(potlora.zeile(ii));
+
+                        if(pvor.x_QString() == b2.get_x_qstring()  &&  pvor.z_QString() == b2.get_z_qstring())
+                        {
+                            set_startbohrung(b2);
+                            set_anz_x(get_anz_x() + 1);//anz der Bohrungen erhöhen
+                            potlora.zeile_loeschen(ii);
+                            break;
+                        }else if(pnach.x_QString() == b2.get_x_qstring()  &&  pnach.z_QString() == b2.get_z_qstring())
+                        {
+                            set_startbohrung(b);
+                            set_anz_x(get_anz_x() + 1);//anz der Bohrungen erhöhen
+                            potlora.zeile_loeschen(ii);
+                            break;
+                        }
+                    }
+                    if(anz_x > 1)
+                    {
+                        uint zeilennumer = 0;
+                        for(uint i=1; i<=potlora.zeilenanzahl() ;i++)
+                        {
+                            if(merkdirmal == potlora.zeile(i))
+                            {
+                                zeilennumer = i;
+                                break;
+                            }
+                        }
+                        if(zeilennumer!=0)
+                        {
+                            potlora.zeile_loeschen(zeilennumer);
+                        }
+                        break;
+                    }
+                }
+                //Restliche zugehörige Bohrungen suchen:
+                if(anz_x == 2)//wenn 2 paarige Bohrungen gefunden wurden
+                {
+                    uint anz_alt = 1;//anz_alt != anz_x  --> 1!=2
+                    while(anz_alt != get_anz_x())
+                    {
+                        anz_alt = get_anz_x();
+
+                        for(uint i=1; i<=potlora.zeilenanzahl() ;i++)
+                        {
+                            pvor.set_x(get_x() - rasterabst );
+                            pnach.set_x(get_x() + (rasterabst * get_anz_x())  );
+
+                            bohrung b2(potlora.zeile(i));
+
+                            if(pvor.x_QString() == b2.get_x_qstring()  &&  pvor.z_QString() == b2.get_z_qstring())
+                            {
+                                set_x(get_x()-rasterabst);//erste Bohrung neu setzen
+                                set_anz_x(get_anz_x() + 1);//anz der Bohrungen erhöhen
+                                potlora.zeile_loeschen(i);
+                                break;
+                            }else if(pnach.x_QString() == b2.get_x_qstring()  &&  pnach.z_QString() == b2.get_z_qstring())
+                            {
+                                set_anz_x(get_anz_x() + 1);//anz der Bohrungen erhöhen
+                                potlora.zeile_loeschen(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                //----------------------------------------------------------------------
+                //Daten zurück speichern / Einzelbohrungen durch Raster ersetzen:
+                set_raster_x(rasterabst);
+                if(anz_x >= mindanz)
+                {
+                    //erste Bohrung des Rasters in bearb finden und durch Bohrraster ersetzen (Damit Reihenfolge der Bearbeitungen stimmt):
+                    for(uint i=1; i<=bearb->zeilenanzahl();i++)
+                    {
+                        zeile.set_text(bearb->zeile(i));
+                        if(zeile.zeile(1) == BEARBART_BOHR)
+                        {
+                            bohrung b(zeile.get_text());
+                            if(b.get_x_qstring() == get_x_qstring()  &&\
+                               b.get_z_qstring() == get_z_qstring()  &&\
+                               b.get_dm_qstring() == get_dm_qstring()  &&\
+                               b.get_tiefe_qstring() == get_tiefe_qstring() &&\
+                               b.get_bezug() == get_bezug())
+                            {
+                                bearb->zeile_ersaetzen(i, get_text());
+                            }
+                        }
+                    }
+                    //Restliche Bohrungen des Rasters finden und löschen
+                    for(uint i = 1; i<anz_x ;i++)
+                    {
+                        for(uint ii=1; ii<=bearb->zeilenanzahl() ;ii++)
+                        {
+                            zeile.set_text(bearb->zeile(ii));
+                            if(zeile.zeile(1) == BEARBART_BOHR)
+                            {
+                                bohrung beinzeln(zeile.get_text());
+                                bohrung bausraster(zeile.get_text());
+                                bausraster.set_bezug(bezug);
+                                bausraster.set_x(get_x()+i*rasterabst);
+                                if(beinzeln.get_text() == bausraster.get_text())
+                                {
+                                    bearb->zeile_loeschen(ii);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    return true;
+                }else
+                {
+                    return false;
+                }
             }
         }
     }else if(rasterrichtung == RASTERRICHTUNG_0_BIS_B)
@@ -446,8 +587,8 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
 
                         for(uint i=1; i<=potlora.zeilenanzahl() ;i++)
                         {
-                            pvor.set_y(b.get_y() - rasterabst );
-                            pnach.set_y(b.get_y() + (rasterabst * get_anz_y())  );
+                            pvor.set_y(get_y() - rasterabst );
+                            pnach.set_y(get_y() + (rasterabst * get_anz_y())  );
 
                             bohrung b2(potlora.zeile(i));
 
@@ -465,10 +606,13 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                             }
                         }
                     }
+
+
                 }
 
                 //----------------------------------------------------------------------
                 //Daten zurück speichern / Einzelbohrungen durch Raster ersetzen:
+                set_raster_y(rasterabst);
                 if(anz_y >= mindanz)
                 {
                     //erste Bohrung des Rasters in bearb finden und durch Bohrraster ersetzen (Damit Reihenfolge der Bearbeitungen stimmt):
@@ -481,7 +625,8 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                             if(b.get_x_qstring() == get_x_qstring()  &&\
                                b.get_y_qstring() == get_y_qstring()  &&\
                                b.get_dm_qstring() == get_dm_qstring()  &&\
-                               b.get_tiefe_qstring() == get_tiefe_qstring())
+                               b.get_tiefe_qstring() == get_tiefe_qstring() &&\
+                               b.get_bezug() == get_bezug())
                             {
                                 bearb->zeile_ersaetzen(i, get_text());
                             }
@@ -497,6 +642,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                             {
                                 bohrung beinzeln(zeile.get_text());
                                 bohrung bausraster(zeile.get_text());
+                                bausraster.set_bezug(bezug);
                                 bausraster.set_y(get_y()+i*rasterabst);
                                 if(beinzeln.get_text() == bausraster.get_text())
                                 {
@@ -513,7 +659,147 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                 }
             }else if(bezug == WST_BEZUG_LI || bezug == WST_BEZUG_RE)
             {
+                bohrung b;
+                punkt3d pvor;
+                punkt3d pnach;
+                QString merkdirmal;
 
+                set_raster_y(rasterabst);
+
+                //----------------------------------------------------------------------
+                //Raster suchen:
+                //2 paarige Bohrungen suchen:
+                for(uint i=1; i<=potlora.zeilenanzahl() ;i++)
+                {
+                    b.set_text(potlora.zeile(i));
+                    merkdirmal = potlora.zeile(i);
+                    pvor.set_x(b.get_x());
+                    pvor.set_y(b.get_y() - rasterabst);
+                    pvor.set_z(b.get_z());
+                    pnach.set_x(b.get_x());
+                    pnach.set_y(b.get_y() + rasterabst);
+                    pnach.set_z(b.get_z());
+
+                    for(uint ii=1; ii<=potlora.zeilenanzahl() ;ii++)
+                    {
+                        if(i==ii)
+                        {
+                            continue;
+                        }
+                        bohrung b2(potlora.zeile(ii));
+
+                        if(pvor.z_QString() == b2.get_z_qstring()  &&  pvor.y_QString() == b2.get_y_qstring())
+                        {
+                            set_startbohrung(b2);
+                            set_anz_y(get_anz_y() + 1);//anz der Bohrungen erhöhen
+                            potlora.zeile_loeschen(ii);
+                            break;
+                        }else if(pnach.z_QString() == b2.get_z_qstring()  &&  pnach.y_QString() == b2.get_y_qstring())
+                        {
+                            set_startbohrung(b);
+                            set_anz_y(get_anz_y() + 1);//anz der Bohrungen erhöhen
+                            potlora.zeile_loeschen(ii);
+                            break;
+                        }
+                    }
+                    if(anz_y > 1)
+                    {
+                        uint zeilennumer = 0;
+                        for(uint i=1; i<=potlora.zeilenanzahl() ;i++)
+                        {
+                            if(merkdirmal == potlora.zeile(i))
+                            {
+                                zeilennumer = i;
+                                break;
+                            }
+                        }
+                        if(zeilennumer!=0)
+                        {
+                            potlora.zeile_loeschen(zeilennumer);
+                        }
+                        break;
+                    }
+                }
+                //Restliche zugehörige Bohrungen suchen:
+                if(anz_y == 2)//wenn 2 paarige Bohrungen gefunden wurden
+                {
+                    uint anz_alt = 1;//anz_alt != anz_y  --> 1!=2
+                    while(anz_alt != get_anz_y())
+                    {
+                        anz_alt = get_anz_y();
+
+                        for(uint i=1; i<=potlora.zeilenanzahl() ;i++)
+                        {
+                            pvor.set_y(get_y() - rasterabst );
+                            pnach.set_y(get_y() + (rasterabst * get_anz_y())  );
+
+                            bohrung b2(potlora.zeile(i));
+
+                            if(pvor.z_QString() == b2.get_z_qstring()  &&  pvor.y_QString() == b2.get_y_qstring())
+                            {
+                                set_y(get_y()-rasterabst);//erste Bohrung neu setzen
+                                set_anz_y(get_anz_y() + 1);//anz der Bohrungen erhöhen
+                                potlora.zeile_loeschen(i);
+                                break;
+                            }else if(pnach.z_QString() == b2.get_z_qstring()  &&  pnach.y_QString() == b2.get_y_qstring())
+                            {
+                                set_anz_y(get_anz_y() + 1);//anz der Bohrungen erhöhen
+                                potlora.zeile_loeschen(i);
+                                break;
+                            }
+                        }
+                    }
+
+
+                }
+
+                //----------------------------------------------------------------------
+                //Daten zurück speichern / Einzelbohrungen durch Raster ersetzen:
+                set_raster_y(rasterabst);
+                if(anz_y >= mindanz)
+                {
+                    //erste Bohrung des Rasters in bearb finden und durch Bohrraster ersetzen (Damit Reihenfolge der Bearbeitungen stimmt):
+                    for(uint i=1; i<=bearb->zeilenanzahl();i++)
+                    {
+                        zeile.set_text(bearb->zeile(i));
+                        if(zeile.zeile(1) == BEARBART_BOHR)
+                        {
+                            bohrung b(zeile.get_text());
+                            if(b.get_z_qstring() == get_z_qstring()  &&\
+                               b.get_y_qstring() == get_y_qstring()  &&\
+                               b.get_dm_qstring() == get_dm_qstring()  &&\
+                               b.get_tiefe_qstring() == get_tiefe_qstring() &&\
+                               b.get_bezug() == get_bezug())
+                            {
+                                bearb->zeile_ersaetzen(i, get_text());
+                            }
+                        }
+                    }
+                    //Restliche Bohrungen des Rasters finden und löschen
+                    for(uint i = 1; i<anz_y ;i++)
+                    {
+                        for(uint ii=1; ii<=bearb->zeilenanzahl() ;ii++)
+                        {
+                            zeile.set_text(bearb->zeile(ii));
+                            if(zeile.zeile(1) == BEARBART_BOHR)
+                            {
+                                bohrung beinzeln(zeile.get_text());
+                                bohrung bausraster(zeile.get_text());
+                                bausraster.set_bezug(bezug);
+                                bausraster.set_y(get_y()+i*rasterabst);
+                                if(beinzeln.get_text() == bausraster.get_text())
+                                {
+                                    bearb->zeile_loeschen(ii);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    return true;
+                }else
+                {
+                    return false;
+                }
             }
         }
     }else if(rasterrichtung == RASTERRICHTUNG_0_BIS_D)

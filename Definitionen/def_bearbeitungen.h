@@ -17,6 +17,7 @@
 #define RASTERRICHTUNG_0_BIS_B  "0_bis_B"
 #define RASTERRICHTUNG_0_BIS_D  "0_bis_D"
 
+
 #define BEARBART_BOHR       "bohrung"       //Bearbeitungsart Bohrung
 /*
     Reihenfolge der Parameter:
@@ -32,7 +33,7 @@
     10: WKZ-Nummer           //optionaler Parameter, für dierekte Fräserzuweisung KTA
 */
 
-#define BEARBART_BOHRRASTER "bohrraster"    //Bearbeitungsart Bohrraster
+#define BEARBART_BOHRRASTER "borast"    //Bearbeitungsart Bohrraster
 /*
     Reihenfolge der Parameter:
     1 : Bearbeitungsart: "bohrraster"

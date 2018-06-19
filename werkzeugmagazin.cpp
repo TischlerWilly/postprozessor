@@ -268,3 +268,28 @@ QString werkzeugmagazin::get_nutzlaenge(QString wkz_nr)
     returntext.replace(",",".");
     return returntext;
 }
+
+text_zeilenweise werkzeugmagazin::get_alle_bodm(QString hori_oder_vert)
+{
+    text_zeilenweise tz;
+
+
+    for(uint i=2; i<=magazin.zeilenanzahl() ;i++)//Zeile 1 ist Tabellenkopf
+    {
+        text_zeilenweise werkzeug;
+        werkzeug.set_text(magazin.zeile(i));
+
+        text_zeilenweise parameter;
+        parameter.set_trennzeichen('\t');
+        parameter.set_text(werkzeug.get_text());
+
+        if(parameter.zeile(1) == WKZ_TYP_BOHRER)
+        {
+            if(parameter.zeile(10) == hori_oder_vert)
+            {
+                tz.zeile_anhaengen(parameter.zeile(7));//dm aus Import
+            }
+        }
+    }
+    return tz;
+}

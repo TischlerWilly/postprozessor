@@ -20,6 +20,7 @@
 #include "fraesergerade.h"
 #include "fraeserbogen.h"
 #include "bohrraster.h"
+#include "../Definitionen/dateinamen.h"
 
 
 class werkstueck
@@ -76,7 +77,7 @@ public:
 
     QString get_fmc(text_zeilenweise wkzmagazin, QString& info, QString drehwinkel = "0", QString zust_fkon = "orgi");
     QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
-    QString get_eigenses_format(QString drehwinkel);
+    QString get_eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin);
 
     QString suche_cad_fehler();
 
@@ -101,13 +102,14 @@ private:
     text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
     text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
 
-    text_zeilenweise rasterbohrungen_finden_ganx(text_zeilenweise bearb);
-    text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb);
+    text_zeilenweise rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin);
+    text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin);
 
     QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
                               double tmp_l, double tmp_b, QString zust_fkon);
     QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
-    QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b);
+    QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
+                                QString ausgabeformat, text_zeilenweise wkzmagazin);
 
     QString kommentar_fmc(QString kom);
 
