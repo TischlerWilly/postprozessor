@@ -1027,7 +1027,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         text_zeilenweise tmp_bearb = bearbeitungen;
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "90")
     {
         double tmp_l = laenge;
@@ -1036,7 +1037,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "180")
     {
         double tmp_l = laenge;
@@ -1046,7 +1048,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "270")
     {
         double tmp_l = laenge;
@@ -1057,7 +1060,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else
     {
         double tmp_l = laenge;
@@ -1415,7 +1419,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "90")
     {
         double tmp_l = breite;
@@ -1425,7 +1430,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "180")
     {
         double tmp_l = breite;
@@ -1436,7 +1442,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "270")
     {
         double tmp_l = breite;
@@ -1448,7 +1455,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else
     {
         double tmp_l = breite;
@@ -1786,7 +1794,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
 QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                        double tmp_l, double tmp_b)
 {
-    bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin);
+    bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin, tmp_l, tmp_b);
     QString msg;
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -2559,6 +2567,173 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     mb.exec();
                     return msg;
                 }
+            }
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bora(zeile.get_text());
+            double x = bora.get_x();
+            double y = bora.get_y();
+            //double z = bora.get_z();
+            double dm = bora.get_dm();
+            double laenge_y = tmp_b;
+            QString bezug = bora.get_bezug();
+
+            //Y-Maß bezieht sich hier immer auf den Nullpunkt der Wst oben links
+            //die Maße intern beziehen sich immer auf Nullpunkt unten links
+            //das heißt, die Y-Maße müssen an dieser Stelle gegengerechnet werden:
+            y = tmp_b - y;
+
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, bora.get_tiefe(), dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                //Anzahl der Zustellungen berechnen:
+                double zustmass = bora.get_zustellmass();
+                if(zustmass <= 0)
+                {
+                    zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+                }
+                int zustellungen = aufrunden(bora.get_tiefe() / zustmass);
+                if(zustellungen <= 0)
+                {
+                    zustellungen = 1;
+                }
+                zustmass = bora.get_tiefe()/zustellungen;
+                //-------------------------------
+
+                if(bezug == WST_BEZUG_OBSEI  ||  bezug == WST_BEZUG_UNSEI)
+                {
+                    for(uint i=1; i<=bora.get_anz_y() ;i++)
+                    {
+                        y = tmp_b - (  bora.get_y()+(bora.get_raster_y()*(i-1))  );
+
+                        for(uint ii=1; ii<=bora.get_anz_x() ;ii++)
+                        {
+                            x = bora.get_x()+(bora.get_raster_x()*(ii-1));
+                            //x = Breite
+                            //y = Länge
+                            //z = Tiefe
+                            double aktti; //aktuelle Tiefe
+                            aktti = zustmass;
+                            while(aktti <= bora.get_tiefe())
+                            {
+                                msg += "  <PrgrFileWork>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <CntID>";
+                                msg += int_to_qstring(id);               //ID-Nummer
+                                msg += "</CntID>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Plane>";
+                                if(bezug == WST_BEZUG_OBSEI)
+                                {
+                                    msg += GANX_WST_BEZUG_OBSEI;
+                                }else
+                                {
+                                    msg += GANX_WST_BEZUG_UNSEI;
+                                }
+                                msg += "</Plane>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Ref>";
+                                QString ref;
+                                if(  laenge_y - y < bezugsmass  &&  bora.get_anz_y()==1  )
+                                {
+                                    ref += GANX_REF_OBEN_LINKS;
+                                }else
+                                {
+                                    ref += GANX_REF_UNTEN_LINKS;
+                                }
+                                msg += ref;
+                                msg += "</Ref>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Typ>B</Typ>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <X>";
+                                msg += double_to_qstring(x);
+                                msg += "</X>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Y>";
+                                msg += double_to_qstring(y);
+                                msg += "</Y>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Z>";
+                                msg += double_to_qstring(0);
+                                msg += "</Z>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Diameter>";
+                                msg += wkzmag.get_dm(tnummer);
+                                msg +="</Diameter>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Depth>";
+                                msg += double_to_qstring(aktti);
+                                msg += "</Depth>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <DblB>false</DblB>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <DblL>false</DblL>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <DblE>false</DblE>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Tool>";
+                                msg += tnummer;
+                                msg += "</Tool>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <ImageKey>BR</ImageKey>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <OldID>";
+                                if(bezug == WST_BEZUG_OBSEI)
+                                {
+                                    msg += GANX_WST_BEZUG_OBSEI;
+                                }else
+                                {
+                                    msg += GANX_WST_BEZUG_UNSEI;
+                                }
+                                msg += "\\";
+                                msg += ref;
+                                msg += "\\";
+                                msg += "BR-";
+                                msg += int_to_qstring(ideditor);               //ID-Nummer
+                                msg += "</OldID>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <KleiGeTei>";    //Zustelltiefe
+                                msg += double_to_qstring(zustmass);
+                                msg += "</KleiGeTei>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Clause />";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <iClauseState>0</iClauseState>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "  </PrgrFileWork>";
+                                msg += "\n";
+                                //----------------------
+
+                                id++;
+                                aktti = aktti + zustmass;
+                            }
+                        }
+                    }
+                    ideditor++;
+                }
+            }else
+            {
+                //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
             }
         }else if(zeile.zeile(1)==BEARBART_NUT)
         {
@@ -3905,6 +4080,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             QString bezug = bora.get_bezug();
 
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, bora.get_tiefe(), dicke, bezug);
+
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrraster kann gebohrt werden:
@@ -3941,7 +4117,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //y < 40 -> TL
                     //Länge - y < 40 ->BL
                     QString ref;
-                    if(laenge_y - y < bezugsmass)
+                    if(  laenge_y - y < bezugsmass  &&  bora.get_anz_y()==1  )
                     {
                         ref += GANX_REF_OBEN_LINKS;
                         y = laenge_y - y;
@@ -4012,22 +4188,22 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
                     //---------------------
                     msg += "    <Cols>";
-                    msg += bora.get_anz_x_qstring();    //X oder Y ?? noch ausprobieren!!
+                    msg += bora.get_anz_x_qstring();
                     msg += "</Cols>";
                     msg += "\n";
                     //---------------------
                     msg += "    <ColsDistance>";
-                    msg += bora.get_raster_x_qstring();    //X oder Y ?? noch ausprobieren!!
+                    msg += bora.get_raster_x_qstring();
                     msg += "</ColsDistance>";
                     msg += "\n";
                     //---------------------
                     msg += "    <Rows>";
-                    msg += bora.get_anz_y_qstring();    //X oder Y ?? noch ausprobieren!!
+                    msg += bora.get_anz_y_qstring();
                     msg += "</Rows>";
                     msg += "\n";
                     //---------------------
                     msg += "    <RowsDistance>";
-                    msg += bora.get_raster_y_qstring();    //X oder Y ?? noch ausprobieren!!
+                    msg += bora.get_raster_y_qstring();
                     msg += "</RowsDistance>";
                     msg += "\n";
                     //---------------------
@@ -4066,9 +4242,6 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
 
                     id++;
-
-                }else if(bezug == WST_BEZUG_UNSEI)
-                {
 
                 }
             }else
@@ -4619,7 +4792,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                       double tmp_l, double tmp_b, QString zust_fkon)
 {
-    //bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin);
+    //bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
     QString msg;   
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -6182,10 +6355,10 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
 {
     if(ausgabeformat == FMC)
     {
-        bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin);
+        bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
     }else if(ausgabeformat == GANX)
     {
-        bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin);
+        bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin, tmp_l, tmp_b);
     }
     QString msg = "";
     bearb_sortieren();
@@ -6271,7 +6444,8 @@ void werkstueck::fraesergeraden_zusammenfassen()
     }
 }
 
-text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin)
+text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin,\
+                                                         double tmp_l, double tmp_b)
 {
     bohrraster bora;
 
@@ -6326,8 +6500,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6340,8 +6514,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6354,8 +6528,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6370,8 +6544,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6384,8 +6558,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6398,8 +6572,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6414,8 +6588,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6428,8 +6602,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6442,8 +6616,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6458,8 +6632,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6472,8 +6646,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6486,8 +6660,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6500,7 +6674,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
     return bearb;
 }
 
-text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin)
+text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,\
+                                                        double tmp_l, double tmp_b)
 {
     bohrraster bora;
 
@@ -6555,8 +6730,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6569,8 +6744,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6583,8 +6758,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6599,8 +6774,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6613,8 +6788,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6627,8 +6802,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6643,8 +6818,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6657,8 +6832,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6671,8 +6846,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6687,8 +6862,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6701,8 +6876,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6715,8 +6890,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6746,8 +6921,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6760,8 +6935,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6774,8 +6949,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6790,8 +6965,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6804,8 +6979,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6818,8 +6993,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_L,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6834,8 +7009,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6848,8 +7023,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6862,8 +7037,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);
@@ -6878,8 +7053,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         32);
@@ -6892,8 +7067,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         64);
@@ -6906,8 +7081,8 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
                                                         dm,\
                                                         tiefe,\
                                                         RASTERRICHTUNG_0_BIS_B,\
-                                                        get_laenge(),\
-                                                        get_breite(),\
+                                                        tmp_l,\
+                                                        tmp_b,\
                                                         get_dicke(),\
                                                         min_rasterbohrungen_anz,\
                                                         96);

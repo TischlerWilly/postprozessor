@@ -45,10 +45,12 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
                         {
                             if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_VERT)//ist ein vertikaler Bohrer
                             {
-                                returntext = zeile.zeile(2);
+                                //nur Nicht-Durchgangsbohrer zulassen:
+                                if(zeile.zeile(8) == "0")//ist Durchgangsbohrer?
+                                {
+                                    returntext = zeile.zeile(2);
+                                }
                             }
-                            //ist im WKZ-Magazin ein Durchgangsbohrer und ein Nicht-Durchgangsbohrer
-                            //mit dem selben DM, so muss Nicht-Durchgangsbohrer vor dem Durchgangsbohrer stehen
                         }
                     }
                 }else
@@ -74,6 +76,32 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
                 {
                     wkz_dm_tmp = wkz_dm;
                     returntext = zeile.zeile(2);
+                }
+            }
+        }
+    }
+    //Suchen, ob es einen passenden durchgangsbohrer gibt, wo wir keinen Nicht-Durchgangsbohrer haben:
+    if(returntext.isEmpty())
+    {
+        wkz_dm_tmp = 0;
+        for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+        {
+            zeile.set_text(magazin.zeile(i));
+            if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
+            {
+                if(zeile.zeile(7).toDouble() == dm)//Durchmesser aus Import == gesuchter DM?
+                {
+                    if(bezugskante == WST_BEZUG_OBSEI || \
+                       bezugskante == WST_BEZUG_UNSEI)
+                    {
+                        if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
+                        {
+                            if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_VERT)//ist ein vertikaler Bohrer
+                            {
+                                returntext = zeile.zeile(2);
+                            }
+                        }
+                    }
                 }
             }
         }

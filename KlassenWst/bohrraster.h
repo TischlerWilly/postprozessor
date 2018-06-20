@@ -17,6 +17,7 @@ public:
     bohrraster(QString text);
 
     QString get_text();
+    QString get_text_erste_bohrung();
     void set_text(QString text);
 
     void set_anz_x(uint a);
