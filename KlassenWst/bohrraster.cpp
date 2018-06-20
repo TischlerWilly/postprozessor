@@ -82,10 +82,7 @@ void bohrraster::set_anz_z(QString a)
 
 void bohrraster::set_raster_x(double rastermas)
 {
-    if(rastermas > 0)
-    {
-        raster_x = rastermas;
-    }
+    raster_x = rastermas;
 }
 void bohrraster::set_raster_x(QString rastermas)
 {
@@ -93,10 +90,7 @@ void bohrraster::set_raster_x(QString rastermas)
 }
 void bohrraster::set_raster_y(double rastermas)
 {
-    if(rastermas > 0)
-    {
-        raster_y = rastermas;
-    }
+    raster_y = rastermas;
 }
 void bohrraster::set_raster_y(QString rastermas)
 {
@@ -104,10 +98,7 @@ void bohrraster::set_raster_y(QString rastermas)
 }
 void bohrraster::set_raster_z(double rastermas)
 {
-    if(rastermas > 0)
-    {
-        raster_z = rastermas;
-    }
+    raster_z = rastermas;
 }
 void bohrraster::set_raster_z(QString rastermas)
 {

@@ -89,7 +89,7 @@
 #define FMC_BOBIY_DM            "DM"
 #define FMC_BOBIY_KM            "KETTE"
 
-#define FMC_BOBIX               "[VBX_40]"
+#define FMC_BOBIX               "[VBX_40]"      //Bohrbild in X
 #define FMC_BOBIX_AFB           "AFB"
 #define FMC_BOBIX_Y1            "Y"
 #define FMC_BOBIX_Y2            "Y2"
@@ -144,6 +144,7 @@
 #define FMC_LORAE_DM            "DM"
 #define FMC_LORAE_DM_           "D"
 #define FMC_LORAE_AFB           "AFB"
+#define FMC_LORAE_BEZ           "BEZB"
 
 #define FMC_LORAM               "[VBLMIT40]"    //Lochreihe Anfang Mitte
 #define FMC_LORAM_XM            "MPX"
