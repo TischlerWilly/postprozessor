@@ -5688,25 +5688,369 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 }else if(bezug == WST_BEZUG_LI)
                 {
                     //HBE Xplus:
+                    for(uint i=0 ; i<bora.get_anz_y() ; i=i+6)
+                    {
+                        msg += FMC_HBEXP;
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y1=";
+                        msg += double_to_qstring(  bora.get_y() + (i*bora.get_raster_y())  );
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y2=";
+                        if(bora.get_anz_y() >= i+2)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y3=";
+                        if(bora.get_anz_y() >= i+3)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y4=";
+                        if(bora.get_anz_y() >= i+4)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y5=";
+                        if(bora.get_anz_y() >= i+5)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y6=";
+                        if(bora.get_anz_y() >= i+6)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "TI=";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "Z=";
+                        msg += bora.get_z_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bora.get_dm_qstring();
+                        msg += "\n";
+                        msg += "KETTE=1\n";
+                        msg += "GRP=1\n";           //Bohrgruppe
+                        msg += "X2=-1\n";
+                        msg += "X1=0\n";
 
+                        //Anbohrtiefe gem. Voreinstellung IMAWOP
+                        //Anbohrvorschub gem. Voreinstellung IMAWOP
+                        //Bohrvorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
 
-
+                        msg += "BEZB=";
+                        msg += "HBE X+ DM";
+                        msg += bora.get_dm_qstring();
+                        msg += " T";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bora.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
                 }else if(bezug == WST_BEZUG_RE)
                 {
                     //HBE Xminus:
+                    for(uint i=0 ; i<bora.get_anz_y() ; i=i+6)
+                    {
+                        msg += FMC_HBEXM;
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y1=";
+                        msg += double_to_qstring(  bora.get_y() + (i*bora.get_raster_y())  );
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y2=";
+                        if(bora.get_anz_y() >= i+2)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y3=";
+                        if(bora.get_anz_y() >= i+3)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y4=";
+                        if(bora.get_anz_y() >= i+4)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y5=";
+                        if(bora.get_anz_y() >= i+5)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y6=";
+                        if(bora.get_anz_y() >= i+6)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "TI=";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "Z=";
+                        msg += bora.get_z_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bora.get_dm_qstring();
+                        msg += "\n";
+                        msg += "KETTE=1\n";
+                        msg += "GRP=1\n";           //Bohrgruppe
+                        msg += "X2=-1\n";
+                        msg += "X1=L\n";
 
+                        //Anbohrtiefe gem. Voreinstellung IMAWOP
+                        //Anbohrvorschub gem. Voreinstellung IMAWOP
+                        //Bohrvorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
 
-
+                        msg += "BEZB=";
+                        msg += "HBE X- DM";
+                        msg += bora.get_dm_qstring();
+                        msg += " T";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bora.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
                 }else if(bezug == WST_BEZUG_VO)
                 {
                     //HBE Yplus:
+                    for(uint i=0 ; i<bora.get_anz_x() ; i=i+6)
+                    {
+                        msg += FMC_HBEYP;
+                        msg += "\n";
+                        msg += "X1=";
+                        msg += double_to_qstring(  bora.get_x() + (i*bora.get_raster_x())  );
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X2=";
+                        if(bora.get_anz_x() >= i+2)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X3=";
+                        if(bora.get_anz_x() >= i+3)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X4=";
+                        if(bora.get_anz_x() >= i+4)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X5=";
+                        if(bora.get_anz_x() >= i+5)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X6=";
+                        if(bora.get_anz_x() >= i+6)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "TI=";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "Z=";
+                        msg += bora.get_z_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bora.get_dm_qstring();
+                        msg += "\n";
+                        msg += "KETTE=1\n";
+                        msg += "GRP=1\n";           //Bohrgruppe
+                        msg += "Y2=-1\n";
+                        msg += "Y1=0\n";
 
+                        //Anbohrtiefe gem. Voreinstellung IMAWOP
+                        //Anbohrvorschub gem. Voreinstellung IMAWOP
+                        //Bohrvorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
 
+                        msg += "BEZB=";
+                        msg += "HBE Y+ DM";
+                        msg += bora.get_dm_qstring();
+                        msg += " T";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bora.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
                 }else if(bezug == WST_BEZUG_HI)
                 {
                     //HBE Yminus:
+                    for(uint i=0 ; i<bora.get_anz_x() ; i=i+6)
+                    {
+                        msg += FMC_HBEYM;
+                        msg += "\n";
+                        msg += "X1=";
+                        msg += double_to_qstring(  bora.get_x() + (i*bora.get_raster_x())  );
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X2=";
+                        if(bora.get_anz_x() >= i+2)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X3=";
+                        if(bora.get_anz_x() >= i+3)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X4=";
+                        if(bora.get_anz_x() >= i+4)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X5=";
+                        if(bora.get_anz_x() >= i+5)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X6=";
+                        if(bora.get_anz_x() >= i+6)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "TI=";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "Z=";
+                        msg += bora.get_z_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bora.get_dm_qstring();
+                        msg += "\n";
+                        msg += "KETTE=1\n";
+                        msg += "GRP=1\n";           //Bohrgruppe
+                        msg += "Y2=-1\n";
+                        msg += "Y1=B\n";
 
+                        //Anbohrtiefe gem. Voreinstellung IMAWOP
+                        //Anbohrvorschub gem. Voreinstellung IMAWOP
+                        //Bohrvorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
 
+                        msg += "BEZB=";
+                        msg += "HBE Y- DM";
+                        msg += bora.get_dm_qstring();
+                        msg += " T";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bora.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
                 }
             }else
             {
@@ -6811,28 +7155,6 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             //Bislang noch keine Lochrasttererkennung in X und Y gleichzeitig vorhanden
                             //desshalb Ausgabe an dieser Stellen nicht nötig
                         }
-                    }else if(bezug == WST_BEZUG_LI)
-                    {
-                        //HBE Xplus:
-
-
-
-                    }else if(bezug == WST_BEZUG_RE)
-                    {
-                        //HBE Xminus:
-
-
-
-                    }else if(bezug == WST_BEZUG_VO)
-                    {
-                        //HBE Yplus:
-
-
-                    }else if(bezug == WST_BEZUG_HI)
-                    {
-                        //HBE Yminus:
-
-
                     }
                 }else
                 {
