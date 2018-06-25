@@ -21,6 +21,7 @@
 #include "fraeserbogen.h"
 #include "bohrraster.h"
 #include "../Definitionen/dateinamen.h"
+#include "ganx_gruppen.h"
 
 
 class werkstueck
