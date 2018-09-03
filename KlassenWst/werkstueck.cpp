@@ -6252,13 +6252,39 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "WKZAKTUELL=1";
                     msg += "\n";
                     msg += "SPX=";
-                    msg += nu.get_xs_qstring();
+                    //Nuten auf unserer BIMA310 müssen immer von L zu 0 verlaufen
+                    //Da Agregat versetzt wenn es gedreht wird
+                    if(nu.get_ys() == nu.get_ye())
+                    {
+                        if(nu.get_xs() > nu.get_xe())
+                        {
+                            msg += nu.get_xs_qstring();
+                        }else
+                        {
+                            msg += nu.get_xe_qstring();
+                        }
+                    }else
+                    {
+                        msg += nu.get_xs_qstring();
+                    }
                     msg += "\n";
                     msg += "SPY=";
                     msg += nu.get_ys_qstring();
                     msg += "\n";
                     msg += "EPX=";
-                    msg += nu.get_xe_qstring();
+                    if(nu.get_ys() == nu.get_ye())
+                    {
+                        if(nu.get_xs() < nu.get_xe())
+                        {
+                            msg += nu.get_xs_qstring();
+                        }else
+                        {
+                            msg += nu.get_xe_qstring();
+                        }
+                    }else
+                    {
+                         msg += nu.get_xe_qstring();
+                    }
                     msg += "\n";
                     msg += "EPY=";
                     if(nu.get_ys() == nu.get_ye())
@@ -7361,13 +7387,39 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "WKZAKTUELL=1";
                         msg += "\n";
                         msg += "SPX=";
-                        msg += nu.get_xs_qstring();
+                        //Nuten auf unserer BIMA310 müssen immer von L zu 0 verlaufen
+                        //Da Agregat versetzt wenn es gedreht wird
+                        if(nu.get_ys() == nu.get_ye())
+                        {
+                            if(nu.get_xs() > nu.get_xe())
+                            {
+                                msg += nu.get_xs_qstring();
+                            }else
+                            {
+                                msg += nu.get_xe_qstring();
+                            }
+                        }else
+                        {
+                            msg += nu.get_xs_qstring();
+                        }
                         msg += "\n";
                         msg += "SPY=";
                         msg += nu.get_ys_qstring();
                         msg += "\n";
                         msg += "EPX=";
-                        msg += nu.get_xe_qstring();
+                        if(nu.get_ys() == nu.get_ye())
+                        {
+                            if(nu.get_xs() < nu.get_xe())
+                            {
+                                msg += nu.get_xs_qstring();
+                            }else
+                            {
+                                msg += nu.get_xe_qstring();
+                            }
+                        }else
+                        {
+                             msg += nu.get_xe_qstring();
+                        }
                         msg += "\n";
                         msg += "EPY=";
                         if(nu.get_ys() == nu.get_ye())
