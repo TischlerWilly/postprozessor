@@ -4947,6 +4947,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                       double tmp_l, double tmp_b, QString zust_fkon)
 {
+    text_zeilenweise bearb_kopie = bearb;
     bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
     QString msg;   
     text_zeilenweise zeile;
@@ -4993,8 +4994,9 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     msg += get_dicke_qstring();
     msg += "\n";
     msg += "HOLKA=-1\n";            //Hole Kante Nr
-    msg += "KOM1=";                 //Kommentar 1
-    msg += "(NULL)";
+    msg += "KOM1=";                //Kommentar 1
+    msg += fmc_kommentar_gute_seite(bearb_kopie);
+    //msg += "(NULL)";
     msg += "\n";
     msg += "KOM2=";                 //Kommentar 2
     msg += "(NULL)";
@@ -7875,6 +7877,99 @@ QString werkstueck::kommentar_fmc(QString kom)
     text += "\n";
     text += "\n";
     return text;
+}
+
+QString werkstueck::fmc_kommentar_gute_seite(text_zeilenweise bearb)
+{
+    QString retmsg;
+    if(name.contains("Seite"))
+    {
+        bool hat_5er_durchgangsbohrungen = false;
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
+        {
+            zeile.set_text(bearb.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 5)
+                {
+                    if(bo.get_tiefe() > dicke  ||  bo.get_tiefe() < 0)
+                    {
+                        hat_5er_durchgangsbohrungen = true;
+                    }
+                }
+            }
+        }
+        if(hat_5er_durchgangsbohrungen == true)
+        {
+            retmsg = "gut oben";
+        }else
+        {
+            retmsg = "gut unten";
+        }
+    }else if(name.contains("MS"))
+    {
+        retmsg = "gut oben";
+    }else if(name.contains("OB"))
+    {
+        retmsg = "gut oben";
+    }else if(name.contains("UB"))
+    {
+        int anz_obsei = 0;
+        int anz_unsei = 0;
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
+        {
+            zeile.set_text(bearb.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 15)
+                {
+                    if(bo.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        anz_obsei++;
+                    }else if(bo.get_bezug() == WST_BEZUG_UNSEI)
+                    {
+                        anz_unsei++;
+                    }
+                }
+            }
+        }
+        if(anz_obsei > anz_unsei)
+        {
+            retmsg = "gut unten";
+        }else
+        {
+            retmsg = "gut oben";
+        }
+    }else if(name.contains("KB"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("EB"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("RW"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("Tuer"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("SF"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("SB"))
+    {
+        retmsg = "gut unten";
+    }else
+    {
+        retmsg = "(NULL)";
+    }
+
+    return retmsg;
 }
 
 bool werkstueck::punkt_auf_wst(double x, double y, double l, double b, double tolleranz)
