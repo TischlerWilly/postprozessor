@@ -4527,7 +4527,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                         x = x + versatz;
                     }else
                     {
-                        x = x + (  (anz_nuten-2)*nutblattbreite  );
+                        x = nu.get_xs() - versatz + (ii-1)*nutblattbreite;
                     }
 
                     msg += "  <PrgrFile>";
