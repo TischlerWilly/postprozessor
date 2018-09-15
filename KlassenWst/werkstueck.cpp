@@ -4365,7 +4365,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 l = nu.get_ys() - nu.get_ye();
                 y = nu.get_ye();
             }
-            y = get_laenge() - y;
+            y = tmp_b - y;
             y = y-l;
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
@@ -4527,7 +4527,10 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                         x = x + versatz;
                     }else
                     {
-                        x = nu.get_xs() - versatz + (ii-1)*nutblattbreite;
+                        double schleifenversatz;
+                        schleifenversatz = nutblattbreite - ((nutblattbreite*anz_nuten)-nu.get_breite()) /(anz_nuten-1);
+                        //x = nu.get_xs() - versatz + (ii-1)*nutblattbreite;
+                        x = nu.get_xs() - versatz + (ii-1)*schleifenversatz;
                     }
 
                     msg += "  <PrgrFile>";
