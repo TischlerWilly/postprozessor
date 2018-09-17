@@ -2492,13 +2492,13 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</Plane>";
                     msg += "\n";
                     //----------------------Bezugskante festlegen:
-                    QString ref = GANX_REF_UNTEN_LINKS;
-                    //y < 40 -> TL
-                    //Länge - y < 40 ->BL
+                    QString ref;
                     if(laenge_y - y < bezugsmass)
                     {
                         ref = GANX_REF_OBEN_LINKS;
-                        y = laenge_y - y;
+                    }else
+                    {
+                        ref = GANX_REF_UNTEN_LINKS;
                     }
                     msg += "    <Ref>";
                     msg += ref;
@@ -3215,13 +3215,13 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "</Plane>";
                 msg += "\n";
                 //----------------------Bezugskante festlegen:
-                QString ref = GANX_REF_UNTEN_LINKS;
-                //y < 40 -> TL
-                //Länge - y < 40 ->BL
+                QString ref;
                 if(laenge_y - y < bezugsmass)
                 {
                     ref = GANX_REF_OBEN_LINKS;
-                    y = laenge_y - y;
+                }else
+                {
+                    ref = GANX_REF_UNTEN_LINKS;
                 }
                 msg += "    <Ref>";
                 msg += ref;
