@@ -49,7 +49,7 @@ public:
     void set_text(QString text);
 
 
-private:
+protected:
     double durchmesser;
     double tiefe;
     double pos_x;

@@ -19,6 +19,9 @@
 #include "fraueseraufruf.h"
 #include "fraesergerade.h"
 #include "fraeserbogen.h"
+#include "bohrraster.h"
+#include "../Definitionen/dateinamen.h"
+#include "ganx_gruppen.h"
 
 
 class werkstueck
@@ -75,7 +78,7 @@ public:
 
     QString get_fmc(text_zeilenweise wkzmagazin, QString& info, QString drehwinkel = "0", QString zust_fkon = "orgi");
     QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
-    QString get_eigenses_format(QString drehwinkel);
+    QString get_eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin);
 
     QString suche_cad_fehler();
 
@@ -86,7 +89,7 @@ private:
     double dicke;   //Z-Wert
     text_zeilenweise bearbeitungen;
     QString name;
-    double schwellenwert_ay = 230; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
+    double schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
 
     //Funktionen:
 
@@ -100,14 +103,20 @@ private:
     text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
     text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
 
+    text_zeilenweise rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
+    text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
+
     QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
                               double tmp_l, double tmp_b, QString zust_fkon);
     QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
-    QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b);
+    QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
+                                QString ausgabeformat, text_zeilenweise wkzmagazin);
 
     QString kommentar_fmc(QString kom);
+    QString fmc_kommentar_gute_seite(text_zeilenweise bearb);
 
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
+    void fraesergeraden_zusammenfassen();
 };
 
 #endif // WERKSTUECK_H

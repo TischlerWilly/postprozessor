@@ -58,6 +58,7 @@ public:
 
     QString get_text();
     void set_text(QString text);
+    strecke get_strecke();
 
 private:
     punkt3d startpunkt, endpunkt; //das Z-Maß ist die Frästiefe bezogen auf die WST-Oberfläche

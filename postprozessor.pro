@@ -39,7 +39,9 @@ SOURCES += main.cpp\
     geometrie/darstellungsatribute.cpp \
     geometrie/geometrie.cpp \
     geometrie/punkt2d.cpp \
-    KlassenWst/fraeserbogen.cpp
+    KlassenWst/fraeserbogen.cpp \
+    KlassenWst/bohrraster.cpp \
+    KlassenWst/ganx_gruppen.cpp
 
 HEADERS  += mainwindow.h \
     allgemKlassen/formel.h \
@@ -75,7 +77,9 @@ HEADERS  += mainwindow.h \
     Definitionen/def_geometrie.h \
     geometrie/makro_geometrie.h \
     geometrie/punkt2d.h \
-    KlassenWst/fraeserbogen.h
+    KlassenWst/fraeserbogen.h \
+    KlassenWst/bohrraster.h \
+    KlassenWst/ganx_gruppen.h
 
 FORMS    += mainwindow.ui \
     dialog_wkz.ui \

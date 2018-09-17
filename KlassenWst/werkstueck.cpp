@@ -5,6 +5,7 @@ werkstueck::werkstueck()
     laenge  = 0;
     breite  = 0;
     dicke   = 0;
+    schwellenwert_ay = 230;
 }
 werkstueck::werkstueck(QString neuer_name)
 {
@@ -12,6 +13,7 @@ werkstueck::werkstueck(QString neuer_name)
     laenge  = 0;
     breite  = 0;
     dicke   = 0;
+    schwellenwert_ay = 230;
 }
 
 
@@ -169,6 +171,20 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                 {
                     msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
                 }
+            }else
+            {
+                //Warnung für 35er Bohrer geben der in Kante Bohrt (Bohrerbruch durch Unwucht)
+                if(wkzmag.get_dm(tnummer) == "35")
+                {
+                    if(bo.get_x() < 17.5            ||\
+                       bo.get_x() > (tmp_l-17.5)    ||\
+                       bo.get_y() < 17.5            ||\
+                       bo.get_y() > (tmp_b-17.5)    )
+                    {
+                        msg += "  !! 35er Bohrung zu dicht am Rand fuer verwendeten Bohrer!\n";
+                    }
+                }
+
             }
 
         }else if(art == BEARBART_RTA)
@@ -231,18 +247,18 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
             nut nu(zeile.get_text());
             QString bezug = nu.get_bezug();
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
+            double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
             if(nu.get_xs() != nu.get_xe())
             {
                 msg += "  !! Nutrichutng auf der der Maschine nicht moeglich!\n";
-            }else if(nu.get_xs() < 10)
+            }else if(nu.get_xs()-nu.get_breite() < 57.5)
             {
                 msg += "  !! Nut zu dicht am Rand/zu dicht an Spannzange!\n";
-                msg += "     X-Mass Nutmitte muss mind 10mm sein\n";
-                msg += "     X ist ca ";
-                msg += nu.get_xe_qstring();
+                msg += "     Randabstand in X muss mind 57,5mm sein\n";
+                msg += "     Randabstand X ist ca ";
+                msg += double_to_qstring(nu.get_xs()-nu.get_breite());
                 msg += "mm\n";
             }
-            double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
             if(nu.get_breite() < nutblattbreite)
             {
                 msg += "  !! Nutbreite ist kleiner als Blattbreite!\n";
@@ -665,6 +681,25 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
                 bo.set_y(tmp_l - x);
             }
             zeile_neu = bo.get_text();
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bora(zeile.get_text());
+            double x = bora.get_x();
+            double y = bora.get_y();
+            QString bezug = bora.get_bezug();
+            if(bezug == WST_BEZUG_OBSEI || bezug == WST_BEZUG_UNSEI)
+            {
+                bora.set_x(y);
+                bora.set_y(tmp_l - x);
+                uint anz_x = bora.get_anz_x();
+                uint anz_y = bora.get_anz_y();
+                bora.set_anz_x(anz_y);
+                bora.set_anz_y(anz_x);
+                double raster_x = bora.get_raster_x();
+                double raster_y = bora.get_raster_y();
+                bora.set_raster_x(raster_y);
+                bora.set_raster_y(raster_x);
+            }
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
@@ -818,6 +853,41 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
                 bo.set_z(dicke-z);
             }
             zeile_neu = bo.get_text();
+        }else if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrraster bora(zeile.get_text());
+            double x = bora.get_x();
+            double y = bora.get_y();
+            //double z = bora.get_z();
+            QString bezug = bora.get_bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                bora.set_bezug(WST_BEZUG_UNSEI);
+                bora.set_x(y);
+                bora.set_y(x);
+                uint anz_x = bora.get_anz_x();
+                uint anz_y = bora.get_anz_y();
+                bora.set_anz_x(anz_y);
+                bora.set_anz_y(anz_x);
+                double raster_x = bora.get_raster_x();
+                double raster_y = bora.get_raster_y();
+                bora.set_raster_x(raster_y);
+                bora.set_raster_y(raster_x);
+            }else if(bezug == WST_BEZUG_UNSEI)
+            {
+                bora.set_bezug(WST_BEZUG_OBSEI);
+                bora.set_x(y);
+                bora.set_y(x);
+                uint anz_x = bora.get_anz_x();
+                uint anz_y = bora.get_anz_y();
+                bora.set_anz_x(anz_y);
+                bora.set_anz_y(anz_x);
+                double raster_x = bora.get_raster_x();
+                double raster_y = bora.get_raster_y();
+                bora.set_raster_x(raster_y);
+                bora.set_raster_y(raster_x);
+            }
+            zeile_neu = bora.get_text();
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.get_text());
@@ -962,6 +1032,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
 {
     QString msg;
     bearb_sortieren();
+    fraesergeraden_zusammenfassen();
 
     if(drehwinkel == "0")
     {
@@ -970,7 +1041,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         text_zeilenweise tmp_bearb = bearbeitungen;
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "90")
     {
         double tmp_l = laenge;
@@ -979,7 +1051,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "180")
     {
         double tmp_l = laenge;
@@ -989,7 +1062,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "270")
     {
         double tmp_l = laenge;
@@ -1000,7 +1074,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else
     {
         double tmp_l = laenge;
@@ -1358,7 +1433,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "90")
     {
         double tmp_l = breite;
@@ -1368,7 +1444,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "180")
     {
         double tmp_l = breite;
@@ -1379,7 +1456,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else if(drehwinkel == "270")
     {
         double tmp_l = breite;
@@ -1391,7 +1469,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info = warnungen;
+        info  = "\n";
+        info += warnungen;
     }else
     {
         double tmp_l = breite;
@@ -1650,7 +1729,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
     }
     return msg;
 }
-QString werkstueck::get_eigenses_format(QString drehwinkel)
+QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin)
 {
     QString msg;
     bearb_sortieren();
@@ -1660,38 +1739,68 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else if(drehwinkel == "90")
     {
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);        
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else if(drehwinkel == "180")
     {
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else if(drehwinkel == "270")
     {
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }else
     {
         //drehung 0:
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b);
+        if(ausgabeformat == GANX)
+        {
+            tmp_l = breite;
+            tmp_b = laenge;
+            tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
+        }
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
     }
     return msg;
 }
@@ -1699,6 +1808,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel)
 QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                        double tmp_l, double tmp_b)
 {
+    bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin, tmp_l, tmp_b);
     QString msg;
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -1770,7 +1880,10 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
     //Dies ist der Teil, den die Maschinen-Steuerung liest
     //Hier darf nur mit absoluten Zahlen gearbeitet werden
     //Die Ausgabe von Formeln wird von der Maschinen-steuerung nicht unterstützt
-    uint id = 1;
+    uint id = 1; //id für die Maschiene
+    uint ideditor = 1;//id die im Editor angezeigt wird
+    ganx_Gruppen gruppen_PrgrFileWork;
+
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
     {
         zeile.set_text(bearb.zeile(i));
@@ -1817,464 +1930,507 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 {
                     zustellungen = 1;
                 }
+                zustmass = bo.get_tiefe()/zustellungen;
                 //-------------------------------
+
                 if(bezug == WST_BEZUG_OBSEI)
                 {
                     //x = Breite
                     //y = Länge
                     //z = Tiefe
+                    double aktti; //aktuelle Tiefe
+                    aktti = zustmass;
+                    while(aktti <= bo.get_tiefe())
+                    {
+                        msg += "  <PrgrFileWork>";
+                        msg += "\n";
+                        msg += "    <CntID>";
+                        msg += int_to_qstring(id);               //ID-Nummer
+                        msg += "</CntID>";
+                        msg += "\n";
+                        msg += "    <Plane>Top</Plane>";
+                        msg += "\n";
+                        //----------------------Bezugskante festlegen:
+                        msg += "    <Ref>";
+                        //y < 40 -> TL
+                        //Länge - y < 40 ->BL
+                        QString ref;
+                        if(laenge_y - y < bezugsmass)
+                        {
+                            ref += GANX_REF_OBEN_LINKS;
+                        }else
+                        {
+                            ref += GANX_REF_UNTEN_LINKS;
+                        }
+                        msg += ref;
+                        msg += "</Ref>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Typ>B</Typ>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <X>";
+                        msg += double_to_qstring(x);
+                        msg += "</X>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Y>";
+                        msg += double_to_qstring(y);
+                        msg += "</Y>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Z>";
+                        msg += double_to_qstring(0);
+                        msg += "</Z>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Diameter>";
+                        msg += wkzmag.get_dm(tnummer);
+                        msg += "</Diameter>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "   <Depth>";
+                        msg += double_to_qstring(aktti);
+                        msg += "</Depth>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Tool>";
+                        msg += tnummer;
+                        msg += "</Tool>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <OldID>";
+                        msg += GANX_WST_BEZUG_OBSEI;
+                        msg += "\\";
+                        msg += ref;
+                        msg += "\\";
+                        msg += "B-";
+                        msg += int_to_qstring(ideditor);               //ID-Nummer
+                        msg += "</OldID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <KleiGeTei>";    //Zustelltiefe
+                        msg += double_to_qstring(zustmass);
+                        msg += "</KleiGeTei>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "  </PrgrFileWork>";
+                        msg += "\n";
 
-                    msg += "  <PrgrFileWork>";
-                    msg += "\n";
-                    msg += "    <CntID>";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</CntID>";
-                    msg += "\n";
-                    msg += "    <Plane>Top</Plane>";
-                    msg += "\n";
-                    //----------------------Bezugskante festlegen:
-                    msg += "    <Ref>";
-                    //y < 40 -> TL
-                    //Länge - y < 40 ->BL
-                    QString ref;
-                    if(laenge_y - y < bezugsmass)
-                    {
-                        ref += GANX_REF_OBEN_LINKS;
-                    }else
-                    {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        id++;
+                        aktti = aktti + zustmass;
                     }
-                    msg += ref;
-                    msg += "</Ref>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Typ>B</Typ>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <X>";
-                    msg += double_to_qstring(x);
-                    msg += "</X>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Y>";
-                    msg += double_to_qstring(y);
-                    msg += "</Y>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Z>";
-                    msg += double_to_qstring(0);
-                    msg += "</Z>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Diameter>";
-                    msg += wkzmag.get_dm(tnummer);
-                    msg += "</Diameter>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "   <Depth>";
-                    msg += bo.get_tiefe_qstring();
-                    msg += "</Depth>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Tool>";
-                    msg += tnummer;
-                    msg += "</Tool>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <OldID>";
-                    msg += GANX_WST_BEZUG_OBSEI;
-                    msg += "\\";
-                    msg += ref;
-                    msg += "\\";
-                    msg += "B-";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</OldID>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <KleiGeTei>";    //Tiefe???
-                    msg += double_to_qstring(z);
-                    msg += "</KleiGeTei>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "  </PrgrFileWork>";
-                    msg += "\n";
+                    ideditor++;
 
-                    id++;
 
                 }else if(bezug == WST_BEZUG_UNSEI)
                 {
                     //x = Breite
                     //y = Länge
                     //z = Tiefe
+                    double aktti; //aktuelle Tiefe
+                    aktti = zustmass;
+                    while(aktti <= bo.get_tiefe())
+                    {
+                        msg += "  <PrgrFileWork>";
+                        msg += "\n";
+                        msg += "    <CntID>";
+                        msg += int_to_qstring(id);               //ID-Nummer
+                        msg += "</CntID>";
+                        msg += "\n";
+                        msg += "    <Plane>Bottom</Plane>";
+                        msg += "\n";
+                        //----------------------Bezugskante festlegen:
+                        msg += "    <Ref>";
+                        //y < 40 -> TL
+                        //Länge - y < 40 ->BL
+                        QString ref;
+                        if(laenge_y - y < bezugsmass)
+                        {
+                            ref = GANX_REF_OBEN_LINKS;
+                        }else
+                        {
+                            ref = GANX_REF_UNTEN_LINKS;
+                        }
+                        msg += ref;
+                        msg += "</Ref>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Typ>B</Typ>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <X>";
+                        msg += double_to_qstring(x);
+                        msg += "</X>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Y>";
+                        msg += double_to_qstring(y);
+                        msg += "</Y>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Z>";
+                        msg += double_to_qstring(0);
+                        msg += "</Z>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Diameter>";
+                        msg += wkzmag.get_dm(tnummer);
+                        msg += "</Diameter>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "   <Depth>";
+                        msg += double_to_qstring(aktti);
+                        msg += "</Depth>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Tool>";
+                        msg += tnummer;
+                        msg += "</Tool>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <OldID>";
+                        msg += GANX_WST_BEZUG_UNSEI;
+                        msg += "\\";
+                        msg += ref;
+                        msg += "\\";
+                        msg += "B-";
+                        msg += int_to_qstring(ideditor);               //ID-Nummer
+                        msg += "</OldID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <KleiGeTei>";    //Zustelltiefe
+                        msg += double_to_qstring(zustmass);
+                        msg += "</KleiGeTei>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "  </PrgrFileWork>";
+                        msg += "\n";
 
-                    msg += "  <PrgrFileWork>";
-                    msg += "\n";
-                    msg += "    <CntID>";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</CntID>";
-                    msg += "\n";
-                    msg += "    <Plane>Bottom</Plane>";
-                    msg += "\n";
-                    //----------------------Bezugskante festlegen:
-                    msg += "    <Ref>";
-                    //y < 40 -> TL
-                    //Länge - y < 40 ->BL
-                    QString ref;
-                    if(laenge_y - y < bezugsmass)
-                    {
-                        ref = GANX_REF_OBEN_LINKS;
-                    }else
-                    {
-                        ref = GANX_REF_UNTEN_LINKS;
+                        id++;
+                        aktti = aktti + zustmass;
                     }
-                    msg += ref;
-                    msg += "</Ref>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Typ>B</Typ>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <X>";
-                    msg += double_to_qstring(x);
-                    msg += "</X>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Y>";
-                    msg += double_to_qstring(y);
-                    msg += "</Y>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Z>";
-                    msg += double_to_qstring(0);
-                    msg += "</Z>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Diameter>";
-                    msg += wkzmag.get_dm(tnummer);
-                    msg += "</Diameter>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "   <Depth>";
-                    msg += bo.get_tiefe_qstring();
-                    msg += "</Depth>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Tool>";
-                    msg += tnummer;
-                    msg += "</Tool>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <OldID>";
-                    msg += GANX_WST_BEZUG_UNSEI;
-                    msg += "\\";
-                    msg += ref;
-                    msg += "\\";
-                    msg += "B-";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</OldID>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <KleiGeTei>";    //Tiefe???
-                    msg += double_to_qstring(z);
-                    msg += "</KleiGeTei>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "  </PrgrFileWork>";
-                    msg += "\n";
-
-                    id++;
+                    ideditor++;
 
                 }else if(bezug == WST_BEZUG_LI)
                 {
                     //x = Tiefe
                     //y = Y-Pos
                     //z = Z-Pos
-                    msg += "  <PrgrFileWork>";
-                    msg += "\n";
-                    msg += "    <CntID>";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</CntID>";
-                    msg += "\n";
-                    msg += "    <Plane>Left</Plane>";
-                    msg += "\n";
-                    //----------------------Bezugskante festlegen:
-                    msg += "    <Ref>";
-                    QString ref = GANX_REF_UNTEN_LINKS;
-                    msg += ref;
-                    msg += "</Ref>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Typ>B</Typ>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <X>";
-                    msg += double_to_qstring(0);
-                    msg += "</X>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Y>";
-                    msg += double_to_qstring(y);
-                    msg += "</Y>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Z>";
-                    msg += double_to_qstring(z);
-                    msg += "</Z>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Diameter>";
-                    msg += wkzmag.get_dm(tnummer);
-                    msg += "</Diameter>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "   <Depth>";
-                    msg += bo.get_tiefe_qstring();
-                    msg += "</Depth>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Tool>";
-                    msg += tnummer;
-                    msg += "</Tool>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <OldID>";
-                    msg += GANX_WST_BEZUG_LI;
-                    msg += "\\";
-                    msg += ref;
-                    msg += "\\";
-                    msg += "B-";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</OldID>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <KleiGeTei>";    //Tiefe???
-                    msg += double_to_qstring(x);
-                    msg += "</KleiGeTei>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "  </PrgrFileWork>";
-                    msg += "\n";
+                    double aktti; //aktuelle Tiefe
+                    aktti = zustmass;
+                    while(aktti <= bo.get_tiefe())
+                    {
+                        msg += "  <PrgrFileWork>";
+                        msg += "\n";
+                        msg += "    <CntID>";
+                        msg += int_to_qstring(id);               //ID-Nummer
+                        msg += "</CntID>";
+                        msg += "\n";
+                        msg += "    <Plane>Left</Plane>";
+                        msg += "\n";
+                        //----------------------Bezugskante festlegen:
+                        msg += "    <Ref>";
+                        QString ref = GANX_REF_UNTEN_LINKS;
+                        msg += ref;
+                        msg += "</Ref>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Typ>B</Typ>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <X>";
+                        msg += double_to_qstring(0);
+                        msg += "</X>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Y>";
+                        msg += double_to_qstring(y);
+                        msg += "</Y>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Z>";
+                        msg += double_to_qstring(z);
+                        msg += "</Z>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Diameter>";
+                        msg += wkzmag.get_dm(tnummer);
+                        msg += "</Diameter>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "   <Depth>";
+                        msg += double_to_qstring(aktti);
+                        msg += "</Depth>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Tool>";
+                        msg += tnummer;
+                        msg += "</Tool>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <OldID>";
+                        msg += GANX_WST_BEZUG_LI;
+                        msg += "\\";
+                        msg += ref;
+                        msg += "\\";
+                        msg += "B-";
+                        msg += int_to_qstring(ideditor);               //ID-Nummer
+                        msg += "</OldID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <KleiGeTei>";    //Zustelltiefe
+                        msg += double_to_qstring(zustmass);
+                        msg += "</KleiGeTei>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "  </PrgrFileWork>";
+                        msg += "\n";
 
-                    id++;
+                        id++;
+                        aktti = aktti + zustmass;
+                    }
+                    ideditor++;
 
                 }else if(bezug == WST_BEZUG_RE)
                 {
                     //x = Tiefe
                     //y = Y-Pos
                     //z = Z-Pos
-                    msg += "  <PrgrFileWork>";
-                    msg += "\n";
-                    msg += "    <CntID>";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</CntID>";
-                    msg += "\n";
-                    msg += "    <Plane>Right</Plane>";
-                    msg += "\n";
-                    //----------------------Bezugskante festlegen:
-                    msg += "    <Ref>";
-                    QString ref = GANX_REF_UNTEN_RECHTS;
-                    msg += ref;
-                    msg += "</Ref>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Typ>B</Typ>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <X>";
-                    msg += double_to_qstring(0);
-                    msg += "</X>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Y>";
-                    msg += double_to_qstring(y);
-                    msg += "</Y>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Z>";
-                    msg += double_to_qstring(z);
-                    msg += "</Z>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Diameter>";
-                    msg += wkzmag.get_dm(tnummer);
-                    msg += "</Diameter>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "   <Depth>";
-                    msg += bo.get_tiefe_qstring();
-                    msg += "</Depth>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Tool>";
-                    msg += tnummer;
-                    msg += "</Tool>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <OldID>";
-                    msg += GANX_WST_BEZUG_RE;
-                    msg += "\\";
-                    msg += ref;
-                    msg += "\\";
-                    msg += "B-";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</OldID>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <KleiGeTei>";    //Tiefe???
-                    msg += double_to_qstring(x);
-                    msg += "</KleiGeTei>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "  </PrgrFileWork>";
-                    msg += "\n";
+                    double aktti; //aktuelle Tiefe
+                    aktti = zustmass;
+                    while(aktti <= bo.get_tiefe())
+                    {
+                        msg += "  <PrgrFileWork>";
+                        msg += "\n";
+                        msg += "    <CntID>";
+                        msg += int_to_qstring(id);               //ID-Nummer
+                        msg += "</CntID>";
+                        msg += "\n";
+                        msg += "    <Plane>Right</Plane>";
+                        msg += "\n";
+                        //----------------------Bezugskante festlegen:
+                        msg += "    <Ref>";
+                        QString ref = GANX_REF_UNTEN_RECHTS;
+                        msg += ref;
+                        msg += "</Ref>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Typ>B</Typ>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <X>";
+                        msg += double_to_qstring(0);
+                        msg += "</X>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Y>";
+                        msg += double_to_qstring(y);
+                        msg += "</Y>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Z>";
+                        msg += double_to_qstring(z);
+                        msg += "</Z>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Diameter>";
+                        msg += wkzmag.get_dm(tnummer);
+                        msg += "</Diameter>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "   <Depth>";
+                        msg += double_to_qstring(aktti);
+                        msg += "</Depth>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Tool>";
+                        msg += tnummer;
+                        msg += "</Tool>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <OldID>";
+                        msg += GANX_WST_BEZUG_RE;
+                        msg += "\\";
+                        msg += ref;
+                        msg += "\\";
+                        msg += "B-";
+                        msg += int_to_qstring(ideditor);               //ID-Nummer
+                        msg += "</OldID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <KleiGeTei>";    //Zustelltiefe
+                        msg += double_to_qstring(zustmass);
+                        msg += "</KleiGeTei>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "  </PrgrFileWork>";
+                        msg += "\n";
 
-                    id++;
+                        id++;
+                        aktti = aktti + zustmass;
+                    }
+                    ideditor++;
 
                 }else if(bezug == WST_BEZUG_VO)
                 {
                     //x = X-Pos
                     //y = Tiefe
                     //z = Z-Pos
-                    msg += "  <PrgrFileWork>";
-                    msg += "\n";
-                    msg += "    <CntID>";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</CntID>";
-                    msg += "\n";
-                    msg += "    <Plane>Front</Plane>";
-                    msg += "\n";
-                    //----------------------Bezugskante festlegen:
-                    msg += "    <Ref>";
-                    QString ref = GANX_REF_UNTEN_LINKS;
-                    msg += ref;
-                    msg += "</Ref>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Typ>B</Typ>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <X>";
-                    msg += double_to_qstring(x);
-                    msg += "</X>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Y>";
-                    msg += double_to_qstring(0);
-                    msg += "</Y>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Z>";
-                    msg += double_to_qstring(z);
-                    msg += "</Z>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Diameter>";
-                    msg += wkzmag.get_dm(tnummer);
-                    msg += "</Diameter>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "   <Depth>";
-                    msg += bo.get_tiefe_qstring();
-                    msg += "</Depth>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Tool>";
-                    msg += tnummer;
-                    msg += "</Tool>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <OldID>";
-                    msg += GANX_WST_BEZUG_VO;
-                    msg += "\\";
-                    msg += ref;
-                    msg += "\\";
-                    msg += "B-";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</OldID>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <KleiGeTei>";    //Tiefe???
-                    msg += double_to_qstring(y);
-                    msg += "</KleiGeTei>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "  </PrgrFileWork>";
-                    msg += "\n";
+                    double aktti; //aktuelle Tiefe
+                    aktti = zustmass;
+                    while(aktti <= bo.get_tiefe())
+                    {
+                        msg += "  <PrgrFileWork>";
+                        msg += "\n";
+                        msg += "    <CntID>";
+                        msg += int_to_qstring(id);               //ID-Nummer
+                        msg += "</CntID>";
+                        msg += "\n";
+                        msg += "    <Plane>Front</Plane>";
+                        msg += "\n";
+                        //----------------------Bezugskante festlegen:
+                        msg += "    <Ref>";
+                        QString ref = GANX_REF_UNTEN_LINKS;
+                        msg += ref;
+                        msg += "</Ref>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Typ>B</Typ>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <X>";
+                        msg += double_to_qstring(x);
+                        msg += "</X>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Y>";
+                        msg += double_to_qstring(0);
+                        msg += "</Y>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Z>";
+                        msg += double_to_qstring(z);
+                        msg += "</Z>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Diameter>";
+                        msg += wkzmag.get_dm(tnummer);
+                        msg += "</Diameter>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "   <Depth>";
+                        msg += double_to_qstring(aktti);
+                        msg += "</Depth>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Tool>";
+                        msg += tnummer;
+                        msg += "</Tool>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <OldID>";
+                        msg += GANX_WST_BEZUG_VO;
+                        msg += "\\";
+                        msg += ref;
+                        msg += "\\";
+                        msg += "B-";
+                        msg += int_to_qstring(ideditor);               //ID-Nummer
+                        msg += "</OldID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <KleiGeTei>";    //Zustelltiefe
+                        msg += double_to_qstring(zustmass);
+                        msg += "</KleiGeTei>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "  </PrgrFileWork>";
+                        msg += "\n";
 
-                    id++;
+                        id++;
+                        aktti = aktti + zustmass;
+                    }
+                    ideditor++;
 
                 }else if(bezug == WST_BEZUG_HI)
                 {
                     //x = X-Pos
                     //y = Tiefe
                     //z = Z-Pos
-                    msg += "  <PrgrFileWork>";
-                    msg += "\n";
-                    msg += "    <CntID>";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</CntID>";
-                    msg += "\n";
-                    msg += "    <Plane>Rear</Plane>";
-                    msg += "\n";
-                    //----------------------Bezugskante festlegen:
-                    msg += "    <Ref>";
-                    QString ref = GANX_REF_OBEN_LINKS;
-                    msg += ref;
-                    msg += "</Ref>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Typ>B</Typ>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <X>";
-                    msg += double_to_qstring(x);
-                    msg += "</X>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Y>";
-                    msg += double_to_qstring(0);
-                    msg += "</Y>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Z>";
-                    msg += double_to_qstring(z);
-                    msg += "</Z>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Diameter>";
-                    msg += wkzmag.get_dm(tnummer);
-                    msg += "</Diameter>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "   <Depth>";
-                    msg += bo.get_tiefe_qstring();
-                    msg += "</Depth>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <Tool>";
-                    msg += tnummer;
-                    msg += "</Tool>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <OldID>";
-                    msg += GANX_WST_BEZUG_HI;
-                    msg += "\\";
-                    msg += ref;
-                    msg += "\\";
-                    msg += "B-";
-                    msg += int_to_qstring(id);               //ID-Nummer
-                    msg += "</OldID>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "    <KleiGeTei>";    //Tiefe???
-                    msg += double_to_qstring(y);
-                    msg += "</KleiGeTei>";
-                    msg += "\n";
-                    //----------------------
-                    msg += "  </PrgrFileWork>";
-                    msg += "\n";
+                    double aktti; //aktuelle Tiefe
+                    aktti = zustmass;
+                    while(aktti <= bo.get_tiefe())
+                    {
+                        msg += "  <PrgrFileWork>";
+                        msg += "\n";
+                        msg += "    <CntID>";
+                        msg += int_to_qstring(id);               //ID-Nummer
+                        msg += "</CntID>";
+                        msg += "\n";
+                        msg += "    <Plane>Rear</Plane>";
+                        msg += "\n";
+                        //----------------------Bezugskante festlegen:
+                        msg += "    <Ref>";
+                        QString ref = GANX_REF_OBEN_LINKS;
+                        msg += ref;
+                        msg += "</Ref>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Typ>B</Typ>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <X>";
+                        msg += double_to_qstring(x);
+                        msg += "</X>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Y>";
+                        msg += double_to_qstring(0);
+                        msg += "</Y>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Z>";
+                        msg += double_to_qstring(z);
+                        msg += "</Z>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Diameter>";
+                        msg += wkzmag.get_dm(tnummer);
+                        msg += "</Diameter>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "   <Depth>";
+                        msg += double_to_qstring(aktti);
+                        msg += "</Depth>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Tool>";
+                        msg += tnummer;
+                        msg += "</Tool>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <OldID>";
+                        msg += GANX_WST_BEZUG_HI;
+                        msg += "\\";
+                        msg += ref;
+                        msg += "\\";
+                        msg += "B-";
+                        msg += int_to_qstring(ideditor);               //ID-Nummer
+                        msg += "</OldID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <KleiGeTei>";    //Zustelltiefe
+                        msg += double_to_qstring(zustmass);
+                        msg += "</KleiGeTei>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "  </PrgrFileWork>";
+                        msg += "\n";
 
-                    id++;
+                        id++;
+                        aktti = aktti + zustmass;
+                    }
+                    ideditor++;
 
                 }
 
@@ -2336,13 +2492,13 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "</Plane>";
                     msg += "\n";
                     //----------------------Bezugskante festlegen:
-                    QString ref = GANX_REF_UNTEN_LINKS;
-                    //y < 40 -> TL
-                    //Länge - y < 40 ->BL
+                    QString ref;
                     if(laenge_y - y < bezugsmass)
                     {
                         ref = GANX_REF_OBEN_LINKS;
-                        y = laenge_y - y;
+                    }else
+                    {
+                        ref = GANX_REF_UNTEN_LINKS;
                     }
                     msg += "    <Ref>";
                     msg += ref;
@@ -2404,7 +2560,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += GANX_REF_OBEN_LINKS;
                     msg += "\\";
                     msg += "M-";
-                    msg += int_to_qstring(id);               //ID-Nummer
+                    msg += int_to_qstring(ideditor);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -2417,6 +2573,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
 
                     id++;
+                    ideditor++;
 
                 }else
                 {
@@ -2426,6 +2583,173 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     mb.exec();
                     return msg;
                 }
+            }
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bora(zeile.get_text());
+            double x = bora.get_x();
+            double y = bora.get_y();
+            //double z = bora.get_z();
+            double dm = bora.get_dm();
+            double laenge_y = tmp_b;
+            QString bezug = bora.get_bezug();
+
+            //Y-Maß bezieht sich hier immer auf den Nullpunkt der Wst oben links
+            //die Maße intern beziehen sich immer auf Nullpunkt unten links
+            //das heißt, die Y-Maße müssen an dieser Stelle gegengerechnet werden:
+            y = tmp_b - y;
+
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, bora.get_tiefe(), dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                //Anzahl der Zustellungen berechnen:
+                double zustmass = bora.get_zustellmass();
+                if(zustmass <= 0)
+                {
+                    zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+                }
+                int zustellungen = aufrunden(bora.get_tiefe() / zustmass);
+                if(zustellungen <= 0)
+                {
+                    zustellungen = 1;
+                }
+                zustmass = bora.get_tiefe()/zustellungen;
+                //-------------------------------
+
+                if(bezug == WST_BEZUG_OBSEI  ||  bezug == WST_BEZUG_UNSEI)
+                {
+                    for(uint i=1; i<=bora.get_anz_y() ;i++)
+                    {
+                        y = tmp_b - (  bora.get_y()+(bora.get_raster_y()*(i-1))  );
+
+                        for(uint ii=1; ii<=bora.get_anz_x() ;ii++)
+                        {
+                            x = bora.get_x()+(bora.get_raster_x()*(ii-1));
+                            //x = Breite
+                            //y = Länge
+                            //z = Tiefe
+                            double aktti; //aktuelle Tiefe
+                            aktti = zustmass;
+                            while(aktti <= bora.get_tiefe())
+                            {
+                                msg += "  <PrgrFileWork>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <CntID>";
+                                msg += int_to_qstring(id);               //ID-Nummer
+                                msg += "</CntID>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Plane>";
+                                if(bezug == WST_BEZUG_OBSEI)
+                                {
+                                    msg += GANX_WST_BEZUG_OBSEI;
+                                }else
+                                {
+                                    msg += GANX_WST_BEZUG_UNSEI;
+                                }
+                                msg += "</Plane>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Ref>";
+                                QString ref;
+                                if(  laenge_y - y < bezugsmass  &&  bora.get_anz_y()==1  )
+                                {
+                                    ref += GANX_REF_OBEN_LINKS;
+                                }else
+                                {
+                                    ref += GANX_REF_UNTEN_LINKS;
+                                }
+                                msg += ref;
+                                msg += "</Ref>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Typ>B</Typ>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <X>";
+                                msg += double_to_qstring(x);
+                                msg += "</X>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Y>";
+                                msg += double_to_qstring(y);
+                                msg += "</Y>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Z>";
+                                msg += double_to_qstring(0);
+                                msg += "</Z>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Diameter>";
+                                msg += wkzmag.get_dm(tnummer);
+                                msg +="</Diameter>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Depth>";
+                                msg += double_to_qstring(aktti);
+                                msg += "</Depth>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <DblB>false</DblB>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <DblL>false</DblL>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <DblE>false</DblE>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Tool>";
+                                msg += tnummer;
+                                msg += "</Tool>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <ImageKey>BR</ImageKey>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <OldID>";
+                                if(bezug == WST_BEZUG_OBSEI)
+                                {
+                                    msg += GANX_WST_BEZUG_OBSEI;
+                                }else
+                                {
+                                    msg += GANX_WST_BEZUG_UNSEI;
+                                }
+                                msg += "\\";
+                                msg += ref;
+                                msg += "\\";
+                                msg += "BR-";
+                                msg += int_to_qstring(ideditor);               //ID-Nummer
+                                msg += "</OldID>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <KleiGeTei>";    //Zustelltiefe
+                                msg += double_to_qstring(zustmass);
+                                msg += "</KleiGeTei>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <Clause />";
+                                msg += "\n";
+                                //----------------------
+                                msg += "    <iClauseState>0</iClauseState>";
+                                msg += "\n";
+                                //----------------------
+                                msg += "  </PrgrFileWork>";
+                                msg += "\n";
+                                //----------------------
+
+                                id++;
+                                aktti = aktti + zustmass;
+                            }
+                        }
+                    }
+                    ideditor++;
+                }
+            }else
+            {
+                //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
             }
         }else if(zeile.zeile(1)==BEARBART_NUT)
         {
@@ -2590,7 +2914,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += GANX_REF_OBEN_LINKS;
                 msg += "\\";
                 msg += "S-";
-                msg += int_to_qstring(id);               //ID-Nummer
+                msg += int_to_qstring(ideditor);               //ID-Nummer
                 msg += "</OldID>";
                 msg += "\n";
                 //----------------------
@@ -2603,6 +2927,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += "\n";
 
                 id++;
+                ideditor++;
 
             }else if(nu.get_breite() > nutblattbreite)
             {
@@ -2719,7 +3044,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += GANX_REF_OBEN_LINKS;
                     msg += "\\";
                     msg += "S-";
-                    msg += int_to_qstring(id);               //ID-Nummer
+                    msg += int_to_qstring(ideditor);               //ID-Nummer
                     msg += "</OldID>";
                     msg += "\n";
                     //----------------------
@@ -2732,6 +3057,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     msg += "\n";
 
                     id++;
+                    ideditor++;
 
                 }
             }
@@ -2845,129 +3171,193 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 zustellungen = 1;
             }
 
-            //----------------------------------------------
-            msg += "  <PrgrFileWork>";
-            msg += "\n";
-            //----------------------
-            msg += "    <CntID>";
-            msg += int_to_qstring(id);               //ID-Nummer
-            msg += "</CntID>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Plane>";
-            if(rt.get_bezug() == WST_BEZUG_OBSEI)
+            if(zustellungen > 1)
             {
-                msg += GANX_WST_BEZUG_OBSEI;
-            }else
-            {
-                msg += GANX_WST_BEZUG_UNSEI;
+                if(rt.get_bezug() == WST_BEZUG_OBSEI)
+                {
+                    gruppen_PrgrFileWork.neue_gruppe(GANX_WST_BEZUG_OBSEI);
+                }else
+                {
+                    gruppen_PrgrFileWork.neue_gruppe(GANX_WST_BEZUG_UNSEI);
+                }
+                if(wkz_dm > by-2  ||  wkz_dm > lx-2)//by==TAB  lx==TAL
+                {
+                    QString msg = fehler_kein_WKZ("ganx", zeile);
+                    msg += "\n";
+                    msg += "Anzahl der Zustellungen: ";
+                    msg += double_to_qstring(zustellungen);
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    return msg;
+                }
             }
-            msg += "</Plane>";
-            msg += "\n";
-            //----------------------Bezugskante festlegen:
-            QString ref = GANX_REF_UNTEN_LINKS;
-            //y < 40 -> TL
-            //Länge - y < 40 ->BL
-            if(laenge_y - y < bezugsmass)
-            {
-                ref = GANX_REF_OBEN_LINKS;
-                y = laenge_y - y;
-            }
-            msg += "    <Ref>";
-            msg += ref;
-            msg += "</Ref>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Typ>M</Typ>";
-            msg += "\n";
-            //----------------------
-            msg += "    <X>";
-            msg += double_to_qstring(x);
-            msg += "</X>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Y>";
-            msg += double_to_qstring(y);
-            msg += "</Y>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Z>";
-            msg += double_to_qstring(0);
-            msg += "</Z>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Tool>";
-            msg += tnummer;
-            msg += "</Tool>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Mill>";
-            msg += "3";                      //Rechtecktasche
-            msg += ";";
-            msg += double_to_qstring(by);    //TAB
-            msg += ";";
-            msg += double_to_qstring(lx);    //TAL
-            msg += ";";
-            msg += double_to_qstring(eckenradius); //Eckenradius Tasche
-            msg += ";";
-            msg += ti;                       //TaTi
-            msg += ";";
-            //Variante der Rechtecktasche:
-            //  1 = ausgeräumt
-            //  2 = nicht ausgeräumt von der Mitte angefahren
-            //  3 = nicht ausgeräumt entlang der Taschenkante angefahren
-            if(ausraeumen == true)
-            {
-                msg += "1";
-            }else
-            {
-                msg += "3";
-            }
-            msg += ";";
-            msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
-            msg += ";";
-            msg += double_to_qstring(wkz_vorschub);
-            msg += ";";
-            msg += int_to_qstring(zustellungen);
-            msg += "</Mill>";
-            msg += "\n";
-            //----------------------
-            msg += "    <ImageKey>RE</ImageKey>";
-            msg += "\n";
-            //----------------------
-            msg += "    <OldID>";
-            if(rt.get_bezug() == WST_BEZUG_OBSEI)
-            {
-                msg += GANX_WST_BEZUG_OBSEI;
-            }else
-            {
-                msg += GANX_WST_BEZUG_UNSEI;
-            }
-            msg += "\\";
-            msg += GANX_REF_OBEN_LINKS;
-            msg += "\\";
-            msg += "M-";
-            msg += int_to_qstring(id);               //ID-Nummer
-            msg += "</OldID>";
-            msg += "\n";
-            //----------------------
-            msg += "    <KleiGeTei>";
-            msg += "0";
-            msg += "</KleiGeTei>";
-            msg += "\n";
-            //----------------------
-            msg += "  </PrgrFileWork>";
-            msg += "\n";
 
-            id++;
+            for(uint ii=1 ; ii<=zustellungen ;ii++)
+            {
+                //----------------------------------------------
+                msg += "  <PrgrFileWork>";
+                msg += "\n";
+                //----------------------
+                msg += "    <CntID>";
+                msg += int_to_qstring(id);               //ID-Nummer
+                msg += "</CntID>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Plane>";
+                if(rt.get_bezug() == WST_BEZUG_OBSEI)
+                {
+                    msg += GANX_WST_BEZUG_OBSEI;
+                }else
+                {
+                    msg += GANX_WST_BEZUG_UNSEI;
+                }
+                msg += "</Plane>";
+                msg += "\n";
+                //----------------------Bezugskante festlegen:
+                QString ref;
+                if(laenge_y - y < bezugsmass)
+                {
+                    ref = GANX_REF_OBEN_LINKS;
+                }else
+                {
+                    ref = GANX_REF_UNTEN_LINKS;
+                }
+                msg += "    <Ref>";
+                msg += ref;
+                msg += "</Ref>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Typ>M</Typ>";
+                msg += "\n";
+                //----------------------
+                msg += "    <X>";
+                msg += double_to_qstring(x);
+                msg += "</X>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Y>";
+                msg += double_to_qstring(y);
+                msg += "</Y>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Z>";
+                msg += double_to_qstring(0);
+                msg += "</Z>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Tool>";
+                msg += tnummer;
+                msg += "</Tool>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Mill>";
+                msg += "3";                      //Rechtecktasche
+                msg += ";";
+                //msg += double_to_qstring(by);    //TAB
+                if(zustellungen > 1  &&  ii != zustellungen)
+                {
+                    msg += double_to_qstring(by-2);    //TAB
+                }else
+                {
+                    msg += double_to_qstring(by);    //TAB
+                }
+                msg += ";";
+                //msg += double_to_qstring(lx);    //TAL
+                if(zustellungen > 1  &&  ii != zustellungen)
+                {
+                    msg += double_to_qstring(lx-2);    //TAL
+                }else
+                {
+                    msg += double_to_qstring(lx);    //TAL
+                }
+                msg += ";";
+                msg += double_to_qstring(eckenradius); //Eckenradius Tasche
+                msg += ";";
+                //msg += ti;                       //TaTi
+                msg += double_to_qstring(ti.toDouble()/zustellungen*ii);    //TaTi
+                msg += ";";
+                //Variante der Rechtecktasche:
+                //  1 = ausgeräumt
+                //  2 = nicht ausgeräumt von der Mitte angefahren
+                //  3 = nicht ausgeräumt entlang der Taschenkante angefahren
+                if(ausraeumen == true)
+                {
+                    msg += "1";
+                }else
+                {
+                    msg += "3";
+                }
+                msg += ";";
+                msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
+                msg += ";";
+                msg += double_to_qstring(wkz_vorschub);
+                msg += ";";
+                //msg += int_to_qstring(zustellungen);
+                msg += "1";                     //ohne Zustellungen
+                msg += "</Mill>";
+                msg += "\n";
+                //----------------------
+                msg += "    <ImageKey>RE</ImageKey>";
+                msg += "\n";
+                //----------------------
+                msg += "    <OldID>";
+                if(rt.get_bezug() == WST_BEZUG_OBSEI)
+                {
+                    msg += GANX_WST_BEZUG_OBSEI;
+                }else
+                {
+                    msg += GANX_WST_BEZUG_UNSEI;
+                }
+                msg += "\\";
+                msg += GANX_REF_OBEN_LINKS;
+                msg += "\\";
+                msg += "M-";
+                msg += int_to_qstring(ideditor);               //ID-Nummer
+                msg += "</OldID>";
+                msg += "\n";
+                //----------------------
+                msg += "    <KleiGeTei>";
+                msg += "0";
+                msg += "</KleiGeTei>";
+                msg += "\n";
+                //----------------------
+                if(zustellungen > 1)
+                {
+                    //----------------------
+                    msg += "    <GroupName>";
+                    msg += gruppen_PrgrFileWork.get_letzten_gruppennamen();
+                    msg += "</GroupName>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SortID>";
+                    msg += double_to_qstring(ii);
+                    msg += "</SortID>";
+                    msg += "\n";
+                    //----------------------
+                }
+                //----------------------
+                msg += "    <Clause />";
+                msg += "\n";
+                //----------------------
+                msg += "    <iClauseState>0</iClauseState>";
+                msg += "\n";
+                //----------------------
+                msg += "  </PrgrFileWork>";
+                msg += "\n";
 
+                id++;
+                ideditor++;
+            }
         }
     }
 
     //-------------------------Bearbeitungen <PrgrFile>:
     //Dies ist der Teil, den die Gannomat-Editor liest
     //Hier darf nur mit der Syntax entsprechenden Formeln gearbeitet werden
-    id = 1;
+    id = 1;//id die im Editor angezeigt wird
+    ganx_Gruppen gruppen_PrgrFile;
+
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
     {
         zeile.set_text(bearb.zeile(i));
@@ -3756,6 +4146,187 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     return msg;
                 }
             }
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bora(zeile.get_text());
+
+            double x = bora.get_x();
+            double y = bora.get_y();
+            //double z = bora.get_z();
+
+            double dm = bora.get_dm();
+            double laenge_y = tmp_b;
+            QString bezug = bora.get_bezug();
+
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, dm, bora.get_tiefe(), dicke, bezug);
+
+            if(!tnummer.isEmpty())
+            {
+                //Werkzeug wurde gefunden, Bohrraster kann gebohrt werden:
+
+                //Anzahl der Zustellungen berechnen:
+                double zustmass = bora.get_zustellmass();
+                if(zustmass <= 0)
+                {
+                    zustmass = wkzmag.get_zustellmass(tnummer).toDouble();
+                }
+                int zustellungen = aufrunden(bora.get_tiefe() / zustmass);
+                if(zustellungen <= 0)
+                {
+                    zustellungen = 1;
+                }
+                //-------------------------------
+
+                if(bezug == WST_BEZUG_OBSEI  ||  bezug == WST_BEZUG_UNSEI)
+                {
+                    //x = Breite
+                    //y = Länge
+                    //z = Tiefe
+                    msg += "  <PrgrFile>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <DELMARK>OK</DELMARK>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <CntID>";
+                    msg += int_to_qstring(id);               //ID-Nummer
+                    msg += "</CntID>";
+                    msg += "\n";
+                    //----------------------
+                    //y < 40 -> TL
+                    //Länge - y < 40 ->BL
+                    QString ref;
+                    if(  laenge_y - y < bezugsmass  &&  bora.get_anz_y()==1  )
+                    {
+                        ref += GANX_REF_OBEN_LINKS;
+                        y = laenge_y - y;
+                    }else
+                    {
+                        ref += GANX_REF_UNTEN_LINKS;
+                    }
+                    //msg += ref;
+                    //----------------------
+                    msg += "    <ID>";
+                    if(bezug == WST_BEZUG_OBSEI)
+                    {
+                        msg += GANX_WST_BEZUG_OBSEI;
+                    }else
+                    {
+                        msg += GANX_WST_BEZUG_UNSEI;
+                    }
+                    msg += "\\";
+                    msg += ref;
+                    msg += "\\";
+                    msg += "BR-";
+                    msg += int_to_qstring(id);               //ID-Nummer
+                    msg += "</ID>";
+                    msg += "\n";
+                    //----------------------
+                    //----------------------
+                    msg += "    <RefVal1>";
+                    msg += double_to_qstring(y).replace(".",",");
+                    msg += "</RefVal1>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefVal2>";
+                    msg += double_to_qstring(x).replace(".",",");
+                    msg += "</RefVal2>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <RefLVL>";
+                    msg += double_to_qstring(0).replace(".",",");
+                    msg += "</RefLVL>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Diameter>";
+                    msg += wkzmag.get_dm(tnummer).replace(".",",");
+                    msg += "</Diameter>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "   <Depth>";
+                    msg += bora.get_tiefe_qstring().replace(".",",");
+                    msg += "</Depth>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DoDbl>false</DoDbl>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <UsedDbl>ERR</UsedDbl>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DblB>true</DblB>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DblL>false</DblL>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DblE>false</DblE>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <DoMF>false</DoMF>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <Cols>";
+                    msg += bora.get_anz_x_qstring();
+                    msg += "</Cols>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <ColsDistance>";
+                    msg += bora.get_raster_x_qstring();
+                    msg += "</ColsDistance>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <Rows>";
+                    msg += bora.get_anz_y_qstring();
+                    msg += "</Rows>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <RowsDistance>";
+                    msg += bora.get_raster_y_qstring();
+                    msg += "</RowsDistance>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <Tool>";
+                    msg += tnummer;
+                    msg += "</Tool>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SVar>VAR1</SVar>";
+                    msg += "\n";
+                    //---------------------
+                    msg += "    <Cyclic>";
+                    msg += int_to_qstring(zustellungen);
+                    msg += "</Cyclic>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <ImageKey>BR</ImageKey>>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Step>1</Step>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <Clause />";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <iClauseState>0</iClauseState>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <IsActivated>true</IsActivated>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <iColor>4294309340</iColor>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "  </PrgrFile>";
+                    msg += "\n";
+
+                    id++;
+
+                }
+            }else
+            {
+                //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
+            }
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {
 
@@ -3794,7 +4365,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 l = nu.get_ys() - nu.get_ye();
                 y = nu.get_ye();
             }
-            y = get_laenge() - y;
+            y = tmp_b - y;
             y = y-l;
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
@@ -3956,7 +4527,10 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                         x = x + versatz;
                     }else
                     {
-                        x = x + (  (anz_nuten-2)*nutblattbreite  );
+                        double schleifenversatz;
+                        schleifenversatz = nutblattbreite - ((nutblattbreite*anz_nuten)-nu.get_breite()) /(anz_nuten-1);
+                        //x = nu.get_xs() - versatz + (ii-1)*nutblattbreite;
+                        x = nu.get_xs() - versatz + (ii-1)*schleifenversatz;
                     }
 
                     msg += "  <PrgrFile>";
@@ -4161,134 +4735,210 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 zustellungen = 1;
             }
 
-            //----------------------------------------------
+            if(zustellungen > 1)
+            {
+                if(rt.get_bezug() == WST_BEZUG_OBSEI)
+                {
+                    gruppen_PrgrFile.neue_gruppe(GANX_WST_BEZUG_OBSEI);
+                }else
+                {
+                    gruppen_PrgrFile.neue_gruppe(GANX_WST_BEZUG_UNSEI);
+                }
+                if(wkz_dm > by-2  ||  wkz_dm > lx-2)//by==TAB  lx==TAL
+                {
+                    //Diese Stelle des Codes wird theoretisch niemals erreicht,
+                    //da die Funktion bereits in er ersten For-Schleife abbricht.
 
-            msg += "  <PrgrFile>";
-            msg += "\n";
-            //----------------------
-            msg += "    <CntID>";
-            msg += int_to_qstring(id);               //ID-Nummer
-            msg += "</CntID>";
-            msg += "\n";
-            //----------------------
-            QString ref = GANX_REF_UNTEN_LINKS;
-            //y < 40 -> TL
-            //Länge - y < 40 ->BL
-            if(laenge_y - y < bezugsmass)
-            {
-                ref = GANX_REF_OBEN_LINKS;
-                y = laenge_y - y;
+                    QString msg = fehler_kein_WKZ("ganx", zeile);
+                    msg += "\n";
+                    msg += "Anzahl der Zustellungen: ";
+                    msg += double_to_qstring(zustellungen);
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    return msg;
+                }
             }
-            //----------------------
-            msg += "    <ID>";
-            if(rt.get_bezug() == WST_BEZUG_OBSEI)
-            {
-                msg += GANX_WST_BEZUG_OBSEI;
-            }else
-            {
-                msg += GANX_WST_BEZUG_UNSEI;
-            }
-            msg += "\\";
-            msg += ref;
-            msg += "\\";
-            msg += "M-";
-            msg += int_to_qstring(id);               //ID-Nummer
-            msg += "</ID>";
-            msg += "\n";
-            //----------------------
-            msg += "    <RefVal1>";
-            msg += double_to_qstring(y).replace(".",",");
-            msg += "</RefVal1>";
-            msg += "\n";
-            //----------------------
-            msg += "    <RefVal2>";
-            msg += double_to_qstring(x).replace(".",",");
-            msg += "</RefVal2>";
-            msg += "\n";
-            //----------------------
-            //----------------------
-            msg += "    <Diameter>";
-            msg += "0";
-            msg += "</Diameter>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Depth>";
-            msg += double_to_qstring(z).replace(".",",");
-            msg += "</Depth>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DoDbl>false</DoDbl>";
-            msg += "\n";
-            //----------------------
-            msg += "    <UsedDbl>ERR</UsedDbl>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DblB>false</DblB>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DblL>false</DblL>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DblE>false</DblE>";
-            msg += "\n";
-            //----------------------
-            msg += "    <DoMF>false</DoMF>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Tool>";
-            msg += tnummer;
-            msg += "</Tool>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Cyclic>0</Cyclic>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Mill>";
-            msg += "3";                      //Rechtecktasche
-            msg += ";";
-            msg += double_to_qstring(by);    //TAB
-            msg += ";";
-            msg += double_to_qstring(lx);    //TAL
-            msg += ";";
-            msg += double_to_qstring(eckenradius); //Eckenradius Tasche
-            msg += ";";
-            msg += ti;                       //TaTi
-            msg += ";";
-            //Variante der Rechtecktasche:
-            //  1 = ausgeräumt
-            //  2 = nicht ausgeräumt von der Mitte angefahren
-            //  3 = nicht ausgeräumt entlang der Taschenkante angefahren
-            if(ausraeumen == true)
-            {
-                msg += "1";
-            }else
-            {
-                msg += "3";
-            }
-            msg += ";";
-            msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
-            msg += ";";
-            msg += double_to_qstring(wkz_vorschub);
-            msg += ";";
-            msg += int_to_qstring(zustellungen);
-            msg += "</Mill>";
-            msg += "\n";
-            //----------------------
-            msg += "    <ImageKey>RE</ImageKey>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Step>1</Step>";
-            msg += "\n";
-            //----------------------
-            msg += "    <Clause>0</Clause>";
-            msg += "\n";
-            //----------------------
-            msg += "  </PrgrFile>";
-            msg += "\n";
 
-            id++;
+            for(uint ii=1 ; ii<=zustellungen ;ii++)
+            {
+                //----------------------------------------------
 
+                msg += "  <PrgrFile>";
+                msg += "\n";
+                //----------------------
+                msg += "    <CntID>";
+                msg += int_to_qstring(id);               //ID-Nummer
+                msg += "</CntID>";
+                msg += "\n";
+                //----------------------
+                QString ref = GANX_REF_UNTEN_LINKS;
+                //y < 40 -> TL
+                //Länge - y < 40 ->BL
+                if(laenge_y - y < bezugsmass)
+                {
+                    ref = GANX_REF_OBEN_LINKS;
+                    y = laenge_y - y;
+                }
+                //----------------------
+                msg += "    <ID>";
+                if(rt.get_bezug() == WST_BEZUG_OBSEI)
+                {
+                    msg += GANX_WST_BEZUG_OBSEI;
+                }else
+                {
+                    msg += GANX_WST_BEZUG_UNSEI;
+                }
+                msg += "\\";
+                msg += ref;
+                msg += "\\";
+                msg += "M-";
+                msg += int_to_qstring(id);               //ID-Nummer
+                msg += "</ID>";
+                msg += "\n";
+                //----------------------
+                msg += "    <RefVal1>";
+                msg += double_to_qstring(y).replace(".",",");
+                msg += "</RefVal1>";
+                msg += "\n";
+                //----------------------
+                msg += "    <RefVal2>";
+                msg += double_to_qstring(x).replace(".",",");
+                msg += "</RefVal2>";
+                msg += "\n";
+                //----------------------
+                //----------------------
+                msg += "    <Diameter>";
+                msg += "0";
+                msg += "</Diameter>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Depth>";
+                msg += double_to_qstring(z).replace(".",",");
+                msg += "</Depth>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DoDbl>false</DoDbl>";
+                msg += "\n";
+                //----------------------
+                msg += "    <UsedDbl>ERR</UsedDbl>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DblB>false</DblB>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DblL>false</DblL>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DblE>false</DblE>";
+                msg += "\n";
+                //----------------------
+                msg += "    <DoMF>false</DoMF>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Tool>";
+                msg += tnummer;
+                msg += "</Tool>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Cyclic>0</Cyclic>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Mill>";
+                msg += "3";                      //Rechtecktasche
+                msg += ";";
+                //msg += double_to_qstring(by);    //TAB
+                if(zustellungen > 1  &&  ii != zustellungen)
+                {
+                    msg += double_to_qstring(by-2);    //TAB
+                }else
+                {
+                    msg += double_to_qstring(by);    //TAB
+                }
+                msg += ";";
+                //msg += double_to_qstring(lx);    //TAL
+                if(zustellungen > 1  &&  ii != zustellungen)
+                {
+                    msg += double_to_qstring(lx-2);    //TAL
+                }else
+                {
+                    msg += double_to_qstring(lx);    //TAL
+                }
+                msg += ";";
+                msg += double_to_qstring(eckenradius); //Eckenradius Tasche
+                msg += ";";
+                //msg += ti;                       //TaTi
+                msg += double_to_qstring(ti.toDouble()/zustellungen*ii);    //TaTi
+                msg += ";";
+                //Variante der Rechtecktasche:
+                //  1 = ausgeräumt
+                //  2 = nicht ausgeräumt von der Mitte angefahren
+                //  3 = nicht ausgeräumt entlang der Taschenkante angefahren
+                if(ausraeumen == true)
+                {
+                    msg += "1";
+                }else
+                {
+                    msg += "3";
+                }
+                msg += ";";
+                msg += "GL";                     //Gleichlauf (GL = Gleichlauf / GG = Gegenlauf)
+                msg += ";";
+                msg += double_to_qstring(wkz_vorschub);
+                msg += ";";
+                //msg += int_to_qstring(zustellungen);
+                msg += "1";                     //ohne Zustellungen
+                msg += "</Mill>";
+                msg += "\n";
+                //----------------------
+                msg += "    <ImageKey>RE</ImageKey>";
+                msg += "\n";
+                //----------------------
+                msg += "    <Step>1</Step>";
+                msg += "\n";
+                //----------------------
+                if(zustellungen > 1)
+                {
+                    //----------------------
+                    msg += "    <GroupName>";
+                    msg += gruppen_PrgrFile.get_letzten_gruppennamen();
+                    msg += "</GroupName>";
+                    msg += "\n";
+                    //----------------------
+                    msg += "    <SortID>";
+                    msg += double_to_qstring(ii);
+                    msg += "</SortID>";
+                    msg += "\n";
+                    //----------------------
+                }
+                //----------------------
+                msg += "    <Clause>0</Clause>";
+                msg += "\n";
+                //----------------------
+                msg += "    <iClauseState>0</iClauseState>";
+                msg += "\n";
+                //----------------------
+                msg += "  </PrgrFile>";
+                msg += "\n";
+
+                id++;
+            }
         }
+    }
+
+    //-------------------------Bearbeitungsgruppen:
+    if(gruppen_PrgrFile.get_gruppen()  ==  gruppen_PrgrFileWork.get_gruppen())
+    {
+        msg += gruppen_PrgrFile.get_gruppen();
+    }else
+    {
+        //Diese Stelle sollte niermals erreicht werden
+
+        QString msg = "Programminterner Fehler bei der Erstellung von Bearbeitungsgruppen!";
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.exec();
+        return msg;
     }
 
     //-------------------------Programmende:
@@ -4300,6 +4950,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                       double tmp_l, double tmp_b, QString zust_fkon)
 {
+    text_zeilenweise bearb_kopie = bearb;
+    bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
     QString msg;   
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -4345,8 +4997,9 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     msg += get_dicke_qstring();
     msg += "\n";
     msg += "HOLKA=-1\n";            //Hole Kante Nr
-    msg += "KOM1=";                 //Kommentar 1
-    msg += "(NULL)";
+    msg += "KOM1=";                //Kommentar 1
+    msg += fmc_kommentar_gute_seite(bearb_kopie);
+    //msg += "(NULL)";
     msg += "\n";
     msg += "KOM2=";                 //Kommentar 2
     msg += "(NULL)";
@@ -4744,6 +5397,825 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     return msg;
                 }
             }
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bora(zeile.get_text());
+            QString bezug = bora.get_bezug();
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bora.get_dm(), bora.get_tiefe(), dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                QString bohrgruppe = "1";
+                if(bezug == WST_BEZUG_OBSEI)
+                {
+                    double tiefe;
+                    if(bora.get_tiefe() <= get_dicke())
+                    {
+                        tiefe = bora.get_tiefe();
+                    }else
+                    {
+                        tiefe = get_dicke() - bora.get_tiefe();
+                    }
+
+                    //Lochreihen ausgeben
+                    if(bora.get_anz_y() == 1)
+                    {
+                        //Lochreihen oder Bohrbild in X?:
+                        if(bora.get_raster_x() == 32  &&  bora.get_dm() == 5)
+                        {
+                            //Lochreihe:
+                            msg += FMC_LORAE;
+                            msg += "\n";
+                            //---------------------------------
+                            msg += FMC_LORAE_AFB;       //Aufruf Lochreihendialog
+                            msg += bora.get_afb();
+                            msg += "\n";
+                            //---------------------------------
+                            msg += FMC_LORAE_BEZ;       //Bezeichnung
+                            msg += "=";
+                            msg += "Lochreihe DM";
+                            msg += bora.get_dm_qstring();
+                            msg += " T";
+                            msg += double_to_qstring(tiefe);
+                            msg += "\n";
+                            //---------------------------------
+                            msg += FMC_LORAE_DM;        //Durchmesser
+                            msg += "=";
+                            msg += bora.get_dm_qstring();
+                            msg += "\n";
+                            //---------------------------------
+                            msg += FMC_LORAE_XS;        //Startpunkt in X
+                            msg += "=";
+                            msg += bora.get_x_qstring();
+                            msg += "\n";
+                            //---------------------------------
+                            msg += FMC_LORAE_XE;        //Endpunkt in X
+                            msg += "=";
+                            msg += double_to_qstring(bora.get_x() + (bora.get_anz_x()*(bora.get_raster_x()-1))  );
+                            msg += "+0.5";              //Sonst ist es zu genau und es wird ggf 1 Bohrung zu wenig gebohrt
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "EPY";
+                            msg += "=";
+                            msg += "Y1";                //gerade verlaufende Lochreihe von 0 bis L
+                            msg += "\n";
+                            //---------------------------------
+                            msg += FMC_LORAE_Y1;
+                            msg += "=";
+                            msg += bora.get_y_qstring();
+                            msg += "\n";
+                            //---------------------------------
+                            msg += FMC_LORAE_Y2;
+                            msg += "=";
+                            msg += "(NULL)";
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "F";                 //Vorschub
+                            msg += "=";
+                            msg += "AUTO";
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "FAN";                 //Anfahr-Vorschub
+                            msg += "=";
+                            msg += "AUTO";
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "GRP";               //Bohrgruppe
+                            msg += "=";
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "LGEAB";             //Restbohrmaß
+                            msg += "=";
+                            msg += "4";
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "LGEAN";             //Anbohrtiefe
+                            msg += "=";
+                            msg += "4";
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "MITTE";             //Vermitteln  0|1|2
+                            msg += "=";
+                            msg += "0";
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "MRICHT";            //Messen Seite
+                            msg += "=";
+                            msg += "0";
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "N";                 //Drehzahl
+                            msg += "=";
+                            msg += "AUTO";
+                            msg += "\n";
+                            //---------------------------------
+                            msg += FMC_LORAE_RASTER;
+                            msg += "=";
+                            msg += bora.get_raster_x_qstring();
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "TASTEIN";
+                            msg += "=";
+                            msg += "-1";
+                            msg += "\n";
+                            //---------------------------------
+                            msg += FMC_LORAE_TI;
+                            msg += "=";
+                            msg += double_to_qstring(tiefe);
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "ZSM";           //Zustellmaß
+                            msg += "=";
+                            msg += bora.get_zustellmass_qstring();
+                            msg += "\n";
+                            //---------------------------------
+                            msg += "\n";
+                        }else
+                        {
+                            //Bohrbild in X:
+                            //max 6 Bohrungen pro Dialog!
+                            for(uint i=0 ; i<bora.get_anz_x() ; i=i+6)
+                            {
+                                msg += FMC_BOBIX;
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_AFB;
+                                msg += "=";
+                                msg += bora.get_afb();
+                                msg += "\n";
+                                //------------------------------
+                                msg += "BEZB";
+                                msg += "=";
+                                msg += "Bohren in X  DM";
+                                msg += bora.get_dm_qstring();
+                                msg += " T";
+                                msg += double_to_qstring(tiefe);
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_DM;
+                                msg += "=";
+                                msg += bora.get_dm_qstring();
+                                msg += "\n";
+                                //------------------------------
+                                msg += "F";                     //Vorschub
+                                msg += "=";
+                                msg += "AUTO";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "FAN";                   //Anfahrvorschub
+                                msg += "=";
+                                msg += "AUTO";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "GRP";                   //Bohrgruppe
+                                msg += "=";
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_KM;            //Kettenmaß
+                                msg += "=";
+                                msg += "1";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "LGEAB";                 //Restbohrmaß
+                                msg += "=";
+                                msg += "4";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "LGEAN";                 //Anbohrtiefe
+                                msg += "=";
+                                msg += "4";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "MRICHT";                //Messen Seite
+                                msg += "=";
+                                msg += "0";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "N";                     //Drehzahl
+                                msg += "=";
+                                msg += "AUTO";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TASTEIN";               //Taste Satz ein
+                                msg += "=";
+                                msg += "-1";
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_TI;            //Tiefe
+                                msg += "=";
+                                msg += double_to_qstring(tiefe);
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_X1;
+                                msg += "=";
+                                msg += double_to_qstring(  bora.get_x() + (i*bora.get_raster_x())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_X2;
+                                msg += "=";
+                                if(bora.get_anz_x() >= i+2)
+                                {
+                                    msg += bora.get_raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_X3;
+                                msg += "=";
+                                if(bora.get_anz_x() >= i+3)
+                                {
+                                    msg += bora.get_raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_X4;
+                                msg += "=";
+                                if(bora.get_anz_x() >= i+4)
+                                {
+                                    msg += bora.get_raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_X5;
+                                msg += "=";
+                                if(bora.get_anz_x() >= i+5)
+                                {
+                                    msg += bora.get_raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_X6;
+                                msg += "=";
+                                if(bora.get_anz_x() >= i+6)
+                                {
+                                    msg += bora.get_raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_Y1;
+                                msg += "=";
+                                msg += bora.get_y_qstring();
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_Y2;
+                                msg += "=";
+                                msg += "-1";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "ZSM";           //Zustellmaß
+                                msg += "=";
+                                msg += bora.get_zustellmass_qstring();
+                                msg += "\n";
+                                //------------------------------
+                                msg += "\n";
+                            }
+                        }
+                    }else if(bora.get_anz_x() == 1)
+                    {
+                        //Bohrbild in Y:
+                        //max 6 Bohrungen pro Dialog!
+                        for(uint i=0 ; i<bora.get_anz_y() ; i=i+6)
+                        {
+                            msg += FMC_BOBIY;
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIX_AFB;
+                            msg += "=";
+                            msg += bora.get_afb();
+                            msg += "\n";
+                            //------------------------------
+                            msg += "BEZB";
+                            msg += "=";
+                            msg += "Bohren in Y  DM";
+                            msg += bora.get_dm_qstring();
+                            msg += " T";
+                            msg += double_to_qstring(tiefe);
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIX_DM;
+                            msg += "=";
+                            msg += bora.get_dm_qstring();
+                            msg += "\n";
+                            //------------------------------
+                            msg += "F";                     //Vorschub
+                            msg += "=";
+                            msg += "AUTO";
+                            msg += "\n";
+                            //------------------------------
+                            msg += "FAN";                   //Anfahrvorschub
+                            msg += "=";
+                            msg += "AUTO";
+                            msg += "\n";
+                            //------------------------------
+                            msg += "GRP";                   //Bohrgruppe
+                            msg += "=";
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_KM;            //Kettenmaß
+                            msg += "=";
+                            msg += "1";
+                            msg += "\n";
+                            //------------------------------
+                            msg += "LGEAB";                 //Restbohrmaß
+                            msg += "=";
+                            msg += "4";
+                            msg += "\n";
+                            //------------------------------
+                            msg += "LGEAN";                 //Anbohrtiefe
+                            msg += "=";
+                            msg += "4";
+                            msg += "\n";
+                            //------------------------------
+                            msg += "MRICHT";                //Messen Seite
+                            msg += "=";
+                            msg += "0";
+                            msg += "\n";
+                            //------------------------------
+                            msg += "N";                     //Drehzahl
+                            msg += "=";
+                            msg += "AUTO";
+                            msg += "\n";
+                            //------------------------------
+                            msg += "TASTEIN";               //Taste Satz ein
+                            msg += "=";
+                            msg += "-1";
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_TI;            //Tiefe
+                            msg += "=";
+                            msg += double_to_qstring(tiefe);
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_Y1;
+                            msg += "=";
+                            msg += double_to_qstring(  bora.get_y() + (i*bora.get_raster_y())  );
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_Y2;
+                            msg += "=";
+                            if(bora.get_anz_y() >= i+2)
+                            {
+                                msg += bora.get_raster_y_qstring();
+                            }else
+                            {
+                                msg += "(NULL)";
+                            }
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_Y3;
+                            msg += "=";
+                            if(bora.get_anz_y() >= i+3)
+                            {
+                                msg += bora.get_raster_y_qstring();
+                            }else
+                            {
+                                msg += "(NULL)";
+                            }
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_Y4;
+                            msg += "=";
+                            if(bora.get_anz_y() >= i+4)
+                            {
+                                msg += bora.get_raster_y_qstring();
+                            }else
+                            {
+                                msg += "(NULL)";
+                            }
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_Y5;
+                            msg += "=";
+                            if(bora.get_anz_y() >= i+5)
+                            {
+                                msg += bora.get_raster_y_qstring();
+                            }else
+                            {
+                                msg += "(NULL)";
+                            }
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_Y6;
+                            msg += "=";
+                            if(bora.get_anz_y() >= i+6)
+                            {
+                                msg += bora.get_raster_y_qstring();
+                            }else
+                            {
+                                msg += "(NULL)";
+                            }
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_X1;
+                            msg += "=";
+                            msg += bora.get_x_qstring();
+                            msg += "\n";
+                            //------------------------------
+                            msg += FMC_BOBIY_X2;
+                            msg += "=";
+                            msg += "-1";
+                            msg += "\n";
+                            //------------------------------
+                            msg += "ZSM";           //Zustellmaß
+                            msg += "=";
+                            msg += bora.get_zustellmass_qstring();
+                            msg += "\n";
+                            //------------------------------
+                            msg += "\n";
+                        }
+                    }else
+                    {
+                        //Bislang noch keine Lochrasttererkennung in X und Y gleichzeitig vorhanden
+                        //desshalb Ausgabe an dieser Stellen nicht nötig
+                    }
+                }else if(bezug == WST_BEZUG_LI)
+                {
+                    //HBE Xplus:
+                    for(uint i=0 ; i<bora.get_anz_y() ; i=i+6)
+                    {
+                        msg += FMC_HBEXP;
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y1=";
+                        msg += double_to_qstring(  bora.get_y() + (i*bora.get_raster_y())  );
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y2=";
+                        if(bora.get_anz_y() >= i+2)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y3=";
+                        if(bora.get_anz_y() >= i+3)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y4=";
+                        if(bora.get_anz_y() >= i+4)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y5=";
+                        if(bora.get_anz_y() >= i+5)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y6=";
+                        if(bora.get_anz_y() >= i+6)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "TI=";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "Z=";
+                        msg += bora.get_z_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bora.get_dm_qstring();
+                        msg += "\n";
+                        msg += "KETTE=1\n";
+                        msg += "GRP=1\n";           //Bohrgruppe
+                        msg += "X2=-1\n";
+                        msg += "X1=0\n";
+
+                        //Anbohrtiefe gem. Voreinstellung IMAWOP
+                        //Anbohrvorschub gem. Voreinstellung IMAWOP
+                        //Bohrvorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
+
+                        msg += "BEZB=";
+                        msg += "HBE X+ DM";
+                        msg += bora.get_dm_qstring();
+                        msg += " T";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bora.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
+                }else if(bezug == WST_BEZUG_RE)
+                {
+                    //HBE Xminus:
+                    for(uint i=0 ; i<bora.get_anz_y() ; i=i+6)
+                    {
+                        msg += FMC_HBEXM;
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y1=";
+                        msg += double_to_qstring(  bora.get_y() + (i*bora.get_raster_y())  );
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y2=";
+                        if(bora.get_anz_y() >= i+2)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y3=";
+                        if(bora.get_anz_y() >= i+3)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y4=";
+                        if(bora.get_anz_y() >= i+4)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y5=";
+                        if(bora.get_anz_y() >= i+5)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "Y6=";
+                        if(bora.get_anz_y() >= i+6)
+                        {
+                            msg += bora.get_raster_y_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "TI=";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "Z=";
+                        msg += bora.get_z_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bora.get_dm_qstring();
+                        msg += "\n";
+                        msg += "KETTE=1\n";
+                        msg += "GRP=1\n";           //Bohrgruppe
+                        msg += "X2=-1\n";
+                        msg += "X1=L\n";
+
+                        //Anbohrtiefe gem. Voreinstellung IMAWOP
+                        //Anbohrvorschub gem. Voreinstellung IMAWOP
+                        //Bohrvorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
+
+                        msg += "BEZB=";
+                        msg += "HBE X- DM";
+                        msg += bora.get_dm_qstring();
+                        msg += " T";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bora.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
+                }else if(bezug == WST_BEZUG_VO)
+                {
+                    //HBE Yplus:
+                    for(uint i=0 ; i<bora.get_anz_x() ; i=i+6)
+                    {
+                        msg += FMC_HBEYP;
+                        msg += "\n";
+                        msg += "X1=";
+                        msg += double_to_qstring(  bora.get_x() + (i*bora.get_raster_x())  );
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X2=";
+                        if(bora.get_anz_x() >= i+2)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X3=";
+                        if(bora.get_anz_x() >= i+3)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X4=";
+                        if(bora.get_anz_x() >= i+4)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X5=";
+                        if(bora.get_anz_x() >= i+5)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X6=";
+                        if(bora.get_anz_x() >= i+6)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "TI=";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "Z=";
+                        msg += bora.get_z_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bora.get_dm_qstring();
+                        msg += "\n";
+                        msg += "KETTE=1\n";
+                        msg += "GRP=1\n";           //Bohrgruppe
+                        msg += "Y2=-1\n";
+                        msg += "Y1=0\n";
+
+                        //Anbohrtiefe gem. Voreinstellung IMAWOP
+                        //Anbohrvorschub gem. Voreinstellung IMAWOP
+                        //Bohrvorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
+
+                        msg += "BEZB=";
+                        msg += "HBE Y+ DM";
+                        msg += bora.get_dm_qstring();
+                        msg += " T";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bora.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
+                }else if(bezug == WST_BEZUG_HI)
+                {
+                    //HBE Yminus:
+                    for(uint i=0 ; i<bora.get_anz_x() ; i=i+6)
+                    {
+                        msg += FMC_HBEYM;
+                        msg += "\n";
+                        msg += "X1=";
+                        msg += double_to_qstring(  bora.get_x() + (i*bora.get_raster_x())  );
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X2=";
+                        if(bora.get_anz_x() >= i+2)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X3=";
+                        if(bora.get_anz_x() >= i+3)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X4=";
+                        if(bora.get_anz_x() >= i+4)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X5=";
+                        if(bora.get_anz_x() >= i+5)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "X6=";
+                        if(bora.get_anz_x() >= i+6)
+                        {
+                            msg += bora.get_raster_x_qstring();
+                        }else
+                        {
+                            msg += "(NULL)";
+                        }
+                        msg += "\n";
+                        //------------------------------
+                        msg += "TI=";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "Z=";
+                        msg += bora.get_z_qstring();
+                        msg += "\n";
+                        msg += "DM=";
+                        msg += bora.get_dm_qstring();
+                        msg += "\n";
+                        msg += "KETTE=1\n";
+                        msg += "GRP=1\n";           //Bohrgruppe
+                        msg += "Y2=-1\n";
+                        msg += "Y1=B\n";
+
+                        //Anbohrtiefe gem. Voreinstellung IMAWOP
+                        //Anbohrvorschub gem. Voreinstellung IMAWOP
+                        //Bohrvorschub gem. Voreinstellung IMAWOP
+                        //Drehzahl gem. Voreinstellung IMAWOP
+
+                        msg += "BEZB=";
+                        msg += "HBE Y- DM";
+                        msg += bora.get_dm_qstring();
+                        msg += " T";
+                        msg += bora.get_tiefe_qstring();
+                        msg += "\n";
+                        msg += "AFB=";
+                        msg += bora.get_afb();
+                        msg += "\n";
+                        msg += "\n";
+                    }
+                }
+            }else
+            {
+                //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
+            }
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {
             nut nu(zeile.get_text());
@@ -4785,16 +6257,48 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "WKZAKTUELL=1";
                     msg += "\n";
                     msg += "SPX=";
-                    msg += nu.get_xs_qstring();
+                    //Nuten auf unserer BIMA310 müssen immer von L zu 0 verlaufen
+                    //Da Agregat versetzt wenn es gedreht wird
+                    if(nu.get_ys() == nu.get_ye())
+                    {
+                        if(nu.get_xs() > nu.get_xe())
+                        {
+                            msg += nu.get_xs_qstring();
+                        }else
+                        {
+                            msg += nu.get_xe_qstring();
+                        }
+                    }else
+                    {
+                        msg += nu.get_xs_qstring();
+                    }
                     msg += "\n";
                     msg += "SPY=";
                     msg += nu.get_ys_qstring();
                     msg += "\n";
                     msg += "EPX=";
-                    msg += nu.get_xe_qstring();
+                    if(nu.get_ys() == nu.get_ye())
+                    {
+                        if(nu.get_xs() < nu.get_xe())
+                        {
+                            msg += nu.get_xs_qstring();
+                        }else
+                        {
+                            msg += nu.get_xe_qstring();
+                        }
+                    }else
+                    {
+                         msg += nu.get_xe_qstring();
+                    }
                     msg += "\n";
                     msg += "EPY=";
-                    msg += nu.get_ye_qstring();
+                    if(nu.get_ys() == nu.get_ye())
+                    {
+                        msg += "SY";
+                    }else
+                    {
+                        msg += nu.get_ye_qstring();
+                    }
                     msg += "\n";
                     msg += "TI=";
                     msg += nu.get_tiefe_qstring();
@@ -5384,6 +6888,464 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         return msg;
                     }
                 }
+            }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+            {
+                bohrraster bora(zeile.get_text());
+                QString bezug = bora.get_bezug();
+                QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bora.get_dm(), bora.get_tiefe(), dicke, bezug);
+
+                //Beareitung auf die Oberseite drehen:
+                bora.set_y(  tmp_b - bora.get_y()  );
+                bora.set_raster_y( -1 * bora.get_raster_y() );
+
+                if(!tnummer.isEmpty())
+                {
+                    //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                    QString bohrgruppe = "2";
+                    if(bezug == WST_BEZUG_UNSEI)
+                    {
+                        double tiefe;
+                        if(bora.get_tiefe() <= get_dicke())
+                        {
+                            tiefe = bora.get_tiefe();
+                        }else
+                        {
+                            tiefe = get_dicke() - bora.get_tiefe();
+                        }
+
+                        //Lochreihen ausgeben
+                        if(bora.get_anz_y() == 1)
+                        {
+                            //Lochreihen oder Bohrbild in X?:
+                            if(bora.get_raster_x() == 32  &&  bora.get_dm() == 5)
+                            {
+                                //Lochreihe:
+                                msg += FMC_LORAE;
+                                msg += "\n";
+                                //---------------------------------
+                                msg += FMC_LORAE_AFB;       //Aufruf Lochreihendialog
+                                msg += bora.get_afb();
+                                msg += "\n";
+                                //---------------------------------
+                                msg += FMC_LORAE_BEZ;       //Bezeichnung
+                                msg += "=";
+                                msg += "Lochreihe DM";
+                                msg += bora.get_dm_qstring();
+                                msg += " T";
+                                msg += double_to_qstring(tiefe);
+                                msg += "\n";
+                                //---------------------------------
+                                msg += FMC_LORAE_DM;        //Durchmesser
+                                msg += "=";
+                                msg += bora.get_dm_qstring();
+                                msg += "\n";
+                                //---------------------------------
+                                msg += FMC_LORAE_XS;        //Startpunkt in X
+                                msg += "=";
+                                msg += bora.get_x_qstring();
+                                msg += "\n";
+                                //---------------------------------
+                                msg += FMC_LORAE_XE;        //Endpunkt in X
+                                msg += "=";
+                                msg += double_to_qstring(bora.get_x() + (bora.get_anz_x()*(bora.get_raster_x()-1))  );
+                                msg += "+0.5";              //Sonst ist es zu genau und es wird ggf 1 Bohrung zu wenig gebohrt
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "EPY";
+                                msg += "=";
+                                msg += "Y1";                //gerade verlaufende Lochreihe von 0 bis L
+                                msg += "\n";
+                                //---------------------------------
+                                msg += FMC_LORAE_Y1;
+                                msg += "=";
+                                msg += bora.get_y_qstring();
+                                msg += "\n";
+                                //---------------------------------
+                                msg += FMC_LORAE_Y2;
+                                msg += "=";
+                                msg += "(NULL)";
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "F";                 //Vorschub
+                                msg += "=";
+                                msg += "AUTO";
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "FAN";                 //Anfahr-Vorschub
+                                msg += "=";
+                                msg += "AUTO";
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "GRP";               //Bohrgruppe
+                                msg += "=";
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "LGEAB";             //Restbohrmaß
+                                msg += "=";
+                                msg += "4";
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "LGEAN";             //Anbohrtiefe
+                                msg += "=";
+                                msg += "4";
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "MITTE";             //Vermitteln  0|1|2
+                                msg += "=";
+                                msg += "0";
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "MRICHT";            //Messen Seite
+                                msg += "=";
+                                msg += "0";
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "N";                 //Drehzahl
+                                msg += "=";
+                                msg += "AUTO";
+                                msg += "\n";
+                                //---------------------------------
+                                msg += FMC_LORAE_RASTER;
+                                msg += "=";
+                                msg += bora.get_raster_x_qstring();
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "TASTEIN";
+                                msg += "=";
+                                msg += "-1";
+                                msg += "\n";
+                                //---------------------------------
+                                msg += FMC_LORAE_TI;
+                                msg += "=";
+                                msg += double_to_qstring(tiefe);
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "ZSM";           //Zustellmaß
+                                msg += "=";
+                                msg += bora.get_zustellmass_qstring();
+                                msg += "\n";
+                                //---------------------------------
+                                msg += "\n";
+                            }else
+                            {
+                                //Bohrbild in X:
+                                //max 6 Bohrungen pro Dialog!
+                                for(uint i=0 ; i<bora.get_anz_x() ; i=i+6)
+                                {
+                                    msg += FMC_BOBIX;
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_AFB;
+                                    msg += "=";
+                                    msg += bora.get_afb();
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "BEZB";
+                                    msg += "=";
+                                    msg += "Bohren in X  DM";
+                                    msg += bora.get_dm_qstring();
+                                    msg += " T";
+                                    msg += double_to_qstring(tiefe);
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_DM;
+                                    msg += "=";
+                                    msg += bora.get_dm_qstring();
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "F";                     //Vorschub
+                                    msg += "=";
+                                    msg += "AUTO";
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "FAN";                   //Anfahrvorschub
+                                    msg += "=";
+                                    msg += "AUTO";
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "GRP";                   //Bohrgruppe
+                                    msg += "=";
+                                    msg += bohrgruppe;
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_KM;            //Kettenmaß
+                                    msg += "=";
+                                    msg += "1";
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "LGEAB";                 //Restbohrmaß
+                                    msg += "=";
+                                    msg += "4";
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "LGEAN";                 //Anbohrtiefe
+                                    msg += "=";
+                                    msg += "4";
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "MRICHT";                //Messen Seite
+                                    msg += "=";
+                                    msg += "0";
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "N";                     //Drehzahl
+                                    msg += "=";
+                                    msg += "AUTO";
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "TASTEIN";               //Taste Satz ein
+                                    msg += "=";
+                                    msg += "-1";
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_TI;            //Tiefe
+                                    msg += "=";
+                                    msg += double_to_qstring(tiefe);
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_X1;
+                                    msg += "=";
+                                    msg += double_to_qstring(  bora.get_x() + (i*bora.get_raster_x())  );
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_X2;
+                                    msg += "=";
+                                    if(bora.get_anz_x() >= i+2)
+                                    {
+                                        msg += bora.get_raster_x_qstring();
+                                    }else
+                                    {
+                                        msg += "(NULL)";
+                                    }
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_X3;
+                                    msg += "=";
+                                    if(bora.get_anz_x() >= i+3)
+                                    {
+                                        msg += bora.get_raster_x_qstring();
+                                    }else
+                                    {
+                                        msg += "(NULL)";
+                                    }
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_X4;
+                                    msg += "=";
+                                    if(bora.get_anz_x() >= i+4)
+                                    {
+                                        msg += bora.get_raster_x_qstring();
+                                    }else
+                                    {
+                                        msg += "(NULL)";
+                                    }
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_X5;
+                                    msg += "=";
+                                    if(bora.get_anz_x() >= i+5)
+                                    {
+                                        msg += bora.get_raster_x_qstring();
+                                    }else
+                                    {
+                                        msg += "(NULL)";
+                                    }
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_X6;
+                                    msg += "=";
+                                    if(bora.get_anz_x() >= i+6)
+                                    {
+                                        msg += bora.get_raster_x_qstring();
+                                    }else
+                                    {
+                                        msg += "(NULL)";
+                                    }
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_Y1;
+                                    msg += "=";
+                                    msg += bora.get_y_qstring();
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += FMC_BOBIX_Y2;
+                                    msg += "=";
+                                    msg += "-1";
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "ZSM";           //Zustellmaß
+                                    msg += "=";
+                                    msg += bora.get_zustellmass_qstring();
+                                    msg += "\n";
+                                    //------------------------------
+                                    msg += "\n";
+                                }
+                            }
+                        }else if(bora.get_anz_x() == 1)
+                        {
+                            //Bohrbild in Y:
+                            //max 6 Bohrungen pro Dialog!
+                            for(uint i=0 ; i<bora.get_anz_y() ; i=i+6)
+                            {
+                                msg += FMC_BOBIY;
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_AFB;
+                                msg += "=";
+                                msg += bora.get_afb();
+                                msg += "\n";
+                                //------------------------------
+                                msg += "BEZB";
+                                msg += "=";
+                                msg += "Bohren in Y  DM";
+                                msg += bora.get_dm_qstring();
+                                msg += " T";
+                                msg += double_to_qstring(tiefe);
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIX_DM;
+                                msg += "=";
+                                msg += bora.get_dm_qstring();
+                                msg += "\n";
+                                //------------------------------
+                                msg += "F";                     //Vorschub
+                                msg += "=";
+                                msg += "AUTO";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "FAN";                   //Anfahrvorschub
+                                msg += "=";
+                                msg += "AUTO";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "GRP";                   //Bohrgruppe
+                                msg += "=";
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_KM;            //Kettenmaß
+                                msg += "=";
+                                msg += "1";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "LGEAB";                 //Restbohrmaß
+                                msg += "=";
+                                msg += "4";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "LGEAN";                 //Anbohrtiefe
+                                msg += "=";
+                                msg += "4";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "MRICHT";                //Messen Seite
+                                msg += "=";
+                                msg += "0";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "N";                     //Drehzahl
+                                msg += "=";
+                                msg += "AUTO";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TASTEIN";               //Taste Satz ein
+                                msg += "=";
+                                msg += "-1";
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_TI;            //Tiefe
+                                msg += "=";
+                                msg += double_to_qstring(tiefe);
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_Y1;
+                                msg += "=";
+                                msg += double_to_qstring(  bora.get_y() + (i*bora.get_raster_y())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_Y2;
+                                msg += "=";
+                                if(bora.get_anz_y() >= i+2)
+                                {
+                                    msg += bora.get_raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_Y3;
+                                msg += "=";
+                                if(bora.get_anz_y() >= i+3)
+                                {
+                                    msg += bora.get_raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_Y4;
+                                msg += "=";
+                                if(bora.get_anz_y() >= i+4)
+                                {
+                                    msg += bora.get_raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_Y5;
+                                msg += "=";
+                                if(bora.get_anz_y() >= i+5)
+                                {
+                                    msg += bora.get_raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_Y6;
+                                msg += "=";
+                                if(bora.get_anz_y() >= i+6)
+                                {
+                                    msg += bora.get_raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_X1;
+                                msg += "=";
+                                msg += bora.get_x_qstring();
+                                msg += "\n";
+                                //------------------------------
+                                msg += FMC_BOBIY_X2;
+                                msg += "=";
+                                msg += "-1";
+                                msg += "\n";
+                                //------------------------------
+                                msg += "ZSM";           //Zustellmaß
+                                msg += "=";
+                                msg += bora.get_zustellmass_qstring();
+                                msg += "\n";
+                                //------------------------------
+                                msg += "\n";
+                            }
+                        }else
+                        {
+                            //Bislang noch keine Lochrasttererkennung in X und Y gleichzeitig vorhanden
+                            //desshalb Ausgabe an dieser Stellen nicht nötig
+                        }
+                    }
+                }else
+                {
+                    //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
+                }
             }else if(zeile.zeile(1) == BEARBART_NUT)
             {
                 nut nu(zeile.get_text());
@@ -5394,30 +7356,28 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     nu.set_bezug(WST_BEZUG_OBSEI);
                     nu.set_ys(  tmp_b - nu.get_ys()  );
                     nu.set_ye(  tmp_b - nu.get_ye()  );
-                }
-                QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
-                if(!tnummer.isEmpty())
-                {
-                    double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
-                    if(nu.get_breite() < nutblattbreite)
-                    {
-                        //Warnung ausgeben und Nut unterdrücken:
-                        QString msg = "";
-                        msg += "Achtung bei fmc-Export!\n";
-                        msg += "Teilname: ";
-                        msg += name;
-                        msg += "\n";
-                        msg += "Saegeblatt zu breit fuer ";
-                        msg += get_bearb_menschlich_lesbar(zeile);
-                        msg += "\n";
-                        msg += "Bitte FMC-Programm pruefen und schmaleres Nutblatt zuweisen.";
 
-                        QMessageBox mb;
-                        mb.setText(msg);
-                        mb.exec();
-                    }
-                    if(bezug == WST_BEZUG_OBSEI)
+                    QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
+                    if(!tnummer.isEmpty())
                     {
+                        double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
+                        if(nu.get_breite() < nutblattbreite)
+                        {
+                            //Warnung ausgeben und Nut unterdrücken:
+                            QString msg = "";
+                            msg += "Achtung bei fmc-Export!\n";
+                            msg += "Teilname: ";
+                            msg += name;
+                            msg += "\n";
+                            msg += "Saegeblatt zu breit fuer ";
+                            msg += get_bearb_menschlich_lesbar(zeile);
+                            msg += "\n";
+                            msg += "Bitte FMC-Programm pruefen und schmaleres Nutblatt zuweisen.";
+
+                            QMessageBox mb;
+                            mb.setText(msg);
+                            mb.exec();
+                        }
                         msg += FMC_NUT;
                         msg += "\n";
                         msg += "WKZID=";                //WKZ-Nummer
@@ -5432,16 +7392,48 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "WKZAKTUELL=1";
                         msg += "\n";
                         msg += "SPX=";
-                        msg += nu.get_xs_qstring();
+                        //Nuten auf unserer BIMA310 müssen immer von L zu 0 verlaufen
+                        //Da Agregat versetzt wenn es gedreht wird
+                        if(nu.get_ys() == nu.get_ye())
+                        {
+                            if(nu.get_xs() > nu.get_xe())
+                            {
+                                msg += nu.get_xs_qstring();
+                            }else
+                            {
+                                msg += nu.get_xe_qstring();
+                            }
+                        }else
+                        {
+                            msg += nu.get_xs_qstring();
+                        }
                         msg += "\n";
                         msg += "SPY=";
                         msg += nu.get_ys_qstring();
                         msg += "\n";
                         msg += "EPX=";
-                        msg += nu.get_xe_qstring();
+                        if(nu.get_ys() == nu.get_ye())
+                        {
+                            if(nu.get_xs() < nu.get_xe())
+                            {
+                                msg += nu.get_xs_qstring();
+                            }else
+                            {
+                                msg += nu.get_xe_qstring();
+                            }
+                        }else
+                        {
+                             msg += nu.get_xe_qstring();
+                        }
                         msg += "\n";
                         msg += "EPY=";
-                        msg += nu.get_ye_qstring();
+                        if(nu.get_ys() == nu.get_ye())
+                        {
+                            msg += "SY";
+                        }else
+                        {
+                            msg += nu.get_ye_qstring();
+                        }
                         msg += "\n";
                         msg += "TI=";
                         msg += nu.get_tiefe_qstring();
@@ -5472,16 +7464,16 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += nu.get_afb();
                         msg += "\n";
                         msg += "\n";
+                    }else
+                    {
+                        //Mit Fehlermeldung abbrechen:
+                        QString msg = fehler_kein_WKZ("fmc", zeile);
+                        QMessageBox mb;
+                        mb.setText(msg);
+                        mb.exec();
+                        return msg;
                     }
-                }else
-                {
-                    //Mit Fehlermeldung abbrechen:
-                    QString msg = fehler_kein_WKZ("fmc", zeile);
-                    QMessageBox mb;
-                    mb.setText(msg);
-                    mb.exec();
-                    return msg;
-                }
+                }                
             }else if(zeile.zeile(1) == BEARBART_RTA)
             {
                 rechtecktasche rt(zeile.get_text());
@@ -5845,8 +7837,16 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
 
     return msg;
 }
-QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b)
+QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b, \
+                                        QString ausgabeformat, text_zeilenweise wkzmagazin)
 {
+    if(ausgabeformat == FMC)
+    {
+        bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
+    }else if(ausgabeformat == GANX)
+    {
+        bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin, tmp_l, tmp_b);
+    }
     QString msg = "";
     bearb_sortieren();
 
@@ -5882,6 +7882,99 @@ QString werkstueck::kommentar_fmc(QString kom)
     return text;
 }
 
+QString werkstueck::fmc_kommentar_gute_seite(text_zeilenweise bearb)
+{
+    QString retmsg;
+    if(name.contains("Seite"))
+    {
+        bool hat_5er_durchgangsbohrungen = false;
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
+        {
+            zeile.set_text(bearb.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 5)
+                {
+                    if(bo.get_tiefe() > dicke  ||  bo.get_tiefe() < 0)
+                    {
+                        hat_5er_durchgangsbohrungen = true;
+                    }
+                }
+            }
+        }
+        if(hat_5er_durchgangsbohrungen == true)
+        {
+            retmsg = "gut oben";
+        }else
+        {
+            retmsg = "gut unten";
+        }
+    }else if(name.contains("MS"))
+    {
+        retmsg = "gut oben";
+    }else if(name.contains("OB"))
+    {
+        retmsg = "gut oben";
+    }else if(name.contains("UB"))
+    {
+        int anz_obsei = 0;
+        int anz_unsei = 0;
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
+        {
+            zeile.set_text(bearb.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 15)
+                {
+                    if(bo.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        anz_obsei++;
+                    }else if(bo.get_bezug() == WST_BEZUG_UNSEI)
+                    {
+                        anz_unsei++;
+                    }
+                }
+            }
+        }
+        if(anz_obsei > anz_unsei)
+        {
+            retmsg = "gut unten";
+        }else
+        {
+            retmsg = "gut oben";
+        }
+    }else if(name.contains("KB"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("EB"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("RW"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("Tuer"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("SF"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("SB"))
+    {
+        retmsg = "gut unten";
+    }else
+    {
+        retmsg = "(NULL)";
+    }
+
+    return retmsg;
+}
+
 bool werkstueck::punkt_auf_wst(double x, double y, double l, double b, double tolleranz)
 {
     bool returnwert = true;
@@ -5893,6 +7986,691 @@ bool werkstueck::punkt_auf_wst(double x, double y, double l, double b, double to
         returnwert = false;
     }
     return returnwert;
+}
+
+void werkstueck::fraesergeraden_zusammenfassen()
+{
+    for(uint i=1 ; i<bearbeitungen.zeilenanzahl() ; i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearbeitungen.zeile(i));
+        text_zeilenweise folgezeile;
+        folgezeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        folgezeile.set_text(bearbeitungen.zeile(i+1));
+
+        if(zeile.zeile(1) == BEARBART_FRAESERGERADE &&\
+           folgezeile.zeile(1) == BEARBART_FRAESERGERADE)
+        {
+            strecke s1, s2;
+            fraesergerade fg1(zeile.get_text());
+            fraesergerade fg2(folgezeile.get_text());
+            s1=fg1.get_strecke();
+            s2=fg2.get_strecke();
+            strecke_bezugspunkt sb = strecke_bezugspunkt_start;
+            s1.set_laenge_2d(s1.laenge2dim()+s2.laenge2dim(), sb );
+            fg1.set_endpunkt(s1.endp());
+            //Vergleich der Strings statt der double da sonst ungleiche Nachkommastellen alles zu genau machen:
+            if(fg1.get_xe_qstring() == fg2.get_xe_qstring() &&\
+               fg1.get_ye_qstring() == fg2.get_ye_qstring() &&\
+               fg1.get_ze_qstring() == fg2.get_ze_qstring()    )
+            {
+                bearbeitungen.zeile_ersaetzen(i, fg1.get_text());
+                bearbeitungen.zeile_loeschen(i+1);
+                i--;
+            }
+        }
+
+    }
+}
+
+text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin,\
+                                                         double tmp_l, double tmp_b)
+{
+    bohrraster bora;
+
+    text_zeilenweise wkzbodm; //Speichert die verschiedenen vorhandenen Bohrdurchmesser
+    werkzeugmagazin magazin(wkzmagazin);
+    int min_rasterbohrungen_anz = 2;
+
+    text_zeilenweise boti;
+    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise param;
+        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        param.set_text(bearb.zeile(i));
+        if(param.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung b(param.get_text());
+            QString tiefe_neu = b.get_tiefe_qstring();
+            bool schon_da = false;
+            for(uint i=1; i<=boti.zeilenanzahl();i++)
+            {
+                if(tiefe_neu == boti.zeile(i))
+                {
+                    schon_da = true;
+                }
+            }
+            if(schon_da == false)
+            {
+                boti.zeile_anhaengen(tiefe_neu);
+            }
+        }
+    }
+
+    //Alle vertikalen Lochraster finden die zu Bohrern im Werkzeugmagazin passen:
+    wkzbodm = magazin.get_alle_bodm(WKZ_PARAMETER_LAGE_VERT);
+
+    for(uint i=1; i<=wkzbodm.zeilenanzahl() ;i++)
+    {
+        double dm = wkzbodm.zeile(i).toDouble();
+
+        for(uint i=1; i<=boti.zeilenanzahl() ; i++)
+        {
+            double tiefe = boti.zeile(i).toDouble();
+            bool raster_gefunden;
+
+            //-------------------------------------------------------------------------------
+            //Oberseite  0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Oberseite  0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Unterseite  0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Unterseite  0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+        }
+
+
+    }
+
+    return bearb;
+}
+
+text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,\
+                                                        double tmp_l, double tmp_b)
+{
+    bohrraster bora;
+
+    text_zeilenweise wkzbodm; //Speichert die verschiedenen vorhandenen Bohrdurchmesser
+    werkzeugmagazin magazin(wkzmagazin);
+    int min_rasterbohrungen_anz = 3;
+
+    text_zeilenweise boti;
+    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise param;
+        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        param.set_text(bearb.zeile(i));
+        if(param.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung b(param.get_text());
+            QString tiefe_neu = b.get_tiefe_qstring();
+            bool schon_da = false;
+            for(uint i=1; i<=boti.zeilenanzahl();i++)
+            {
+                if(tiefe_neu == boti.zeile(i))
+                {
+                    schon_da = true;
+                }
+            }
+            if(schon_da == false)
+            {
+                boti.zeile_anhaengen(tiefe_neu);
+            }
+        }
+    }
+
+    //Alle vertikalen Lochraster finden die zu Bohrern im Werkzeugmagazin passen:
+    wkzbodm = magazin.get_alle_bodm(WKZ_PARAMETER_LAGE_VERT);
+
+    for(uint i=1; i<=wkzbodm.zeilenanzahl() ;i++)
+    {
+        double dm = wkzbodm.zeile(i).toDouble();
+
+        for(uint i=1; i<=boti.zeilenanzahl() ; i++)
+        {
+            double tiefe = boti.zeile(i).toDouble();
+            bool raster_gefunden;
+
+            //-------------------------------------------------------------------------------
+            //Oberseite  0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Oberseite  0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_OBSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Unterseite  0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //Unterseite  0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_UNSEI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+        }
+    }
+
+    //HBEs im Raser finden die zu Bohrern im Werkzeugmagazin passen:
+    wkzbodm = magazin.get_alle_bodm(WKZ_PARAMETER_LAGE_HORI);
+
+    for(uint i=1; i<=wkzbodm.zeilenanzahl() ;i++)
+    {
+        double dm = wkzbodm.zeile(i).toDouble();
+
+        for(uint i=1; i<=boti.zeilenanzahl() ; i++)
+        {
+            double tiefe = boti.zeile(i).toDouble();
+            bool raster_gefunden;
+
+            //-------------------------------------------------------------------------------
+            //vorne 0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_VO, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_VO, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_VO, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //hinten 0_bis_L:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_HI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_HI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_HI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_L,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //links 0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_LI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_LI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_LI, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+            //-------------------------------------------------------------------------------
+            //rechts 0_bis_B:
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_RE, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        32);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_RE, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        64);
+            }
+            raster_gefunden = true;
+            while(raster_gefunden == true)
+            {
+                raster_gefunden = bora.finde_bohrraster(&bearb,\
+                                                        WST_BEZUG_RE, \
+                                                        dm,\
+                                                        tiefe,\
+                                                        RASTERRICHTUNG_0_BIS_B,\
+                                                        tmp_l,\
+                                                        tmp_b,\
+                                                        get_dicke(),\
+                                                        min_rasterbohrungen_anz,\
+                                                        96);
+            }
+        }
+    }
+
+    return bearb;
 }
 
 //-------------------------------------------------------------------------Werkzeug:
