@@ -2787,7 +2787,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 l = nu.get_ys() - nu.get_ye();
                 y = nu.get_ye();
             }
-            y = get_laenge() - y;
+            y = tmp_b - y;
             y = y-l;
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE);
             if(tnummer.isEmpty())
@@ -2957,7 +2957,9 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                         x = x + versatz;
                     }else
                     {
-                        x = x + (  (anz_nuten-2)*nutblattbreite  );
+                        double schleifenversatz;
+                        schleifenversatz = nutblattbreite - ((nutblattbreite*anz_nuten)-nu.get_breite()) /(anz_nuten-1);
+                        x = nu.get_xs() - versatz + (ii-1)*schleifenversatz;
                     }
 
                     msg += "  <PrgrFileWork>";
@@ -4529,7 +4531,6 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     {
                         double schleifenversatz;
                         schleifenversatz = nutblattbreite - ((nutblattbreite*anz_nuten)-nu.get_breite()) /(anz_nuten-1);
-                        //x = nu.get_xs() - versatz + (ii-1)*nutblattbreite;
                         x = nu.get_xs() - versatz + (ii-1)*schleifenversatz;
                     }
 
@@ -6243,6 +6244,35 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 }
                 if(bezug == WST_BEZUG_OBSEI)
                 {
+                    //Bezugskante der Nut finden:
+                    QString bezugskante = "0"; //Maß gibt Mittellinie der nut an
+                    QString posys = nu.get_ys_qstring();
+                    QString posye = nu.get_ye_qstring();
+                    if(posys == posye)
+                    {
+                        if(nu.get_ys() < (tmp_b-nu.get_ys()))
+                        {
+                            posys = double_to_qstring(  nu.get_ys() - nu.get_breite()/2  );
+                            posye = "SY";
+                            bezugskante = "2"; //Maß gibt linke Flanke der nut an
+                        }else
+                        {
+                            if(nu.get_breite() == 8.5 && nu.get_tiefe() == 6.5)
+                            {
+                                posys = "B-";
+                                posys += double_to_qstring(  (tmp_b - nu.get_ys()) + nu.get_breite()/2  );
+                                posye = "SY";
+                                bezugskante = "2"; //Maß gibt linke Flanke der nut an
+                            }else
+                            {
+                                posys = "B-";
+                                posys += double_to_qstring(  (tmp_b - nu.get_ys()) - nu.get_breite()/2  );
+                                posye = "SY";
+                                bezugskante = "1"; //Maß gibt rechte Flanke der nut an
+                            }
+                        }
+                    }
+
                     msg += FMC_NUT;
                     msg += "\n";
                     msg += "WKZID=";                //WKZ-Nummer
@@ -6273,8 +6303,10 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += nu.get_xs_qstring();
                     }
                     msg += "\n";
+
+
                     msg += "SPY=";
-                    msg += nu.get_ys_qstring();
+                    msg += posys;
                     msg += "\n";
                     msg += "EPX=";
                     if(nu.get_ys() == nu.get_ye())
@@ -6292,13 +6324,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     }
                     msg += "\n";
                     msg += "EPY=";
-                    if(nu.get_ys() == nu.get_ye())
-                    {
-                        msg += "SY";
-                    }else
-                    {
-                        msg += nu.get_ye_qstring();
-                    }
+                    msg += posye;
                     msg += "\n";
                     msg += "TI=";
                     msg += nu.get_tiefe_qstring();
@@ -6306,8 +6332,10 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "NB=";
                     msg += nu.get_breite_qstring();
                     msg += "\n";
-                    msg += "TYPA=1\n";              //Auslauf
-                    msg += "TRKOR=0\n";             //KOrrektur/Bezugskante
+                    msg += "TYPA=1\n";              //Auslauf                    
+                    msg += "TRKOR=";                //Korrektur/Bezugskante
+                    msg += bezugskante;
+                    msg += "\n";
                     msg += "GEGENL=0\n";            //Genenlauf
                     msg += "TWKL=0\n";              //Neigungswinkel
                     msg += "TYPN=1\n";              //Neigungstyp
@@ -7378,6 +7406,36 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             mb.setText(msg);
                             mb.exec();
                         }
+
+                        //Bezugskante der Nut finden:
+                        QString bezugskante = "0"; //Maß gibt Mittellinie der nut an
+                        QString posys = nu.get_ys_qstring();
+                        QString posye = nu.get_ye_qstring();
+                        if(posys == posye)
+                        {
+                            if(nu.get_ys() < (tmp_b-nu.get_ys()))
+                            {
+                                posys = double_to_qstring(  nu.get_ys() - nu.get_breite()/2  );
+                                posye = "SY";
+                                bezugskante = "2"; //Maß gibt linke Flanke der nut an
+                            }else
+                            {
+                                if(nu.get_breite() == 8.5 && nu.get_tiefe() == 6.5)
+                                {
+                                    posys = "B-";
+                                    posys += double_to_qstring(  (tmp_b - nu.get_ys()) + nu.get_breite()/2  );
+                                    posye = "SY";
+                                    bezugskante = "2"; //Maß gibt linke Flanke der nut an
+                                }else
+                                {
+                                    posys = "B-";
+                                    posys += double_to_qstring(  (tmp_b - nu.get_ys()) - nu.get_breite()/2  );
+                                    posye = "SY";
+                                    bezugskante = "1"; //Maß gibt rechte Flanke der nut an
+                                }
+                            }
+                        }
+
                         msg += FMC_NUT;
                         msg += "\n";
                         msg += "WKZID=";                //WKZ-Nummer
@@ -7409,7 +7467,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         }
                         msg += "\n";
                         msg += "SPY=";
-                        msg += nu.get_ys_qstring();
+                        msg += posys;
                         msg += "\n";
                         msg += "EPX=";
                         if(nu.get_ys() == nu.get_ye())
@@ -7427,13 +7485,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         }
                         msg += "\n";
                         msg += "EPY=";
-                        if(nu.get_ys() == nu.get_ye())
-                        {
-                            msg += "SY";
-                        }else
-                        {
-                            msg += nu.get_ye_qstring();
-                        }
+                        msg += posye;
                         msg += "\n";
                         msg += "TI=";
                         msg += nu.get_tiefe_qstring();
@@ -7442,7 +7494,9 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += nu.get_breite_qstring();
                         msg += "\n";
                         msg += "TYPA=1\n";              //Auslauf
-                        msg += "TRKOR=0\n";             //KOrrektur/Bezugskante
+                        msg += "TRKOR=";                //Korrektur/Bezugskante
+                        msg += bezugskante;
+                        msg += "\n";
                         msg += "GEGENL=0\n";            //Genenlauf
                         msg += "TWKL=0\n";              //Neigungswinkel
                         msg += "TYPN=1\n";              //Neigungstyp
@@ -7959,6 +8013,12 @@ QString werkstueck::fmc_kommentar_gute_seite(text_zeilenweise bearb)
     {
         retmsg = "gut unten";
     }else if(name.contains("Tuer"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("Front"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("Paneel"))
     {
         retmsg = "gut unten";
     }else if(name.contains("SF"))
