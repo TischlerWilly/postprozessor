@@ -286,9 +286,9 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
     {
         msg += "  !! Werkstueck-Breite > 1100mm\n";
     }
-    if(tmp_b < 60)
+    if(tmp_b < 50)
     {
-        msg += "  !! Werkstueck-Breite < 60mm\n";
+        msg += "  !! Werkstueck-Breite < 50mm\n";
     }
     if(tmp_d > 100)
     {
@@ -1277,6 +1277,9 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             if(bonus == true)
             {
                 bewertung_0 += 1;
+            }else
+            {
+                bewertung_0 -= 2;
             }
         }
         if(b_90 <= schwellenwert_ay)
@@ -1299,6 +1302,9 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             if(bonus == true)
             {
                 bewertung_90 += 1;
+            }else
+            {
+                bewertung_90 -= 2;
             }
         }
         if(b_180 <= schwellenwert_ay)
@@ -1321,6 +1327,9 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             if(bonus == true)
             {
                 bewertung_180 += 1;
+            }else
+            {
+                bewertung_180 -= 2;
             }
         }
         if(b_270 <= schwellenwert_ay)
@@ -1343,6 +1352,9 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             if(bonus == true)
             {
                 bewertung_270 += 1;
+            }else
+            {
+                bewertung_270 -= 2;
             }
         }
 
@@ -8015,10 +8027,16 @@ QString werkstueck::fmc_kommentar_gute_seite(text_zeilenweise bearb)
     }else if(name.contains("Tuer"))
     {
         retmsg = "gut unten";
-    }else if(name.contains("Front"))
+    }else if(name.contains("Front") || name.contains("front"))
     {
         retmsg = "gut unten";
-    }else if(name.contains("Paneel"))
+    }else if(name.contains("Blende") || name.contains("blende"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("Doppel") || name.contains("doppel"))
+    {
+        retmsg = "gut unten";
+    }else if(name.contains("Paneel") || name.contains("paneel"))
     {
         retmsg = "gut unten";
     }else if(name.contains("SF"))
