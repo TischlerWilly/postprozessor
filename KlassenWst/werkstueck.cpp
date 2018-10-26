@@ -4881,7 +4881,18 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += double_to_qstring(eckenradius); //Eckenradius Tasche
                 msg += ";";
                 //msg += ti;                       //TaTi
-                msg += double_to_qstring(ti.toDouble()/zustellungen*ii);    //TaTi
+                QString tiakt = rt.get_tiefe_qstring();//Weil ti sonst evtl. {LZ}+2 seinkönnte
+                if((tiakt.toDouble()/zustellungen*ii) > get_dicke())
+                {
+                    QString tmp = "{LZ}+";
+                    double dif = tiakt.toDouble() - get_dicke();
+                    tmp += double_to_qstring(dif);
+                    tiakt = tmp;
+                }else
+                {
+                    tiakt = double_to_qstring(tiakt.toDouble()/zustellungen*ii);
+                }
+                msg += tiakt;    //TaTi
                 msg += ";";
                 //Variante der Rechtecktasche:
                 //  1 = ausgeräumt
