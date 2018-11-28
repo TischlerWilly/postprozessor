@@ -179,15 +179,40 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                 }
             }else
             {
-                //Warnung für 35er Bohrer geben der in Kante Bohrt (Bohrerbruch durch Unwucht)
+
                 if(wkzmag.get_dm(tnummer) == "35")
                 {
+                    //Warnung für 35er Bohrer geben der in Kante Bohrt (Bohrerbruch durch Unwucht)
+                    //rein mechanisch ist das mind X-Maß beim 35er Bohrer 11,5mm == 35/2-6 == 17,5-6
                     if(bo.get_x() < 17.5            ||\
                        bo.get_x() > (tmp_l-17.5)    ||\
                        bo.get_y() < 17.5            ||\
                        bo.get_y() > (tmp_b-17.5)    )
                     {
                         msg += "  !! 35er Bohrung zu dicht am Rand fuer verwendeten Bohrer!\n";
+                    }
+                }else if(wkzmag.get_dm(tnummer) == "8")
+                {
+                    if(bo.get_x() < 0)
+                    {
+                        msg += "  !! X-Maß 8er Bohrung zu gering! Mind 0mm erforderlich.\n";
+                    }
+                }else if(wkzmag.get_dm(tnummer) == "10")
+                {
+                    if(bo.get_x() < 0)
+                    {
+                        msg += "  !! X-Maß 10er Bohrung zu gering! Mind 0mm erforderlich.\n";
+                    }
+                }else
+                {
+                    double wkzdm = wkzmag.get_dm(tnummer).toDouble();
+                    if(bo.get_x() < 1+wkzdm/2)
+                    {
+                        msg += "  !! X-Maß ";
+                        msg += double_to_qstring(wkzdm);
+                        msg += "er Bohrung zu gering! Mind ";
+                        msg += double_to_qstring(1+wkzdm/2);
+                        msg += "mm erforderlich.\n";
                     }
                 }
 
