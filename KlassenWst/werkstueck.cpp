@@ -58,8 +58,14 @@ void werkstueck::neue_bearbeitung(QString text)
     {
         if(bearbeitungen.zeile(i) == text)
         {
-            bereits_vorhanden = true;
-            break;
+            text_zeilenweise zeile;//Folgezeile
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(text);
+            if(zeile.zeile(1) == BEARBART_BOHR)//Nur doppelte Bohrungen unterdrücken, Doppelte Fräsbahnen können gewollt sein!
+            {
+                bereits_vorhanden = true;
+                break;
+            }
         }
     }
 
@@ -173,15 +179,40 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                 }
             }else
             {
-                //Warnung für 35er Bohrer geben der in Kante Bohrt (Bohrerbruch durch Unwucht)
+
                 if(wkzmag.get_dm(tnummer) == "35")
                 {
+                    //Warnung für 35er Bohrer geben der in Kante Bohrt (Bohrerbruch durch Unwucht)
+                    //rein mechanisch ist das mind X-Maß beim 35er Bohrer 11,5mm == 35/2-6 == 17,5-6
                     if(bo.get_x() < 17.5            ||\
                        bo.get_x() > (tmp_l-17.5)    ||\
                        bo.get_y() < 17.5            ||\
                        bo.get_y() > (tmp_b-17.5)    )
                     {
                         msg += "  !! 35er Bohrung zu dicht am Rand fuer verwendeten Bohrer!\n";
+                    }
+                }else if(wkzmag.get_dm(tnummer) == "8")
+                {
+                    if(bo.get_x() < 0)
+                    {
+                        msg += "  !! X-Maß 8er Bohrung zu gering! Mind 0mm erforderlich.\n";
+                    }
+                }else if(wkzmag.get_dm(tnummer) == "10")
+                {
+                    if(bo.get_x() < 0)
+                    {
+                        msg += "  !! X-Maß 10er Bohrung zu gering! Mind 0mm erforderlich.\n";
+                    }
+                }else
+                {
+                    double wkzdm = wkzmag.get_dm(tnummer).toDouble();
+                    if(bo.get_x() < 1+wkzdm/2)
+                    {
+                        msg += "  !! X-Maß ";
+                        msg += double_to_qstring(wkzdm);
+                        msg += "er Bohrung zu gering! Mind ";
+                        msg += double_to_qstring(1+wkzdm/2);
+                        msg += "mm erforderlich.\n";
                     }
                 }
 
@@ -1166,6 +1197,16 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                     {
                         bewertung_0 += 2;
                     }
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                {
+                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_0 += 2;
+                    }
+                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_0 += 2;
+                    }
                 }
             }
         }
@@ -1185,6 +1226,16 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                         bewertung_90 += 2;
                     }
                     if(bo.get_y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    {
+                        bewertung_90 += 2;
+                    }
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                {
+                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_90 += 2;
+                    }
+                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
                         bewertung_90 += 2;
                     }
@@ -1210,6 +1261,16 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                     {
                         bewertung_180 += 2;
                     }
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                {
+                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_180 += 2;
+                    }
+                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_180 += 2;
+                    }
                 }
             }
         }
@@ -1229,6 +1290,16 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                         bewertung_270 += 2;
                     }
                     if(bo.get_y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    {
+                        bewertung_270 += 2;
+                    }
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                {
+                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_270 += 2;
+                    }
+                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
                         bewertung_270 += 2;
                     }
@@ -1574,6 +1645,16 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
                     {
                         bewertung_0 += 2;
                     }
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                {
+                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_0 += 2;
+                    }
+                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_0 += 2;
+                    }
                 }
             }
         }
@@ -1593,6 +1674,16 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
                         bewertung_90 += 2;
                     }
                     if(bo.get_y() == b_90-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    {
+                        bewertung_90 += 2;
+                    }
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                {
+                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_90 += 2;
+                    }
+                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
                         bewertung_90 += 2;
                     }
@@ -1618,6 +1709,16 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
                     {
                         bewertung_180 += 2;
                     }
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                {
+                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_180 += 2;
+                    }
+                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_180 += 2;
+                    }
                 }
             }
         }
@@ -1637,6 +1738,16 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
                         bewertung_270 += 2;
                     }
                     if(bo.get_y() == b_270-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                    {
+                        bewertung_270 += 2;
+                    }
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                {
+                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                    {
+                        bewertung_270 += 2;
+                    }
+                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
                         bewertung_270 += 2;
                     }
@@ -6565,21 +6676,77 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += "=";
                         msg += radkor;
                         msg += "\n";
-                        bool aufwst = punkt_auf_wst(fa.get_x(), fa.get_y(), get_laenge(), get_breite(), 1);
+
+                        //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
+                        punkt3d pfa;//Punkt Fräseraufruf
+                        pfa.set_x(fa.get_x());
+                        pfa.set_y(fa.get_y());
+                        text_zeilenweise folzei;//Folgezeile
+                        folzei.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                        folzei.set_text(bearb.zeile(i+1));
+                        punkt3d pein;//Eintauchpunkt
+                        int anweg = 50;
+
+                        if(folzei.zeile(1) == BEARBART_FRAESERGERADE)
+                        {
+                            fraesergerade fg(folzei.get_text());
+                            strecke s;
+                            s.set_start(pfa);
+                            punkt3d ep = fg.get_ep();
+                            ep.set_z(0);
+                            s.set_ende(ep);
+                            strecke_bezugspunkt sb;
+                            sb = strecke_bezugspunkt_ende;
+                            s.set_laenge_2d(s.laenge2dim()+anweg, sb);
+                            pein = s.startp();
+                        }else if(folzei.zeile(1) == BEARBART_FRAESERBOGEN)
+                        {
+                            fraeserbogen fb(folzei.get_text());
+                            bogen b;
+                            b.set_startpunkt(pfa);
+                            b.set_endpunkt(fb.get_ep());
+                            strecke s;
+                            s.set_start(pfa);
+                            punkt3d pmibo;
+                            pmibo.set_x(b.mitte().x());
+                            pmibo.set_y(b.mitte().y());
+                            s.set_ende(pmibo);
+                            s.drenen_um_startpunkt_2d(90, b.im_uzs());
+                            strecke_bezugspunkt sb;
+                            sb = strecke_bezugspunkt_start;
+                            s.set_laenge_2d(anweg, sb);
+                            pein = s.endp();
+                        }
+
+                        bool aufwst = punkt_auf_wst(pein.x(), pein.y(), get_laenge(), get_breite(), 1);
                         if(aufwst == true)
                         {
                             msg += "TYPAN=1\n";     //Anfahrtyp
                             msg += "TYPAB=1\n";     //Abfahrtyp
                             msg += "TYPEIN=1\n";    //Eintauchtp
-                            msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                            msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                            if(pos_z > 0)
+                            {
+                                //Anfahranweisung für nicht durchgefräste Innen-Bahnen:
+                                msg += "LGEAN=2*WKZR\n";    //Anfahrwert
+                                msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                            }else
+                            {
+                                //Anfahranweisung für durchgefräste Innen-Bahnen:
+                                msg += "LGEAN=50\n";    //Anfahrwert
+                                msg += "LGEAB=50\n";    //Abfahrwert
+                            }
                         }else
                         {
+                            //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
                             msg += "TYPAN=0\n";     //Anfahrtyp
                             msg += "TYPAB=0\n";     //Abfahrtyp
                             msg += "TYPEIN=-1\n";   //Eintauchtp
-                            msg += "LGEAN=2*WKZR+5\n";    //Anfahrwert
-                            msg += "LGEAB=2*WKZR+5\n";    //Abfahrwert
+                            msg += "LGEAN=2*WKZR+";    //Anfahrwert
+                            msg += double_to_qstring(anweg);
+                            msg += "\n";
+                            msg += "LGEAB=2*WKZR+";    //Abfahrwert
+                            msg += double_to_qstring(anweg);
+                            msg += "\n";
                         }
                         msg += "FAN=AUTO\n";    //Anfahrvorschub
                         msg += "F=AUTO\n";      //Vorschub
@@ -7733,21 +7900,85 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             msg += "=";
                             msg += radkor;
                             msg += "\n";
-                            bool aufwst = punkt_auf_wst(fa.get_x(), fa.get_y(), get_laenge(), get_breite(), 1);
+
+                            //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
+                            punkt3d pfa;//Punkt Fräseraufruf
+                            pfa.set_x(fa.get_x());
+                            pfa.set_y(fa.get_y());
+                            text_zeilenweise folzei;//Folgezeile
+                            folzei.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                            folzei.set_text(bearb.zeile(i+1));
+                            punkt3d pein;//Eintauchpunkt
+                            int anweg = 50;
+
+                            if(folzei.zeile(1) == BEARBART_FRAESERGERADE)
+                            {
+                                fraesergerade fg(folzei.get_text());
+                                //Beareitung auf die Oberseite drehen:
+                                fg.set_ys(  tmp_b - fg.get_ys()  );
+                                fg.set_ye(  tmp_b - fg.get_ye()  );
+                                //-------
+                                strecke s;
+                                s.set_start(pfa);
+                                punkt3d ep = fg.get_ep();
+                                ep.set_z(0);
+                                s.set_ende(ep);
+                                strecke_bezugspunkt sb;
+                                sb = strecke_bezugspunkt_ende;
+                                s.set_laenge_2d(s.laenge2dim()+anweg, sb);
+                                pein = s.startp();
+                            }else if(folzei.zeile(1) == BEARBART_FRAESERBOGEN)
+                            {
+                                fraeserbogen fb(folzei.get_text());
+                                //Beareitung auf die Oberseite drehen:
+                                fb.set_ys(  tmp_b - fb.get_ys()  );
+                                fb.set_ye(  tmp_b - fb.get_ye()  );
+                                //---------
+                                bogen b;
+                                b.set_startpunkt(pfa);
+                                b.set_endpunkt(fb.get_ep());
+                                strecke s;
+                                s.set_start(pfa);
+                                punkt3d pmibo;
+                                pmibo.set_x(b.mitte().x());
+                                pmibo.set_y(b.mitte().y());
+                                s.set_ende(pmibo);
+                                s.drenen_um_startpunkt_2d(90, b.im_uzs());
+                                strecke_bezugspunkt sb;
+                                sb = strecke_bezugspunkt_start;
+                                s.set_laenge_2d(anweg, sb);
+                                pein = s.endp();
+                            }
+
+                            bool aufwst = punkt_auf_wst(pein.x(), pein.y(), get_laenge(), get_breite(), 1);
                             if(aufwst == true)
                             {
                                 msg += "TYPAN=1\n";     //Anfahrtyp
                                 msg += "TYPAB=1\n";     //Abfahrtyp
                                 msg += "TYPEIN=1\n";    //Eintauchtp
-                                msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                                msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                                if(pos_z > 0)
+                                {
+                                    //Anfahranweisung für nicht durchgefräste Innen-Bahnen:
+                                    msg += "LGEAN=2*WKZR\n";    //Anfahrwert
+                                    msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                                }else
+                                {
+                                    //Anfahranweisung für durchgefräste Innen-Bahnen:
+                                    msg += "LGEAN=50\n";    //Anfahrwert
+                                    msg += "LGEAB=50\n";    //Abfahrwert
+                                }
                             }else
                             {
+                                //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
                                 msg += "TYPAN=0\n";     //Anfahrtyp
                                 msg += "TYPAB=0\n";     //Abfahrtyp
                                 msg += "TYPEIN=-1\n";   //Eintauchtp
-                                msg += "LGEAN=2*WKZR+5\n";    //Anfahrwert
-                                msg += "LGEAB=2*WKZR+5\n";    //Abfahrwert
+                                msg += "LGEAN=2*WKZR+";    //Anfahrwert
+                                msg += double_to_qstring(anweg);
+                                msg += "\n";
+                                msg += "LGEAB=2*WKZR+";    //Abfahrwert
+                                msg += double_to_qstring(anweg);
+                                msg += "\n";
                             }
                             msg += "FAN=AUTO\n";    //Anfahrvorschub
                             msg += "F=AUTO\n";      //Vorschub
