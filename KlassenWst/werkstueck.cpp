@@ -1197,7 +1197,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                     {
                         bewertung_0 += 2;
                     }
-                }else if(bo.get_dm() == 35,3)//Töpfe/Topfbänder am Anschlag anlegen
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
                 {
                     if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
@@ -1229,7 +1229,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                     {
                         bewertung_90 += 2;
                     }
-                }else if(bo.get_dm() == 35,3)//Töpfe/Topfbänder am Anschlag anlegen
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
                 {
                     if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
@@ -1261,7 +1261,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                     {
                         bewertung_180 += 2;
                     }
-                }else if(bo.get_dm() == 35,3)//Töpfe/Topfbänder am Anschlag anlegen
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
                 {
                     if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
@@ -1293,7 +1293,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
                     {
                         bewertung_270 += 2;
                     }
-                }else if(bo.get_dm() == 35,3)//Töpfe/Topfbänder am Anschlag anlegen
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
                 {
                     if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
@@ -1645,7 +1645,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
                     {
                         bewertung_0 += 2;
                     }
-                }else if(bo.get_dm() == 35,3)//Töpfe/Topfbänder am Anschlag anlegen
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
                 {
                     if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
@@ -1677,7 +1677,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
                     {
                         bewertung_90 += 2;
                     }
-                }else if(bo.get_dm() == 35,3)//Töpfe/Topfbänder am Anschlag anlegen
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
                 {
                     if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
@@ -1709,7 +1709,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
                     {
                         bewertung_180 += 2;
                     }
-                }else if(bo.get_dm() == 35,3)//Töpfe/Topfbänder am Anschlag anlegen
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
                 {
                     if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
@@ -1741,7 +1741,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
                     {
                         bewertung_270 += 2;
                     }
-                }else if(bo.get_dm() == 35,3)//Töpfe/Topfbänder am Anschlag anlegen
+                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
                 {
                     if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                     {
