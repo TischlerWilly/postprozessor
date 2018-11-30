@@ -274,6 +274,37 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }                    
                 }
             }
+        }else if(zeile.contains(FMC_KOMMENTAR))
+        {
+            i++;
+            zeile = tz.zeile(i);
+            QString schluessel = text_links(zeile, "=");
+
+            if(schluessel == FMC_KOMMENTAR_TEXT)
+            {
+                QString vo = VW_KANTE_VO;
+                vo = vo.toUpper();
+                QString hi = VW_KANTE_HI;
+                hi = hi.toUpper();
+                QString li = VW_KANTE_LI;
+                li = li.toUpper();
+                QString re = VW_KANTE_RE;
+                re = re.toUpper();
+                QString kom = text_rechts(zeile, "=");
+                if(kom.contains(vo))
+                {
+                    w.set_kante_vo(text_rechts(kom, vo));
+                }else if(kom.contains(hi))
+                {
+                    w.set_kante_hi(text_rechts(kom, hi));
+                }else if(kom.contains(li))
+                {
+                    w.set_kante_li(text_rechts(kom, li));
+                }else if(kom.contains(re))
+                {
+                    w.set_kante_re(text_rechts(kom, re));
+                }
+            }
         }else if(zeile.contains(FMC_BOHR_DM))
         {
             bohrung bo;

@@ -9,6 +9,7 @@
 #include "../allgemKlassen/text_zeilenweise.h"
 #include "../Definitionen/dateinamen.h"
 #include "../Definitionen/def_fmc.h"
+#include "../Definitionen/def_vw.h"
 #include "../eigeneFunktionen/text.h"
 #include "../eigeneFunktionen/myfunktion.h"
 

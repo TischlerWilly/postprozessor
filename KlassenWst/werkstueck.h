@@ -37,6 +37,14 @@ public:
     void set_dicke(double d);
     void set_dicke(QString d);
     void neue_bearbeitung(QString text);
+    void set_kante_vo(QString artiklenummer);
+    void set_kante_hi(QString artiklenummer);
+    void set_kante_li(QString artiklenummer);
+    void set_kante_re(QString artiklenummer);
+    QString get_kante_vo(QString drewi = "0");
+    QString get_kante_hi(QString drewi = "0");
+    QString get_kante_li(QString drewi = "0");
+    QString get_kante_re(QString drewi = "0");
 
     inline void set_name(QString neuer_name)
     {
@@ -90,6 +98,10 @@ private:
     text_zeilenweise bearbeitungen;
     QString name;
     double schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
+    QString kante_vo; //Kante an X
+    QString kante_hi;
+    QString kante_li; //Kante an Y
+    QString kante_re;
 
     //Funktionen:
 
@@ -107,7 +119,8 @@ private:
     text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
 
     QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
-                              double tmp_l, double tmp_b, QString zust_fkon);
+                              double tmp_l, double tmp_b, QString zust_fkon,\
+                              QString drewi);
     QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
     QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
                                 QString ausgabeformat, text_zeilenweise wkzmagazin);

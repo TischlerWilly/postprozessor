@@ -74,6 +74,86 @@ void werkstueck::neue_bearbeitung(QString text)
         bearbeitungen.zeilen_anhaengen(text);
     }
 }
+void werkstueck::set_kante_vo(QString artiklenummer)
+{
+    kante_vo = artiklenummer;
+}
+void werkstueck::set_kante_hi(QString artiklenummer)
+{
+    kante_hi = artiklenummer;
+}
+void werkstueck::set_kante_li(QString artiklenummer)
+{
+    kante_li = artiklenummer;
+}
+void werkstueck::set_kante_re(QString artiklenummer)
+{
+    kante_re = artiklenummer;
+}
+QString werkstueck::get_kante_vo(QString drewi)
+{
+    if(drewi == "90")
+    {
+        return kante_re;
+    }else if(drewi == "180")
+    {
+        return kante_hi;
+    }else if(drewi == "270")
+    {
+        return kante_li;
+    }else
+    {
+        return kante_vo;
+    }
+}
+QString werkstueck::get_kante_hi(QString drewi)
+{
+    if(drewi == "90")
+    {
+        return kante_li;
+    }else if(drewi == "180")
+    {
+        return kante_vo;
+    }else if(drewi == "270")
+    {
+        return kante_re;
+    }else
+    {
+        return kante_hi;
+    }
+}
+QString werkstueck::get_kante_li(QString drewi)
+{
+    if(drewi == "90")
+    {
+        return kante_vo;
+    }else if(drewi == "180")
+    {
+        return kante_re;
+    }else if(drewi == "270")
+    {
+        return kante_hi;
+    }else
+    {
+        return kante_li;
+    }
+}
+QString werkstueck::get_kante_re(QString drewi)
+{
+    if(drewi == "90")
+    {
+        return kante_hi;
+    }else if(drewi == "180")
+    {
+        return kante_li;
+    }else if(drewi == "270")
+    {
+        return kante_vo;
+    }else
+    {
+        return kante_re;
+    }
+}
 
 QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin)
 {
@@ -1070,7 +1150,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0");
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info  = "\n";
         info += warnungen;
@@ -1080,7 +1160,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90");
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info  = "\n";
         info += warnungen;
@@ -1091,7 +1171,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180");
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info  = "\n";
         info += warnungen;
@@ -1103,7 +1183,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270");
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info  = "\n";
         info += warnungen;
@@ -1177,7 +1257,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         double b_270 = b_kopie;
 
         //Stufe 2:
-        //heraus bekommen wo vorne ist:
+        //heraus bekommen wo vorne ist anhand von Bearbeitungen:
         for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
         {
             text_zeilenweise zeile;
@@ -1308,25 +1388,44 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         }
 
         //Stufe 3:
-        //Teile bevorzugen, bei bei denen gilt: L > B:
-        if(l_0 > b_0)
+        //heraus bekommen wo vorne ist anhand von Kanteninfo:
+        if(!get_kante_vo("0").isEmpty() || !get_kante_li("0").isEmpty())
         {
             bewertung_0 += 10;
         }
-        if(l_90 > b_90)
+        if(!get_kante_vo("90").isEmpty() || !get_kante_li("90").isEmpty())
         {
             bewertung_90 += 10;
         }
-        if(l_180 > b_180)
+        if(!get_kante_vo("180").isEmpty() || !get_kante_li("180").isEmpty())
         {
             bewertung_180 += 10;
         }
-        if(l_270 > b_270)
+        if(!get_kante_vo("270").isEmpty() || !get_kante_li("270").isEmpty())
         {
             bewertung_270 += 10;
         }
 
         //Stufe 4:
+        //Teile bevorzugen, bei bei denen gilt: L > B:
+        if(l_0 > b_0)
+        {
+            bewertung_0 += 8;
+        }
+        if(l_90 > b_90)
+        {
+            bewertung_0 += 8;
+        }
+        if(l_180 > b_180)
+        {
+            bewertung_0 += 8;
+        }
+        if(l_270 > b_270)
+        {
+           bewertung_0 += 8;
+        }
+
+        //Stufe 5:
         //Bei schmalen Teilen bevorzugen, wenn HBE nicht aus richtung des Anschlages kommt:
         if(b_0 <= schwellenwert_ay)
         {
@@ -1347,10 +1446,10 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             }
             if(bonus == true)
             {
-                bewertung_0 += 1;
+                bewertung_0 += 5;
             }else
             {
-                bewertung_0 -= 2;
+                bewertung_0 -= 10;
             }
         }
         if(b_90 <= schwellenwert_ay)
@@ -1372,10 +1471,10 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             }
             if(bonus == true)
             {
-                bewertung_90 += 1;
+                bewertung_90 += 5;
             }else
             {
-                bewertung_90 -= 2;
+                bewertung_90 -= 10;
             }
         }
         if(b_180 <= schwellenwert_ay)
@@ -1397,10 +1496,10 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             }
             if(bonus == true)
             {
-                bewertung_180 += 1;
+                bewertung_180 += 5;
             }else
             {
-                bewertung_180 -= 2;
+                bewertung_180 -= 10;
             }
         }
         if(b_270 <= schwellenwert_ay)
@@ -1422,10 +1521,10 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             }
             if(bonus == true)
             {
-                bewertung_270 += 1;
+                bewertung_270 += 5;
             }else
             {
-                bewertung_270 -= 2;
+                bewertung_270 -= 10;
             }
         }
 
@@ -1440,7 +1539,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             double tmp_l = laenge;
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0");
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine\n";
             info += warnungen;
@@ -1454,7 +1553,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90");
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 90 Grad\n";
             info += warnungen;
@@ -1469,7 +1568,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180");
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 180 Grad\n";
             info += warnungen;
@@ -1485,7 +1584,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270");
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info = "  -> Drehung 270 Grad\n";
             info += warnungen;
@@ -1495,7 +1594,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             double tmp_l = laenge;
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0");
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine\n";
             info += warnungen;
@@ -1625,7 +1724,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         double b_270 = b_kopie;
 
         //Stufe 2:
-        //heraus bekommen wo vorne ist:
+        //heraus bekommen wo vorne ist anhand von Bearbeitungen:
         for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
         {
             text_zeilenweise zeile;
@@ -1756,22 +1855,41 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         }
 
         //Stufe 3:
+        //heraus bekommen wo vorne ist anhand von Kanteninfo:
+        if(!get_kante_hi("0").isEmpty() || !get_kante_li("0").isEmpty())
+        {
+            bewertung_0 += 10;
+        }
+        if(!get_kante_hi("90").isEmpty() || !get_kante_li("90").isEmpty())
+        {
+            bewertung_90 += 10;
+        }
+        if(!get_kante_hi("180").isEmpty() || !get_kante_li("180").isEmpty())
+        {
+            bewertung_180 += 10;
+        }
+        if(!get_kante_hi("270").isEmpty() || !get_kante_li("270").isEmpty())
+        {
+            bewertung_270 += 10;
+        }
+
+        //Stufe 4:
         //Teile bevorzugen, bei bei denen gilt: B > L:
         if(b_0 > l_0)
         {
-            bewertung_0 += 2;
+            bewertung_0 += 8;
         }
-        if(b_90 > l_90)
+        if(b_90 < l_90)
         {
-            bewertung_90 += 2;
+            bewertung_0 += 8;
         }
-        if(b_180 > l_180)
+        if(b_180 < l_180)
         {
-            bewertung_180 += 2;
+            bewertung_0 += 8;
         }
-        if(b_270 > l_270)
+        if(b_270 < l_270)
         {
-            bewertung_270 += 2;
+            bewertung_0 += 8;
         }
 
         //Bewertungen auswerten:
@@ -5083,7 +5201,8 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
     return msg;
 }
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
-                                      double tmp_l, double tmp_b, QString zust_fkon)
+                                      double tmp_l, double tmp_b, QString zust_fkon,\
+                                      QString drewi)
 {
     text_zeilenweise bearb_kopie = bearb;
     bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
@@ -5091,6 +5210,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
      werkzeugmagazin wkzmag(wkzmagazin);
+     QString kavo = get_kante_vo(drewi);//Kante vorne == Kante an X
+     QString kali = get_kante_li(drewi);//Kante links == Kante an Y
 
      bool ay = false;
      if(tmp_b < schwellenwert_ay)
@@ -5137,7 +5258,19 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     //msg += "(NULL)";
     msg += "\n";
     msg += "KOM2=";                 //Kommentar 2
-    msg += "(NULL)";
+    if(!kavo.isEmpty()  &&  !kali.isEmpty())
+    {
+        msg += "an X+Y mit Kante";
+    }else if(!kavo.isEmpty()  &&  kali.isEmpty())
+    {
+        msg += "an X mit / an Y ohne Kante";
+    }else if(kavo.isEmpty()  &&  !kali.isEmpty())
+    {
+        msg += "an X ohne / an Y mit Kante";
+    }else
+    {
+        msg += "(NULL)";
+    }
     msg += "\n";
     msg += "LOESEN=";               //Automatisch lösen
     msg += "1";
@@ -8172,6 +8305,21 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
     msg += "\n";
     msg += "---------------";
     msg += "\n";
+    //Kanteninfo:
+    msg += "Kante vorne: \t\"";
+    msg += kante_vo;
+    msg += "\"\n";
+    msg += "Kante hinten: \t\"";
+    msg += kante_hi;
+    msg += "\"\n";
+    msg += "Kante links: \t\"";
+    msg += kante_li;
+    msg += "\"\n";
+    msg += "Kante rechts: \t\"";
+    msg += kante_re;
+    msg += "\"\n";
+    msg += "---------------";
+    msg += "\n";
 
     msg += bearb.get_text();
 
@@ -8184,6 +8332,7 @@ QString werkstueck::kommentar_fmc(QString kom)
     text = FMC_KOMMENTAR;
     text += "\n";
     text += FMC_KOMMENTAR_TEXT;
+    text += "=";
     text += kom;
     text += "\n";
     text += "\n";
