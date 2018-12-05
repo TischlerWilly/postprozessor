@@ -1920,6 +1920,250 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
     QString msg;
     bearb_sortieren();
 
+    double tmp_l = breite;
+    double tmp_b = laenge;
+    text_zeilenweise tmp_bearb;
+    tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
+
+    //Die beste Drehrichtung herausfinden:
+    uint bewertung_0    = 1;
+    uint bewertung_90   = 1;
+    uint bewertung_180  = 1;
+    uint bewertung_270  = 1;
+    //Stufe 1:
+    //heraus bekommen, für welche Lage es Warnungen gibt:
+    QString warnung;
+    text_zeilenweise bearb_kopie = tmp_bearb;
+    double l_kopie = tmp_l;
+    double b_kopie = tmp_b;
+    //------------------------0:
+    warnung = warnungen_ganx(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
+    if(warnung.isEmpty())
+    {
+        bewertung_0 = 100;
+    }else
+    {
+        bewertung_0 = 0;
+    }
+    text_zeilenweise bearb_0 = bearb_kopie;
+    double l_0 = l_kopie;
+    double b_0 = b_kopie;
+    //------------------------90:
+    bearb_kopie = bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+    warnung = warnungen_ganx(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
+    if(warnung.isEmpty())
+    {
+        bewertung_90 = 100;
+    }else
+    {
+        bewertung_90 = 0;
+    }
+    text_zeilenweise bearb_90 = bearb_kopie;
+    double l_90 = l_kopie;
+    double b_90 = b_kopie;
+    //------------------------180:
+    bearb_kopie = bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+    warnung = warnungen_ganx(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
+    if(warnung.isEmpty())
+    {
+        bewertung_180 = 100;
+    }else
+    {
+        bewertung_180 = 0;
+    }
+    text_zeilenweise bearb_180 = bearb_kopie;
+    double l_180 = l_kopie;
+    double b_180 = b_kopie;
+    //------------------------270:
+    bearb_kopie = bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+    warnung = warnungen_ganx(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
+    if(warnung.isEmpty())
+    {
+        bewertung_270 = 100;
+    }else
+    {
+        bewertung_270 = 0;
+    }
+    text_zeilenweise bearb_270 = bearb_kopie;
+    double l_270 = l_kopie;
+    double b_270 = b_kopie;
+
+    //Stufe 2:
+    //heraus bekommen wo vorne ist anhand von Bearbeitungen:
+    for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_0.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.get_text());
+            if(bo.get_dm() == 8 || \
+               bo.get_dm() == 8.2)
+            {
+                if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_0 += 2;
+                }
+                if(bo.get_y() == b_0-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                {
+                    bewertung_0 += 2;
+                }
+            }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+            {
+                if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_0 += 2;
+                }
+                if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_0 += 2;
+                }
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_90.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.get_text());
+            if(bo.get_dm() == 8 || \
+               bo.get_dm() == 8.2)
+            {
+                if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_90 += 2;
+                }
+                if(bo.get_y() == b_90-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                {
+                    bewertung_90 += 2;
+                }
+            }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+            {
+                if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_90 += 2;
+                }
+                if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_90 += 2;
+                }
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_180.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.get_text());
+            if(bo.get_dm() == 8 || \
+               bo.get_dm() == 8.2)
+            {
+                if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_180 += 2;
+                }
+                if(bo.get_y() == b_180-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                {
+                    bewertung_180 += 2;
+                }
+            }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+            {
+                if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_180 += 2;
+                }
+                if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_180 += 2;
+                }
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_270.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.get_text());
+            if(bo.get_dm() == 8 || \
+               bo.get_dm() == 8.2)
+            {
+                if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_270 += 2;
+                }
+                if(bo.get_y() == b_270-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
+                {
+                    bewertung_270 += 2;
+                }
+            }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+            {
+                if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_270 += 2;
+                }
+                if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
+                {
+                    bewertung_270 += 2;
+                }
+            }
+        }
+    }
+
+    //Stufe 3:
+    //heraus bekommen wo vorne ist anhand von Kanteninfo:
+    //Kantenpos müssen Getauscht werden wegen X-Y-Achsentausch
+    //Kante_li == Kante_vo_ganx;
+    //Kante_re == Kante_hi_ganx;
+    //Kante_vo == Kante_li_ganx;
+    //Kante_hi == Kante_re_ganx;
+
+    if(!get_kante_re("0").isEmpty() || !get_kante_vo("0").isEmpty())//hi, li
+    {
+        bewertung_0 += 10;
+    }
+    if(!get_kante_re("90").isEmpty() || !get_kante_vo("90").isEmpty())//hi, li
+    {
+        bewertung_90 += 10;
+    }
+    if(!get_kante_re("180").isEmpty() || !get_kante_vo("180").isEmpty())//hi, li
+    {
+        bewertung_180 += 10;
+    }
+    if(!get_kante_re("270").isEmpty() || !get_kante_vo("270").isEmpty())//hi, li
+    {
+        bewertung_270 += 10;
+    }
+
+    //Stufe 4:
+    //Teile bevorzugen, bei bei denen gilt: B > L:
+    if(b_0 > l_0)
+    {
+        bewertung_0 += 8;
+    }
+    if(b_90 > l_90)
+    {
+        bewertung_90 += 8;
+    }
+    if(b_180 > l_180)
+    {
+        bewertung_180 += 8;
+    }
+    if(b_270 > l_270)
+    {
+        bewertung_270 += 8;
+    }
+
+
     if(drehwinkel == "0")
     {
         double tmp_l = breite;
@@ -1928,7 +2172,10 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "\n";
+        info += " (";
+        info += double_to_qstring(bewertung_0);
+        info += " Punkte)";
+        info += "\n";
         info += warnungen;
     }else if(drehwinkel == "90")
     {
@@ -1939,7 +2186,10 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "\n";
+        info += " (";
+        info += double_to_qstring(bewertung_90);
+        info += " Punkte)";
+        info += "\n";
         info += warnungen;
     }else if(drehwinkel == "180")
     {
@@ -1951,7 +2201,10 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "\n";
+        info += " (";
+        info += double_to_qstring(bewertung_180);
+        info += " Punkte)";
+        info += "\n";
         info += warnungen;
     }else if(drehwinkel == "270")
     {
@@ -1964,253 +2217,13 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "\n";
+        info += " (";
+        info += double_to_qstring(bewertung_270);
+        info += " Punkte)";
+        info += "\n";
         info += warnungen;
     }else
-    {
-        double tmp_l = breite;
-        double tmp_b = laenge;
-        text_zeilenweise tmp_bearb;
-        tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
-
-        //Die beste Drehrichtung herausfinden:
-        uint bewertung_0    = 1;
-        uint bewertung_90   = 1;
-        uint bewertung_180  = 1;
-        uint bewertung_270  = 1;
-        //Stufe 1:
-        //heraus bekommen, für welche Lage es Warnungen gibt:
-        QString warnung;
-        text_zeilenweise bearb_kopie = tmp_bearb;
-        double l_kopie = tmp_l;
-        double b_kopie = tmp_b;
-        //------------------------0:
-        warnung = warnungen_ganx(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
-        if(warnung.isEmpty())
-        {
-            bewertung_0 = 100;
-        }else
-        {
-            bewertung_0 = 0;
-        }
-        text_zeilenweise bearb_0 = bearb_kopie;
-        double l_0 = l_kopie;
-        double b_0 = b_kopie;
-        //------------------------90:
-        bearb_kopie = bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-        warnung = warnungen_ganx(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
-        if(warnung.isEmpty())
-        {
-            bewertung_90 = 100;
-        }else
-        {
-            bewertung_90 = 0;
-        }
-        text_zeilenweise bearb_90 = bearb_kopie;
-        double l_90 = l_kopie;
-        double b_90 = b_kopie;
-        //------------------------180:
-        bearb_kopie = bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-        warnung = warnungen_ganx(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
-        if(warnung.isEmpty())
-        {
-            bewertung_180 = 100;
-        }else
-        {
-            bewertung_180 = 0;
-        }
-        text_zeilenweise bearb_180 = bearb_kopie;
-        double l_180 = l_kopie;
-        double b_180 = b_kopie;
-        //------------------------270:
-        bearb_kopie = bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-        warnung = warnungen_ganx(bearb_kopie, l_kopie, b_kopie, wkzmagazin);
-        if(warnung.isEmpty())
-        {
-            bewertung_270 = 100;
-        }else
-        {
-            bewertung_270 = 0;
-        }
-        text_zeilenweise bearb_270 = bearb_kopie;
-        double l_270 = l_kopie;
-        double b_270 = b_kopie;
-
-        //Stufe 2:
-        //heraus bekommen wo vorne ist anhand von Bearbeitungen:
-        for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
-        {
-            text_zeilenweise zeile;
-            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            zeile.set_text(bearb_0.zeile(i));
-            if(zeile.zeile(1) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.get_text());
-                if(bo.get_dm() == 8 || \
-                   bo.get_dm() == 8.2)
-                {
-                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_0 += 2;
-                    }
-                    if(bo.get_y() == b_0-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                    {
-                        bewertung_0 += 2;
-                    }
-                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
-                {
-                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_0 += 2;
-                    }
-                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_0 += 2;
-                    }
-                }
-            }
-        }
-        for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
-        {
-            text_zeilenweise zeile;
-            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            zeile.set_text(bearb_90.zeile(i));
-            if(zeile.zeile(1) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.get_text());
-                if(bo.get_dm() == 8 || \
-                   bo.get_dm() == 8.2)
-                {
-                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_90 += 2;
-                    }
-                    if(bo.get_y() == b_90-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                    {
-                        bewertung_90 += 2;
-                    }
-                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
-                {
-                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_90 += 2;
-                    }
-                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_90 += 2;
-                    }
-                }
-            }
-        }
-        for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
-        {
-            text_zeilenweise zeile;
-            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            zeile.set_text(bearb_180.zeile(i));
-            if(zeile.zeile(1) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.get_text());
-                if(bo.get_dm() == 8 || \
-                   bo.get_dm() == 8.2)
-                {
-                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_180 += 2;
-                    }
-                    if(bo.get_y() == b_180-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                    {
-                        bewertung_180 += 2;
-                    }
-                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
-                {
-                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_180 += 2;
-                    }
-                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_180 += 2;
-                    }
-                }
-            }
-        }
-        for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
-        {
-            text_zeilenweise zeile;
-            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            zeile.set_text(bearb_270.zeile(i));
-            if(zeile.zeile(1) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.get_text());
-                if(bo.get_dm() == 8 || \
-                   bo.get_dm() == 8.2)
-                {
-                    if(bo.get_x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_270 += 2;
-                    }
-                    if(bo.get_y() == b_270-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                    {
-                        bewertung_270 += 2;
-                    }
-                }else if(bo.get_dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
-                {
-                    if(bo.get_y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_270 += 2;
-                    }
-                    if(bo.get_x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                    {
-                        bewertung_270 += 2;
-                    }
-                }
-            }
-        }
-
-        //Stufe 3:
-        //heraus bekommen wo vorne ist anhand von Kanteninfo:
-        //Kantenpos müssen Getauscht werden wegen X-Y-Achsentausch
-        //Kante_li == Kante_vo_ganx;
-        //Kante_re == Kante_hi_ganx;
-        //Kante_vo == Kante_li_ganx;
-        //Kante_hi == Kante_re_ganx;
-
-        if(!get_kante_re("0").isEmpty() || !get_kante_vo("0").isEmpty())//hi, li
-        {
-            bewertung_0 += 10;
-        }
-        if(!get_kante_re("90").isEmpty() || !get_kante_vo("90").isEmpty())//hi, li
-        {
-            bewertung_90 += 10;
-        }
-        if(!get_kante_re("180").isEmpty() || !get_kante_vo("180").isEmpty())//hi, li
-        {
-            bewertung_180 += 10;
-        }
-        if(!get_kante_re("270").isEmpty() || !get_kante_vo("270").isEmpty())//hi, li
-        {
-            bewertung_270 += 10;
-        }
-
-        //Stufe 4:
-        //Teile bevorzugen, bei bei denen gilt: B > L:
-        if(b_0 > l_0)
-        {
-            bewertung_0 += 8;
-        }
-        if(b_90 < l_90)
-        {
-            bewertung_90 += 8;
-        }
-        if(b_180 < l_180)
-        {
-            bewertung_180 += 8;
-        }
-        if(b_270 < l_270)
-        {
-            bewertung_270 += 8;
-        }
-
+    {        
         //Bewertungen auswerten:
         if(bewertung_0 >= 100 && \
            bewertung_0 >= bewertung_90 && \
@@ -2224,7 +2237,11 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info  = "  -> Drehung keine\n";
+            info  = "  -> Drehung keine";
+            info += " (";
+            info += double_to_qstring(bewertung_0);
+            info += " Punkte)";
+            info += "\n";
             info += warnungen;
         }else if(bewertung_90 >= 100 && \
                  bewertung_90 >= bewertung_0 && \
@@ -2239,7 +2256,11 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info  = "  -> Drehung 90 Grad\n";
+            info  = "  -> Drehung 90 Grad";
+            info += " (";
+            info += double_to_qstring(bewertung_90);
+            info += " Punkte)";
+            info += "\n";
             info += warnungen;
         }else if(bewertung_180 >= 100 && \
                  bewertung_180 >= bewertung_0 && \
@@ -2255,7 +2276,11 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info  = "  -> Drehung 180 Grad\n";
+            info  = "  -> Drehung 180 Grad";
+            info += " (";
+            info += double_to_qstring(bewertung_180);
+            info += " Punkte)";
+            info += "\n";
             info += warnungen;
         }else if(bewertung_270 >= 100 && \
                  bewertung_270 >= bewertung_0 && \
@@ -2272,7 +2297,11 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info  = "  -> Drehung 270 Grad\n";
+            info  = "  -> Drehung 270 Grad";
+            info += " (";
+            info += double_to_qstring(bewertung_270);
+            info += " Punkte)";
+            info += "\n";
             info += warnungen;
         }else
         {
@@ -2283,7 +2312,11 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen);
             msg = get_ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-            info  = "  -> Drehung keine\n";
+            info  = "  -> Drehung keine";
+            info += " (";
+            info += double_to_qstring(bewertung_0);
+            info += " Punkte)";
+            info += "\n";
             info += warnungen;
         }
     }
