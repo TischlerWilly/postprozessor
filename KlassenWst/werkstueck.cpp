@@ -2169,19 +2169,25 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
 
         //Stufe 3:
         //heraus bekommen wo vorne ist anhand von Kanteninfo:
-        if(!get_kante_hi("0").isEmpty() || !get_kante_li("0").isEmpty())
+        //Kantenpos müssen Getauscht werden wegen X-Y-Achsentausch
+        //Kante_li == Kante_vo_ganx;
+        //Kante_re == Kante_hi_ganx;
+        //Kante_vo == Kante_li_ganx;
+        //Kante_hi == Kante_re_ganx;
+
+        if(!get_kante_re("0").isEmpty() || !get_kante_vo("0").isEmpty())//hi, li
         {
             bewertung_0 += 10;
         }
-        if(!get_kante_hi("90").isEmpty() || !get_kante_li("90").isEmpty())
+        if(!get_kante_re("90").isEmpty() || !get_kante_vo("90").isEmpty())//hi, li
         {
             bewertung_90 += 10;
         }
-        if(!get_kante_hi("180").isEmpty() || !get_kante_li("180").isEmpty())
+        if(!get_kante_re("180").isEmpty() || !get_kante_vo("180").isEmpty())//hi, li
         {
             bewertung_180 += 10;
         }
-        if(!get_kante_hi("270").isEmpty() || !get_kante_li("270").isEmpty())
+        if(!get_kante_re("270").isEmpty() || !get_kante_vo("270").isEmpty())//hi, li
         {
             bewertung_270 += 10;
         }
