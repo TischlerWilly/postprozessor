@@ -159,8 +159,8 @@
 #define FMC_LORAM_DM_           "D"
 #define FMC_LORAM_AFB           "AFB"
 
-#define FMC_KOMMENTAR           "[SWKOMT40]"
-#define FMC_KOMMENTAR_TEXT      "BEZB="
+#define FMC_KOMMENTAR           "[SWKOMT40]"    //Kommentar
+#define FMC_KOMMENTAR_TEXT      "BEZB"
 
 #define FMC_ENDE                "[PGENDE40]"
 #define FMC_HALT                "[SNHALT40]"

@@ -79,7 +79,8 @@ HEADERS  += mainwindow.h \
     geometrie/punkt2d.h \
     KlassenWst/fraeserbogen.h \
     KlassenWst/bohrraster.h \
-    KlassenWst/ganx_gruppen.h
+    KlassenWst/ganx_gruppen.h \
+    Definitionen/def_vw.h
 
 FORMS    += mainwindow.ui \
     dialog_wkz.ui \
