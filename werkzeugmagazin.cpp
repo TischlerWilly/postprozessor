@@ -32,7 +32,7 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
                 {
                     if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
                     {
-                        if(bearbeitungstiefe >= werkstueckdicke)
+                        if(bearbeitungstiefe >= werkstueckdicke || ((bearbeitungstiefe == 2)&&(dm == 5)))//Tiefe 2mm == Ankörnungen
                         {
                             if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
                             {

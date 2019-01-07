@@ -150,13 +150,13 @@ void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_ne
             bool bekannt = false;
             for(uint iii=1; iii<=bekannte_namen.zeilenanzahl() ;iii++)//bekannte Namen nacheinander durchgehen
             {
-                if(bekannte_namen.zeile(iii) == name_bis_ziffer)
+                if(name_bis_ziffer.length() >0 && bekannte_namen.zeile(iii) == name_bis_ziffer)
                 {
                     bekannt = true;
                     break;
                 }
             }
-            if(bekannt == false)//Wenn der Name noch nicht vergeben war
+            if(name_bis_ziffer.length() >0 && bekannt == false)//Wenn der Name noch nicht vergeben war
             {
                 namen.zeile_ersaetzen(i, name_bis_ziffer);
                 bekannte_namen.zeile_anhaengen(name_bis_ziffer);
