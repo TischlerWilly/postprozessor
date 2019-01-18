@@ -5564,6 +5564,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
      werkzeugmagazin wkzmag(wkzmagazin);
      QString kavo = get_kante_vo(drewi);//Kante vorne == Kante an X
      QString kali = get_kante_li(drewi);//Kante links == Kante an Y
+     QString kahi = get_kante_hi(drewi);//Kante hinten == Kante nicht an X
+     QString kare = get_kante_re(drewi);//Kante rechts == Kante nicht an Y
 
      bool ay = false;
      if(tmp_b < schwellenwert_ay)
@@ -5621,7 +5623,13 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
         msg += "an X ohne / an Y mit Kante";
     }else
     {
-        msg += "(NULL)";
+        if(kavo.isEmpty() && kahi.isEmpty() && kali.isEmpty() && kare.isEmpty())
+        {
+            msg += "(NULL)";
+        }else
+        {
+            msg += "an X+Y ohne Kante";
+        }
     }
     msg += "\n";
     msg += "LOESEN=";               //Automatisch lösen
