@@ -88,7 +88,9 @@ public:
                     QString drehwinkel = "0", QString zust_fkon = "orgi",\
                     bool formartierungen_aufbrechen = false);
     QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
-    QString get_eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin);
+    QString get_eigenses_format(QString drehwinkel, QString ausgabeformat, \
+                                text_zeilenweise wkzmagazin,\
+                                bool formartierungen_aufbrechen = false);
 
     QString suche_cad_fehler();
 
@@ -128,7 +130,8 @@ private:
     QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
                                double tmp_l, double tmp_b);
     QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
-                                QString ausgabeformat, text_zeilenweise wkzmagazin);
+                                QString ausgabeformat, text_zeilenweise wkzmagazin,\
+                                bool formartierungen_aufbrechen);
 
     QString kommentar_fmc(QString kom);
     QString fmc_kommentar_gute_seite(text_zeilenweise bearb);

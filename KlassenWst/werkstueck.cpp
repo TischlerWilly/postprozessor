@@ -2323,7 +2323,9 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
     }
     return msg;
 }
-QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin)
+QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeformat, \
+                                        text_zeilenweise wkzmagazin,\
+                                        bool formartierungen_aufbrechen)
 {
     QString msg;
     bearb_sortieren();
@@ -2339,7 +2341,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
             tmp_b = laenge;
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
         }
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
     }else if(drehwinkel == "90")
     {
         double tmp_l = laenge;
@@ -2352,7 +2354,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
         }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);        
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
     }else if(drehwinkel == "180")
     {
         double tmp_l = laenge;
@@ -2366,7 +2368,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
         }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
     }else if(drehwinkel == "270")
     {
         double tmp_l = laenge;
@@ -2381,7 +2383,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
     }else
     {
         //drehung 0:
@@ -2394,7 +2396,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
             tmp_b = laenge;
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
         }
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
     }
     return msg;
 }
@@ -8644,7 +8646,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     return msg;
 }
 QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b, \
-                                        QString ausgabeformat, text_zeilenweise wkzmagazin)
+                                        QString ausgabeformat, text_zeilenweise wkzmagazin,\
+                                        bool formartierungen_aufbrechen)
 {
     if(ausgabeformat == FMC)
     {
@@ -8655,6 +8658,10 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
     }
     QString msg = "";
     bearb_sortieren();
+    if(formartierungen_aufbrechen == true)
+    {
+        bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+    }
 
     //Programmkopf:
     msg += get_name();

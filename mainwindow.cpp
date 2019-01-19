@@ -1017,6 +1017,15 @@ void MainWindow::on_pushButton_start_clicked()
 
     for(uint i=1; i<=wste.anzahl() ;i++)
     {
+        bool foauf;
+        if(formartierungen_aufbrechen == "ja")
+        {
+            foauf = true;
+        }else
+        {
+            foauf = false;
+        }
+
         if(erzeuge_ganx == "ja")
         {
             QString teilname = wste.get_name(i);
@@ -1058,8 +1067,9 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
-                QString info = "";
-                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils, option_fkon_ti);
+                QString info = "";                
+                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils, \
+                                                      option_fkon_ti, foauf);
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;
@@ -1084,19 +1094,20 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
-                QString info = "";
-                //QString tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils);
                 QString tmp;
                 if(erzeuge_fmc  == "ja"  &&  erzeuge_ganx != "ja")
                 {
-                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, FMC, wkz_magazin_fmc);
+                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, FMC, \
+                                                              wkz_magazin_fmc, foauf);
                 }else if(erzeuge_fmc  != "ja"  &&  erzeuge_ganx == "ja")
                 {
-                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, GANX, wkz_magazin_ganx);
+                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, GANX, \
+                                                              wkz_magazin_ganx, foauf);
                 }else
                 {
                     text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
-                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, EIGENES_FORMAT, wkz_eigen);
+                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, EIGENES_FORMAT, \
+                                                              wkz_eigen, foauf);
                 }
                 datei.write(tmp.toUtf8());
                 QString output;
@@ -1105,7 +1116,6 @@ void MainWindow::on_pushButton_start_clicked()
                 ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();
-
         }
     }
 
