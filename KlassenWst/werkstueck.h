@@ -84,7 +84,9 @@ public:
         return bearbeitungen;
     }
 
-    QString get_fmc(text_zeilenweise wkzmagazin, QString& info, QString drehwinkel = "0", QString zust_fkon = "orgi");
+    QString get_fmc(text_zeilenweise wkzmagazin, QString& info, \
+                    QString drehwinkel = "0", QString zust_fkon = "orgi",\
+                    bool formartierungen_aufbrechen = false);
     QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
     QString get_eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin);
 
@@ -118,10 +120,13 @@ private:
     text_zeilenweise rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
     text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
 
+    text_zeilenweise formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
+
     QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
                               double tmp_l, double tmp_b, QString zust_fkon,\
-                              QString drewi);
-    QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,double tmp_l, double tmp_b);
+                              QString drewi, bool formartierungen_aufbrechen);
+    QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
+                               double tmp_l, double tmp_b);
     QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
                                 QString ausgabeformat, text_zeilenweise wkzmagazin);
 
@@ -130,6 +135,8 @@ private:
 
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
     void fraesergeraden_zusammenfassen();
+
+
 };
 
 #endif // WERKSTUECK_H

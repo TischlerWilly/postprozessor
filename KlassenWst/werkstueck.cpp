@@ -1138,8 +1138,9 @@ QString werkstueck::suche_cad_fehler()
 }
 
 //-------------------------------------------------------------------------Export:
-QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel, \
-                            QString zust_fkon)
+QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
+                            QString drehwinkel, QString zust_fkon,\
+                            bool formartierungen_aufbrechen)
 {
 //#define ISDEBUG
 
@@ -1771,7 +1772,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0");
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", formartierungen_aufbrechen);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_0);
@@ -1784,7 +1785,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90");
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", formartierungen_aufbrechen);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_90);
@@ -1798,7 +1799,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180");
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", formartierungen_aufbrechen);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_180);
@@ -1813,7 +1814,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270");
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270", formartierungen_aufbrechen);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_270);
@@ -1832,7 +1833,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             double tmp_l = laenge;
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", formartierungen_aufbrechen);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
             info += " (";
@@ -1850,7 +1851,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", formartierungen_aufbrechen);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 90 Grad";
             info += " (";
@@ -1869,7 +1870,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", formartierungen_aufbrechen);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 180 Grad";
             info += " (";
@@ -1889,7 +1890,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270", formartierungen_aufbrechen);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info = "  -> Drehung 270 Grad";
             info += " (";
@@ -1903,7 +1904,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             double tmp_l = laenge;
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", formartierungen_aufbrechen);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
             info += " (";
@@ -5554,10 +5555,14 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 }
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                       double tmp_l, double tmp_b, QString zust_fkon,\
-                                      QString drewi)
+                                      QString drewi, bool formartierungen_aufbrechen)
 {
     text_zeilenweise bearb_kopie = bearb;
     bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
+    if(formartierungen_aufbrechen == true)
+    {
+        bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+    }
     QString msg;   
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -9499,6 +9504,122 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
         }
     }
 
+    return bearb;
+}
+
+text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin, \
+                                                         double tmp_l, double tmp_b)
+{
+    //Prüfen ob wst eine umlaufende Formartierung enthällt:
+    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise param;
+        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        param.set_text(bearb.zeile(i));
+        if(param.zeile(1) == BEARBART_FRAESERAUFRUF)
+        {
+            uint zeibeg = i;
+            uint zeiend = i;
+            fraueseraufruf fa(param.get_text());
+            double xbeg = fa.get_x();
+            double ybeg = fa.get_y();
+            double zbeg = fa.get_z();
+            double xend = xbeg;
+            double yend = ybeg;
+            double zend = zbeg;
+            double xmin = xbeg;
+            double xmax = xbeg;
+            double ymin = ybeg;
+            double ymax = ybeg;
+            if(i<= bearb.zeilenanzahl())
+            {
+                i++;
+                for(; i<= bearb.zeilenanzahl() ;i++)
+                {
+                    param.set_text(bearb.zeile(i));
+                    if(param.zeile(1) == BEARBART_FRAESERGERADE)
+                    {
+                        fraesergerade fg(param.get_text());
+                        xend = fg.get_xe();
+                        yend = fg.get_ye();
+                        zend = fg.get_ze();
+                        zeiend = i;
+                        if(xend > xmax)
+                        {
+                            xmax = xend;
+                        }
+                        if(xend < xmin)
+                        {
+                            xmin = xend;
+                        }
+                        if(yend > ymax)
+                        {
+                            ymax = yend;
+                        }
+                        if(yend < ymin)
+                        {
+                            ymin = yend;
+                        }
+                    }else if(param.zeile(1) == BEARBART_FRAESERBOGEN)
+                    {
+                        fraeserbogen fb(param.get_text());
+                        xend = fb.get_xe();
+                        yend = fb.get_ye();
+                        zend = fb.get_ze();
+                        zeiend = i;
+                        if(xend > xmax)
+                        {
+                            xmax = xend;
+                        }
+                        if(xend < xmin)
+                        {
+                            xmin = xend;
+                        }
+                        if(yend > ymax)
+                        {
+                            ymax = yend;
+                        }
+                        if(yend < ymin)
+                        {
+                            ymin = yend;
+                        }
+                    }else
+                    {
+                        break;
+                    }
+                }
+            }
+            if(zeibeg != zeiend)
+            {
+                //Prüfen ob Start- und Endpunkt gleich sind:
+                if(xbeg == xend && ybeg == yend && zbeg == zend)//evtl. ist hier cagleich nötig!!
+                {
+                    //Prüfen ob fkon Formartierung ist:
+                    if(xmin <= 0        &&\
+                       xmax >= tmp_l    &&\
+                       ymin <= 0        &&\
+                       ymax >= tmp_b)
+                    {
+                        //Zu Testzwecken:
+                        QString msg = "Formartierung gefunden bei: \"";
+                        msg += get_name();
+                        msg +="\"";
+                        QMessageBox mb;
+                        mb.setText(msg);
+                        mb.exec();
+
+                        //Die Teile aus der Bearbeitung löschen die Deckungsgleich auf der WST-Kante liegen
+                        //....
+
+
+
+                        //Neue Fräsungen in Beachtung der Bekanntung definieren:
+                        //...
+                    }
+                }
+            }
+        }
+    }
     return bearb;
 }
 

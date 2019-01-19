@@ -144,7 +144,7 @@
       <x>11</x>
       <y>564</y>
       <width>191</width>
-      <height>118</height>
+      <height>122</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -323,13 +323,13 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>440</y>
       <width>191</width>
-      <height>66</height>
+      <height>68</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
@@ -359,6 +359,19 @@
      </item>
     </layout>
    </widget>
+   <widget class="QCheckBox" name="checkBox_formatierung_aufbrechen">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>510</y>
+      <width>191</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Formartierungen aufbrechen</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -366,7 +379,7 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>27</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuWerkzeug">

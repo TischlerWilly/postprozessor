@@ -108,7 +108,11 @@ void MainWindow::setup()
             ui->checkBox_geraden->setChecked(true);
             file.write("kurze_geraden_weglassen:ja");
             file.write("\n");
-            wste.kurze_geraden_importieren(false);
+            wste.set_kurze_geraden_importieren(false);
+
+            ui->checkBox_formatierung_aufbrechen->setChecked(false);
+            file.write("formatierung_aufbrechen:nein");
+            file.write("\n");
 
         }
         file.close();
@@ -196,11 +200,11 @@ void MainWindow::setup()
                     if(kurze_geraden_weglassen == "ja")
                     {
                         ui->checkBox_geraden->setChecked(true);
-                        wste.kurze_geraden_importieren(false);
+                        wste.set_kurze_geraden_importieren(false);
                     }else
                     {
                         ui->checkBox_geraden->setChecked(false);
-                        wste.kurze_geraden_importieren(true);
+                        wste.set_kurze_geraden_importieren(true);
                     }
                 }else if(zeile.contains("drehung_des_bauteils:"))
                 {
@@ -230,6 +234,16 @@ void MainWindow::setup()
                     }else if(option_fkon_ti == "wkz")
                     {
                         ui->radioButton_fkon_ti_wkz->setChecked(true);
+                    }
+                }else if(zeile.contains("formartierungen_aufbrechen:"))
+                {
+                    formartierungen_aufbrechen = text_mitte(zeile, "formartierungen_aufbrechen:", "\n");
+                    if(formartierungen_aufbrechen == "ja")
+                    {
+                        ui->checkBox_formatierung_aufbrechen->setChecked(true);
+                    }else
+                    {
+                        ui->checkBox_formatierung_aufbrechen->setChecked(false);
                     }
                 }
             }
@@ -438,11 +452,15 @@ void MainWindow::schreibe_ini()
         file.write("\n");
         if(kurze_geraden_weglassen == "ja")
         {
-            wste.kurze_geraden_importieren(false);
+            wste.set_kurze_geraden_importieren(false);
         }else
         {
-            wste.kurze_geraden_importieren(true);
+            wste.set_kurze_geraden_importieren(true);
         }
+
+        file.write("formartierungen_aufbrechen:");
+        file.write(formartierungen_aufbrechen.toUtf8());
+        file.write("\n");
 
         //-------------------------------------------Radio-Buttons:
         file.write("drehung_des_bauteils:");
@@ -622,6 +640,17 @@ void MainWindow::on_checkBox_geraden_stateChanged()
     }else
     {
         kurze_geraden_weglassen = "nein";
+    }
+    schreibe_ini();
+}
+void MainWindow::on_checkBox_formatierung_aufbrechen_stateChanged()
+{
+    if(ui->checkBox_formatierung_aufbrechen->isChecked() == true)
+    {
+        formartierungen_aufbrechen = "ja";
+    }else
+    {
+        formartierungen_aufbrechen = "nein";
     }
     schreibe_ini();
 }
@@ -1146,6 +1175,8 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
+
 
 
 

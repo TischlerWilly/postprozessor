@@ -57,6 +57,7 @@ private slots:
     void on_radioButton_fkon_ti_wkz_toggled(bool checked);
     void on_checkBox_geraden_stateChanged();
     void on_lineEdit_geraden_schwellenwert_editingFinished();
+    void on_checkBox_formatierung_aufbrechen_stateChanged();
 
 private:
     Ui::MainWindow *ui;
@@ -68,12 +69,13 @@ private:
     QString verzeichnis_ziel;
 
     //Checkboxen:
-    QString quelldateien_erhalten;  // "ja" | "nein"
-    QString std_namen;              // "ja" | "nein"
-    QString erzeuge_ganx;           // "ja" | "nein"
-    QString erzeuge_fmc;            // "ja" | "nein"
-    QString erzeuge_eigenes_format; // "ja" | "nein"
-    QString kurze_geraden_weglassen;// "ja" | "nein"
+    QString quelldateien_erhalten;      // "ja" | "nein"
+    QString std_namen;                  // "ja" | "nein"
+    QString erzeuge_ganx;               // "ja" | "nein"
+    QString erzeuge_fmc;                // "ja" | "nein"
+    QString erzeuge_eigenes_format;     // "ja" | "nein"
+    QString kurze_geraden_weglassen;    // "ja" | "nein"
+    QString formartierungen_aufbrechen; // "ja" | "nein"
 
     //Radio Buttons:
     QString drehung_des_bauteils; // 0 | 90 | 180 | 270 | AUTO

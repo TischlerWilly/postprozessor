@@ -218,7 +218,7 @@ void werkstuecke::set_fkon_gerade_laenge(double wert)
 {
     min_fkon_gerade_laenge = wert;
 }
-void werkstuecke::kurze_geraden_importieren(bool wert)
+void werkstuecke::set_kurze_geraden_importieren(bool wert)
 {
     kurze_geraden_import = wert;
 }
