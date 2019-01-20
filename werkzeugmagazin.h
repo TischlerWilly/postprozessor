@@ -27,6 +27,7 @@
     11: Alias-Name
     12: Mindest Zustellmaß
         0 | 12 etc (wenn 0 dann nicht relevant)
+    13: Spiegelwerkzeug
 
 */
 
@@ -51,6 +52,7 @@ public:
     QString get_saegeblattbreite(QString wkz_nr);
     QString get_nutzlaenge(QString wkz_nr);
     text_zeilenweise get_alle_bodm(QString hori_oder_vert);
+    QString get_spiegelwkz(QString wkz_nr);
 
 
 private:

@@ -1140,7 +1140,8 @@ QString werkstueck::suche_cad_fehler()
 //-------------------------------------------------------------------------Export:
 QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
                             QString drehwinkel, QString zust_fkon,\
-                            bool formartierungen_aufbrechen)
+                            bool formartierungen_aufbrechen,\
+                            bool fkon_kantenschonend)
 {
 //#define ISDEBUG
 
@@ -1772,7 +1773,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", formartierungen_aufbrechen);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
+                                formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_0);
@@ -1785,7 +1787,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", formartierungen_aufbrechen);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", \
+                                formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_90);
@@ -1799,7 +1802,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", formartierungen_aufbrechen);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", \
+                                formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_180);
@@ -1814,7 +1818,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270", formartierungen_aufbrechen);
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270", \
+                                formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_270);
@@ -1833,7 +1838,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
             double tmp_l = laenge;
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", formartierungen_aufbrechen);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
             info += " (";
@@ -1851,7 +1857,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", formartierungen_aufbrechen);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 90 Grad";
             info += " (";
@@ -1870,7 +1877,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
             text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", formartierungen_aufbrechen);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 180 Grad";
             info += " (";
@@ -1890,7 +1898,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270", formartierungen_aufbrechen);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info = "  -> Drehung 270 Grad";
             info += " (";
@@ -1904,7 +1913,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
             double tmp_l = laenge;
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", formartierungen_aufbrechen);
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
             info += " (";
@@ -2325,7 +2335,8 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
 }
 QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeformat, \
                                         text_zeilenweise wkzmagazin,\
-                                        bool formartierungen_aufbrechen)
+                                        bool formartierungen_aufbrechen,\
+                                        bool fkon_kantenschonend)
 {
     QString msg;
     bearb_sortieren();
@@ -2341,7 +2352,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
             tmp_b = laenge;
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
         }
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }else if(drehwinkel == "90")
     {
         double tmp_l = laenge;
@@ -2354,7 +2366,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
         }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);        
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }else if(drehwinkel == "180")
     {
         double tmp_l = laenge;
@@ -2368,7 +2381,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
         }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }else if(drehwinkel == "270")
     {
         double tmp_l = laenge;
@@ -2383,7 +2397,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }else
     {
         //drehung 0:
@@ -2396,7 +2411,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
             tmp_b = laenge;
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
         }
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, formartierungen_aufbrechen);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }
     return msg;
 }
@@ -5557,13 +5573,18 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 }
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                       double tmp_l, double tmp_b, QString zust_fkon,\
-                                      QString drewi, bool formartierungen_aufbrechen)
+                                      QString drewi, bool formartierungen_aufbrechen,\
+                                      bool fkon_kantenschonend)
 {
     text_zeilenweise bearb_kopie = bearb;
     bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
     if(formartierungen_aufbrechen == true)
     {
         bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+    }
+    if(fkon_kantenschonend == true)
+    {
+        bearb = fkon_kantengut(bearb, wkzmagazin, tmp_l, tmp_b);
     }
     QString msg;   
     text_zeilenweise zeile;
@@ -8647,7 +8668,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
 }
 QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b, \
                                         QString ausgabeformat, text_zeilenweise wkzmagazin,\
-                                        bool formartierungen_aufbrechen)
+                                        bool formartierungen_aufbrechen, \
+                                        bool fkon_kantenschonend)
 {
     if(ausgabeformat == FMC)
     {
@@ -8661,6 +8683,10 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
     if(formartierungen_aufbrechen == true)
     {
         bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+    }
+    if(fkon_kantenschonend == true)
+    {
+        bearb = fkon_kantengut(bearb, wkzmagazin, tmp_l, tmp_b);
     }
 
     //Programmkopf:
@@ -9517,6 +9543,10 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
 text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin, \
                                                          double tmp_l, double tmp_b)
 {
+    //Diese Funktion soll die vom VW ausgegebenen Poligonförmigen Formartierungen entdecken
+    //Diese werden generiert, wenn die Grundfläche eines 3D-Bauteils kein Rechteck ist
+    //Die Bestandteile der Fräskontur, die deckungsgleich auf der Kante liegen werden nicht benötigt
+
     //Prüfen ob wst eine umlaufende Formartierung enthällt:
     for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
     {
@@ -9618,10 +9648,6 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                         //Die Teile aus der Bearbeitung löschen die Deckungsgleich auf der WST-Kante liegen
                         //....
 
-
-
-                        //Neue Fräsungen in Beachtung der Bekanntung definieren:
-                        //...
                     }
                 }
             }
@@ -9630,6 +9656,17 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
     return bearb;
 }
 
+text_zeilenweise werkstueck::fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin, double tmp_l, double tmp_b)
+{
+    //Diese Funktion soll Fräsungen entdecken die zum Abscheren der ABS-Kante führen
+    //Also Fräsungen von Werkstückmitte in Richtung Kante
+    //Wird eine solche Fräsung gefunden, so soll diese intweder in der Lufrichtung umgekehrt werden
+    //Oder in 2 Einzelfräskonturen zerteilt werden
+    //Dies ist jeweis nur dann möglich, wenn es einen Spiegelfräser gibt damit aus Gegenlauf nicht
+    //Gleichlauf wird
+
+    return bearb;
+}
 //-------------------------------------------------------------------------Werkzeug:
 
 

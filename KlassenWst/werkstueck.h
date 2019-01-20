@@ -86,11 +86,13 @@ public:
 
     QString get_fmc(text_zeilenweise wkzmagazin, QString& info, \
                     QString drehwinkel = "0", QString zust_fkon = "orgi",\
-                    bool formartierungen_aufbrechen = false);
+                    bool formartierungen_aufbrechen = false,\
+                    bool fkon_kantenschonend = false);
     QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
     QString get_eigenses_format(QString drehwinkel, QString ausgabeformat, \
                                 text_zeilenweise wkzmagazin,\
-                                bool formartierungen_aufbrechen = false);
+                                bool formartierungen_aufbrechen = false,\
+                                bool fkon_kantenschonend = false);
 
     QString suche_cad_fehler();
 
@@ -123,15 +125,18 @@ private:
     text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
 
     text_zeilenweise formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
+    text_zeilenweise fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
 
     QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
                               double tmp_l, double tmp_b, QString zust_fkon,\
-                              QString drewi, bool formartierungen_aufbrechen);
+                              QString drewi, bool formartierungen_aufbrechen,\
+                              bool fkon_kantenschonend);
     QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
                                double tmp_l, double tmp_b);
     QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
                                 QString ausgabeformat, text_zeilenweise wkzmagazin,\
-                                bool formartierungen_aufbrechen);
+                                bool formartierungen_aufbrechen,\
+                                bool fkon_kantenschonend);
 
     QString kommentar_fmc(QString kom);
     QString fmc_kommentar_gute_seite(text_zeilenweise bearb);

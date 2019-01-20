@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.19.01.07"
+#define PROGRAMMVERSION "1.19.01.20"
 #endif //PROGRAMMVERSION
 
 #include <QMainWindow>
@@ -58,6 +58,7 @@ private slots:
     void on_checkBox_geraden_stateChanged();
     void on_lineEdit_geraden_schwellenwert_editingFinished();
     void on_checkBox_formatierung_aufbrechen_stateChanged();
+    void on_checkBox_fkon_kantenschonend_stateChanged();
 
 private:
     Ui::MainWindow *ui;
@@ -76,6 +77,7 @@ private:
     QString erzeuge_eigenes_format;     // "ja" | "nein"
     QString kurze_geraden_weglassen;    // "ja" | "nein"
     QString formartierungen_aufbrechen; // "ja" | "nein"
+    QString fkon_kantenschonend;        // "ja" | "nein"
 
     //Radio Buttons:
     QString drehung_des_bauteils; // 0 | 90 | 180 | 270 | AUTO
