@@ -9706,11 +9706,14 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                         {
                             bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
                             bearb.zeilen_einfuegen(zeibeg-1, bearb_neu.get_text());
+                            i = zeibeg-1+bearb_neu.zeilenanzahl();
                         }else
                         {
                             bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
                             bearb.zeilen_anhaengen(bearb_neu.get_text());
+                            i = bearb.zeilenanzahl();
                         }
+
                     }
                 }
             }
