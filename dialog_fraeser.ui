@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>336</height>
+    <height>370</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,9 +20,9 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>300</y>
+     <y>330</y>
      <width>231</width>
-     <height>29</height>
+     <height>31</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -48,33 +48,16 @@
      <x>20</x>
      <y>10</y>
      <width>371</width>
-     <height>291</height>
+     <height>321</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="6" column="1">
-     <widget class="QLineEdit" name="lineEdit_alias">
-      <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ein Alias-Name ist ein zweiter Name für das selbe Werkzeug. Wird mehr als ein Alias-Name benötigt, so kann das Werkzeug dupliziert werden und dem Duplikat ein anderer Alias-Name zugewiesen werden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_alias">
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_dm">
       <property name="text">
-       <string>Alias-Name</string>
+       <string>Durchmesser</string>
       </property>
      </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_nr">
-      <property name="text">
-       <string>Werkzeugnummer</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_nutzl"/>
     </item>
     <item row="3" column="0">
      <widget class="QLabel" name="label_zustm">
@@ -83,36 +66,20 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_dm">
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEdit_voers"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_nr">
       <property name="text">
-       <string>Durchmesser</string>
+       <string>Werkzeugnummer</string>
       </property>
      </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_dm"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_nutzl">
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nutzlänge&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_zustm"/>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit_nr"/>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="lineEdit_voers"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_vors">
-      <property name="text">
-       <string>Vorschub</string>
       </property>
      </widget>
     </item>
@@ -123,8 +90,51 @@
       </property>
      </widget>
     </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_alias">
+      <property name="text">
+       <string>Alias-Name</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_nr"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_vors">
+      <property name="text">
+       <string>Vorschub</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QLineEdit" name="lineEdit_alias">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ein Alias-Name ist ein zweiter Name für das selbe Werkzeug. Wird mehr als ein Alias-Name benötigt, so kann das Werkzeug dupliziert werden und dem Duplikat ein anderer Alias-Name zugewiesen werden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_nutzl"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_zustm"/>
+    </item>
     <item row="4" column="1">
      <widget class="QLineEdit" name="lineEdit_zust_min"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm"/>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="lineEdit_spiegel"/>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_spiegel">
+      <property name="text">
+       <string>Spiegelwerkzeug</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -135,7 +145,10 @@
   <tabstop>lineEdit_dm</tabstop>
   <tabstop>lineEdit_nutzl</tabstop>
   <tabstop>lineEdit_zustm</tabstop>
+  <tabstop>lineEdit_zust_min</tabstop>
   <tabstop>lineEdit_voers</tabstop>
+  <tabstop>lineEdit_alias</tabstop>
+  <tabstop>lineEdit_spiegel</tabstop>
   <tabstop>pushButton_abbrechen</tabstop>
  </tabstops>
  <resources/>

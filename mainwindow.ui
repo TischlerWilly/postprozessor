@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>896</width>
-    <height>711</height>
+    <height>718</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -142,9 +142,9 @@
     <property name="geometry">
      <rect>
       <x>11</x>
-      <y>564</y>
+      <y>590</y>
       <width>191</width>
-      <height>118</height>
+      <height>91</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -155,16 +155,6 @@
        </property>
        <property name="text">
         <string>Dateien auflisten</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_zielordner_leeren">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Löscht alle Dateien die sich im Zielverzeichnis befinden&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="text">
-        <string>Zielordner leeren</string>
        </property>
       </widget>
      </item>
@@ -323,20 +313,20 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>440</y>
-      <width>191</width>
-      <height>66</height>
+      <width>196</width>
+      <height>133</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="2" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkBox_geraden">
-       <property name="text">
-        <string>kurze Geraden ignorieren</string>
+     <item row="1" column="0" colspan="2">
+      <widget class="Line" name="line_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -350,8 +340,29 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="2">
-      <widget class="Line" name="line_4">
+     <item row="6" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkBox_fkon_kantenschonend">
+       <property name="text">
+        <string>Fräsungen kantenschonend</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkBox_formatierung_aufbrechen">
+       <property name="text">
+        <string>Formartierungen aufbrechen</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkBox_geraden">
+       <property name="text">
+        <string>kurze Geraden ignorieren</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="Line" name="line_5">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -366,7 +377,7 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>27</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuWerkzeug">

@@ -1138,8 +1138,10 @@ QString werkstueck::suche_cad_fehler()
 }
 
 //-------------------------------------------------------------------------Export:
-QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel, \
-                            QString zust_fkon)
+QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
+                            QString drehwinkel, QString zust_fkon,\
+                            bool formartierungen_aufbrechen,\
+                            bool fkon_kantenschonend)
 {
 //#define ISDEBUG
 
@@ -1771,7 +1773,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         double tmp_l = laenge;
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0");
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
+                                formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_0);
@@ -1784,7 +1787,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         double tmp_b = breite;
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90");
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", \
+                                formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_90);
@@ -1798,7 +1802,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         text_zeilenweise tmp_bearb = bearbeitungen;
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180");
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", \
+                                formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_180);
@@ -1813,7 +1818,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270");
+        msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270", \
+                                formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_270);
@@ -1832,7 +1838,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             double tmp_l = laenge;
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
             info += " (";
@@ -1850,7 +1857,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 90 Grad";
             info += " (";
@@ -1869,7 +1877,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             text_zeilenweise tmp_bearb = bearbeitungen;
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 180 Grad";
             info += " (";
@@ -1889,7 +1898,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info = "  -> Drehung 270 Grad";
             info += " (";
@@ -1903,7 +1913,8 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , QString
             double tmp_l = laenge;
             double tmp_b = breite;
             text_zeilenweise tmp_bearb = bearbeitungen;
-            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0");
+            msg = get_fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
+                                    formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
             info += " (";
@@ -2322,7 +2333,10 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
     }
     return msg;
 }
-QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin)
+QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeformat, \
+                                        text_zeilenweise wkzmagazin,\
+                                        bool formartierungen_aufbrechen,\
+                                        bool fkon_kantenschonend)
 {
     QString msg;
     bearb_sortieren();
@@ -2338,7 +2352,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
             tmp_b = laenge;
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
         }
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }else if(drehwinkel == "90")
     {
         double tmp_l = laenge;
@@ -2351,7 +2366,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
         }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);        
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }else if(drehwinkel == "180")
     {
         double tmp_l = laenge;
@@ -2365,7 +2381,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
         }
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }else if(drehwinkel == "270")
     {
         double tmp_l = laenge;
@@ -2380,7 +2397,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }else
     {
         //drehung 0:
@@ -2393,7 +2411,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
             tmp_b = laenge;
             tmp_bearb = bearb_optimieren_ganx(bearbeitungen); //nur zu Testzwecken
         }
-        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin);
+        msg = get_eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                                  formartierungen_aufbrechen, fkon_kantenschonend);
     }
     return msg;
 }
@@ -5554,16 +5573,27 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 }
 QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                       double tmp_l, double tmp_b, QString zust_fkon,\
-                                      QString drewi)
+                                      QString drewi, bool formartierungen_aufbrechen,\
+                                      bool fkon_kantenschonend)
 {
     text_zeilenweise bearb_kopie = bearb;
     bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
+    if(formartierungen_aufbrechen == true)
+    {
+        bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+    }
+    if(fkon_kantenschonend == true)
+    {
+        bearb = fkon_kantengut(bearb, wkzmagazin, tmp_l, tmp_b);
+    }
     QString msg;   
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
      werkzeugmagazin wkzmag(wkzmagazin);
      QString kavo = get_kante_vo(drewi);//Kante vorne == Kante an X
      QString kali = get_kante_li(drewi);//Kante links == Kante an Y
+     QString kahi = get_kante_hi(drewi);//Kante hinten == Kante nicht an X
+     QString kare = get_kante_re(drewi);//Kante rechts == Kante nicht an Y
 
      bool ay = false;
      if(tmp_b < schwellenwert_ay)
@@ -5621,7 +5651,13 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
         msg += "an X ohne / an Y mit Kante";
     }else
     {
-        msg += "(NULL)";
+        if(kavo.isEmpty() && kahi.isEmpty() && kali.isEmpty() && kare.isEmpty())
+        {
+            msg += "(NULL)";
+        }else
+        {
+            msg += "an X+Y ohne Kante";
+        }
     }
     msg += "\n";
     msg += "LOESEN=";               //Automatisch lösen
@@ -8631,7 +8667,9 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     return msg;
 }
 QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b, \
-                                        QString ausgabeformat, text_zeilenweise wkzmagazin)
+                                        QString ausgabeformat, text_zeilenweise wkzmagazin,\
+                                        bool formartierungen_aufbrechen, \
+                                        bool fkon_kantenschonend)
 {
     if(ausgabeformat == FMC)
     {
@@ -8642,6 +8680,14 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
     }
     QString msg = "";
     bearb_sortieren();
+    if(formartierungen_aufbrechen == true)
+    {
+        bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+    }
+    if(fkon_kantenschonend == true)
+    {
+        bearb = fkon_kantengut(bearb, wkzmagazin, tmp_l, tmp_b);
+    }
 
     //Programmkopf:
     msg += get_name();
@@ -9494,6 +9540,199 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
     return bearb;
 }
 
+text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin, \
+                                                         double tmp_l, double tmp_b)
+{
+    //Diese Funktion soll die vom VW ausgegebenen Poligonförmigen Formartierungen entdecken.
+    //Diese werden generiert, wenn die Grundfläche eines 3D-Bauteils kein Rechteck ist
+    //Die Bestandteile der Fräskontur, die deckungsgleich auf der Kante liegen werden nicht benötigt
+    //Und werden durch diese Funktion heraus genommen
+
+    //Prüfen ob wst eine umlaufende Formartierung enthällt:
+    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise param;
+        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        param.set_text(bearb.zeile(i));
+        if(param.zeile(1) == BEARBART_FRAESERAUFRUF)
+        {
+            uint zeibeg = i;
+            uint zeiend = i;
+            fraueseraufruf fa(param.get_text());
+            double xbeg = fa.get_x();
+            double ybeg = fa.get_y();
+            double zbeg = fa.get_tiefe();
+            double xend = xbeg;
+            double yend = ybeg;
+            double zend = zbeg;
+            double xmin = xbeg;
+            double xmax = xbeg;
+            double ymin = ybeg;
+            double ymax = ybeg;
+            if(i<= bearb.zeilenanzahl())
+            {
+                i++;
+                for(; i<= bearb.zeilenanzahl() ;i++)
+                {
+                    param.set_text(bearb.zeile(i));
+                    if(param.zeile(1) == BEARBART_FRAESERGERADE)
+                    {
+                        fraesergerade fg(param.get_text());
+                        xend = fg.get_xe();
+                        yend = fg.get_ye();
+                        zend = fg.get_ze();
+                        zeiend = i;
+                        if(xend > xmax)
+                        {
+                            xmax = xend;
+                        }
+                        if(xend < xmin)
+                        {
+                            xmin = xend;
+                        }
+                        if(yend > ymax)
+                        {
+                            ymax = yend;
+                        }
+                        if(yend < ymin)
+                        {
+                            ymin = yend;
+                        }
+                    }else if(param.zeile(1) == BEARBART_FRAESERBOGEN)
+                    {
+                        fraeserbogen fb(param.get_text());
+                        xend = fb.get_xe();
+                        yend = fb.get_ye();
+                        zend = fb.get_ze();
+                        zeiend = i;
+                        if(xend > xmax)
+                        {
+                            xmax = xend;
+                        }
+                        if(xend < xmin)
+                        {
+                            xmin = xend;
+                        }
+                        if(yend > ymax)
+                        {
+                            ymax = yend;
+                        }
+                        if(yend < ymin)
+                        {
+                            ymin = yend;
+                        }
+                    }else
+                    {
+                        break;
+                    }
+                }
+            }
+            if(zeibeg != zeiend)
+            {
+                //Prüfen ob Start- und Endpunkt gleich sind:
+                if(xbeg == xend && ybeg == yend && zbeg == zend)//evtl. ist hier cagleich nötig!!
+                {
+                    //Prüfen ob fkon Formartierung ist:
+                    if(xmin <= 0        &&\
+                       xmax >= tmp_l    &&\
+                       ymin <= 0        &&\
+                       ymax >= tmp_b)
+                    {
+                        //Die Teile aus der Bearbeitung löschen die Deckungsgleich auf der WST-Kante liegen
+                        text_zeilenweise bearb_neu;
+                        bearb_neu.set_text(fa.get_text());
+
+                        for(uint ii=zeibeg+1; ii<=zeiend ;ii++)
+                        {
+                            text_zeilenweise param;
+                            param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                            param.set_text(bearb.zeile(ii));
+                            if(param.zeile(1) == BEARBART_FRAESERGERADE)
+                            {
+                                fraesergerade fg(param.get_text());
+                                bool loeschen = false;
+                                if((fg.get_xs() == fg.get_xe()) && (fg.get_ys() != fg.get_ye()))
+                                {
+                                    //Gerade ist senkrecht
+                                    if((fg.get_xs() == 0) || (fg.get_xs()== tmp_l))
+                                    {
+                                        //Gerade liegt auf der WST-Kante
+                                        loeschen = true;
+                                    }
+                                }else if((fg.get_xs() != fg.get_xe()) && (fg.get_ys() == fg.get_ye()))
+                                {
+                                    //Gerade ist wagerecht
+                                    if((fg.get_ys() == 0) || (fg.get_ys()== tmp_b))
+                                    {
+                                        //Gerade liegt auf der WST-Kante
+                                        loeschen = true;
+                                    }
+                                }
+                                if(loeschen == true)
+                                {
+                                    QString vorzeile = bearb_neu.zeile(bearb_neu.zeilenanzahl());
+                                    text_zeilenweise vorparam;
+                                    vorparam.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                                    vorparam.set_text(vorzeile);
+                                    if(vorparam.zeile(1) == BEARBART_FRAESERAUFRUF)
+                                    {
+                                        fraueseraufruf tmpfa(vorparam.get_text());
+                                        tmpfa.set_x(fg.get_xe());
+                                        tmpfa.set_y(fg.get_ye());
+                                        bearb_neu.zeile_ersaetzen(bearb_neu.zeilenanzahl(), tmpfa.get_text());
+                                    }else
+                                    {
+                                        fa.set_x(fg.get_xe());
+                                        fa.set_y(fg.get_ye());
+                                        bearb_neu.zeile_anhaengen(fa.get_text());
+                                    }
+                                }
+                            }else
+                            {
+                                bearb_neu.zeile_anhaengen(bearb.zeile(ii));
+                            }
+                        }
+                        //prüfen ob letzte Zeile von bearb_neu fa ist und ggf löschen:
+                        text_zeilenweise endparam;
+                        endparam.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                        endparam.set_text(bearb_neu.zeile(bearb_neu.zeilenanzahl()));
+                        if(endparam.zeile(1) == BEARBART_FRAESERAUFRUF)
+                        {
+                            bearb_neu.zeile_loeschen(bearb_neu.zeilenanzahl());
+                        }
+
+                        //bearb.zeile(zeibeg bis zeiend) gegen bearb_neu austauschen:
+                        if(zeiend < bearb.zeilenanzahl())
+                        {
+                            bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
+                            bearb.zeilen_einfuegen(zeibeg-1, bearb_neu.get_text());
+                            i = zeibeg-1+bearb_neu.zeilenanzahl();
+                        }else
+                        {
+                            bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
+                            bearb.zeilen_anhaengen(bearb_neu.get_text());
+                            i = bearb.zeilenanzahl();
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    return bearb;
+}
+
+text_zeilenweise werkstueck::fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin, double tmp_l, double tmp_b)
+{
+    //Diese Funktion soll Fräsungen entdecken die zum Abscheren der ABS-Kante führen
+    //Also Fräsungen von Werkstückmitte in Richtung Kante
+    //Wird eine solche Fräsung gefunden, so soll diese intweder in der Lufrichtung umgekehrt werden
+    //Oder in 2 Einzelfräskonturen zerteilt werden
+    //Dies ist jeweis nur dann möglich, wenn es einen Spiegelfräser gibt damit aus Gegenlauf nicht
+    //Gleichlauf wird
+
+    return bearb;
+}
 //-------------------------------------------------------------------------Werkzeug:
 
 

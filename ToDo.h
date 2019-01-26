@@ -3,7 +3,7 @@
 
 /*
 
-
+text_zeilenweise werkstueck::fkon_kantengut(...)
 
 
 
@@ -17,7 +17,7 @@
 
 -------------------------------------------------------
 Testen:
-
+text_zeilenweise werkstueck::formartierung_zu_einzelfkon(...)
 
 
 

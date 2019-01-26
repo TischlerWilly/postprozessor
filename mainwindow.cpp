@@ -108,7 +108,15 @@ void MainWindow::setup()
             ui->checkBox_geraden->setChecked(true);
             file.write("kurze_geraden_weglassen:ja");
             file.write("\n");
-            wste.kurze_geraden_importieren(false);
+            wste.set_kurze_geraden_importieren(false);
+
+            ui->checkBox_formatierung_aufbrechen->setChecked(false);
+            file.write("formatierung_aufbrechen:nein");
+            file.write("\n");
+
+            ui->checkBox_fkon_kantenschonend->setChecked(false);
+            file.write("fkon_kantenschonend:nein");
+            file.write("\n");
 
         }
         file.close();
@@ -196,11 +204,11 @@ void MainWindow::setup()
                     if(kurze_geraden_weglassen == "ja")
                     {
                         ui->checkBox_geraden->setChecked(true);
-                        wste.kurze_geraden_importieren(false);
+                        wste.set_kurze_geraden_importieren(false);
                     }else
                     {
                         ui->checkBox_geraden->setChecked(false);
-                        wste.kurze_geraden_importieren(true);
+                        wste.set_kurze_geraden_importieren(true);
                     }
                 }else if(zeile.contains("drehung_des_bauteils:"))
                 {
@@ -230,6 +238,26 @@ void MainWindow::setup()
                     }else if(option_fkon_ti == "wkz")
                     {
                         ui->radioButton_fkon_ti_wkz->setChecked(true);
+                    }
+                }else if(zeile.contains("formartierungen_aufbrechen:"))
+                {
+                    formartierungen_aufbrechen = text_mitte(zeile, "formartierungen_aufbrechen:", "\n");
+                    if(formartierungen_aufbrechen == "ja")
+                    {
+                        ui->checkBox_formatierung_aufbrechen->setChecked(true);
+                    }else
+                    {
+                        ui->checkBox_formatierung_aufbrechen->setChecked(false);
+                    }
+                }else if(zeile.contains("fkon_kantenschonend:"))
+                {
+                    fkon_kantenschonend = text_mitte(zeile, "fkon_kantenschonend:", "\n");
+                    if(fkon_kantenschonend == "ja")
+                    {
+                        ui->checkBox_fkon_kantenschonend->setChecked(true);
+                    }else
+                    {
+                        ui->checkBox_fkon_kantenschonend->setChecked(false);
                     }
                 }
             }
@@ -288,29 +316,9 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            //----------------------------------------------Tabellenkopf:
             werkzeugmagazin wm;
             file.write(wm.get_tabellenkopf().toUtf8());
-            /*
-            file.write("Typ");
-            file.write("\t");
-            file.write("Nummer");
-            file.write("\t");
-            file.write("Durchmesser");
-            file.write("\t");
-            file.write("Nutzlaenge");
-            file.write("\t");
-            file.write("Vorschub");
-            file.write("\t");
-            file.write("Zustellmass");
-            file.write("\t");
-            file.write("DM_CAD");
-            file.write("\t");
-            file.write("Ist Durchgangsbohrer");
-            file.write("\t");
-            file.write(" ");
-            */
-            //file.write("\n");
+            wkz_magazin_ganx.set_text(wm.get_tabellenkopf());
         }
         file.close();
     }else
@@ -342,29 +350,9 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            //----------------------------------------------Tabellenkopf:
             werkzeugmagazin wm;
             file.write(wm.get_tabellenkopf().toUtf8());
-            /*
-            file.write("Typ");
-            file.write("\t");
-            file.write("Nummer");
-            file.write("\t");
-            file.write("Durchmesser");
-            file.write("\t");
-            file.write("Nutzlaenge");
-            file.write("\t");
-            file.write("Vorschub");
-            file.write("\t");
-            file.write("Zustellmass");
-            file.write("\t");
-            file.write("DM_CAD");
-            file.write("\t");
-            file.write("Ist Durchgangsbohrer");
-            file.write("\t");
-            file.write(" ");
-            */
-            //file.write("\n");
+            wkz_magazin_fmc.set_text(wm.get_tabellenkopf());
         }
         file.close();
     }else
@@ -438,11 +426,19 @@ void MainWindow::schreibe_ini()
         file.write("\n");
         if(kurze_geraden_weglassen == "ja")
         {
-            wste.kurze_geraden_importieren(false);
+            wste.set_kurze_geraden_importieren(false);
         }else
         {
-            wste.kurze_geraden_importieren(true);
+            wste.set_kurze_geraden_importieren(true);
         }
+
+        file.write("formartierungen_aufbrechen:");
+        file.write(formartierungen_aufbrechen.toUtf8());
+        file.write("\n");
+
+        file.write("fkon_kantenschonend:");
+        file.write(fkon_kantenschonend.toUtf8());
+        file.write("\n");
 
         //-------------------------------------------Radio-Buttons:
         file.write("drehung_des_bauteils:");
@@ -625,7 +621,32 @@ void MainWindow::on_checkBox_geraden_stateChanged()
     }
     schreibe_ini();
 }
+void MainWindow::on_checkBox_formatierung_aufbrechen_stateChanged()
+{
+    if(ui->checkBox_formatierung_aufbrechen->isChecked() == true)
+    {
+        formartierungen_aufbrechen = "ja";
+    }else
+    {
+        formartierungen_aufbrechen = "nein";
+    }
+    schreibe_ini();
+}
+void MainWindow::on_checkBox_fkon_kantenschonend_stateChanged()
+{
+    QMessageBox mb;
+    mb.setText("Diese Funktion ist derzeit leider noch nicht fertig!");
+    mb.exec();
 
+    if(ui->checkBox_fkon_kantenschonend->isChecked() == true)
+    {
+        fkon_kantenschonend = "ja";
+    }else
+    {
+        fkon_kantenschonend = "nein";
+    }
+    schreibe_ini();
+}
 //-----------------------------------------------------------------------Radio-Buttons:
 void MainWindow::on_radioButton_drehung_0_toggled(bool checked)
 {
@@ -778,7 +799,7 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
 }
 void MainWindow::on_pushButton_start_clicked()
 {
-    on_pushButton_zielordner_leeren_clicked();
+    zielordner_leeren();
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -988,6 +1009,23 @@ void MainWindow::on_pushButton_start_clicked()
 
     for(uint i=1; i<=wste.anzahl() ;i++)
     {
+        bool foauf;
+        if(formartierungen_aufbrechen == "ja")
+        {
+            foauf = true;
+        }else
+        {
+            foauf = false;
+        }
+        bool fkonkanschon;
+        if(fkon_kantenschonend == "ja")
+        {
+            fkonkanschon = true;
+        }else
+        {
+            fkonkanschon = false;
+        }
+
         if(erzeuge_ganx == "ja")
         {
             QString teilname = wste.get_name(i);
@@ -1029,8 +1067,9 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
-                QString info = "";
-                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils, option_fkon_ti);
+                QString info = "";                
+                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils, \
+                                                      option_fkon_ti, foauf,fkonkanschon);
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;
@@ -1055,19 +1094,20 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
-                QString info = "";
-                //QString tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils);
                 QString tmp;
                 if(erzeuge_fmc  == "ja"  &&  erzeuge_ganx != "ja")
                 {
-                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, FMC, wkz_magazin_fmc);
+                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, FMC, \
+                                                              wkz_magazin_fmc, foauf, fkonkanschon);
                 }else if(erzeuge_fmc  != "ja"  &&  erzeuge_ganx == "ja")
                 {
-                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, GANX, wkz_magazin_ganx);
+                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, GANX, \
+                                                              wkz_magazin_ganx, foauf, fkonkanschon);
                 }else
                 {
                     text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
-                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, EIGENES_FORMAT, wkz_eigen);
+                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, EIGENES_FORMAT, \
+                                                              wkz_eigen, foauf, fkonkanschon);
                 }
                 datei.write(tmp.toUtf8());
                 QString output;
@@ -1076,13 +1116,12 @@ void MainWindow::on_pushButton_start_clicked()
                 ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();
-
         }
     }
 
     QApplication::restoreOverrideCursor();
 }
-void MainWindow::on_pushButton_zielordner_leeren_clicked()
+void MainWindow::zielordner_leeren()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -1146,6 +1185,10 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
+
+
+
 
 
 

@@ -29,7 +29,7 @@ public:
     }
     void stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
     void set_fkon_gerade_laenge(double wert);
-    void kurze_geraden_importieren(bool wert);
+    void set_kurze_geraden_importieren(bool wert);
 
     werkstueck get_wst(uint index);
     QString get_name(uint index);

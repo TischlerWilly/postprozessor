@@ -32,7 +32,7 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
                 {
                     if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
                     {
-                        if(bearbeitungstiefe >= werkstueckdicke)
+                        if(bearbeitungstiefe >= werkstueckdicke || ((bearbeitungstiefe == 2)&&(dm == 5)))//Tiefe 2mm == Ankörnungen
                         {
                             if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
                             {
@@ -253,7 +253,13 @@ QString werkzeugmagazin::get_tabellenkopf()
     tmp += "\t";
     tmp += "Alias";
     tmp += "\t";
+    tmp += "MindZust";
+    tmp += "\t";
+    tmp += "SpiegelWKZ";
+    tmp += "\t";
 
+    tmp += " ";
+    tmp += "\n";
     tmp += " ";
 
     return tmp;
@@ -294,6 +300,24 @@ QString werkzeugmagazin::get_nutzlaenge(QString wkz_nr)
 
     }
     returntext.replace(",",".");
+    return returntext;
+}
+QString werkzeugmagazin::get_spiegelwkz(QString wkz_nr)
+{
+    QString returntext = "";
+    text_zeilenweise zeile;
+    zeile.set_trennzeichen('\t');
+
+    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    {
+        zeile.set_text(magazin.zeile(i));
+
+        if(zeile.zeile(2) == wkz_nr)
+        {
+            returntext = zeile.zeile(13);
+        }
+
+    }
     return returntext;
 }
 
