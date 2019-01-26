@@ -634,6 +634,10 @@ void MainWindow::on_checkBox_formatierung_aufbrechen_stateChanged()
 }
 void MainWindow::on_checkBox_fkon_kantenschonend_stateChanged()
 {
+    QMessageBox mb;
+    mb.setText("Diese Funktion ist derzeit leider noch nicht fertig!");
+    mb.exec();
+
     if(ui->checkBox_fkon_kantenschonend->isChecked() == true)
     {
         fkon_kantenschonend = "ja";
@@ -795,7 +799,7 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
 }
 void MainWindow::on_pushButton_start_clicked()
 {
-    on_pushButton_zielordner_leeren_clicked();
+    zielordner_leeren();
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -1117,7 +1121,7 @@ void MainWindow::on_pushButton_start_clicked()
 
     QApplication::restoreOverrideCursor();
 }
-void MainWindow::on_pushButton_zielordner_leeren_clicked()
+void MainWindow::zielordner_leeren()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 

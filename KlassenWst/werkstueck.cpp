@@ -9543,9 +9543,10 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
 text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin, \
                                                          double tmp_l, double tmp_b)
 {
-    //Diese Funktion soll die vom VW ausgegebenen Poligonförmigen Formartierungen entdecken
+    //Diese Funktion soll die vom VW ausgegebenen Poligonförmigen Formartierungen entdecken.
     //Diese werden generiert, wenn die Grundfläche eines 3D-Bauteils kein Rechteck ist
     //Die Bestandteile der Fräskontur, die deckungsgleich auf der Kante liegen werden nicht benötigt
+    //Und werden durch diese Funktion heraus genommen
 
     //Prüfen ob wst eine umlaufende Formartierung enthällt:
     for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
@@ -9560,7 +9561,7 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
             fraueseraufruf fa(param.get_text());
             double xbeg = fa.get_x();
             double ybeg = fa.get_y();
-            double zbeg = fa.get_z();
+            double zbeg = fa.get_tiefe();
             double xend = xbeg;
             double yend = ybeg;
             double zend = zbeg;
@@ -9637,17 +9638,79 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                        ymin <= 0        &&\
                        ymax >= tmp_b)
                     {
-                        //Zu Testzwecken:
-                        QString msg = "Formartierung gefunden bei: \"";
-                        msg += get_name();
-                        msg +="\"";
-                        QMessageBox mb;
-                        mb.setText(msg);
-                        mb.exec();
-
                         //Die Teile aus der Bearbeitung löschen die Deckungsgleich auf der WST-Kante liegen
-                        //....
+                        text_zeilenweise bearb_neu;
+                        bearb_neu.set_text(fa.get_text());
 
+                        for(uint ii=zeibeg+1; ii<=zeiend ;ii++)
+                        {
+                            text_zeilenweise param;
+                            param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                            param.set_text(bearb.zeile(ii));
+                            if(param.zeile(1) == BEARBART_FRAESERGERADE)
+                            {
+                                fraesergerade fg(param.get_text());
+                                bool loeschen = false;
+                                if((fg.get_xs() == fg.get_xe()) && (fg.get_ys() != fg.get_ye()))
+                                {
+                                    //Gerade ist senkrecht
+                                    if((fg.get_xs() == 0) || (fg.get_xs()== tmp_l))
+                                    {
+                                        //Gerade liegt auf der WST-Kante
+                                        loeschen = true;
+                                    }
+                                }else if((fg.get_xs() != fg.get_xe()) && (fg.get_ys() == fg.get_ye()))
+                                {
+                                    //Gerade ist wagerecht
+                                    if((fg.get_ys() == 0) || (fg.get_ys()== tmp_b))
+                                    {
+                                        //Gerade liegt auf der WST-Kante
+                                        loeschen = true;
+                                    }
+                                }
+                                if(loeschen == true)
+                                {
+                                    QString vorzeile = bearb_neu.zeile(bearb_neu.zeilenanzahl());
+                                    text_zeilenweise vorparam;
+                                    vorparam.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                                    vorparam.set_text(vorzeile);
+                                    if(vorparam.zeile(1) == BEARBART_FRAESERAUFRUF)
+                                    {
+                                        fraueseraufruf tmpfa(vorparam.get_text());
+                                        tmpfa.set_x(fg.get_xe());
+                                        tmpfa.set_y(fg.get_ye());
+                                        bearb_neu.zeile_ersaetzen(bearb_neu.zeilenanzahl(), tmpfa.get_text());
+                                    }else
+                                    {
+                                        fa.set_x(fg.get_xe());
+                                        fa.set_y(fg.get_ye());
+                                        bearb_neu.zeile_anhaengen(fa.get_text());
+                                    }
+                                }
+                            }else
+                            {
+                                bearb_neu.zeile_anhaengen(bearb.zeile(ii));
+                            }
+                        }
+                        //prüfen ob letzte Zeile von bearb_neu fa ist und ggf löschen:
+                        text_zeilenweise endparam;
+                        endparam.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                        endparam.set_text(bearb_neu.zeile(bearb_neu.zeilenanzahl()));
+                        if(endparam.zeile(1) == BEARBART_FRAESERAUFRUF)
+                        {
+                            bearb_neu.zeile_loeschen(bearb_neu.zeilenanzahl());
+                        }
+
+                        //bearb.zeile(zeibeg bis zeiend) gegen bearb_neu austauschen:
+                        if(zeiend < bearb.zeilenanzahl())
+                        {
+                            bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
+                            bearb.zeilen_einfuegen(zeibeg-1, bearb_neu.get_text());
+                        }else
+                        {
+                            bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
+                            bearb.zeilen_anhaengen(bearb_neu.get_text());
+                        }
                     }
                 }
             }

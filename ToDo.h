@@ -3,9 +3,7 @@
 
 /*
 
-
-text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin, double tmp_l, double tmp_b)
-text_zeilenweise werkstueck::fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin, double tmp_l, double tmp_b)
+text_zeilenweise werkstueck::fkon_kantengut(...)
 
 
 
@@ -19,7 +17,7 @@ text_zeilenweise werkstueck::fkon_kantengut(text_zeilenweise bearb, text_zeilenw
 
 -------------------------------------------------------
 Testen:
-
+text_zeilenweise werkstueck::formartierung_zu_einzelfkon(...)
 
 
 

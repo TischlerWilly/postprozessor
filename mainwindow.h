@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.19.01.20"
+#define PROGRAMMVERSION "1.19.01.26"
 #endif //PROGRAMMVERSION
 
 #include <QMainWindow>
@@ -52,7 +52,7 @@ private slots:
     void on_actionWerkzeug_fmc_anzeigen_triggered();
     void on_checkBox_af_eigen_stateChanged();
     void on_actionStandard_Namen_anzeigen_triggered();
-    void on_pushButton_zielordner_leeren_clicked();
+    void zielordner_leeren();
     void on_radioButton_fkon_ti_quell_toggled(bool checked);
     void on_radioButton_fkon_ti_wkz_toggled(bool checked);
     void on_checkBox_geraden_stateChanged();
