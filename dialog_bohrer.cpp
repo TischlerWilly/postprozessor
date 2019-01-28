@@ -109,7 +109,9 @@ void Dialog_bohrer::on_pushButton_ok_clicked()
         wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_HORI);
     }
 
-    wkz.zeile_anhaengen("");                                //11: Alias-Name
+    wkz.zeile_anhaengen(" ");                               //11: Alias-Name
+    wkz.zeile_anhaengen(" ");                               //12: Mindest Zustellmaß
+    wkz.zeile_anhaengen(" ");                               //13: Spiegelwerkzeug
 
     //deutsche Zahlen in englische Zahlen umwandeln:
     for(uint i=3; i<=wkz.zeilenanzahl() ;i++)
