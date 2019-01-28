@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.19.01.26"
+#define PROGRAMMVERSION "1.19.01.28"
 #endif //PROGRAMMVERSION
 
 #include <QMainWindow>
@@ -12,12 +12,13 @@
 
 #include "Definitionen/dateinamen.h"
 #include "dialog_wkz.h"
-
+#include "dialog_stdnamen.h"
 
 #include "eigeneFunktionen/text.h"
 #include "allgemKlassen/text_zeilenweise.h"
 #include "KlassenWst/werkstuecke.h"
 #include "werkzeugmagazin.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -102,12 +103,15 @@ private:
 
     //Dialoge:
     Dialog_WKZ dlg_wkz;
+    Dialog_stdnamen dlg_stdnamen;
 
 signals:
     void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
+    void sendStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
 
 public slots:
     void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
+    void getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
 
 };
 

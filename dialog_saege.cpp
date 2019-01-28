@@ -69,7 +69,9 @@ void Dialog_saege::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(" ");                               //8 : ist Durchgangsbohrer
     wkz.zeile_anhaengen(ui->lineEdit_breite->text());       //9 : Sägeblattbreite
     wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);           //10: Lage
-    wkz.zeile_anhaengen("");                                //11: Alias-Name
+    wkz.zeile_anhaengen(" ");                               //11: Alias-Name
+    wkz.zeile_anhaengen(" ");                               //12: Mindest Zustellmaß
+    wkz.zeile_anhaengen(" ");                               //13: Spiegelwerkzeug
 
     //deutsche Zahlen in englische Zahlen umwandeln:
     for(uint i=3; i<=wkz.zeilenanzahl() ;i++)

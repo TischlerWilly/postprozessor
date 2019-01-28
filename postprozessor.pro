@@ -41,7 +41,9 @@ SOURCES += main.cpp\
     geometrie/punkt2d.cpp \
     KlassenWst/fraeserbogen.cpp \
     KlassenWst/bohrraster.cpp \
-    KlassenWst/ganx_gruppen.cpp
+    KlassenWst/ganx_gruppen.cpp \
+    dialog_stdnamen.cpp \
+    dialog_stdname.cpp
 
 HEADERS  += mainwindow.h \
     allgemKlassen/formel.h \
@@ -80,10 +82,14 @@ HEADERS  += mainwindow.h \
     KlassenWst/fraeserbogen.h \
     KlassenWst/bohrraster.h \
     KlassenWst/ganx_gruppen.h \
-    Definitionen/def_vw.h
+    Definitionen/def_vw.h \
+    dialog_stdnamen.h \
+    dialog_stdname.h
 
 FORMS    += mainwindow.ui \
     dialog_wkz.ui \
     dialog_bohrer.ui \
     dialog_fraeser.ui \
-    dialog_saege.ui
+    dialog_saege.ui \
+    dialog_stdnamen.ui \
+    dialog_stdname.ui
