@@ -17,6 +17,10 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_wkz, SLOT(getDialogDataWKZ(QString,text_zeilenweise)) );
     connect(&dlg_wkz, SIGNAL(sendData_wkzmagazin(QString,text_zeilenweise)), \
             this, SLOT(getDialogDataWKZ(QString,text_zeilenweise))     );
+    connect(this, SIGNAL(sendStdNamen(text_zeilenweise, text_zeilenweise)),\
+            &dlg_stdnamen, SLOT(slot_setup(text_zeilenweise,text_zeilenweise)));
+    connect(&dlg_stdnamen, SIGNAL(signal_sendData(text_zeilenweise,text_zeilenweise)),\
+            this, SLOT(getStdNamen(text_zeilenweise,text_zeilenweise)));
 }
 
 MainWindow::~MainWindow()
@@ -280,6 +284,8 @@ void MainWindow::setup()
             file.write("Namen original");
             file.write(NAMEN_STD_INI_TZ_);
             file.write("Namen neu");
+            namen_std_vor.zeile_anhaengen("Namen original");
+            namen_std_nach.zeile_anhaengen("Namen neu");
         }
         file.close();
     }else
@@ -489,6 +495,34 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
     }
 }
 
+void MainWindow::getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach)
+{
+    namen_std_vor = namen_vor;
+    namen_std_nach = namen_nach;
+
+    QFile file(NAMEN_STD_INI);
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QString tmp = "Fehler beim Dateizugriff!\n";
+        tmp += NAMEN_STD_INI;
+        tmp += "\n";
+        tmp += "in der Funktion getStdNamen";
+        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+    }else
+    {
+        text_zeilenweise namen;
+        for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
+        {
+            QString zeile;
+            zeile  = namen_std_vor.zeile(i);
+            zeile += NAMEN_STD_INI_TZ_;
+            zeile += namen_std_nach.zeile(i);
+            namen.zeile_anhaengen(zeile);
+        }
+        file.write(namen.get_text().toUtf8());
+    }
+    file.close();
+}
 //-----------------------------------------------------------------------LineEdits:
 void MainWindow::on_lineEdit_quelle_editingFinished()
 {
@@ -741,37 +775,7 @@ void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
 }
 void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
 {
-    QString msg = "";
-    //Längsten Namen finden:
-    int anz_zeichen = 0;
-    for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
-    {
-        if(namen_std_vor.zeile(i).count() > anz_zeichen)
-        {
-            anz_zeichen = namen_std_vor.zeile(i).count();
-        }
-    }
-    //Allen Namen die gleiche Länge geben:
-    text_zeilenweise tz;
-    for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
-    {
-        QString tmp = namen_std_vor.zeile(i);
-        while(tmp.count() < anz_zeichen)
-        {
-            tmp += " ";
-        }
-        tz.zeile_anhaengen(tmp);
-    }
-    //Auflistung erstellen:
-    for(uint i=1; i<=namen_std_vor.zeilenanzahl() ;i++)
-    {
-        //msg += namen_std_vor.zeile(i);
-        msg += tz.zeile(i);
-        msg += "\t";
-        msg += namen_std_nach.zeile(i);
-        msg += "\n";
-    }
-    ui->plainTextEdit_eldungen->setPlainText(msg);
+    emit sendStdNamen(namen_std_vor, namen_std_nach);
 }
 
 //-----------------------------------------------------------------------Buttons:
