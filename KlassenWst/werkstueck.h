@@ -124,7 +124,7 @@ private:
     text_zeilenweise rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
     text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
 
-    text_zeilenweise formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
+    text_zeilenweise formartierung_zu_einzelfkon(text_zeilenweise bearb,double tmp_l, double tmp_b);
     text_zeilenweise fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
 
     QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
@@ -143,6 +143,8 @@ private:
 
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
     void fraesergeraden_zusammenfassen();
+    void hbemiduebeltiefe();
+
 
 
 };

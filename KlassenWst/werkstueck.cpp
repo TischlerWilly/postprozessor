@@ -1169,6 +1169,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     QString msg;
     bearb_sortieren();
     fraesergeraden_zusammenfassen();
+    hbemiduebeltiefe();
 
     double tmp_l = laenge;
     double tmp_b = breite;
@@ -1930,6 +1931,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
 {
     QString msg;
     bearb_sortieren();
+    hbemiduebeltiefe();
 
     double tmp_l = breite;
     double tmp_b = laenge;
@@ -2340,6 +2342,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
 {
     QString msg;
     bearb_sortieren();
+    hbemiduebeltiefe();
 
     if(drehwinkel == "0")
     {
@@ -5580,7 +5583,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
     if(formartierungen_aufbrechen == true)
     {
-        bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+        bearb = formartierung_zu_einzelfkon(bearb, tmp_l, tmp_b);
     }
     if(fkon_kantenschonend == true)
     {
@@ -8682,7 +8685,7 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
     bearb_sortieren();
     if(formartierungen_aufbrechen == true)
     {
-        bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+        bearb = formartierung_zu_einzelfkon(bearb, tmp_l, tmp_b);
     }
     if(fkon_kantenschonend == true)
     {
@@ -8812,7 +8815,39 @@ QString werkstueck::fmc_kommentar_gute_seite(text_zeilenweise bearb)
         retmsg = "gut unten";
     }else if(name.contains("RW"))
     {
-        retmsg = "gut unten";
+        retmsg = "gut unten";//Wert wird ggf. weiter unten überschrieben
+        bool hat_5er_durchgangsbohrungen = false;
+        bool hat_8er_flaechenbohrungen_obsei = false;
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
+        {
+            zeile.set_text(bearb.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 5)
+                {
+                    if(bo.get_tiefe() > dicke  ||  bo.get_tiefe() < 0)
+                    {
+                        hat_5er_durchgangsbohrungen = true;
+                    }
+                }else if(bo.get_dm() == 8)
+                {
+                    if(bo.get_tiefe() < dicke &&  bo.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        hat_8er_flaechenbohrungen_obsei = true;
+                    }
+                }
+            }
+        }
+        if(hat_8er_flaechenbohrungen_obsei)
+        {
+            if(hat_5er_durchgangsbohrungen)
+            {
+                retmsg = "gut oben";
+            }
+        }
     }else if(name.contains("Tuer"))
     {
         retmsg = "gut unten";
@@ -9540,7 +9575,7 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
     return bearb;
 }
 
-text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin, \
+text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb, \
                                                          double tmp_l, double tmp_b)
 {
     //Diese Funktion soll die vom VW ausgegebenen Poligonförmigen Formartierungen entdecken.
@@ -9686,6 +9721,9 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                                         fa.set_y(fg.get_ye());
                                         bearb_neu.zeile_anhaengen(fa.get_text());
                                     }
+                                }else
+                                {
+                                    bearb_neu.zeile_anhaengen(bearb.zeile(ii));
                                 }
                             }else
                             {
@@ -9733,6 +9771,61 @@ text_zeilenweise werkstueck::fkon_kantengut(text_zeilenweise bearb, text_zeilenw
 
     return bearb;
 }
+
+void werkstueck::hbemiduebeltiefe()
+{
+    //Diese Funktion stellt die Lochtiefe für die Dübel 8x30 bei den
+    //HBEs einheitlich auf 18mm ein, damit es nicht zu Problemen in
+    //der Fertigung kommt wenn die Löcher CNC-gebohrt werden und mit dem
+    //Dübelautomaten die Dübel eingetrieben werden
+
+    const double min = 16;//Maximale Dübellochtiefe
+    const double max = 18;//Minimale Dübellochtiefe
+    for(uint i=1 ; i<=bearbeitungen.zeilenanzahl() ; i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearbeitungen.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
+            if(bezug == WST_BEZUG_LI || bezug == WST_BEZUG_RE || \
+               bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
+            {
+                //Bohrung ist HBE
+                if(bo.get_dm() == 8.2)
+                {
+                    double boti = bo.get_tiefe();
+                    if(max >= boti && boti >= min)
+                    {
+                        bo.set_tiefe(max);
+                        bearbeitungen.zeile_ersaetzen(i, bo.get_text());
+                    }
+                }
+            }
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
+            if(bezug == WST_BEZUG_LI || bezug == WST_BEZUG_RE || \
+               bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
+            {
+                //Bohrung ist HBE
+                if(bo.get_dm() == 8.2)
+                {
+                    double boti = bo.get_tiefe();
+                    if(max >= boti && boti >= min)
+                    {
+                        bo.set_tiefe(max);
+                        bearbeitungen.zeile_ersaetzen(i, bo.get_text());
+                    }
+                }
+            }
+        }
+    }
+}
+
 //-------------------------------------------------------------------------Werkzeug:
 
 
