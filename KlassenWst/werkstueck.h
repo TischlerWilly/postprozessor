@@ -45,6 +45,10 @@ public:
     QString get_kante_hi(QString drewi = "0");
     QString get_kante_li(QString drewi = "0");
     QString get_kante_re(QString drewi = "0");
+    QString get_kante_vo_ganx(QString drewi = "0");
+    QString get_kante_hi_ganx(QString drewi = "0");
+    QString get_kante_li_ganx(QString drewi = "0");
+    QString get_kante_re_ganx(QString drewi = "0");
 
     inline void set_name(QString neuer_name)
     {
