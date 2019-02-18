@@ -3745,6 +3745,10 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double y = rt.get_y();
 
             bool ausraeumen = true;
+            if(rt.get_tiefe() == get_dicke())
+            {
+                rt.set_tiefe(get_dicke()+2);
+            }
             if(rt.get_tiefe() >= dicke  || \
                rt.get_tiefe() <  0 )
             {
@@ -5313,6 +5317,10 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double y = rt.get_y();
             double z = rt.get_z();
             bool ausraeumen = true;
+            if(rt.get_tiefe() == get_dicke())
+            {
+                rt.set_tiefe(get_dicke()+2);
+            }
             if(rt.get_tiefe() >= dicke  || \
                rt.get_tiefe() <  0 )
             {
@@ -7116,8 +7124,14 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     tiefe_qstring = double_to_qstring(tiefe);
                 }else if(get_dicke()-rt.get_tiefe() <= 2)
                 {
-                    tiefe_qstring  = "D-";
-                    tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                    if(get_dicke() == rt.get_tiefe())
+                    {
+                        tiefe_qstring  = "-2";
+                    }else
+                    {
+                        tiefe_qstring  = "D-";
+                        tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                    }
                 }else
                 {
                     tiefe = rt.get_tiefe();
@@ -8337,8 +8351,14 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         tiefe_qstring = double_to_qstring(tiefe);
                     }else if(get_dicke()-rt.get_tiefe() <= 2)
                     {
-                        tiefe_qstring  = "D-";
-                        tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                        if(get_dicke() == rt.get_tiefe())
+                        {
+                            tiefe_qstring  = "-2";
+                        }else
+                        {
+                            tiefe_qstring  = "D-";
+                            tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                        }
                     }else
                     {
                         tiefe = rt.get_tiefe();
