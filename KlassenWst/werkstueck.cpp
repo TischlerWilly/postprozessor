@@ -1566,8 +1566,15 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     //Stufe 3:
     //heraus bekommen wo vorne ist anhand von Kanteninfo:
     if(!get_kante_vo("0").isEmpty() || !get_kante_li("0").isEmpty())
-    {
-        bewertung_0 += 10;
+    {        
+        if(!get_kante_vo("0").isEmpty())
+        {
+            bewertung_0 += 15;
+        }
+        if(!get_kante_li("0").isEmpty())
+        {
+            bewertung_0 += 10;
+        }
 #ifdef ISDEBUG
         if(isdebugmodus_0 == true)
         {
@@ -1579,7 +1586,14 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     }
     if(!get_kante_vo("90").isEmpty() || !get_kante_li("90").isEmpty())
     {
-        bewertung_90 += 10;
+        if(!get_kante_vo("90").isEmpty())
+        {
+            bewertung_90 += 15;
+        }
+        if(!get_kante_li("90").isEmpty())
+        {
+            bewertung_90 += 10;
+        }
 #ifdef ISDEBUG
         if(isdebugmodus_90 == true)
         {
@@ -1591,7 +1605,14 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     }
     if(!get_kante_vo("180").isEmpty() || !get_kante_li("180").isEmpty())
     {
-        bewertung_180 += 10;
+        if(!get_kante_vo("180").isEmpty())
+        {
+            bewertung_180 += 15;
+        }
+        if(!get_kante_li("180").isEmpty())
+        {
+            bewertung_180 += 10;
+        }
 #ifdef ISDEBUG
         if(isdebugmodus_180 == true)
         {
@@ -1603,7 +1624,14 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     }
     if(!get_kante_vo("270").isEmpty() || !get_kante_li("270").isEmpty())
     {
-        bewertung_270 += 10;
+        if(!get_kante_vo("270").isEmpty())
+        {
+            bewertung_270 += 15;
+        }
+        if(!get_kante_li("270").isEmpty())
+        {
+            bewertung_270 += 10;
+        }
 #ifdef ISDEBUG
         if(isdebugmodus_270 == true)
         {
@@ -1686,7 +1714,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         }
         if(bonus == true)
         {
-            bewertung_0 += 5;
+            bewertung_0 += 20;
 #ifdef ISDEBUG
             if(isdebugmodus_0 == true)
             {
@@ -1727,7 +1755,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         }
         if(bonus == true)
         {
-            bewertung_90 += 5;
+            bewertung_90 += 20;
 #ifdef ISDEBUG
             if(isdebugmodus_90 == true)
             {
@@ -1768,7 +1796,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         }
         if(bonus == true)
         {
-            bewertung_180 += 5;
+            bewertung_180 += 20;
 #ifdef ISDEBUG
             if(isdebugmodus_180 == true)
             {
@@ -1809,7 +1837,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         }
         if(bonus == true)
         {
-            bewertung_270 += 5;
+            bewertung_270 += 20;
 #ifdef ISDEBUG
             if(isdebugmodus_270 == true)
             {
@@ -2200,19 +2228,47 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
     //heraus bekommen wo vorne ist anhand von Kanteninfo:
     if(!get_kante_hi_ganx("0").isEmpty() || !get_kante_li_ganx("0").isEmpty())//hi, li
     {
-        bewertung_0 += 10;
+        if(!get_kante_hi("0").isEmpty())
+        {
+            bewertung_0 += 15;
+        }
+        if(!get_kante_li("0").isEmpty())
+        {
+            bewertung_0 += 10;
+        }
     }
     if(!get_kante_hi_ganx("90").isEmpty() || !get_kante_li_ganx("90").isEmpty())//hi, li
     {
-        bewertung_90 += 10;
+        if(!get_kante_hi("90").isEmpty())
+        {
+            bewertung_90 += 15;
+        }
+        if(!get_kante_li("90").isEmpty())
+        {
+            bewertung_90 += 10;
+        }
     }
     if(!get_kante_hi_ganx("180").isEmpty() || !get_kante_li_ganx("180").isEmpty())//hi, li
     {
-        bewertung_180 += 10;
+        if(!get_kante_hi("180").isEmpty())
+        {
+            bewertung_180 += 15;
+        }
+        if(!get_kante_li("180").isEmpty())
+        {
+            bewertung_180 += 10;
+        }
     }
     if(!get_kante_hi_ganx("270").isEmpty() || !get_kante_li_ganx("270").isEmpty())//hi, li
     {
-        bewertung_270 += 10;
+        if(!get_kante_hi("270").isEmpty())
+        {
+            bewertung_270 += 15;
+        }
+        if(!get_kante_li("270").isEmpty())
+        {
+            bewertung_270 += 10;
+        }
     }
 
     //Stufe 4:
