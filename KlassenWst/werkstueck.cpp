@@ -154,6 +154,70 @@ QString werkstueck::get_kante_re(QString drewi)
         return kante_re;
     }
 }
+QString werkstueck::get_kante_vo_ganx(QString drewi)
+{
+    if(drewi == "90")
+    {
+        return kante_hi;
+    }else if(drewi == "180")
+    {
+        return kante_li;
+    }else if(drewi == "270")
+    {
+        return kante_vo;
+    }else
+    {
+        return kante_re;
+    }
+}
+QString werkstueck::get_kante_hi_ganx(QString drewi)
+{
+    if(drewi == "90")
+    {
+        return kante_vo;
+    }else if(drewi == "180")
+    {
+        return kante_re;
+    }else if(drewi == "270")
+    {
+        return kante_hi;
+    }else
+    {
+        return kante_li;
+    }
+}
+QString werkstueck::get_kante_li_ganx(QString drewi)
+{
+    if(drewi == "90")
+    {
+        return kante_re;
+    }else if(drewi == "180")
+    {
+        return kante_hi;
+    }else if(drewi == "270")
+    {
+        return kante_li;
+    }else
+    {
+        return kante_vo;
+    }
+}
+QString werkstueck::get_kante_re_ganx(QString drewi)
+{
+    if(drewi == "90")
+    {
+        return kante_li;
+    }else if(drewi == "180")
+    {
+        return kante_vo;
+    }else if(drewi == "270")
+    {
+        return kante_re;
+    }else
+    {
+        return kante_hi;
+    }
+}
 
 QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin)
 {
@@ -1169,6 +1233,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     QString msg;
     bearb_sortieren();
     fraesergeraden_zusammenfassen();
+    hbemiduebeltiefe();
 
     double tmp_l = laenge;
     double tmp_b = breite;
@@ -1501,8 +1566,15 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     //Stufe 3:
     //heraus bekommen wo vorne ist anhand von Kanteninfo:
     if(!get_kante_vo("0").isEmpty() || !get_kante_li("0").isEmpty())
-    {
-        bewertung_0 += 10;
+    {        
+        if(!get_kante_vo("0").isEmpty())
+        {
+            bewertung_0 += 15;
+        }
+        if(!get_kante_li("0").isEmpty())
+        {
+            bewertung_0 += 10;
+        }
 #ifdef ISDEBUG
         if(isdebugmodus_0 == true)
         {
@@ -1514,7 +1586,14 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     }
     if(!get_kante_vo("90").isEmpty() || !get_kante_li("90").isEmpty())
     {
-        bewertung_90 += 10;
+        if(!get_kante_vo("90").isEmpty())
+        {
+            bewertung_90 += 15;
+        }
+        if(!get_kante_li("90").isEmpty())
+        {
+            bewertung_90 += 10;
+        }
 #ifdef ISDEBUG
         if(isdebugmodus_90 == true)
         {
@@ -1526,7 +1605,14 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     }
     if(!get_kante_vo("180").isEmpty() || !get_kante_li("180").isEmpty())
     {
-        bewertung_180 += 10;
+        if(!get_kante_vo("180").isEmpty())
+        {
+            bewertung_180 += 15;
+        }
+        if(!get_kante_li("180").isEmpty())
+        {
+            bewertung_180 += 10;
+        }
 #ifdef ISDEBUG
         if(isdebugmodus_180 == true)
         {
@@ -1538,7 +1624,14 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
     }
     if(!get_kante_vo("270").isEmpty() || !get_kante_li("270").isEmpty())
     {
-        bewertung_270 += 10;
+        if(!get_kante_vo("270").isEmpty())
+        {
+            bewertung_270 += 15;
+        }
+        if(!get_kante_li("270").isEmpty())
+        {
+            bewertung_270 += 10;
+        }
 #ifdef ISDEBUG
         if(isdebugmodus_270 == true)
         {
@@ -1621,7 +1714,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         }
         if(bonus == true)
         {
-            bewertung_0 += 5;
+            bewertung_0 += 20;
 #ifdef ISDEBUG
             if(isdebugmodus_0 == true)
             {
@@ -1662,7 +1755,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         }
         if(bonus == true)
         {
-            bewertung_90 += 5;
+            bewertung_90 += 20;
 #ifdef ISDEBUG
             if(isdebugmodus_90 == true)
             {
@@ -1703,7 +1796,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         }
         if(bonus == true)
         {
-            bewertung_180 += 5;
+            bewertung_180 += 20;
 #ifdef ISDEBUG
             if(isdebugmodus_180 == true)
             {
@@ -1744,7 +1837,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         }
         if(bonus == true)
         {
-            bewertung_270 += 5;
+            bewertung_270 += 20;
 #ifdef ISDEBUG
             if(isdebugmodus_270 == true)
             {
@@ -1930,6 +2023,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
 {
     QString msg;
     bearb_sortieren();
+    hbemiduebeltiefe();
 
     double tmp_l = breite;
     double tmp_b = laenge;
@@ -2132,27 +2226,40 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
 
     //Stufe 3:
     //heraus bekommen wo vorne ist anhand von Kanteninfo:
-    //Kantenpos müssen Getauscht werden wegen X-Y-Achsentausch
-    //Kante_li == Kante_vo_ganx;
-    //Kante_re == Kante_hi_ganx;
-    //Kante_vo == Kante_li_ganx;
-    //Kante_hi == Kante_re_ganx;
-
-    if(!get_kante_re("0").isEmpty() || !get_kante_vo("0").isEmpty())//hi, li
+    if(!get_kante_hi_ganx("0").isEmpty())
     {
         bewertung_0 += 10;
     }
-    if(!get_kante_re("90").isEmpty() || !get_kante_vo("90").isEmpty())//hi, li
+    if(!get_kante_li_ganx("0").isEmpty())
+    {
+        bewertung_0 += 15;
+    }
+
+    if(!get_kante_hi_ganx("90").isEmpty())
     {
         bewertung_90 += 10;
     }
-    if(!get_kante_re("180").isEmpty() || !get_kante_vo("180").isEmpty())//hi, li
+    if(!get_kante_li_ganx("90").isEmpty())
+    {
+        bewertung_90 += 15;
+    }
+
+    if(!get_kante_hi_ganx("180").isEmpty())
     {
         bewertung_180 += 10;
     }
-    if(!get_kante_re("270").isEmpty() || !get_kante_vo("270").isEmpty())//hi, li
+    if(!get_kante_li_ganx("180").isEmpty())
+    {
+        bewertung_180 += 15;
+    }
+
+    if(!get_kante_hi_ganx("270").isEmpty())
     {
         bewertung_270 += 10;
+    }
+    if(!get_kante_li_ganx("270").isEmpty())
+    {
+        bewertung_270 += 15;
     }
 
     //Stufe 4:
@@ -2340,6 +2447,7 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
 {
     QString msg;
     bearb_sortieren();
+    hbemiduebeltiefe();
 
     if(drehwinkel == "0")
     {
@@ -3684,6 +3792,10 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double y = rt.get_y();
 
             bool ausraeumen = true;
+            if(rt.get_tiefe() == get_dicke())
+            {
+                rt.set_tiefe(get_dicke()+2);
+            }
             if(rt.get_tiefe() >= dicke  || \
                rt.get_tiefe() <  0 )
             {
@@ -5252,6 +5364,10 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             double y = rt.get_y();
             double z = rt.get_z();
             bool ausraeumen = true;
+            if(rt.get_tiefe() == get_dicke())
+            {
+                rt.set_tiefe(get_dicke()+2);
+            }
             if(rt.get_tiefe() >= dicke  || \
                rt.get_tiefe() <  0 )
             {
@@ -5580,7 +5696,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
     if(formartierungen_aufbrechen == true)
     {
-        bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+        bearb = formartierung_zu_einzelfkon(bearb, tmp_l, tmp_b);
     }
     if(fkon_kantenschonend == true)
     {
@@ -7055,8 +7171,14 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     tiefe_qstring = double_to_qstring(tiefe);
                 }else if(get_dicke()-rt.get_tiefe() <= 2)
                 {
-                    tiefe_qstring  = "D-";
-                    tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                    if(get_dicke() == rt.get_tiefe())
+                    {
+                        tiefe_qstring  = "-2";
+                    }else
+                    {
+                        tiefe_qstring  = "D-";
+                        tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                    }
                 }else
                 {
                     tiefe = rt.get_tiefe();
@@ -8276,8 +8398,14 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         tiefe_qstring = double_to_qstring(tiefe);
                     }else if(get_dicke()-rt.get_tiefe() <= 2)
                     {
-                        tiefe_qstring  = "D-";
-                        tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                        if(get_dicke() == rt.get_tiefe())
+                        {
+                            tiefe_qstring  = "-2";
+                        }else
+                        {
+                            tiefe_qstring  = "D-";
+                            tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                        }
                     }else
                     {
                         tiefe = rt.get_tiefe();
@@ -8682,7 +8810,7 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
     bearb_sortieren();
     if(formartierungen_aufbrechen == true)
     {
-        bearb = formartierung_zu_einzelfkon(bearb, wkzmagazin, tmp_l, tmp_b);
+        bearb = formartierung_zu_einzelfkon(bearb, tmp_l, tmp_b);
     }
     if(fkon_kantenschonend == true)
     {
@@ -8812,7 +8940,39 @@ QString werkstueck::fmc_kommentar_gute_seite(text_zeilenweise bearb)
         retmsg = "gut unten";
     }else if(name.contains("RW"))
     {
-        retmsg = "gut unten";
+        retmsg = "gut unten";//Wert wird ggf. weiter unten überschrieben
+        bool hat_5er_durchgangsbohrungen = false;
+        bool hat_8er_flaechenbohrungen_obsei = false;
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        for(uint i=1; i<=bearbeitungen.zeilenanzahl() ;i++)
+        {
+            zeile.set_text(bearb.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.get_text());
+                if(bo.get_dm() == 5)
+                {
+                    if(bo.get_tiefe() > dicke  ||  bo.get_tiefe() < 0)
+                    {
+                        hat_5er_durchgangsbohrungen = true;
+                    }
+                }else if(bo.get_dm() == 8)
+                {
+                    if(bo.get_tiefe() < dicke &&  bo.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        hat_8er_flaechenbohrungen_obsei = true;
+                    }
+                }
+            }
+        }
+        if(hat_8er_flaechenbohrungen_obsei)
+        {
+            if(hat_5er_durchgangsbohrungen)
+            {
+                retmsg = "gut oben";
+            }
+        }
     }else if(name.contains("Tuer"))
     {
         retmsg = "gut unten";
@@ -9540,7 +9700,7 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
     return bearb;
 }
 
-text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb, text_zeilenweise wkzmagazin, \
+text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb, \
                                                          double tmp_l, double tmp_b)
 {
     //Diese Funktion soll die vom VW ausgegebenen Poligonförmigen Formartierungen entdecken.
@@ -9686,6 +9846,9 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                                         fa.set_y(fg.get_ye());
                                         bearb_neu.zeile_anhaengen(fa.get_text());
                                     }
+                                }else
+                                {
+                                    bearb_neu.zeile_anhaengen(bearb.zeile(ii));
                                 }
                             }else
                             {
@@ -9733,6 +9896,61 @@ text_zeilenweise werkstueck::fkon_kantengut(text_zeilenweise bearb, text_zeilenw
 
     return bearb;
 }
+
+void werkstueck::hbemiduebeltiefe()
+{
+    //Diese Funktion stellt die Lochtiefe für die Dübel 8x30 bei den
+    //HBEs einheitlich auf 18mm ein, damit es nicht zu Problemen in
+    //der Fertigung kommt wenn die Löcher CNC-gebohrt werden und mit dem
+    //Dübelautomaten die Dübel eingetrieben werden
+
+    const double min = 16;//Maximale Dübellochtiefe
+    const double max = 18;//Minimale Dübellochtiefe
+    for(uint i=1 ; i<=bearbeitungen.zeilenanzahl() ; i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearbeitungen.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
+            if(bezug == WST_BEZUG_LI || bezug == WST_BEZUG_RE || \
+               bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
+            {
+                //Bohrung ist HBE
+                if(bo.get_dm() == 8.2)
+                {
+                    double boti = bo.get_tiefe();
+                    if(max >= boti && boti >= min)
+                    {
+                        bo.set_tiefe(max);
+                        bearbeitungen.zeile_ersaetzen(i, bo.get_text());
+                    }
+                }
+            }
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
+            if(bezug == WST_BEZUG_LI || bezug == WST_BEZUG_RE || \
+               bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
+            {
+                //Bohrung ist HBE
+                if(bo.get_dm() == 8.2)
+                {
+                    double boti = bo.get_tiefe();
+                    if(max >= boti && boti >= min)
+                    {
+                        bo.set_tiefe(max);
+                        bearbeitungen.zeile_ersaetzen(i, bo.get_text());
+                    }
+                }
+            }
+        }
+    }
+}
+
 //-------------------------------------------------------------------------Werkzeug:
 
 

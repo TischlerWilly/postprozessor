@@ -1,10 +1,22 @@
 Typ	Nr	DM	Nutzl	Vorschub	Zustellm	DM_CAD	DuBo	Saegebr	Lage	 
-M	IMA602	18	46	7000	12	 	 	 	vert
-M	IMA608	8	20	4500	5	 	 	 	vert
+B	B4	4	30	 	5	4	0	 	vert	
 B	B5a	5	35	 	8	5	1	 	vert
 B	B6a	6	35	 	8	6	0	 	vert
+B	B6b	6	35	 	8	6	0	 	hori	
 B	B8a	8	35	 	8	8	0	 	vert
-B	B8b	8.2	35	 	8	8.2	0	 	hori
+B	B8b	8.2	35	 	20	8.2	0	 	hori	
+B	B8c	8.1	35	 	5	8.1	1	 	vert	
 B	B10a	10	35	 	8	10	0	 	vert
 B	B15a	15	35	 	8	15	0	 	vert
-S	Saege425	200	 	 	10	 	 	4	vert
+S	Saege- 425	200	 	 	10	 	 	4	vert	
+M	IMA608	8	20	4500	5	 	 	 	vert	IMA608	0	
+M	IMA602	18	46	7000	12	 	 	 	vert	IMA602	12	IMA601
+M	IMA602	18	46	7000	12	 	 	 	vert	602	12	IMA601
+M	IMA601	18	46	7000	12	 	 	 	vert	IMA601	12	IMA602
+M	IMA601	18	46	7000	12	 	 	 	vert	601	12	IMA602
+M	IMA646  Re DIA d6 NL20	6	20	2500	2	 	 	 	vert	IMA646  RE DIA D6 NL20	0	
+M	614 nut 10mm HM	10	24	4000	8	 	 	 	vert	614 NUT 10MM HM	0	
+M	IMA 616 3mm-R	3	10	2500	3	 	 	 	vert	IMA 616 3MM-R	0	
+M	609 nut 4mm HM	4	12	2500	4	 	 	 	vert	609 NUT 4MM HM	0	
+M	IMA642 DIA Rechts	20	60	4500	10	 	 	 	vert	IMA642 DIA RECHTS	0	
+M	IMA643 DIA Links	20	60	4500	10	 	 	 	vert	IMA643 DIA LINKS	0	
