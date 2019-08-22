@@ -7314,7 +7314,15 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += double_to_qstring(pos_z);
                         msg += "\n";
                         msg += "EBG=0\n";       //Eckenrunden global
-                        msg += "KD=0\n";        //Kantendicke
+                        msg += "KD=";           //Kantendicke
+                        if(zustelltiefe == gesamttiefe)
+                        {
+                            msg += "0";     //Originalkontur fahren bei letztem Fräsgang in der Tiefe
+                        }else
+                        {
+                            msg += "-0,5";  //Vorfräsung leicht versetzen
+                        }
+                        msg += "\n";
                         msg += FMC_FKON_KOR;    //Fräsbaohnkorrektur
                         msg += "=";
                         msg += radkor;
@@ -8544,7 +8552,15 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             msg += double_to_qstring(pos_z);
                             msg += "\n";
                             msg += "EBG=0\n";       //Eckenrunden global
-                            msg += "KD=0\n";        //Kantendicke
+                            msg += "KD=";           //Kantendicke
+                            if(zustelltiefe == gesamttiefe)
+                            {
+                                msg += "0";     //Originalkontur fahren bei letztem Fräsgang in der Tiefe
+                            }else
+                            {
+                                msg += "-0,5";  //Vorfräsung leicht versetzen
+                            }
+                            msg += "\n";
                             msg += FMC_FKON_KOR;    //Fräsbaohnkorrektur
                             msg += "=";
                             msg += radkor;

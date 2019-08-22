@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.19.02.26"
+#define PROGRAMMVERSION "1.19.08.22"
 #endif //PROGRAMMVERSION
 
 #include <QMainWindow>
