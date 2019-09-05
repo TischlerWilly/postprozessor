@@ -6299,7 +6299,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             //---------------------------------
                             msg += "ZSM";           //Zustellmaß
                             msg += "=";
-                            msg += bora.get_zustellmass_qstring();
+                            //msg += bora.get_zustellmass_qstring();
+                            msg += wkzmag.get_zustellmass(tnummer);
                             msg += "\n";
                             //---------------------------------
                             msg += "\n";
@@ -6452,7 +6453,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                 //------------------------------
                                 msg += "ZSM";           //Zustellmaß
                                 msg += "=";
-                                msg += bora.get_zustellmass_qstring();
+                                //msg += bora.get_zustellmass_qstring();
+                                msg += wkzmag.get_zustellmass(tnummer);
                                 msg += "\n";
                                 //------------------------------
                                 msg += "\n";
@@ -6607,7 +6609,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             //------------------------------
                             msg += "ZSM";           //Zustellmaß
                             msg += "=";
-                            msg += bora.get_zustellmass_qstring();
+                            //msg += bora.get_zustellmass_qstring();
+                            msg += wkzmag.get_zustellmass(tnummer);
                             msg += "\n";
                             //------------------------------
                             msg += "\n";
@@ -7892,7 +7895,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                 //---------------------------------
                                 msg += "ZSM";           //Zustellmaß
                                 msg += "=";
-                                msg += bora.get_zustellmass_qstring();
+                                //msg += bora.get_zustellmass_qstring();
+                                msg += wkzmag.get_zustellmass(tnummer);
                                 msg += "\n";
                                 //---------------------------------
                                 msg += "\n";
@@ -8045,7 +8049,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                     //------------------------------
                                     msg += "ZSM";           //Zustellmaß
                                     msg += "=";
-                                    msg += bora.get_zustellmass_qstring();
+                                    //msg += bora.get_zustellmass_qstring();
+                                    msg += wkzmag.get_zustellmass(tnummer);
                                     msg += "\n";
                                     //------------------------------
                                     msg += "\n";
@@ -8200,7 +8205,8 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                 //------------------------------
                                 msg += "ZSM";           //Zustellmaß
                                 msg += "=";
-                                msg += bora.get_zustellmass_qstring();
+                                //msg += bora.get_zustellmass_qstring();
+                                msg += wkzmag.get_zustellmass(tnummer);
                                 msg += "\n";
                                 //------------------------------
                                 msg += "\n";
