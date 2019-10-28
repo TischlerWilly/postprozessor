@@ -4922,13 +4922,20 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //y < 40 -> TL
                     //Länge - y < 40 ->BL
                     QString ref;
-                    if(  laenge_y - y < bezugsmass  &&  bora.get_anz_y()==1  )
+                    if(bora.get_anz_y()==1  )
+                    {
+                        if(laenge_y - y < bezugsmass)
+                        {
+                            ref += GANX_REF_OBEN_LINKS;
+                            y = laenge_y - y;
+                        }else
+                        {
+                            ref += GANX_REF_UNTEN_LINKS;
+                        }
+                    }else //bora.get_anz_y()>1
                     {
                         ref += GANX_REF_OBEN_LINKS;
-                        y = laenge_y - y;
-                    }else
-                    {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - (y + (  (bora.get_anz_y()-1)*bora.get_raster_y()  ));
                     }
                     //msg += ref;
                     //----------------------
