@@ -583,6 +583,21 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
 
     return msg;
 }
+QString werkstueck::warnungen_ggf(text_zeilenweise bearbeit, double tmp_l, double tmp_b, text_zeilenweise wkzmagazin)
+{
+    QString msg = "";
+    //Bislang erfolgt keine Prüfung und es werden keine Warnungen gegeben...
+    //...
+    //...
+    //...
+    //...
+    //...
+    //...
+    //...
+    //...
+    //...
+    return msg;
+}
 QString werkstueck::fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbeitung)
 {
     QString fehlermeldung;
@@ -2440,6 +2455,65 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
     }
     return msg;
 }
+
+QString werkstueck::get_ggf(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel)
+{
+    QString msg;
+    if(drehwinkel == "0")
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }else if(drehwinkel == "90")
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }else if(drehwinkel == "180")
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }else if(drehwinkel == "270")
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }else
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }
+    return msg;
+}
+
 QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeformat, \
                                         text_zeilenweise wkzmagazin,\
                                         bool formartierungen_aufbrechen,\
@@ -8822,6 +8896,179 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     msg += "BEZB=Programm-Ende";
 
     return msg;
+}
+QString werkstueck::get_ggf_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, double tmp_l, double tmp_b)
+{
+    QString msg;
+    text_zeilenweise zeile;
+    zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+     werkzeugmagazin wkzmag(wkzmagazin);
+
+     //---------------------------------------Programmversion:
+     msg = "GCodeGenerator Version 2";
+     msg += "\n";
+     //---------------------------------------Programmkopf:
+     msg += ">PRGKOPF:";
+     msg += "[L]";
+     msg += double_to_qstring(tmp_l);
+     msg += ";";
+     msg += "[B]";
+     msg += double_to_qstring(tmp_b);
+     msg += ";";
+     msg += "[D]";
+     msg += get_dicke_qstring();
+     msg += ";";
+     msg += "[KOM]";
+     msg += "";
+     msg += ";";
+     msg += "[SIA]";
+     msg += "20";
+     msg += ";";
+     msg += "[BEZ]";
+     msg += "Programmkopf";
+     msg += ";";
+     msg += "[AFB]";
+     msg += "1";
+     msg += ";";
+     msg += "[AX]";
+     msg += "0";
+     msg += ";";
+     msg += "[AY]";
+     msg += "0";
+     msg += ";";
+     msg += "[SH]";
+     msg += "0";
+     msg += ";";
+     msg += ";#ENDE#";
+     msg += "\n";
+     //---------------------------------------Bearbeitungen Oberseite:
+     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+     {
+        zeile.set_text(bearb.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                if(bezug == WST_BEZUG_OBSEI)
+                {
+                    double tiefe;
+                    if(bo.get_tiefe() <= get_dicke())
+                    {
+                        tiefe = bo.get_tiefe();
+                    }else
+                    {
+                        tiefe = get_dicke() - bo.get_tiefe();
+                    }
+                    msg += ">BOHREN";//Achtung der GCodeGenerator speichert derzeit nicht als ">BOHREN:" !!!
+                    msg += "[wNAME]";
+                    msg += tnummer;
+                    msg += ";";
+                    msg += "[wD]";
+                    msg += "Durchmesser";
+                    msg += ";";
+                    msg += "[DM]";
+                    msg += bo.get_dm_qstring();
+                    msg += ";";
+                    msg += "[X]";
+                    msg += bo.get_x_qstring();
+                    msg += ";";
+                    msg += "[Y]";
+                    msg += bo.get_y_qstring();
+                    msg += ";";
+                    msg += "[BT]";
+                    msg += double_to_qstring(tiefe);
+                    msg += ";";
+                    msg += "[ANBT]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[REBT]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[ZUST]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[FAN]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[F]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[N]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[KOM]";
+                    msg += "";
+                    msg += ";";
+                    msg += "[BEZ]";
+                    msg += "Bohrung";
+                    msg += ";";
+                    msg += "[AFB]";
+                    msg += "1";
+                    msg += ";";
+                    msg += ";#ENDE#";
+                    msg += "\n";
+                }
+            }else
+            {
+
+            }
+        }else if(zeile.zeile(1) == BEARBART_RTA)
+        {
+
+        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+        {
+
+        }
+     }
+     //---------------------------------------Bearbeitungen Unterseite:
+     bool unterseite_hat_bearb = false;
+     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+     {
+         zeile.set_text(bearb.zeile(i));
+         if(zeile.zeile(2) == WST_BEZUG_UNSEI)
+         {
+             unterseite_hat_bearb = true;
+             break;
+         }
+     }
+     if(unterseite_hat_bearb == true)
+     {
+         for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+         {
+             //...
+         }
+     }
+     //---------------------------------------Programmende:
+     msg += ">PRGENDE:";
+     msg += "[MODUS]";
+     msg += "benutzerdefiniert";
+     msg += ";";
+     msg += "[X]";
+     msg += "400";
+     msg += ";";
+     msg += "[Y]";
+     msg += "400";
+     msg += ";";
+     msg += "[Z]";
+     msg += "100";
+     msg += ";";
+     msg += "[BEZ]";
+     msg += "Programmende";
+     msg += ";";
+     msg += "[AFB]";
+     msg += "1";
+     msg += ";";
+     msg += "#ENDE#";
+     msg += "\n";
+     //---------------------------------------letzte Zeile:
+     msg += ">ENDE";
+
+
+     return msg;
 }
 QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b, \
                                         QString ausgabeformat, text_zeilenweise wkzmagazin,\

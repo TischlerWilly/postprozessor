@@ -88,7 +88,7 @@
       <x>770</x>
       <y>100</y>
       <width>111</width>
-      <height>103</height>
+      <height>107</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -117,6 +117,13 @@
       <widget class="QCheckBox" name="checkBox_af_fmc">
        <property name="text">
         <string>*.fmc</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_af_ggf">
+       <property name="text">
+        <string>*.ggf</string>
        </property>
       </widget>
      </item>
@@ -377,7 +384,7 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuWerkzeug">
@@ -386,6 +393,7 @@
     </property>
     <addaction name="actionWerkzeug_ganx_anzeigen"/>
     <addaction name="actionWerkzeug_fmc_anzeigen"/>
+    <addaction name="actionWerkzeug_ggf_anzeigen"/>
    </widget>
    <widget class="QMenu" name="menuExtras">
     <property name="title">
@@ -415,6 +423,11 @@
   <action name="actionStandard_Namen_anzeigen">
    <property name="text">
     <string>Standard-Namen anzeigen</string>
+   </property>
+  </action>
+  <action name="actionWerkzeug_ggf_anzeigen">
+   <property name="text">
+    <string>Werkzeug ggf bearbeiten</string>
    </property>
   </action>
  </widget>

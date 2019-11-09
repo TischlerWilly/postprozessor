@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.19.10.28"
+#define PROGRAMMVERSION "1.19.11.09"
 #endif //PROGRAMMVERSION
 
 #include <QMainWindow>
@@ -60,11 +60,14 @@ private slots:
     void on_lineEdit_geraden_schwellenwert_editingFinished();
     void on_checkBox_formatierung_aufbrechen_stateChanged();
     void on_checkBox_fkon_kantenschonend_stateChanged();
+    void on_checkBox_af_ggf_stateChanged();
+    void on_actionWerkzeug_ggf_anzeigen_triggered();
 
 private:
     Ui::MainWindow *ui;
     text_zeilenweise wkz_magazin_ganx;
     text_zeilenweise wkz_magazin_fmc;
+    text_zeilenweise wkz_magazin_ggf;
 
     //Pfade:
     QString verzeichnis_quelle;
@@ -75,6 +78,7 @@ private:
     QString std_namen;                  // "ja" | "nein"
     QString erzeuge_ganx;               // "ja" | "nein"
     QString erzeuge_fmc;                // "ja" | "nein"
+    QString erzeuge_ggf;                // "ja" | "nein"
     QString erzeuge_eigenes_format;     // "ja" | "nein"
     QString kurze_geraden_weglassen;    // "ja" | "nein"
     QString formartierungen_aufbrechen; // "ja" | "nein"
