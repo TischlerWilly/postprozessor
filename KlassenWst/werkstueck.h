@@ -93,6 +93,7 @@ public:
                     bool formartierungen_aufbrechen = false,\
                     bool fkon_kantenschonend = false);
     QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
+    QString get_ggf(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
     QString get_eigenses_format(QString drehwinkel, QString ausgabeformat, \
                                 text_zeilenweise wkzmagazin,\
                                 bool formartierungen_aufbrechen = false,\
@@ -118,6 +119,7 @@ private:
 
     QString warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
     QString warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
+    QString warnungen_ggf(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
     QString fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbeitung);
     QString get_bearb_menschlich_lesbar(text_zeilenweise bearbeitung);
 
@@ -137,12 +139,15 @@ private:
                               bool fkon_kantenschonend);
     QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
                                double tmp_l, double tmp_b);
+    QString get_ggf_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
+                               double tmp_l, double tmp_b);
     QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
                                 QString ausgabeformat, text_zeilenweise wkzmagazin,\
                                 bool formartierungen_aufbrechen,\
                                 bool fkon_kantenschonend);
 
     QString kommentar_fmc(QString kom);
+    QString kommentar_ggf(QString kom);
     QString fmc_kommentar_gute_seite(text_zeilenweise bearb);
 
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);

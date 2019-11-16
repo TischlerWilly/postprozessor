@@ -583,6 +583,21 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
 
     return msg;
 }
+QString werkstueck::warnungen_ggf(text_zeilenweise bearbeit, double tmp_l, double tmp_b, text_zeilenweise wkzmagazin)
+{
+    QString msg = "";
+    //Bislang erfolgt keine Prüfung und es werden keine Warnungen gegeben...
+    //...
+    //...
+    //...
+    //...
+    //...
+    //...
+    //...
+    //...
+    //...
+    return msg;
+}
 QString werkstueck::fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbeitung)
 {
     QString fehlermeldung;
@@ -2440,6 +2455,65 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
     }
     return msg;
 }
+
+QString werkstueck::get_ggf(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel)
+{
+    QString msg;
+    if(drehwinkel == "0")
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }else if(drehwinkel == "90")
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }else if(drehwinkel == "180")
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }else if(drehwinkel == "270")
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }else
+    {
+        double tmp_l = laenge;
+        double tmp_b = breite;
+        text_zeilenweise tmp_bearb = bearbeitungen;
+        msg = get_ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        info += " ";
+        info += warnungen;
+    }
+    return msg;
+}
+
 QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeformat, \
                                         text_zeilenweise wkzmagazin,\
                                         bool formartierungen_aufbrechen,\
@@ -4922,13 +4996,20 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                     //y < 40 -> TL
                     //Länge - y < 40 ->BL
                     QString ref;
-                    if(  laenge_y - y < bezugsmass  &&  bora.get_anz_y()==1  )
+                    if(bora.get_anz_y()==1  )
+                    {
+                        if(laenge_y - y < bezugsmass)
+                        {
+                            ref += GANX_REF_OBEN_LINKS;
+                            y = laenge_y - y;
+                        }else
+                        {
+                            ref += GANX_REF_UNTEN_LINKS;
+                        }
+                    }else //bora.get_anz_y()>1
                     {
                         ref += GANX_REF_OBEN_LINKS;
-                        y = laenge_y - y;
-                    }else
-                    {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - (y + (  (bora.get_anz_y()-1)*bora.get_raster_y()  ));
                     }
                     //msg += ref;
                     //----------------------
@@ -7423,7 +7504,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                 zeile.set_text(bearb.zeile(i));
                                 //Gerade fräsen:
                                 fraesergerade fg(zeile.get_text());
-                                QString tiefe_fg = 0;
+                                QString tiefe_fg = "0";
                                 if(fg.get_ze() == fa.get_tiefe())
                                 {
                                     tiefe_fg = "Z"; //Tiefe beibehalten
@@ -7458,7 +7539,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                 zeile.set_text(bearb.zeile(i));
                                 //Bogen fräsen:
                                 fraeserbogen fb(zeile.get_text());
-                                QString tiefe_fb = 0;
+                                QString tiefe_fb = "0";
                                 if(fb.get_ze() == fa.get_tiefe())
                                 {
                                     tiefe_fb = "Z"; //Tiefe beibehalten
@@ -8816,6 +8897,573 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
 
     return msg;
 }
+QString werkstueck::get_ggf_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, double tmp_l, double tmp_b)
+{
+    QString msg;
+    text_zeilenweise zeile;
+    zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+     werkzeugmagazin wkzmag(wkzmagazin);
+     int min_kta_dm_ausraeumen_false = 200; //Durchmesser ab dem Kreistaschen nicht ausgeräumt werden
+
+     //---------------------------------------Programmversion:
+     msg = "GCodeGenerator Version 2";
+     msg += "\n";
+     //---------------------------------------Programmkopf:
+     msg += ">PRGKOPF:";
+     msg += "[L]";
+     msg += double_to_qstring(tmp_l);
+     msg += ";";
+     msg += "[B]";
+     msg += double_to_qstring(tmp_b);
+     msg += ";";
+     msg += "[D]";
+     msg += get_dicke_qstring();
+     msg += ";";
+     msg += "[KOM]";
+     msg += "";
+     msg += ";";
+     msg += "[SIA]";
+     msg += "20";
+     msg += ";";
+     msg += "[BEZ]";
+     msg += "Programmkopf";
+     msg += ";";
+     msg += "[AFB]";
+     msg += "1";
+     msg += ";";
+     msg += "[AX]";
+     msg += "0";
+     msg += ";";
+     msg += "[AY]";
+     msg += "0";
+     msg += ";";
+     msg += "[SH]";
+     msg += "0";
+     msg += ";";
+     msg += ";#ENDE#";
+     msg += "\n";
+     //---------------------------------------Bearbeitungen Oberseite:
+     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+     {
+        zeile.set_text(bearb.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.get_text());
+            QString bezug = bo.get_bezug();
+            QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                if(bezug == WST_BEZUG_OBSEI)
+                {
+                    double tiefe;
+                    if(bo.get_tiefe() <= get_dicke())
+                    {
+                        tiefe = bo.get_tiefe();
+                    }else
+                    {
+                        tiefe = get_dicke() - bo.get_tiefe();
+                    }
+                    msg += ">BOHREN";//Achtung der GCodeGenerator speichert derzeit nicht als ">BOHREN:" !!!
+                    msg += "[wNAME]";
+                    msg += tnummer;
+                    msg += ";";
+                    msg += "[wD]";
+                    msg += "Durchmesser";
+                    msg += ";";
+                    msg += "[DM]";
+                    msg += bo.get_dm_qstring();
+                    msg += ";";
+                    msg += "[X]";
+                    msg += bo.get_x_qstring();
+                    msg += ";";
+                    msg += "[Y]";
+                    msg += bo.get_y_qstring();
+                    msg += ";";
+                    msg += "[BT]";
+                    msg += double_to_qstring(tiefe);
+                    msg += ";";
+                    msg += "[ANBT]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[REBT]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[ZUST]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[FAN]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[F]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[N]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[KOM]";
+                    msg += "";
+                    msg += ";";
+                    msg += "[BEZ]";
+                    msg += "Bohrung";
+                    msg += ";";
+                    msg += "[AFB]";
+                    msg += "1";
+                    msg += ";";
+                    msg += ";#ENDE#";
+                    msg += "\n";
+                }
+            }else
+            {
+                //Kein Werkzeug wurde gefunden.
+                //Kann Bohrung als Kreistasche gefräst werden?:
+
+                tnummer = wkzmag.get_wkznummer_von_alias(bo.get_wkznum());//Ist direkt ei WKZ definiert?
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
+                }
+                if(!tnummer.isEmpty())
+                {
+                    double zustellmas = bo.get_zustellmass();
+                    if(zustellmas <= 0)
+                    {
+                        zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
+                    }
+
+                    double tiefe = 0;
+                    QString tiefe_qstring;
+                    if(bo.get_tiefe() > get_dicke())
+                    {
+                        tiefe = get_dicke() - bo.get_tiefe();
+                        tiefe_qstring = double_to_qstring(tiefe);
+                    }else if(get_dicke()-bo.get_tiefe() <= 2)
+                    {
+                        tiefe_qstring  = "D-";
+                        tiefe_qstring += double_to_qstring(get_dicke()-bo.get_tiefe());
+                    }else
+                    {
+                        tiefe = bo.get_tiefe();
+                        tiefe_qstring = double_to_qstring(tiefe);
+                    }
+
+                    bool ausraeumen = true;
+                    if(bo.get_dm() > 2*wkzmag.get_dm(tnummer).toDouble()+20)
+                    {
+                        if(bo.get_tiefe() < 0  ||  bo.get_tiefe() > get_dicke())
+                        {
+                            ausraeumen = false;
+                        }
+                    }
+                    if(bo.get_dm() > min_kta_dm_ausraeumen_false)
+                    {
+                        ausraeumen = false;
+                    }
+
+                    if(bo.get_bezug() == WST_BEZUG_OBSEI)
+                    {
+                        msg += ">KTASCHE:";
+                        msg += "[wNAME]";
+                        msg += tnummer;
+                        msg += ";";
+                        msg += "[wD]";
+                        msg += wkzmag.get_dm(tnummer);
+                        msg += ";";
+                        msg += "[X]";
+                        msg += bo.get_x_qstring();
+                        msg += ";";
+                        msg += "[Y]";
+                        msg += bo.get_y_qstring();
+                        msg += ";";
+                        msg += "[DM]";
+                        msg += bo.get_dm_qstring();
+                        msg += ";";
+                        msg += "[TT]";
+                        msg += tiefe_qstring;
+                        msg += ";";
+                        msg += "[ZUST]";
+                        msg += "AUTO";
+                        msg += ";";
+                        msg += "[AUSR]";
+                        if(ausraeumen == true)
+                        {
+                            msg += "1";
+                        }else
+                        {
+                            msg += "0";
+                        }
+                        msg += ";";
+                        msg += "[GEGL]";
+                        msg += "1";
+                        msg += ";";
+                        msg += "[FAN]";
+                        msg += "AUTO";
+                        msg += ";";
+                        msg += "[F]";
+                        msg += "AUTO";
+                        msg += ";";
+                        msg += "[N]";
+                        msg += "AUTO";
+                        msg += ";";
+                        msg += "[KOM]";
+                        msg += "";
+                        msg += ";";
+                        msg += "[BEZ]";
+                        msg += "Kreistasche";
+                        msg += ";";
+                        msg += "[AFB]";
+                        msg += "1";
+                        msg += ";";
+                        msg += "#ENDE#";
+                        msg += "\n";
+                    }
+                }else
+                {
+                    //Fehler melden:
+                    QString msg = fehler_kein_WKZ("ggf", zeile);
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    //return msg;
+                }
+            }
+        }else if(zeile.zeile(1) == BEARBART_RTA)
+        {
+            rechtecktasche rt(zeile.get_text());
+            QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
+            if(tnummer.isEmpty())
+            {
+                QString bezug = rt.get_bezug();
+                double minmass = 0;
+                if(rt.get_laenge() < rt.get_breite())
+                {
+                    minmass = rt.get_laenge();
+                }else
+                {
+                    minmass = get_breite();
+                }
+                tnummer = wkzmag.get_wkznummer(WKZ_TYP_FRAESER, minmass, rt.get_tiefe(), dicke, bezug);
+            }
+            if(!tnummer.isEmpty())
+            {
+                double zustellmas = rt.get_zustellmass();
+                if(zustellmas <= 0)
+                {
+                    zustellmas = wkzmag.get_zustellmass(tnummer).toDouble();
+                }
+
+                double tiefe = 0;
+                QString tiefe_qstring;
+                if(rt.get_tiefe() > get_dicke())
+                {
+                    tiefe = get_dicke() - rt.get_tiefe();
+                    tiefe_qstring = double_to_qstring(tiefe);
+                }else if(get_dicke()-rt.get_tiefe() <= 2)
+                {
+                    if(get_dicke() == rt.get_tiefe())
+                    {
+                        tiefe_qstring  = "-2";
+                    }else
+                    {
+                        tiefe_qstring  = "D-";
+                        tiefe_qstring += double_to_qstring(get_dicke()-rt.get_tiefe());
+                    }
+                }else
+                {
+                    tiefe = rt.get_tiefe();
+                    tiefe_qstring = double_to_qstring(tiefe);
+                }
+
+                double radius = rt.get_rad();
+
+                if(rt.get_bezug() == WST_BEZUG_OBSEI)
+                {
+                    msg += ">RTASCHE:";
+                    msg += "[wNAME]";
+                    msg += tnummer;
+                    msg += ";";
+                    msg += "[wD]";
+                    msg += wkzmag.get_dm(tnummer);
+                    msg += ";";
+                    msg += "[X]";
+                    msg += rt.get_x_qstring();
+                    msg += ";";
+                    msg += "[Y]";
+                    msg += rt.get_y_qstring();
+                    msg += ";";
+                    msg += "[TL]";
+                    msg += rt.get_laenge_qstring();
+                    msg += ";";
+                    msg += "[TB]";
+                    msg += rt.get_breite_qstring();
+                    msg += ";";
+                    msg += "[TT]";
+                    msg += tiefe_qstring;
+                    msg += ";";
+                    msg += "[RAD]";
+                    msg += double_to_qstring(radius);
+                    msg += ";";
+                    msg += "[ZUST]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[GEGL]";
+                    msg += "1";
+                    msg += ";";
+                    msg += "[W]";
+                    msg += rt.get_drewi_qstring();
+                    msg += ";";
+                    msg += "[AUSR]";
+                    msg += rt.get_ausraeumen_qstring();;
+                    msg += ";";
+                    msg += "[FAN]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[F]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[N]";
+                    msg += "AUTO";
+                    msg += ";";
+                    msg += "[KOM]";
+                    msg += "";
+                    msg += ";";
+                    msg += "[BEZ]";
+                    msg += "Kreistasche";
+                    msg += ";";
+                    msg += "[AFB]";
+                    msg += "1";
+                    msg += ";";
+                    msg += "[BEZPUNKT]";
+                    msg += "5";//Mitte
+                    msg += ";";
+                    msg += "#ENDE#";
+                    msg += "\n";
+                }
+            }else
+            {
+                //Mit Fehlermeldung abbrechen:
+                QString msg = fehler_kein_WKZ("ggf", zeile);
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                //return msg;
+            }
+        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+        {
+            fraueseraufruf fa(zeile.get_text());
+            QString tnummer = wkzmag.get_wkznummer_von_alias(fa.get_wkznum());
+            if(!tnummer.isEmpty())
+            {
+                QString radkor = fa.get_radkor();
+                if(radkor == FRKOR_L)
+                {
+                    radkor = "links";
+                }else if(radkor == FRKOR_M)
+                {
+                    radkor = "keine";
+                }else if(radkor == FRKOR_R)
+                {
+                    radkor = "rechts";
+                }
+
+                if(fa.get_bezug() == WST_BEZUG_OBSEI)
+                {
+                    msg += kommentar_ggf("--------------------");
+
+                    msg += ">FAUFR:";
+                    msg += "[wNAME]";
+                    msg += tnummer;
+                    msg += ";";
+                    msg += "[BKO]";
+                    msg += radkor;
+                    msg += ";";
+                    msg += "[X]";
+                    msg += fa.get_x_qstring();
+                    msg += ";";
+                    msg += "[Y]";
+                    msg += fa.get_y_qstring();
+                    msg += ";";
+                    msg += "[Z]";
+                    msg += fa.get_tiefe_qstring();
+                    msg += ";";
+                    msg += "[ERG]";
+                    msg += "0";
+                    msg += ";";
+                    msg += "[KD]";
+                    msg += "0";
+                    msg += ";";
+                    msg += "[FAN]AUTO;[F]AUTO;[N]AUTO;[ANT]Bogen im Uhrzeigersinn;[ABT]Bogen im Uhrzeigersinn;[KOM];";
+                    msg += "[BEZ]";
+                    msg += "Aufruf Fraeser";
+                    msg += ";";
+                    msg += "[AFB]1;";
+                    msg += "[wD]";
+                    msg += wkzmag.get_dm(tnummer);
+                    msg += ";";
+                    msg += "[ZUST]AUTO;#ENDE#";
+                    msg += "\n";
+
+                    //Fräsbahnen:
+                    while(i+1<=bearb.zeilenanzahl())
+                    {
+                        zeile.set_text(bearb.zeile(i+1));
+
+                        if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+                        {
+                            i++;
+                            zeile.set_text(bearb.zeile(i));
+                            //Gerade fräsen:
+                            fraesergerade fg(zeile.get_text());
+                            QString tiefe_fg = "0";
+                            if(fg.get_ze() == fa.get_tiefe())
+                            {
+                                tiefe_fg = "Z"; //Tiefe beibehalten
+                                                //Führt zu falschen Ergebissen, wenn manuell geschriebene
+                                                //fmc-Programme eingelesen wurden, bei denen
+                                                //die FKONs zwischen dem Fräseraufruf und dieser Gerade
+                                                //nicht den selben Z-Wert haben!!!
+                                                //Dieser Fall wird nicht erwartet....
+                            }else
+                            {
+                                tiefe_fg = double_to_qstring(  get_dicke()-fg.get_ze()  );
+                            }
+
+                            msg += ">FGERADE:";
+                            msg += "[X]";
+                            msg += fg.get_xe_qstring();
+                            msg += ";";
+                            msg += "[Y]";
+                            msg += fg.get_ye_qstring();
+                            msg += ";";
+                            msg += "[Z]";
+                            msg += tiefe_fg;
+                            msg += ";";
+                            msg += "[RAD]ERG;";
+                            msg += "[BEZ]";
+                            msg += "--- gerade Fraesbahn";
+                            msg += ";";
+                            msg += "[AFB]";
+                            msg += "1";
+                            msg += ";";
+                            msg += "#ENDE#";
+                            msg += "\n";
+                        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+                        {
+                            i++;
+                            zeile.set_text(bearb.zeile(i));
+                            //Bogen fräsen:
+                            fraeserbogen fb(zeile.get_text());
+                            QString tiefe_fb = "0";
+                            if(fb.get_ze() == fa.get_tiefe())
+                            {
+                                tiefe_fb = "Z"; //Tiefe beibehalten
+                                                //Führt zu falschen Ergebissen, wenn manuell geschriebene
+                                                //fmc-Programme eingelesen wurden, bei denen
+                                                //die FKONs zwischen dem Fräseraufruf und dieser Gerade
+                                                //nicht den selben Z-Wert haben!!!
+                                                //Dieser Fall wird nicht erwartet....
+                            }else
+                            {
+                                tiefe_fb = double_to_qstring(  get_dicke()-fb.get_ze()  );
+                            }
+                            msg += ">FBOGEN:";
+                            msg += "[X]";
+                            msg += fb.get_xe_qstring();
+                            msg += ";";
+                            msg += "[Y]";
+                            msg += fb.get_ye_qstring();
+                            msg += ";";
+                            msg += "[Z]";
+                            msg += tiefe_fb;
+                            msg += ";";
+                            msg += "[RAD]";
+                            msg += fb.get_rad_qstring();
+                            msg += ";";
+                            msg += "[BRICH]";
+                            if(fb.get_uzs() == true)
+                            {
+                                msg += "uzs";
+                            }else
+                            {
+                                msg += "guzs";
+                            }
+                            msg += ";";
+                            msg += "[BEZ]";
+                            msg += "--- gebogene Fraesbahn";
+                            msg += ";";
+                            msg += "[AFB]1;#ENDE#";
+                            msg += "\n";
+                        }else
+                        {
+                            break;
+                        }
+                    }
+
+                    //--------------------------------------------
+                    //Abfahren Fräser:
+                    msg += ">FABFA:[BEZ]Abfahren Fraeser;[AFB]1;#ENDE#";
+                    msg += "\n";
+
+                    msg += kommentar_ggf("--------------------");
+                }
+
+            }else
+            {
+                //Mit Fehlermeldung abbrechen:
+                QString msg = fehler_kein_WKZ("ggf", zeile);
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+                //return msg;
+            }
+        }
+     }
+     //---------------------------------------Bearbeitungen Unterseite:
+     bool unterseite_hat_bearb = false;
+     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+     {
+         zeile.set_text(bearb.zeile(i));
+         if(zeile.zeile(2) == WST_BEZUG_UNSEI)
+         {
+             unterseite_hat_bearb = true;
+             break;
+         }
+     }
+     if(unterseite_hat_bearb == true)
+     {
+         for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+         {
+             //...
+         }
+     }
+     //---------------------------------------Programmende:
+     msg += ">PRGENDE:";
+     msg += "[MODUS]";
+     msg += "benutzerdefiniert";
+     msg += ";";
+     msg += "[X]";
+     msg += "400";
+     msg += ";";
+     msg += "[Y]";
+     msg += "400";
+     msg += ";";
+     msg += "[Z]";
+     msg += "100";
+     msg += ";";
+     msg += "[BEZ]";
+     msg += "Programmende";
+     msg += ";";
+     msg += "[AFB]";
+     msg += "1";
+     msg += ";";
+     msg += "#ENDE#";
+     msg += "\n";
+     //---------------------------------------letzte Zeile:
+     msg += ">ENDE";
+
+
+     return msg;
+}
 QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, double tmp_b, \
                                         QString ausgabeformat, text_zeilenweise wkzmagazin,\
                                         bool formartierungen_aufbrechen, \
@@ -8883,6 +9531,16 @@ QString werkstueck::kommentar_fmc(QString kom)
     text += "=";
     text += kom;
     text += "\n";
+    text += "\n";
+    return text;
+}
+
+QString werkstueck::kommentar_ggf(QString kom)
+{
+    QString text;
+    text = ">KOMMENTAR:[KOM]";
+    text += kom;
+    text += ";[AFB]1;#ENDE#";
     text += "\n";
     return text;
 }
