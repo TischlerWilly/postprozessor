@@ -1197,9 +1197,9 @@ void MainWindow::on_pushButton_start_clicked()
                 QString tmp = wste.get_wst(i).get_ggf(wkz_magazin_ggf, info, drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
                 QString output;
-                output = teilname;
-                //output += "\n";
+                output = teilname;                
                 output += info;
+                output += "\n";
                 ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();

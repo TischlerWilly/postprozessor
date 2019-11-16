@@ -147,6 +147,7 @@ private:
                                 bool fkon_kantenschonend);
 
     QString kommentar_fmc(QString kom);
+    QString kommentar_ggf(QString kom);
     QString fmc_kommentar_gute_seite(text_zeilenweise bearb);
 
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
