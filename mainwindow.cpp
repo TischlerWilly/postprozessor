@@ -1278,6 +1278,20 @@ void MainWindow::zielordner_leeren()
         }
     }
 
+    pfad = verzeichnis_ziel + QDir::separator() + "ggf";
+    QDir dir_ggf(pfad);
+    if(dir_ggf.exists())
+    {
+        QStringList ordnerinhalt;
+        ordnerinhalt = dir_ggf.entryList(QDir::Files);
+        for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
+        {
+            QString name = *it;
+            QFile tmp(pfad + QDir::separator() + name);
+            tmp.remove();
+        }
+    }
+
     pfad = verzeichnis_ziel + QDir::separator() + "ganx";
     QDir dir_ganx(pfad);
     if(dir_ganx.exists())

@@ -9255,15 +9255,19 @@ QString werkstueck::get_ggf_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             if(!tnummer.isEmpty())
             {
                 QString radkor = fa.get_radkor();
+                QString anabtyp = "kein";
                 if(radkor == FRKOR_L)
                 {
                     radkor = "links";
+                    anabtyp = "Bogen gegen den Uhrzeigersinn";
                 }else if(radkor == FRKOR_M)
                 {
                     radkor = "keine";
+                    anabtyp = "kein";
                 }else if(radkor == FRKOR_R)
                 {
                     radkor = "rechts";
+                    anabtyp = "Bogen im Uhrzeigersinn";
                 }
 
                 if(fa.get_bezug() == WST_BEZUG_OBSEI)
@@ -9292,7 +9296,16 @@ QString werkstueck::get_ggf_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                     msg += "[KD]";
                     msg += "0";
                     msg += ";";
-                    msg += "[FAN]AUTO;[F]AUTO;[N]AUTO;[ANT]Bogen im Uhrzeigersinn;[ABT]Bogen im Uhrzeigersinn;[KOM];";
+                    msg += "[FAN]AUTO;[F]AUTO;[N]AUTO;";
+                    msg += "[ANT]";
+                    msg += anabtyp;
+                    msg += ";";
+                    msg += "[ABT]";
+                    msg += anabtyp;
+                    msg += ";";
+                    msg += "[KOM]";
+                    msg += "";
+                    msg += ";";
                     msg += "[BEZ]";
                     msg += "Aufruf Fraeser";
                     msg += ";";
