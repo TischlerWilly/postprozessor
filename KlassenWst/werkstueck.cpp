@@ -7434,6 +7434,11 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             sb = strecke_bezugspunkt_ende;
                             s.set_laenge_2d(s.laenge2dim()+anweg, sb);
                             pein = s.startp();
+                            msg += "anfahrpunkt X = ";
+                            msg += s.startp().x_QString();
+                            msg += " / Y = ";
+                            msg += s.startp().y_QString();
+                            msg += "\n";
                         }else if(folzei.zeile(1) == BEARBART_FRAESERBOGEN)
                         {
                             fraeserbogen fb(folzei.get_text());
@@ -7453,7 +7458,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             pein = s.endp();
                         }
 
-                        bool aufwst = punkt_auf_wst(pein.x(), pein.y(), get_laenge(), get_breite(), 1);
+                        bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
                         if(aufwst == true)
                         {
                             msg += "TYPAN=1\n";     //Anfahrtyp
@@ -8702,7 +8707,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                 pein = s.endp();
                             }
 
-                            bool aufwst = punkt_auf_wst(pein.x(), pein.y(), get_laenge(), get_breite(), 1);
+                            bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
                             if(aufwst == true)
                             {
                                 msg += "TYPAN=1\n";     //Anfahrtyp
