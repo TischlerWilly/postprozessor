@@ -1,15 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.20.01.07"
-#endif //PROGRAMMVERSION
-
 #include <QMainWindow>
 #include <QDir>
 #include <QMessageBox>
 #include <QFileDialog>
 
+#include "prgpfade.h"
 #include "Definitionen/dateinamen.h"
 #include "dialog_wkz.h"
 #include "dialog_stdnamen.h"
@@ -18,6 +15,7 @@
 #include "allgemKlassen/text_zeilenweise.h"
 #include "KlassenWst/werkstuecke.h"
 #include "werkzeugmagazin.h"
+#include "ToDo.h"
 
 
 namespace Ui {
@@ -34,9 +32,11 @@ public:
 
 private slots:
     void on_lineEdit_quelle_editingFinished();
-    void on_lineEdit_ziel_editingFinished();
+    void on_lineEdit_zielA_editingFinished();
+    void on_lineEdit_zielB_editingFinished();
     void on_pushButton__quelle_clicked();
-    void on_pushButton_ziel_clicked();
+    void on_pushButton_zielA_clicked();
+    void on_pushButton_zielB_clicked();
     void on_checkBox_quelldat_erhalt_stateChanged();
     void on_checkBox_std_namen_zuweisen_stateChanged();
     void on_checkBox_af_ganx_stateChanged();
@@ -62,6 +62,7 @@ private slots:
     void on_checkBox_fkon_kantenschonend_stateChanged();
     void on_checkBox_af_ggf_stateChanged();
     void on_actionWerkzeug_ggf_anzeigen_triggered();
+    void on_checkBox_use_ZielB_stateChanged();
 
 private:
     Ui::MainWindow *ui;
@@ -70,10 +71,14 @@ private:
     text_zeilenweise wkz_magazin_ggf;
 
     //Pfade:
+    prgpfade pf;
     QString verzeichnis_quelle;
     QString verzeichnis_ziel;
+    QString verzeichnis_zielA;
+    QString verzeichnis_zielB;
 
     //Checkboxen:
+    QString use_zielB;                  // "ja" | "nein"
     QString quelldateien_erhalten;      // "ja" | "nein"
     QString std_namen;                  // "ja" | "nein"
     QString erzeuge_ganx;               // "ja" | "nein"

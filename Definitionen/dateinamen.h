@@ -1,12 +1,6 @@
 #ifndef DATEINAMEN_H
 #define DATEINAMEN_H
 
-
-#define INIFILE             "postprozessor.ini"
-#define WERKZEUGDATEI_GANX  "wkz_magazin_ganx.csv"
-#define WERKZEUGDATEI_FMC   "wkz_magazin_fmc.csv"
-#define WERKZEUGDATEI_GGF   "wkz_magazin_ggf.csv"
-#define NAMEN_STD_INI       "namen_std.ini"
 #define NAMEN_STD_INI_TZ    '\t'
 #define NAMEN_STD_INI_TZ_   "\t"
 

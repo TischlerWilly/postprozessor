@@ -2548,7 +2548,12 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         tmp = ausdruck_auswerten(tmp);
-                        fb.set_rad(tmp);
+                        double rad = tmp.toDouble();
+                        if(rad < 0)
+                        {
+                            rad = rad * -1;
+                        }
+                        fb.set_rad(rad);
                     }
                 }
             }
@@ -5311,7 +5316,12 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         tmp = ausdruck_auswerten(tmp);
-                        fb.set_rad(tmp);
+                        double rad = tmp.toDouble();
+                        if(rad < 0)
+                        {
+                            rad = rad * -1;
+                        }
+                        fb.set_rad(rad);
                     }
                 }
             }
