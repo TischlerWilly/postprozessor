@@ -26,6 +26,7 @@ SOURCES += main.cpp\
     KlassenWst/bohrung.cpp \
     KlassenWst/rechtecktasche.cpp \
     KlassenWst/nut.cpp \
+    prgpfade.cpp \
     werkzeugmagazin.cpp \
     dialog_wkz.cpp \
     dialog_bohrer.cpp \
@@ -64,6 +65,7 @@ HEADERS  += mainwindow.h \
     KlassenWst/rechtecktasche.h \
     KlassenWst/nut.h \
     Definitionen/def_ganx.h \
+    prgpfade.h \
     werkzeugmagazin.h \
     dialog_wkz.h \
     dialog_bohrer.h \
@@ -93,3 +95,8 @@ FORMS    += mainwindow.ui \
     dialog_saege.ui \
     dialog_stdnamen.ui \
     dialog_stdname.ui
+
+DISTFILES += \
+    postprozessor.ico
+
+RC_ICONS = postprozessor.ico

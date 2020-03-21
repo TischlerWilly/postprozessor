@@ -1,15 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.20.01.07"
-#endif //PROGRAMMVERSION
-
 #include <QMainWindow>
 #include <QDir>
 #include <QMessageBox>
 #include <QFileDialog>
 
+#include "prgpfade.h"
 #include "Definitionen/dateinamen.h"
 #include "dialog_wkz.h"
 #include "dialog_stdnamen.h"
@@ -18,6 +15,7 @@
 #include "allgemKlassen/text_zeilenweise.h"
 #include "KlassenWst/werkstuecke.h"
 #include "werkzeugmagazin.h"
+#include "ToDo.h"
 
 
 namespace Ui {
@@ -70,6 +68,7 @@ private:
     text_zeilenweise wkz_magazin_ggf;
 
     //Pfade:
+    prgpfade pf;
     QString verzeichnis_quelle;
     QString verzeichnis_ziel;
 
