@@ -6,8 +6,6 @@
 #endif //PROGRAMMVERSION
 /*
 
-
-
 - Zielverzeichnis A für CAM auf Server
 - Zielverzeichnis A für CAM in Dokumente
 

@@ -153,15 +153,31 @@ void MainWindow::setup()
                 {
                     verzeichnis_quelle = text_mitte(zeile, "verzeichnis_quelle:", "\n");
                     ui->lineEdit_quelle->setText(verzeichnis_quelle);
-                }else if(zeile.contains("verzeichnis_ziel:"))
+                }else if(zeile.contains("verzeichnis_zielA:"))
                 {
-                    verzeichnis_ziel = text_mitte(zeile, "verzeichnis_ziel:", "\n");
-                    ui->lineEdit_ziel->setText(verzeichnis_ziel);
+                    verzeichnis_zielA = text_mitte(zeile, "verzeichnis_zielA:", "\n");
+                    ui->lineEdit_zielA->setText(verzeichnis_zielA);
+                }else if(zeile.contains("verzeichnis_zielB:"))
+                {
+                    verzeichnis_zielB = text_mitte(zeile, "verzeichnis_zielB:", "\n");
+                    ui->lineEdit_zielB->setText(verzeichnis_zielB);
                 }else if(zeile.contains("geraden_schwellenwert:"))
                 {
                     geraden_schwellenwert = text_mitte(zeile, "geraden_schwellenwert:", "\n");
                     ui->lineEdit_geraden_schwellenwert->setText(geraden_schwellenwert);
                     wste.set_fkon_gerade_laenge(geraden_schwellenwert.toDouble());
+                }else if(zeile.contains("use_zielB:"))
+                {
+                    use_zielB = text_mitte(zeile, "use_zielB:", "\n");
+                    if(use_zielB == "ja")
+                    {
+                        ui->checkBox_use_ZielB->setChecked(true);
+                        on_checkBox_use_ZielB_stateChanged();
+                    }else
+                    {
+                        ui->checkBox_use_ZielB->setChecked(false);
+                        on_checkBox_use_ZielB_stateChanged();
+                    }
                 }else if(zeile.contains("quelldateien_erhalten:"))
                 {
                     quelldateien_erhalten = text_mitte(zeile, "quelldateien_erhalten:", "\n");
@@ -451,8 +467,12 @@ void MainWindow::schreibe_ini()
         file.write(verzeichnis_quelle.toUtf8());
         file.write("\n");
 
-        file.write("verzeichnis_ziel:");
-        file.write(verzeichnis_ziel.toUtf8());
+        file.write("verzeichnis_zielA:");
+        file.write(verzeichnis_zielA.toUtf8());
+        file.write("\n");
+
+        file.write("verzeichnis_zielB:");
+        file.write(verzeichnis_zielB.toUtf8());
         file.write("\n");
 
         file.write("geraden_schwellenwert:");
@@ -461,6 +481,10 @@ void MainWindow::schreibe_ini()
         wste.set_fkon_gerade_laenge(geraden_schwellenwert.toDouble());
 
         //-------------------------------------------Checkboxen:
+        file.write("use_zielB:");
+        file.write(use_zielB.toUtf8());
+        file.write("\n");
+
         file.write("quelldateien_erhalten:");
         file.write(quelldateien_erhalten.toUtf8());
         file.write("\n");
@@ -611,16 +635,29 @@ void MainWindow::on_lineEdit_quelle_editingFinished()
         schreibe_ini();
     }
 }
-void MainWindow::on_lineEdit_ziel_editingFinished()
+void MainWindow::on_lineEdit_zielA_editingFinished()
 {
-    QString eingabe = ui->lineEdit_ziel->text();
+    QString eingabe = ui->lineEdit_zielA->text();
     if(!QDir(eingabe).exists())
     {
         QMessageBox::warning(this,"Fehler","Verzeichniss \"" + eingabe + "\" nicht gefunden!",QMessageBox::Ok);
-        ui->lineEdit_ziel->setText(verzeichnis_ziel);
+        ui->lineEdit_zielA->setText(verzeichnis_ziel);
     }else
     {
-        verzeichnis_ziel = eingabe;
+        verzeichnis_zielA = eingabe;
+        schreibe_ini();
+    }
+}
+void MainWindow::on_lineEdit_zielB_editingFinished()
+{
+    QString eingabe = ui->lineEdit_zielB->text();
+    if(!QDir(eingabe).exists())
+    {
+        QMessageBox::warning(this,"Fehler","Verzeichniss \"" + eingabe + "\" nicht gefunden!",QMessageBox::Ok);
+        ui->lineEdit_zielB->setText(verzeichnis_ziel);
+    }else
+    {
+        verzeichnis_zielB = eingabe;
         schreibe_ini();
     }
 }
@@ -647,22 +684,53 @@ void MainWindow::on_pushButton__quelle_clicked()
         schreibe_ini();
     }
 }
-void MainWindow::on_pushButton_ziel_clicked()
+void MainWindow::on_pushButton_zielA_clicked()
 {
-    if(verzeichnis_ziel.isEmpty())
+    if(verzeichnis_zielA.isEmpty())
     {
-        verzeichnis_ziel = "./";
+        verzeichnis_zielA = "./";
     }
-    QString tmp = QFileDialog::getExistingDirectory(this, tr("Zielverzeichniss"), verzeichnis_ziel);
+    QString tmp = QFileDialog::getExistingDirectory(this, tr("Zielverzeichniss"), verzeichnis_zielA);
     if(!tmp.isEmpty())
     {
-        verzeichnis_ziel = tmp;
-        ui->lineEdit_ziel->setText(verzeichnis_ziel);
+        verzeichnis_zielA = tmp;
+        ui->lineEdit_zielA->setText(verzeichnis_zielA);
+        schreibe_ini();
+    }
+}
+void MainWindow::on_pushButton_zielB_clicked()
+{
+    if(verzeichnis_zielB.isEmpty())
+    {
+        verzeichnis_zielB = "./";
+    }
+    QString tmp = QFileDialog::getExistingDirectory(this, tr("Zielverzeichniss"), verzeichnis_zielB);
+    if(!tmp.isEmpty())
+    {
+        verzeichnis_zielB = tmp;
+        ui->lineEdit_zielB->setText(verzeichnis_zielB);
         schreibe_ini();
     }
 }
 
 //-----------------------------------------------------------------------Checkboxen:
+void MainWindow::on_checkBox_use_ZielB_stateChanged()
+{
+    if(ui->checkBox_use_ZielB->isChecked() == true)
+    {
+        use_zielB = "ja";
+        verzeichnis_ziel = verzeichnis_zielB;
+        ui->lineEdit_zielA->setDisabled(true);
+        ui->lineEdit_zielB->setEnabled(true);
+    }else
+    {
+        use_zielB = "nein";
+        verzeichnis_ziel = verzeichnis_zielA;
+        ui->lineEdit_zielB->setDisabled(true);
+        ui->lineEdit_zielA->setEnabled(true);
+    }
+    schreibe_ini();
+}
 void MainWindow::on_checkBox_quelldat_erhalt_stateChanged()
 {
     if(ui->checkBox_quelldat_erhalt->isChecked() == true)
@@ -1325,6 +1393,12 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
+
+
+
+
+
 
 
 
