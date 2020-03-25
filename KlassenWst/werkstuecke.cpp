@@ -3789,7 +3789,6 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         double z = w.get_dicke() - ausdruck_auswerten(tmp).toDouble();//Umrechen auf Oberseite
-                        z = w.get_dicke()-z;
                         bo.set_z(z);
                     }else if(schluessel == FMC_HBEXP_Y1)
                     {

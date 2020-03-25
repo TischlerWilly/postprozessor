@@ -2,12 +2,10 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.20.03.21"
+#define PROGRAMMVERSION "1.20.03.25"
 #endif //PROGRAMMVERSION
 /*
 
-- Zielverzeichnis A für CAM auf Server
-- Zielverzeichnis A für CAM in Dokumente
 
 
 
