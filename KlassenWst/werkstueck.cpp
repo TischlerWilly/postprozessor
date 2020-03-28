@@ -221,6 +221,7 @@ QString werkstueck::get_kante_re_ganx(QString drewi)
 
 QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin)
 {
+    bearbeit = dubosplitten(bearbeit, wkzmagazin, get_dicke());
     QString msg = "";
     double wst_x = tmp_l;
     double wst_y = tmp_b;
@@ -320,6 +321,9 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                 }else//Es ist auch kein passender Fräser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
                     msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
+                    msg += "    ->";
+                    msg += bearbeit.zeile(i).replace("\t", " | ");
+                    msg += "\n";
                 }
             }else
             {
@@ -445,6 +449,7 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
 }
 QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin)
 {
+    bearbeit = dubosplitten(bearbeit, wkzmagazin, get_dicke());
     QString msg = "";
 
     //Wst-Maße prüfen:
@@ -512,6 +517,9 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                 }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
                     msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
+                    msg += "    ->";
+                    msg += bearbeit.zeile(i).replace("\t", " | ");
+                    msg += "\n";
                 }
             }
 
@@ -2602,7 +2610,8 @@ QString werkstueck::get_eigenses_format(QString drehwinkel, QString ausgabeforma
 QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
                                        double tmp_l, double tmp_b)
 {
-    bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin, tmp_l, tmp_b);
+    bearb = dubosplitten(bearb, wkzmagazin, get_dicke());
+    bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin, tmp_l, tmp_b);    
     QString msg;
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -5773,8 +5782,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                       QString drewi, bool formartierungen_aufbrechen,\
                                       bool fkon_kantenschonend)
 {
-    text_zeilenweise bearb_kopie = bearb;
-    bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
+    text_zeilenweise bearb_kopie = bearb;    
     if(formartierungen_aufbrechen == true)
     {
         bearb = formartierung_zu_einzelfkon(bearb, tmp_l, tmp_b);
@@ -5783,6 +5791,9 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     {
         bearb = fkon_kantengut(bearb, wkzmagazin, tmp_l, tmp_b);
     }
+    bearb = kurze_an_ab_geraden(bearb, wkzmagazin);//Kringelfahrten vermeiden
+    bearb = dubosplitten(bearb, wkzmagazin, get_dicke());
+    bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
     QString msg;   
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -7637,7 +7648,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
     //---------------------------------------Bearbeitungen Unterseite:
     bool unterseite_hat_bearb = false;
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
-    {
+    {      
         zeile.set_text(bearb.zeile(i));
         if(zeile.zeile(2) == WST_BEZUG_UNSEI)
         {
@@ -9489,10 +9500,12 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
 {
     if(ausgabeformat == FMC)
     {
-        bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);
+        bearb = dubosplitten(bearb, wkzmagazin, get_dicke());
+        bearb = rasterbohrungen_finden_fmc(bearb, wkzmagazin, tmp_l, tmp_b);        
     }else if(ausgabeformat == GANX)
     {
         bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin, tmp_l, tmp_b);
+        bearb = dubosplitten(bearb, wkzmagazin, get_dicke());
     }
     QString msg = "";
     bearb_sortieren();
@@ -10581,6 +10594,167 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
         }
     }
     return bearb;
+}
+
+text_zeilenweise werkstueck::kurze_an_ab_geraden(text_zeilenweise bearb, text_zeilenweise wkzmagazin)
+{
+    //Geraden die Kürzer sind als der Fräser-Durchmesser und ungünstig liegen kann
+    //die CNC-Maschine nicht korrekt verarbeiten
+    //in Folge fährt die CNC einen ungewollten Kringel
+    //Dies soll durch diese Funktion verringert werden
+    werkzeugmagazin wkzmag(wkzmagazin);
+    double wkzdm;
+    double afb = false; //Bei Fräserradiuskorrektur 0 soll die Funktion keine Änderungen vornehmen
+
+    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise param;
+        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        param.set_text(bearb.zeile(i));
+        if(param.zeile(1) == BEARBART_FRAESERAUFRUF)//zu Kurze Geraden am Anfang finden
+        {
+            fraueseraufruf fa(param.get_text());
+            if(  fa.get_radkor() == FRKOR_L  ||  fa.get_radkor() == FRKOR_R  )
+            {
+                afb = true;
+            }else
+            {
+                afb = false;
+                continue; //For-Schleife in die nächste Runde
+            }
+            QString tnummer = wkzmag.get_wkznummer_von_alias(fa.get_wkznum());
+            if(!tnummer.isEmpty())
+            {
+                wkzdm = wkzmag.get_dm(tnummer).toDouble();
+            }else
+            {
+                wkzdm = 2;//Defaultwert
+            }
+
+            if(i+1 <= bearb.zeilenanzahl())
+            {
+                text_zeilenweise param2; //Folgezeile
+                param2.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                param2.set_text(bearb.zeile(i+1));
+                if(param2.zeile(1) == BEARBART_FRAESERGERADE)
+                {
+                    fraesergerade fg(param2.get_text());
+                    punkt3d sp,ep;
+                    sp.set_x(param2.zeile(3));
+                    sp.set_y(param2.zeile(4));
+                    ep.set_x(param2.zeile(6));
+                    ep.set_y(param2.zeile(7));
+                    strecke s;
+                    s.set_start(sp);
+                    s.set_ende(ep);
+
+                    if(wkzdm >= s.laenge2dim())
+                    {
+                        s.set_laenge_2d(wkzdm+1, strecke_bezugspunkt_ende);
+                        fa.set_x(s.startp().x());
+                        fa.set_y(s.startp().y());
+                        fg.set_xs(s.startp().x());
+                        fg.set_ys(s.startp().y());
+                        bearb.zeile_ersaetzen(i, fa.get_text());
+                        bearb.zeile_ersaetzen(i+1, fg.get_text());
+                        i++;
+                    }
+                }
+            }
+        }else if(param.zeile(1) == BEARBART_FRAESERGERADE  &&  afb == true)//zu Kurze Geraden am Ende finden
+        {
+            bool ist_schlussgerade = false;
+            if(i+1 <= bearb.zeilenanzahl())
+            {
+                text_zeilenweise param2; //Folgezeile
+                param2.set_trennzeichen(TRENNZ_BEARB_PARAM);
+                param2.set_text(bearb.zeile(i+1));
+                if(  param2.zeile(1) != BEARBART_FRAESERGERADE  &&  param2.zeile(1) != BEARBART_FRAESERBOGEN  )
+                {
+                    ist_schlussgerade = true;
+                }
+            }else
+            {
+                ist_schlussgerade = true;
+            }
+            if(ist_schlussgerade == true)
+            {
+                fraesergerade fg(param.get_text());
+                punkt3d sp,ep;
+                sp.set_x(param.zeile(3));
+                sp.set_y(param.zeile(4));
+                ep.set_x(param.zeile(6));
+                ep.set_y(param.zeile(7));
+                strecke s;
+                s.set_start(sp);
+                s.set_ende(ep);
+                if(wkzdm >= s.laenge2dim())
+                {
+                    s.set_laenge_2d(wkzdm+1, strecke_bezugspunkt_start);
+                    fg.set_xe(s.endp().x());
+                    fg.set_ye(s.endp().y());
+                    bearb.zeile_ersaetzen(i, fg.get_text());
+                }
+            }
+        }
+    }
+    return bearb;
+}
+
+text_zeilenweise werkstueck::dubosplitten(text_zeilenweise bearb, text_zeilenweise wkzmagazin, double wstdicke)
+{
+    //Diese Funktion soll Durchgangs-Bohrungen finden
+    //Gibt es für eine Durchgangsbohrung keinen Duchgangsborer so soll das Loch von beiden Plattenseiten gebohrt werden
+    //Gibt es einen Durchgangsbohrer, dieser ist jedoch zu kurz so soll das Loch von beiden Plattenseiten gebohrt werden
+    //Diese Funktion sollte vor der Funktion zum finden von Bohrrastern aufgerufen werden
+    //da Bohrraster hier nicht berücksichtigt werden
+    werkzeugmagazin wkzmag(wkzmagazin);
+    text_zeilenweise bearb_neu;
+
+    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
+    {
+        bool editiert = false;
+        text_zeilenweise param;
+        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        param.set_text(bearb.zeile(i));
+        if(param.zeile(1) == BEARBART_BOHR)
+        {
+            QString bezflaeche = param.zeile(2);
+            if(bezflaeche == WST_BEZUG_OBSEI  ||  bezflaeche == WST_BEZUG_UNSEI  )
+            {
+                bohrung bo(param.get_text());
+                if(bo.get_tiefe() >= wstdicke)
+                {
+                    QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bo.get_bezug());
+                    if(tnummer.isEmpty())
+                    {
+                        bohrung boA = bo;
+                        boA.set_tiefe(bo.get_tiefe()/2 + 2);
+                        tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), boA.get_tiefe(), dicke, bo.get_bezug());
+                        if(!tnummer.isEmpty())
+                        {
+                            bohrung boB = boA;
+                            if(boB.get_bezug() == WST_BEZUG_OBSEI)
+                            {
+                                boB.set_bezug(WST_BEZUG_UNSEI);
+                            }else
+                            {
+                                boB.set_bezug(WST_BEZUG_OBSEI);
+                            }
+                            bearb_neu.zeile_anhaengen(boA.get_text());
+                            bearb_neu.zeile_anhaengen(boB.get_text());
+                            editiert = true;
+                        }
+                    }
+                }
+            }
+        }
+        if(editiert == false)
+        {
+            bearb_neu.zeile_anhaengen(bearb.zeile(i));
+        }
+    }
+    return bearb_neu;
 }
 
 text_zeilenweise werkstueck::fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin, double tmp_l, double tmp_b)

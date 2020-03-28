@@ -131,6 +131,8 @@ private:
     text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
 
     text_zeilenweise formartierung_zu_einzelfkon(text_zeilenweise bearb,double tmp_l, double tmp_b);
+    text_zeilenweise kurze_an_ab_geraden(text_zeilenweise bearb, text_zeilenweise wkzmagazin);
+    text_zeilenweise dubosplitten(text_zeilenweise bearb, text_zeilenweise wkzmagazin, double wstdicke);
     text_zeilenweise fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
 
     QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
