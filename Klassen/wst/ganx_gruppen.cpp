@@ -22,7 +22,7 @@ void ganx_Gruppen::neue_gruppe(QString bezugsflaeche)
     gruppenzeile.clear();
     gruppenzeile.zeile_anhaengen(bezugsflaeche);
     //ggf weitere Parameter anhängen
-    gruppen.zeile_anhaengen(gruppenzeile.get_text());
+    gruppen.zeile_anhaengen(gruppenzeile.text());
 }
 
 QString ganx_Gruppen::get_gruppen()

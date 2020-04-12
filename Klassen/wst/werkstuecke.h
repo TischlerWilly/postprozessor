@@ -35,7 +35,7 @@ public:
     QString get_name(uint index);
     inline QString get_namen()
     {
-        return namen.get_text();
+        return namen.text();
     }
     inline text_zeilenweise get_namen_tz()
     {

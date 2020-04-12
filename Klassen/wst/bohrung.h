@@ -45,7 +45,7 @@ public:
     QString get_afb();
     QString get_wkznum();
 
-    QString get_text();
+    QString text();
     void set_text(QString text);
 
 

@@ -63,7 +63,7 @@ public:
     bool get_uzs();
     QString get_uzs_qstring();
 
-    QString get_text();
+    QString text();
     void set_text(QString text);
 
 private:

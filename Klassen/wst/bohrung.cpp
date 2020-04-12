@@ -153,7 +153,7 @@ QString bohrung::get_wkznum()
     return werkzeugnummer;
 }
 
-QString bohrung::get_text()
+QString bohrung::text()
 {
     QString msg = BEARBART_BOHR;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;

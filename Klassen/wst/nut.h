@@ -44,7 +44,7 @@ public:
     QString get_bezug();
     QString get_afb();
 
-    QString get_text();
+    QString text();
     void set_text(QString text);
 
 private:

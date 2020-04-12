@@ -244,7 +244,7 @@ QString rechtecktasche::get_wkznum()
     return werkzeugnummer;
 }
 
-QString rechtecktasche::get_text()
+QString rechtecktasche::text()
 {
     QString msg = BEARBART_RTA;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;

@@ -333,7 +333,7 @@ text_zeilenweise werkzeugmagazin::get_alle_bodm(QString hori_oder_vert)
 
         text_zeilenweise parameter;
         parameter.set_trennzeichen('\t');
-        parameter.set_text(werkzeug.get_text());
+        parameter.set_text(werkzeug.text());
 
         if(parameter.zeile(1) == WKZ_TYP_BOHRER)
         {

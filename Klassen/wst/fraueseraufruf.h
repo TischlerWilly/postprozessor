@@ -41,7 +41,7 @@ public:
     QString get_wkznum();
     punkt3d get_pos_vertikal();
 
-    QString get_text();
+    QString text();
     void set_text(QString text);
 
 private:

@@ -202,7 +202,7 @@ QString fraeserbogen::get_afb()
 
 
 
-QString fraeserbogen::get_text()
+QString fraeserbogen::text()
 {
     QString msg = BEARBART_FRAESERBOGEN;     //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;

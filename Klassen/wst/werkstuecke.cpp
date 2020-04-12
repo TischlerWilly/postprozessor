@@ -316,7 +316,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(bo.get_text());
+                    w.neue_bearbeitung(bo.text());
                     break;
                 }else
                 {
@@ -378,18 +378,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     if(y1)
                     {
                         bo.set_y(y1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(y2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_y(y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y3)
@@ -397,11 +397,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y4)
@@ -409,11 +409,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y5)
@@ -421,11 +421,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y6)
@@ -433,11 +433,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5+y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -450,18 +450,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(y1)
                         {
                             bo.set_y(y1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(y2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_y(y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y3)
@@ -469,11 +469,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y4)
@@ -481,11 +481,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y5)
@@ -493,11 +493,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y6)
@@ -505,11 +505,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5+y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -640,18 +640,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     if(y1)
                     {
                         bo.set_y(y1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(y2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_y(y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y3)
@@ -659,11 +659,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y4)
@@ -671,11 +671,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y5)
@@ -683,11 +683,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y6)
@@ -695,11 +695,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5+y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -712,18 +712,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(y1)
                         {
                             bo.set_y(y1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(y2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_y(y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y3)
@@ -731,11 +731,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y4)
@@ -743,11 +743,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y5)
@@ -755,11 +755,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y6)
@@ -767,11 +767,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5+y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -902,18 +902,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     if(x1)
                     {
                         bo.set_x(x1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(x2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_x(x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x3)
@@ -921,11 +921,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x4)
@@ -933,11 +933,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x5)
@@ -945,11 +945,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x6)
@@ -957,11 +957,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5+x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -974,18 +974,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(x1)
                         {
                             bo.set_x(x1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(x2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_x(x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x3)
@@ -993,11 +993,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x4)
@@ -1005,11 +1005,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x5)
@@ -1017,11 +1017,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x6)
@@ -1029,11 +1029,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5+x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -1164,18 +1164,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     if(x1)
                     {
                         bo.set_x(x1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(x2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_x(x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x3)
@@ -1183,11 +1183,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x4)
@@ -1195,11 +1195,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x5)
@@ -1207,11 +1207,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x6)
@@ -1219,11 +1219,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5+x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -1236,18 +1236,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(x1)
                         {
                             bo.set_x(x1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(x2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_x(x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x3)
@@ -1255,11 +1255,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x4)
@@ -1267,11 +1267,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x5)
@@ -1279,11 +1279,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x6)
@@ -1291,11 +1291,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5+x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -1426,18 +1426,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     if(y1)
                     {
                         bo.set_y(y1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(y2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_y(y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y3)
@@ -1445,11 +1445,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y4)
@@ -1457,11 +1457,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y5)
@@ -1469,11 +1469,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y6)
@@ -1481,11 +1481,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_y(y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5+y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -1496,18 +1496,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(y1)
                         {
                             bo.set_y(y1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(y2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_y(y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y3)
@@ -1515,11 +1515,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y4)
@@ -1527,11 +1527,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y5)
@@ -1539,11 +1539,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y6)
@@ -1551,11 +1551,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_y(y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5+y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -1687,18 +1687,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     if(x1)
                     {
                         bo.set_x(x1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(x2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_x(x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x3)
@@ -1706,11 +1706,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x4)
@@ -1718,11 +1718,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x5)
@@ -1730,11 +1730,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x6)
@@ -1742,11 +1742,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(kettenmass == false)
                         {
                             bo.set_x(x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5+x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -1757,18 +1757,18 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         if(x1)
                         {
                             bo.set_x(x1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(x2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_x(x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x3)
@@ -1776,11 +1776,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x4)
@@ -1788,11 +1788,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x5)
@@ -1800,11 +1800,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x6)
@@ -1812,11 +1812,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             if(kettenmass == false)
                             {
                                 bo.set_x(x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5+x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -1933,7 +1933,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(bo.get_text());
+                    w.neue_bearbeitung(bo.text());
                     break;
                 }else
                 {
@@ -1995,7 +1995,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(rt.get_text());
+                    w.neue_bearbeitung(rt.text());
                     break;
                 }else
                 {
@@ -2080,7 +2080,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(n.get_text());
+                    w.neue_bearbeitung(n.text());
                     break;
                 }else
                 {
@@ -2152,7 +2152,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         while(tmp_x <= xe)
                         {
                             bo.set_x(tmp_x);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                             tmp_x = tmp_x + raster;
                         }
                     }
@@ -2163,7 +2163,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         while(tmp_x <= xe)
                         {
                             bo.set_x(tmp_x);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                             tmp_x = tmp_x + raster;
                         }
                     }
@@ -2258,7 +2258,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         while(tmp_x <= xe)
                         {
                             bo.set_x(tmp_x);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                             tmp_x = tmp_x + raster;
                         }
                     }
@@ -2269,7 +2269,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         while(tmp_x <= xe)
                         {
                             bo.set_x(tmp_x);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                             tmp_x = tmp_x + raster;
                         }
                     }
@@ -2342,7 +2342,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(fa.get_text());
+                    w.neue_bearbeitung(fa.text());
                     break;
                 }else
                 {
@@ -2408,15 +2408,15 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
             if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(letzte_bearb.get_text());
+                fraueseraufruf tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.get_pos_vertikal());
             }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
             {
-                fraesergerade tmp(letzte_bearb.get_text());
+                fraesergerade tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.get_ep());
             }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
             {
-                fraeserbogen tmp(letzte_bearb.get_text());
+                fraeserbogen tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.get_ep());
             }
 
@@ -2428,11 +2428,11 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     i=ii-1;
                     if(kurze_geraden_import == true)
                     {
-                        w.neue_bearbeitung(fg.get_text());
+                        w.neue_bearbeitung(fg.text());
                     }else if(fg.get_laenge_2d() > min_fkon_gerade_laenge || \
                              fg.get_zs() != fg.get_ze())
                     {
-                        w.neue_bearbeitung(fg.get_text());
+                        w.neue_bearbeitung(fg.text());
                     }
 
                     break;
@@ -2492,15 +2492,15 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
             if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(letzte_bearb.get_text());
+                fraueseraufruf tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.get_pos_vertikal());
             }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
             {
-                fraesergerade tmp(letzte_bearb.get_text());
+                fraesergerade tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.get_ep());
             }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
             {
-                fraeserbogen tmp(letzte_bearb.get_text());
+                fraeserbogen tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.get_ep());
             }
 
@@ -2510,7 +2510,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(fb.get_text());
+                    w.neue_bearbeitung(fb.text());
                     break;
                 }else
                 {
@@ -2570,8 +2570,8 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(fa.get_text());
-                    w.neue_bearbeitung(fg.get_text());
+                    w.neue_bearbeitung(fa.text());
+                    w.neue_bearbeitung(fg.text());
                     break;
                 }else
                 {
@@ -2674,13 +2674,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(topfabst+massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                         if(abst2 > 0)
                         {
@@ -2695,13 +2695,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(topfabst+massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                         if(abst3 > 0)
                         {
@@ -2716,13 +2716,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(topfabst+massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                         if(abst4 > 0)
                         {
@@ -2737,13 +2737,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(topfabst+massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                         if(abst5 > 0)
                         {
@@ -2758,13 +2758,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(topfabst+massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                     }else if(seite == 2)
                     {
@@ -2777,13 +2777,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(w.get_breite() - topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(w.get_breite() - topfabst - massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                         if(abst2 > 0)
                         {
@@ -2798,13 +2798,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(w.get_breite() - topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(w.get_breite() - topfabst - massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                         if(abst3 > 0)
                         {
@@ -2819,13 +2819,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(w.get_breite() - topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(w.get_breite() - topfabst - massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                         if(abst4 > 0)
                         {
@@ -2840,13 +2840,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(w.get_breite() - topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(w.get_breite() - topfabst - massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                         if(abst5 > 0)
                         {
@@ -2861,13 +2861,13 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
                             botopf.set_x(abst_tmp);
                             botopf.set_y(w.get_breite() - topfabst);
-                            w.neue_bearbeitung(botopf.get_text());
+                            w.neue_bearbeitung(botopf.text());
 
                             boduebel.set_y(w.get_breite() - topfabst - massB);
                             boduebel.set_x(abst_tmp - massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                             boduebel.set_x(abst_tmp + massA/2);
-                            w.neue_bearbeitung(boduebel.get_text());
+                            w.neue_bearbeitung(boduebel.text());
                         }
                     }else if(seite == 4)
                     {
@@ -3043,7 +3043,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(bo.get_text());
+                    w.neue_bearbeitung(bo.text());
                     break;
                 }else
                 {
@@ -3107,18 +3107,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     if(y1)
                     {
                         bo.set_y(y1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(y2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_y(y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y3)
@@ -3126,11 +3126,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y4)
@@ -3138,11 +3138,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y5)
@@ -3150,11 +3150,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y6)
@@ -3162,11 +3162,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5+y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -3179,18 +3179,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(y1)
                         {
                             bo.set_y(y1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(y2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_y(y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y3)
@@ -3198,11 +3198,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y4)
@@ -3210,11 +3210,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y5)
@@ -3222,11 +3222,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y6)
@@ -3234,11 +3234,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5+y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -3369,18 +3369,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     if(y1)
                     {
                         bo.set_y(y1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(y2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_y(y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y3)
@@ -3388,11 +3388,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y4)
@@ -3400,11 +3400,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y5)
@@ -3412,11 +3412,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y6)
@@ -3424,11 +3424,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5+y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -3441,18 +3441,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(y1)
                         {
                             bo.set_y(y1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(y2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_y(y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y3)
@@ -3460,11 +3460,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y4)
@@ -3472,11 +3472,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y5)
@@ -3484,11 +3484,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y6)
@@ -3496,11 +3496,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5+y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -3632,18 +3632,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     if(x1)
                     {
                         bo.set_x(x1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(x2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_x(x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x3)
@@ -3651,11 +3651,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x4)
@@ -3663,11 +3663,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x5)
@@ -3675,11 +3675,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x6)
@@ -3687,11 +3687,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5+x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -3704,18 +3704,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(x1)
                         {
                             bo.set_x(x1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(x2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_x(x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x3)
@@ -3723,11 +3723,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x4)
@@ -3735,11 +3735,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x5)
@@ -3747,11 +3747,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x6)
@@ -3759,11 +3759,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5+x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -3895,18 +3895,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     if(x1)
                     {
                         bo.set_x(x1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(x2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_x(x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x3)
@@ -3914,11 +3914,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x4)
@@ -3926,11 +3926,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x5)
@@ -3938,11 +3938,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x6)
@@ -3950,11 +3950,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5+x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -3967,18 +3967,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(x1)
                         {
                             bo.set_x(x1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(x2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_x(x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x3)
@@ -3986,11 +3986,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x4)
@@ -3998,11 +3998,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x5)
@@ -4010,11 +4010,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x6)
@@ -4022,11 +4022,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5+x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -4157,18 +4157,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     if(y1)
                     {
                         bo.set_y(y1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(y2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_y(y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y3)
@@ -4176,11 +4176,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y4)
@@ -4188,11 +4188,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y5)
@@ -4200,11 +4200,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(y6)
@@ -4212,11 +4212,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_y(y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_y(y1+y2+y3+y4+y5+y6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -4227,18 +4227,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(y1)
                         {
                             bo.set_y(y1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(y2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_y(y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y3)
@@ -4246,11 +4246,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y4)
@@ -4258,11 +4258,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y5)
@@ -4270,11 +4270,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(y6)
@@ -4282,11 +4282,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_y(y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_y(y1+y2+y3+y4+y5+y6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -4422,18 +4422,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     if(x1)
                     {
                         bo.set_x(x1);
-                        w.neue_bearbeitung(bo.get_text());
+                        w.neue_bearbeitung(bo.text());
                     }
                     if(x2)
                     {
                         if(kettenmass == false)
                         {
                             bo.set_x(x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x3)
@@ -4441,11 +4441,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x4)
@@ -4453,11 +4453,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x5)
@@ -4465,11 +4465,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
                     if(x6)
@@ -4477,11 +4477,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(kettenmass == false)
                         {
                             bo.set_x(x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }else
                         {
                             bo.set_x(x1+x2+x3+x4+x5+x6);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                     }
 
@@ -4492,18 +4492,18 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         if(x1)
                         {
                             bo.set_x(x1);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                         }
                         if(x2)
                         {
                             if(kettenmass == false)
                             {
                                 bo.set_x(x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x3)
@@ -4511,11 +4511,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x4)
@@ -4523,11 +4523,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x5)
@@ -4535,11 +4535,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                         if(x6)
@@ -4547,11 +4547,11 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             if(kettenmass == false)
                             {
                                 bo.set_x(x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }else
                             {
                                 bo.set_x(x1+x2+x3+x4+x5+x6);
-                                w.neue_bearbeitung(bo.get_text());
+                                w.neue_bearbeitung(bo.text());
                             }
                         }
                     }
@@ -4674,7 +4674,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(bo.get_text());
+                    w.neue_bearbeitung(bo.text());
                     break;
                 }else
                 {
@@ -4737,7 +4737,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(rt.get_text());
+                    w.neue_bearbeitung(rt.text());
                     break;
                 }else
                 {
@@ -4836,7 +4836,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(n.get_text());
+                    w.neue_bearbeitung(n.text());
                     break;
                 }else
                 {
@@ -4912,7 +4912,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         while(tmp_x <= xe)
                         {
                             bo.set_x(tmp_x);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                             tmp_x = tmp_x + raster;
                         }
                     }
@@ -4923,7 +4923,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         while(tmp_x <= xe)
                         {
                             bo.set_x(tmp_x);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                             tmp_x = tmp_x + raster;
                         }
                     }
@@ -5020,7 +5020,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         while(tmp_x <= xe)
                         {
                             bo.set_x(tmp_x);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                             tmp_x = tmp_x + raster;
                         }
                     }
@@ -5031,7 +5031,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         while(tmp_x <= xe)
                         {
                             bo.set_x(tmp_x);
-                            w.neue_bearbeitung(bo.get_text());
+                            w.neue_bearbeitung(bo.text());
                             tmp_x = tmp_x + raster;
                         }
                     }
@@ -5107,7 +5107,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(fa.get_text());
+                    w.neue_bearbeitung(fa.text());
                     break;
                 }else
                 {
@@ -5174,15 +5174,15 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
             if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(letzte_bearb.get_text());
+                fraueseraufruf tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.get_pos_vertikal());
             }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
             {
-                fraesergerade tmp(letzte_bearb.get_text());
+                fraesergerade tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.get_ep());
             }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
             {
-                fraeserbogen tmp(letzte_bearb.get_text());
+                fraeserbogen tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.get_ep());
             }
 
@@ -5195,7 +5195,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     if(fg.get_laenge_2d() > min_fkon_gerade_laenge || \
                        fg.get_zs() != fg.get_ze())
                     {
-                        w.neue_bearbeitung(fg.get_text());
+                        w.neue_bearbeitung(fg.text());
                     }
                     break;
                 }else
@@ -5257,15 +5257,15 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
             if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(letzte_bearb.get_text());
+                fraueseraufruf tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.get_pos_vertikal());
             }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
             {
-                fraesergerade tmp(letzte_bearb.get_text());
+                fraesergerade tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.get_ep());
             }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
             {
-                fraeserbogen tmp(letzte_bearb.get_text());
+                fraeserbogen tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.get_ep());
             }
 
@@ -5275,7 +5275,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(fb.get_text());
+                    w.neue_bearbeitung(fb.text());
                     break;
                 }else
                 {
@@ -5337,8 +5337,8 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
-                    w.neue_bearbeitung(fa.get_text());
-                    w.neue_bearbeitung(fg.get_text());
+                    w.neue_bearbeitung(fa.text());
+                    w.neue_bearbeitung(fg.text());
                     break;
                 }else
                 {

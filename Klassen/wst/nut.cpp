@@ -148,7 +148,7 @@ QString nut::get_afb()
 
 
 
-QString nut::get_text()
+QString nut::text()
 {
     QString msg = BEARBART_NUT;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;

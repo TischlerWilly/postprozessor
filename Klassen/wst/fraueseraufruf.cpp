@@ -135,7 +135,7 @@ punkt3d fraueseraufruf::get_pos_vertikal()
     return p;
 }
 
-QString fraueseraufruf::get_text()
+QString fraueseraufruf::text()
 {
     QString msg = BEARBART_FRAESERAUFRUF;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;

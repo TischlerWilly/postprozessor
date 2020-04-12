@@ -16,7 +16,6 @@ SOURCES += main.cpp\
     Klassen/geo/geometrietext.cpp \
     Klassen/geo/kreis.cpp \
     Klassen/geo/rechteck3d.cpp \
-    Klassen/geo/vorschau.cpp \
     Klassen/geo/wuerfel.cpp \
     Klassen/geo/zylinder.cpp \
         mainwindow.cpp \
@@ -57,8 +56,8 @@ HEADERS  += mainwindow.h \
     Klassen/geo/defines_geometrie.h \
     Klassen/geo/geometrietext.h \
     Klassen/geo/kreis.h \
+    Klassen/geo/makro_geometrie.h \
     Klassen/geo/rechteck3d.h \
-    Klassen/geo/vorschau.h \
     Klassen/geo/wuerfel.h \
     Klassen/geo/zylinder.h \
     Klassen/text_zeilenweise.h \
@@ -92,8 +91,6 @@ HEADERS  += mainwindow.h \
     Klassen/wst/fraesergerade.h \
     Klassen/geo/darstellungsatribute.h \
     Klassen/geo/geofunktionen.h \
-    Defines//def_geometrie.h \
-    Klassen/geo/makro_geometrie.h \
     Klassen/geo/punkt2d.h \
     Klassen/wst/fraeserbogen.h \
     Klassen/wst/bohrraster.h \
@@ -111,6 +108,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_stdname.ui
 
 DISTFILES += \
+    Klassen/geo/makro_geometrie.h~ \
     Struncts/punkt.h~ \
     postprozessor.ico
 

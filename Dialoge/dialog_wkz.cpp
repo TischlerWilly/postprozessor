@@ -96,10 +96,10 @@ void Dialog_WKZ::getParamaterWKZ(text_zeilenweise wkz, bool ist_neues_wkz)
 {
     if(ist_neues_wkz)
     {
-        ui->listWidget_wkz->insertItem(ui->listWidget_wkz->count()-1, wkz.get_text());
+        ui->listWidget_wkz->insertItem(ui->listWidget_wkz->count()-1, wkz.text());
     }else
     {
-        ui->listWidget_wkz->currentItem()->setText(wkz.get_text());
+        ui->listWidget_wkz->currentItem()->setText(wkz.text());
     }
 }
 

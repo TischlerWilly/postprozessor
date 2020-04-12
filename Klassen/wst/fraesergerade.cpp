@@ -155,7 +155,7 @@ QString fraesergerade::get_afb()
     return afb;
 }
 
-QString fraesergerade::get_text()
+QString fraesergerade::text()
 {
     QString msg = BEARBART_FRAESERGERADE;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;

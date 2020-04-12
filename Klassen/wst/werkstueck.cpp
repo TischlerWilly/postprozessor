@@ -270,7 +270,7 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
         QString art = zeile.zeile(1);
         if(art == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             QString bezug = bo.get_bezug();
 
             //Warnung für HBEs:
@@ -368,7 +368,7 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
 
         }else if(art == BEARBART_RTA)
         {
-            rechtecktasche rt(zeile.get_text());
+            rechtecktasche rt(zeile.text());
             //Prüfen ob Tasche zu dicht am WST-Rand ist:
             double xmin = rt.get_x();
             if(rt.get_drewi() == 0 || rt.get_drewi() == 180)
@@ -423,7 +423,7 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
             }
         }else if(art == BEARBART_NUT)
         {
-            nut nu(zeile.get_text());
+            nut nu(zeile.text());
             QString bezug = nu.get_bezug();
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
             double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
@@ -490,7 +490,7 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
         QString art = zeile.zeile(1);
         if(art == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             QString bezug = bo.get_bezug();
 
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
@@ -525,7 +525,7 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
 
         }else if(art == BEARBART_RTA)
         {
-            rechtecktasche rt(zeile.get_text());
+            rechtecktasche rt(zeile.text());
 
             //Prüfen ob Nutzlänge ausreichend für Tati ist:
             QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
@@ -557,7 +557,7 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
             }
         }else if(art == BEARBART_NUT)
         {
-            nut nu(zeile.get_text());
+            nut nu(zeile.text());
             QString bezug = nu.get_bezug();
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
             double nutblattbreite = wkzmag.get_saegeblattbreite(tnummer).toDouble();
@@ -567,7 +567,7 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
             }
         }else if(art == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf fa(zeile.get_text());
+            fraueseraufruf fa(zeile.text());
             QString tnummer = wkzmag.get_wkznummer_von_alias(fa.get_wkznum());
             if(tnummer.isEmpty())
             {
@@ -849,7 +849,7 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
 
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             double x = bo.get_x();
             double y = bo.get_y();
             QString bezug = bo.get_bezug();
@@ -878,10 +878,10 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
                 bo.set_x(y);
                 bo.set_y(tmp_l - x);
             }
-            zeile_neu = bo.get_text();
+            zeile_neu = bo.text();
         }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
         {
-            bohrraster bora(zeile.get_text());
+            bohrraster bora(zeile.text());
             double x = bora.get_x();
             double y = bora.get_y();
             QString bezug = bora.get_bezug();
@@ -900,7 +900,7 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
             }
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
-            rechtecktasche rt(zeile.get_text());
+            rechtecktasche rt(zeile.text());
             double x = rt.get_x();
             double y = rt.get_y();
             double tal = rt.get_laenge();
@@ -933,10 +933,10 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
                 rt.set_x(y);
                 rt.set_y(tmp_l - x);
             }
-            zeile_neu = rt.get_text();
+            zeile_neu = rt.text();
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {
-            nut nu(zeile.get_text());
+            nut nu(zeile.text());
             double xs = nu.get_xs();
             double ys = nu.get_ys();
             double xe = nu.get_xe();
@@ -947,19 +947,19 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
             nu.set_xe(ye);
             nu.set_ye(tmp_l - xe);
 
-            zeile_neu = nu.get_text();
+            zeile_neu = nu.text();
         }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf tmp(zeile.get_text());
+            fraueseraufruf tmp(zeile.text());
             double x = tmp.get_x();
             double y = tmp.get_y();
 
             tmp.set_x(y);
             tmp.set_y(tmp_l - x);
-            zeile_neu = tmp.get_text();
+            zeile_neu = tmp.text();
         }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
         {
-            fraesergerade tmp(zeile.get_text());
+            fraesergerade tmp(zeile.text());
             double xs = tmp.get_xs();
             double xe = tmp.get_xe();
             double ys = tmp.get_ys();
@@ -969,10 +969,10 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
             tmp.set_xe(ye);
             tmp.set_ys(tmp_l - xs);
             tmp.set_ye(tmp_l - xe);
-            zeile_neu = tmp.get_text();
+            zeile_neu = tmp.text();
         }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
         {
-            fraeserbogen tmp(zeile.get_text());
+            fraeserbogen tmp(zeile.text());
             double xs = tmp.get_xs();
             double xe = tmp.get_xe();
             double ys = tmp.get_ys();
@@ -982,7 +982,7 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
             tmp.set_xe(ye);
             tmp.set_ys(tmp_l - xs);
             tmp.set_ye(tmp_l - xe);
-            zeile_neu = tmp.get_text();
+            zeile_neu = tmp.text();
         }
 
         bearb.zeile_ersaetzen(i, zeile_neu);
@@ -1010,7 +1010,7 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
 
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             double x = bo.get_x();
             double y = bo.get_y();
             double z = bo.get_z();
@@ -1050,10 +1050,10 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
                 bo.set_y(x);
                 bo.set_z(dicke-z);
             }
-            zeile_neu = bo.get_text();
+            zeile_neu = bo.text();
         }else if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrraster bora(zeile.get_text());
+            bohrraster bora(zeile.text());
             double x = bora.get_x();
             double y = bora.get_y();
             //double z = bora.get_z();
@@ -1085,10 +1085,10 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
                 bora.set_raster_x(raster_y);
                 bora.set_raster_y(raster_x);
             }
-            zeile_neu = bora.get_text();
+            zeile_neu = bora.text();
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
-            rechtecktasche rt(zeile.get_text());
+            rechtecktasche rt(zeile.text());
             double x = rt.get_x();
             double y = rt.get_y();
             double z = rt.get_z();
@@ -1134,10 +1134,10 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
                 rt.set_y(x);
                 rt.set_z(dicke-z);
             }
-            zeile_neu = rt.get_text();
+            zeile_neu = rt.text();
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {
-            nut nu(zeile.get_text());
+            nut nu(zeile.text());
             double xs = nu.get_xs();
             double ys = nu.get_ys();
             double xe = nu.get_xe();
@@ -1158,7 +1158,7 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
                 nu.set_xe(ye);
                 nu.set_ye(xe);
             }
-            zeile_neu = nu.get_text();
+            zeile_neu = nu.text();
         }
         bearb.zeile_ersaetzen(i, zeile_neu);
     }
@@ -1334,7 +1334,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         zeile.set_text(bearb_0.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             if(bo.get_dm() == 8 || \
                bo.get_dm() == 8.2)
             {
@@ -1399,7 +1399,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         zeile.set_text(bearb_90.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             if(bo.get_dm() == 8 || \
                bo.get_dm() == 8.2)
             {
@@ -1463,7 +1463,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         zeile.set_text(bearb_180.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-           bohrung bo(zeile.get_text());
+           bohrung bo(zeile.text());
             if(bo.get_dm() == 8 || \
                bo.get_dm() == 8.2)
             {
@@ -1528,7 +1528,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
         zeile.set_text(bearb_270.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             if(bo.get_dm() == 8 || \
                bo.get_dm() == 8.2)
             {
@@ -1728,7 +1728,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
             zeile.set_text(bearb_0.zeile(i));
             if(zeile.zeile(1) == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+                bohrung bo(zeile.text());
                 if(bo.get_bezug() == WST_BEZUG_VO)
                 {
                     bonus = false;
@@ -1769,7 +1769,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
             zeile.set_text(bearb_90.zeile(i));
             if(zeile.zeile(1) == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+                bohrung bo(zeile.text());
                 if(bo.get_bezug() == WST_BEZUG_VO)
                 {
                     bonus = false;
@@ -1810,7 +1810,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
             zeile.set_text(bearb_180.zeile(i));
             if(zeile.zeile(1) == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+                bohrung bo(zeile.text());
                 if(bo.get_bezug() == WST_BEZUG_VO)
                 {
                     bonus = false;
@@ -1851,7 +1851,7 @@ QString werkstueck::get_fmc(text_zeilenweise wkzmagazin, QString& info , \
             zeile.set_text(bearb_270.zeile(i));
             if(zeile.zeile(1) == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+                bohrung bo(zeile.text());
                 if(bo.get_bezug() == WST_BEZUG_VO)
                 {
                     bonus = false;
@@ -2125,7 +2125,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         zeile.set_text(bearb_0.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             if(bo.get_dm() == 8 || \
                bo.get_dm() == 8.2)
             {
@@ -2157,7 +2157,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         zeile.set_text(bearb_90.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             if(bo.get_dm() == 8 || \
                bo.get_dm() == 8.2)
             {
@@ -2189,7 +2189,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         zeile.set_text(bearb_180.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             if(bo.get_dm() == 8 || \
                bo.get_dm() == 8.2)
             {
@@ -2221,7 +2221,7 @@ QString werkstueck::get_ganx(text_zeilenweise wkzmagazin, QString& info , QStrin
         zeile.set_text(bearb_270.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             if(bo.get_dm() == 8 || \
                bo.get_dm() == 8.2)
             {
@@ -2692,7 +2692,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
         zeile.set_text(bearb.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
 
             QString afb_text = bo.get_afb();
             afb_text.replace("L", get_laenge_qstring());
@@ -3389,7 +3389,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             }
         }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
         {
-            bohrraster bora(zeile.get_text());
+            bohrraster bora(zeile.text());
             double x = bora.get_x();
             double y = bora.get_y();
             //double z = bora.get_z();
@@ -3557,7 +3557,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
         }else if(zeile.zeile(1)==BEARBART_NUT)
         {
 
-            nut nu(zeile.get_text());
+            nut nu(zeile.text());
             if(nu.get_xs() != nu.get_xe())
             {
                 //Warnung ausgeben und Nut unterdrücken:
@@ -3870,7 +3870,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 
         }else if(zeile.zeile(1)==BEARBART_RTA)
         {
-            rechtecktasche rt(zeile.get_text());
+            rechtecktasche rt(zeile.text());
             double x = rt.get_x();
             double y = rt.get_y();
 
@@ -3930,7 +3930,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += name;
                 msg += "\n";
                 msg += "Drehwinkel der Rechtecktasche wird nicht unterstuetzt:\n";
-                msg += zeile.get_text();
+                msg += zeile.text();
                 msg += "\n";
                 msg += "Bearbeitung wird unterdrueckt.";
 
@@ -4172,7 +4172,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
         zeile.set_text(bearb.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
 
             QString afb_text = bo.get_afb();
             afb_text.replace("L", get_laenge_qstring());
@@ -4957,7 +4957,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
             }
         }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
         {
-            bohrraster bora(zeile.get_text());
+            bohrraster bora(zeile.text());
 
             double x = bora.get_x();
             double y = bora.get_y();
@@ -5146,7 +5146,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {
 
-            nut nu(zeile.get_text());
+            nut nu(zeile.text());
             if(nu.get_xs() != nu.get_xe())
             {
                 /*
@@ -5157,7 +5157,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += name;
                 msg += "\n";
                 msg += "Nut ist nicht parallel zur X-Achse:\n";
-                msg += zeile.get_text();
+                msg += zeile.text();
                 msg += "\n";
                 msg += "Bearbeitung wird unterdrueckt.";
 
@@ -5218,7 +5218,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += name;
                 msg += "\n";
                 msg += "Saegeblatt zu breit fuer Nut:\n";
-                msg += zeile.get_text();
+                msg += zeile.text();
                 msg += "\n";
                 msg += "Bearbeitung wird unterdrueckt.";
 
@@ -5449,7 +5449,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
 
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
-            rechtecktasche rt(zeile.get_text());
+            rechtecktasche rt(zeile.text());
             double x = rt.get_x();
             double y = rt.get_y();
             double z = rt.get_z();
@@ -5501,7 +5501,7 @@ QString werkstueck::get_ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenw
                 msg += name;
                 msg += "\n";
                 msg += "Drehwinkel der Rechtecktasche wird nicht unterstuetzt:\n";
-                msg += zeile.get_text();
+                msg += zeile.text();
                 msg += "\n";
                 msg += "Bearbeitung wird unterdrueckt.";
 
@@ -5903,7 +5903,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             QString art = zeile.zeile(1);
             if(art == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+                bohrung bo(zeile.text());
 
                 if(bo.get_bezug() == WST_BEZUG_VO)
                 {
@@ -5926,7 +5926,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
         zeile.set_text(bearb.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             QString bezug = bo.get_bezug();
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
             if(!tnummer.isEmpty())
@@ -6263,7 +6263,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             }
         }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
         {
-            bohrraster bora(zeile.get_text());
+            bohrraster bora(zeile.text());
             QString bezug = bora.get_bezug();
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bora.get_dm(), bora.get_tiefe(), dicke, bezug);
             if(!tnummer.isEmpty())
@@ -7085,7 +7085,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             }
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {
-            nut nu(zeile.get_text());
+            nut nu(zeile.text());
             QString bezug = nu.get_bezug();
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_SAEGE, 0, nu.get_tiefe(), dicke, bezug);
             if(!tnummer.isEmpty())
@@ -7235,7 +7235,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             }
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
-            rechtecktasche rt(zeile.get_text());
+            rechtecktasche rt(zeile.text());
             QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
             if(tnummer.isEmpty())
             {
@@ -7348,7 +7348,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             }
         }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf fa(zeile.get_text());
+            fraueseraufruf fa(zeile.text());
             QString tnummer = wkzmag.get_wkznummer_von_alias(fa.get_wkznum());
             if(!tnummer.isEmpty())
             {
@@ -7435,7 +7435,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
 
                         if(folzei.zeile(1) == BEARBART_FRAESERGERADE)
                         {
-                            fraesergerade fg(folzei.get_text());
+                            fraesergerade fg(folzei.text());
                             strecke s;
                             s.set_start(pfa);
                             punkt3d ep = fg.get_ep();
@@ -7452,7 +7452,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             msg += "\n";
                         }else if(folzei.zeile(1) == BEARBART_FRAESERBOGEN)
                         {
-                            fraeserbogen fb(folzei.get_text());
+                            fraeserbogen fb(folzei.text());
                             bogen b;
                             b.set_startpunkt(pfa);
                             b.set_endpunkt(fb.get_ep());
@@ -7519,7 +7519,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                 i++;
                                 zeile.set_text(bearb.zeile(i));
                                 //Gerade fräsen:
-                                fraesergerade fg(zeile.get_text());
+                                fraesergerade fg(zeile.text());
                                 QString tiefe_fg = "0";
                                 if(fg.get_ze() == fa.get_tiefe())
                                 {
@@ -7554,7 +7554,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                 i++;
                                 zeile.set_text(bearb.zeile(i));
                                 //Bogen fräsen:
-                                fraeserbogen fb(zeile.get_text());
+                                fraeserbogen fb(zeile.text());
                                 QString tiefe_fb = "0";
                                 if(fb.get_ze() == fa.get_tiefe())
                                 {
@@ -7676,7 +7676,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             zeile.set_text(bearb.zeile(i));
             if(zeile.zeile(1) == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+                bohrung bo(zeile.text());
                 QString bezug = bo.get_bezug();
                 QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
 
@@ -7849,7 +7849,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                         msg += name;
                         msg += "\n";
                         msg += "Kein Werkzeug fuer:\n";
-                        msg += zeile.get_text();
+                        msg += zeile.text();
 
                         QMessageBox mb;
                         mb.setText(msg);
@@ -7859,7 +7859,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 }
             }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
             {
-                bohrraster bora(zeile.get_text());
+                bohrraster bora(zeile.text());
                 QString bezug = bora.get_bezug();
                 QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bora.get_dm(), bora.get_tiefe(), dicke, bezug);
 
@@ -8320,7 +8320,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 }
             }else if(zeile.zeile(1) == BEARBART_NUT)
             {
-                nut nu(zeile.get_text());
+                nut nu(zeile.text());
                 QString bezug = nu.get_bezug();
                 if(bezug == WST_BEZUG_UNSEI)
                 {
@@ -8474,7 +8474,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 }                
             }else if(zeile.zeile(1) == BEARBART_RTA)
             {
-                rechtecktasche rt(zeile.get_text());
+                rechtecktasche rt(zeile.text());
                 QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
                 if(tnummer.isEmpty())
                 {
@@ -8591,7 +8591,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                 }
             }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf fa(zeile.get_text());
+                fraueseraufruf fa(zeile.text());
                 QString tnummer = wkzmag.get_wkznummer_von_alias(fa.get_wkznum());
                 if(!tnummer.isEmpty())
                 {
@@ -8681,7 +8681,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
 
                             if(folzei.zeile(1) == BEARBART_FRAESERGERADE)
                             {
-                                fraesergerade fg(folzei.get_text());
+                                fraesergerade fg(folzei.text());
                                 //Beareitung auf die Oberseite drehen:
                                 fg.set_ys(  tmp_b - fg.get_ys()  );
                                 fg.set_ye(  tmp_b - fg.get_ye()  );
@@ -8697,7 +8697,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                 pein = s.stapu();
                             }else if(folzei.zeile(1) == BEARBART_FRAESERBOGEN)
                             {
-                                fraeserbogen fb(folzei.get_text());
+                                fraeserbogen fb(folzei.text());
                                 //Beareitung auf die Oberseite drehen:
                                 fb.set_ys(  tmp_b - fb.get_ys()  );
                                 fb.set_ye(  tmp_b - fb.get_ye()  );
@@ -8768,7 +8768,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                     i++;
                                     zeile.set_text(bearb.zeile(i));
                                     //Gerade fräsen:
-                                    fraesergerade fg(zeile.get_text());
+                                    fraesergerade fg(zeile.text());
                                     QString tiefe_fg = 0;
                                     if(fg.get_ze() == fa.get_tiefe())
                                     {
@@ -8807,7 +8807,7 @@ QString werkstueck::get_fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                                     i++;
                                     zeile.set_text(bearb.zeile(i));
                                     //Bogen fräsen:
-                                    fraeserbogen fb(zeile.get_text());
+                                    fraeserbogen fb(zeile.text());
                                     QString tiefe_fb = 0;
                                     if(fb.get_ze() == fa.get_tiefe())
                                     {
@@ -8964,7 +8964,7 @@ QString werkstueck::get_ggf_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
         zeile.set_text(bearb.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             QString bezug = bo.get_bezug();
             QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bezug);
             if(!tnummer.isEmpty())
@@ -9145,7 +9145,7 @@ QString werkstueck::get_ggf_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             }
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
-            rechtecktasche rt(zeile.get_text());
+            rechtecktasche rt(zeile.text());
             QString tnummer = wkzmag.get_wkznummer_von_alias(rt.get_wkznum());//Ist direkt ei WKZ definiert?
             if(tnummer.isEmpty())
             {
@@ -9266,7 +9266,7 @@ QString werkstueck::get_ggf_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
             }
         }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf fa(zeile.get_text());
+            fraueseraufruf fa(zeile.text());
             QString tnummer = wkzmag.get_wkznummer_von_alias(fa.get_wkznum());
             if(!tnummer.isEmpty())
             {
@@ -9342,7 +9342,7 @@ QString werkstueck::get_ggf_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             i++;
                             zeile.set_text(bearb.zeile(i));
                             //Gerade fräsen:
-                            fraesergerade fg(zeile.get_text());
+                            fraesergerade fg(zeile.text());
                             QString tiefe_fg = "0";
                             if(fg.get_ze() == fa.get_tiefe())
                             {
@@ -9381,7 +9381,7 @@ QString werkstueck::get_ggf_dateitext(text_zeilenweise wkzmagazin, text_zeilenwe
                             i++;
                             zeile.set_text(bearb.zeile(i));
                             //Bogen fräsen:
-                            fraeserbogen fb(zeile.get_text());
+                            fraeserbogen fb(zeile.text());
                             QString tiefe_fb = "0";
                             if(fb.get_ze() == fa.get_tiefe())
                             {
@@ -9548,7 +9548,7 @@ QString werkstueck::get_eigen_dateitext(text_zeilenweise bearb, double tmp_l, do
     msg += "---------------";
     msg += "\n";
 
-    msg += bearb.get_text();
+    msg += bearb.text();
 
     return msg;
 }
@@ -9589,7 +9589,7 @@ QString werkstueck::fmc_kommentar_gute_seite(text_zeilenweise bearb)
             zeile.set_text(bearb.zeile(i));
             if(zeile.zeile(1) == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+                bohrung bo(zeile.text());
                 if(bo.get_dm() == 5)
                 {
                     if(bo.get_tiefe() > dicke  ||  bo.get_tiefe() < 0)
@@ -9623,7 +9623,7 @@ QString werkstueck::fmc_kommentar_gute_seite(text_zeilenweise bearb)
             zeile.set_text(bearb.zeile(i));
             if(zeile.zeile(1) == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+                bohrung bo(zeile.text());
                 if(bo.get_dm() == 15)
                 {
                     if(bo.get_bezug() == WST_BEZUG_OBSEI)
@@ -9661,7 +9661,7 @@ QString werkstueck::fmc_kommentar_gute_seite(text_zeilenweise bearb)
             zeile.set_text(bearb.zeile(i));
             if(zeile.zeile(1) == BEARBART_BOHR)
             {
-                bohrung bo(zeile.get_text());
+                bohrung bo(zeile.text());
                 if(bo.get_dm() == 5)
                 {
                     if(bo.get_tiefe() > dicke  ||  bo.get_tiefe() < 0)
@@ -9741,8 +9741,8 @@ void werkstueck::fraesergeraden_zusammenfassen()
            folgezeile.zeile(1) == BEARBART_FRAESERGERADE)
         {
             strecke s1, s2;
-            fraesergerade fg1(zeile.get_text());
-            fraesergerade fg2(folgezeile.get_text());
+            fraesergerade fg1(zeile.text());
+            fraesergerade fg2(folgezeile.text());
             s1=fg1.get_strecke();
             s2=fg2.get_strecke();
             strecke_bezugspunkt sb = strecke_bezugspunkt_start;
@@ -9753,7 +9753,7 @@ void werkstueck::fraesergeraden_zusammenfassen()
                fg1.get_ye_qstring() == fg2.get_ye_qstring() &&\
                fg1.get_ze_qstring() == fg2.get_ze_qstring()    )
             {
-                bearbeitungen.zeile_ersaetzen(i, fg1.get_text());
+                bearbeitungen.zeile_ersaetzen(i, fg1.text());
                 bearbeitungen.zeile_loeschen(i+1);
                 i--;
             }
@@ -9779,7 +9779,7 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_ganx(text_zeilenweise bearb,
         param.set_text(bearb.zeile(i));
         if(param.zeile(1) == BEARBART_BOHR)
         {
-            bohrung b(param.get_text());
+            bohrung b(param.text());
             QString tiefe_neu = b.get_tiefe_qstring();
             bool schon_da = false;
             for(uint i=1; i<=boti.zeilenanzahl();i++)
@@ -10009,7 +10009,7 @@ text_zeilenweise werkstueck::rasterbohrungen_finden_fmc(text_zeilenweise bearb, 
         param.set_text(bearb.zeile(i));
         if(param.zeile(1) == BEARBART_BOHR)
         {
-            bohrung b(param.get_text());
+            bohrung b(param.text());
             QString tiefe_neu = b.get_tiefe_qstring();
             bool schon_da = false;
             for(uint i=1; i<=boti.zeilenanzahl();i++)
@@ -10429,7 +10429,7 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
         {
             uint zeibeg = i;
             uint zeiend = i;
-            fraueseraufruf fa(param.get_text());
+            fraueseraufruf fa(param.text());
             double xbeg = fa.get_x();
             double ybeg = fa.get_y();
             double zbeg = fa.get_tiefe();
@@ -10448,7 +10448,7 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                     param.set_text(bearb.zeile(i));
                     if(param.zeile(1) == BEARBART_FRAESERGERADE)
                     {
-                        fraesergerade fg(param.get_text());
+                        fraesergerade fg(param.text());
                         xend = fg.get_xe();
                         yend = fg.get_ye();
                         zend = fg.get_ze();
@@ -10471,7 +10471,7 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                         }
                     }else if(param.zeile(1) == BEARBART_FRAESERBOGEN)
                     {
-                        fraeserbogen fb(param.get_text());
+                        fraeserbogen fb(param.text());
                         xend = fb.get_xe();
                         yend = fb.get_ye();
                         zend = fb.get_ze();
@@ -10511,7 +10511,7 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                     {
                         //Die Teile aus der Bearbeitung löschen die Deckungsgleich auf der WST-Kante liegen
                         text_zeilenweise bearb_neu;
-                        bearb_neu.set_text(fa.get_text());
+                        bearb_neu.set_text(fa.text());
 
                         for(uint ii=zeibeg+1; ii<=zeiend ;ii++)
                         {
@@ -10520,7 +10520,7 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                             param.set_text(bearb.zeile(ii));
                             if(param.zeile(1) == BEARBART_FRAESERGERADE)
                             {
-                                fraesergerade fg(param.get_text());
+                                fraesergerade fg(param.text());
                                 bool loeschen = false;
                                 if((fg.get_xs() == fg.get_xe()) && (fg.get_ys() != fg.get_ye()))
                                 {
@@ -10547,15 +10547,15 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                                     vorparam.set_text(vorzeile);
                                     if(vorparam.zeile(1) == BEARBART_FRAESERAUFRUF)
                                     {
-                                        fraueseraufruf tmpfa(vorparam.get_text());
+                                        fraueseraufruf tmpfa(vorparam.text());
                                         tmpfa.set_x(fg.get_xe());
                                         tmpfa.set_y(fg.get_ye());
-                                        bearb_neu.zeile_ersaetzen(bearb_neu.zeilenanzahl(), tmpfa.get_text());
+                                        bearb_neu.zeile_ersaetzen(bearb_neu.zeilenanzahl(), tmpfa.text());
                                     }else
                                     {
                                         fa.set_x(fg.get_xe());
                                         fa.set_y(fg.get_ye());
-                                        bearb_neu.zeile_anhaengen(fa.get_text());
+                                        bearb_neu.zeile_anhaengen(fa.text());
                                     }
                                 }else
                                 {
@@ -10579,12 +10579,12 @@ text_zeilenweise werkstueck::formartierung_zu_einzelfkon(text_zeilenweise bearb,
                         if(zeiend < bearb.zeilenanzahl())
                         {
                             bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
-                            bearb.zeilen_einfuegen(zeibeg-1, bearb_neu.get_text());
+                            bearb.zeilen_einfuegen(zeibeg-1, bearb_neu.text());
                             i = zeibeg-1+bearb_neu.zeilenanzahl();
                         }else
                         {
                             bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
-                            bearb.zeilen_anhaengen(bearb_neu.get_text());
+                            bearb.zeilen_anhaengen(bearb_neu.text());
                             i = bearb.zeilenanzahl();
                         }
 
@@ -10613,7 +10613,7 @@ text_zeilenweise werkstueck::kurze_an_ab_geraden(text_zeilenweise bearb, text_ze
         param.set_text(bearb.zeile(i));
         if(param.zeile(1) == BEARBART_FRAESERAUFRUF)//zu Kurze Geraden am Anfang finden
         {
-            fraueseraufruf fa(param.get_text());
+            fraueseraufruf fa(param.text());
             if(  fa.get_radkor() == FRKOR_L  ||  fa.get_radkor() == FRKOR_R  )
             {
                 afb = true;
@@ -10638,7 +10638,7 @@ text_zeilenweise werkstueck::kurze_an_ab_geraden(text_zeilenweise bearb, text_ze
                 param2.set_text(bearb.zeile(i+1));
                 if(param2.zeile(1) == BEARBART_FRAESERGERADE)
                 {
-                    fraesergerade fg(param2.get_text());
+                    fraesergerade fg(param2.text());
                     punkt3d sp,ep;
                     sp.set_x(param2.zeile(3));
                     sp.set_y(param2.zeile(4));
@@ -10655,8 +10655,8 @@ text_zeilenweise werkstueck::kurze_an_ab_geraden(text_zeilenweise bearb, text_ze
                         fa.set_y(s.stapu().y());
                         fg.set_xs(s.stapu().x());
                         fg.set_ys(s.stapu().y());
-                        bearb.zeile_ersaetzen(i, fa.get_text());
-                        bearb.zeile_ersaetzen(i+1, fg.get_text());
+                        bearb.zeile_ersaetzen(i, fa.text());
+                        bearb.zeile_ersaetzen(i+1, fg.text());
                         i++;
                     }
                 }
@@ -10679,7 +10679,7 @@ text_zeilenweise werkstueck::kurze_an_ab_geraden(text_zeilenweise bearb, text_ze
             }
             if(ist_schlussgerade == true)
             {
-                fraesergerade fg(param.get_text());
+                fraesergerade fg(param.text());
                 punkt3d sp,ep;
                 sp.set_x(param.zeile(3));
                 sp.set_y(param.zeile(4));
@@ -10693,7 +10693,7 @@ text_zeilenweise werkstueck::kurze_an_ab_geraden(text_zeilenweise bearb, text_ze
                     s.set_laenge_2d(wkzdm+1, strecke_bezugspunkt_start);
                     fg.set_xe(s.endpu().x());
                     fg.set_ye(s.endpu().y());
-                    bearb.zeile_ersaetzen(i, fg.get_text());
+                    bearb.zeile_ersaetzen(i, fg.text());
                 }
             }
         }
@@ -10722,7 +10722,7 @@ text_zeilenweise werkstueck::dubosplitten(text_zeilenweise bearb, text_zeilenwei
             QString bezflaeche = param.zeile(2);
             if(bezflaeche == WST_BEZUG_OBSEI  ||  bezflaeche == WST_BEZUG_UNSEI  )
             {
-                bohrung bo(param.get_text());
+                bohrung bo(param.text());
                 if(bo.get_tiefe() >= wstdicke)
                 {
                     QString tnummer = wkzmag.get_wkznummer(WKZ_TYP_BOHRER, bo.get_dm(), bo.get_tiefe(), dicke, bo.get_bezug());
@@ -10741,8 +10741,8 @@ text_zeilenweise werkstueck::dubosplitten(text_zeilenweise bearb, text_zeilenwei
                             {
                                 boB.set_bezug(WST_BEZUG_OBSEI);
                             }
-                            bearb_neu.zeile_anhaengen(boA.get_text());
-                            bearb_neu.zeile_anhaengen(boB.get_text());
+                            bearb_neu.zeile_anhaengen(boA.text());
+                            bearb_neu.zeile_anhaengen(boB.text());
                             editiert = true;
                         }
                     }
@@ -10785,7 +10785,7 @@ void werkstueck::hbemiduebeltiefe()
         zeile.set_text(bearbeitungen.zeile(i));
         if(zeile.zeile(1) == BEARBART_BOHR)
         {
-            bohrung bo(zeile.get_text());
+            bohrung bo(zeile.text());
             QString bezug = bo.get_bezug();
             if(bezug == WST_BEZUG_LI || bezug == WST_BEZUG_RE || \
                bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
@@ -10797,13 +10797,13 @@ void werkstueck::hbemiduebeltiefe()
                     if(max >= boti && boti >= min)
                     {
                         bo.set_tiefe(max);
-                        bearbeitungen.zeile_ersaetzen(i, bo.get_text());
+                        bearbeitungen.zeile_ersaetzen(i, bo.text());
                     }
                 }
             }
         }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
         {
-            bohrraster bo(zeile.get_text());
+            bohrraster bo(zeile.text());
             QString bezug = bo.get_bezug();
             if(bezug == WST_BEZUG_LI || bezug == WST_BEZUG_RE || \
                bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
@@ -10815,7 +10815,7 @@ void werkstueck::hbemiduebeltiefe()
                     if(max >= boti && boti >= min)
                     {
                         bo.set_tiefe(max);
-                        bearbeitungen.zeile_ersaetzen(i, bo.get_text());
+                        bearbeitungen.zeile_ersaetzen(i, bo.text());
                     }
                 }
             }

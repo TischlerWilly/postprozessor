@@ -230,7 +230,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                     {
                         if(zeile.zeile(4).toDouble() == tiefe)
                         {
-                            potlora.zeilen_anhaengen(zeile.get_text());
+                            potlora.zeilen_anhaengen(zeile.text());
                         }
                     }
                 }
@@ -347,7 +347,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                         zeile.set_text(bearb->zeile(i));
                         if(zeile.zeile(1) == BEARBART_BOHR)
                         {
-                            bohrung b(zeile.get_text());
+                            bohrung b(zeile.text());
                             if(b.get_x_qstring() == get_x_qstring()  &&\
                                b.get_y_qstring() == get_y_qstring()  &&\
                                b.get_dm_qstring() == get_dm_qstring()  &&\
@@ -366,7 +366,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                             zeile.set_text(bearb->zeile(ii));
                             if(zeile.zeile(1) == BEARBART_BOHR)
                             {
-                                bohrung beinzeln(zeile.get_text());
+                                bohrung beinzeln(zeile.text());
                                 bohrung bausraster(get_text_erste_bohrung());
                                 bausraster.set_x(get_x()+i*rasterabst);
                                 if(beinzeln.get_x_qstring() == bausraster.get_x_qstring() &&\
@@ -491,7 +491,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                         zeile.set_text(bearb->zeile(i));
                         if(zeile.zeile(1) == BEARBART_BOHR)
                         {
-                            bohrung b(zeile.get_text());
+                            bohrung b(zeile.text());
                             if(b.get_x_qstring() == get_x_qstring()  &&\
                                b.get_z_qstring() == get_z_qstring()  &&\
                                b.get_dm_qstring() == get_dm_qstring()  &&\
@@ -510,7 +510,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                             zeile.set_text(bearb->zeile(ii));
                             if(zeile.zeile(1) == BEARBART_BOHR)
                             {
-                                bohrung beinzeln(zeile.get_text());
+                                bohrung beinzeln(zeile.text());
                                 bohrung bausraster(get_text_erste_bohrung());
                                 bausraster.set_x(get_x()+i*rasterabst);
                                 if(beinzeln.get_x_qstring() == bausraster.get_x_qstring() &&\
@@ -643,7 +643,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                         zeile.set_text(bearb->zeile(i));
                         if(zeile.zeile(1) == BEARBART_BOHR)
                         {
-                            bohrung b(zeile.get_text());
+                            bohrung b(zeile.text());
                             if(b.get_x_qstring() == get_x_qstring()  &&\
                                b.get_y_qstring() == get_y_qstring()  &&\
                                b.get_dm_qstring() == get_dm_qstring()  &&\
@@ -662,7 +662,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                             zeile.set_text(bearb->zeile(ii));
                             if(zeile.zeile(1) == BEARBART_BOHR)
                             {
-                                bohrung beinzeln(zeile.get_text());
+                                bohrung beinzeln(zeile.text());
                                 bohrung bausraster(get_text_erste_bohrung());
                                 bausraster.set_y(get_y()+i*rasterabst);
                                 if(beinzeln.get_x_qstring() == bausraster.get_x_qstring() &&\
@@ -789,7 +789,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                         zeile.set_text(bearb->zeile(i));
                         if(zeile.zeile(1) == BEARBART_BOHR)
                         {
-                            bohrung b(zeile.get_text());
+                            bohrung b(zeile.text());
                             if(b.get_z_qstring() == get_z_qstring()  &&\
                                b.get_y_qstring() == get_y_qstring()  &&\
                                b.get_dm_qstring() == get_dm_qstring()  &&\
@@ -808,7 +808,7 @@ bool bohrraster::finde_bohrraster(text_zeilenweise *bearb, \
                             zeile.set_text(bearb->zeile(ii));
                             if(zeile.zeile(1) == BEARBART_BOHR)
                             {
-                                bohrung beinzeln(zeile.get_text());
+                                bohrung beinzeln(zeile.text());
                                 bohrung bausraster(get_text_erste_bohrung());
                                 bausraster.set_y(get_y()+i*rasterabst);
                                 if(beinzeln.get_x_qstring() == bausraster.get_x_qstring() &&\
