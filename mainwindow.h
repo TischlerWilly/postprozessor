@@ -6,15 +6,15 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
-#include "prgpfade.h"
-#include "Definitionen/dateinamen.h"
-#include "dialog_wkz.h"
-#include "dialog_stdnamen.h"
+#include "Klassen/prgpfade.h"
+#include "Defines/dateinamen.h"
+#include "Dialoge/dialog_wkz.h"
+#include "Dialoge/dialog_stdnamen.h"
 
-#include "eigeneFunktionen/text.h"
-#include "allgemKlassen/text_zeilenweise.h"
-#include "KlassenWst/werkstuecke.h"
-#include "werkzeugmagazin.h"
+#include "Funktionen/text.h"
+#include "Klassen/text_zeilenweise.h"
+#include "Klassen/wst/werkstuecke.h"
+#include "Klassen/werkzeugmagazin.h"
 #include "ToDo.h"
 
 
