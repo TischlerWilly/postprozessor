@@ -13,90 +13,103 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+    Klassen/geo/geometrietext.cpp \
+    Klassen/geo/kreis.cpp \
+    Klassen/geo/rechteck3d.cpp \
+    Klassen/geo/wuerfel.cpp \
+    Klassen/geo/zylinder.cpp \
         mainwindow.cpp \
-    allgemKlassen/formel.cpp \
-    allgemKlassen/text_zeilenweise.cpp \
-    allgemKlassen/wenndannsonst.cpp \
-    eigeneFunktionen/myfunktion.cpp \
-    eigeneFunktionen/runden.cpp \
-    eigeneFunktionen/text.cpp \
-    eigeneFunktionen/umwandeln.cpp \
-    KlassenWst/werkstueck.cpp \
-    KlassenWst/werkstuecke.cpp \
-    KlassenWst/bohrung.cpp \
-    KlassenWst/rechtecktasche.cpp \
-    KlassenWst/nut.cpp \
-    prgpfade.cpp \
-    werkzeugmagazin.cpp \
-    dialog_wkz.cpp \
-    dialog_bohrer.cpp \
-    dialog_fraeser.cpp \
-    dialog_saege.cpp \
-    KlassenWst/fraueseraufruf.cpp \
-    geometrie/bogen.cpp \
-    geometrie/punkt3d.cpp \
-    geometrie/strecke.cpp \
-    KlassenWst/fraesergerade.cpp \
-    geometrie/darstellungsatribute.cpp \
-    geometrie/geometrie.cpp \
-    geometrie/punkt2d.cpp \
-    KlassenWst/fraeserbogen.cpp \
-    KlassenWst/bohrraster.cpp \
-    KlassenWst/ganx_gruppen.cpp \
-    dialog_stdnamen.cpp \
-    dialog_stdname.cpp
+    Klassen/formel.cpp \
+    Klassen/text_zeilenweise.cpp \
+    Klassen/wenndannsonst.cpp \
+    Funktionen/myfunktion.cpp \
+    Funktionen/runden.cpp \
+    Funktionen/text.cpp \
+    Funktionen/umwandeln.cpp \
+    Klassen/wst/werkstueck.cpp \
+    Klassen/wst/werkstuecke.cpp \
+    Klassen/wst/bohrung.cpp \
+    Klassen/wst/rechtecktasche.cpp \
+    Klassen/wst/nut.cpp \
+    Klassen/prgpfade.cpp \
+    Klassen/werkzeugmagazin.cpp \
+    Dialoge/dialog_wkz.cpp \
+    Dialoge/dialog_bohrer.cpp \
+    Dialoge/dialog_fraeser.cpp \
+    Dialoge/dialog_saege.cpp \
+    Klassen/wst/fraueseraufruf.cpp \
+    Klassen/geo/bogen.cpp \
+    Klassen/geo/punkt3d.cpp \
+    Klassen/geo/strecke.cpp \
+    Klassen/wst/fraesergerade.cpp \
+    Klassen/geo/darstellungsatribute.cpp \
+    Klassen/geo/geofunktionen.cpp \
+    Klassen/geo/punkt2d.cpp \
+    Klassen/wst/fraeserbogen.cpp \
+    Klassen/wst/bohrraster.cpp \
+    Klassen/wst/ganx_gruppen.cpp \
+    Dialoge/dialog_stdnamen.cpp \
+    Dialoge/dialog_stdname.cpp
 
 HEADERS  += mainwindow.h \
-    allgemKlassen/formel.h \
-    allgemKlassen/text_zeilenweise.h \
-    allgemKlassen/wenndannsonst.h \
-    eigeneFunktionen/myfunktion.h \
-    eigeneFunktionen/runden.h \
-    eigeneFunktionen/text.h \
-    eigeneFunktionen/umwandeln.h \
+    Klassen/formel.h \
+    Klassen/geo/defines_geometrie.h \
+    Klassen/geo/geometrietext.h \
+    Klassen/geo/kreis.h \
+    Klassen/geo/makro_geometrie.h \
+    Klassen/geo/rechteck3d.h \
+    Klassen/geo/wuerfel.h \
+    Klassen/geo/zylinder.h \
+    Klassen/text_zeilenweise.h \
+    Klassen/wenndannsonst.h \
+    Funktionen/myfunktion.h \
+    Funktionen/runden.h \
+    Funktionen/text.h \
+    Funktionen/umwandeln.h \
+    Struncts/punkt.h \
     ToDo.h \
-    Definitionen/dateinamen.h \
-    Definitionen/werkzeug.h \
-    KlassenWst/werkstueck.h \
-    KlassenWst/werkstuecke.h \
-    Definitionen/def_fmc.h \
-    KlassenWst/bohrung.h \
-    Definitionen/def_bearbeitungen.h \
-    KlassenWst/rechtecktasche.h \
-    KlassenWst/nut.h \
-    Definitionen/def_ganx.h \
-    prgpfade.h \
-    werkzeugmagazin.h \
-    dialog_wkz.h \
-    dialog_bohrer.h \
-    dialog_fraeser.h \
-    dialog_saege.h \
-    KlassenWst/fraueseraufruf.h \
-    geometrie/bogen.h \
-    geometrie/punkt3d.h \
-    geometrie/strecke.h \
-    KlassenWst/fraesergerade.h \
-    geometrie/darstellungsatribute.h \
-    geometrie/geometrie.h \
-    Definitionen/def_geometrie.h \
-    geometrie/makro_geometrie.h \
-    geometrie/punkt2d.h \
-    KlassenWst/fraeserbogen.h \
-    KlassenWst/bohrraster.h \
-    KlassenWst/ganx_gruppen.h \
-    Definitionen/def_vw.h \
-    dialog_stdnamen.h \
-    dialog_stdname.h
+    Defines/dateinamen.h \
+    Defines//werkzeug.h \
+    Klassen/wst/werkstueck.h \
+    Klassen/wst/werkstuecke.h \
+    Defines//def_fmc.h \
+    Klassen/wst/bohrung.h \
+    Defines/def_bearbeitungen.h \
+    Klassen/wst/rechtecktasche.h \
+    Klassen/wst/nut.h \
+    Defines//def_ganx.h \
+    Klassen/prgpfade.h \
+    Klassen/werkzeugmagazin.h \
+    Dialoge/dialog_wkz.h \
+    Dialoge/dialog_bohrer.h \
+    Dialoge/dialog_fraeser.h \
+    Dialoge/dialog_saege.h \
+    Klassen/wst/fraueseraufruf.h \
+    Klassen/geo/bogen.h \
+    Klassen/geo/punkt3d.h \
+    Klassen/geo/strecke.h \
+    Klassen/wst/fraesergerade.h \
+    Klassen/geo/darstellungsatribute.h \
+    Klassen/geo/geofunktionen.h \
+    Klassen/geo/punkt2d.h \
+    Klassen/wst/fraeserbogen.h \
+    Klassen/wst/bohrraster.h \
+    Klassen/wst/ganx_gruppen.h \
+    Defines//def_vw.h \
+    Dialoge/dialog_stdnamen.h \
+    Dialoge/dialog_stdname.h
 
 FORMS    += mainwindow.ui \
-    dialog_wkz.ui \
-    dialog_bohrer.ui \
-    dialog_fraeser.ui \
-    dialog_saege.ui \
-    dialog_stdnamen.ui \
-    dialog_stdname.ui
+    Dialoge/dialog_wkz.ui \
+    Dialoge/dialog_bohrer.ui \
+    Dialoge/dialog_fraeser.ui \
+    Dialoge/dialog_saege.ui \
+    Dialoge/dialog_stdnamen.ui \
+    Dialoge/dialog_stdname.ui
 
 DISTFILES += \
+    Klassen/geo/makro_geometrie.h~ \
+    Struncts/punkt.h~ \
     postprozessor.ico
 
 RC_ICONS = postprozessor.ico

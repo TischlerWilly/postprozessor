@@ -555,7 +555,7 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
         }else
         {
             wkz_magazin_ganx = werkzeugmagazin;
-            file.write(werkzeugmagazin.get_text().toUtf8());
+            file.write(werkzeugmagazin.text().toUtf8());
         }
         file.close();
     }else if(fenstertitel.contains("FMC"))
@@ -571,7 +571,7 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
         }else
         {
             wkz_magazin_fmc = werkzeugmagazin;
-            file.write(werkzeugmagazin.get_text().toUtf8());
+            file.write(werkzeugmagazin.text().toUtf8());
         }
         file.close();
     }else if(fenstertitel.contains("GGF"))
@@ -587,7 +587,7 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
         }else
         {
             wkz_magazin_ggf = werkzeugmagazin;
-            file.write(werkzeugmagazin.get_text().toUtf8());
+            file.write(werkzeugmagazin.text().toUtf8());
         }
         file.close();
     }
@@ -617,7 +617,7 @@ void MainWindow::getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_
             zeile += namen_std_nach.zeile(i);
             namen.zeile_anhaengen(zeile);
         }
-        file.write(namen.get_text().toUtf8());
+        file.write(namen.text().toUtf8());
     }
     file.close();
 }
@@ -952,7 +952,7 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
     }
     dateien_erfassen();
     QString vortext = int_to_qstring(dateien_alle.zeilenanzahl()) + " Dateien gefunden:\n";
-    vortext += dateien_alle.get_text();
+    vortext += dateien_alle.text();
     ui->plainTextEdit_eldungen->setPlainText(vortext);
     ui->plainTextEdit_zusatzinfo->clear();
 
