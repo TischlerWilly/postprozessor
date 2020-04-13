@@ -29,36 +29,36 @@ public:
     void set_afb(QString ausfuehrbedingung);
     void set_wkznum(QString nummer);
 
-    double get_dm();
-    QString get_dm_qstring();
-    double get_tiefe();
-    QString get_tiefe_qstring();
-    double get_x();
-    QString get_x_qstring();
-    double get_y();
-    QString get_y_qstring();
-    double get_z();
-    QString get_z_qstring();
-    double get_zustellmass();
-    QString get_zustellmass_qstring();
-    QString get_bezug();
-    QString get_afb();
-    QString get_wkznum();
+    double  dm();
+    QString dm_qstring();
+    double  tiefe();
+    QString tiefe_qstring();
+    double  x();
+    QString x_qstring();
+    double  y();
+    QString y_qstring();
+    double  z();
+    QString z_qstring();
+    double  zustellmass();
+    QString zustellmass_qstring();
+    QString bezug();
+    QString afb();
+    QString wkznum();
 
     QString text();
     void set_text(QString text);
 
 
 protected:
-    double durchmesser;
-    double tiefe;
-    double pos_x;
-    double pos_y;
-    double pos_z;
-    QString bezug;
-    QString afb;
-    double zustellmass;
-    QString werkzeugnummer;
+    double Durchmesser;
+    double Tiefe;
+    double Pos_x;
+    double Pos_y;
+    double Pos_z;
+    QString Bezug;
+    QString Afb;
+    double Zustellmass;
+    QString Werkzeugnummer;
 
     void setup();
 

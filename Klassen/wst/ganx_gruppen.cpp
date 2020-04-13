@@ -8,30 +8,30 @@ ganx_Gruppen::ganx_Gruppen()
 void ganx_Gruppen::setup()
 {
     clear();
-    gruppenzeile.set_trennzeichen('\t');
+    Gruppenzeile.set_trennzeichen('\t');
 }
 
 void ganx_Gruppen::clear()
 {
-    gruppen.clear();
-    gruppenzeile.clear();
+    Gruppen.clear();
+    Gruppenzeile.clear();
 }
 
 void ganx_Gruppen::neue_gruppe(QString bezugsflaeche)
 {
-    gruppenzeile.clear();
-    gruppenzeile.zeile_anhaengen(bezugsflaeche);
+    Gruppenzeile.clear();
+    Gruppenzeile.zeile_anhaengen(bezugsflaeche);
     //ggf weitere Parameter anhängen
-    gruppen.zeile_anhaengen(gruppenzeile.text());
+    Gruppen.zeile_anhaengen(Gruppenzeile.text());
 }
 
-QString ganx_Gruppen::get_gruppen()
+QString ganx_Gruppen::gruppen()
 {
     QString msg;
 
-    for(uint i=1; i<=gruppen.zeilenanzahl() ;i++)
+    for(uint i=1; i<=Gruppen.zeilenanzahl() ;i++)
     {
-        gruppenzeile.set_text(gruppen.zeile(i));
+        Gruppenzeile.set_text(Gruppen.zeile(i));
 
         msg += "  <CycleGroups>";
         msg += "\n";
@@ -54,7 +54,7 @@ QString ganx_Gruppen::get_gruppen()
         msg += "\n";
         //-------------------------------
         msg += "    <Plane>";
-        msg += gruppenzeile.zeile(1);       //Bezugsfläche
+        msg += Gruppenzeile.zeile(1);       //Bezugsfläche
         msg += "</Plane>";
         msg += "\n";
         //-------------------------------
@@ -75,13 +75,13 @@ QString ganx_Gruppen::get_gruppen()
     return msg;
 }
 
-QString ganx_Gruppen::get_letzten_gruppennamen()
+QString ganx_Gruppen::letzten_gruppennamen()
 {
     QString msg;
 
     //-------------------------------
     msg += "Gruppe";
-    msg += double_to_qstring(gruppen.zeilenanzahl());
+    msg += double_to_qstring(Gruppen.zeilenanzahl());
     //-------------------------------
 
     return msg;

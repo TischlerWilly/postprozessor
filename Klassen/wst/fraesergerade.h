@@ -31,39 +31,39 @@ public:
 
     inline void set_startpunkt(punkt3d p)
     {
-        startpunkt = p;
+        Startpunkt = p;
     }
     inline void set_endpunkt(punkt3d p)
     {
-        endpunkt = p;
+        Endpunkt = p;
     }
 
-    double get_xs();
-    QString get_xs_qstring();
-    double get_xe();
-    QString get_xe_qstring();
-    double get_ys();
-    QString get_ys_qstring();
-    double get_ye();
-    QString get_ye_qstring();
-    double get_zs();
-    QString get_zs_qstring();
-    double get_ze();
-    QString get_ze_qstring();
-    punkt3d get_sp();
-    punkt3d get_ep();
-    double get_laenge_2d();
-    QString get_bezug();
-    QString get_afb();
+    double  xs();
+    QString xs_qstring();
+    double  xe();
+    QString xe_qstring();
+    double  ys();
+    QString ys_qstring();
+    double  ye();
+    QString ye_qstring();
+    double  zs();
+    QString zs_qstring();
+    double  ze();
+    QString ze_qstring();
+    punkt3d sp();
+    punkt3d ep();
+    double  laenge_2d();
+    QString bezug();
+    QString afb();
 
     QString text();
     void set_text(QString text);
-    strecke get_strecke();
+    strecke strecke_();
 
 private:
-    punkt3d startpunkt, endpunkt; //das Z-Maß ist die Frästiefe bezogen auf die WST-Oberfläche
-    QString afb;
-    QString bezug;
+    punkt3d Startpunkt, Endpunkt; //das Z-Maß ist die Frästiefe bezogen auf die WST-Oberfläche
+    QString Afb;
+    QString Bezug;
 
     void setup();
 

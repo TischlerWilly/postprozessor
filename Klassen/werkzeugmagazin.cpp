@@ -1,4 +1,4 @@
-#include "werkzeugmagazin.h"
+#include "werkzeugMagazin.h"
 
 werkzeugmagazin::werkzeugmagazin()
 {
@@ -6,10 +6,10 @@ werkzeugmagazin::werkzeugmagazin()
 }
 werkzeugmagazin::werkzeugmagazin(text_zeilenweise neues_magazin)
 {
-    magazin = neues_magazin;
+    Magazin = neues_magazin;
 }
 
-QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
+QString werkzeugmagazin::wkznummer(QString wkz_typ, \
                                        double dm, \
                                        double bearbeitungstiefe, \
                                        double werkstueckdicke, \
@@ -20,9 +20,9 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
     zeile.set_trennzeichen('\t');
     double wkz_dm_tmp = 0;
 
-    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
     {
-        zeile.set_text(magazin.zeile(i));
+        zeile.set_text(Magazin.zeile(i));
         if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
         {
             if(zeile.zeile(7).toDouble() == dm)//Durchmesser aus Import == gesuchter DM?
@@ -84,9 +84,9 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
     if(returntext.isEmpty())
     {
         wkz_dm_tmp = 0;
-        for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+        for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
         {
-            zeile.set_text(magazin.zeile(i));
+            zeile.set_text(Magazin.zeile(i));
             if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
             {
                 if(zeile.zeile(7).toDouble() == dm)//Durchmesser aus Import == gesuchter DM?
@@ -109,9 +109,9 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
     if(returntext.isEmpty())
     {
         wkz_dm_tmp = 0;
-        for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+        for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
         {
-            zeile.set_text(magazin.zeile(i));
+            zeile.set_text(Magazin.zeile(i));
             if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
             {
                 double wkz_dm = zeile.zeile(3).toDouble();
@@ -129,15 +129,15 @@ QString werkzeugmagazin::get_wkznummer(QString wkz_typ, \
 
     return returntext;
 }
-QString werkzeugmagazin::get_wkznummer_von_alias(QString alias)
+QString werkzeugmagazin::wkznummer_von_alias(QString alias)
 {
     QString returntext = "";
     text_zeilenweise zeile;
     zeile.set_trennzeichen('\t');
 
-    for(uint i = 2; i<magazin.zeilenanzahl() ;i++)//i<.. und nicht i<=... weil letzte Zeile nur \n enthällt
+    for(uint i = 2; i<Magazin.zeilenanzahl() ;i++)//i<.. und nicht i<=... weil letzte Zeile nur \n enthällt
     {
-        zeile.set_text(magazin.zeile(i));
+        zeile.set_text(Magazin.zeile(i));
 
         if(zeile.zeile(11) == alias)
         {
@@ -151,15 +151,15 @@ QString werkzeugmagazin::get_wkznummer_von_alias(QString alias)
     return returntext;
 }
 
-QString werkzeugmagazin::get_dm(QString wkz_nr)
+QString werkzeugmagazin::dm(QString wkz_nr)
 {
     QString returntext = "";
     text_zeilenweise zeile;
     zeile.set_trennzeichen('\t');
 
-    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
     {
-        zeile.set_text(magazin.zeile(i));
+        zeile.set_text(Magazin.zeile(i));
 
         if(zeile.zeile(2) == wkz_nr)
         {
@@ -170,15 +170,15 @@ QString werkzeugmagazin::get_dm(QString wkz_nr)
     returntext.replace(",",".");
     return returntext;
 }
-QString werkzeugmagazin::get_vorschub(QString wkz_nr)
+QString werkzeugmagazin::vorschub(QString wkz_nr)
 {
     QString returntext = "";
     text_zeilenweise zeile;
     zeile.set_trennzeichen('\t');
 
-    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
     {
-        zeile.set_text(magazin.zeile(i));
+        zeile.set_text(Magazin.zeile(i));
 
         if(zeile.zeile(2) == wkz_nr)
         {
@@ -189,15 +189,15 @@ QString werkzeugmagazin::get_vorschub(QString wkz_nr)
     returntext.replace(",",".");
     return returntext;
 }
-QString werkzeugmagazin::get_zustellmass(QString wkz_nr)
+QString werkzeugmagazin::zustellmass(QString wkz_nr)
 {
     QString returntext = "";
     text_zeilenweise zeile;
     zeile.set_trennzeichen('\t');
 
-    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
     {
-        zeile.set_text(magazin.zeile(i));
+        zeile.set_text(Magazin.zeile(i));
 
         if(zeile.zeile(2) == wkz_nr)
         {
@@ -208,15 +208,15 @@ QString werkzeugmagazin::get_zustellmass(QString wkz_nr)
     returntext.replace(",",".");
     return returntext;
 }
-QString werkzeugmagazin::get_zustellmass_min(QString wkz_nr)
+QString werkzeugmagazin::zustellmass_min(QString wkz_nr)
 {
     QString returntext = "";
     text_zeilenweise zeile;
     zeile.set_trennzeichen('\t');
 
-    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
     {
-        zeile.set_text(magazin.zeile(i));
+        zeile.set_text(Magazin.zeile(i));
 
         if(zeile.zeile(2) == wkz_nr)
         {
@@ -227,7 +227,7 @@ QString werkzeugmagazin::get_zustellmass_min(QString wkz_nr)
     returntext.replace(",",".");
     return returntext;
 }
-QString werkzeugmagazin::get_tabellenkopf()
+QString werkzeugmagazin::tabellenkopf()
 {
     QString tmp;
 
@@ -264,15 +264,15 @@ QString werkzeugmagazin::get_tabellenkopf()
 
     return tmp;
 }
-QString werkzeugmagazin::get_saegeblattbreite(QString wkz_nr)
+QString werkzeugmagazin::saegeblattbreite(QString wkz_nr)
 {
     QString returntext = "";
     text_zeilenweise zeile;
     zeile.set_trennzeichen('\t');
 
-    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
     {
-        zeile.set_text(magazin.zeile(i));
+        zeile.set_text(Magazin.zeile(i));
 
         if(zeile.zeile(2) == wkz_nr)
         {
@@ -283,15 +283,15 @@ QString werkzeugmagazin::get_saegeblattbreite(QString wkz_nr)
     returntext.replace(",",".");
     return returntext;
 }
-QString werkzeugmagazin::get_nutzlaenge(QString wkz_nr)
+QString werkzeugmagazin::nutzlaenge(QString wkz_nr)
 {
     QString returntext = "";
     text_zeilenweise zeile;
     zeile.set_trennzeichen('\t');
 
-    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
     {
-        zeile.set_text(magazin.zeile(i));
+        zeile.set_text(Magazin.zeile(i));
 
         if(zeile.zeile(2) == wkz_nr)
         {
@@ -302,15 +302,15 @@ QString werkzeugmagazin::get_nutzlaenge(QString wkz_nr)
     returntext.replace(",",".");
     return returntext;
 }
-QString werkzeugmagazin::get_spiegelwkz(QString wkz_nr)
+QString werkzeugmagazin::spiegelwkz(QString wkz_nr)
 {
     QString returntext = "";
     text_zeilenweise zeile;
     zeile.set_trennzeichen('\t');
 
-    for(uint i = 2; i<=magazin.zeilenanzahl() ;i++)
+    for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
     {
-        zeile.set_text(magazin.zeile(i));
+        zeile.set_text(Magazin.zeile(i));
 
         if(zeile.zeile(2) == wkz_nr)
         {
@@ -321,15 +321,15 @@ QString werkzeugmagazin::get_spiegelwkz(QString wkz_nr)
     return returntext;
 }
 
-text_zeilenweise werkzeugmagazin::get_alle_bodm(QString hori_oder_vert)
+text_zeilenweise werkzeugmagazin::alle_bodm(QString hori_oder_vert)
 {
     text_zeilenweise tz;
 
 
-    for(uint i=2; i<=magazin.zeilenanzahl() ;i++)//Zeile 1 ist Tabellenkopf
+    for(uint i=2; i<=Magazin.zeilenanzahl() ;i++)//Zeile 1 ist Tabellenkopf
     {
         text_zeilenweise werkzeug;
-        werkzeug.set_text(magazin.zeile(i));
+        werkzeug.set_text(Magazin.zeile(i));
 
         text_zeilenweise parameter;
         parameter.set_trennzeichen('\t');

@@ -30,6 +30,7 @@ public:
     werkstueck();
     werkstueck(QString neuer_name);
 
+    //--------------------------------------------------set_xy:
     void set_laenge(double l);
     void set_laenge(QString l);
     void set_breite(double b);
@@ -41,122 +42,123 @@ public:
     void set_kante_hi(QString artiklenummer);
     void set_kante_li(QString artiklenummer);
     void set_kante_re(QString artiklenummer);
-    QString get_kante_vo(QString drewi = "0");
-    QString get_kante_hi(QString drewi = "0");
-    QString get_kante_li(QString drewi = "0");
-    QString get_kante_re(QString drewi = "0");
-    QString get_kante_vo_ganx(QString drewi = "0");
-    QString get_kante_hi_ganx(QString drewi = "0");
-    QString get_kante_li_ganx(QString drewi = "0");
-    QString get_kante_re_ganx(QString drewi = "0");
 
     inline void set_name(QString neuer_name)
     {
-        name = neuer_name;
+        Name = neuer_name;
     }
 
-    inline double get_laenge() const
-    {
-        return laenge;
-    }
-    inline QString get_laenge_qstring() const
-    {
-        return double_to_qstring(laenge);
-    }
-    inline double get_breite() const
-    {
-        return breite;
-    }
-    inline QString get_breite_qstring() const
-    {
-        return double_to_qstring(breite);
-    }
-    inline double get_dicke() const
-    {
-        return dicke;
-    }
-    inline QString get_dicke_qstring() const
-    {
-        return double_to_qstring(dicke);
-    }
-    inline QString get_name()
-    {
-        return name;
-    } 
-    inline text_zeilenweise get_bearb()
-    {
-        return bearbeitungen;
-    }
-
-    QString get_fmc(text_zeilenweise wkzmagazin, QString& info, \
+    //--------------------------------------------------get_xy:
+    QString kante_vo(QString drewi = "0");
+    QString kante_hi(QString drewi = "0");
+    QString kante_li(QString drewi = "0");
+    QString kante_re(QString drewi = "0");
+    QString kante_vo_ganx(QString drewi = "0");
+    QString kante_hi_ganx(QString drewi = "0");
+    QString kante_li_ganx(QString drewi = "0");
+    QString kante_re_ganx(QString drewi = "0");
+    QString cad_fehler();
+    QString fmc(text_zeilenweise wkzmagazin, QString& info, \
                     QString drehwinkel = "0", QString zust_fkon = "orgi",\
                     bool formartierungen_aufbrechen = false,\
                     bool fkon_kantenschonend = false);
-    QString get_ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
-    QString get_ggf(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
-    QString get_eigenses_format(QString drehwinkel, QString ausgabeformat, \
+    QString ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
+    QString ggf(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
+    QString eigenses_format(QString drehwinkel, QString ausgabeformat, \
                                 text_zeilenweise wkzmagazin,\
                                 bool formartierungen_aufbrechen = false,\
                                 bool fkon_kantenschonend = false);
 
-    QString suche_cad_fehler();
+    inline double   laenge() const
+    {
+        return Laenge;
+    }
+    inline QString  laenge_qstring() const
+    {
+        return double_to_qstring(Laenge);
+    }
+    inline double   breite() const
+    {
+        return Breite;
+    }
+    inline QString  breite_qstring() const
+    {
+        return double_to_qstring(Breite);
+    }
+    inline double   dicke() const
+    {
+        return Dicke;
+    }
+    inline QString  dicke_qstring() const
+    {
+        return double_to_qstring(Dicke);
+    }
+    inline QString  name()
+    {
+        return Name;
+    }
+    inline text_zeilenweise bearb()
+    {
+        return Bearbeitungen;
+    }
+
+    //--------------------------------------------------Manipulationen:
+
+    //--------------------------------------------------
 
 private:
     //Variabeln:
-    double laenge;  //X-Wert
-    double breite;  //Y-Wert
-    double dicke;   //Z-Wert
-    text_zeilenweise bearbeitungen;
-    QString name;
-    double schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
-    QString kante_vo; //Kante an X
-    QString kante_hi;
-    QString kante_li; //Kante an Y
-    QString kante_re;
+    double Laenge;  //X-Wert
+    double Breite;  //Y-Wert
+    double Dicke;   //Z-Wert
+    text_zeilenweise Bearbeitungen;
+    QString Name;
+    double Schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
+    QString Kante_vo; //Kante an X
+    QString Kante_hi;
+    QString Kante_li; //Kante an Y
+    QString Kante_re;
 
     //Funktionen:
+    //--------------------------------------------------set_xy:
 
-
+    //--------------------------------------------------get_xy:
     QString warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
     QString warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
     QString warnungen_ggf(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
     QString fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbeitung);
-    QString get_bearb_menschlich_lesbar(text_zeilenweise bearbeitung);
+    QString bearb_menschlich_lesbar(text_zeilenweise bearbeitung);
+    QString fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
+                          double tmp_l, double tmp_b, QString zust_fkon,\
+                          QString drewi, bool formartierungen_aufbrechen,\
+                          bool fkon_kantenschonend);
+    QString ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
+                           double tmp_l, double tmp_b);
+    QString ggf_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
+                          double tmp_l, double tmp_b);
+    QString eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
+                            QString ausgabeformat, text_zeilenweise wkzmagazin,\
+                            bool formartierungen_aufbrechen,\
+                            bool fkon_kantenschonend);
+    QString kommentar_fmc(QString kom);
+    QString kommentar_ggf(QString kom);
+    QString fmc_kommentar_gute_seite(text_zeilenweise bearb);
+    bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
 
+    //--------------------------------------------------Manipulationen:
     void bearb_sortieren();
     text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
     text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
-
     text_zeilenweise rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
     text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
-
     text_zeilenweise formartierung_zu_einzelfkon(text_zeilenweise bearb,double tmp_l, double tmp_b);
     text_zeilenweise kurze_an_ab_geraden(text_zeilenweise bearb, text_zeilenweise wkzmagazin);
     text_zeilenweise dubosplitten(text_zeilenweise bearb, text_zeilenweise wkzmagazin, double wstdicke);
     text_zeilenweise fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
-
-    QString get_fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
-                              double tmp_l, double tmp_b, QString zust_fkon,\
-                              QString drewi, bool formartierungen_aufbrechen,\
-                              bool fkon_kantenschonend);
-    QString get_ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
-                               double tmp_l, double tmp_b);
-    QString get_ggf_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
-                               double tmp_l, double tmp_b);
-    QString get_eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
-                                QString ausgabeformat, text_zeilenweise wkzmagazin,\
-                                bool formartierungen_aufbrechen,\
-                                bool fkon_kantenschonend);
-
-    QString kommentar_fmc(QString kom);
-    QString kommentar_ggf(QString kom);
-    QString fmc_kommentar_gute_seite(text_zeilenweise bearb);
-
-    bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
-    void fraesergeraden_zusammenfassen();
     void hbemiduebeltiefe();
+    void fraesergeraden_zusammenfassen();
 
-
+    //--------------------------------------------------
 
 };
 

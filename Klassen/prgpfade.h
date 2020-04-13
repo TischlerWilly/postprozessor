@@ -9,31 +9,31 @@ class prgpfade
 public:
     prgpfade();
     void ordner_erstellen();
-    QString get_path_prg();
-    QString get_path_user();
-    QString get_path_inifile();
-    QString get_path_stdNamen();
-    QString get_path_wkz_fmc();
-    QString get_path_wkz_ganx();
-    QString get_path_wkz_ggf();
+    QString path_prg();
+    QString path_user();
+    QString path_inifile();
+    QString path_stdNamen();
+    QString path_wkz_fmc();
+    QString path_wkz_ganx();
+    QString path_wkz_ggf();
 
-    QString get_name_inifile();
-    QString get_name_stdNamen();
-    QString get_name_wkz_fmc();
-    QString get_name_wkz_ganx();
-    QString get_name_wkz_ggf();
+    QString name_inifile();
+    QString name_stdNamen();
+    QString name_wkz_fmc();
+    QString name_wkz_ganx();
+    QString name_wkz_ggf();
 
 private:
     //Ordner:
 
     //ini-Dateien:
-    QString inifile;
-    QString stdNamen;
+    QString Inifile;
+    QString StdNamen;
 
     //WKZ-Dateien:
-    QString wkz_fmc;
-    QString wkz_ganx;
-    QString wkz_ggf;
+    QString Wkz_fmc;
+    QString Wkz_ganx;
+    QString Wkz_ggf;
 
 };
 

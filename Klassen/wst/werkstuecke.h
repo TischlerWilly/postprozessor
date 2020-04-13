@@ -18,44 +18,58 @@ class werkstuecke
 public:
     werkstuecke();
 
-    bool ist_bekannt(QString Werkstueckname);
+    //--------------------------------------------------set_xy:
     bool neu(QString Werkstueckname, QString Quellformat);
-    void clear();
     bool import_fmc_oberseite(QString Werkstueckname, QString importtext);
     bool import_fmc_unterseite(QString Werkstueckname, QString importtext);
-    inline uint anzahl()
-    {
-        return namen.zeilenanzahl();
-    }
-    void stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
     void set_fkon_gerade_laenge(double wert);
     void set_kurze_geraden_importieren(bool wert);
 
-    werkstueck get_wst(uint index);
-    QString get_name(uint index);
-    inline QString get_namen()
+    //--------------------------------------------------get_xy:
+    bool        ist_bekannt(QString Werkstueckname);
+    werkstueck  wst(uint index);
+    QString     name(uint index);
+    QString     cad_fehler();
+
+    inline uint             anzahl()
     {
-        return namen.text();
+        return Namen.zeilenanzahl();
     }
-    inline text_zeilenweise get_namen_tz()
+    inline QString          namen()
     {
-        return namen;
+        return Namen.text();
     }
-    QString suche_cad_fehler();
+    inline text_zeilenweise namen_tz()
+    {
+        return Namen;
+    }
+
+    //--------------------------------------------------Manipulationen:
+    void clear();
+    void stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
+
+    //--------------------------------------------------
 
 private:
     //Variabeln:
-    text_zeilenweise namen;         //namen der Wst
-    text_zeilenweise quellformate;  //aus welchem Dateiformat wurde das Wst eingelesen
-    QVector<werkstueck> wste;       //hier werden alle Werkstücke gespeichert
-    QString var_einsetzen(werkstueck w, QString formel);
-    double min_fkon_gerade_laenge;  //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
-    bool kurze_geraden_import;
+    text_zeilenweise    Namen;        //namen der Wst
+    text_zeilenweise    Quellformate; //aus welchem Dateiformat wurde das Wst eingelesen
+    QVector<werkstueck> Wste;         //hier werden alle Werkstücke gespeichert
+    double              Min_fkon_gerade_laenge;  //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
+    bool                Kurze_geraden_import;
 
     //Funktionen:
-    uint get_index(QString Werkstueckname);
+    //--------------------------------------------------set_xy:
+
+    //--------------------------------------------------get_xy:
+    uint    index(QString Werkstueckname);
     QString wert_nach_istgleich(QString text);
-    bool ist_ziffer(const QChar zeichen);
+    bool    ist_ziffer(const QChar zeichen);
+
+    //--------------------------------------------------Manipulationen:
+    QString var_einsetzen(werkstueck w, QString formel);
+
+    //--------------------------------------------------
 
 };
 

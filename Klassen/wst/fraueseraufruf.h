@@ -27,32 +27,32 @@ public:
     void set_radkor(QString kor);
     void set_wkznum(QString nummer);
 
-    double get_x();
-    QString get_x_qstring();
-    double get_y();
-    QString get_y_qstring();
-    double get_z();
-    QString get_z_qstring();
-    double get_tiefe();
-    QString get_tiefe_qstring();
-    QString get_bezug();
-    QString get_afb();
-    QString get_radkor();
-    QString get_wkznum();
-    punkt3d get_pos_vertikal();
+    double  x();
+    QString x_qstring();
+    double  y();
+    QString y_qstring();
+    double  z();
+    QString z_qstring();
+    double  tiefe();
+    QString tiefe_qstring();
+    QString bezug();
+    QString afb();
+    QString radkor();
+    QString wkznum();
+    punkt3d pos_vertikal();
 
     QString text();
     void set_text(QString text);
 
 private:
-    double pos_x;
-    double pos_y;
-    double pos_z;   //für horizontale Fräseraufrufe
-    double tiefe;   //ist die Eintauchtiefe = Oberfläche-Wst bis gesamte Bahntiefe
-    QString bezug;
-    QString afb;
-    QString korrektur;
-    QString werkzeugnummer;
+    double Pos_x;
+    double Pos_y;
+    double Pos_z;   //für horizontale Fräseraufrufe
+    double Tiefe;   //ist die Eintauchtiefe = Oberfläche-Wst bis gesamte Bahntiefe
+    QString Bezug;
+    QString Afb;
+    QString Korrektur;
+    QString Werkzeugnummer;
 
     void setup();
 

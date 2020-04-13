@@ -13,167 +13,167 @@ fraesergerade::fraesergerade(QString text)
 
 void fraesergerade::setup()
 {
-    afb = "1";
-    bezug = WST_BEZUG_OBSEI;
+    Afb = "1";
+    Bezug = WST_BEZUG_OBSEI;
 }
 
 void fraesergerade::set_xs(double x)
 {
-    startpunkt.set_x(x);
+    Startpunkt.set_x(x);
 }
 void fraesergerade::set_xs(QString x)
 {
-    startpunkt.set_x(x);
+    Startpunkt.set_x(x);
 }
 void fraesergerade::set_xe(double x)
 {
-    endpunkt.set_x(x);
+    Endpunkt.set_x(x);
 }
 void fraesergerade::set_xe(QString x)
 {
-    endpunkt.set_x(x);
+    Endpunkt.set_x(x);
 }
 
 void fraesergerade::set_ys(double y)
 {
-    startpunkt.set_y(y);
+    Startpunkt.set_y(y);
 }
 void fraesergerade::set_ys(QString y)
 {
-    startpunkt.set_y(y);
+    Startpunkt.set_y(y);
 }
 void fraesergerade::set_ye(double y)
 {
-    endpunkt.set_y(y);
+    Endpunkt.set_y(y);
 }
 void fraesergerade::set_ye(QString y)
 {
-    endpunkt.set_y(y);
+    Endpunkt.set_y(y);
 }
 
 void fraesergerade::set_zs(double z)
 {
-    startpunkt.set_z(z);
+    Startpunkt.set_z(z);
 }
 void fraesergerade::set_zs(QString z)
 {
-    startpunkt.set_z(z);
+    Startpunkt.set_z(z);
 }
 void fraesergerade::set_ze(double z)
 {
-    endpunkt.set_z(z);
+    Endpunkt.set_z(z);
 }
 void fraesergerade::set_ze(QString z)
 {
-    endpunkt.set_z(z);
+    Endpunkt.set_z(z);
 }
 
-double fraesergerade::get_xs()
+double fraesergerade::xs()
 {
-    return startpunkt.x();
+    return Startpunkt.x();
 }
-QString fraesergerade::get_xs_qstring()
+QString fraesergerade::xs_qstring()
 {
-    return startpunkt.x_QString();
+    return Startpunkt.x_QString();
 }
-double fraesergerade::get_xe()
+double fraesergerade::xe()
 {
-    return endpunkt.x();
+    return Endpunkt.x();
 }
-QString fraesergerade::get_xe_qstring()
+QString fraesergerade::xe_qstring()
 {
-    return endpunkt.x_QString();
-}
-
-double fraesergerade::get_ys()
-{
-    return startpunkt.y();
-}
-QString fraesergerade::get_ys_qstring()
-{
-    return startpunkt.y_QString();
-}
-double fraesergerade::get_ye()
-{
-    return endpunkt.y();
-}
-QString fraesergerade::get_ye_qstring()
-{
-    return endpunkt.y_QString();
+    return Endpunkt.x_QString();
 }
 
-double fraesergerade::get_zs()
+double fraesergerade::ys()
 {
-    return startpunkt.z();
+    return Startpunkt.y();
 }
-QString fraesergerade::get_zs_qstring()
+QString fraesergerade::ys_qstring()
 {
-    return startpunkt.z_QString();
+    return Startpunkt.y_QString();
 }
-double fraesergerade::get_ze()
+double fraesergerade::ye()
 {
-    return endpunkt.z();
+    return Endpunkt.y();
 }
-QString fraesergerade::get_ze_qstring()
+QString fraesergerade::ye_qstring()
 {
-    return endpunkt.z_QString();
-}
-
-punkt3d fraesergerade::get_sp()
-{
-    return startpunkt;
-}
-punkt3d fraesergerade::get_ep()
-{
-    return endpunkt;
+    return Endpunkt.y_QString();
 }
 
-double fraesergerade::get_laenge_2d()
+double fraesergerade::zs()
+{
+    return Startpunkt.z();
+}
+QString fraesergerade::zs_qstring()
+{
+    return Startpunkt.z_QString();
+}
+double fraesergerade::ze()
+{
+    return Endpunkt.z();
+}
+QString fraesergerade::ze_qstring()
+{
+    return Endpunkt.z_QString();
+}
+
+punkt3d fraesergerade::sp()
+{
+    return Startpunkt;
+}
+punkt3d fraesergerade::ep()
+{
+    return Endpunkt;
+}
+
+double fraesergerade::laenge_2d()
 {
     strecke s;
-    s.set_start(startpunkt);
-    s.set_ende(endpunkt);
+    s.set_start(Startpunkt);
+    s.set_ende(Endpunkt);
 
     return s.laenge2d();
 }
 
 void fraesergerade::set_bezug(QString bezugsflaeche)
 {
-    bezug = bezugsflaeche;
+    Bezug = bezugsflaeche;
 }
 void fraesergerade::set_afb(QString ausfuehrbedingung)
 {
-    afb = ausfuehrbedingung;
+    Afb = ausfuehrbedingung;
 }
 
-QString fraesergerade::get_bezug()
+QString fraesergerade::bezug()
 {
-    return bezug;
+    return Bezug;
 }
-QString fraesergerade::get_afb()
+QString fraesergerade::afb()
 {
-    return afb;
+    return Afb;
 }
 
 QString fraesergerade::text()
 {
     QString msg = BEARBART_FRAESERGERADE;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_bezug();                      //Zeile 2
+    msg += bezug();                      //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_xs_qstring();                 //Zeile 3
+    msg += xs_qstring();                 //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_ys_qstring();                 //Zeile 4
+    msg += ys_qstring();                 //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_zs_qstring();                 //Zeile 5
+    msg += zs_qstring();                 //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_xe_qstring();                 //Zeile 6
+    msg += xe_qstring();                 //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_ye_qstring();                 //Zeile 7
+    msg += ye_qstring();                 //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_ze_qstring();                 //Zeile 8
+    msg += ze_qstring();                 //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_afb();                        //Zeile 9
+    msg += afb();                        //Zeile 9
 
     return msg;
 }
@@ -195,11 +195,11 @@ void fraesergerade::set_text(QString text)
     }
 }
 
-strecke fraesergerade::get_strecke()
+strecke fraesergerade::strecke_()
 {
     strecke s;
-    s.set_start(startpunkt);
-    s.set_ende(endpunkt);
+    s.set_start(Startpunkt);
+    s.set_ende(Endpunkt);
     return s;
 }
 

@@ -16,8 +16,8 @@ public:
     bohrraster();
     bohrraster(QString text);
 
-    QString get_text();
-    QString get_text_erste_bohrung();
+    QString text();
+    QString text_erste_bohrung();
     void set_text(QString text);
 
     void set_anz_x(uint a);
@@ -34,69 +34,69 @@ public:
     void set_raster_z(QString rastermas);
     void set_startbohrung(bohrung b);
 
-    inline uint get_anz_x()
+    inline uint     anz_x()
     {
-        return anz_x;
+        return Anz_x;
     }
-    inline QString get_anz_x_qstring()
+    inline QString  anz_x_qstring()
     {
-        return double_to_qstring(anz_x);
+        return double_to_qstring(Anz_x);
     }
-    inline uint get_anz_y()
+    inline uint     anz_y()
     {
-        return anz_y;
+        return Anz_y;
     }
-    inline QString get_anz_y_qstring()
+    inline QString  anz_y_qstring()
     {
-        return double_to_qstring(anz_y);
+        return double_to_qstring(Anz_y);
     }
-    inline uint get_anz_z()
+    inline uint     anz_z()
     {
-        return anz_z;
+        return Anz_z;
     }
-    inline QString get_anz_z_qstring()
+    inline QString  anz_z_qstring()
     {
-        return double_to_qstring(anz_z);
+        return double_to_qstring(Anz_z);
     }
-    inline double get_raster_x()
+    inline double   raster_x()
     {
-        return raster_x;
+        return Raster_x;
     }
-    inline QString get_raster_x_qstring()
+    inline QString  raster_x_qstring()
     {
-        return double_to_qstring(raster_x);
+        return double_to_qstring(Raster_x);
     }
-    inline double get_raster_y()
+    inline double   raster_y()
     {
-        return raster_y;
+        return Raster_y;
     }
-    inline QString get_raster_y_qstring()
+    inline QString  raster_y_qstring()
     {
-        return double_to_qstring(raster_y);
+        return double_to_qstring(Raster_y);
     }
-    inline double get_raster_z()
+    inline double   raster_z()
     {
-        return raster_z;
+        return Raster_z;
     }
-    inline QString get_raster_z_qstring()
+    inline QString  raster_z_qstring()
     {
-        return double_to_qstring(raster_z);
+        return double_to_qstring(Raster_z);
     }
 
     bool finde_bohrraster(text_zeilenweise *bearb, \
-                          QString bezug, double dm, \
+                          QString Bezug, double dm, \
                           double tiefe, QString rasterrichtung, \
                           double wst_L, double wst_B, double wst_D,\
                           uint mindanz, double rasterabst);
 
 private:
-    uint anz_x;
-    uint anz_y;
-    uint anz_z;
+    uint Anz_x;
+    uint Anz_y;
+    uint Anz_z;
 
-    double raster_x;
-    double raster_y;
-    double raster_z;
+    double Raster_x;
+    double Raster_y;
+    double Raster_z;
 
     void setup();
     void clear();

@@ -13,25 +13,25 @@ rechtecktasche::rechtecktasche(QString text)
 
 void rechtecktasche::setup()
 {
-    laenge = 0;
-    breite = 0;
-    tiefe = 0;
-    pos_x = 0;
-    pos_y = 0;
-    pos_z = 0;
-    drewinkel = 0;
-    eckenradius = 0;
-    zustellmass = 0;
-    ausraeumen = true;
-    bezug = WST_BEZUG_OBSEI;
-    afb = "1";
+    Laenge = 0;
+    Breite = 0;
+    Tiefe = 0;
+    Pos_x = 0;
+    Pos_y = 0;
+    Pos_z = 0;
+    Drewinkel = 0;
+    Eckenradius = 0;
+    Zustellmass = 0;
+    Ausraeumen = true;
+    Bezug = WST_BEZUG_OBSEI;
+    Afb = "1";
 }
 
 void rechtecktasche::set_laenge(double l)
 {
     if(l > 0)
     {
-        laenge = l;
+        Laenge = l;
     }
 }
 void rechtecktasche::set_laenge(QString l)
@@ -42,7 +42,7 @@ void rechtecktasche::set_breite(double b)
 {
     if(b > 0)
     {
-        breite = b;
+        Breite = b;
     }
 }
 void rechtecktasche::set_breite(QString b)
@@ -53,7 +53,7 @@ void rechtecktasche::set_tiefe(double t)
 {
     if(t > 0)
     {
-        tiefe = t;
+        Tiefe = t;
     }
 }
 void rechtecktasche::set_tiefe(QString t)
@@ -62,7 +62,7 @@ void rechtecktasche::set_tiefe(QString t)
 }
 void rechtecktasche::set_x(double x)
 {
-    pos_x = x;
+    Pos_x = x;
 }
 void rechtecktasche::set_x(QString x)
 {
@@ -70,7 +70,7 @@ void rechtecktasche::set_x(QString x)
 }
 void rechtecktasche::set_y(double y)
 {
-    pos_y = y;
+    Pos_y = y;
 }
 void rechtecktasche::set_y(QString y)
 {
@@ -78,7 +78,7 @@ void rechtecktasche::set_y(QString y)
 }
 void rechtecktasche::set_z(double z)
 {
-    pos_z = z;
+    Pos_z = z;
 }
 void rechtecktasche::set_z(QString z)
 {
@@ -90,7 +90,7 @@ void rechtecktasche::set_drewi(double wi)
     {
         wi = wi -180;
     }
-    drewinkel = wi;
+    Drewinkel = wi;
 }
 void rechtecktasche::set_drewi(QString wi)
 {
@@ -100,7 +100,7 @@ void rechtecktasche::set_rad(double r)
 {
     if(r >= 0)
     {
-        eckenradius = r;
+        Eckenradius = r;
     }
 }
 void rechtecktasche::set_rad(QString r)
@@ -111,7 +111,7 @@ void rechtecktasche::set_zustellmass(double mass)
 {
     if(mass >= 0)
     {
-        zustellmass = mass;
+        Zustellmass = mass;
     }
 }
 void rechtecktasche::set_zustellmass(QString mass)
@@ -122,10 +122,10 @@ void rechtecktasche::set_ausraeumen(double ja)
 {
     if(ja > 0)
     {
-        ausraeumen = true;
+        Ausraeumen = true;
     }else
     {
-        ausraeumen = false;
+        Ausraeumen = false;
     }
 }
 void rechtecktasche::set_ausraeumen(QString ja)
@@ -134,96 +134,96 @@ void rechtecktasche::set_ausraeumen(QString ja)
 }
 void rechtecktasche::set_bezug(QString bezugsflaeche)
 {
-    bezug = bezugsflaeche;
+    Bezug = bezugsflaeche;
 }
 void rechtecktasche::set_afb(QString ausfuehrbedingung)
 {
-    afb = ausfuehrbedingung;
+    Afb = ausfuehrbedingung;
 }
 void rechtecktasche::set_wkznum(QString nummer)
 {
-    werkzeugnummer = nummer;
+    Werkzeugnummer = nummer;
 }
 
-double rechtecktasche::get_laenge()
+double rechtecktasche::laenge()
 {
-    return laenge;
+    return Laenge;
 }
-QString rechtecktasche::get_laenge_qstring()
+QString rechtecktasche::laenge_qstring()
 {
-    return double_to_qstring(laenge);
+    return double_to_qstring(Laenge);
 }
-double rechtecktasche::get_breite()
+double rechtecktasche::breite()
 {
-    return breite;
+    return Breite;
 }
-QString rechtecktasche::get_breite_qstring()
+QString rechtecktasche::breite_qstring()
 {
-    return double_to_qstring(breite);
+    return double_to_qstring(Breite);
 }
-double rechtecktasche::get_tiefe()
+double rechtecktasche::tiefe()
 {
-    return tiefe;
+    return Tiefe;
 }
-QString rechtecktasche::get_tiefe_qstring()
+QString rechtecktasche::tiefe_qstring()
 {
-    return double_to_qstring(tiefe);
+    return double_to_qstring(Tiefe);
 }
-double rechtecktasche::get_x()
+double rechtecktasche::x()
 {
-    return pos_x;
+    return Pos_x;
 }
-QString rechtecktasche::get_x_qstring()
+QString rechtecktasche::x_qstring()
 {
-    return double_to_qstring(pos_x);
+    return double_to_qstring(Pos_x);
 }
-double rechtecktasche::get_y()
+double rechtecktasche::y()
 {
-    return pos_y;
+    return Pos_y;
 }
-QString rechtecktasche::get_y_qstring()
+QString rechtecktasche::y_qstring()
 {
-    return double_to_qstring(pos_y);
+    return double_to_qstring(Pos_y);
 }
-double rechtecktasche::get_z()
+double rechtecktasche::z()
 {
-    return pos_z;
+    return Pos_z;
 }
-QString rechtecktasche::get_z_qstring()
+QString rechtecktasche::z_qstring()
 {
-    return double_to_qstring(pos_z);
+    return double_to_qstring(Pos_z);
 }
-double rechtecktasche::get_drewi()
+double rechtecktasche::drewi()
 {
-    return drewinkel;
+    return Drewinkel;
 }
-QString rechtecktasche::get_drewi_qstring()
+QString rechtecktasche::drewi_qstring()
 {
-    return double_to_qstring(drewinkel);
+    return double_to_qstring(Drewinkel);
 }
-double rechtecktasche::get_rad()
+double rechtecktasche::rad()
 {
-    return eckenradius;
+    return Eckenradius;
 }
-QString rechtecktasche::get_rad_qstring()
+QString rechtecktasche::rad_qstring()
 {
-    return double_to_qstring(eckenradius);
+    return double_to_qstring(Eckenradius);
 }
-double rechtecktasche::get_zustellmass()
+double rechtecktasche::zustellmass()
 {
-    return zustellmass;
+    return Zustellmass;
 }
-QString rechtecktasche::get_zustellmass_qstring()
+QString rechtecktasche::zustellmass_qstring()
 {
-    return double_to_qstring(zustellmass);
+    return double_to_qstring(Zustellmass);
 }
-bool rechtecktasche::get_ausraeumen()
+bool rechtecktasche::ausraeumen()
 {
-    return ausraeumen;
+    return Ausraeumen;
 }
-QString rechtecktasche::get_ausraeumen_qstring()
+QString rechtecktasche::ausraeumen_qstring()
 {
-    if(ausraeumen == true)
+    if(Ausraeumen == true)
     {
         return "1";
     }else
@@ -231,48 +231,48 @@ QString rechtecktasche::get_ausraeumen_qstring()
         return "0";
     }
 }
-QString rechtecktasche::get_bezug()
+QString rechtecktasche::bezug()
 {
-    return bezug;
+    return Bezug;
 }
-QString rechtecktasche::get_afb()
+QString rechtecktasche::afb()
 {
-    return afb;
+    return Afb;
 }
-QString rechtecktasche::get_wkznum()
+QString rechtecktasche::wkznum()
 {
-    return werkzeugnummer;
+    return Werkzeugnummer;
 }
 
 QString rechtecktasche::text()
 {
     QString msg = BEARBART_RTA;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_bezug();             //Zeile 2
+    msg += bezug();             //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_laenge_qstring();    //Zeile 3
+    msg += laenge_qstring();    //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_breite_qstring();    //Zeile 4
+    msg += breite_qstring();    //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_tiefe_qstring();     //Zeile 5
+    msg += tiefe_qstring();     //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_x_qstring();         //Zeile 6
+    msg += x_qstring();         //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_y_qstring();         //Zeile 7
+    msg += y_qstring();         //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_z_qstring();         //Zeile 8
+    msg += z_qstring();         //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_drewi_qstring();     //Zeile 9
+    msg += drewi_qstring();     //Zeile 9
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_rad_qstring();       //Zeile 10
+    msg += rad_qstring();       //Zeile 10
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_ausraeumen_qstring();//Zeile 11
+    msg += ausraeumen_qstring();//Zeile 11
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_afb();               //Zeile 12
+    msg += afb();               //Zeile 12
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_zustellmass_qstring();//Zeile 13
+    msg += zustellmass_qstring();//Zeile 13
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_wkznum();            //Zeile 14
+    msg += wkznum();            //Zeile 14
 
     return msg;
 }

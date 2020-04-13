@@ -12,20 +12,20 @@ fraueseraufruf::fraueseraufruf(QString text)
 
 void fraueseraufruf::setup()
 {
-    pos_x = 0;
-    pos_y = 0;
-    pos_z = 0;
-    tiefe = 0;
-    bezug = WST_BEZUG_OBSEI;
-    afb = "1";
-    korrektur = "M";
-    werkzeugnummer = "123456789";
+    Pos_x = 0;
+    Pos_y = 0;
+    Pos_z = 0;
+    Tiefe = 0;
+    Bezug = WST_BEZUG_OBSEI;
+    Afb = "1";
+    Korrektur = "M";
+    Werkzeugnummer = "123456789";
 
 }
 
 void fraueseraufruf::set_x(double x)
 {
-    pos_x = x;
+    Pos_x = x;
 }
 void fraueseraufruf::set_x(QString x)
 {
@@ -33,7 +33,7 @@ void fraueseraufruf::set_x(QString x)
 }
 void fraueseraufruf::set_y(double y)
 {
-    pos_y = y;
+    Pos_y = y;
 }
 void fraueseraufruf::set_y(QString y)
 {
@@ -41,7 +41,7 @@ void fraueseraufruf::set_y(QString y)
 }
 void fraueseraufruf::set_z(double z)
 {
-    pos_z = z;
+    Pos_z = z;
 }
 void fraueseraufruf::set_z(QString z)
 {
@@ -49,7 +49,7 @@ void fraueseraufruf::set_z(QString z)
 }
 void fraueseraufruf::set_tiefe(double ti)
 {
-    tiefe = ti;
+    Tiefe = ti;
 }
 void fraueseraufruf::set_tiefe(QString ti)
 {
@@ -57,11 +57,11 @@ void fraueseraufruf::set_tiefe(QString ti)
 }
 void fraueseraufruf::set_bezug(QString bezugsflaeche)
 {
-    bezug = bezugsflaeche;
+    Bezug = bezugsflaeche;
 }
 void fraueseraufruf::set_afb(QString ausfuehrbedingung)
 {
-    afb = ausfuehrbedingung;
+    Afb = ausfuehrbedingung;
 }
 void fraueseraufruf::set_radkor(QString kor)
 {
@@ -69,69 +69,69 @@ void fraueseraufruf::set_radkor(QString kor)
        kor == FRKOR_M || \
        kor == FRKOR_R)
     {
-        korrektur = kor;
+        Korrektur = kor;
     }
 }
 void fraueseraufruf::set_wkznum(QString nummer)
 {
-    werkzeugnummer = nummer;
+    Werkzeugnummer = nummer;
 }
 
 //------------------------------------------------------------
-double fraueseraufruf::get_x()
+double fraueseraufruf::x()
 {
-    return pos_x;
+    return Pos_x;
 }
-QString fraueseraufruf::get_x_qstring()
+QString fraueseraufruf::x_qstring()
 {
-    return double_to_qstring(pos_x);
+    return double_to_qstring(Pos_x);
 }
-double fraueseraufruf::get_y()
+double fraueseraufruf::y()
 {
-    return pos_y;
+    return Pos_y;
 }
-QString fraueseraufruf::get_y_qstring()
+QString fraueseraufruf::y_qstring()
 {
-    return double_to_qstring(pos_y);
+    return double_to_qstring(Pos_y);
 }
-double fraueseraufruf::get_z()
+double fraueseraufruf::z()
 {
-    return pos_z;
+    return Pos_z;
 }
-QString fraueseraufruf::get_z_qstring()
+QString fraueseraufruf::z_qstring()
 {
-    return double_to_qstring(pos_z);
+    return double_to_qstring(Pos_z);
 }
-double fraueseraufruf::get_tiefe()
+double fraueseraufruf::tiefe()
 {
-    return tiefe;
+    return Tiefe;
 }
-QString fraueseraufruf::get_tiefe_qstring()
+QString fraueseraufruf::tiefe_qstring()
 {
-    return double_to_qstring(tiefe);
+    return double_to_qstring(Tiefe);
 }
-QString fraueseraufruf::get_bezug()
+QString fraueseraufruf::bezug()
 {
-    return bezug;
+    return Bezug;
 }
-QString fraueseraufruf::get_afb()
+QString fraueseraufruf::afb()
 {
-    return afb;
+    return Afb;
 }
-QString fraueseraufruf::get_radkor()
+QString fraueseraufruf::radkor()
 {
-    return korrektur;
+    return Korrektur;
 }
-QString fraueseraufruf::get_wkznum()
+QString fraueseraufruf::wkznum()
 {
-    return werkzeugnummer;
+    return Werkzeugnummer;
 }
-punkt3d fraueseraufruf::get_pos_vertikal()
+punkt3d fraueseraufruf::pos_vertikal()
 {
     punkt3d p;
-    p.set_x(pos_x);
-    p.set_y(pos_y);
-    p.set_z(tiefe);
+    p.set_x(Pos_x);
+    p.set_y(Pos_y);
+    p.set_z(Tiefe);
     return p;
 }
 
@@ -139,21 +139,21 @@ QString fraueseraufruf::text()
 {
     QString msg = BEARBART_FRAESERAUFRUF;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_bezug();                      //Zeile 2
+    msg += bezug();                      //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_x_qstring();                  //Zeile 3
+    msg += x_qstring();                  //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_y_qstring();                  //Zeile 4
+    msg += y_qstring();                  //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_z_qstring();                  //Zeile 5
+    msg += z_qstring();                  //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_tiefe_qstring();              //Zeile 6
+    msg += tiefe_qstring();              //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_radkor();                     //Zeile 7
+    msg += radkor();                     //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_wkznum();                     //Zeile 8
+    msg += wkznum();                     //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_afb();                        //Zeile 9
+    msg += afb();                        //Zeile 9
 
     return msg;
 }
