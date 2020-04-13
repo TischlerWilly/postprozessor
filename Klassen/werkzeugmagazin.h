@@ -38,25 +38,25 @@ public:
     werkzeugmagazin();
     werkzeugmagazin(text_zeilenweise neues_magazin);
 
-    QString get_wkznummer(QString wkz_typ, \
+    QString wkznummer(QString wkz_typ, \
                           double dm = 0, \
                           double bearbeitungstiefe = 0, \
                           double werkstueckdicke = 0, \
                           QString bezugskante = WST_BEZUG_OBSEI);
-    QString get_wkznummer_von_alias(QString alias);
-    QString get_dm(QString wkz_nr);
-    QString get_vorschub(QString wkz_nr);
-    QString get_zustellmass(QString wkz_nr);
-    QString get_zustellmass_min(QString wkz_nr);
-    QString get_tabellenkopf();
-    QString get_saegeblattbreite(QString wkz_nr);
-    QString get_nutzlaenge(QString wkz_nr);
-    text_zeilenweise get_alle_bodm(QString hori_oder_vert);
-    QString get_spiegelwkz(QString wkz_nr);
+    QString wkznummer_von_alias(QString alias);
+    QString dm(QString wkz_nr);
+    QString vorschub(QString wkz_nr);
+    QString zustellmass(QString wkz_nr);
+    QString zustellmass_min(QString wkz_nr);
+    QString tabellenkopf();
+    QString saegeblattbreite(QString wkz_nr);
+    QString nutzlaenge(QString wkz_nr);
+    text_zeilenweise alle_bodm(QString hori_oder_vert);
+    QString spiegelwkz(QString wkz_nr);
 
 
 private:
-    text_zeilenweise magazin;
+    text_zeilenweise Magazin;
 
 
 

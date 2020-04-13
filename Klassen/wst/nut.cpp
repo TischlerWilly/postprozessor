@@ -12,21 +12,21 @@ nut::nut(QString text)
 
 void nut::setup()
 {
-    tiefe = 0;
-    breite = 0;
-    pos_xs = 0;
-    pos_ys = 0;
-    pos_xe = 0;
-    pos_ye = 0;
-    bezug = WST_BEZUG_OBSEI;
-    afb = "1";
+    Tiefe = 0;
+    Breite = 0;
+    Pos_xs = 0;
+    Pos_ys = 0;
+    Pos_xe = 0;
+    Pos_ye = 0;
+    Bezug = WST_BEZUG_OBSEI;
+    Afb = "1";
 }
 
 void nut::set_tiefe(double ti)
 {
     if(ti > 0)
     {
-        tiefe = ti;
+        Tiefe = ti;
     }
 }
 void nut::set_tiefe(QString ti)
@@ -37,7 +37,7 @@ void nut::set_breite(double b)
 {
     if(b > 0)
     {
-        breite = b;
+        Breite = b;
     }
 }
 void nut::set_breite(QString b)
@@ -46,7 +46,7 @@ void nut::set_breite(QString b)
 }
 void nut::set_xs(double x)
 {
-    pos_xs = x;
+    Pos_xs = x;
 }
 void nut::set_xs(QString x)
 {
@@ -54,7 +54,7 @@ void nut::set_xs(QString x)
 }
 void nut::set_ys(double y)
 {
-    pos_ys = y;
+    Pos_ys = y;
 }
 void nut::set_ys(QString y)
 {
@@ -62,7 +62,7 @@ void nut::set_ys(QString y)
 }
 void nut::set_xe(double x)
 {
-    pos_xe = x;
+    Pos_xe = x;
 }
 void nut::set_xe(QString x)
 {
@@ -70,7 +70,7 @@ void nut::set_xe(QString x)
 }
 void nut::set_ye(double y)
 {
-    pos_ye = y;
+    Pos_ye = y;
 }
 void nut::set_ye(QString y)
 {
@@ -78,68 +78,68 @@ void nut::set_ye(QString y)
 }
 void nut::set_bezug(QString bezugsflaeche)
 {
-    bezug = bezugsflaeche;
+    Bezug = bezugsflaeche;
 }
 void nut::set_afb(QString ausfuehrbedingung)
 {
-    afb = ausfuehrbedingung;
+    Afb = ausfuehrbedingung;
 }
 
-double nut::get_tiefe()
+double nut::tiefe()
 {
-    return tiefe;
+    return Tiefe;
 }
-QString nut::get_tiefe_qstring()
+QString nut::tiefe_qstring()
 {
-    return double_to_qstring(tiefe);
+    return double_to_qstring(Tiefe);
 }
-double nut::get_breite()
+double nut::breite()
 {
-    return breite;
+    return Breite;
 }
-QString nut::get_breite_qstring()
+QString nut::breite_qstring()
 {
-    return double_to_qstring(breite);
+    return double_to_qstring(Breite);
 }
-double nut::get_xs()
+double nut::xs()
 {
-    return pos_xs;
+    return Pos_xs;
 }
-QString nut::get_xs_qstring()
+QString nut::xs_qstring()
 {
-    return double_to_qstring(pos_xs);
+    return double_to_qstring(Pos_xs);
 }
-double nut::get_ys()
+double nut::ys()
 {
-    return pos_ys;
+    return Pos_ys;
 }
-QString nut::get_ys_qstring()
+QString nut::ys_qstring()
 {
-    return double_to_qstring(pos_ys);
+    return double_to_qstring(Pos_ys);
 }
-double nut::get_xe()
+double nut::xe()
 {
-    return pos_xe;
+    return Pos_xe;
 }
-QString nut::get_xe_qstring()
+QString nut::xe_qstring()
 {
-    return double_to_qstring(pos_xe);
+    return double_to_qstring(Pos_xe);
 }
-double nut::get_ye()
+double nut::ye()
 {
-    return pos_ye;
+    return Pos_ye;
 }
-QString nut::get_ye_qstring()
+QString nut::ye_qstring()
 {
-    return double_to_qstring(pos_ye);
+    return double_to_qstring(Pos_ye);
 }
-QString nut::get_bezug()
+QString nut::bezug()
 {
-    return bezug;
+    return Bezug;
 }
-QString nut::get_afb()
+QString nut::afb()
 {
-    return afb;
+    return Afb;
 }
 
 
@@ -152,21 +152,21 @@ QString nut::text()
 {
     QString msg = BEARBART_NUT;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_bezug();            //Zeile 2
+    msg += bezug();            //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_xs_qstring();       //Zeile 3
+    msg += xs_qstring();       //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_ys_qstring();       //Zeile 4
+    msg += ys_qstring();       //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_xe_qstring();       //Zeile 5
+    msg += xe_qstring();       //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_ye_qstring();       //Zeile 6
+    msg += ye_qstring();       //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_tiefe_qstring();    //Zeile 7
+    msg += tiefe_qstring();    //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_breite_qstring();   //Zeile 8
+    msg += breite_qstring();   //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_afb();              //Zeile 9
+    msg += afb();              //Zeile 9
 
     return msg;
 }

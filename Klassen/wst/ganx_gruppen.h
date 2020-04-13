@@ -13,16 +13,16 @@ public:
     ganx_Gruppen();    
     void clear();
     void neue_gruppe(QString bezugsflaeche);
-    QString get_gruppen();
-    QString get_letzten_gruppennamen();
+    QString gruppen();
+    QString letzten_gruppennamen();
 
 
 private:
 
     void setup();
 
-    text_zeilenweise gruppen;
-    text_zeilenweise gruppenzeile;  //wird nach bedarf mit einem Mitgleid der Gruppe gefüllt
+    text_zeilenweise Gruppen;
+    text_zeilenweise Gruppenzeile;  //wird nach bedarf mit einem Mitgleid der Gruppe gefüllt
                                     //wird zum Auslesen der einzelnen Werte eines Gruppenmitgliedes benötigt
                                     //Parameter:
                                     //      Zeile 01:     Bezugsfläche

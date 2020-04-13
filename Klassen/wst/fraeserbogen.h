@@ -35,43 +35,43 @@ public:
 
     inline void set_startpunkt(punkt3d p)
     {
-        startpunkt = p;
+        Startpunkt = p;
     }
     inline void set_endpunkt(punkt3d p)
     {
-        endpunkt = p;
+        Endpunkt = p;
     }
 
-    double get_xs();
-    QString get_xs_qstring();
-    double get_xe();
-    QString get_xe_qstring();
-    double get_ys();
-    QString get_ys_qstring();
-    double get_ye();
-    QString get_ye_qstring();
-    double get_zs();
-    QString get_zs_qstring();
-    double get_ze();
-    QString get_ze_qstring();
-    punkt3d get_sp();
-    punkt3d get_ep();
-    QString get_bezug();
-    QString get_afb();
-    double get_rad();
-    QString get_rad_qstring();
-    bool get_uzs();
-    QString get_uzs_qstring();
+    double  xs();
+    QString xs_qstring();
+    double  xe();
+    QString xe_qstring();
+    double  ys();
+    QString ys_qstring();
+    double  ye();
+    QString ye_qstring();
+    double  zs();
+    QString zs_qstring();
+    double  ze();
+    QString ze_qstring();
+    punkt3d sp();
+    punkt3d ep();
+    QString bezug();
+    QString afb();
+    double  rad();
+    QString rad_qstring();
+    bool    uzs();
+    QString uzs_qstring();
 
     QString text();
     void set_text(QString text);
 
 private:
-    punkt3d startpunkt, endpunkt;  //das Z-Maß ist die Frästiefe bezogen auf die WST-Oberfläche
-    bool uzs;
-    double radius;
-    QString afb;
-    QString bezug;
+    punkt3d Startpunkt, Endpunkt;  //das Z-Maß ist die Frästiefe bezogen auf die WST-Oberfläche
+    bool Uzs;
+    double Radius;
+    QString Afb;
+    QString Bezug;
 
     void setup();
 

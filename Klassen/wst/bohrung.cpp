@@ -12,21 +12,21 @@ bohrung::bohrung(QString text)
 
 void bohrung::setup()
 {
-    durchmesser = 0;
-    tiefe = 0;
-    pos_x = 0;
-    pos_y = 0;
-    pos_z = 0;
-    bezug = WST_BEZUG_OBSEI;
-    afb = "1";
-    zustellmass = 0;
+    Durchmesser = 0;
+    Tiefe = 0;
+    Pos_x = 0;
+    Pos_y = 0;
+    Pos_z = 0;
+    Bezug = WST_BEZUG_OBSEI;
+    Afb = "1";
+    Zustellmass = 0;
 }
 
 void bohrung::set_dm(double dm)
 {
     if(dm > 0)
     {
-        durchmesser = dm;
+        Durchmesser = dm;
     }
 }
 void bohrung::set_dm(QString dm)
@@ -37,7 +37,7 @@ void bohrung::set_tiefe(double ti)
 {
     if(ti > 0)
     {
-        tiefe = ti;
+        Tiefe = ti;
     }
 }
 void bohrung::set_tiefe(QString ti)
@@ -46,7 +46,7 @@ void bohrung::set_tiefe(QString ti)
 }
 void bohrung::set_x(double x)
 {
-    pos_x = x;
+    Pos_x = x;
 }
 void bohrung::set_x(QString x)
 {
@@ -54,7 +54,7 @@ void bohrung::set_x(QString x)
 }
 void bohrung::set_y(double y)
 {
-    pos_y = y;
+    Pos_y = y;
 }
 void bohrung::set_y(QString y)
 {
@@ -62,7 +62,7 @@ void bohrung::set_y(QString y)
 }
 void bohrung::set_z(double z)
 {
-    pos_z = z;
+    Pos_z = z;
 }
 void bohrung::set_z(QString z)
 {
@@ -72,7 +72,7 @@ void bohrung::set_zustellmass(double mass)
 {
     if(mass >= 0)
     {
-        zustellmass = mass;
+        Zustellmass = mass;
     }
 }
 void bohrung::set_zustellmass(QString mass)
@@ -81,99 +81,99 @@ void bohrung::set_zustellmass(QString mass)
 }
 void bohrung::set_bezug(QString bezugsflaeche)
 {
-    bezug = bezugsflaeche;
+    Bezug = bezugsflaeche;
 }
 void bohrung::set_afb(QString ausfuehrbedingung)
 {
-    afb = ausfuehrbedingung;
+    Afb = ausfuehrbedingung;
 }
 void bohrung::set_wkznum(QString nummer)
 {
-    werkzeugnummer = nummer;
+    Werkzeugnummer = nummer;
 }
 
-double bohrung::get_dm()
+double bohrung::dm()
 {
-    return durchmesser;
+    return Durchmesser;
 }
-QString bohrung::get_dm_qstring()
+QString bohrung::dm_qstring()
 {
-    return double_to_qstring(durchmesser);
+    return double_to_qstring(Durchmesser);
 }
-double bohrung::get_tiefe()
+double bohrung::tiefe()
 {
-    return tiefe;
+    return Tiefe;
 }
-QString bohrung::get_tiefe_qstring()
+QString bohrung::tiefe_qstring()
 {
-    return double_to_qstring(tiefe);
+    return double_to_qstring(Tiefe);
 }
-double bohrung::get_x()
+double bohrung::x()
 {
-    return pos_x;
+    return Pos_x;
 }
-QString bohrung::get_x_qstring()
+QString bohrung::x_qstring()
 {
-    return double_to_qstring(pos_x);
+    return double_to_qstring(Pos_x);
 }
-double bohrung::get_y()
+double bohrung::y()
 {
-    return pos_y;
+    return Pos_y;
 }
-QString bohrung::get_y_qstring()
+QString bohrung::y_qstring()
 {
-    return double_to_qstring(pos_y);
+    return double_to_qstring(Pos_y);
 }
-double bohrung::get_z()
+double bohrung::z()
 {
-    return pos_z;
+    return Pos_z;
 }
-QString bohrung::get_z_qstring()
+QString bohrung::z_qstring()
 {
-    return double_to_qstring(pos_z);
+    return double_to_qstring(Pos_z);
 }
-double bohrung::get_zustellmass()
+double bohrung::zustellmass()
 {
-    return zustellmass;
+    return Zustellmass;
 }
-QString bohrung::get_zustellmass_qstring()
+QString bohrung::zustellmass_qstring()
 {
-    return double_to_qstring(zustellmass);
+    return double_to_qstring(Zustellmass);
 }
-QString bohrung::get_bezug()
+QString bohrung::bezug()
 {
-    return bezug;
+    return Bezug;
 }
-QString bohrung::get_afb()
+QString bohrung::afb()
 {
-    return afb;
+    return Afb;
 }
-QString bohrung::get_wkznum()
+QString bohrung::wkznum()
 {
-    return werkzeugnummer;
+    return Werkzeugnummer;
 }
 
 QString bohrung::text()
 {
     QString msg = BEARBART_BOHR;    //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_bezug();             //Zeile 2
+    msg += bezug();             //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_dm_qstring();        //Zeile 3
+    msg += dm_qstring();        //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_tiefe_qstring();     //Zeile 4
+    msg += tiefe_qstring();     //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_x_qstring();         //Zeile 5
+    msg += x_qstring();         //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_y_qstring();         //Zeile 6
+    msg += y_qstring();         //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_z_qstring();         //Zeile 7
+    msg += z_qstring();         //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_afb();               //Zeile 8
+    msg += afb();               //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_zustellmass_qstring();               //Zeile 9
+    msg += zustellmass_qstring();               //Zeile 9
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_wkznum();            //Zeile 10
+    msg += wkznum();            //Zeile 10
 
     return msg;
 }

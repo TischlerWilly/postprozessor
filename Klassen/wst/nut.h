@@ -29,31 +29,31 @@ public:
     void set_bezug(QString bezugsflaeche);
     void set_afb(QString ausfuehrbedingung);
 
-    double get_tiefe();
-    QString get_tiefe_qstring();
-    double get_breite();
-    QString get_breite_qstring();
-    double get_xs();
-    QString get_xs_qstring();
-    double get_ys();
-    QString get_ys_qstring();
-    double get_xe();
-    QString get_xe_qstring();
-    double get_ye();
-    QString get_ye_qstring();
-    QString get_bezug();
-    QString get_afb();
+    double  tiefe();
+    QString tiefe_qstring();
+    double  breite();
+    QString breite_qstring();
+    double  xs();
+    QString xs_qstring();
+    double  ys();
+    QString ys_qstring();
+    double  xe();
+    QString xe_qstring();
+    double  ye();
+    QString ye_qstring();
+    QString bezug();
+    QString afb();
 
     QString text();
     void set_text(QString text);
 
 private:
-    double tiefe;
-    double breite;
-    double pos_xs, pos_xe;
-    double pos_ys, pos_ye;
-    QString bezug;
-    QString afb;
+    double Tiefe;
+    double Breite;
+    double Pos_xs, Pos_xe;
+    double Pos_ys, Pos_ye;
+    QString Bezug;
+    QString Afb;
 
 
     void setup();

@@ -36,40 +36,40 @@ void MainWindow::setup()
     bool wkz_fmc_gefunden = false;      //user-Ordner
     bool wkz_ggf_gefunden = false;      //user-Ordner
     bool namen_std_gefunden = false;    //user-Ordner
-    QDir user_ordner(pf.get_path_user());
+    QDir user_ordner(pf.path_user());
     QStringList ordnerinhalt;
     ordnerinhalt = user_ordner.entryList(QDir::Files);
     for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
     {
         QString name = *it;
-        if(name.contains(pf.get_name_inifile()))
+        if(name.contains(pf.name_inifile()))
         {
             inifile_gefunden = true;
         }
-        if(name.contains(pf.get_name_wkz_ganx()))
+        if(name.contains(pf.name_wkz_ganx()))
         {
             wkz_ganx_gefunden = true;
         }
-        if(name.contains(pf.get_name_wkz_fmc()))
+        if(name.contains(pf.name_wkz_fmc()))
         {
             wkz_fmc_gefunden = true;
         }
-        if(name.contains(pf.get_name_wkz_ggf()))
+        if(name.contains(pf.name_wkz_ggf()))
         {
             wkz_ggf_gefunden = true;
         }
-        if(name.contains(pf.get_name_stdNamen()))
+        if(name.contains(pf.name_stdNamen()))
         {
             namen_std_gefunden = true;
         }
     }
     if(inifile_gefunden == false)
     {
-        QFile file(pf.get_path_inifile());
+        QFile file(pf.path_inifile());
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_inifile();
+            tmp += pf.path_inifile();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -136,11 +136,11 @@ void MainWindow::setup()
         file.close();
     }else
     {
-        QFile file(pf.get_path_inifile());
+        QFile file(pf.path_inifile());
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_inifile();
+            tmp += pf.path_inifile();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -307,11 +307,11 @@ void MainWindow::setup()
 
     if(namen_std_gefunden == false)
     {
-        QFile file(pf.get_path_stdNamen());
+        QFile file(pf.path_stdNamen());
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_stdNamen();
+            tmp += pf.path_stdNamen();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -326,11 +326,11 @@ void MainWindow::setup()
         file.close();
     }else
     {
-        QFile file(pf.get_path_stdNamen());
+        QFile file(pf.path_stdNamen());
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_stdNamen();
+            tmp += pf.path_stdNamen();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -348,28 +348,28 @@ void MainWindow::setup()
 
     if(wkz_ganx_gefunden == false)
     {
-        QFile file(pf.get_path_wkz_ganx());
+        QFile file(pf.path_wkz_ganx());
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_wkz_ganx();
+            tmp += pf.path_wkz_ganx();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             werkzeugmagazin wm;
-            file.write(wm.get_tabellenkopf().toUtf8());
-            wkz_magazin_ganx.set_text(wm.get_tabellenkopf());
+            file.write(wm.tabellenkopf().toUtf8());
+            wkz_magazin_ganx.set_text(wm.tabellenkopf());
         }
         file.close();
     }else
     {
-        QFile file(pf.get_path_wkz_ganx());
+        QFile file(pf.path_wkz_ganx());
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_wkz_ganx();
+            tmp += pf.path_wkz_ganx();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -382,28 +382,28 @@ void MainWindow::setup()
 
     if(wkz_fmc_gefunden == false)
     {
-        QFile file(pf.get_path_wkz_fmc());
+        QFile file(pf.path_wkz_fmc());
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_wkz_fmc();
+            tmp += pf.path_wkz_fmc();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             werkzeugmagazin wm;
-            file.write(wm.get_tabellenkopf().toUtf8());
-            wkz_magazin_fmc.set_text(wm.get_tabellenkopf());
+            file.write(wm.tabellenkopf().toUtf8());
+            wkz_magazin_fmc.set_text(wm.tabellenkopf());
         }
         file.close();
     }else
     {
-        QFile file(pf.get_path_wkz_fmc());
+        QFile file(pf.path_wkz_fmc());
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_wkz_fmc();
+            tmp += pf.path_wkz_fmc();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -416,28 +416,28 @@ void MainWindow::setup()
 
     if(wkz_ggf_gefunden == false)
     {
-        QFile file(pf.get_path_wkz_ggf());
+        QFile file(pf.path_wkz_ggf());
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_wkz_ggf();
+            tmp += pf.path_wkz_ggf();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
             werkzeugmagazin wm;
-            file.write(wm.get_tabellenkopf().toUtf8());
-            wkz_magazin_ggf.set_text(wm.get_tabellenkopf());
+            file.write(wm.tabellenkopf().toUtf8());
+            wkz_magazin_ggf.set_text(wm.tabellenkopf());
         }
         file.close();
     }else
     {
-        QFile file(pf.get_path_wkz_ggf());
+        QFile file(pf.path_wkz_ggf());
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_wkz_ggf();
+            tmp += pf.path_wkz_ggf();
             tmp += "\n";
             tmp += "in der Funktion setup";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -451,12 +451,12 @@ void MainWindow::setup()
 
 void MainWindow::schreibe_ini()
 {
-    QFile file(pf.get_path_inifile());
+    QFile file(pf.path_inifile());
     file.remove();
     if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         QString tmp = "Fehler beim Dateizugriff!\n";
-        tmp += pf.get_path_inifile();
+        tmp += pf.path_inifile();
         tmp += "\n";
         tmp += "in der Funktion schreibe_ini";
         QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -544,11 +544,11 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
 {
     if(fenstertitel.contains("GANX"))
     {
-        QFile file(pf.get_path_wkz_ganx());
+        QFile file(pf.path_wkz_ganx());
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_wkz_ganx();
+            tmp += pf.path_wkz_ganx();
             tmp += "\n";
             tmp += "in der Funktion getDialogDataWKZ";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -560,11 +560,11 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
         file.close();
     }else if(fenstertitel.contains("FMC"))
     {
-        QFile file(pf.get_path_wkz_fmc());
+        QFile file(pf.path_wkz_fmc());
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_wkz_fmc();
+            tmp += pf.path_wkz_fmc();
             tmp += "\n";
             tmp += "in der Funktion getDialogDataWKZ";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -576,11 +576,11 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
         file.close();
     }else if(fenstertitel.contains("GGF"))
     {
-        QFile file(pf.get_path_wkz_ggf());
+        QFile file(pf.path_wkz_ggf());
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
-            tmp += pf.get_path_wkz_ggf();
+            tmp += pf.path_wkz_ggf();
             tmp += "\n";
             tmp += "in der Funktion getDialogDataWKZ";
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -598,11 +598,11 @@ void MainWindow::getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_
     namen_std_vor = namen_vor;
     namen_std_nach = namen_nach;
 
-    QFile file(pf.get_path_stdNamen());
+    QFile file(pf.path_stdNamen());
     if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         QString tmp = "Fehler beim Dateizugriff!\n";
-        tmp += pf.get_path_stdNamen();
+        tmp += pf.path_stdNamen();
         tmp += "\n";
         tmp += "in der Funktion getStdNamen";
         QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
@@ -1141,10 +1141,10 @@ void MainWindow::on_pushButton_start_clicked()
     }
 
     QString msg;
-    msg = int_to_qstring(wste.get_namen_tz().zeilenanzahl()) + " eingelesene Dateien\n\n";
+    msg = int_to_qstring(wste.namen_tz().zeilenanzahl()) + " eingelesene Dateien\n\n";
     msg += "------------------\n";
     ui->plainTextEdit_eldungen->setPlainText(msg);
-    ui->plainTextEdit_zusatzinfo->setPlainText(wste.suche_cad_fehler());
+    ui->plainTextEdit_zusatzinfo->setPlainText(wste.cad_fehler());
 
     //Datein exportieren:
     QDir dir_ganx;
@@ -1196,7 +1196,7 @@ void MainWindow::on_pushButton_start_clicked()
 
         if(erzeuge_ganx == "ja")
         {
-            QString teilname = wste.get_name(i);
+            QString teilname = wste.name(i);
             teilname += GANX;
 
             QFile datei(pfad_ganx + QDir::separator() + teilname);
@@ -1210,7 +1210,7 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";
-                QString tmp = wste.get_wst(i).get_ganx(wkz_magazin_ganx, info, drehung_des_bauteils);
+                QString tmp = wste.wst(i).ganx(wkz_magazin_ganx, info, drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;
@@ -1222,7 +1222,7 @@ void MainWindow::on_pushButton_start_clicked()
         }
         if(erzeuge_fmc == "ja")
         {
-            QString teilname = wste.get_name(i);
+            QString teilname = wste.name(i);
             teilname += FMC;
 
             QFile datei(pfad_fmc + QDir::separator() + teilname);
@@ -1236,7 +1236,7 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";                
-                QString tmp = wste.get_wst(i).get_fmc(wkz_magazin_fmc, info, drehung_des_bauteils, \
+                QString tmp = wste.wst(i).fmc(wkz_magazin_fmc, info, drehung_des_bauteils, \
                                                       option_fkon_ti, foauf,fkonkanschon);
                 datei.write(tmp.toUtf8());
                 QString output;
@@ -1249,7 +1249,7 @@ void MainWindow::on_pushButton_start_clicked()
         }
         if(erzeuge_ggf == "ja")
         {
-            QString teilname = wste.get_name(i);
+            QString teilname = wste.name(i);
             teilname += GGF;
 
             QFile datei(pfad_ggf + QDir::separator() + teilname);
@@ -1263,7 +1263,7 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";
-                QString tmp = wste.get_wst(i).get_ggf(wkz_magazin_ggf, info, drehung_des_bauteils);
+                QString tmp = wste.wst(i).ggf(wkz_magazin_ggf, info, drehung_des_bauteils);
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;                
@@ -1275,7 +1275,7 @@ void MainWindow::on_pushButton_start_clicked()
         }
         if(erzeuge_eigenes_format == "ja")
         {
-            QString teilname = wste.get_name(i);
+            QString teilname = wste.name(i);
             teilname += EIGENES_FORMAT;
 
             QFile datei(pfad_eigen + QDir::separator() + teilname);
@@ -1291,16 +1291,16 @@ void MainWindow::on_pushButton_start_clicked()
                 QString tmp;
                 if(erzeuge_fmc  == "ja"  &&  erzeuge_ganx != "ja")
                 {
-                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, FMC, \
+                    tmp = wste.wst(i).eigenses_format(drehung_des_bauteils, FMC, \
                                                               wkz_magazin_fmc, foauf, fkonkanschon);
                 }else if(erzeuge_fmc  != "ja"  &&  erzeuge_ganx == "ja")
                 {
-                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, GANX, \
+                    tmp = wste.wst(i).eigenses_format(drehung_des_bauteils, GANX, \
                                                               wkz_magazin_ganx, foauf, fkonkanschon);
                 }else
                 {
                     text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
-                    tmp = wste.get_wst(i).get_eigenses_format(drehung_des_bauteils, EIGENES_FORMAT, \
+                    tmp = wste.wst(i).eigenses_format(drehung_des_bauteils, EIGENES_FORMAT, \
                                                               wkz_eigen, foauf, fkonkanschon);
                 }
                 datei.write(tmp.toUtf8());

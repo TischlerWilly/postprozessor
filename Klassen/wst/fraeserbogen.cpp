@@ -13,69 +13,69 @@ fraeserbogen::fraeserbogen(QString text)
 
 void fraeserbogen::setup()
 {
-    uzs = true;
-    radius = 0;
-    afb = "1";
-    bezug = WST_BEZUG_OBSEI;
+    Uzs = true;
+    Radius = 0;
+    Afb = "1";
+    Bezug = WST_BEZUG_OBSEI;
 }
 
 
 void fraeserbogen::set_xs(double x)
 {
-    startpunkt.set_x(x);
+    Startpunkt.set_x(x);
 }
 void fraeserbogen::set_xs(QString x)
 {
-    startpunkt.set_x(x);
+    Startpunkt.set_x(x);
 }
 void fraeserbogen::set_xe(double x)
 {
-    endpunkt.set_x(x);
+    Endpunkt.set_x(x);
 }
 void fraeserbogen::set_xe(QString x)
 {
-    endpunkt.set_x(x);
+    Endpunkt.set_x(x);
 }
 
 void fraeserbogen::set_ys(double y)
 {
-    startpunkt.set_y(y);
+    Startpunkt.set_y(y);
 }
 void fraeserbogen::set_ys(QString y)
 {
-    startpunkt.set_y(y);
+    Startpunkt.set_y(y);
 }
 void fraeserbogen::set_ye(double y)
 {
-    endpunkt.set_y(y);
+    Endpunkt.set_y(y);
 }
 void fraeserbogen::set_ye(QString y)
 {
-    endpunkt.set_y(y);
+    Endpunkt.set_y(y);
 }
 
 void fraeserbogen::set_zs(double z)
 {
-    startpunkt.set_z(z);
+    Startpunkt.set_z(z);
 }
 void fraeserbogen::set_zs(QString z)
 {
-    startpunkt.set_z(z);
+    Startpunkt.set_z(z);
 }
 void fraeserbogen::set_ze(double z)
 {
-    endpunkt.set_z(z);
+    Endpunkt.set_z(z);
 }
 void fraeserbogen::set_ze(QString z)
 {
-    endpunkt.set_z(z);
+    Endpunkt.set_z(z);
 }
 
 void fraeserbogen::set_rad(double rad)
 {
     if(rad > 0)
     {
-        radius = rad;
+        Radius = rad;
     }
 }
 void fraeserbogen::set_rad(QString rad)
@@ -85,95 +85,95 @@ void fraeserbogen::set_rad(QString rad)
 
 void fraeserbogen::set_uzs(bool ist_im_uzs)
 {
-    uzs = ist_im_uzs;
+    Uzs = ist_im_uzs;
 }
 void fraeserbogen::set_uzs(QString ist_im_uzs)
 {
     if(ist_im_uzs == "1")
     {
-        uzs = true;
+        Uzs = true;
     }else if(ist_im_uzs == "0")
     {
-        uzs = false;
+        Uzs = false;
     }
 }
 
 void fraeserbogen::set_bezug(QString bezugsflaeche)
 {
-    bezug = bezugsflaeche;
+    Bezug = bezugsflaeche;
 }
 void fraeserbogen::set_afb(QString ausfuehrbedingung)
 {
-    afb = ausfuehrbedingung;
+    Afb = ausfuehrbedingung;
 }
 
-double fraeserbogen::get_xs()
+double fraeserbogen::xs()
 {
-    return startpunkt.x();
+    return Startpunkt.x();
 }
-QString fraeserbogen::get_xs_qstring()
+QString fraeserbogen::xs_qstring()
 {
-    return startpunkt.x_QString();
+    return Startpunkt.x_QString();
 }
-double fraeserbogen::get_xe()
+double fraeserbogen::xe()
 {
-    return endpunkt.x();
+    return Endpunkt.x();
 }
-QString fraeserbogen::get_xe_qstring()
+QString fraeserbogen::xe_qstring()
 {
-    return endpunkt.x_QString();
-}
-
-double fraeserbogen::get_ys()
-{
-    return startpunkt.y();
-}
-QString fraeserbogen::get_ys_qstring()
-{
-    return startpunkt.y_QString();
-}
-double fraeserbogen::get_ye()
-{
-    return endpunkt.y();
-}
-QString fraeserbogen::get_ye_qstring()
-{
-    return endpunkt.y_QString();
+    return Endpunkt.x_QString();
 }
 
-double fraeserbogen::get_zs()
+double fraeserbogen::ys()
 {
-    return startpunkt.z();
+    return Startpunkt.y();
 }
-QString fraeserbogen::get_zs_qstring()
+QString fraeserbogen::ys_qstring()
 {
-    return startpunkt.z_QString();
+    return Startpunkt.y_QString();
 }
-double fraeserbogen::get_ze()
+double fraeserbogen::ye()
 {
-    return endpunkt.z();
+    return Endpunkt.y();
 }
-QString fraeserbogen::get_ze_qstring()
+QString fraeserbogen::ye_qstring()
 {
-    return endpunkt.z_QString();
-}
-
-double fraeserbogen::get_rad()
-{
-    return radius;
-}
-QString fraeserbogen::get_rad_qstring()
-{
-    return double_to_qstring(radius);
+    return Endpunkt.y_QString();
 }
 
-bool fraeserbogen::get_uzs()
+double fraeserbogen::zs()
 {
-    return uzs;
+    return Startpunkt.z();
 }
-QString fraeserbogen::get_uzs_qstring()
+QString fraeserbogen::zs_qstring()
 {
-    if(uzs == true)
+    return Startpunkt.z_QString();
+}
+double fraeserbogen::ze()
+{
+    return Endpunkt.z();
+}
+QString fraeserbogen::ze_qstring()
+{
+    return Endpunkt.z_QString();
+}
+
+double fraeserbogen::rad()
+{
+    return Radius;
+}
+QString fraeserbogen::rad_qstring()
+{
+    return double_to_qstring(Radius);
+}
+
+bool fraeserbogen::uzs()
+{
+    return Uzs;
+}
+QString fraeserbogen::uzs_qstring()
+{
+    if(Uzs == true)
     {
         return "1";
     }else
@@ -182,49 +182,47 @@ QString fraeserbogen::get_uzs_qstring()
     }
 }
 
-punkt3d fraeserbogen::get_sp()
+punkt3d fraeserbogen::sp()
 {
-    return startpunkt;
+    return Startpunkt;
 }
-punkt3d fraeserbogen::get_ep()
+punkt3d fraeserbogen::ep()
 {
-    return endpunkt;
-}
-
-QString fraeserbogen::get_bezug()
-{
-    return bezug;
-}
-QString fraeserbogen::get_afb()
-{
-    return afb;
+    return Endpunkt;
 }
 
-
+QString fraeserbogen::bezug()
+{
+    return Bezug;
+}
+QString fraeserbogen::afb()
+{
+    return Afb;
+}
 
 QString fraeserbogen::text()
 {
     QString msg = BEARBART_FRAESERBOGEN;     //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_bezug();                      //Zeile 2
+    msg += bezug();                      //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_xs_qstring();                 //Zeile 3
+    msg += xs_qstring();                 //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_ys_qstring();                 //Zeile 4
+    msg += ys_qstring();                 //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_zs_qstring();                 //Zeile 5
+    msg += zs_qstring();                 //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_xe_qstring();                 //Zeile 6
+    msg += xe_qstring();                 //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_ye_qstring();                 //Zeile 7
+    msg += ye_qstring();                 //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_ze_qstring();                 //Zeile 8
+    msg += ze_qstring();                 //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_rad_qstring();                //Zeile 9
+    msg += rad_qstring();                //Zeile 9
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_uzs_qstring();                //Zeile 10
+    msg += uzs_qstring();                //Zeile 10
     msg += TRENNZ_BEARB_PARAM_;
-    msg += get_afb();                        //Zeile 11
+    msg += afb();                        //Zeile 11
 
     return msg;
 }

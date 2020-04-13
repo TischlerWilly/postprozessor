@@ -2,51 +2,51 @@
 
 prgpfade::prgpfade()
 {
-    inifile             = "postprozessor.ini";
-    stdNamen            = "namen_std.ini";
-    wkz_fmc             = "wkz_magazin_fmc.csv";
-    wkz_ganx            = "wkz_magazin_ganx.csv";
-    wkz_ggf             = "wkz_magazin_ggf.csv";
+    Inifile             = "postprozessor.ini";
+    StdNamen            = "namen_std.ini";
+    Wkz_fmc             = "wkz_magazin_fmc.csv";
+    Wkz_ganx            = "wkz_magazin_ganx.csv";
+    Wkz_ggf             = "wkz_magazin_ggf.csv";
 }
 
 void prgpfade::ordner_erstellen()
 {
-    QDir dir_prg(get_path_prg());
+    QDir dir_prg(path_prg());
     if(!dir_prg.exists())
     {
-        dir_prg.mkdir(get_path_prg());
+        dir_prg.mkdir(path_prg());
     }
-    QDir dir_user(get_path_user());
+    QDir dir_user(path_user());
     if(!dir_user.exists())
     {
-        dir_user.mkdir(get_path_user());
+        dir_user.mkdir(path_user());
     }
 }
 
 //--------------------------------------
-QString prgpfade::get_name_inifile()
+QString prgpfade::name_inifile()
 {
-    return inifile;
+    return Inifile;
 }
-QString prgpfade::get_name_stdNamen()
+QString prgpfade::name_stdNamen()
 {
-    return stdNamen;
+    return StdNamen;
 }
-QString prgpfade::get_name_wkz_fmc()
+QString prgpfade::name_wkz_fmc()
 {
-    return wkz_fmc;
+    return Wkz_fmc;
 }
-QString prgpfade::get_name_wkz_ganx()
+QString prgpfade::name_wkz_ganx()
 {
-    return wkz_ganx;
+    return Wkz_ganx;
 }
-QString prgpfade::get_name_wkz_ggf()
+QString prgpfade::name_wkz_ggf()
 {
-    return wkz_ggf;
+    return Wkz_ggf;
 }
 
 //--------------------------------------Programmordner:
-QString prgpfade::get_path_prg()
+QString prgpfade::path_prg()
 {
     QString tmp;
     tmp = "C:\\Program Files\\postprozessor";
@@ -54,7 +54,7 @@ QString prgpfade::get_path_prg()
 }
 
 //--------------------------------------Nutzerordner:
-QString prgpfade::get_path_user()
+QString prgpfade::path_user()
 {
     QString tmp;
     tmp = QDir::homePath();
@@ -62,43 +62,43 @@ QString prgpfade::get_path_user()
     tmp += ".postprozessor";
     return tmp;
 }
-QString prgpfade::get_path_inifile()
+QString prgpfade::path_inifile()
 {
     QString tmp;
-    tmp = get_path_user();
+    tmp = path_user();
     tmp += QDir::separator();
-    tmp += inifile;
+    tmp += Inifile;
     return tmp;
 }
-QString prgpfade::get_path_stdNamen()
+QString prgpfade::path_stdNamen()
 {
     QString tmp;
-    tmp = get_path_user();
+    tmp = path_user();
     tmp += QDir::separator();
-    tmp += stdNamen;
+    tmp += StdNamen;
     return tmp;
 }
-QString prgpfade::get_path_wkz_fmc()
+QString prgpfade::path_wkz_fmc()
 {
     QString tmp;
-    tmp = get_path_user();
+    tmp = path_user();
     tmp += QDir::separator();
-    tmp += wkz_fmc;
+    tmp += Wkz_fmc;
     return tmp;
 }
-QString prgpfade::get_path_wkz_ganx()
+QString prgpfade::path_wkz_ganx()
 {
     QString tmp;
-    tmp = get_path_user();
+    tmp = path_user();
     tmp += QDir::separator();
-    tmp += wkz_ganx;
+    tmp += Wkz_ganx;
     return tmp;
 }
-QString prgpfade::get_path_wkz_ggf()
+QString prgpfade::path_wkz_ggf()
 {
     QString tmp;
-    tmp = get_path_user();
+    tmp = path_user();
     tmp += QDir::separator();
-    tmp += wkz_ggf;
+    tmp += Wkz_ggf;
     return tmp;
 }
