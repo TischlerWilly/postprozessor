@@ -98,7 +98,10 @@ QString werkzeugmagazin::wkznummer(QString wkz_typ, \
                         {
                             if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_VERT)//ist ein vertikaler Bohrer
                             {
-                                returntext = zeile.zeile(2);
+                                if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
+                                {
+                                    returntext = zeile.zeile(2);
+                                }
                             }
                         }
                     }
