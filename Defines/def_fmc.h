@@ -220,6 +220,20 @@
 #define FMC_TOPF_TOWKZ          "TNR"               //Werkzeugnummer für Topf
 #define FMC_TOPF_AFB            "AFB"
 
+#define FMC_GEHR                "[ZYSCHN40]"
+#define FMC_GEHR_SPX            "SPX" //Startpunkt X-Wert
+#define FMC_GEHR_SPY            "SPY" //Startpunkt Y-Wert
+#define FMC_GEHR_EPX            "EPX" //Endpunkt X-Wert
+#define FMC_GEHR_EPY            "EPY" //Endpunkt Y-Wert
+#define FMC_GEHR_TIRITZEN       "LGEAN" //Einritztiefe (Vorritztiefe)
+#define FMC_GEHR_TISCHNITT      "TI" //gesamte Schnitttiefe
+#define FMC_GEHR_KOR            "TRKOR" //Bahnkorrektur (1 == linkg / 0 == keine / 2 == rechts)
+#define FMC_GEHR_GEGENLAUF      "GEGENL" //Gegenlauf
+#define FMC_GEHR_KADI           "KD" //Kantendicke
+#define FMC_GEHR_WI             "TWKL" //Neigungswinkel (0° == Blatt steht senkrecht)
+#define FMC_GEHR_BEZUG          "TYPN" //Bezugsfläche (1 == Spitze auf Unterseite / 2 == Spitze auf Oberseite)
+#define FMC_GEHR_WKZNR          "WKZID"
+#define FMC_GEHR_AFB            "AFB"
 
 
 #endif // DEF_FMC_H

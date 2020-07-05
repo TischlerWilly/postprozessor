@@ -22,6 +22,7 @@
 #include "bohrraster.h"
 #include "Defines/dateinamen.h"
 #include "ganx_gruppen.h"
+#include "gehrung.h"
 
 
 class werkstueck
