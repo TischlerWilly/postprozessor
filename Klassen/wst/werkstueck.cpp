@@ -314,6 +314,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
     double tmp_l = Laenge;
     double tmp_b = Breite;
     text_zeilenweise tmp_bearb = Bearbeitungen;
+    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
 
     //Die beste Drehrichtung herausfinden:
     uint bewertung_0    = 1;
@@ -942,6 +943,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
                                 formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -955,6 +957,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", \
                                 formartierungen_aufbrechen, fkon_kantenschonend);
@@ -969,6 +972,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", \
@@ -984,6 +988,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1007,6 +1012,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
                                     formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1025,6 +1031,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", \
                                     formartierungen_aufbrechen, fkon_kantenschonend);
@@ -1044,6 +1051,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", \
@@ -1064,6 +1072,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1082,6 +1091,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
                                     formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1105,6 +1115,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
     double tmp_b = Laenge;
     text_zeilenweise tmp_bearb;
     tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
 
     //Die beste Drehrichtung herausfinden:
     uint bewertung_0    = 1;
@@ -1364,6 +1375,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         double tmp_b = Laenge;
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
@@ -1377,6 +1389,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         double tmp_b = Laenge;
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1391,6 +1404,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         double tmp_b = Laenge;
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
@@ -1406,6 +1420,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         double tmp_b = Laenge;
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1429,6 +1444,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
@@ -1447,6 +1463,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1466,6 +1483,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
@@ -1486,6 +1504,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1504,6 +1523,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
             msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
@@ -1584,7 +1604,8 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
     {
         double tmp_l = Laenge;
         double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
+        text_zeilenweise tmp_bearb = Bearbeitungen;        
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -1598,6 +1619,7 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -1612,6 +1634,7 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -1627,6 +1650,7 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -1644,6 +1668,7 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -9459,6 +9484,7 @@ text_zeilenweise werkstueck::bearb_drehen_90(text_zeilenweise bearb, double& tmp
                 bora.set_raster_x(raster_y);
                 bora.set_raster_y(raster_x);
             }
+            zeile_neu = bora.text();
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());
@@ -10814,6 +10840,343 @@ void werkstueck::fraesergeraden_zusammenfassen()
 
     }
 }
+text_zeilenweise werkstueck::gehr_3achs(text_zeilenweise bearb, double &tmp_l, double &tmp_b)
+{
+    //Diese Funktion löscht die Gehrungen aus den Bearbeitungen heraus
+    //Diese können mit einer 3-Achs-Maschine nicht ohne Spezial-WKS hergestellt werden.
+    //und im Spezielle nicht mit beliebigem Winkel
 
+    //Schritt 1:
+    //Heraus bekommen ob Gehrungen vorhanden sind und wo sie liegen
+    //Gehrungen löschen
+    bool li = false;
+    bool re = false;
+    bool ob = false;
+    bool un = false;
+
+    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb.zeile(i));
+        //QString zeile_neu;
+        if(zeile.zeile(1) == BEARBART_GEHRUNG)
+        {
+            gehrung ge(zeile.text());
+            double spx = ge.stapu().x();
+            double spy = ge.stapu().y();
+            double epx = ge.endpu().x();
+            double epy = ge.endpu().y();
+            if(spx == epx)//senkrecht
+            {
+                if(spx == 0)
+                {
+                    li = true;
+                }else if(spx == tmp_l)
+                {
+                    re = true;
+                }
+            }else if(spy == epy)//waagerecht
+            {
+                if(spy == 0)
+                {
+                    un = true;
+                }else if(spy == tmp_b)
+                {
+                    ob = true;
+                }
+            }
+            bearb.zeile_loeschen(i);
+            i--;
+        }
+    }
+
+    //Schritt 2:
+    //WST vergrößern
+    //andere Bearbeitungen gem vergrößerung verschieben
+    double zugabe = 20;
+    if(li == true) //X-Werte verschieben
+    {
+        tmp_l += zugabe;
+        for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb.zeile(i));
+            QString zeile_neu;
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.text());
+                bo.set_x(bo.x() + zugabe);
+                zeile_neu = bo.text();
+            }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+            {
+                bohrraster bora(zeile.text());
+                bora.set_x((bora.x() + zugabe));
+                zeile_neu = bora.text();
+            }else if(zeile.zeile(1) == BEARBART_RTA)
+            {
+                rechtecktasche rt(zeile.text());
+                rt.set_x(rt.x() + zugabe);
+                zeile_neu = rt.text();
+            }else if(zeile.zeile(1) == BEARBART_NUT)
+            {
+                nut nu(zeile.text());
+                nu.set_xs(nu.xs() + zugabe);
+                nu.set_xe(nu.xe() + zugabe);
+                zeile_neu = nu.text();
+            }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+            {
+                fraueseraufruf tmp(zeile.text());
+                tmp.set_x(tmp.x() + zugabe);
+                zeile_neu = tmp.text();
+            }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+            {
+                fraesergerade tmp(zeile.text());
+                tmp.set_xs(tmp.xs() + zugabe);
+                tmp.set_xe(tmp.xe() + zugabe);
+                zeile_neu = tmp.text();
+            }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+            {
+                fraeserbogen tmp(zeile.text());
+                tmp.set_xs(tmp.xs() + zugabe);
+                tmp.set_xe(tmp.xe() + zugabe);
+                zeile_neu = tmp.text();
+            }
+
+            bearb.zeile_ersaetzen(i, zeile_neu);
+        }
+    }
+    if(re == true)
+    {
+        tmp_l += zugabe;
+    }
+    if(un == true) //Y-Werte verschieben
+    {
+        tmp_b += zugabe;
+        for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb.zeile(i));
+            QString zeile_neu;
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.text());
+                bo.set_y(bo.y() + zugabe);
+                zeile_neu = bo.text();
+            }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+            {
+                bohrraster bora(zeile.text());
+                bora.set_y((bora.y() + zugabe));
+                zeile_neu = bora.text();
+            }else if(zeile.zeile(1) == BEARBART_RTA)
+            {
+                rechtecktasche rt(zeile.text());
+                rt.set_y(rt.y() + zugabe);
+                zeile_neu = rt.text();
+            }else if(zeile.zeile(1) == BEARBART_NUT)
+            {
+                nut nu(zeile.text());
+                nu.set_ys(nu.ys() + zugabe);
+                nu.set_ye(nu.ye() + zugabe);
+                zeile_neu = nu.text();
+            }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+            {
+                fraueseraufruf tmp(zeile.text());
+                tmp.set_y(tmp.y() + zugabe);
+                zeile_neu = tmp.text();
+            }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+            {
+                fraesergerade tmp(zeile.text());
+                tmp.set_ys(tmp.ys() + zugabe);
+                tmp.set_ye(tmp.ye() + zugabe);
+                zeile_neu = tmp.text();
+            }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+            {
+                fraeserbogen tmp(zeile.text());
+                tmp.set_ys(tmp.ys() + zugabe);
+                tmp.set_ye(tmp.ye() + zugabe);
+                zeile_neu = tmp.text();
+            }
+
+            bearb.zeile_ersaetzen(i, zeile_neu);
+        }
+    }
+    if(ob == true)
+    {
+        tmp_b += zugabe;
+    }
+
+    //Schritt 3:
+    //Prüfen ob WST jetzt nur noch auf der Unterseite Bearbeitungen hat
+    bool unsei = false;
+    bool obsei = false;
+    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb.zeile(i));
+        if(zeile.zeile(2) == WST_BEZUG_OBSEI)
+        {
+            obsei = true;
+        }else if(zeile.zeile(2) == WST_BEZUG_UNSEI)
+        {
+            unsei = true;
+        }
+        if(obsei == true && unsei == true)
+        {
+            break; //for
+        }
+    }
+    if(obsei == false && unsei == true)
+    {
+        bearb = drehen_um_b_halbe(bearb, tmp_l, tmp_b);
+    }
+
+    return bearb;
+}
+text_zeilenweise werkstueck::drehen_um_b_halbe(text_zeilenweise bearb, double &tmp_l, double &tmp_b)
+{
+    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb.zeile(i));
+        QString zeile_neu;
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            QString bezug = bo.bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                bo.set_y(tmp_b - bo.y());
+                bo.set_bezug(WST_BEZUG_UNSEI);
+            }else if(bezug == WST_BEZUG_UNSEI)
+            {
+                bo.set_y(tmp_b - bo.y());
+                bo.set_bezug(WST_BEZUG_OBSEI);
+            }else if(bezug == WST_BEZUG_LI)
+            {
+                bo.set_y(tmp_b - bo.y());
+            }else if(bezug == WST_BEZUG_RE)
+            {
+                bo.set_y(tmp_b - bo.y());
+            }else if(bezug == WST_BEZUG_VO)
+            {
+                bo.set_y(tmp_b - bo.y());
+                bo.set_bezug(WST_BEZUG_HI);
+            }else if(bezug == WST_BEZUG_HI)
+            {
+                bo.set_y(tmp_b - bo.y());
+                bo.set_bezug(WST_BEZUG_VO);
+            }
+            zeile_neu = bo.text();
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            bohrraster bora(zeile.text());
+            QString bezug = bora.bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                bora.set_y(tmp_b - bora.y());
+                bora.set_raster_y(-1 * bora.raster_y());
+                bora.set_bezug(WST_BEZUG_UNSEI);
+            }else if(bezug == WST_BEZUG_UNSEI)
+            {
+                bora.set_y(tmp_b - bora.y());
+                bora.set_raster_y(-1 * bora.raster_y());
+                bora.set_bezug(WST_BEZUG_OBSEI);
+            }else if(bezug == WST_BEZUG_LI)
+            {
+                bora.set_raster_y(-1 * bora.raster_y());
+                bora.set_y(tmp_b - bora.y());
+            }else if(bezug == WST_BEZUG_RE)
+            {
+                bora.set_raster_y(-1 * bora.raster_y());
+                bora.set_y(tmp_b - bora.y());
+            }else if(bezug == WST_BEZUG_VO)
+            {
+                bora.set_y(tmp_b - bora.y());
+                bora.set_bezug(WST_BEZUG_HI);
+            }else if(bezug == WST_BEZUG_HI)
+            {
+                bora.set_y(tmp_b - bora.y());
+                bora.set_bezug(WST_BEZUG_VO);
+            }
+            zeile_neu = bora.text();
+        }else if(zeile.zeile(1) == BEARBART_RTA)
+        {
+            rechtecktasche rt(zeile.text());
+            rt.set_y(tmp_b - rt.y());
+            QString bezug = rt.bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                rt.set_bezug(WST_BEZUG_UNSEI);
+            }else
+            {
+                rt.set_bezug(WST_BEZUG_OBSEI);
+            }
+            zeile_neu = rt.text();
+        }else if(zeile.zeile(1) == BEARBART_NUT)
+        {
+            nut nu(zeile.text());
+            nu.set_ys(tmp_b - nu.ys());
+            nu.set_ye(tmp_b - nu.ye());
+            QString bezug = nu.bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                nu.set_bezug(WST_BEZUG_UNSEI);
+            }else
+            {
+                nu.set_bezug(WST_BEZUG_OBSEI);
+            }
+            zeile_neu = nu.text();
+        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+        {
+            fraueseraufruf tmp(zeile.text());
+            tmp.set_y(tmp_b - tmp.y());
+            QString bezug = tmp.bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                tmp.set_bezug(WST_BEZUG_UNSEI);
+            }else
+            {
+                tmp.set_bezug(WST_BEZUG_OBSEI);
+            }
+            zeile_neu = tmp.text();
+        }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade tmp(zeile.text());
+            tmp.set_ys(tmp_b - tmp.ys());
+            tmp.set_ye(tmp_b - tmp.ye());
+            QString bezug = tmp.bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                tmp.set_bezug(WST_BEZUG_UNSEI);
+            }else
+            {
+                tmp.set_bezug(WST_BEZUG_OBSEI);
+            }
+            zeile_neu = tmp.text();
+        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen tmp(zeile.text());
+            tmp.set_ys(tmp_b - tmp.ys());
+            tmp.set_ye(tmp_b - tmp.ye());
+            QString bezug = tmp.bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                tmp.set_bezug(WST_BEZUG_UNSEI);
+            }else
+            {
+                tmp.set_bezug(WST_BEZUG_OBSEI);
+            }
+            zeile_neu = tmp.text();
+        }
+
+        bearb.zeile_ersaetzen(i, zeile_neu);
+    }
+    return bearb;
+}
 //--------------------------------------------------
 

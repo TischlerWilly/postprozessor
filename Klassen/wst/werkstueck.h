@@ -22,6 +22,7 @@
 #include "bohrraster.h"
 #include "Defines/dateinamen.h"
 #include "ganx_gruppen.h"
+#include "gehrung.h"
 
 
 class werkstueck
@@ -157,7 +158,8 @@ private:
     text_zeilenweise fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
     void hbemiduebeltiefe();
     void fraesergeraden_zusammenfassen();
-
+    text_zeilenweise gehr_3achs(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
+    text_zeilenweise drehen_um_b_halbe(text_zeilenweise bearb, double &tmp_l, double &tmp_b);
     //--------------------------------------------------
 
 };

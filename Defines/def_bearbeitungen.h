@@ -88,7 +88,6 @@
 */
 
 #define BEARBART_FRAESERAUFRUF  "fraufr"    //Bearbeitungsart Fräser-Aufruf
-
 /*
     Reihenfolge der Parameter:
     1 : Bearbeitungsart: "fraufr"
@@ -108,7 +107,6 @@
 #define FRKOR_R     "R"
 
 #define BEARBART_FRAESERGERADE  "frgradv"    //Bearbeitungsart Fräser-Gerade für vertikale Fräser
-
 /*
     Reihenfolge der Parameter:
     1 : Bearbeitungsart: "frgrad"
@@ -123,7 +121,6 @@
 */
 
 #define BEARBART_FRAESERBOGEN  "frbogv"    //Bearbeitungsart Fräser-Bogen für vertikale Fräser
-
 /*
     Reihenfolge der Parameter:
     1 : Bearbeitungsart: "frbog"
@@ -141,6 +138,21 @@
     11: Ausführbedingung
 */
 
+#define BEARBART_GEHRUNG       "gehrung"       //Bearbeitungsart Gehrung
+/*
+    Reihenfolge der Parameter:
+    1 : Bearbeitungsart: "gehrung"
+    2 : Bezugsfläche
+    3 : Posision in X Stratpunkt
+    4 : Posision in Y Startpunkt
+    5 : Posision in X Endpunkt
+    6 : Position in Y Endpunkt
+    7 : Winkel
+    8 : Ausführbedingung
+    9 : WKZ-Nummer
+    10: Ritz-Tiefe
+    11: Schnitt-Tiefe
+*/
 
 
 
