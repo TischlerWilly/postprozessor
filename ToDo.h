@@ -2,11 +2,9 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.20.04.21"
+#define PROGRAMMVERSION "1.20.07.12"
 #endif //PROGRAMMVERSION
 /*
-
-Funktion für den FMC und GANX-Export die das WST an den Kanten die Gehrung haben verbreitert
 
 
 
