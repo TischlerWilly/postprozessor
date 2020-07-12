@@ -42,6 +42,34 @@ void gehrung::set_winkel(QString w)
 {
     set_winkel(w.toDouble());
 }
+void gehrung::set_riti(double ritz_tiefe)
+{
+    if(ritz_tiefe > 0)
+    {
+        Ritztiefe = ritz_tiefe;
+    }else
+    {
+        Ritztiefe = 0;
+    }
+}
+void gehrung::set_riti(QString ritz_tirefe)
+{
+    set_riti(ritz_tirefe.toDouble());
+}
+void gehrung::set_sti(double schnitt_tiefe)
+{
+    if(schnitt_tiefe > 0)
+    {
+        Schnittiefe = schnitt_tiefe;
+    }else
+    {
+        Schnittiefe = 0;
+    }
+}
+void gehrung::set_sti(QString schnitt_tiefe)
+{
+    set_sti(schnitt_tiefe.toDouble());
+}
 void gehrung::set_bezug(QString bezugsflaeche)
 {
     Bezug = bezugsflaeche;
@@ -75,6 +103,22 @@ QString gehrung::winkel_qstring()
 {
     return double_to_qstring(winkel());
 }
+double gehrung::riti()
+{
+    return Ritztiefe;
+}
+QString gehrung::riti_qstring()
+{
+    return double_to_qstring(riti());
+}
+double gehrung::sti()
+{
+    return Schnittiefe;
+}
+QString gehrung::sti_qstring()
+{
+    return double_to_qstring(sti());
+}
 QString gehrung::bezug()
 {
     return Bezug;
@@ -107,6 +151,10 @@ QString gehrung::text()
     msg += afb();               //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
     msg += wkznum();            //Zeile 9
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += riti_qstring();      //Zeile 10
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += sti_qstring();       //Zeile 11
 
     return msg;
 }
@@ -123,9 +171,13 @@ void gehrung::set_text(QString text)
         sp.set_y(tz.zeile(4));
         ep.set_x(tz.zeile(5));
         ep.set_y(tz.zeile(6));
+        set_stapu(sp);
+        set_endpu(ep);
         set_winkel(tz.zeile(7));
         set_afb(tz.zeile(8));
         set_wkznum(tz.zeile(9));
+        set_riti(tz.zeile(10));
+        set_sti(tz.zeile(11));
     }
 }
 

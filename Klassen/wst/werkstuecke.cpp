@@ -2805,6 +2805,97 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }
                 }
             }
+        }else if(zeile.contains(FMC_GEHR))
+        {
+            gehrung ge;
+            double spx = 0;
+            double spy = 0;
+            double epx = 0;
+            double epy = 0;
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    punkt3d sp, ep;
+                    sp.set_x(spx);
+                    sp.set_y(spy);
+                    ep.set_x(epx);
+                    ep.set_y(epy);
+                    ge.set_stapu(sp);
+                    ge.set_endpu(ep);
+                    w.neue_bearbeitung(ge.text());
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_GEHR_AFB)
+                    {
+                        ge.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_GEHR_SPX)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        spx = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_GEHR_SPY)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        spy = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_GEHR_EPX)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        epx = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_GEHR_EPY)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        epy = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_GEHR_TIRITZEN)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        ge.set_riti(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_GEHR_TISCHNITT)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        ge.set_sti(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_GEHR_KOR)
+                    {
+                        //...
+                    }else if(schluessel == FMC_GEHR_GEGENLAUF)
+                    {
+                        //...
+                    }else if(schluessel == FMC_GEHR_KADI)
+                    {
+                        //...
+                    }else if(schluessel == FMC_GEHR_WI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        ge.set_winkel(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_GEHR_BEZUG)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp).toDouble();
+                        if(tmp == 1)//Spitze auf der Unterseite
+                        {
+                            ge.set_bezug(WST_BEZUG_OBSEI);
+                        }else//Spitze auf der Oberseite
+                        {
+                            ge.set_bezug(WST_BEZUG_UNSEI);
+                        }
+                    }else if(schluessel == FMC_GEHR_WKZNR)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        ge.set_wkznum(tmp);
+                    }
+                }
+            }
         }
 
     }
@@ -5211,8 +5302,98 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                 }
             }
 
+        }else if(zeile.contains(FMC_GEHR))
+        {
+            gehrung ge;
+            double spx = 0;
+            double spy = 0;
+            double epx = 0;
+            double epy = 0;
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    punkt3d sp, ep;
+                    sp.set_x(spx);
+                    sp.set_y(spy);
+                    ep.set_x(epx);
+                    ep.set_y(epy);
+                    ge.set_stapu(sp);
+                    ge.set_endpu(ep);
+                    w.neue_bearbeitung(ge.text());
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_GEHR_AFB)
+                    {
+                        ge.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_GEHR_SPX)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        spx = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_GEHR_SPY)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        spy = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_GEHR_EPX)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        epx = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_GEHR_EPY)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        epy = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_GEHR_TIRITZEN)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        ge.set_riti(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_GEHR_TISCHNITT)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        ge.set_sti(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_GEHR_KOR)
+                    {
+                        //...
+                    }else if(schluessel == FMC_GEHR_GEGENLAUF)
+                    {
+                        //...
+                    }else if(schluessel == FMC_GEHR_KADI)
+                    {
+                        //...
+                    }else if(schluessel == FMC_GEHR_WI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        ge.set_winkel(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_GEHR_BEZUG)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp).toDouble();
+                        if(tmp == 1)//Spitze auf der Unterseite
+                        {
+                            ge.set_bezug(WST_BEZUG_OBSEI);
+                        }else//Spitze auf der Oberseite
+                        {
+                            ge.set_bezug(WST_BEZUG_UNSEI);
+                        }
+                    }else if(schluessel == FMC_GEHR_WKZNR)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        ge.set_wkznum(tmp);
+                    }
+                }
+            }
         }
-
 
     }
 

@@ -6,9 +6,6 @@
 #endif //PROGRAMMVERSION
 /*
 
-Gerungen importieren
--->bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtext)
--->bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importtext)
 Funktion für den FMC und GANX-Export die das WST an den Kanten die Gehrung haben verbreitert
 
 

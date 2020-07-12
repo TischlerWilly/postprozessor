@@ -150,6 +150,8 @@
     7 : Winkel
     8 : Ausführbedingung
     9 : WKZ-Nummer
+    10: Ritz-Tiefe
+    11: Schnitt-Tiefe
 */
 
 
