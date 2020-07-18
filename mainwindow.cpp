@@ -897,24 +897,33 @@ void MainWindow::on_radioButton_fkon_ti_wkz_toggled(bool checked)
 void MainWindow::on_actionInfo_triggered()
 {
     QString tmp;
-    tmp = "Postprozessor";
-    tmp += "\t\tProgrammversion: ";
+    tmp = "Postprozessor ";
     tmp += PROGRAMMVERSION;
+    this->setWindowTitle(tmp);
+    //----------------------------------------------------------
+    tmp =  "Autor:";
+    tmp += "\t";
+    tmp += "Oliver Schuft";
+    tmp += "\n";
+    tmp += "source:";
+    tmp += "\t";
+    tmp += "https://github.com/TischlerWilly/postprozessor.git";
     tmp += "\n\n";
 
-    tmp += "Moegliche Importformate:\n";
-    tmp += "  *.FMC / *.fmc (IMAWOP4)\n";
+    tmp += "Mögliche Importformate:\n";
+    tmp += "  *.FMC (IMAWOP4)\n";
+    tmp += "  *.fmc  (IMAWOP4)\n";
     tmp += "\n";
 
     tmp += "Hinweis zum GANX-Export:\n";
-    tmp += "  Fraeskonturen werden nicht ausgegeben.\n";
+    tmp += "  Fräskonturen werden nicht ausgegeben.\n";
 
     ui->plainTextEdit_eldungen->setPlainText(tmp);
 
     //----------------------------------------------------------
 
     tmp  = "Der Postpozessor versucht fehlerhaft ausgegebene Bauteile zu erkennen.\n";
-    tmp += "In diesem Textfeld werden die gefundenen Auffaelligkeiten aufgelistet.";
+    tmp += "In diesem Textfeld werden die gefundenen Auffälligkeiten aufgelistet.";
 
     ui->plainTextEdit_zusatzinfo->setPlainText(tmp);
 }
@@ -1311,7 +1320,34 @@ void MainWindow::on_pushButton_start_clicked()
             }
             datei.close();
         }
+
+
     }
+
+    QString slist; //Stückliste
+    slist += "\n";
+    slist += "----------------------------Stückliste----------------------------";
+    slist += "\n";
+    slist += "Bezeichnung";
+    slist += "\t";
+    slist += "Länge";
+    slist += "\t";
+    slist += "Breite";
+    slist += "\t";
+    slist += "Dicke";
+    slist += "\n";
+    for(uint i=1; i<=wste.anzahl() ;i++)
+    {
+        slist += wste.wst(i).name();
+        slist += "\t";
+        slist += wste.wst(i).laenge_qstring();
+        slist += "\t";
+        slist += wste.wst(i).breite_qstring();
+        slist += "\t";
+        slist += wste.wst(i).dicke_qstring();
+        slist += "\n";
+    }
+    ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + slist);
 
     QApplication::restoreOverrideCursor();
 }
