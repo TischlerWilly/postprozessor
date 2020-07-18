@@ -317,10 +317,10 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
     tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
 
     //Die beste Drehrichtung herausfinden:
-    uint bewertung_0    = 1;
-    uint bewertung_90   = 1;
-    uint bewertung_180  = 1;
-    uint bewertung_270  = 1;
+    int bewertung_0    = 1;
+    int bewertung_90   = 1;
+    int bewertung_180  = 1;
+    int bewertung_270  = 1;
     //Stufe 1:
     //heraus bekommen, für welche Lage es Warnungen gibt:
     QString warnung;
@@ -723,7 +723,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
     //Teile bevorzugen, bei bei denen gilt: L > B:
     if(l_0 > b_0)
     {
-        bewertung_0 += 8;
+        bewertung_0 += 20;
 #ifdef ISDEBUG
         if(isdebugmodus_0 == true)
         {
@@ -735,7 +735,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
     }
     if(l_90 > b_90)
     {
-        bewertung_90 += 8;
+        bewertung_90 += 20;
 #ifdef ISDEBUG
         if(isdebugmodus_90 == true)
         {
@@ -747,7 +747,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
     }
     if(l_180 > b_180)
     {
-        bewertung_180 += 8;
+        bewertung_180 += 20;
 #ifdef ISDEBUG
         if(isdebugmodus_180 == true)
         {
@@ -759,7 +759,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
     }
     if(l_270 > b_270)
     {
-       bewertung_270 += 8;
+       bewertung_270 += 20;
 #ifdef ISDEBUG
        if(isdebugmodus_270 == true)
        {
@@ -937,6 +937,147 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
         }
     }
 
+    //Stufe 6:
+    //Flächenbohrungen mit geringem Kantenabstand beforzugen
+    for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_0.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            if(bo.x() < 20 || bo.y() < 20)
+            {
+                bewertung_0 += 1;
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_90.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            if(bo.x() < 20 || bo.y() < 20)
+            {
+                bewertung_90 += 1;
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_180.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            if(bo.x() < 20 || bo.y() < 20)
+            {
+                bewertung_180 += 1;
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_270.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            if(bo.x() < 20 || bo.y() < 20)
+            {
+                bewertung_270 += 1;
+            }
+        }
+    }
+
+    //Stufe 7:
+    //RW-Nuten nicht am Anschlag bevorzugen
+    for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_0.zeile(i));
+        if(zeile.zeile(1) == BEARBART_NUT)
+        {
+            nut n(zeile.text());
+            if(n.breite() == 8.5 && n.tiefe() == 6.5)
+            {
+                if(n.ys() == n.ye())
+                {
+                    if(n.ys() == b_0 - 20 + 4.25)
+                    {
+                        bewertung_0 += 10;
+                    }
+                }
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_90.zeile(i));
+        if(zeile.zeile(1) == BEARBART_NUT)
+        {
+            nut n(zeile.text());
+            if(n.breite() == 8.5 && n.tiefe() == 6.5)
+            {
+                if(n.ys() == n.ye())
+                {
+                    if(n.ys() == b_0 - 20 + 4.25)
+                    {
+                        bewertung_90 += 10;
+                    }
+                }
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_180.zeile(i));
+        if(zeile.zeile(1) == BEARBART_NUT)
+        {
+            nut n(zeile.text());
+            if(n.breite() == 8.5 && n.tiefe() == 6.5)
+            {
+                if(n.ys() == n.ye())
+                {
+                    if(n.ys() == b_0 - 20 + 4.25)
+                    {
+                        bewertung_180 += 10;
+                    }
+                }
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_270.zeile(i));
+        if(zeile.zeile(1) == BEARBART_NUT)
+        {
+            nut n(zeile.text());
+            if(n.breite() == 8.5 && n.tiefe() == 6.5)
+            {
+                if(n.ys() == n.ye())
+                {
+                    if(n.ys() == b_0 - 20 + 4.25)
+                    {
+                        bewertung_270 += 10;
+                    }
+                }
+            }
+        }
+    }
 
     if(drehwinkel == "0")
     {
@@ -1118,10 +1259,10 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
     tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
 
     //Die beste Drehrichtung herausfinden:
-    uint bewertung_0    = 1;
-    uint bewertung_90   = 1;
-    uint bewertung_180  = 1;
-    uint bewertung_270  = 1;
+    int bewertung_0    = 1;
+    int bewertung_90   = 1;
+    int bewertung_180  = 1;
+    int bewertung_270  = 1;
     //Stufe 1:
     //heraus bekommen, für welche Lage es Warnungen gibt:
     QString warnung;
@@ -1205,11 +1346,11 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             {
                 if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_0 += 2;
+                    bewertung_0 += 5;
                 }
                 if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_0 += 2;
+                    bewertung_0 += 5;
                 }
             }
         }
@@ -1237,11 +1378,11 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             {
                 if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_90 += 2;
+                    bewertung_90 += 5;
                 }
                 if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_90 += 2;
+                    bewertung_90 += 5;
                 }
             }
         }
@@ -1269,11 +1410,11 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             {
                 if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_180 += 2;
+                    bewertung_180 += 5;
                 }
                 if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_180 += 2;
+                    bewertung_180 += 5;
                 }
             }
         }
@@ -1301,11 +1442,11 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             {
                 if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_270 += 2;
+                    bewertung_270 += 5;
                 }
                 if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_270 += 2;
+                    bewertung_270 += 5;
                 }
             }
         }
@@ -1353,21 +1494,186 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
     //Teile bevorzugen, bei bei denen gilt: B > L:
     if(b_0 > l_0)
     {
-        bewertung_0 += 8;
+        bewertung_0 += 20;
     }
     if(b_90 > l_90)
     {
-        bewertung_90 += 8;
+        bewertung_90 += 20;
     }
     if(b_180 > l_180)
     {
-        bewertung_180 += 8;
+        bewertung_180 += 20;
     }
     if(b_270 > l_270)
     {
-        bewertung_270 += 8;
+        bewertung_270 += 20;
     }
 
+    //Stufe 5:
+    //Bei schmalen Teilen bevorzugen, wenn HBE nicht aus richtung des Anschlages kommt:
+    if(b_0 <= Schwellenwert_ay)
+    {
+        bool bonus = true;
+        for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb_0.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.text());
+                if(bo.bezug() == WST_BEZUG_VO)
+                {
+                    bonus = false;
+                }
+            }
+        }
+        if(bonus == true)
+        {
+            bewertung_0 += 20;
+        }else
+        {
+            bewertung_0 -= 10;
+        }
+    }
+    if(b_90 <= Schwellenwert_ay)
+    {
+        bool bonus = true;
+        for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb_90.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.text());
+                if(bo.bezug() == WST_BEZUG_VO)
+                {
+                    bonus = false;
+                }
+            }
+        }
+        if(bonus == true)
+        {
+            bewertung_90 += 20;
+        }else
+        {
+            bewertung_90 -= 10;
+        }
+    }
+    if(b_180 <= Schwellenwert_ay)
+    {
+        bool bonus = true;
+        for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb_180.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.text());
+                if(bo.bezug() == WST_BEZUG_VO)
+                {
+                    bonus = false;
+                }
+            }
+        }
+        if(bonus == true)
+        {
+            bewertung_180 += 20;
+        }else
+        {
+            bewertung_180 -= 10;
+        }
+    }
+    if(b_270 <= Schwellenwert_ay)
+    {
+        bool bonus = true;
+        for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
+        {
+            text_zeilenweise zeile;
+            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            zeile.set_text(bearb_270.zeile(i));
+            if(zeile.zeile(1) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.text());
+                if(bo.bezug() == WST_BEZUG_VO)
+                {
+                    bonus = false;
+                }
+            }
+        }
+        if(bonus == true)
+        {
+            bewertung_270 += 20;
+        }else
+        {
+            bewertung_270 -= 10;
+        }
+    }
+
+    //Stufe 6:
+    //Flächenbohrungen mit geringem Kantenabstand beforzugen
+    for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_0.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            if(bo.x() < 20 || bo.y() < 20)
+            {
+                bewertung_0 += 1;
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_90.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            if(bo.x() < 20 || bo.y() < 20)
+            {
+                bewertung_90 += 1;
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_180.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            if(bo.x() < 20 || bo.y() < 20)
+            {
+                bewertung_180 += 1;
+            }
+        }
+    }
+    for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(bearb_270.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            if(bo.x() < 20 || bo.y() < 20)
+            {
+                bewertung_270 += 1;
+            }
+        }
+    }
+
+    //Stufe 7:
+    //RW-Nuten nicht am Anschlag bevorzugen
+    //ist bei GANX nicht nötig weil physisch mit der Maschine nicht möglich
 
     if(drehwinkel == "0")
     {
