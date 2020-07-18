@@ -28,6 +28,8 @@
     12: Mindest Zustellmaß
         0 | 12 etc (wenn 0 dann nicht relevant)
     13: Spiegelwerkzeug
+    14: nur direkt zuweisbar
+        ja | nein
 
 */
 

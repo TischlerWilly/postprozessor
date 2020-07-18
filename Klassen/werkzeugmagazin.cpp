@@ -74,8 +74,11 @@ QString werkzeugmagazin::wkznummer(QString wkz_typ, \
             {
                 if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
                 {
-                    wkz_dm_tmp = wkz_dm;
-                    returntext = zeile.zeile(2);
+                    if(zeile.zeile(14) != "ja") //ist nicht nur direkt zuweisbar
+                    {
+                        wkz_dm_tmp = wkz_dm;
+                        returntext = zeile.zeile(2);
+                    }
                 }
             }
         }
@@ -259,6 +262,8 @@ QString werkzeugmagazin::tabellenkopf()
     tmp += "MindZust";
     tmp += "\t";
     tmp += "SpiegelWKZ";
+    tmp += "\t";
+    tmp += "nur direkt zuweisbar";
     tmp += "\t";
 
     tmp += " ";
