@@ -27,6 +27,14 @@ void Dialog_fraeser::getData(text_zeilenweise msg)
     ui->lineEdit_alias->setText(msg.zeile(11));
     ui->lineEdit_zust_min->setText(msg.zeile(12));
     ui->lineEdit_spiegel->setText(msg.zeile(13));
+    QString tmp = msg.zeile(14);
+    if(tmp == "ja")
+    {
+        ui->checkBox_nur_direkt_zuweisbar->setChecked(true);
+    }else
+    {
+        ui->checkBox_nur_direkt_zuweisbar->setChecked(false);
+    }
 
     this->show();
 }
@@ -49,6 +57,7 @@ void Dialog_fraeser::clear()
     ui->lineEdit_alias->clear();
     ui->lineEdit_zust_min->clear();
     ui->lineEdit_spiegel->clear();
+    ui->checkBox_nur_direkt_zuweisbar->setChecked(false);
 }
 
 void Dialog_fraeser::setup()
@@ -81,6 +90,13 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
                           //Beim Einlesen der FMC-Datei werden alle kleinen Buchstaben durch große ersetzt
     wkz.zeile_anhaengen(ui->lineEdit_zust_min->text());         //12: Mindest-Zustellmaß
     wkz.zeile_anhaengen(ui->lineEdit_spiegel->text());          //13: Spiegelwerkzeug
+    if(ui->checkBox_nur_direkt_zuweisbar->isChecked())
+    {
+        wkz.zeile_anhaengen("ja");                              //14: nur_direkt_zuweisbar
+    }else
+    {
+        wkz.zeile_anhaengen("nein");                            //14: nur_direkt_zuweisbar
+    }
 
     //deutsche Zahlen in englische Zahlen umwandeln:
     for(uint i=3; i<=wkz.zeilenanzahl() ;i++)
