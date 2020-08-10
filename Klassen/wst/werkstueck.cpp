@@ -2980,7 +2980,6 @@ QString werkstueck::fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise 
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-
                 tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
                 if(tnummer.isEmpty())
                 {
