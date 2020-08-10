@@ -125,8 +125,11 @@ QString werkzeugmagazin::wkznummer(QString wkz_typ, \
                 {
                     if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
                     {
-                        wkz_dm_tmp = wkz_dm;
-                        returntext = zeile.zeile(2);
+                        if(zeile.zeile(14) != "ja") //ist nicht nur direkt zuweisbar
+                        {
+                            wkz_dm_tmp = wkz_dm;
+                            returntext = zeile.zeile(2);
+                        }
                     }
                 }
             }
@@ -145,7 +148,7 @@ QString werkzeugmagazin::wkznummer_von_alias(QString alias)
     {
         zeile.set_text(Magazin.zeile(i));
 
-        if(zeile.zeile(11) == alias)
+        if(  (zeile.zeile(11) == alias) &&  !zeile.zeile(11).isEmpty()  )
         {
             if(zeile.zeile(1) == WKZ_TYP_FRAESER)
             {
