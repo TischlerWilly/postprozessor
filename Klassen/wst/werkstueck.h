@@ -43,6 +43,7 @@ public:
     void set_kante_hi(QString artiklenummer);
     void set_kante_li(QString artiklenummer);
     void set_kante_re(QString artiklenummer);
+    void set_zugabe_gehrungen(double wert);
 
     inline void set_name(QString neuer_name)
     {
@@ -119,9 +120,10 @@ private:
     QString Kante_hi;
     QString Kante_li; //Kante an Y
     QString Kante_re;
+    double  Zugabe_gehrungen;
 
     //Funktionen:
-    //--------------------------------------------------set_xy:
+    //--------------------------------------------------set_xy:    
 
     //--------------------------------------------------get_xy:
     QString warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);

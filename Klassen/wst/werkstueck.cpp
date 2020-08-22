@@ -92,6 +92,10 @@ void werkstueck::set_kante_re(QString artiklenummer)
 {
     Kante_re = artiklenummer;
 }
+void werkstueck::set_zugabe_gehrungen(double wert)
+{
+    Zugabe_gehrungen = wert;
+}
 
 //--------------------------------------------------get_xy:
 QString werkstueck::kante_vo(QString drewi)
@@ -10051,6 +10055,31 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
                 nu.set_ye(xe);
             }
             zeile_neu = nu.text();
+        }else if(zeile.zeile(1) == BEARBART_GEHRUNG)
+        {
+            gehrung ge(zeile.text());   //nut nu(zeile.text());
+            double xs = ge.pfad().stapu().x(); //nu.xs();
+            double ys = ge.pfad().stapu().y(); //nu.ys();
+            double xe = ge.pfad().endpu().x(); //nu.xe();
+            double ye = ge.pfad().endpu().y(); //nu.ye();
+            QString bezug = ge.bezug();
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                ge.set_bezug(WST_BEZUG_UNSEI);
+            }else //if(bezug == WST_BEZUG_UNSEI)
+            {
+                ge.set_bezug(WST_BEZUG_OBSEI);
+            }
+            punkt3d sp, ep;
+            sp.set_x(ys);
+            sp.set_y(xs);
+            ep.set_x(ye);
+            ep.set_y(xe);
+            strecke s;
+            s.set_start(sp);
+            s.set_ende(ep);
+            ge.set_pfad(s);
+            zeile_neu = ge.text();
         }
         bearb.zeile_ersaetzen(i, zeile_neu);
     }
@@ -11199,7 +11228,7 @@ text_zeilenweise werkstueck::gehr_3achs(text_zeilenweise bearb, double &tmp_l, d
     //Schritt 2:
     //WST vergrößern
     //andere Bearbeitungen gem vergrößerung verschieben
-    double zugabe = 20;
+    double zugabe = Zugabe_gehrungen;
     if(li == true) //X-Werte verschieben
     {
         tmp_l += zugabe;

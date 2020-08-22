@@ -24,6 +24,7 @@ public:
     bool import_fmc_unterseite(QString Werkstueckname, QString importtext);
     void set_fkon_gerade_laenge(double wert);
     void set_kurze_geraden_importieren(bool wert);
+    void set_zugabe_gehrungen(double wert);
 
     //--------------------------------------------------get_xy:
     bool        ist_bekannt(QString Werkstueckname);
@@ -57,6 +58,7 @@ private:
     QVector<werkstueck> Wste;         //hier werden alle Werkstücke gespeichert
     double              Min_fkon_gerade_laenge;  //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
     bool                Kurze_geraden_import;
+    double              Zugabe_gehrungen;
 
     //Funktionen:
     //--------------------------------------------------set_xy:

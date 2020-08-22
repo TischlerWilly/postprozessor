@@ -64,6 +64,8 @@ private slots:
     void on_actionWerkzeug_ggf_anzeigen_triggered();
     void on_checkBox_use_ZielB_stateChanged();
 
+    void on_lineEdit_zugabe_gehr_editingFinished();
+
 private:
     Ui::MainWindow *ui;
     text_zeilenweise wkz_magazin_ganx;
@@ -103,6 +105,7 @@ private:
     text_zeilenweise namen_std_vor;         //Standard-Dateinamen von CAD
     text_zeilenweise namen_std_nach;        //Standard-Dateinamen eigen
     QString geraden_schwellenwert;          //Geraden ab dieser Lnge werden nicht importiert
+    QString zugabe_gehrungen;               //Maßangabe wie viel Zugabe bei Gehrungen gewünscht ist
     //double bezugsmass;
 
     //Funktionen:

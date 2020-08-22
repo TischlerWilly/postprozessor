@@ -87,6 +87,12 @@ void MainWindow::setup()
             ui->lineEdit_geraden_schwellenwert->setText(geraden_schwellenwert);
             wste.set_fkon_gerade_laenge(geraden_schwellenwert.toDouble());
 
+            file.write("zugabe_gehrungen:20");
+            file.write("\n");
+            zugabe_gehrungen = "20";
+            ui->lineEdit_zugabe_gehr->setText(zugabe_gehrungen);
+            wste.set_zugabe_gehrungen(zugabe_gehrungen.toDouble());
+
             ui->checkBox_quelldat_erhalt->setChecked(true);
             file.write("quelldateien_erhalten:ja");
             file.write("\n");
@@ -166,6 +172,11 @@ void MainWindow::setup()
                     geraden_schwellenwert = text_mitte(zeile, "geraden_schwellenwert:", "\n");
                     ui->lineEdit_geraden_schwellenwert->setText(geraden_schwellenwert);
                     wste.set_fkon_gerade_laenge(geraden_schwellenwert.toDouble());
+                }else if(zeile.contains("zugabe_gehrungen:"))
+                {
+                    zugabe_gehrungen = text_mitte(zeile, "zugabe_gehrungen:", "\n");
+                    ui->lineEdit_zugabe_gehr->setText(zugabe_gehrungen);
+                    wste.set_zugabe_gehrungen(zugabe_gehrungen.toDouble());
                 }else if(zeile.contains("use_zielB:"))
                 {
                     use_zielB = text_mitte(zeile, "use_zielB:", "\n");
@@ -447,6 +458,16 @@ void MainWindow::setup()
         }
         file.close();
     }
+
+    //GUI ergänzen wenn inifile von alter Programmversion:
+    if(ui->lineEdit_geraden_schwellenwert->text().isEmpty())
+    {
+        ui->lineEdit_geraden_schwellenwert->setText("2");
+    }
+    if(ui->lineEdit_zugabe_gehr->text().isEmpty())
+    {
+        ui->lineEdit_zugabe_gehr->setText("20");
+    }
 }
 
 void MainWindow::schreibe_ini()
@@ -479,6 +500,11 @@ void MainWindow::schreibe_ini()
         file.write(geraden_schwellenwert.toUtf8());
         file.write("\n");
         wste.set_fkon_gerade_laenge(geraden_schwellenwert.toDouble());
+
+        file.write("zugabe_gehrungen:");
+        file.write(zugabe_gehrungen.toUtf8());
+        file.write("\n");
+        wste.set_zugabe_gehrungen(zugabe_gehrungen.toDouble());
 
         //-------------------------------------------Checkboxen:
         file.write("use_zielB:");
@@ -668,6 +694,21 @@ void MainWindow::on_lineEdit_geraden_schwellenwert_editingFinished()
     ui->lineEdit_geraden_schwellenwert->setText(eingabe);
     geraden_schwellenwert = eingabe;
     schreibe_ini();
+}
+void MainWindow::on_lineEdit_zugabe_gehr_editingFinished()
+{
+    QString eingabe = ui->lineEdit_zugabe_gehr->text();
+    eingabe.replace(",",".");
+    if(eingabe.toDouble() >= 0)
+    {
+        ui->lineEdit_zugabe_gehr->setText(eingabe);
+        zugabe_gehrungen = eingabe;
+        schreibe_ini();
+    }else
+    {
+        QMessageBox::warning(this,"Fehler" ,"Eingaben kleiner als Nulle sind hier nicht erlaubt!",QMessageBox::Ok);
+        ui->lineEdit_zugabe_gehr->setText(zugabe_gehrungen);
+    }
 }
 //-----------------------------------------------------------------------Pfad-Buttons:
 void MainWindow::on_pushButton__quelle_clicked()
@@ -1429,6 +1470,8 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
+
 
 
 
