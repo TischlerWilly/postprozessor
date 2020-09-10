@@ -318,7 +318,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
     double tmp_l = Laenge;
     double tmp_b = Breite;
     text_zeilenweise tmp_bearb = Bearbeitungen;
-    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
 
     //Die beste Drehrichtung herausfinden:
     int bewertung_0    = 1;
@@ -1088,7 +1088,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
         msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
                                 formartierungen_aufbrechen, fkon_kantenschonend);
         QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1102,7 +1102,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", \
                                 formartierungen_aufbrechen, fkon_kantenschonend);
@@ -1117,7 +1117,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", \
@@ -1133,7 +1133,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1157,7 +1157,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
             msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
                                     formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1176,7 +1176,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", \
                                     formartierungen_aufbrechen, fkon_kantenschonend);
@@ -1196,7 +1196,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", \
@@ -1217,7 +1217,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1236,7 +1236,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             double tmp_l = Laenge;
             double tmp_b = Breite;
             text_zeilenweise tmp_bearb = Bearbeitungen;
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
             msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
                                     formartierungen_aufbrechen, fkon_kantenschonend);
             QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1260,7 +1260,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
     double tmp_b = Laenge;
     text_zeilenweise tmp_bearb;
     tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
 
     //Die beste Drehrichtung herausfinden:
     int bewertung_0    = 1;
@@ -1685,7 +1685,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         double tmp_b = Laenge;
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");                             //<--------------------
         msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
@@ -1699,7 +1699,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         double tmp_b = Laenge;
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1714,7 +1714,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         double tmp_b = Laenge;
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
@@ -1730,7 +1730,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         double tmp_b = Laenge;
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1754,7 +1754,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
             msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
@@ -1773,7 +1773,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
@@ -1793,7 +1793,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
@@ -1814,7 +1814,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
@@ -1833,7 +1833,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             double tmp_b = Laenge;
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+            tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
             msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
@@ -1915,7 +1915,7 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;        
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -1929,7 +1929,7 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -1944,7 +1944,7 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -1960,7 +1960,7 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -1978,7 +1978,7 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
         double tmp_l = Laenge;
         double tmp_b = Breite;
         text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
         if(ausgabeformat == GANX)
         {
             tmp_l = Breite;
@@ -11174,11 +11174,12 @@ void werkstueck::fraesergeraden_zusammenfassen()
 
     }
 }
-text_zeilenweise werkstueck::gehr_3achs(text_zeilenweise bearb, double &tmp_l, double &tmp_b)
+text_zeilenweise werkstueck::gehr_3achs(text_zeilenweise bearb, double &tmp_l, double &tmp_b, QString ausgabeformat)
 {
     //Diese Funktion löscht die Gehrungen aus den Bearbeitungen heraus
     //Diese können mit einer 3-Achs-Maschine nicht ohne Spezial-WKS hergestellt werden.
     //und im Spezielle nicht mit beliebigem Winkel
+    //ausgabeformate: fmc, ganx, eigen
 
     //Schritt 1:
     //Heraus bekommen ob Gehrungen vorhanden sind und wo sie liegen
@@ -11343,7 +11344,7 @@ text_zeilenweise werkstueck::gehr_3achs(text_zeilenweise bearb, double &tmp_l, d
     }
 
     //Schritt 3:
-    //Prüfen ob WST jetzt nur noch auf der Unterseite Bearbeitungen hat
+    //Prüfen ob WST jetzt nur noch auf der Unterseite Bearbeitungen hat    
     bool unsei = false;
     bool obsei = false;
     for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
@@ -11363,9 +11364,18 @@ text_zeilenweise werkstueck::gehr_3achs(text_zeilenweise bearb, double &tmp_l, d
             break; //for
         }
     }
-    if(obsei == false && unsei == true)
+    if(  (ausgabeformat == "fmc")  ||  (ausgabeformat == "eigen")  )
     {
-        bearb = drehen_um_b_halbe(bearb, tmp_l, tmp_b);
+        if(obsei == false && unsei == true)
+        {
+            bearb = drehen_um_b_halbe(bearb, tmp_l, tmp_b);
+        }
+    }else if(ausgabeformat == "ganx")
+    {
+        if(obsei == true && unsei == false)
+        {
+            bearb = drehen_um_b_halbe(bearb, tmp_l, tmp_b);
+        }
     }
 
     return bearb;
