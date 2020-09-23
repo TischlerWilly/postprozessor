@@ -2029,9 +2029,9 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
         msg += "  !! Werkstueck-X-Mass < 50mm\n";
         msg += "     X-Mass = " + double_to_qstring(wst_x) + "\n";
     }
-    if(tmp_d > 50)
+    if(tmp_d > 60)
     {
-        msg += "  !! Werkstueck-Dicke > 50mm\n";
+        msg += "  !! Werkstueck-Dicke > 60mm\n";
         msg += "     Dicke = " + double_to_qstring(tmp_d) + "\n";
     }
     if(tmp_d < 6)
