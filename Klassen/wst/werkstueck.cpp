@@ -2735,6 +2735,14 @@ QString werkstueck::fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise 
                 {
                     kreuzkopf_von_vorne = true;
                 }
+            }else if(art == BEARBART_BOHRRASTER)
+            {
+                bohrraster bora(zeile.text());
+
+                if(bora.bezug() == WST_BEZUG_VO)
+                {
+                    kreuzkopf_von_vorne = true;
+                }
             }
         }
         if(kreuzkopf_von_vorne == true)
