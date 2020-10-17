@@ -169,10 +169,10 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>11</x>
-      <y>600</y>
-      <width>191</width>
-      <height>91</height>
+      <x>770</x>
+      <y>560</y>
+      <width>121</width>
+      <height>131</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -361,10 +361,24 @@
       <x>10</x>
       <y>450</y>
       <width>196</width>
-      <height>133</height>
+      <height>231</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="5" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkBox_formatierung_aufbrechen">
+       <property name="text">
+        <string>Formartierungen aufbrechen</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0" colspan="2">
+      <widget class="Line" name="line_7">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0" colspan="2">
       <widget class="Line" name="line_4">
        <property name="orientation">
@@ -372,8 +386,25 @@
        </property>
       </widget>
      </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Zugabe Gehrungen</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLineEdit" name="lineEdit_zugabe_gehr"/>
+     </item>
      <item row="3" column="1">
       <widget class="QLineEdit" name="lineEdit_geraden_schwellenwert"/>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QCheckBox" name="checkBox_geraden">
+       <property name="text">
+        <string>kurze Geraden ignorieren</string>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label">
@@ -389,22 +420,15 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkBox_formatierung_aufbrechen">
-       <property name="text">
-        <string>Formartierungen aufbrechen</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkBox_geraden">
-       <property name="text">
-        <string>kurze Geraden ignorieren</string>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="0" colspan="2">
       <widget class="Line" name="line_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" colspan="2">
+      <widget class="Line" name="line_8">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

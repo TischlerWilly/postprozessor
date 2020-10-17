@@ -20,6 +20,7 @@ bool werkstuecke::neu(QString Werkstueckname, QString Quellformat)
         Namen.zeile_anhaengen(Werkstueckname);
         Quellformate.zeile_anhaengen(Quellformat);
         werkstueck w(Werkstueckname);
+        w.set_zugabe_gehrungen(Zugabe_gehrungen);
         Wste.append(w);
     }
     return false;
@@ -5408,6 +5409,10 @@ void werkstuecke::set_fkon_gerade_laenge(double wert)
 void werkstuecke::set_kurze_geraden_importieren(bool wert)
 {
     Kurze_geraden_import = wert;
+}
+void werkstuecke::set_zugabe_gehrungen(double wert)
+{
+    Zugabe_gehrungen = wert;
 }
 
 //--------------------------------------------------get_xy:
