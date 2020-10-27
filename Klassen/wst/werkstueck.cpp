@@ -288,6 +288,8 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                             bool formartierungen_aufbrechen, bool fkon_kantenschonend)
 {
 //#define ISDEBUG
+    const int ranking_abst_zwanzig = 5;
+    const int ranking_rw_nut = 30;
 
 #ifdef ISDEBUG
     bool isdebugmodus_0     = false;
@@ -398,7 +400,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             {
                 if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_0 += 2;
+                    bewertung_0 += ranking_abst_zwanzig;
 #ifdef ISDEBUG
                     if(isdebugmodus_0 == true)
                     {
@@ -410,7 +412,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                 }
                 if(bo.y() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_0 += 2;
+                    bewertung_0 += ranking_abst_zwanzig;
 #ifdef ISDEBUG
                     if(isdebugmodus_0 == true)
                     {
@@ -463,7 +465,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             {
                 if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_90 += 2;
+                    bewertung_90 += ranking_abst_zwanzig;
 #ifdef ISDEBUG
                     if(isdebugmodus_90 == true)
                     {
@@ -475,7 +477,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                 }
                 if(bo.y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                 {
-                    bewertung_90 += 2;
+                    bewertung_90 += ranking_abst_zwanzig;
 #ifdef ISDEBUG
                     if(isdebugmodus_90 == true)
                     {
@@ -527,7 +529,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             {
                 if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_180 += 2;
+                    bewertung_180 += ranking_abst_zwanzig;
 #ifdef ISDEBUG
                     if(isdebugmodus_180 == true)
                     {
@@ -539,7 +541,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                 }
                 if(bo.y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                 {
-                    bewertung_180 += 2;
+                    bewertung_180 += ranking_abst_zwanzig;
 #ifdef ISDEBUG
                     if(isdebugmodus_180 == true)
                     {
@@ -592,7 +594,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
             {
                 if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_270 += 2;
+                    bewertung_270 += ranking_abst_zwanzig;
 #ifdef ISDEBUG
                     if(isdebugmodus_270 == true)
                     {
@@ -604,7 +606,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                 }
                 if(bo.y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                 {
-                    bewertung_270 += 2;
+                    bewertung_270 += ranking_abst_zwanzig;
 #ifdef ISDEBUG
                     if(isdebugmodus_270 == true)
                     {
@@ -1016,7 +1018,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                 {
                     if(n.ys() == b_0 - 20 + 4.25)
                     {
-                        bewertung_0 += 10;
+                        bewertung_0 += ranking_rw_nut;
                     }
                 }
             }
@@ -1036,7 +1038,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                 {
                     if(n.ys() == b_0 - 20 + 4.25)
                     {
-                        bewertung_90 += 10;
+                        bewertung_90 += ranking_rw_nut;
                     }
                 }
             }
@@ -1056,7 +1058,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                 {
                     if(n.ys() == b_0 - 20 + 4.25)
                     {
-                        bewertung_180 += 10;
+                        bewertung_180 += ranking_rw_nut;
                     }
                 }
             }
@@ -1076,7 +1078,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                 {
                     if(n.ys() == b_0 - 20 + 4.25)
                     {
-                        bewertung_270 += 10;
+                        bewertung_270 += ranking_rw_nut;
                     }
                 }
             }
@@ -1252,6 +1254,8 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
 }
 QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel)
 {
+    const int ranking_abst_zwanzig = 5;
+
     QString msg;
     bearb_sortieren();
     hbemiduebeltiefe();
@@ -1340,11 +1344,11 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             {
                 if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_0 += 2;
+                    bewertung_0 += ranking_abst_zwanzig;
                 }
                 if(bo.y() == b_0-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                 {
-                    bewertung_0 += 2;
+                    bewertung_0 += ranking_abst_zwanzig;
                 }
             }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
             {
@@ -1372,11 +1376,11 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             {
                 if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_90 += 2;
+                    bewertung_90 += ranking_abst_zwanzig;
                 }
                 if(bo.y() == b_90-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                 {
-                    bewertung_90 += 2;
+                    bewertung_90 += ranking_abst_zwanzig;
                 }
             }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
             {
@@ -1404,11 +1408,11 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             {
                 if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_180 += 2;
+                    bewertung_180 += ranking_abst_zwanzig;
                 }
                 if(bo.y() == b_180-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                 {
-                    bewertung_180 += 2;
+                    bewertung_180 += ranking_abst_zwanzig;
                 }
             }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
             {
@@ -1436,11 +1440,11 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             {
                 if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                 {
-                    bewertung_270 += 2;
+                    bewertung_270 += ranking_abst_zwanzig;
                 }
                 if(bo.y() == b_270-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
                 {
-                    bewertung_270 += 2;
+                    bewertung_270 += ranking_abst_zwanzig;
                 }
             }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
             {
