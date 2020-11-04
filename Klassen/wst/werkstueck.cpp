@@ -2299,7 +2299,7 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                         msg += "  !! Fraestiefe < Mindest-Zustellmass    bei Kreistasche!\n";
                     }
 
-                }else//Es ist auch kein passender Frser da, die CNC-Bearbeitung kann nicht erfolgen
+                }else//Es ist auch kein passender Fräser da, die CNC-Bearbeitung kann nicht erfolgen
                 {
                     msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
                     msg += "    ->";
@@ -2996,7 +2996,7 @@ QString werkstueck::fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise 
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
+                tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ein WKZ definiert?
                 if(tnummer.isEmpty())
                 {
                     tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
@@ -11060,7 +11060,9 @@ text_zeilenweise werkstueck::dubosplitten(text_zeilenweise bearb, text_zeilenwei
                     if(tnummer.isEmpty())
                     {
                         bohrung boA = bo;
-                        boA.set_tiefe(bo.tiefe()/2 + 2);
+                        double boti = bo.tiefe();
+                        boti = boti -4; // jetzt boti == wst-Dicke
+                        boA.set_tiefe(boti/2 + 2);
                         tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), boA.tiefe(), Dicke, bo.bezug());
                         if(!tnummer.isEmpty())
                         {
