@@ -10,11 +10,13 @@
 #include "Defines/dateinamen.h"
 #include "Dialoge/dialog_wkz.h"
 #include "Dialoge/dialog_stdnamen.h"
+#include "Dialoge/dialog_einstellung_ganx.h"
 
 #include "Funktionen/text.h"
 #include "Klassen/text_zeilenweise.h"
 #include "Klassen/wst/werkstuecke.h"
 #include "Klassen/werkzeugmagazin.h"
+#include "Klassen/einstellung_ganx.h"
 #include "ToDo.h"
 
 
@@ -66,6 +68,8 @@ private slots:
 
     void on_lineEdit_zugabe_gehr_editingFinished();
 
+    void on_actionEinstellung_ganx_triggered();
+
 private:
     Ui::MainWindow *ui;
     text_zeilenweise wkz_magazin_ganx;
@@ -106,6 +110,7 @@ private:
     text_zeilenweise namen_std_nach;        //Standard-Dateinamen eigen
     QString geraden_schwellenwert;          //Geraden ab dieser Lnge werden nicht importiert
     QString zugabe_gehrungen;               //Maßangabe wie viel Zugabe bei Gehrungen gewünscht ist
+    einstellung_ganx Einstellung_ganx;
     //double bezugsmass;
 
     //Funktionen:
@@ -116,14 +121,18 @@ private:
     //Dialoge:
     Dialog_WKZ dlg_wkz;
     Dialog_stdnamen dlg_stdnamen;
+    Dialog_einstellung_ganx dlg_einstellung_ganx;
+
 
 signals:
     void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
     void sendStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
+    void sendEinstellungGANX(einstellung_ganx e);
 
 public slots:
     void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
     void getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
+    void getEinstellungGANX(einstellung_ganx e);
 
 };
 

@@ -459,9 +459,16 @@
      <string>Extras</string>
     </property>
     <addaction name="actionInfo"/>
+   </widget>
+   <widget class="QMenu" name="menuEinstellungen">
+    <property name="title">
+     <string>Einstellungen</string>
+    </property>
     <addaction name="actionStandard_Namen_anzeigen"/>
+    <addaction name="actionEinstellung_ganx"/>
    </widget>
    <addaction name="menuWerkzeug"/>
+   <addaction name="menuEinstellungen"/>
    <addaction name="menuExtras"/>
   </widget>
   <action name="actionWerkzeug_ganx_anzeigen">
@@ -481,12 +488,17 @@
   </action>
   <action name="actionStandard_Namen_anzeigen">
    <property name="text">
-    <string>Standard-Namen anzeigen</string>
+    <string>Standard-Namen</string>
    </property>
   </action>
   <action name="actionWerkzeug_ggf_anzeigen">
    <property name="text">
     <string>Werkzeug ggf bearbeiten</string>
+   </property>
+  </action>
+  <action name="actionEinstellung_ganx">
+   <property name="text">
+    <string>ganx</string>
    </property>
   </action>
  </widget>

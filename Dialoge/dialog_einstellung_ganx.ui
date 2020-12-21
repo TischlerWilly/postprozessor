@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog_einstellung_ganx</class>
+ <widget class="QDialog" name="Dialog_einstellung_ganx">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Einstellungen ganx</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <widget class="QCheckBox" name="checkBox_bezugskantenmass">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>261</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ist in der Maschinensteuerung die Option &amp;quot;Vermessen&amp;quot; aktiviert so werden alle Bearbeitungen gemäß ihrer Bezugskante verschoben anhand der nun erfolgenden Längenmessung des Werkstückes.&lt;/p&gt;&lt;p&gt;Wird dieser Haken im Postprozessor nicht gesetzt so werden alle Bearbeitungen mit Absolutmaß ausgegeben (Bezugskante Nullpunkt).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="text">
+    <string>Bezugskanten anhand Referenzmaß setzen</string>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="doubleSpinBox_bezugskantenmass">
+   <property name="geometry">
+    <rect>
+     <x>281</x>
+     <y>10</y>
+     <width>101</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="decimals">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <double>100.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_ok">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>260</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Speichern</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_abbrechen">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>260</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Abbrechen</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
