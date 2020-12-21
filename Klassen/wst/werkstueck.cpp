@@ -96,7 +96,6 @@ void werkstueck::set_zugabe_gehrungen(double wert)
 {
     Zugabe_gehrungen = wert;
 }
-
 //--------------------------------------------------get_xy:
 QString werkstueck::kante_vo(QString drewi)
 {
@@ -1252,7 +1251,7 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
     }
     return msg;
 }
-QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel)
+QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel, einstellung_ganx eganx)
 {
     const int ranking_abst_zwanzig = 5;
 
@@ -1690,7 +1689,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         text_zeilenweise tmp_bearb;
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
         tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");                             //<--------------------
-        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_0);
@@ -1705,7 +1704,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
         tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_90);
@@ -1721,7 +1720,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_180);
@@ -1738,7 +1737,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
         tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
         QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
         info += " (";
         info += double_to_qstring(bewertung_270);
@@ -1759,7 +1758,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
             tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
-            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
             info += " (";
@@ -1779,7 +1778,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
             tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 90 Grad";
             info += " (";
@@ -1800,7 +1799,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 180 Grad";
             info += " (";
@@ -1822,7 +1821,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
             tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung 270 Grad";
             info += " (";
@@ -1838,7 +1837,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
             text_zeilenweise tmp_bearb;
             tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
             tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
-            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+            msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
             QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
             info  = "  -> Drehung keine";
             info += " (";
@@ -5751,14 +5750,22 @@ QString werkstueck::fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise 
     return msg;
 }
 QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise bearb, \
-                                       double tmp_l, double tmp_b)
+                                       double tmp_l, double tmp_b,\
+                                       einstellung_ganx eganx)
 {
+    //Physischer-Maschinen-Nullpunkt ist oben links
+    //Maschinen-Nullunkt in der Software ist unten links
+    //Programm-Nullpunkt in bearb ist unten links
+
     bearb = dubosplitten(bearb, wkzmagazin, dicke());
     bearb = rasterbohrungen_finden_ganx(bearb, wkzmagazin, tmp_l, tmp_b);
     QString msg;
     text_zeilenweise zeile;
     zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    double bezugsmass = 40;    //Referenzmaß zum Erkennen der Bezugskante
+    double bezugsmass;    //Referenzmaß zum Erkennen der Bezugskante
+    bezugsmass = eganx.bezugsmass();
+    bool bezmass_in_use = eganx.bezugsmass_in_use();
+
     werkzeugmagazin wkzmag(wkzmagazin);
 
     //-------------------------1.Vorspann:
@@ -5901,12 +5908,15 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                         //y < 40 -> TL
                         //Länge - y < 40 ->BL
                         QString ref;
-                        if(laenge_y - y < bezugsmass)
-                        {
-                            ref += GANX_REF_OBEN_LINKS;
-                        }else
+                        y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                        if(bezmass_in_use && laenge_y - y < bezugsmass)
                         {
                             ref += GANX_REF_UNTEN_LINKS;
+                            y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
+                        }else
+                        {
+                            ref += GANX_REF_OBEN_LINKS;
+                            y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
                         }
                         msg += ref;
                         msg += "</Ref>";
@@ -5991,12 +6001,15 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                         //y < 40 -> TL
                         //Länge - y < 40 ->BL
                         QString ref;
-                        if(laenge_y - y < bezugsmass)
-                        {
-                            ref = GANX_REF_OBEN_LINKS;
-                        }else
+                        y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                        if(bezmass_in_use && laenge_y - y < bezugsmass)
                         {
                             ref = GANX_REF_UNTEN_LINKS;
+                            y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
+                        }else
+                        {
+                            ref = GANX_REF_OBEN_LINKS;
+                            y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
                         }
                         msg += ref;
                         msg += "</Ref>";
@@ -6439,12 +6452,15 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                     msg += "\n";
                     //----------------------Bezugskante festlegen:
                     QString ref;
-                    if(laenge_y - y < bezugsmass)
-                    {
-                        ref = GANX_REF_OBEN_LINKS;
-                    }else
+                    y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                    if(bezmass_in_use && laenge_y - y < bezugsmass)
                     {
                         ref = GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
+                    }else
+                    {
+                        ref = GANX_REF_OBEN_LINKS;
+                        y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
                     }
                     msg += "    <Ref>";
                     msg += ref;
@@ -6599,12 +6615,15 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                                 //----------------------
                                 msg += "    <Ref>";
                                 QString ref;
-                                if(  laenge_y - y < bezugsmass  &&  bora.anz_y()==1  )
-                                {
-                                    ref += GANX_REF_OBEN_LINKS;
-                                }else
+                                y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                                if(bezmass_in_use && laenge_y - y < bezugsmass  &&  bora.anz_y()==1  )
                                 {
                                     ref += GANX_REF_UNTEN_LINKS;
+                                    y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
+                                }else
+                                {
+                                    ref += GANX_REF_OBEN_LINKS;
+                                    y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
                                 }
                                 msg += ref;
                                 msg += "</Ref>";
@@ -7168,12 +7187,15 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                 msg += "\n";
                 //----------------------Bezugskante festlegen:
                 QString ref;
-                if(laenge_y - y < bezugsmass)
-                {
-                    ref = GANX_REF_OBEN_LINKS;
-                }else
+                y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                if(bezmass_in_use && laenge_y - y < bezugsmass)
                 {
                     ref = GANX_REF_UNTEN_LINKS;
+                    y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
+                }else
+                {
+                    ref = GANX_REF_OBEN_LINKS;
+                    y = laenge_y - y; //Y-Maß auf Maschinen-Nullpnkt in der Software umdenken (unten links)
                 }
                 msg += "    <Ref>";
                 msg += ref;
@@ -7370,13 +7392,14 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                     //y < 40 -> TL
                     //Länge - y < 40 ->BL
                     QString ref;
-                    if(laenge_y - y < bezugsmass)
+                    y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                    if(bezmass_in_use && laenge_y - y < bezugsmass)
                     {
-                        ref += GANX_REF_OBEN_LINKS;
+                        ref += GANX_REF_UNTEN_LINKS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        ref += GANX_REF_OBEN_LINKS;
                     }
                     //msg += ref;
                     //----------------------
@@ -7470,13 +7493,14 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                     msg += "\n";
                     //----------------------
                     QString ref;
-                    if(laenge_y - y < bezugsmass)
+                    y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                    if(bezmass_in_use && laenge_y - y < bezugsmass)
                     {
-                        ref = GANX_REF_OBEN_LINKS;
+                        ref = GANX_REF_UNTEN_LINKS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref = GANX_REF_UNTEN_LINKS;
+                        ref = GANX_REF_OBEN_LINKS;
                     }
                     //----------------------
                     msg += "    <ID>";
@@ -7569,13 +7593,14 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                     msg += "\n";
                     //----------------------
                     QString ref;
-                    if(laenge_y - y < bezugsmass)
+                    y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                    if(bezmass_in_use && laenge_y - y < bezugsmass)
                     {
-                        ref += GANX_REF_OBEN_LINKS;
+                        ref += GANX_REF_UNTEN_LINKS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref += GANX_REF_UNTEN_LINKS;
+                        ref += GANX_REF_OBEN_LINKS;
                     }
                     //----------------------
                     msg += "    <ID>";
@@ -7668,13 +7693,14 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                     msg += "\n";
                     //----------------------
                     QString ref;
-                    if(laenge_y - y < bezugsmass)
+                    y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                    if(bezmass_in_use && laenge_y - y < bezugsmass)
                     {
-                        ref += GANX_REF_OBEN_RECHTS;
+                        ref += GANX_REF_UNTEN_RECHTS;
                         y = laenge_y - y;
                     }else
                     {
-                        ref += GANX_REF_UNTEN_RECHTS;
+                        ref += GANX_REF_OBEN_RECHTS;
                     }
                     //----------------------
                     msg += "    <ID>";
@@ -7984,13 +8010,17 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                     msg += "</CntID>";
                     msg += "\n";
                     //----------------------
-                    QString ref = GANX_REF_UNTEN_LINKS;
+                    QString ref;
                     //y < 40 -> TL
                     //Länge - y < 40 ->BL
-                    if(laenge_y - y < bezugsmass)
+                    y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                    if(bezmass_in_use && laenge_y - y < bezugsmass)
+                    {
+                        ref = GANX_REF_UNTEN_LINKS;
+                        y = laenge_y - y;
+                    }else
                     {
                         ref = GANX_REF_OBEN_LINKS;
-                        y = laenge_y - y;
                     }
                     //----------------------
                     msg += "    <ID>";
@@ -8150,13 +8180,14 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                     QString ref;
                     if(bora.anz_y()==1  )
                     {
-                        if(laenge_y - y < bezugsmass)
+                        y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                        if(bezmass_in_use && laenge_y - y < bezugsmass)
                         {
-                            ref += GANX_REF_OBEN_LINKS;
+                            ref += GANX_REF_UNTEN_LINKS;
                             y = laenge_y - y;
                         }else
                         {
-                            ref += GANX_REF_UNTEN_LINKS;
+                            ref += GANX_REF_OBEN_LINKS;
                         }
                     }else //bora.anz_y()>1
                     {
@@ -8734,13 +8765,17 @@ QString werkstueck::ganx_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise
                 msg += "</CntID>";
                 msg += "\n";
                 //----------------------
-                QString ref = GANX_REF_UNTEN_LINKS;
+                QString ref;
                 //y < 40 -> TL
                 //Länge - y < 40 ->BL
-                if(laenge_y - y < bezugsmass)
+                y = laenge_y - y; //Y-Maß auf physischen Maschinen-Nullpnkt umdenken (oben links)
+                if(bezmass_in_use && laenge_y - y < bezugsmass)
+                {
+                    ref = GANX_REF_UNTEN_LINKS;
+                    y = laenge_y - y;
+                }else
                 {
                     ref = GANX_REF_OBEN_LINKS;
-                    y = laenge_y - y;
                 }
                 //----------------------
                 msg += "    <ID>";

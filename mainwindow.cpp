@@ -22,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_stdnamen, SLOT(slot_setup(text_zeilenweise,text_zeilenweise)));
     connect(&dlg_stdnamen, SIGNAL(signal_sendData(text_zeilenweise,text_zeilenweise)),\
             this, SLOT(getStdNamen(text_zeilenweise,text_zeilenweise)));
+    connect(this, SIGNAL(sendEinstellungGANX(einstellung_ganx)),\
+            &dlg_einstellung_ganx, SLOT(slot_einstellung(einstellung_ganx)));
+    connect(&dlg_einstellung_ganx, SIGNAL(send_einstellung(einstellung_ganx)),\
+            this, SLOT(getEinstellungGANX(einstellung_ganx )));
 }
 
 MainWindow::~MainWindow()
@@ -36,6 +40,7 @@ void MainWindow::setup()
     bool wkz_fmc_gefunden = false;      //user-Ordner
     bool wkz_ggf_gefunden = false;      //user-Ordner
     bool namen_std_gefunden = false;    //user-Ordner
+    bool ini_ganx_gefunden = false;     //user-Ordner
     QDir user_ordner(pf.path_user());
     QStringList ordnerinhalt;
     ordnerinhalt = user_ordner.entryList(QDir::Files);
@@ -61,6 +66,10 @@ void MainWindow::setup()
         if(name.contains(pf.name_stdNamen()))
         {
             namen_std_gefunden = true;
+        }
+        if(name.contains(pf.name_ini_ganx()))
+        {
+            ini_ganx_gefunden = true;
         }
     }
     if(inifile_gefunden == false)
@@ -357,6 +366,38 @@ void MainWindow::setup()
         file.close();
     }
 
+    if(ini_ganx_gefunden == false)
+    {
+        QFile file(pf.path_ini_ganx());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_ini_ganx();
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            file.write(Einstellung_ganx.text().toLatin1());
+        }
+        file.close();
+    }else
+    {
+        QFile file(pf.path_ini_ganx());
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_ini_ganx();
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            Einstellung_ganx.set_text(file.readAll());
+        }
+        file.close();
+    }
+
     if(wkz_ganx_gefunden == false)
     {
         QFile file(pf.path_wkz_ganx());
@@ -644,6 +685,25 @@ void MainWindow::getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_
             namen.zeile_anhaengen(zeile);
         }
         file.write(namen.text().toUtf8());
+    }
+    file.close();
+}
+
+void MainWindow::getEinstellungGANX(einstellung_ganx e)
+{
+    Einstellung_ganx = e;
+
+    QFile file(pf.path_ini_ganx());
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QString tmp = "Fehler beim Dateizugriff!\n";
+        tmp += pf.path_ini_ganx();
+        tmp += "\n";
+        tmp += "in der Funktion getEinstellungGANX";
+        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+    }else
+    {
+        file.write(Einstellung_ganx.text().toLatin1());
     }
     file.close();
 }
@@ -984,6 +1044,10 @@ void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
 {
     emit sendStdNamen(namen_std_vor, namen_std_nach);
 }
+void MainWindow::on_actionEinstellung_ganx_triggered()
+{
+    emit sendEinstellungGANX(Einstellung_ganx);
+}
 
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
@@ -1183,8 +1247,6 @@ void MainWindow::on_pushButton_start_clicked()
         }
     }
 
-
-
     if(std_namen == "ja")
     {
         wste.stdnamen(namen_std_vor, namen_std_nach);
@@ -1195,6 +1257,12 @@ void MainWindow::on_pushButton_start_clicked()
     msg += "------------------\n";
     ui->plainTextEdit_eldungen->setPlainText(msg);
     ui->plainTextEdit_zusatzinfo->setPlainText(wste.cad_fehler());
+
+    //Einstellungen auf Werkstücke übertragen:
+    //for(uint i=1; i<=wste.anzahl() ;i++)
+    //{
+    //    wste.wst(i).set_einstellung_ganx(Einstellung_ganx);
+    //}
 
     //Datein exportieren:
     QDir dir_ganx;
@@ -1260,7 +1328,7 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";
-                QString tmp = wste.wst(i).ganx(wkz_magazin_ganx, info, drehung_des_bauteils);
+                QString tmp = wste.wst(i).ganx(wkz_magazin_ganx, info, drehung_des_bauteils, Einstellung_ganx);
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;
@@ -1470,6 +1538,8 @@ void MainWindow::dateien_erfassen()
     }
     dateien_alle = tz;
 }
+
+
 
 
 

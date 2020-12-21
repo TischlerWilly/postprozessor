@@ -13,6 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+    Dialoge/dialog_einstellung_ganx.cpp \
+    Klassen/einstellung_ganx.cpp \
     Klassen/geo/geometrietext.cpp \
     Klassen/geo/kreis.cpp \
     Klassen/geo/rechteck3d.cpp \
@@ -53,6 +55,8 @@ SOURCES += main.cpp\
     Dialoge/dialog_stdname.cpp
 
 HEADERS  += mainwindow.h \
+    Dialoge/dialog_einstellung_ganx.h \
+    Klassen/einstellung_ganx.h \
     Klassen/formel.h \
     Klassen/geo/defines_geometrie.h \
     Klassen/geo/geometrietext.h \
@@ -99,15 +103,16 @@ HEADERS  += mainwindow.h \
     Klassen/wst/ganx_gruppen.h \
     Defines//def_vw.h \
     Dialoge/dialog_stdnamen.h \
-    Dialoge/dialog_stdname.h
+    Dialoge/dialog_stdname.h \
 
 FORMS    += mainwindow.ui \
+    Dialoge/dialog_einstellung_ganx.ui \
     Dialoge/dialog_wkz.ui \
     Dialoge/dialog_bohrer.ui \
     Dialoge/dialog_fraeser.ui \
     Dialoge/dialog_saege.ui \
     Dialoge/dialog_stdnamen.ui \
-    Dialoge/dialog_stdname.ui
+    Dialoge/dialog_stdname.ui \
 
 DISTFILES += \
     Klassen/geo/makro_geometrie.h~ \

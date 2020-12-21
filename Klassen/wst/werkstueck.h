@@ -5,6 +5,7 @@
 #include <QMessageBox>
 
 #include "Defines/werkzeug.h"
+#include "Klassen/einstellung_ganx.h"
 
 #include "Funktionen/umwandeln.h"
 #include "Funktionen/runden.h"
@@ -45,6 +46,7 @@ public:
     void set_kante_re(QString artiklenummer);
     void set_zugabe_gehrungen(double wert);
 
+
     inline void set_name(QString neuer_name)
     {
         Name = neuer_name;
@@ -64,7 +66,7 @@ public:
                     QString drehwinkel = "0", QString zust_fkon = "orgi",\
                     bool formartierungen_aufbrechen = false,\
                     bool fkon_kantenschonend = false);
-    QString ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
+    QString ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel,einstellung_ganx eganx);
     QString ggf(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
     QString eigenses_format(QString drehwinkel, QString ausgabeformat, \
                                 text_zeilenweise wkzmagazin,\
@@ -136,7 +138,8 @@ private:
                           QString drewi, bool formartierungen_aufbrechen,\
                           bool fkon_kantenschonend);
     QString ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
-                           double tmp_l, double tmp_b);
+                           double tmp_l, double tmp_b,\
+                           einstellung_ganx eganx);
     QString ggf_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
                           double tmp_l, double tmp_b);
     QString eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \

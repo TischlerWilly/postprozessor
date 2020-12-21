@@ -13,12 +13,14 @@ public:
     QString path_user();
     QString path_inifile();
     QString path_stdNamen();
+    QString path_ini_ganx();
     QString path_wkz_fmc();
     QString path_wkz_ganx();
     QString path_wkz_ggf();
 
     QString name_inifile();
     QString name_stdNamen();
+    QString name_ini_ganx();
     QString name_wkz_fmc();
     QString name_wkz_ganx();
     QString name_wkz_ggf();
@@ -29,6 +31,7 @@ private:
     //ini-Dateien:
     QString Inifile;
     QString StdNamen;
+    QString ini_ganx;
 
     //WKZ-Dateien:
     QString Wkz_fmc;

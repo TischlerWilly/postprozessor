@@ -4,6 +4,7 @@ prgpfade::prgpfade()
 {
     Inifile             = "postprozessor.ini";
     StdNamen            = "namen_std.ini";
+    ini_ganx            = "ganx.ini";
     Wkz_fmc             = "wkz_magazin_fmc.csv";
     Wkz_ganx            = "wkz_magazin_ganx.csv";
     Wkz_ggf             = "wkz_magazin_ggf.csv";
@@ -31,6 +32,10 @@ QString prgpfade::name_inifile()
 QString prgpfade::name_stdNamen()
 {
     return StdNamen;
+}
+QString prgpfade::name_ini_ganx()
+{
+    return ini_ganx;
 }
 QString prgpfade::name_wkz_fmc()
 {
@@ -76,6 +81,14 @@ QString prgpfade::path_stdNamen()
     tmp = path_user();
     tmp += QDir::separator();
     tmp += StdNamen;
+    return tmp;
+}
+QString prgpfade::path_ini_ganx()
+{
+    QString tmp;
+    tmp = path_user();
+    tmp += QDir::separator();
+    tmp += ini_ganx;
     return tmp;
 }
 QString prgpfade::path_wkz_fmc()
