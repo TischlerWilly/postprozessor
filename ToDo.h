@@ -2,7 +2,7 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.20.12.21"
+#define PROGRAMMVERSION "1.20.12.26"
 #endif //PROGRAMMVERSION
 /*
 
