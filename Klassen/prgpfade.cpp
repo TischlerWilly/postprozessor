@@ -2,7 +2,7 @@
 
 prgpfade::prgpfade()
 {
-    Inifile             = "postprozessor.ini";
+    Inifile             = "einstellungen.ini";
     StdNamen            = "namen_std.ini";
     ini_ganx            = "ganx.ini";
     Wkz_fmc             = "wkz_magazin_fmc.csv";

@@ -14,6 +14,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     Dialoge/dialog_einstellung_ganx.cpp \
+    Klassen/einstellung.cpp \
     Klassen/einstellung_ganx.cpp \
     Klassen/geo/geometrietext.cpp \
     Klassen/geo/kreis.cpp \
@@ -56,6 +57,7 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     Dialoge/dialog_einstellung_ganx.h \
+    Klassen/einstellung.h \
     Klassen/einstellung_ganx.h \
     Klassen/formel.h \
     Klassen/geo/defines_geometrie.h \

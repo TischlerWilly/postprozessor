@@ -10,16 +10,17 @@ class einstellung_ganx
 {
 public:
     einstellung_ganx();
+
+    //set:
     void set_text(QString t);
-    QString text();
-
-public:
-    double bezugsmass();
-    bool bezugsmass_in_use();
-
     void set_bezugskantenmass(double b);
     void use_bezugsmass(bool in_use);
     void use_bezugsmass(QString in_use);
+
+    //get:
+    QString text();
+    double bezugsmass();
+    bool bezugsmass_in_use();
 
 private:
     double Bezugskantenmass;
