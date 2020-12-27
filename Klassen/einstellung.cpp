@@ -2,10 +2,12 @@
 
 einstellung::einstellung()
 {
-    Verzeichniss_quelle         = "";
-    Verzeichniss_ziel_a         = "";
-    Verzeichniss_ziel_b         = "";
-    Verzeichniss_ziel_auswahl   = "a"; // | "b"
+    Verzeichnis_quelle          = "./";
+    Verzeichnis_ziel_server     = "./";
+    Verzeichnis_ziel_lokal      = "./";
+    Verzeichnis_root_ganx       = "P:\\CNC Ganner\\Programme";
+    Verzeichnis_root_fmc        = "P:\\CNC";
+    Verzeichnis_ziel_auswahl    = "server"; // | "lokal" | "AUTO"
     Quelldateien_erhalten       = true;
     Std_dateinamen_verwenden    = false;
     Drehung_wst                 = "0";// | "90" | "180" | "270" | "AUTO"
@@ -33,16 +35,22 @@ void einstellung::set_text(QString t)
         spalten.set_text(tz.zeile(i));
         if(spalten.zeile(1) == "verzeichnis_quelle:")
         {
-            set_verzeichniss_quelle(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "verzeichnis_ziel_A:")
+            set_verzeichnis_quelle(spalten.zeile(2));
+        }else if(spalten.zeile(1) == "verzeichnis_ziel_server:")
         {
-            set_verzeichniss_ziel_a(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "verzeichnis_ziel_B:")
+            set_verzeichnis_ziel_server(spalten.zeile(2));
+        }else if(spalten.zeile(1) == "verzeichnis_ziel_lokal:")
         {
-            set_verzeichniss_ziel_b(spalten.zeile(2));
+            set_verzeichnis_ziel_lokal(spalten.zeile(2));
+        }else if(spalten.zeile(1) == "verzeichnis_root_ganx:")
+        {
+            set_verzeichnis_root_ganx(spalten.zeile(2));
+        }else if(spalten.zeile(1) == "verzeichnis_root_fmc:")
+        {
+            set_verzeichnis_root_fmc(spalten.zeile(2));
         }else if(spalten.zeile(1) == "verzeichnis_zielABC:")
         {
-            set_verzeichniss_ziel_auswahl(spalten.zeile(2));
+            set_verzeichnis_ziel_auswahl(spalten.zeile(2));
         }else if(spalten.zeile(1) == "quelldateien_erhalten:")
         {
             set_quelldateien_erhalten(spalten.zeile(2));
@@ -85,23 +93,31 @@ void einstellung::set_text(QString t)
         }
     }
 }
-void einstellung::set_verzeichniss_quelle(QString v)
+void einstellung::set_verzeichnis_quelle(QString v)
 {
-    Verzeichniss_quelle = v;
+    Verzeichnis_quelle = v;
 }
-void einstellung::set_verzeichniss_ziel_a(QString v)
+void einstellung::set_verzeichnis_ziel_server(QString v)
 {
-    Verzeichniss_ziel_a = v;
+    Verzeichnis_ziel_server = v;
 }
-void einstellung::set_verzeichniss_ziel_b(QString v)
+void einstellung::set_verzeichnis_ziel_lokal(QString v)
 {
-    Verzeichniss_ziel_b = v;
+    Verzeichnis_ziel_lokal = v;
 }
-bool einstellung::set_verzeichniss_ziel_auswahl(QString abc)
+void einstellung::set_verzeichnis_root_ganx(QString v)
 {
-    if(abc =="a" | abc =="b")
+    Verzeichnis_root_ganx = v;
+}
+void einstellung::set_verzeichnis_root_fmc(QString v)
+{
+    Verzeichnis_root_fmc = v;
+}
+bool einstellung::set_verzeichnis_ziel_auswahl(QString abc)
+{
+    if(abc=="server" | abc=="lokal" | abc=="AUTO")
     {
-        Verzeichniss_ziel_auswahl = abc;
+        Verzeichnis_ziel_auswahl = abc;
         return true;//Erfolg
     }else
     {
@@ -285,22 +301,32 @@ QString einstellung::text()
 
     text += "verzeichnis_quelle:";
     text += "\t";
-    text += verzeichniss_quelle();
+    text += verzeichnis_quelle();
     text += "\n";
 
-    text += "verzeichnis_ziel_A:";
+    text += "verzeichnis_ziel_server:";
     text += "\t";
-    text += verzeichniss_ziel_a();
+    text += verzeichnis_ziel_server();
     text += "\n";
 
-    text += "verzeichnis_ziel_B:";
+    text += "verzeichnis_ziel_lokal:";
     text += "\t";
-    text += verzeichniss_ziel_b();
+    text += verzeichnis_ziel_lokal();
+    text += "\n";
+
+    text += "verzeichnis_root_ganx:";
+    text += "\t";
+    text += verzeichnis_root_ganx();
+    text += "\n";
+
+    text += "verzeichnis_root_fmc:";
+    text += "\t";
+    text += verzeichnis_root_fmc();
     text += "\n";
 
     text += "verzeichnis_zielABC:";
     text += "\t";
-    text += verzeichniss_ziel_auswahl();
+    text += verzeichnis_ziel_auswahl();
     text += "\n";
 
     text += "quelldateien_erhalten:";
@@ -424,21 +450,29 @@ QString einstellung::text()
 
     return text;
 }
-QString einstellung::verzeichniss_quelle()
+QString einstellung::verzeichnis_quelle()
 {
-    return Verzeichniss_quelle;
+    return Verzeichnis_quelle;
 }
-QString einstellung::verzeichniss_ziel_a()
+QString einstellung::verzeichnis_ziel_server()
 {
-    return Verzeichniss_ziel_a;
+    return Verzeichnis_ziel_server;
 }
-QString einstellung::verzeichniss_ziel_b()
+QString einstellung::verzeichnis_ziel_lokal()
 {
-    return Verzeichniss_ziel_b;
+    return Verzeichnis_ziel_lokal;
 }
-QString einstellung::verzeichniss_ziel_auswahl()
+QString einstellung::verzeichnis_root_ganx()
 {
-    return Verzeichniss_ziel_auswahl;
+    return Verzeichnis_root_ganx;
+}
+QString einstellung::verzeichnis_root_fmc()
+{
+    return Verzeichnis_root_fmc;
+}
+QString einstellung::verzeichnis_ziel_auswahl()
+{
+    return Verzeichnis_ziel_auswahl;
 }
 bool einstellung::quelldateien_erhalten()
 {

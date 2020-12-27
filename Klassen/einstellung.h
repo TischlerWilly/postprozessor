@@ -12,10 +12,12 @@ public:
 
     //set:
     void set_text(QString t);
-    void set_verzeichniss_quelle(QString v);
-    void set_verzeichniss_ziel_a(QString v);
-    void set_verzeichniss_ziel_b(QString v);
-    bool set_verzeichniss_ziel_auswahl(QString abc);
+    void set_verzeichnis_quelle(QString v);
+    void set_verzeichnis_ziel_server(QString v);
+    void set_verzeichnis_ziel_lokal(QString v);
+    void set_verzeichnis_root_ganx(QString v);
+    void set_verzeichnis_root_fmc(QString v);
+    bool set_verzeichnis_ziel_auswahl(QString abc);
     void set_quelldateien_erhalten(bool erhalten);
     void set_quelldateien_erhalten(QString erhalten);
     void set_std_dateinamen_verwenden(bool jn);
@@ -42,10 +44,12 @@ public:
 
     //get:
     QString text();
-    QString verzeichniss_quelle();
-    QString verzeichniss_ziel_a();
-    QString verzeichniss_ziel_b();
-    QString verzeichniss_ziel_auswahl();
+    QString verzeichnis_quelle();
+    QString verzeichnis_ziel_server();
+    QString verzeichnis_ziel_lokal();
+    QString verzeichnis_root_ganx();
+    QString verzeichnis_root_fmc();
+    QString verzeichnis_ziel_auswahl();
     bool quelldateien_erhalten();
     bool std_dateinamen_verwenden();
     QString drehung_wst();
@@ -61,10 +65,12 @@ public:
     bool export_eigen();
 
 private:
-    QString Verzeichniss_quelle;
-    QString Verzeichniss_ziel_a;
-    QString Verzeichniss_ziel_b;
-    QString Verzeichniss_ziel_auswahl;
+    QString Verzeichnis_quelle;
+    QString Verzeichnis_ziel_server;
+    QString Verzeichnis_ziel_lokal;
+    QString Verzeichnis_root_ganx;
+    QString Verzeichnis_root_fmc;
+    QString Verzeichnis_ziel_auswahl;
     bool Quelldateien_erhalten;
     bool Std_dateinamen_verwenden;
     QString Drehung_wst;
