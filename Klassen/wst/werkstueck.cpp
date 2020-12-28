@@ -1993,7 +1993,32 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
     }
     return msg;
 }
+double werkstueck::max_x()
+{
+    return laenge();
+}
+double werkstueck::min_x()
+{
+    return 0;
+}
+double werkstueck::max_y()
+{
+    return breite();
+}
+double werkstueck::min_y()
+{
+    return 0;
+}
+geometrietext werkstueck::geo()
+{
+    geometrietext gt;
+    rechteck3d wst;
+    wst.set_laenge(laenge());
+    wst.set_breite(breite());
+    gt.add_rechteck(wst);
 
+    return gt;
+}
 //--------------------------------------------------Manipulationen:
 
 //--------------------------------------------------

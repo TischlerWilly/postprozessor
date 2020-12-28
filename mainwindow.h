@@ -19,6 +19,7 @@
 #include "Klassen/werkzeugmagazin.h"
 #include "Klassen/einstellung.h"
 #include "Klassen/einstellung_ganx.h"
+#include "Klassen/geo/vorschau.h"
 #include "ToDo.h"
 
 
@@ -35,6 +36,7 @@ public:
     ~MainWindow();
 
 private slots:
+    void resizeEvent(QResizeEvent *event);
     void on_checkBox_quelldat_erhalt_stateChanged();
     void on_checkBox_std_namen_zuweisen_stateChanged();
     void on_checkBox_af_ganx_stateChanged();
@@ -63,6 +65,8 @@ private slots:
     void on_lineEdit_zugabe_gehr_editingFinished();
     void on_actionEinstellung_ganx_triggered();
     void on_actionEinstellung_pfade_triggered();
+    void on_pushButton_import_clicked();
+    void on_listWidget_wste_currentRowChanged(int currentRow);
 
 private:
     Ui::MainWindow *ui;
@@ -71,29 +75,22 @@ private:
     text_zeilenweise wkz_magazin_ggf;
     prgpfade pf;
 
-    //Radio Buttons:
-    //QString drehung_des_bauteils; // 0 | 90 | 180 | 270 | AUTO
-    //QString option_fkon_ti;
-        //orgi = Tiefe gemäß Importdatei aus CAD
-        //wkz  = Tiefe gemäß Zustellung aus dem WKZ-Magazin = evtl. mehrere Zustellungen
-
-
     //Variablen:
     QString tz; //Trennzeichen für Pfade (Linux '/'  Windows '\')
     text_zeilenweise dateien_alle;
     werkstuecke wste;
     text_zeilenweise namen_std_vor;         //Standard-Dateinamen von CAD
     text_zeilenweise namen_std_nach;        //Standard-Dateinamen eigen
-    //QString geraden_schwellenwert;          //Geraden ab dieser Lnge werden nicht importiert
-    //QString zugabe_gehrungen;               //Maßangabe wie viel Zugabe bei Gehrungen gewünscht ist
     einstellung Einstellung;
     einstellung_ganx Einstellung_ganx;
+    vorschau vorschaufenster;
 
     //Funktionen:
     void setup();
     void schreibe_ini();
     void dateien_erfassen();
     QString verzeichnis_ziel();
+    void import();
 
     //Dialoge:
     Dialog_WKZ dlg_wkz;
@@ -107,6 +104,7 @@ signals:
     void sendStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
     void sendEinstellungPfade(einstellung e);
     void sendEinstellungGANX(einstellung_ganx e);
+    void sendVorschauAktualisieren(werkstueck w_neu, int aktuelle_programmzeile);
 
 public slots:
     void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);

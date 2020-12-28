@@ -2,10 +2,11 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.20.12.26"
+#define PROGRAMMVERSION "1.20.12.28"
 #endif //PROGRAMMVERSION
 /*
 
+  geometrietext werkstueck::geo()
 
 
 

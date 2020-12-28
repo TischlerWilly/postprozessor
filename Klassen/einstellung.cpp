@@ -113,16 +113,9 @@ void einstellung::set_verzeichnis_root_fmc(QString v)
 {
     Verzeichnis_root_fmc = v;
 }
-bool einstellung::set_verzeichnis_ziel_auswahl(QString abc)
+void einstellung::set_verzeichnis_ziel_auswahl(QString abc)
 {
-    if(abc=="server" | abc=="lokal" | abc=="AUTO")
-    {
-        Verzeichnis_ziel_auswahl = abc;
-        return true;//Erfolg
-    }else
-    {
-        return false;//Fehlschlag
-    }
+    Verzeichnis_ziel_auswahl = abc;
 }
 void einstellung::set_quelldateien_erhalten(bool erhalten)
 {

@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_einstellung_ganx, SLOT(slot_einstellung(einstellung_ganx)));
     connect(&dlg_einstellung_ganx, SIGNAL(send_einstellung(einstellung_ganx)),\
             this, SLOT(getEinstellungGANX(einstellung_ganx )));
+    connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
+            &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int)));
 }
 
 MainWindow::~MainWindow()
@@ -344,7 +346,43 @@ void MainWindow::schreibe_ini()
     }
     file.close();
 }
-//-----------------------------------------------------------------------poblic slots:
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    //linker Bereich (Einstellungen):
+    ui->scrollArea_einstellungen->move(10,10);
+    ui->scrollArea_einstellungen->setFixedHeight(this->height()-40);
+    //rechter Bereich:
+    ui->tabWidget_main->move(ui->scrollArea_einstellungen->width()+10, 10);
+    ui->tabWidget_main->setFixedWidth(this->width()-ui->scrollArea_einstellungen->width()-20);
+    ui->tabWidget_main->setFixedHeight(this->height()-40);
+    //tab-Schnell-Modus:
+    ui->plainTextEdit_eldungen->move(5,5);
+    ui->plainTextEdit_eldungen->setFixedWidth(ui->tabWidget_main->width()-150);
+    ui->plainTextEdit_eldungen->setFixedHeight(ui->tabWidget_main->height()-180);
+    ui->plainTextEdit_zusatzinfo->move(5,ui->plainTextEdit_eldungen->y()+ui->plainTextEdit_eldungen->height()+10);
+    ui->plainTextEdit_zusatzinfo->setFixedWidth(ui->plainTextEdit_eldungen->width());
+    ui->plainTextEdit_zusatzinfo->setFixedHeight(135);
+    ui->pushButton_dateien_auflisten->move(ui->plainTextEdit_eldungen->x()+ui->plainTextEdit_eldungen->width()+10,\
+                                           ui->tabWidget_main->height()/2-50);
+    ui->pushButton_dateien_auflisten->setFixedWidth(120);
+    ui->pushButton_start->move(ui->pushButton_dateien_auflisten->x(), ui->pushButton_dateien_auflisten->y() \
+                               + ui->pushButton_dateien_auflisten->height() +5);
+    ui->pushButton_start->setFixedWidth(ui->pushButton_dateien_auflisten->width());
+    //tab-Detail-Modus:
+    vorschaufenster.setParent(ui->tab_detail);
+    vorschaufenster.move(5,5);
+    vorschaufenster.setFixedWidth(ui->tabWidget_main->width()-200);
+    vorschaufenster.setFixedHeight(ui->tabWidget_main->height()-50);
+    ui->pushButton_import->move(ui->tabWidget_main->width()-190,5);
+    ui->pushButton_import->setFixedWidth(180);
+    ui->listWidget_wste->move(ui->pushButton_import->x(),\
+                              ui->pushButton_import->y()+ui->pushButton_import->height()+5);
+    ui->listWidget_wste->setFixedWidth(180);
+    //-----
+    QMainWindow::resizeEvent(event);
+}
+
+//-----------------------------------------------------------------------public slots:
 void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin)
 {
     if(fenstertitel.contains("GANX"))
@@ -661,182 +699,8 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
 void MainWindow::on_pushButton_start_clicked()
 {
     zielordner_leeren();
-
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
-    wste.clear();
-    dateien_erfassen();
-    QString fmc = FMC;
-    QString fmcA = FMC_PRGA;
-    QString fmcB = FMC_PRGB;
-
-    //Dateien einlesen:
-    for(uint i=1; i<=dateien_alle.zeilenanzahl() ;i++)
-    {
-
-        if(dateien_alle.zeile(i).right(fmc.length()) == FMC  || \
-           dateien_alle.zeile(i).right(fmc.length()) == FMC_     )
-        {
-            QString nam_ohn_end = dateien_alle.zeile(i).left(dateien_alle.zeile(i).length()-fmc.length());
-
-            if(nam_ohn_end.right(fmcA.length()) == FMC_PRGA)
-            {
-                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcA.length());
-                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
-                {
-                    //Bearbeitungen auf der Wst-Unterseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
-                {
-                    //Bearbeitungen auf der Wst-Obererseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }
-            }else if(nam_ohn_end.right(fmcB.length()) == FMC_PRGB)
-            {
-                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcB.length());
-                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
-                {
-                    //Bearbeitungen auf der Wst-Unterseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }else//Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
-                {
-                    //Bearbeitungen auf der Wst-Obererseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }
-            }else //Ober und Unterseite sind bereits in einem Programm zusammengeführt
-            {
-                //Import von händisch geschriebenen Programmen:
-                QString nam_ohn_pref = nam_ohn_end;
-                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
-                {
-                    //Bearbeitungen auf der Wst-Unterseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
-                {
-                    //Bearbeitungen auf der Wst-Obererseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    if(Einstellung.std_dateinamen_verwenden())
-    {
-        wste.stdnamen(namen_std_vor, namen_std_nach);
-    }
+    import();
+    QApplication::setOverrideCursor(Qt::WaitCursor);    
 
     QString msg;
     msg = int_to_qstring(wste.namen_tz().zeilenanzahl()) + " eingelesene Dateien\n\n";
@@ -844,13 +708,7 @@ void MainWindow::on_pushButton_start_clicked()
     ui->plainTextEdit_eldungen->setPlainText(msg);
     ui->plainTextEdit_zusatzinfo->setPlainText(wste.cad_fehler());
 
-    //Einstellungen auf Werkstücke übertragen:
-    //for(uint i=1; i<=wste.anzahl() ;i++)
-    //{
-    //    wste.wst(i).set_einstellung_ganx(Einstellung_ganx);
-    //}
-
-    //Datein exportieren:
+    //Dateien exportieren:
     QDir dir_ganx;
     QString pfad_ganx = verzeichnis_ziel() + QDir::separator() + "ganx";
     if(Einstellung.export_ganx())
@@ -1046,6 +904,226 @@ void MainWindow::on_pushButton_start_clicked()
 
     QApplication::restoreOverrideCursor();
 }
+void MainWindow::on_pushButton_import_clicked()
+{
+    import();
+    ui->listWidget_wste->clear();
+    for(uint i=1; i<=wste.anzahl() ;i++)
+    {
+        ui->listWidget_wste->addItem(wste.wst(i).name());
+    }
+}
+//-----------------------------------------------------------------------ListeWidgets:
+void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
+{
+    emit sendVorschauAktualisieren(wste.wst(currentRow+1),0);
+}
+//-----------------------------------------------------------------------
+void MainWindow::dateien_erfassen()
+{
+    QDir ordner(Einstellung.verzeichnis_quelle());
+    QStringList ordnerinhalt;
+    ordnerinhalt = ordner.entryList(QDir::Files);
+    text_zeilenweise tz;
+    for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
+    {
+        QString name = *it;
+        tz.zeile_anhaengen(name);
+    }
+    dateien_alle = tz;
+}
+void MainWindow::import()
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    wste.clear();
+    dateien_erfassen();
+    QString fmc = FMC;
+    QString fmcA = FMC_PRGA;
+    QString fmcB = FMC_PRGB;
+
+    //Dateien einlesen:
+    for(uint i=1; i<=dateien_alle.zeilenanzahl() ;i++)
+    {
+
+        if(dateien_alle.zeile(i).right(fmc.length()) == FMC  || \
+           dateien_alle.zeile(i).right(fmc.length()) == FMC_     )
+        {
+            QString nam_ohn_end = dateien_alle.zeile(i).left(dateien_alle.zeile(i).length()-fmc.length());
+
+            if(nam_ohn_end.right(fmcA.length()) == FMC_PRGA)
+            {
+                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcA.length());
+                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
+                {
+                    //Bearbeitungen auf der Wst-Unterseite importieren
+                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
+                        datei.close();
+                        if(Einstellung.quelldateien_erhalten() == false)
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
+                }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+                {
+                    //Bearbeitungen auf der Wst-Obererseite importieren
+                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
+                        datei.close();
+                        if(Einstellung.quelldateien_erhalten() == false)
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
+                }
+            }else if(nam_ohn_end.right(fmcB.length()) == FMC_PRGB)
+            {
+                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcB.length());
+                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
+                {
+                    //Bearbeitungen auf der Wst-Unterseite importieren
+                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
+                        datei.close();
+                        if(Einstellung.quelldateien_erhalten() == false)
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
+                }else//Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+                {
+                    //Bearbeitungen auf der Wst-Obererseite importieren
+                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
+                        datei.close();
+                        if(Einstellung.quelldateien_erhalten() == false)
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
+                }
+            }else //Ober und Unterseite sind bereits in einem Programm zusammengeführt
+            {
+                //Import von händisch geschriebenen Programmen:
+                QString nam_ohn_pref = nam_ohn_end;
+                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
+                {
+                    //Bearbeitungen auf der Wst-Unterseite importieren
+                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
+                        if(Einstellung.quelldateien_erhalten() == false)
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
+                }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+                {
+                    //Bearbeitungen auf der Wst-Obererseite importieren
+                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
+                    QFile datei(pfad);
+                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                        QString tmp = "Fehler beim Dateizugriff!\n";
+                        tmp += pfad;
+                        tmp += "\n";
+                        tmp += "in der Funktion on_pushButton_start_clicked";
+                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                    }else
+                    {
+                        QString inhalt = datei.readAll();
+                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
+                        datei.close();
+                        if(Einstellung.quelldateien_erhalten() == false)
+                        {
+                            QFile originaldatei(pfad);
+                            originaldatei.remove();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if(Einstellung.std_dateinamen_verwenden())
+    {
+        wste.stdnamen(namen_std_vor, namen_std_nach);
+    }
+
+    QApplication::restoreOverrideCursor();
+}
+QString MainWindow::verzeichnis_ziel()
+{
+    QDir d(Einstellung.verzeichnis_ziel_server());
+    if(d.exists())
+    {
+        Einstellung.set_verzeichnis_ziel_auswahl(Einstellung.verzeichnis_ziel_server());
+        return Einstellung.verzeichnis_ziel_server();
+    }else
+    {
+        Einstellung.set_verzeichnis_ziel_auswahl(Einstellung.verzeichnis_ziel_lokal());
+        return Einstellung.verzeichnis_ziel_lokal();
+    }
+}
 void MainWindow::zielordner_leeren()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1110,32 +1188,9 @@ void MainWindow::zielordner_leeren()
     QApplication::restoreOverrideCursor();
 }
 
-//-----------------------------------------------------------------------
-void MainWindow::dateien_erfassen()
-{
-    QDir ordner(Einstellung.verzeichnis_quelle());
-    QStringList ordnerinhalt;
-    ordnerinhalt = ordner.entryList(QDir::Files);
-    text_zeilenweise tz;
-    for(QStringList::iterator it = ordnerinhalt.begin() ; it!=ordnerinhalt.end() ; ++it)
-    {
-        QString name = *it;
-        tz.zeile_anhaengen(name);
-    }
-    dateien_alle = tz;
-}
 
-QString MainWindow::verzeichnis_ziel()
-{
-    QDir d(Einstellung.verzeichnis_ziel_server());
-    if(d.exists())
-    {
-        return Einstellung.verzeichnis_ziel_server();
-    }else
-    {
-        return Einstellung.verzeichnis_ziel_lokal();
-    }
-}
+
+
 
 
 

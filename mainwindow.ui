@@ -14,347 +14,497 @@
    <string>Postprozessor</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPlainTextEdit" name="plainTextEdit_eldungen">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>110</y>
-      <width>551</width>
-      <height>461</height>
-     </rect>
-    </property>
-    <property name="lineWrapMode">
-     <enum>QPlainTextEdit::NoWrap</enum>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>770</x>
-      <y>110</y>
-      <width>111</width>
-      <height>107</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_ausgbeformate">
-       <property name="text">
-        <string>Ausgabeformate:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_af_eigen">
-       <property name="text">
-        <string>eigenes</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_af_ganx">
-       <property name="text">
-        <string>*.ganx</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_af_fmc">
-       <property name="text">
-        <string>*.fmc</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_af_ggf">
-       <property name="text">
-        <string>*.ggf</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit_zusatzinfo">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>580</y>
-      <width>551</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <property name="lineWrapMode">
-     <enum>QPlainTextEdit::NoWrap</enum>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>770</x>
-      <y>560</y>
-      <width>121</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton_dateien_auflisten">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Listet die im Importverzeichnis gefundenen Dateien auf.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="text">
-        <string>Dateien auflisten</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_start">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>50</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Startet den Export&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="text">
-        <string>Start</string>
-       </property>
-       <property name="checkable">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>11</x>
-      <y>121</y>
-      <width>191</width>
-      <height>242</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
-      <widget class="Line" name="line_6">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_quelldat_erhalt">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die Quelldateien werden beim Import in den Postprozessor nicht gelöscht&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="text">
-        <string>Quelldateien erhalten</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox_std_namen_zuweisen">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die importierten Dateien werden mit veränderten Dateinamen exportiert. Die vorangestellte Schranknummer wird wenn möglich entfernt.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="text">
-        <string>Standard-Dateinamen</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_drehung">
-       <property name="text">
-        <string>Drehung Bauteile:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_drehung_0">
-       <property name="text">
-        <string>keine</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_drehung_90">
-       <property name="text">
-        <string>90 Grad</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_drehung_180">
-       <property name="text">
-        <string>180 Grad</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_drehung_270">
-       <property name="text">
-        <string>270 Grad</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_drehung_autom">
-       <property name="text">
-        <string>automatisch</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>11</x>
-      <y>367</y>
-      <width>191</width>
-      <height>75</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_4">
-     <item>
-      <widget class="QLabel" name="label_fkon_tiefe">
-       <property name="text">
-        <string>Tiefe der Fraeskonturen:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_fkon_ti_quell">
-       <property name="toolTip">
-        <string>Tiefe der Fräskontur bleibt unverändert, so wie in der Quelldatei angegeben, erhalten</string>
-       </property>
-       <property name="text">
-        <string>gem Quelldatei</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_fkon_ti_wkz">
-       <property name="toolTip">
-        <string>ggf. wird die Fräsbahn mehrfach ausgegeben mit unterschiedlichen Zustelltiefen, bis die Gesamttiefe erreicht ist</string>
-       </property>
-       <property name="text">
-        <string>gem Zustellung Werkzeug</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QScrollArea" name="scrollArea_einstellungen">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>450</y>
-      <width>196</width>
-      <height>231</height>
+      <y>10</y>
+      <width>191</width>
+      <height>671</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="5" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkBox_formatierung_aufbrechen">
-       <property name="text">
-        <string>Formartierungen aufbrechen</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0" colspan="2">
-      <widget class="Line" name="line_7">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2">
-      <widget class="Line" name="line_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Zugabe Gehrungen</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QLineEdit" name="lineEdit_zugabe_gehr"/>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="lineEdit_geraden_schwellenwert"/>
-     </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkBox_geraden">
-       <property name="text">
-        <string>kurze Geraden ignorieren</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Schwellenwert</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkBox_fkon_kantenschonend">
-       <property name="text">
-        <string>Fräsungen kantenschonend</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0" colspan="2">
-      <widget class="Line" name="line_5">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2">
-      <widget class="Line" name="line_8">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAsNeeded</enum>
+    </property>
+    <property name="widgetResizable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="scrollAreaWidgetContents">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>189</width>
+       <height>669</height>
+      </rect>
+     </property>
+     <widget class="QCheckBox" name="checkBox_quelldat_erhalt">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>11</y>
+        <width>126</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die Quelldateien werden beim Import in den Postprozessor nicht gelöscht&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>Quelldateien erhalten</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_std_namen_zuweisen">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>34</y>
+        <width>128</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die importierten Dateien werden mit veränderten Dateinamen exportiert. Die vorangestellte Schranknummer wird wenn möglich entfernt.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>Standard-Dateinamen</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>57</y>
+        <width>161</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>66</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Drehung der Bauteile</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line_2">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>156</y>
+        <width>161</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_fkon_tiefe">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>165</y>
+        <width>120</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Tiefe der Fraeskonturen:</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line_3">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>232</y>
+        <width>161</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_geraden">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>241</y>
+        <width>144</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>kurze Geraden ignorieren</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>264</y>
+        <width>73</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Schwellenwert:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_geraden_schwellenwert">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>283</y>
+        <width>133</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="Line" name="line_4">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>309</y>
+        <width>161</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_formatierung_aufbrechen">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>318</y>
+        <width>161</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Formartierungen aufbrechen</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_fkon_kantenschonend">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>341</y>
+        <width>156</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Fräsungen kantenschonend</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line_5">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>364</y>
+        <width>161</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>373</y>
+        <width>96</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Zugabe Gehrungen:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_zugabe_gehr">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>392</y>
+        <width>133</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="Line" name="line_6">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>418</y>
+        <width>161</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>427</y>
+        <width>86</width>
+        <height>107</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_ausgbeformate">
+         <property name="text">
+          <string>Ausgabeformate:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_af_eigen">
+         <property name="text">
+          <string>eigenes</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_af_ganx">
+         <property name="text">
+          <string>*.ganx</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_af_fmc">
+         <property name="text">
+          <string>*.fmc</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_af_ggf">
+         <property name="text">
+          <string>*.ggf</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>85</y>
+        <width>141</width>
+        <height>65</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="radioButton_drehung_0">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QRadioButton" name="radioButton_drehung_270">
+         <property name="text">
+          <string>270</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QRadioButton" name="radioButton_drehung_autom">
+         <property name="text">
+          <string>AUTO</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QRadioButton" name="radioButton_drehung_90">
+         <property name="text">
+          <string>90</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QRadioButton" name="radioButton_drehung_180">
+         <property name="text">
+          <string>180</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>184</y>
+        <width>148</width>
+        <height>42</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QRadioButton" name="radioButton_fkon_ti_quell">
+         <property name="toolTip">
+          <string>Tiefe der Fräskontur bleibt unverändert, so wie in der Quelldatei angegeben, erhalten</string>
+         </property>
+         <property name="text">
+          <string>gem Quelldatei</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_fkon_ti_wkz">
+         <property name="toolTip">
+          <string>ggf. wird die Fräsbahn mehrfach ausgegeben mit unterschiedlichen Zustelltiefen, bis die Gesamttiefe erreicht ist</string>
+         </property>
+         <property name="text">
+          <string>gem Zustellung Werkzeug</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget_main">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>10</y>
+      <width>681</width>
+      <height>671</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="tab_quick">
+     <attribute name="title">
+      <string>Schnell-Modus</string>
+     </attribute>
+     <widget class="QPlainTextEdit" name="plainTextEdit_eldungen">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>531</width>
+        <height>501</height>
+       </rect>
+      </property>
+      <property name="lineWrapMode">
+       <enum>QPlainTextEdit::NoWrap</enum>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_dateien_auflisten">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>200</y>
+        <width>89</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Listet die im Importverzeichnis gefundenen Dateien auf.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>Dateien auflisten</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_start">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>230</y>
+        <width>81</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Startet den Export&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>Start</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPlainTextEdit" name="plainTextEdit_zusatzinfo">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>520</y>
+        <width>531</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="lineWrapMode">
+       <enum>QPlainTextEdit::NoWrap</enum>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_detail">
+     <attribute name="title">
+      <string>Detail-Modus</string>
+     </attribute>
+     <widget class="QPushButton" name="pushButton_import">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>10</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>importieren</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="listWidget_wste">
+      <property name="geometry">
+       <rect>
+        <x>525</x>
+        <y>40</y>
+        <width>141</width>
+        <height>291</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

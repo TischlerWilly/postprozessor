@@ -6,6 +6,7 @@
 
 #include "Defines/werkzeug.h"
 #include "Klassen/einstellung_ganx.h"
+#include "Klassen/geo/geometrietext.h"
 
 #include "Funktionen/umwandeln.h"
 #include "Funktionen/runden.h"
@@ -72,6 +73,12 @@ public:
                                 text_zeilenweise wkzmagazin,\
                                 bool formartierungen_aufbrechen = false,\
                                 bool fkon_kantenschonend = false);
+    double max_x();
+    double min_x();
+    double max_y();
+    double min_y();
+    geometrietext geo();
+
 
     inline double   laenge() const
     {
