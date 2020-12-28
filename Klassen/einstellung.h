@@ -17,7 +17,7 @@ public:
     void set_verzeichnis_ziel_lokal(QString v);
     void set_verzeichnis_root_ganx(QString v);
     void set_verzeichnis_root_fmc(QString v);
-    bool set_verzeichnis_ziel_auswahl(QString abc);
+    void set_verzeichnis_ziel_auswahl(QString abc);
     void set_quelldateien_erhalten(bool erhalten);
     void set_quelldateien_erhalten(QString erhalten);
     void set_std_dateinamen_verwenden(bool jn);

@@ -20,6 +20,7 @@ SOURCES += main.cpp\
     Klassen/geo/geometrietext.cpp \
     Klassen/geo/kreis.cpp \
     Klassen/geo/rechteck3d.cpp \
+    Klassen/geo/vorschau.cpp \
     Klassen/geo/wuerfel.cpp \
     Klassen/geo/zylinder.cpp \
     Klassen/wst/gehrung.cpp \
@@ -67,6 +68,7 @@ HEADERS  += mainwindow.h \
     Klassen/geo/kreis.h \
     Klassen/geo/makro_geometrie.h \
     Klassen/geo/rechteck3d.h \
+    Klassen/geo/vorschau.h \
     Klassen/geo/wuerfel.h \
     Klassen/geo/zylinder.h \
     Klassen/text_zeilenweise.h \
