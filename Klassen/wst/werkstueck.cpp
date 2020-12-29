@@ -293,317 +293,64 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
                             bool formartierungen_aufbrechen, bool fkon_kantenschonend)
 {
     QString msg;
-    //Vorab-Manipulationen:
-    bearb_sortieren();
-    fraesergeraden_zusammenfassen();
-    hbemiduebeltiefe();
-    //---
-    double tmp_l = Laenge;
-    double tmp_b = Breite;
-    text_zeilenweise tmp_bearb = Bearbeitungen;
-    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
-    //Drehwinkel ermitteln:
-    text_zeilenweise autodrehen = finde_drehwinkel_auto("fmc", wkzmagazin, drehwinkel);
-    drehwinkel = autodrehen.zeile(1);
-    QString bewertung = autodrehen.zeile(2);
-    //Aufbereiten und ausgeben:
-    if(drehwinkel == "0")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
-        msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "0", \
-                                formartierungen_aufbrechen, fkon_kantenschonend);
-        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "  -> Drehung 0";
-        info += " (";
-        info += bewertung;
-        info += " Punkte)";
-        info += "\n";
-        info += warnungen;
-    }else if(drehwinkel == "90")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "90", \
-                                formartierungen_aufbrechen, fkon_kantenschonend);
-        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "  -> Drehung 90";
-        info += " (";
-        info += bewertung;
-        info += " Punkte)";
-        info += "\n";
-        info += warnungen;
-    }else if(drehwinkel == "180")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "180", \
-                                formartierungen_aufbrechen, fkon_kantenschonend);
-        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "  -> Drehung 180";
-        info += " (";
-        info += bewertung;
-        info += " Punkte)";
-        info += "\n";
-        info += warnungen;
-    }else if(drehwinkel == "270")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "fmc");
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, "270", \
-                                formartierungen_aufbrechen, fkon_kantenschonend);
-        QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "  -> Drehung 270";
-        info += " (";
-        info += bewertung;
-        info += " Punkte)";
-        info += "\n";
-        info += warnungen;
-    }
+    double tmp_l = 0;
+    double tmp_b = 0;
+    text_zeilenweise tmp_bearb = bearb("fmc", wkzmagazin, drehwinkel, tmp_l, tmp_b);
+    msg = fmc_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, zust_fkon, drehwinkel, \
+                        formartierungen_aufbrechen, fkon_kantenschonend);
+    QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+    info  = "  -> Drehung ";
+    info += drehwinkel;
+    info += " (";
+    info += int_to_qstring(Bewertung);
+    info += " Punkte)";
+    info += "\n";
+    info += warnungen;
     return msg;
 }
 QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel, einstellung_ganx eganx)
 {
     QString msg;
-    //Vorab-Manipulationen:
-    bearb_sortieren();
-    hbemiduebeltiefe();
-    //---
-    double tmp_l = Breite;
-    double tmp_b = Laenge;
-    text_zeilenweise tmp_bearb;
-    tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
-    //Drehwinkel ermitteln:
-    text_zeilenweise autodrehen = finde_drehwinkel_auto("ganx", wkzmagazin, drehwinkel);
-    drehwinkel = autodrehen.zeile(1);
-    QString bewertung = autodrehen.zeile(2);
-    //Aufbereiten und ausgeben:
-    if(drehwinkel == "0")
-    {
-        double tmp_l = Breite;
-        double tmp_b = Laenge;
-        text_zeilenweise tmp_bearb;
-        tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");                             //<--------------------
-        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
-        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "  -> Drehung 0";
-        info += " (";
-        info += bewertung;
-        info += " Punkte)";
-        info += "\n";
-        info += warnungen;
-    }else if(drehwinkel == "90")
-    {
-        double tmp_l = Breite;
-        double tmp_b = Laenge;
-        text_zeilenweise tmp_bearb;
-        tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
-        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "  -> Drehung 90";
-        info += " (";
-        info += bewertung;
-        info += " Punkte)";
-        info += "\n";
-        info += warnungen;
-    }else if(drehwinkel == "180")
-    {
-        double tmp_l = Breite;
-        double tmp_b = Laenge;
-        text_zeilenweise tmp_bearb;
-        tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
-        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "  -> Drehung 0";
-        info += " (";
-        info += bewertung;
-        info += " Punkte)";
-        info += "\n";
-        info += warnungen;
-    }else if(drehwinkel == "270")
-    {
-        double tmp_l = Breite;
-        double tmp_b = Laenge;
-        text_zeilenweise tmp_bearb;
-        tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "ganx");
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
-        QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info  = "  -> Drehung 0";
-        info += " (";
-        info += bewertung;
-        info += " Punkte)";
-        info += "\n";
-        info += warnungen;
-    }
+    double tmp_l = 0;
+    double tmp_b = 0;
+    text_zeilenweise tmp_bearb = bearb("ganx", wkzmagazin, drehwinkel, tmp_l, tmp_b);
+    msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
+    QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+    info  = "  -> Drehung ";
+    info += drehwinkel;
+    info += " (";
+    info += int_to_qstring(Bewertung);
+    info += " Punkte)";
+    info += "\n";
+    info += warnungen;
     return msg;
 }
 QString werkstueck::ggf(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel)
 {
     QString msg;
-    if(drehwinkel == "0")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        msg = ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info += " ";
-        info += warnungen;
-    }else if(drehwinkel == "90")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info += " ";
-        info += warnungen;
-    }else if(drehwinkel == "180")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info += " ";
-        info += warnungen;
-    }else if(drehwinkel == "270")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info += " ";
-        info += warnungen;
-    }else
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        msg = ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
-        QString warnungen = warnungen_ggf(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
-        info += " ";
-        info += warnungen;
-    }
+    double tmp_l = 0;
+    double tmp_b = 0;
+    text_zeilenweise tmp_bearb = bearb("ggf", wkzmagazin, drehwinkel, tmp_l, tmp_b);
+    msg = ggf_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b);
+    QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+    info  = "  -> Drehung ";
+    info += drehwinkel;
+    info += " (";
+    info += int_to_qstring(Bewertung);
+    info += " Punkte)";
+    info += "\n";
+    info += warnungen;
     return msg;
 }
 QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin,\
                                         bool formartierungen_aufbrechen, bool fkon_kantenschonend)
 {
     QString msg;
-    bearb_sortieren();
-    hbemiduebeltiefe();
-
-    if(drehwinkel == "0")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;        
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
-        if(ausgabeformat == GANX)
-        {
-            tmp_l = Breite;
-            tmp_b = Laenge;
-            tmp_bearb = bearb_optimieren_ganx(Bearbeitungen); //nur zu Testzwecken
-        }
-        msg = eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
-                                  formartierungen_aufbrechen, fkon_kantenschonend);
-    }else if(drehwinkel == "90")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
-        if(ausgabeformat == GANX)
-        {
-            tmp_l = Breite;
-            tmp_b = Laenge;
-            tmp_bearb = bearb_optimieren_ganx(Bearbeitungen); //nur zu Testzwecken
-        }
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
-                                  formartierungen_aufbrechen, fkon_kantenschonend);
-    }else if(drehwinkel == "180")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
-        if(ausgabeformat == GANX)
-        {
-            tmp_l = Breite;
-            tmp_b = Laenge;
-            tmp_bearb = bearb_optimieren_ganx(Bearbeitungen); //nur zu Testzwecken
-        }
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
-                                  formartierungen_aufbrechen, fkon_kantenschonend);
-    }else if(drehwinkel == "270")
-    {
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
-        if(ausgabeformat == GANX)
-        {
-            tmp_l = Breite;
-            tmp_b = Laenge;
-            tmp_bearb = bearb_optimieren_ganx(Bearbeitungen); //nur zu Testzwecken
-        }
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
-        msg = eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
-                                  formartierungen_aufbrechen, fkon_kantenschonend);
-    }else
-    {
-        //drehung 0:
-        double tmp_l = Laenge;
-        double tmp_b = Breite;
-        text_zeilenweise tmp_bearb = Bearbeitungen;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, "eigen");
-        if(ausgabeformat == GANX)
-        {
-            tmp_l = Breite;
-            tmp_b = Laenge;
-            tmp_bearb = bearb_optimieren_ganx(Bearbeitungen); //nur zu Testzwecken
-        }
-        msg = eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
-                                  formartierungen_aufbrechen, fkon_kantenschonend);
-    }
+    double tmp_l = 0;
+    double tmp_b = 0;
+    text_zeilenweise tmp_bearb = bearb("eigen", wkzmagazin, drehwinkel, tmp_l, tmp_b);
+    msg = eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
+                              formartierungen_aufbrechen, fkon_kantenschonend);
     return msg;
 }
 double werkstueck::max_x(QString format)
@@ -638,30 +385,16 @@ geometrietext werkstueck::geo(QString format, text_zeilenweise wkzmagazin, QStri
 {
     double tmp_l = 0;
     double tmp_b = 0;
-    text_zeilenweise tmp_bearb;
-    tmp_bearb = Bearbeitungen;
-    text_zeilenweise autodrehen;
+    text_zeilenweise tmp_bearb = bearb(format, wkzmagazin, drehwinkel, tmp_l, tmp_b);
     double Versatz_x = 0;
     double Versatz_y = 0;
     QString kante_v;
     QString kante_h;
     QString kante_l;
-    QString kante_r;
+    QString kante_r;    
 
     if(format == "fmc")
     {
-        //Vorab-Manipulationen:
-        bearb_sortieren();
-        fraesergeraden_zusammenfassen();
-        hbemiduebeltiefe();
-        //---
-        tmp_l = Laenge;
-        tmp_b = Breite;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, format);
-        //Drehwinkel ermitteln:
-        autodrehen = finde_drehwinkel_auto(format, wkzmagazin, drehwinkel, \
-                                                            double_to_qstring(tmp_l), double_to_qstring(tmp_b));
-        drehwinkel = autodrehen.zeile(1);
         if(tmp_b < Schwellenwert_ay)
         {
             Versatz_y = 210;
@@ -672,34 +405,12 @@ geometrietext werkstueck::geo(QString format, text_zeilenweise wkzmagazin, QStri
         kante_r = kante_re(drehwinkel);
     }else if(format == "ganx")
     {
-        //Vorab-Manipulationen:
-        bearb_sortieren();
-        hbemiduebeltiefe();
-        //---
-        tmp_l = Breite;
-        tmp_b = Laenge;
-        tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, format);
-        //Drehwinkel ermitteln:
-        text_zeilenweise autodrehen = finde_drehwinkel_auto(format, wkzmagazin, drehwinkel);
-        drehwinkel = autodrehen.zeile(1);
         kante_v = kante_vo_ganx(drehwinkel);
         kante_h = kante_hi_ganx(drehwinkel);
         kante_l = kante_li_ganx(drehwinkel);
         kante_r = kante_re_ganx(drehwinkel);
     }else if(format == "ggf" | format == "eigen")
     {
-        bearb_sortieren();
-        fraesergeraden_zusammenfassen();
-        hbemiduebeltiefe();
-        //---
-        tmp_l = Laenge;
-        tmp_b = Breite;
-        tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, format);
-        //Drehwinkel ermitteln:
-        autodrehen = finde_drehwinkel_auto(format, wkzmagazin, drehwinkel, \
-                                                            double_to_qstring(tmp_l), double_to_qstring(tmp_b));
-        drehwinkel = autodrehen.zeile(1);
         kante_v = kante_vo(drehwinkel);
         kante_h = kante_hi(drehwinkel);
         kante_l = kante_li(drehwinkel);
@@ -723,55 +434,52 @@ geometrietext werkstueck::geo(QString format, text_zeilenweise wkzmagazin, QStri
     gt.add_rechteck(rec);
     //------------------------------
     //Kanten darstellen:
+    strecke skante;
+    skante.set_linienbreite(5);
+    if(!kante_v.isEmpty())
+    {
+        punkt3d sp(0,0,0);
+        punkt3d ep(tmp_l,0,0);
+        skante.set_start(sp);
+        skante.set_ende(ep);
+        gt.add_strecke(skante);
+    }
+    if(!kante_h.isEmpty())
+    {
+        punkt3d sp(0,tmp_b,0);
+        punkt3d ep(tmp_l,tmp_b,0);
+        skante.set_start(sp);
+        skante.set_ende(ep);
+        gt.add_strecke(skante);
+    }
+    if(!kante_l.isEmpty())
+    {
+        punkt3d sp(0,0,0);
+        punkt3d ep(0,tmp_b,0);
+        skante.set_start(sp);
+        skante.set_ende(ep);
+        gt.add_strecke(skante);
+    }
+    if(!kante_r.isEmpty())
+    {
+        punkt3d sp(tmp_l,0,0);
+        punkt3d ep(tmp_l,tmp_b,0);
+        skante.set_start(sp);
+        skante.set_ende(ep);
+        gt.add_strecke(skante);
+    }
+
+
 
     return gt;
 }
-text_zeilenweise werkstueck::finde_drehwinkel_auto(QString format, text_zeilenweise wkzmagazin, QString drehwinkel,\
-                                                   QString wst_l, QString wst_b)
+QString werkstueck::finde_drehwinkel_auto(QString format, text_zeilenweise wkzmagazin, QString drehwinkel)
 {
+    Bewertung = 0;
     //Diese Funktion berechnet den besten Drehwinkel für der wst
-    //Rückgabewerte:
-    text_zeilenweise erg_;
-    QString dw_         = " ";//1
-    QString bewertung_  = " ";//2
-    QString laenge_     = " ";//3
-    QString breite_     = " ";//4
-
-    if(wst_l.isEmpty())
-    {
-        wst_l = laenge_qstring();
-    }
-    if(wst_b.isEmpty())
-    {
-        wst_b = breite_qstring();
-    }
-
     if(drehwinkel=="0" | drehwinkel=="90" | drehwinkel=="180" | drehwinkel=="270")
     {
-        dw_ = drehwinkel;
-        if(format == "fmc" | format == "ggf" | format == "eigen")
-        {
-            if(drehwinkel=="0" | drehwinkel=="180")
-            {
-                laenge_ = wst_l;
-                breite_ = wst_b;
-            }else
-            {
-                laenge_ = wst_b;
-                breite_ = wst_l;
-            }
-        }else if(format == "ganx")
-        {
-            if(drehwinkel=="0" | drehwinkel=="180")
-            {
-                laenge_ = wst_b;
-                breite_ = wst_l;
-            }else
-            {
-                laenge_ = wst_l;
-                breite_ = wst_b;
-            }
-        }
+        return drehwinkel;
     }else
     {
         if(format == "fmc")
@@ -1297,45 +1005,34 @@ text_zeilenweise werkstueck::finde_drehwinkel_auto(QString format, text_zeilenwe
                bewertung_0 >= bewertung_180 && \
                bewertung_0 >= bewertung_270 )
             {
-                dw_ = "0";
-                bewertung_ = double_to_qstring(bewertung_0);
-                laenge_ = wst_l;
-                breite_ = wst_b;
-
+                Bewertung = bewertung_0;
+                return "0";
             }else if(bewertung_90 >= 100 && \
                      bewertung_90 >= bewertung_0 && \
                      bewertung_90 >= bewertung_180 && \
                      bewertung_90 >= bewertung_270 )
             {
-                dw_ = "90";
-                bewertung_ = double_to_qstring(bewertung_90);
-                laenge_ = wst_b;
-                breite_ = wst_l;
+                Bewertung = bewertung_90;
+                return "90";
             }else if(bewertung_180 >= 100 && \
                      bewertung_180 >= bewertung_0 && \
                      bewertung_180 >= bewertung_90 && \
                      bewertung_180 >= bewertung_270 )
             {
-                dw_ = "180";
-                bewertung_ = double_to_qstring(bewertung_180);
-                laenge_ = wst_l;
-                breite_ = wst_b;
+                Bewertung = bewertung_180;
+                return "180";
             }else if(bewertung_270 >= 100 && \
                      bewertung_270 >= bewertung_0 && \
                      bewertung_270 >= bewertung_90 && \
                      bewertung_270 >= bewertung_180 )
             {
-                dw_ = "270";
-                bewertung_ = double_to_qstring(bewertung_270);
-                laenge_ = wst_b;
-                breite_ = wst_l;
+                Bewertung = bewertung_270;
+                return "270";
             }else
             {
                 //wir nehmen 0:
-                dw_ = "0";
-                bewertung_ = double_to_qstring(bewertung_0);
-                laenge_ = wst_l;
-                breite_ = wst_b;
+                Bewertung = bewertung_0;
+                return "0";
             }
 
         }else if(format == "ganx")
@@ -1771,57 +1468,87 @@ text_zeilenweise werkstueck::finde_drehwinkel_auto(QString format, text_zeilenwe
                bewertung_0 >= bewertung_180 && \
                bewertung_0 >= bewertung_270 )
             {
-                dw_ = "0";
-                bewertung_ = double_to_qstring(bewertung_0);
-                laenge_ = wst_b;
-                breite_ = wst_l;
+                Bewertung = bewertung_0;
+                return "0";
             }else if(bewertung_90 >= 100 && \
                      bewertung_90 >= bewertung_0 && \
                      bewertung_90 >= bewertung_180 && \
                      bewertung_90 >= bewertung_270 )
             {
-                dw_ = "90";
-                bewertung_ = double_to_qstring(bewertung_90);
-                laenge_ = wst_l;
-                breite_ = wst_b;
+                Bewertung = bewertung_90;
+                return "90";
             }else if(bewertung_180 >= 100 && \
                      bewertung_180 >= bewertung_0 && \
                      bewertung_180 >= bewertung_90 && \
                      bewertung_180 >= bewertung_270 )
             {
-                dw_ = "180";
-                bewertung_ = double_to_qstring(bewertung_180);
-                laenge_ = wst_b;
-                breite_ = wst_l;
+                Bewertung = bewertung_180;
+                return "180";
             }else if(bewertung_270 >= 100 && \
                      bewertung_270 >= bewertung_0 && \
                      bewertung_270 >= bewertung_90 && \
                      bewertung_270 >= bewertung_180 )
             {
-                dw_ = "270";
-                bewertung_ = double_to_qstring(bewertung_270);
-                laenge_ = wst_l;
-                breite_ = wst_b;
+                Bewertung = bewertung_270;
+                return "270";
             }else
             {
                 //wir nehmen 0:
-                dw_ = "0";
-                bewertung_ = double_to_qstring(bewertung_0);
-                laenge_ = wst_b;
-                breite_ = wst_l;
+                Bewertung = bewertung_0;
+                return "0";
             }
         }else if(format == "ggf" | format == "eigen")
         {
-            dw_ = "0";
-            laenge_ = wst_l;
-            breite_ = wst_b;
+            return "0";
         }
     }
-    erg_.set_text(dw_);
-    erg_.zeile_anhaengen(bewertung_);
-    erg_.zeile_anhaengen(laenge_);
-    erg_.zeile_anhaengen(breite_);
-    return erg_;
+}
+text_zeilenweise werkstueck::bearb(QString format, text_zeilenweise wkzmagazin, QString &drehwinkel, \
+                                   double& wst_l, double& wst_b)
+{
+    double tmp_l = laenge();
+    double tmp_b = breite();
+    if(format == "ganx")
+    {
+        tmp_l = breite();
+        tmp_b = laenge();
+    }
+    text_zeilenweise tmp_bearb;
+    //Vorab-Manipulationen:
+    bearb_sortieren();
+    fraesergeraden_zusammenfassen();
+    hbemiduebeltiefe();
+    tmp_bearb = Bearbeitungen;
+    if(format == "ganx")
+    {
+        tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+    }
+    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, format);
+    //Drehwinkel herausfinden:
+    QString bewertung;
+    drehwinkel = finde_drehwinkel_auto(format, wkzmagazin, drehwinkel);
+    //Bearbeitung ermitteln:
+    if(drehwinkel == "0")
+    {
+        //mache nichts
+    }else if(drehwinkel == "90")
+    {
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+    }else if(drehwinkel == "180")
+    {
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+    }else if(drehwinkel == "270")
+    {
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+        tmp_bearb = bearb_drehen_90(tmp_bearb, tmp_l, tmp_b);
+    }
+    //Werte zurück schreiben:
+    wst_l = tmp_l;
+    wst_b = tmp_b;
+
+    return tmp_bearb;
 }
 
 //--------------------------------------------------Manipulationen:

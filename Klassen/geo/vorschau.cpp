@@ -765,9 +765,11 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile, \
 {
     W = w_neu;
     Format = format;
-    text_zeilenweise tmp = W.finde_drehwinkel_auto(format, wkzmagazin, drehwinkel);
-    Wst.set_laenge(tmp.zeile(3));
-    Wst.set_breite(tmp.zeile(4));
+    double tmp_l = 0;
+    double tmp_b = 0;
+    text_zeilenweise tmp_bearb = W.bearb(format, wkzmagazin, drehwinkel, tmp_l, tmp_b);
+    Wst.set_laenge(tmp_l);
+    Wst.set_breite(tmp_b);
     Aktuelle_zeilennummer = aktive_zeile;
     werkstueck_darstellung_berechnen();
     Geotext = W.geo(format, wkzmagazin, drehwinkel).text_zw();
