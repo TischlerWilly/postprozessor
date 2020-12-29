@@ -78,8 +78,9 @@ public:
     double max_y(QString format);
     double min_y(QString format);
     geometrietext geo(QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
-    text_zeilenweise finde_drehwinkel_auto(QString format, text_zeilenweise wkzmagazin, QString drehwinkel,\
-                                           QString wst_l = "", QString wst_b = "");
+    QString finde_drehwinkel_auto(QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
+    text_zeilenweise bearb(QString format, text_zeilenweise wkzmagazin, QString& drehwinkel,\
+                           double& wst_l, double& wst_b);
 
     inline double   laenge() const
     {
@@ -115,7 +116,7 @@ public:
     }
 
     //--------------------------------------------------Manipulationen:
-
+    text_zeilenweise gehr_3achs(text_zeilenweise bearb, double& tmp_l, double& tmp_b, QString ausgabeformat);
     //--------------------------------------------------
 
 private:
@@ -124,6 +125,7 @@ private:
     double Breite;  //Y-Wert
     double Dicke;   //Z-Wert
     text_zeilenweise Bearbeitungen;
+    int Bewertung;
     QString Name;
     double Schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
     QString Kante_vo; //Kante an X
@@ -174,7 +176,7 @@ private:
     text_zeilenweise fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
     void hbemiduebeltiefe();
     void fraesergeraden_zusammenfassen();
-    text_zeilenweise gehr_3achs(text_zeilenweise bearb, double& tmp_l, double& tmp_b, QString ausgabeformat);
+
     text_zeilenweise drehen_um_b_halbe(text_zeilenweise bearb, double &tmp_l, double &tmp_b);
     //--------------------------------------------------
 

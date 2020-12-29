@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(getEinstellungGANX(einstellung_ganx )));
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int,QString,text_zeilenweise,QString)),\
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int,QString,text_zeilenweise,QString)));
+    connect(this, SIGNAL(sendProgrammtext(werkstueck,QString,text_zeilenweise,QString)),\
+            &dlg_prgtext, SLOT(slot_wst(werkstueck,QString,text_zeilenweise,QString)));
 }
 
 MainWindow::~MainWindow()
@@ -570,6 +572,10 @@ void MainWindow::on_radioButton_drehung_0_toggled(bool checked)
     if(checked)
     {
         Einstellung.set_drehung_wst("0");
+        if(ui->tab_detail->isVisible() && ui->listWidget_wste->count()>0)
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        }
     }
     schreibe_ini();
 }
@@ -578,6 +584,10 @@ void MainWindow::on_radioButton_drehung_90_toggled(bool checked)
     if(checked)
     {
         Einstellung.set_drehung_wst("90");
+        if(ui->tab_detail->isVisible() && ui->listWidget_wste->count()>0)
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        }
     }
     schreibe_ini();
 }
@@ -586,6 +596,10 @@ void MainWindow::on_radioButton_drehung_180_toggled(bool checked)
     if(checked)
     {
         Einstellung.set_drehung_wst("180");
+        if(ui->tab_detail->isVisible() && ui->listWidget_wste->count()>0)
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        }
     }
     schreibe_ini();
 }
@@ -594,6 +608,10 @@ void MainWindow::on_radioButton_drehung_270_toggled(bool checked)
     if(checked)
     {
         Einstellung.set_drehung_wst("270");
+        if(ui->tab_detail->isVisible() && ui->listWidget_wste->count()>0)
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        }
     }
     schreibe_ini();
 }
@@ -602,6 +620,10 @@ void MainWindow::on_radioButton_drehung_autom_toggled(bool checked)
     if(checked)
     {
         Einstellung.set_drehung_wst("AUTO");
+        if(ui->tab_detail->isVisible() && ui->listWidget_wste->count()>0)
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        }
     }
     schreibe_ini();
 }
@@ -952,7 +974,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
     if(ui->radioButton_vorschau_eigen->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
-        //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
+        //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.        
     }else if(ui->radioButton_vorschau_ganx->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
@@ -962,6 +984,31 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
     }else if(ui->radioButton_vorschau_ggf->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
+    }
+    if(dlg_prgtext.isVisible())
+    {
+        on_listWidget_wste_itemDoubleClicked();
+    }
+}
+void MainWindow::on_listWidget_wste_itemDoubleClicked()
+{
+    if(ui->radioButton_vorschau_eigen->isChecked())
+    {
+        emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1), \
+                              "eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
+        //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
+    }else if(ui->radioButton_vorschau_ganx->isChecked())
+    {
+        emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1), \
+                              "ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
+    }else if(ui->radioButton_vorschau_fmc->isChecked())
+    {
+        emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1), \
+                              "fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
+    }else if(ui->radioButton_vorschau_ggf->isChecked())
+    {
+        emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1), \
+                              "ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
     }
 
 }
@@ -1234,6 +1281,8 @@ void MainWindow::zielordner_leeren()
     ui->plainTextEdit_zusatzinfo->clear();
     QApplication::restoreOverrideCursor();
 }
+
+
 
 
 
