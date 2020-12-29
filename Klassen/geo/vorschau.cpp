@@ -26,7 +26,7 @@ void vorschau::update_cad()
     painter.setPen(Qt::black);
     painter.drawRect(0, 0, width(), height());
 
-    text_zeilenweise geotext;
+
 /*
     //Maschine darstellen:
     geotext = T.maschinengeo().text_zw();
@@ -44,7 +44,7 @@ void vorschau::update_cad()
 */
 
     //Bearbeitungen darstellen:
-    geotext = W.geo().text_zw();
+    text_zeilenweise geotext = Geotext;
     for(uint i=1;i<=geotext.zeilenanzahl();i++)
     {
         text_zeilenweise spalten;
@@ -728,8 +728,8 @@ void vorschau::zeichneFkon(QString geometrieElement, uint i)
 void vorschau::werkstueck_darstellung_berechnen()
 {
     int randabstand = 10;
-    float maximallaenge = W.max_x() - W.min_x();
-    float maximalbreite = W.max_y() - W.min_y();
+    float maximallaenge = W.max_x(Format) - W.min_x(Format);
+    float maximalbreite = W.max_y(Format) - W.min_y(Format);
 
     float bildlaenge = width()-randabstand*2;
     float bildbreite = height()-randabstand*2;
@@ -755,18 +755,22 @@ void vorschau::werkstueck_darstellung_berechnen()
     basispunkt.x = randabstand;
     basispunkt.y = height()-randabstand;
 
-    N.x = basispunkt.x - W.min_x()*Sf * Zf;
-    N.y = basispunkt.y + W.min_y()*Sf * Zf;
+    N.x = basispunkt.x - W.min_x(Format)*Sf * Zf;
+    N.y = basispunkt.y + W.min_y(Format)*Sf * Zf;
 
 }
 
-void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
+void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile, \
+                                  QString format, text_zeilenweise wkzmagazin, QString drehwinkel)
 {
     W = w_neu;
-    Wst.set_laenge(W.laenge());
-    Wst.set_breite(W.breite());
+    Format = format;
+    text_zeilenweise tmp = W.finde_drehwinkel_auto(format, wkzmagazin, drehwinkel);
+    Wst.set_laenge(tmp.zeile(3));
+    Wst.set_breite(tmp.zeile(4));
     Aktuelle_zeilennummer = aktive_zeile;
     werkstueck_darstellung_berechnen();
+    Geotext = W.geo(format, wkzmagazin, drehwinkel).text_zw();
     this->update();
 }
 

@@ -259,7 +259,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>11</x>
@@ -277,9 +277,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_af_eigen">
+        <widget class="QCheckBox" name="checkBox_af_fmc">
          <property name="text">
-          <string>eigenes</string>
+          <string>*.fmc</string>
          </property>
         </widget>
        </item>
@@ -291,22 +291,22 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_af_fmc">
-         <property name="text">
-          <string>*.fmc</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QCheckBox" name="checkBox_af_ggf">
          <property name="text">
           <string>*.ggf</string>
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_af_eigen">
+         <property name="text">
+          <string>eigenes</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>11</x>
@@ -353,7 +353,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>11</x>
@@ -503,6 +503,59 @@
         <height>291</height>
        </rect>
       </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_vorschauformat">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>340</y>
+        <width>131</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Vorschau anzeigen für:</string>
+      </property>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>51</width>
+         <height>88</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QRadioButton" name="radioButton_vorschau_fmc">
+          <property name="text">
+           <string>fmc</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioButton_vorschau_ganx">
+          <property name="text">
+           <string>ganx</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioButton_vorschau_ggf">
+          <property name="text">
+           <string>ggf</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioButton_vorschau_eigen">
+          <property name="text">
+           <string>eigen</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
    </widget>

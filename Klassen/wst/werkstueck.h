@@ -73,12 +73,13 @@ public:
                                 text_zeilenweise wkzmagazin,\
                                 bool formartierungen_aufbrechen = false,\
                                 bool fkon_kantenschonend = false);
-    double max_x();
-    double min_x();
-    double max_y();
-    double min_y();
-    geometrietext geo();
-
+    double max_x(QString format);
+    double min_x(QString format);
+    double max_y(QString format);
+    double min_y(QString format);
+    geometrietext geo(QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
+    text_zeilenweise finde_drehwinkel_auto(QString format, text_zeilenweise wkzmagazin, QString drehwinkel,\
+                                           QString wst_l = "", QString wst_b = "");
 
     inline double   laenge() const
     {
@@ -130,6 +131,8 @@ private:
     QString Kante_li; //Kante an Y
     QString Kante_re;
     double  Zugabe_gehrungen;
+    bool Hbemiduebeltiefe_aktuell;
+    bool Fraesergeraden_zusammenfassen_aktuell;
 
     //Funktionen:
     //--------------------------------------------------set_xy:    
@@ -158,8 +161,9 @@ private:
     QString fmc_kommentar_gute_seite(text_zeilenweise bearb);
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
 
+
     //--------------------------------------------------Manipulationen:
-    void bearb_sortieren();
+    void bearb_sortieren();    
     text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
     text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
     text_zeilenweise rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
