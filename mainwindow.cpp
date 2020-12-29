@@ -27,8 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_einstellung_ganx, SLOT(slot_einstellung(einstellung_ganx)));
     connect(&dlg_einstellung_ganx, SIGNAL(send_einstellung(einstellung_ganx)),\
             this, SLOT(getEinstellungGANX(einstellung_ganx )));
-    connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
-            &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int)));
+    connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int,QString,text_zeilenweise,QString)),\
+            &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int,QString,text_zeilenweise,QString)));
 }
 
 MainWindow::~MainWindow()
@@ -329,6 +329,7 @@ void MainWindow::setup()
     {
         ui->lineEdit_zugabe_gehr->setText("20");
     }
+    ui->radioButton_vorschau_fmc->setChecked(true);
 }
 void MainWindow::schreibe_ini()
 {
@@ -378,6 +379,9 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     ui->listWidget_wste->move(ui->pushButton_import->x(),\
                               ui->pushButton_import->y()+ui->pushButton_import->height()+5);
     ui->listWidget_wste->setFixedWidth(180);
+    ui->groupBox_vorschauformat->move(ui->pushButton_import->x(),\
+                                      ui->listWidget_wste->y()+ui->listWidget_wste->height()+5);
+    ui->groupBox_vorschauformat->setFixedWidth(180);
     //-----
     QMainWindow::resizeEvent(event);
 }
@@ -617,6 +621,35 @@ void MainWindow::on_radioButton_fkon_ti_wkz_toggled(bool checked)
         Einstellung.set_tiefeneinstellung_fkon("wkz");
     }
     schreibe_ini();
+}
+
+void MainWindow::on_radioButton_vorschau_eigen_clicked(bool checked)
+{
+    if(checked == true)
+    {
+        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+    }
+}
+void MainWindow::on_radioButton_vorschau_ganx_clicked(bool checked)
+{
+    if(checked == true)
+    {
+        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+    }
+}
+void MainWindow::on_radioButton_vorschau_fmc_clicked(bool checked)
+{
+    if(checked == true)
+    {
+        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+    }
+}
+void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
+{
+    if(checked == true)
+    {
+        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+    }
 }
 
 //-----------------------------------------------------------------------Menüs:
@@ -916,7 +949,21 @@ void MainWindow::on_pushButton_import_clicked()
 //-----------------------------------------------------------------------ListeWidgets:
 void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
 {
-    emit sendVorschauAktualisieren(wste.wst(currentRow+1),0);
+    if(ui->radioButton_vorschau_eigen->isChecked())
+    {
+        emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
+        //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
+    }else if(ui->radioButton_vorschau_ganx->isChecked())
+    {
+        emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
+    }else if(ui->radioButton_vorschau_fmc->isChecked())
+    {
+        emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
+    }else if(ui->radioButton_vorschau_ggf->isChecked())
+    {
+        emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
+    }
+
 }
 //-----------------------------------------------------------------------
 void MainWindow::dateien_erfassen()
@@ -1187,6 +1234,8 @@ void MainWindow::zielordner_leeren()
     ui->plainTextEdit_zusatzinfo->clear();
     QApplication::restoreOverrideCursor();
 }
+
+
 
 
 

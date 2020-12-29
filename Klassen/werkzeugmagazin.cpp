@@ -1,4 +1,4 @@
-#include "werkzeugMagazin.h"
+#include "werkzeugmagazin.h"
 
 werkzeugmagazin::werkzeugmagazin()
 {

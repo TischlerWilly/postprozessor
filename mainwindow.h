@@ -67,6 +67,10 @@ private slots:
     void on_actionEinstellung_pfade_triggered();
     void on_pushButton_import_clicked();
     void on_listWidget_wste_currentRowChanged(int currentRow);
+    void on_radioButton_vorschau_eigen_clicked(bool checked);
+    void on_radioButton_vorschau_ganx_clicked(bool checked);
+    void on_radioButton_vorschau_fmc_clicked(bool checked);
+    void on_radioButton_vorschau_ggf_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;
@@ -104,7 +108,8 @@ signals:
     void sendStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
     void sendEinstellungPfade(einstellung e);
     void sendEinstellungGANX(einstellung_ganx e);
-    void sendVorschauAktualisieren(werkstueck w_neu, int aktuelle_programmzeile);
+    void sendVorschauAktualisieren(werkstueck w_neu, int aktuelle_programmzeile,\
+                                   QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
 
 public slots:
     void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
