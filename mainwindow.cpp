@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(getEinstellungGANX(einstellung_ganx )));
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int,QString,text_zeilenweise,QString)),\
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int,QString,text_zeilenweise,QString)));
+    connect(&dlg_prgtext, SIGNAL(signalIndexChange(int)),\
+            &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
     connect(this, SIGNAL(sendProgrammtext(werkstueck,QString,text_zeilenweise,QString)),\
             &dlg_prgtext, SLOT(slot_wst(werkstueck,QString,text_zeilenweise,QString)));
 }
@@ -1281,7 +1283,18 @@ void MainWindow::zielordner_leeren()
     ui->plainTextEdit_zusatzinfo->clear();
     QApplication::restoreOverrideCursor();
 }
-
+void MainWindow::closeEvent(QCloseEvent *ce)
+{
+    //if(irgendwas == true)
+    //{
+    //    ce->ignore();
+    //}else
+    //{
+    //    ce->accept();
+    //}
+    dlg_prgtext.close();
+    ce->accept();
+}
 
 
 

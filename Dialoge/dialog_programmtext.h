@@ -21,10 +21,15 @@ private:
     Ui::Dialog_programmtext *ui;
     werkstueck Wst;
 
+signals:
+    void signalIndexChange(int index);
+
 public slots:
     void slot_wst(werkstueck w_neu,\
                   QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
 
+private slots:
+    void on_listWidget_prgtext_currentRowChanged(int currentRow);
 };
 
 #endif // DIALOG_PROGRAMMTEXT_H

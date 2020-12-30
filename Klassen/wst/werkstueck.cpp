@@ -6,6 +6,8 @@ werkstueck::werkstueck()
     Breite  = 0;
     Dicke   = 0;
     Schwellenwert_ay = 230;
+    Versatz_y = 0;
+    Drehung = "0";
     Hbemiduebeltiefe_aktuell = false;
     Fraesergeraden_zusammenfassen_aktuell = false;
 }
@@ -16,6 +18,8 @@ werkstueck::werkstueck(QString neuer_name)
     Breite  = 0;
     Dicke   = 0;
     Schwellenwert_ay = 230;
+    Versatz_y = 0;
+    Drehung = "0";
     Hbemiduebeltiefe_aktuell = false;
     Fraesergeraden_zusammenfassen_aktuell = false;
 }
@@ -291,7 +295,7 @@ QString werkstueck::cad_fehler()
 }
 QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel, QString zust_fkon,\
                             bool formartierungen_aufbrechen, bool fkon_kantenschonend)
-{
+{    
     QString msg;
     double tmp_l = 0;
     double tmp_b = 0;
@@ -355,31 +359,57 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
 }
 double werkstueck::max_x(QString format)
 {
-    if(format == "ganx")
+    if(Drehung=="0" | Drehung=="180")
     {
-        return breite()+50;
+        if(format == "ganx")
+        {
+            return breite()+25;
+        }else
+        {
+            return laenge()+25;
+        }
     }else
     {
-        return laenge()+50;
+        if(format == "ganx")
+        {
+            return laenge()+25;
+        }else
+        {
+            return breite()+25;
+        }
     }
+    //Drehung "AUTO" kann hier nicht korrekt verarbeitet werden, muss aber auch nicht
 }
 double werkstueck::min_x(QString format)
 {
-    return 0-50;
+    return 0-25;
 }
 double werkstueck::max_y(QString format)
 {
-    if(format == "ganx")
+    if(Drehung=="0" | Drehung=="180")
     {
-        return laenge()+50;
+        if(format == "ganx")
+        {
+            return laenge()+25+Versatz_y;
+        }else
+        {
+            return breite()+25+Versatz_y;
+        }
     }else
     {
-        return breite()+50;
+        if(format == "ganx")
+        {
+            return breite()+25+Versatz_y;
+        }else
+        {
+            return laenge()+25+Versatz_y;
+        }
     }
+    //Drehung "AUTO" kann hier nicht korrekt verarbeitet werden, muss aber auch nicht
 }
 double werkstueck::min_y(QString format)
 {
-    return 0-50;
+    return 0-25;
 }
 geometrietext werkstueck::geo(QString format, text_zeilenweise wkzmagazin, QString drehwinkel)
 {
@@ -442,6 +472,7 @@ geometrietext werkstueck::geo(QString format, text_zeilenweise wkzmagazin, QStri
         punkt3d ep(tmp_l,0,0);
         skante.set_start(sp);
         skante.set_ende(ep);
+        skante.verschieben_um(Versatz_x, Versatz_y);
         gt.add_strecke(skante);
     }
     if(!kante_h.isEmpty())
@@ -450,6 +481,7 @@ geometrietext werkstueck::geo(QString format, text_zeilenweise wkzmagazin, QStri
         punkt3d ep(tmp_l,tmp_b,0);
         skante.set_start(sp);
         skante.set_ende(ep);
+        skante.verschieben_um(Versatz_x, Versatz_y);
         gt.add_strecke(skante);
     }
     if(!kante_l.isEmpty())
@@ -458,6 +490,7 @@ geometrietext werkstueck::geo(QString format, text_zeilenweise wkzmagazin, QStri
         punkt3d ep(0,tmp_b,0);
         skante.set_start(sp);
         skante.set_ende(ep);
+        skante.verschieben_um(Versatz_x, Versatz_y);
         gt.add_strecke(skante);
     }
     if(!kante_r.isEmpty())
@@ -466,11 +499,214 @@ geometrietext werkstueck::geo(QString format, text_zeilenweise wkzmagazin, QStri
         punkt3d ep(tmp_l,tmp_b,0);
         skante.set_start(sp);
         skante.set_ende(ep);
+        skante.verschieben_um(Versatz_x, Versatz_y);
         gt.add_strecke(skante);
     }
-
-
-
+    //------------------------------
+    gt.zeilenvorschub();
+    //------------------------------
+    //Bearbeitungen darstellen:
+    QString farbe_unterseite = FARBE_ROSE;
+    for(uint i=1; i<=tmp_bearb.zeilenanzahl() ;i++)
+    {
+        text_zeilenweise zeile;
+        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+        zeile.set_text(tmp_bearb.zeile(i));
+        if(zeile.zeile(1) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            if(bo.bezug() == WST_BEZUG_OBSEI)
+            {
+                kreis k;
+                k.set_farbe(FARBE_SCHWARZ);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(bo.mipu());
+                k.verschieben_um(Versatz_x, Versatz_y);
+                if(bo.tiefe() > dicke())
+                {
+                    k.set_farbe_fuellung(FARBE_WEISS);
+                }else
+                {
+                    k.set_farbe_fuellung(FARBE_HELLBLAU);
+                }
+                gt.add_kreis(k);
+                strecke s;
+                s.set_farbe(k.farbe());
+                s.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s.verschieben_um(Versatz_x, Versatz_y);
+                gt.add_strecke(s);
+                s.drenen_um_mittelpunkt_2d(90, true);
+                gt.add_strecke(s);
+            }else if(bo.bezug() == WST_BEZUG_UNSEI)
+            {
+                kreis k;
+                k.set_farbe(farbe_unterseite);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(bo.mipu());
+                if(bo.tiefe() > dicke())
+                {
+                    k.set_farbe_fuellung(FARBE_WEISS);
+                }else
+                {
+                    k.set_farbe_fuellung(FARBE_HELLBLAU);
+                }
+                k.verschieben_um(Versatz_x, Versatz_y);
+                gt.add_kreis(k);
+                strecke s;
+                s.set_farbe(k.farbe());
+                s.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s.drenen_um_mittelpunkt_2d(45, true);
+                s.verschieben_um(Versatz_x, Versatz_y);
+                gt.add_strecke(s);
+                s.drenen_um_mittelpunkt_2d(90, true);
+                gt.add_strecke(s);
+            }else if(bo.bezug() == WST_BEZUG_LI)
+            {
+                rechteck3d r;
+                r.set_farbe_fuellung(FARBE_BRAUN);
+                r.set_laenge(bo.tiefe());
+                r.set_breite(bo.dm());
+                r.set_bezugspunkt(LINKS);
+                r.set_einfuegepunkt(0, bo.y(), 0);
+                r.verschieben_um(Versatz_x, Versatz_y);
+                gt.add_rechteck(r);
+            }else if(bo.bezug() == WST_BEZUG_RE)
+            {
+                rechteck3d r;
+                r.set_farbe_fuellung(FARBE_BRAUN);
+                r.set_laenge(bo.tiefe());
+                r.set_breite(bo.dm());
+                r.set_bezugspunkt(RECHTS);
+                r.set_einfuegepunkt(tmp_l, bo.y(), 0);
+                r.verschieben_um(Versatz_x, Versatz_y);
+                gt.add_rechteck(r);
+            }else if(bo.bezug() == WST_BEZUG_VO)
+            {
+                rechteck3d r;
+                r.set_farbe_fuellung(FARBE_BRAUN);
+                r.set_laenge(bo.dm());
+                r.set_breite(bo.tiefe());
+                r.set_bezugspunkt(UNTEN);
+                r.set_einfuegepunkt(bo.x(), 0, 0);
+                r.verschieben_um(Versatz_x, Versatz_y);
+                gt.add_rechteck(r);
+            }else if(bo.bezug() == WST_BEZUG_HI)
+            {
+                rechteck3d r;
+                r.set_farbe_fuellung(FARBE_BRAUN);
+                r.set_laenge(bo.dm());
+                r.set_breite(bo.tiefe());
+                r.set_bezugspunkt(OBEN);
+                r.set_einfuegepunkt(bo.x(), tmp_b, 0);
+                r.verschieben_um(Versatz_x, Versatz_y);
+                gt.add_rechteck(r);
+            }
+        }else if(zeile.zeile(1) == BEARBART_NUT)
+        {
+            nut nu(zeile.text());
+            strecke s;
+            s.set_start(nu.xs(), nu.ys(), 0);
+            s.set_ende(nu.xe(), nu.ye(), 0);
+            rechteck3d r;
+            if(nu.bezug() == WST_BEZUG_OBSEI)
+            {
+                r.set_farbe_fuellung(FARBE_BLAU);
+            }else
+            {
+                r.set_farbe_fuellung(farbe_unterseite);
+                r.set_stil(STIL_GESTRICHELT);
+            }
+            r.set_laenge(s.laenge2d());
+            r.set_breite(nu.breite());
+            r.set_bezugspunkt(MITTE);
+            r.set_einfuegepunkt(s.mitpu3d());
+            r.set_drewi(s.wink());
+            r.verschieben_um(Versatz_x, Versatz_y);
+            gt.add_rechteck(r);
+        }else if(zeile.zeile(1) == BEARBART_RTA)
+        {
+            rechtecktasche rt(zeile.text());
+            rechteck3d r;
+            r.set_bezugspunkt(MITTE);
+            if(rt.tiefe() >= dicke())
+            {
+                r.set_farbe_fuellung(FARBE_WEISS);
+            }else
+            {
+                if(rt.bezug() == WST_BEZUG_OBSEI)
+                {
+                    r.set_farbe_fuellung(FARBE_DUNKELGRAU);
+                }else
+                {
+                    r.set_farbe_fuellung(farbe_unterseite);
+                    r.set_stil(STIL_GESTRICHELT);
+                }
+            }
+            r.set_laenge(rt.laenge());
+            r.set_breite(rt.breite());
+            r.set_mipu(rt.x(), rt.y(), rt.z());
+            r.set_drewi(rt.drewi());
+            r.verschieben_um(Versatz_x, Versatz_y);
+            gt.add_rechteck(r);
+            if(rt.ausraeumen() == false)
+            {
+                r.set_laenge(r.l()/8*5);
+                r.set_breite(r.b()/8*5);
+                r.set_farbe_fuellung(FARBE_WEISS);
+                gt.add_rechteck(r);
+            }
+        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+        {
+            fraueseraufruf fa(zeile.text());
+            punkt3d p(fa.x(), fa.y(), fa.z());
+            p.set_linienbreite(10);
+            p.verschieben_um(Versatz_x, Versatz_y);
+            if(fa.bezug() == WST_BEZUG_OBSEI)
+            {
+                p.set_farbe(FARBE_DUNKELGRAU);
+            }else
+            {
+                p.set_farbe(farbe_unterseite);
+            }
+            gt.add_punkt(p);
+        }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg(zeile.text());
+            strecke s;
+            s = fg.strecke_();
+            s.verschieben_um(Versatz_x, Versatz_y);
+            if(fg.bezug() == WST_BEZUG_OBSEI)
+            {
+                s.set_farbe(FARBE_DUNKELGRAU);
+            }else
+            {
+                s.set_farbe(farbe_unterseite);
+                s.set_stil(STIL_GESTRICHELT);
+            }
+            gt.add_strecke(s);
+        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb(zeile.text());
+            bogen b;
+            b.set_startpunkt(fb.stapu());
+            b.set_endpunkt(fb.endpu());
+            if(fb.bezug() == WST_BEZUG_OBSEI)
+            {
+                b.set_radius(fb.rad(), fb.uzs());
+                b.set_farbe(FARBE_DUNKELGRAU);
+            }else
+            {
+                b.set_radius(fb.rad(), !fb.uzs());
+                b.set_farbe(farbe_unterseite);
+                b.set_stil(STIL_GESTRICHELT);
+            }
+            b.verschieben_um(Versatz_x, Versatz_y);
+            gt.add_bogen(b);
+        }
+        gt.zeilenvorschub();
+    }
     return gt;
 }
 QString werkstueck::finde_drehwinkel_auto(QString format, text_zeilenweise wkzmagazin, QString drehwinkel)
@@ -1521,9 +1757,9 @@ text_zeilenweise werkstueck::bearb(QString format, text_zeilenweise wkzmagazin, 
     tmp_bearb = Bearbeitungen;
     if(format == "ganx")
     {
-        tmp_bearb = bearb_optimieren_ganx(Bearbeitungen);
+        tmp_bearb = bearb_optimieren_ganx(tmp_bearb);
     }
-    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, format);
+    tmp_bearb = gehr_3achs(tmp_bearb, tmp_l, tmp_b, format);    
     //Drehwinkel herausfinden:
     QString bewertung;
     drehwinkel = finde_drehwinkel_auto(format, wkzmagazin, drehwinkel);
@@ -1547,7 +1783,15 @@ text_zeilenweise werkstueck::bearb(QString format, text_zeilenweise wkzmagazin, 
     //Werte zurück schreiben:
     wst_l = tmp_l;
     wst_b = tmp_b;
-
+    Versatz_y = 0;
+    if(format == "fmc")
+    {
+        if(tmp_b < Schwellenwert_ay)
+        {
+            Versatz_y = 210;
+        }
+    }
+    Drehung = drehwinkel;
     return tmp_bearb;
 }
 

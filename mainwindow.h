@@ -97,6 +97,7 @@ private:
     void dateien_erfassen();
     QString verzeichnis_ziel();
     void import();
+    void closeEvent(QCloseEvent *ce);
 
     //Dialoge:
     Dialog_WKZ dlg_wkz;
