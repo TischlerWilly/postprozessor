@@ -25,8 +25,10 @@ public:
     void    set_text(QString geotext);
     void    set_start(punkt3d startpunkt);
     void    set_start(punkt2d startpunkt);
+    void    set_start(double x, double y, double z);
     void    set_ende(punkt3d endpunkt);
     void    set_ende(punkt2d endpunkt);
+    void    set_ende(double x, double y, double z);
 
     //-----------------------------------------get_xy:
     inline punkt3d stapu()

@@ -43,7 +43,7 @@ private:
     void zoom(bool dichter);
     punkt2d mauspos_npwst();
     punkt2d mauspos_npanschlag();
-    //uint zeile_von_Mauspos();
+    uint zeile_von_Mauspos();
 
     QColor set_farbe(QString farbe);
     Qt::PenStyle set_linienstil(QString stil);

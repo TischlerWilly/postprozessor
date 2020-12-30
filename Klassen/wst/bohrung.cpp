@@ -132,6 +132,11 @@ QString bohrung::z_qstring()
 {
     return double_to_qstring(Pos_z);
 }
+punkt3d bohrung::mipu()
+{
+    punkt3d p(x(),y(),z());
+    return p;
+}
 double bohrung::zustellmass()
 {
     return Zustellmass;

@@ -1,4 +1,4 @@
-#include "dialog_programmtext.h"
+﻿#include "dialog_programmtext.h"
 #include "ui_dialog_programmtext.h"
 
 Dialog_programmtext::Dialog_programmtext(QWidget *parent) :
@@ -37,11 +37,22 @@ void Dialog_programmtext::slot_wst(werkstueck w_neu,\
     param  = "D=";
     param += Wst.dicke_qstring();
     pkopf.zeile_anhaengen(param);
+    param  = "Drehung ";
+    param += drehwinkel;
+    pkopf.zeile_anhaengen(param);
+    param = format;
+    pkopf.zeile_anhaengen(param);
     ui->listWidget_prgtext->addItem(pkopf.text());
     //Bearbeitungen ab 2. Zeile einfügen:
-    for(uint i=1; i<=Wst.bearb().zeilenanzahl() ;i++)
+    for(uint i=1; i<=tmp_bearb.zeilenanzahl() ;i++)
     {
-        ui->listWidget_prgtext->addItem(Wst.bearb().zeile(i));
+        ui->listWidget_prgtext->addItem(tmp_bearb.zeile(i));
     }
+    ui->listWidget_prgtext->addItem("...");
     this->show();
+}
+
+void Dialog_programmtext::on_listWidget_prgtext_currentRowChanged(int currentRow)
+{
+    emit signalIndexChange(currentRow+1);
 }

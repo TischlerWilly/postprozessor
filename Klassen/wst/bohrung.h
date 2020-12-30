@@ -6,6 +6,7 @@
 #include "Klassen/text_zeilenweise.h"
 #include "Defines/def_bearbeitungen.h"
 #include "Funktionen/umwandeln.h"
+#include "Klassen/geo/punkt3d.h"
 
 class bohrung
 {
@@ -39,6 +40,7 @@ public:
     QString y_qstring();
     double  z();
     QString z_qstring();
+    punkt3d  mipu();
     double  zustellmass();
     QString zustellmass_qstring();
     QString bezug();

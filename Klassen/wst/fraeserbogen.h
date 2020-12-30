@@ -63,6 +63,15 @@ public:
     bool    uzs();
     QString uzs_qstring();
 
+    inline punkt3d stapu()
+    {
+        return Startpunkt;
+    }
+    inline punkt3d endpu()
+    {
+        return Endpunkt;
+    }
+
     QString text();
     void set_text(QString text);
 

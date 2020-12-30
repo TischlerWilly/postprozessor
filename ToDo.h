@@ -2,11 +2,13 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.20.12.29"
+#define PROGRAMMVERSION "1.20.12.30"
 #endif //PROGRAMMVERSION
 /*
 
-  geometrietext werkstueck::geo()
+-->rechtsklick erkennt aktive Zeile
+-->Einzel-Programm-Export
+-->wst unbenennen
 
 
 

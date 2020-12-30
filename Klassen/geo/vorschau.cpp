@@ -141,6 +141,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
+            pen.setWidth(pen.width()*2);
         }else
         {
             pen.setColor(set_farbe(element.zeile(5)));
@@ -165,6 +166,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
+            pen.setWidth(pen.width()*2);
         }else
         {
             pen.setColor(set_farbe(element.zeile(8)));
@@ -236,6 +238,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
+            pen.setWidth(pen.width()*2);
         }else
         {
             pen.setColor(set_farbe(element.zeile(12)));
@@ -261,6 +264,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
+            pen.setWidth(pen.width()*2);
         }else
         {
             pen.setColor(set_farbe(element.zeile(6)));
@@ -290,6 +294,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
+            pen.setWidth(pen.width()*2);
         }else
         {
             pen.setColor(set_farbe(element.zeile(7)));
@@ -349,6 +354,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
+            pen.setWidth(pen.width()*2);
         }else
         {
             pen.setColor(set_farbe(element.zeile(10)));
@@ -498,6 +504,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
+            pen.setWidth(pen.width()*2);
         }else
         {
             pen.setColor(set_farbe(element.zeile(11)));
@@ -636,6 +643,7 @@ void vorschau::zeichneFkon(QString geometrieElement, uint i)
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
+            pen.setWidth(pen.width()*2);
         }else
         {
             pen.setColor(set_farbe(element.zeile(8)));
@@ -707,6 +715,7 @@ void vorschau::zeichneFkon(QString geometrieElement, uint i)
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
+            pen.setWidth(pen.width()*2);
         }else
         {
             pen.setColor(set_farbe(element.zeile(12)));
@@ -863,15 +872,14 @@ punkt2d vorschau::mauspos_npwst()
 {
     punkt2d p;
     p = mauspos_npanschlag();
-    //p.set_x(p.x()-T.ax());  //es gibt bislang keine Versatzwerte im wst
-    p.set_x(p.x());
-    //p.set_y(p.y()-T.ay());  //es gibt bislang keine Versatzwerte im wst
-    p.set_y(p.y());
+    p.set_x(p.x()-0);
+    p.set_y(p.y()-W.ay());
     return p;
 }
-/*
+
 uint vorschau::zeile_von_Mauspos()
 {
+/*
     uint zeile = 0;
     double abst = 9999999999;
     strecke s; //nehmen wir für Längenberechnung/Abstandsberechnung
@@ -1067,8 +1075,9 @@ uint vorschau::zeile_von_Mauspos()
         }
     }
     return zeile;
-}
 */
+}
+
 void vorschau::mouseMoveEvent(QMouseEvent *event)
 {
     if(Mrg)
@@ -1127,7 +1136,6 @@ void vorschau::wheelEvent(QWheelEvent *event)
 
 void vorschau::mousePressEvent(QMouseEvent *event)
 {
-    /*
     if(event->button() == Qt::MidButton)
     {
         Mrg = true;
@@ -1158,7 +1166,6 @@ void vorschau::mousePressEvent(QMouseEvent *event)
         m.addAction(msgedit, this, SLOT(slot_sende_zeilennummer()), 0) ;
         m.exec(this->mapFrom(this, QCursor::pos()));
     }
-    */
 }
 
 void vorschau::slot_sende_zeilennummer()

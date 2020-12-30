@@ -45,6 +45,14 @@ void strecke::set_start(punkt2d startpunkt)
     p.set_y(startpunkt.y());
     Stapu = p;
 }
+void strecke::set_start(double x, double y, double z)
+{
+    punkt3d p;
+    p.set_x(x);
+    p.set_y(y);
+    p.set_z(z);
+    Stapu = p;
+}
 void strecke::set_ende(punkt3d endpunkt)
 {
     Endpu = endpunkt;
@@ -56,7 +64,14 @@ void strecke::set_ende(punkt2d endpunkt)
     p.set_y(endpunkt.y());
     Endpu = p;
 }
-
+void strecke::set_ende(double x, double y, double z)
+{
+    punkt3d p;
+    p.set_x(x);
+    p.set_y(y);
+    p.set_z(z);
+    Endpu = p;
+}
 //-----------------------------------------get_xy:
 punkt3d strecke::mitpu3d()
 {

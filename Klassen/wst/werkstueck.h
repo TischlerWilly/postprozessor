@@ -114,6 +114,10 @@ public:
     {
         return Bearbeitungen;
     }
+    inline double ay()
+    {
+        return Versatz_y;
+    }
 
     //--------------------------------------------------Manipulationen:
     text_zeilenweise gehr_3achs(text_zeilenweise bearb, double& tmp_l, double& tmp_b, QString ausgabeformat);
@@ -128,6 +132,8 @@ private:
     int Bewertung;
     QString Name;
     double Schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
+    double Versatz_y;
+    QString Drehung;
     QString Kante_vo; //Kante an X
     QString Kante_hi;
     QString Kante_li; //Kante an Y
