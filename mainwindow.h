@@ -73,6 +73,11 @@ private slots:
     void on_radioButton_vorschau_fmc_clicked(bool checked);
     void on_radioButton_vorschau_ggf_clicked(bool checked);
     void on_listWidget_wste_itemDoubleClicked();
+    void on_lineEdit_projekt_editingFinished();
+    void on_lineEdit_pos_editingFinished();
+    void on_lineEdit_baugruppe_editingFinished();
+
+    void on_listWidget_wste_itemSelectionChanged();
 
 private:
     Ui::MainWindow *ui;
@@ -90,6 +95,8 @@ private:
     einstellung Einstellung;
     einstellung_ganx Einstellung_ganx;
     vorschau vorschaufenster;
+    QString Projektposition;
+    bool Projektpfad_stimmt;
 
     //Funktionen:
     void setup();
@@ -98,6 +105,7 @@ private:
     QString verzeichnis_ziel();
     void import();
     void closeEvent(QCloseEvent *ce);
+    void set_projektpfad();
 
     //Dialoge:
     Dialog_WKZ dlg_wkz;

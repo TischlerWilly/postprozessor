@@ -13,6 +13,13 @@ Dialog_programmtext::~Dialog_programmtext()
     delete ui;
 }
 
+void Dialog_programmtext::resizeEvent(QResizeEvent *event)
+{
+    ui->listWidget_prgtext->move(5,5);
+    ui->listWidget_prgtext->setFixedWidth(this->width()-10);
+    ui->listWidget_prgtext->setFixedHeight(this->height()-10);
+}
+
 void Dialog_programmtext::slot_wst(werkstueck w_neu,\
                                    QString format, text_zeilenweise wkzmagazin, QString drehwinkel)
 {
@@ -50,6 +57,13 @@ void Dialog_programmtext::slot_wst(werkstueck w_neu,\
     }
     ui->listWidget_prgtext->addItem("...");
     this->show();
+}
+void Dialog_programmtext::slot_zeilennummer(uint nr)
+{
+    if((int)nr < ui->listWidget_prgtext->count())
+    {
+        ui->listWidget_prgtext->item(nr-1)->setSelected(true);
+    }
 }
 
 void Dialog_programmtext::on_listWidget_prgtext_currentRowChanged(int currentRow)

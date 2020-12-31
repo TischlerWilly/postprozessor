@@ -31,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int,QString,text_zeilenweise,QString)));
     connect(&dlg_prgtext, SIGNAL(signalIndexChange(int)),\
             &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
+    connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint)),\
+            &dlg_prgtext, SLOT(slot_zeilennummer(uint)));
     connect(this, SIGNAL(sendProgrammtext(werkstueck,QString,text_zeilenweise,QString)),\
             &dlg_prgtext, SLOT(slot_wst(werkstueck,QString,text_zeilenweise,QString)));
 }
@@ -42,6 +44,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setup()
 {
+    Projektpfad_stimmt = false;
     //Schauen ob alle Konfigurationsdateien vorhanden sind:
     bool inifile_gefunden = false;      //user-Ordner
     bool wkz_ganx_gefunden = false;     //user-Ordner
@@ -374,10 +377,33 @@ void MainWindow::resizeEvent(QResizeEvent *event)
                                + ui->pushButton_dateien_auflisten->height() +5);
     ui->pushButton_start->setFixedWidth(ui->pushButton_dateien_auflisten->width());
     //tab-Detail-Modus:
+    //---Projektpfad:
+    rechteck3d r;
+    r.set_bezugspunkt(OBEN_LINKS);
+    r.set_einfuegepunkt(5,5,0);
+    r.set_laenge(ui->tabWidget_main->width()-200-5);
+    r.set_breite(50);
+    double lx = r.l()/6 - 2;
+    double ly = r.b()/2 - 1;
+    ui->label_projekt->move(r.einfpunkt().x(), r.einfpunkt().y());
+    ui->label_projekt->setFixedSize(lx,ly);
+    ui->lineEdit_projekt->move(r.einfpunkt().x() + lx*1 + 2*1, r.einfpunkt().y());
+    ui->lineEdit_projekt->setFixedSize(lx, ly);
+    ui->label_pos->move(r.einfpunkt().x() + lx*2 + 2*2, r.einfpunkt().y());
+    ui->label_pos->setFixedSize(lx,ly);
+    ui->lineEdit_pos->move(r.einfpunkt().x() + lx*3 + 2*3, r.einfpunkt().y());
+    ui->lineEdit_pos->setFixedSize(lx, ly);
+    ui->label_baugruppe->move(r.einfpunkt().x() + lx*4 + 2*4, r.einfpunkt().y());
+    ui->label_baugruppe->setFixedSize(lx,ly);
+    ui->lineEdit_baugruppe->move(r.einfpunkt().x() + lx*5 + 2*5, r.einfpunkt().y());
+    ui->lineEdit_baugruppe->setFixedSize(lx, ly);
+    ui->lineEdit_projektpfad->move(r.einfpunkt().x(), r.einfpunkt().y() + ly*1 + 2*1);
+    ui->lineEdit_projektpfad->setFixedSize(r.l(),ly);
+    //---Vorschaufenster:
     vorschaufenster.setParent(ui->tab_detail);
-    vorschaufenster.move(5,5);
+    vorschaufenster.move(5,r.einfpunkt().y()+r.b()+5);
     vorschaufenster.setFixedWidth(ui->tabWidget_main->width()-200);
-    vorschaufenster.setFixedHeight(ui->tabWidget_main->height()-50);
+    vorschaufenster.setFixedHeight(ui->tabWidget_main->height()-r.einfpunkt().y()-r.b()-35);
     ui->pushButton_import->move(ui->tabWidget_main->width()-190,5);
     ui->pushButton_import->setFixedWidth(180);
     ui->listWidget_wste->move(ui->pushButton_import->x(),\
@@ -518,7 +544,217 @@ void MainWindow::on_lineEdit_zugabe_gehr_editingFinished()
         ui->lineEdit_zugabe_gehr->setText(double_to_qstring(Einstellung.gehrungen_zugabe()));
     }
 }
+void MainWindow::on_lineEdit_projekt_editingFinished()
+{
+    set_projektpfad();
+}
+void MainWindow::on_lineEdit_pos_editingFinished()
+{
+    QString eingabe = ui->lineEdit_pos->text();
+    eingabe.replace(",", ".");
+    double eingabe_double = eingabe.toDouble();
+    QString tmp = double_to_qstring(eingabe_double);
+    if(eingabe.isEmpty() | (eingabe == tmp && eingabe_double <= 9999))
+    {
+        eingabe.replace(".", ",");
+        Projektposition = eingabe;
+        ui->lineEdit_pos->setText(Projektposition);
+        set_projektpfad();
+    }else
+    {
+        QString msg;
+        msg += "\"";
+        msg += ui->lineEdit_pos->text();
+        msg += "\"";
+        msg += " ist keine gültige Positionsnummer!";
+        if(eingabe_double > 9999)
+        {
+            msg += "\n";
+            msg += "Positionsnummer ist zu hoch.";
+        }
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.exec();
+        ui->lineEdit_pos->setText(Projektposition);
+        set_projektpfad();
+    }
+}
+void MainWindow::on_lineEdit_baugruppe_editingFinished()
+{
+    set_projektpfad();
+}
+void MainWindow::set_projektpfad()
+{
+    Projektpfad_stimmt = false;
+    QString pfad;
+    QString pfad_lokal;
+    pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
+    pfad_lokal += QDir::separator();
+    pfad_lokal += "DetailModus";
+    if(ui->radioButton_vorschau_fmc->isChecked())
+    {
+        pfad_lokal += QDir::separator();
+        pfad_lokal += "fmc";
+    }else if(ui->radioButton_vorschau_ganx->isChecked())
+    {
+        pfad_lokal += QDir::separator();
+        pfad_lokal += "ganx";
+    }else if(ui->radioButton_vorschau_ggf->isChecked())
+    {
+        pfad_lokal += QDir::separator();
+        pfad_lokal += "ggf";
+    }else //eigen
+    {
+        pfad_lokal += QDir::separator();
+        pfad_lokal += "eigen";
+    }
 
+    if(ui->radioButton_vorschau_fmc->isChecked())
+    {
+        QDir d(Einstellung.verzeichnis_root_fmc());
+        if(d.exists())
+        {
+            pfad = Einstellung.verzeichnis_root_fmc();
+            pfad += QDir::separator();
+        }else
+        {
+            pfad = pfad_lokal;
+            pfad += QDir::separator();
+        }
+    }else if(ui->radioButton_vorschau_ganx->isChecked())
+    {
+        QDir d(Einstellung.verzeichnis_root_ganx());
+        if(d.exists())
+        {
+            pfad = Einstellung.verzeichnis_root_ganx();
+            pfad += QDir::separator();
+        }else
+        {
+            pfad = pfad_lokal;
+            pfad += QDir::separator();
+        }
+    }else
+    {
+        pfad = pfad_lokal;
+        pfad += QDir::separator();
+    }
+    if(!ui->lineEdit_projekt->text().isEmpty())
+    {
+        pfad += ui->lineEdit_projekt->text();
+        if(!ui->lineEdit_pos->text().isEmpty())
+        {
+            QString tmp = ui->lineEdit_pos->text();
+            QString barcode;
+            if(tmp.contains(","))
+            {
+                QString li = text_links(tmp, ",");
+                QString re = text_rechts(tmp, ",");
+                if(li.length()==4)
+                {
+                    barcode += tmp;
+                }else if(li.length()==3)
+                {
+                    barcode += "0";
+                    barcode += li;
+                    barcode += ",";
+                    barcode += re;
+                }else if(li.length()==2)
+                {
+                    barcode += "00";
+                    barcode += li;
+                    barcode += ",";
+                    barcode += re;
+                }else if(li.length()==1)
+                {
+                    barcode += "000";
+                    barcode += li;
+                    barcode += ",";
+                    barcode += re;
+                }
+            }else
+            {
+                if(tmp.length()==4)
+                {
+                    barcode += tmp;
+                }else if(tmp.length()==3)
+                {
+                    barcode += "0";
+                    barcode += tmp;
+                }else if(tmp.length()==2)
+                {
+                    barcode += "00";
+                    barcode += tmp;
+                }else if(tmp.length()==1)
+                {
+                    barcode += "000";
+                    barcode += tmp;
+                }
+            }
+            pfad += QDir::separator();
+            pfad += barcode;
+            Projektpfad_stimmt = true;
+            if(!ui->lineEdit_baugruppe->text().isEmpty())
+            {
+                pfad += QDir::separator();
+                pfad += ui->lineEdit_baugruppe->text();
+            }
+            if(ui->listWidget_wste->selectedItems().count())
+            {
+                if(!ui->listWidget_wste->currentItem()->text().isEmpty())
+                {
+                    pfad += QDir::separator();
+                    pfad += ui->listWidget_wste->currentItem()->text();
+                    if(ui->radioButton_vorschau_fmc->isChecked())
+                    {
+                        pfad += ".fmc";
+                    }else if(ui->radioButton_vorschau_ganx->isChecked())
+                    {
+                        pfad += ".ganx";
+                    }else if(ui->radioButton_vorschau_ggf->isChecked())
+                    {
+                        pfad += ".ggf";
+                    }else //eigen
+                    {
+                        pfad += ".ppf";
+                    }
+                }
+            }
+        }else
+        {
+            pfad.clear();
+        }
+    }else
+    {
+        pfad.clear();
+    }
+    pfad.replace("\\", QDir::separator());
+    pfad.replace("/", QDir::separator());
+    ui->lineEdit_projektpfad->setText(pfad);
+    QFile f(pfad);
+    QDir d(pfad);
+    if(f.exists() && !d.exists())
+    {
+        QPalette palette;
+        palette.setColor(QPalette::Base,Qt::green);
+        //palette.setColor(QPalette::Text,Qt::black);
+        ui->lineEdit_projektpfad->setPalette(palette);
+    }else
+    {
+        if(d.exists() && !pfad.isEmpty())
+        {
+            QPalette palette;
+            palette.setColor(QPalette::Base,Qt::yellow);
+            //palette.setColor(QPalette::Text,Qt::black);
+            ui->lineEdit_projektpfad->setPalette(palette);
+        }else
+        {
+            QPalette palette;
+            palette.setColor(QPalette::Base,Qt::white);
+            //palette.setColor(QPalette::Text,Qt::black);
+            ui->lineEdit_projektpfad->setPalette(palette);
+        }
+    }
+}
 //-----------------------------------------------------------------------Checkboxen:
 void MainWindow::on_checkBox_quelldat_erhalt_stateChanged()
 {
@@ -652,6 +888,7 @@ void MainWindow::on_radioButton_vorschau_eigen_clicked(bool checked)
     if(checked == true)
     {
         on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        set_projektpfad();
     }
 }
 void MainWindow::on_radioButton_vorschau_ganx_clicked(bool checked)
@@ -659,6 +896,7 @@ void MainWindow::on_radioButton_vorschau_ganx_clicked(bool checked)
     if(checked == true)
     {
         on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        set_projektpfad();
     }
 }
 void MainWindow::on_radioButton_vorschau_fmc_clicked(bool checked)
@@ -666,6 +904,7 @@ void MainWindow::on_radioButton_vorschau_fmc_clicked(bool checked)
     if(checked == true)
     {
         on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        set_projektpfad();
     }
 }
 void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
@@ -673,6 +912,7 @@ void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
     if(checked == true)
     {
         on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        set_projektpfad();
     }
 }
 
@@ -991,6 +1231,14 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
     {
         on_listWidget_wste_itemDoubleClicked();
     }
+    set_projektpfad();
+}
+void MainWindow::on_listWidget_wste_itemSelectionChanged()
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+    }
 }
 void MainWindow::on_listWidget_wste_itemDoubleClicked()
 {
@@ -1295,6 +1543,10 @@ void MainWindow::closeEvent(QCloseEvent *ce)
     dlg_prgtext.close();
     ce->accept();
 }
+
+
+
+
 
 
 
