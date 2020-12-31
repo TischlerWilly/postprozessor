@@ -2,11 +2,10 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "1.20.12.30"
+#define PROGRAMMVERSION "3.20.12.31"
 #endif //PROGRAMMVERSION
 /*
 
--->rechtsklick erkennt aktive Zeile
 -->Einzel-Programm-Export
 -->wst unbenennen
 

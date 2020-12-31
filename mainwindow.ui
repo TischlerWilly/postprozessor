@@ -516,7 +516,7 @@
       <property name="title">
        <string>Vorschau anzeigen für:</string>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -556,6 +556,88 @@
         </item>
        </layout>
       </widget>
+     </widget>
+     <widget class="QLabel" name="label_projekt">
+      <property name="geometry">
+       <rect>
+        <x>1</x>
+        <y>1</y>
+        <width>38</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Projekt:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_pos">
+      <property name="geometry">
+       <rect>
+        <x>169</x>
+        <y>1</y>
+        <width>21</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Pos:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_baugruppe">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>1</y>
+        <width>56</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Baugruppe:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_projekt">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>1</y>
+        <width>118</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_pos">
+      <property name="geometry">
+       <rect>
+        <x>196</x>
+        <y>1</y>
+        <width>118</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_baugruppe">
+      <property name="geometry">
+       <rect>
+        <x>382</x>
+        <y>1</y>
+        <width>118</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_projektpfad">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>27</y>
+        <width>451</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hintergrundfarben:&lt;/p&gt;&lt;p&gt;weiß: Ordner oder Datei existieren nicht&lt;/p&gt;&lt;p&gt;gelb: Ordner existiert bereits&lt;/p&gt;&lt;p&gt;grün: CNC-Programm existiert bereits&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
      </widget>
     </widget>
    </widget>

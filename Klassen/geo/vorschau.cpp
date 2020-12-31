@@ -879,12 +879,11 @@ punkt2d vorschau::mauspos_npwst()
 
 uint vorschau::zeile_von_Mauspos()
 {
-/*
     uint zeile = 0;
     double abst = 9999999999;
     strecke s; //nehmen wir für Längenberechnung/Abstandsberechnung
     s.set_start(mauspos_npanschlag());
-    text_zeilenweise geotext = T.geo().text_zw();
+    text_zeilenweise geotext = Geotext;
 
     for(uint i=1;i<=geotext.zeilenanzahl();i++)
     {
@@ -1075,7 +1074,6 @@ uint vorschau::zeile_von_Mauspos()
         }
     }
     return zeile;
-*/
 }
 
 void vorschau::mouseMoveEvent(QMouseEvent *event)
@@ -1152,19 +1150,21 @@ void vorschau::mousePressEvent(QMouseEvent *event)
         msg_pos_wst += pwst.y_QString();
         msg_pos_wst += ")";
 
-        uint zeile = zeile_von_Mauspos();
-        Zeile_von_maus_pos = zeile;
-        slot_aktives_Element_einfaerben(zeile);
-        QString msgedit;
-        msgedit += "Zeile ";
-        msgedit += int_to_qstring(zeile);
-        msgedit += " bearbeiten";
-
         QMenu m(this);
         m.addAction("Ansicht einpassen", this, SLOT(slot_zf_gleich_eins()), 0) ;
         m.addAction(msg_pos_wst, this, SLOT(slot_tunix()), 0) ;
-        m.addAction(msgedit, this, SLOT(slot_sende_zeilennummer()), 0) ;
         m.exec(this->mapFrom(this, QCursor::pos()));
+
+        uint zeile = zeile_von_Mauspos();
+        Zeile_von_maus_pos = zeile;
+        slot_aktives_Element_einfaerben(zeile);
+        sende_zeilennummer(Zeile_von_maus_pos);
+    }else if(event->button() == Qt::LeftButton)
+    {
+        uint zeile = zeile_von_Mauspos();
+        Zeile_von_maus_pos = zeile;
+        slot_aktives_Element_einfaerben(zeile);
+        sende_zeilennummer(Zeile_von_maus_pos);
     }
 }
 
