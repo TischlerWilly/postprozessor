@@ -47,7 +47,8 @@ public:
 
     //--------------------------------------------------Manipulationen:
     void clear();
-    void stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
+    QString stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
+    void ersetzen(werkstueck w, uint index);
 
     //--------------------------------------------------
 

@@ -263,53 +263,6 @@
       <property name="geometry">
        <rect>
         <x>11</x>
-        <y>427</y>
-        <width>86</width>
-        <height>107</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_ausgbeformate">
-         <property name="text">
-          <string>Ausgabeformate:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_af_fmc">
-         <property name="text">
-          <string>*.fmc</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_af_ganx">
-         <property name="text">
-          <string>*.ganx</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_af_ggf">
-         <property name="text">
-          <string>*.ggf</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_af_eigen">
-         <property name="text">
-          <string>eigenes</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>11</x>
         <y>85</y>
         <width>141</width>
         <height>65</height>
@@ -397,7 +350,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_quick">
      <attribute name="title">
@@ -476,6 +429,59 @@
        <bool>true</bool>
       </property>
      </widget>
+     <widget class="QGroupBox" name="groupBox_ausgabeformate">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>20</y>
+        <width>120</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Ausgabeformate:</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>86</width>
+         <height>107</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QCheckBox" name="checkBox_af_fmc">
+          <property name="text">
+           <string>*.fmc</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_af_ganx">
+          <property name="text">
+           <string>*.ganx</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_af_ggf">
+          <property name="text">
+           <string>*.ggf</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_af_eigen">
+          <property name="text">
+           <string>eigenes</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_detail">
      <attribute name="title">
@@ -500,7 +506,7 @@
         <x>525</x>
         <y>40</y>
         <width>141</width>
-        <height>291</height>
+        <height>371</height>
        </rect>
       </property>
      </widget>
@@ -508,9 +514,9 @@
       <property name="geometry">
        <rect>
         <x>530</x>
-        <y>340</y>
+        <y>420</y>
         <width>131</width>
-        <height>121</height>
+        <height>111</height>
        </rect>
       </property>
       <property name="title">
@@ -637,6 +643,32 @@
       </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hintergrundfarben:&lt;/p&gt;&lt;p&gt;weiß: Ordner oder Datei existieren nicht&lt;/p&gt;&lt;p&gt;gelb: Ordner existiert bereits&lt;/p&gt;&lt;p&gt;grün: CNC-Programm existiert bereits&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_einzelexport">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>530</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>exportieren</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_umbenennen">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>560</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>umbenennen</string>
       </property>
      </widget>
     </widget>
