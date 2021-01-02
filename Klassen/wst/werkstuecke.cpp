@@ -5429,6 +5429,8 @@ bool werkstuecke::ist_bekannt(QString Werkstueckname)
 }
 werkstueck werkstuecke::wst(uint index)
 {
+    //übergibt eine Kopie des Wst
+    //Änderungen an dieser Kopie werden nicht zurück in diese Instanz geschrieben.
     if(index > 0 && index <= Namen.zeilenanzahl())
     {
         return Wste.at(index-1);
@@ -5468,8 +5470,9 @@ void werkstuecke::clear()
     Quellformate.clear();
     Wste.clear();
 }
-void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu)
+QString werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu)
 {
+    QString baugruppenname; //Rückgabewert der Funktion
     //erster Durchlauf: Namen tauschen
     for(uint i = 1; i<=Namen.zeilenanzahl() ;i++)
     {
@@ -5501,11 +5504,16 @@ void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_ne
         }
         if(identisch == true)
         {
+            if(Namen.zeilenanzahl() > 0)
+            {
+                baugruppenname = text_links(Namen.zeile(1),"_");
+            }
             for(uint i = 1; i<=Namen.zeilenanzahl() ;i++)
             {
                 Namen.zeile_ersaetzen(  i, text_rechts(Namen.zeile(i),"_")  );
             }
             schranknummer_wurde_entfernt = true;
+
         }
     }
     //dritter Durchlauf: Nummer hinter Teilenamen löschen wenn möglich
@@ -5551,6 +5559,14 @@ void werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_ne
         werkstueck w = Wste.at(i-1);
         w.set_name(Namen.zeile(i));
         Wste.replace(i-1, w);
+    }
+    return baugruppenname;
+}
+void werkstuecke::ersetzen(werkstueck w, uint index)
+{
+    if(index > 0 && index <= Namen.zeilenanzahl())
+    {
+        Wste.replace(index-1, w);
     }
 }
 

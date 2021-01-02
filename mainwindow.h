@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QDir>
 #include <QMessageBox>
+#include <QInputDialog>
 #include <QFileDialog>
 
 #include "Klassen/prgpfade.h"
@@ -76,8 +77,9 @@ private slots:
     void on_lineEdit_projekt_editingFinished();
     void on_lineEdit_pos_editingFinished();
     void on_lineEdit_baugruppe_editingFinished();
-
     void on_listWidget_wste_itemSelectionChanged();
+    void on_pushButton_einzelexport_clicked();
+    void on_pushButton_umbenennen_clicked();
 
 private:
     Ui::MainWindow *ui;

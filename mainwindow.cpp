@@ -35,6 +35,8 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_prgtext, SLOT(slot_zeilennummer(uint)));
     connect(this, SIGNAL(sendProgrammtext(werkstueck,QString,text_zeilenweise,QString)),\
             &dlg_prgtext, SLOT(slot_wst(werkstueck,QString,text_zeilenweise,QString)));
+
+    //this->setWindowState(Qt::WindowMaximized);
 }
 
 MainWindow::~MainWindow()
@@ -364,16 +366,23 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     ui->tabWidget_main->setFixedWidth(this->width()-ui->scrollArea_einstellungen->width()-20);
     ui->tabWidget_main->setFixedHeight(this->height()-40);
     //tab-Schnell-Modus:
+    //---links:
     ui->plainTextEdit_eldungen->move(5,5);
     ui->plainTextEdit_eldungen->setFixedWidth(ui->tabWidget_main->width()-150);
     ui->plainTextEdit_eldungen->setFixedHeight(ui->tabWidget_main->height()-180);
     ui->plainTextEdit_zusatzinfo->move(5,ui->plainTextEdit_eldungen->y()+ui->plainTextEdit_eldungen->height()+10);
     ui->plainTextEdit_zusatzinfo->setFixedWidth(ui->plainTextEdit_eldungen->width());
     ui->plainTextEdit_zusatzinfo->setFixedHeight(135);
-    ui->pushButton_dateien_auflisten->move(ui->plainTextEdit_eldungen->x()+ui->plainTextEdit_eldungen->width()+10,\
-                                           ui->tabWidget_main->height()/2-50);
+    //---rechts:
+    ui->groupBox_ausgabeformate->move(ui->plainTextEdit_eldungen->x()+ui->plainTextEdit_eldungen->width()+10,\
+                                      5);
+    ui->groupBox_ausgabeformate->setFixedWidth(120);
+    ui->pushButton_dateien_auflisten->move(ui->groupBox_ausgabeformate->x(), \
+                                           ui->groupBox_ausgabeformate->y() \
+                                           + ui->groupBox_ausgabeformate->height() +5);
     ui->pushButton_dateien_auflisten->setFixedWidth(120);
-    ui->pushButton_start->move(ui->pushButton_dateien_auflisten->x(), ui->pushButton_dateien_auflisten->y() \
+    ui->pushButton_start->move(ui->pushButton_dateien_auflisten->x(), \
+                               ui->pushButton_dateien_auflisten->y() \
                                + ui->pushButton_dateien_auflisten->height() +5);
     ui->pushButton_start->setFixedWidth(ui->pushButton_dateien_auflisten->width());
     //tab-Detail-Modus:
@@ -404,15 +413,26 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     vorschaufenster.move(5,r.einfpunkt().y()+r.b()+5);
     vorschaufenster.setFixedWidth(ui->tabWidget_main->width()-200);
     vorschaufenster.setFixedHeight(ui->tabWidget_main->height()-r.einfpunkt().y()-r.b()-35);
+    //---rechter Bereich:
     ui->pushButton_import->move(ui->tabWidget_main->width()-190,5);
     ui->pushButton_import->setFixedWidth(180);
     ui->listWidget_wste->move(ui->pushButton_import->x(),\
                               ui->pushButton_import->y()+ui->pushButton_import->height()+5);
     ui->listWidget_wste->setFixedWidth(180);
+    ui->listWidget_wste->setFixedHeight(this->height()-300);
     ui->groupBox_vorschauformat->move(ui->pushButton_import->x(),\
                                       ui->listWidget_wste->y()+ui->listWidget_wste->height()+5);
     ui->groupBox_vorschauformat->setFixedWidth(180);
+    ui->pushButton_einzelexport->move(ui->pushButton_import->x(),\
+                                      ui->groupBox_vorschauformat->y() + \
+                                      ui->groupBox_vorschauformat->height()+5);
+    ui->pushButton_einzelexport->setFixedWidth(180);
+    ui->pushButton_umbenennen->move(ui->pushButton_import->x(),\
+                                      ui->pushButton_einzelexport->y() + \
+                                      ui->pushButton_einzelexport->height()+5);
+    ui->pushButton_umbenennen->setFixedWidth(180);
     //-----
+    ui->checkBox_fkon_kantenschonend->setDisabled(true);
     QMainWindow::resizeEvent(event);
 }
 
@@ -587,10 +607,11 @@ void MainWindow::set_projektpfad()
 {
     Projektpfad_stimmt = false;
     QString pfad;
+    QString dateiname;
     QString pfad_lokal;
     pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
     pfad_lokal += QDir::separator();
-    pfad_lokal += "DetailModus";
+    pfad_lokal += "DetailModus";    
     if(ui->radioButton_vorschau_fmc->isChecked())
     {
         pfad_lokal += QDir::separator();
@@ -702,20 +723,19 @@ void MainWindow::set_projektpfad()
             {
                 if(!ui->listWidget_wste->currentItem()->text().isEmpty())
                 {
-                    pfad += QDir::separator();
-                    pfad += ui->listWidget_wste->currentItem()->text();
+                    dateiname = ui->listWidget_wste->currentItem()->text();
                     if(ui->radioButton_vorschau_fmc->isChecked())
                     {
-                        pfad += ".fmc";
+                        dateiname += ".fmc";
                     }else if(ui->radioButton_vorschau_ganx->isChecked())
                     {
-                        pfad += ".ganx";
+                        dateiname += ".ganx";
                     }else if(ui->radioButton_vorschau_ggf->isChecked())
                     {
-                        pfad += ".ggf";
+                        dateiname += ".ggf";
                     }else //eigen
                     {
-                        pfad += ".ppf";
+                        dateiname += ".ppf";
                     }
                 }
             }
@@ -729,18 +749,48 @@ void MainWindow::set_projektpfad()
     }
     pfad.replace("\\", QDir::separator());
     pfad.replace("/", QDir::separator());
-    ui->lineEdit_projektpfad->setText(pfad);
-    QFile f(pfad);
-    QDir d(pfad);
-    if(f.exists() && !d.exists())
+    QString pfad_mit_dateinamen;
+    if(!pfad.isEmpty() && !dateiname.isEmpty())
     {
-        QPalette palette;
-        palette.setColor(QPalette::Base,Qt::green);
-        //palette.setColor(QPalette::Text,Qt::black);
-        ui->lineEdit_projektpfad->setPalette(palette);
+        pfad_mit_dateinamen = pfad + QDir::separator() + dateiname;
+        ui->lineEdit_projektpfad->setText(pfad_mit_dateinamen);
     }else
     {
-        if(d.exists() && !pfad.isEmpty())
+        ui->lineEdit_projektpfad->setText(pfad);
+    }
+
+
+    //lineEdit einfärben:
+    if(!pfad_mit_dateinamen.isEmpty())
+    {
+        QFile f(pfad_mit_dateinamen);
+        if(f.exists())
+        {
+            QPalette palette;
+            palette.setColor(QPalette::Base,Qt::green);
+            //palette.setColor(QPalette::Text,Qt::black);
+            ui->lineEdit_projektpfad->setPalette(palette);
+        }else if(!pfad.isEmpty())
+        {
+            QDir d(pfad);
+            if(d.exists())
+            {
+                QPalette palette;
+                palette.setColor(QPalette::Base,Qt::yellow);
+                //palette.setColor(QPalette::Text,Qt::black);
+                ui->lineEdit_projektpfad->setPalette(palette);
+            }else
+            {
+                QPalette palette;
+                palette.setColor(QPalette::Base,Qt::white);
+                //palette.setColor(QPalette::Text,Qt::black);
+                ui->lineEdit_projektpfad->setPalette(palette);
+            }
+        }
+    }else if(!pfad.isEmpty())
+    {
+        QDir d(pfad);
+        if(d.exists())
         {
             QPalette palette;
             palette.setColor(QPalette::Base,Qt::yellow);
@@ -753,6 +803,12 @@ void MainWindow::set_projektpfad()
             //palette.setColor(QPalette::Text,Qt::black);
             ui->lineEdit_projektpfad->setPalette(palette);
         }
+    }else
+    {
+        QPalette palette;
+        palette.setColor(QPalette::Base,Qt::white);
+        //palette.setColor(QPalette::Text,Qt::black);
+        ui->lineEdit_projektpfad->setPalette(palette);
     }
 }
 //-----------------------------------------------------------------------Checkboxen:
@@ -1210,6 +1266,236 @@ void MainWindow::on_pushButton_import_clicked()
         ui->listWidget_wste->addItem(wste.wst(i).name());
     }
 }
+void MainWindow::on_pushButton_einzelexport_clicked()
+{
+    QString pfad = ui->lineEdit_projektpfad->text();
+    bool exportieren = false;
+    if(!pfad.isEmpty())
+    {
+        if(ui->listWidget_wste->selectedItems().count())
+        {
+            if(!ui->listWidget_wste->currentItem()->text().isEmpty())
+            {
+                QString dateiname = ui->listWidget_wste->currentItem()->text();
+                if(ui->radioButton_vorschau_fmc->isChecked())
+                {
+                    dateiname += ".fmc";
+                }else if(ui->radioButton_vorschau_ganx->isChecked())
+                {
+                    dateiname += ".ganx";
+                }else if(ui->radioButton_vorschau_ggf->isChecked())
+                {
+                    dateiname += ".ggf";
+                }else //eigen
+                {
+                    dateiname += ".ppf";
+                }
+                QDir exportdir(text_links(pfad, dateiname));
+                exportdir.mkpath(text_links(pfad, dateiname));
+                QFile f(pfad);
+                if(f.exists())
+                {
+                    QString msg;
+                    msg  = "Die Datei existiert bereits!\n";
+                    msg += "Soll sie überschrieben werden?";
+                    QMessageBox mb;
+                    mb.setWindowTitle("Datei überschreiben?");
+                    mb.setText(msg);
+                    mb.setStandardButtons(QMessageBox::Yes);
+                    mb.addButton(QMessageBox::No);
+                    mb.setDefaultButton(QMessageBox::No);
+
+                    int mb_returnwert = mb.exec();
+                    if(mb_returnwert == QMessageBox::Yes)
+                    {
+                        exportieren = true;
+                    }else if(mb_returnwert == QMessageBox::No)
+                    {
+                        ;//nichts tun = nicht speichern
+                    }
+                }else
+                {
+                    exportieren = true;
+                }
+            }else
+            {
+                QString msg;
+                msg = "Bauteil hat keinen Namen!";
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+            }
+        }else
+        {
+            QString msg;
+            msg = "Es ist kein Bauteil ausgewählt!";
+            QMessageBox mb;
+            mb.setText(msg);
+            mb.exec();
+        }
+    }else
+    {
+        QString msg;
+        msg = "Bitte Projekt und Positionsnummer angeben!";
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.exec();
+    }
+    if(exportieren == true)
+    {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        QFile f(pfad);
+        bool foauf;
+        if(Einstellung.formartierungen_aufbrechen())
+        {
+            foauf = true;
+        }else
+        {
+            foauf = false;
+        }
+        bool fkonkanschon;
+        if(Einstellung.fkon_kantenschonend())
+        {
+            fkonkanschon = true;
+        }else
+        {
+            fkonkanschon = false;
+        }
+        if(ui->radioButton_vorschau_fmc->isChecked())
+        {
+            if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+            {
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_einzelexport_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+            }else
+            {
+                QString info = "";
+                int i = ui->listWidget_wste->currentRow()+1;
+                QString tmp = wste.wst(i).fmc(wkz_magazin_fmc, info, Einstellung.drehung_wst(), \
+                                                      Einstellung.tiefeneinst_fkon(), foauf,fkonkanschon);
+                f.write(tmp.toUtf8());
+            }
+            f.close();
+        }else if(ui->radioButton_vorschau_ganx->isChecked())
+        {
+            if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+            {
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_einzelexport_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+            }else
+            {
+                QString info = "";
+                int i = ui->listWidget_wste->currentRow()+1;
+                QString tmp = wste.wst(i).ganx(wkz_magazin_ganx, info, Einstellung.drehung_wst(), Einstellung_ganx);
+                f.write(tmp.toUtf8());
+            }
+            f.close();
+        }else if(ui->radioButton_vorschau_ggf->isChecked())
+        {
+            if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+            {
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_einzelexport_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+            }else
+            {
+                QString info = "";
+                int i = ui->listWidget_wste->currentRow()+1;
+                QString tmp = wste.wst(i).ggf(wkz_magazin_ggf, info, Einstellung.drehung_wst());
+                f.write(tmp.toUtf8());
+            }
+            f.close();
+        }else //eigen
+        {
+            if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+            {
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_einzelexport_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+            }else
+            {
+                QString info = "";
+                int i = ui->listWidget_wste->currentRow()+1;
+                QString tmp;
+                text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
+                tmp = wste.wst(i).eigenses_format(Einstellung.drehung_wst(), EIGENES_FORMAT, \
+                                                          wkz_eigen, foauf, fkonkanschon);
+                f.write(tmp.toUtf8());
+            }
+            f.close();
+        }
+        QApplication::restoreOverrideCursor();
+    }
+    set_projektpfad();//Farbänderung
+}
+void MainWindow::on_pushButton_umbenennen_clicked()
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        QString name = ui->listWidget_wste->currentItem()->text();
+        if(!name.isEmpty())
+        {
+            bool ok;
+            QString fenstertitel = "umbenennen";
+            QString hinweistext  = "Neuer Name:";
+            QString vorgebewert  = name;
+            QString neuer_name = QInputDialog::getText(this, fenstertitel,
+                                                       hinweistext, QLineEdit::Normal,
+                                                       name, &ok);
+            if (ok && !neuer_name.isEmpty())
+            {
+                if(wste.ist_bekannt(neuer_name))
+                {
+                    QString msg;
+                    msg  = "Das Bauteil kann nicht umbenannt werden.";
+                    msg += "\n";
+                    msg += "Es gibt bereits ein Baiteil mit dem Namen ";
+                    msg += neuer_name;
+                    msg += ".";
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                }else
+                {
+                    int row = ui->listWidget_wste->currentRow();
+                    werkstueck w = wste.wst(row+1);
+                    w.set_name(neuer_name);
+                    wste.ersetzen(w, row+1);
+                    ui->listWidget_wste->clear();
+                    for(uint i=1; i<=wste.anzahl() ;i++)
+                    {
+                        ui->listWidget_wste->addItem(wste.wst(i).name());
+                    }
+                    ui->listWidget_wste->setCurrentRow(row);
+                }
+            }
+        }else
+        {
+            QString msg;
+            msg = "Bauteil hat keinen Namen!";
+            QMessageBox mb;
+            mb.setText(msg);
+            mb.exec();
+        }
+    }else
+    {
+        QString msg;
+        msg = "Es ist kein Bauteil ausgewählt!";
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.exec();
+    }
+}
 //-----------------------------------------------------------------------ListeWidgets:
 void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
 {
@@ -1450,7 +1736,8 @@ void MainWindow::import()
 
     if(Einstellung.std_dateinamen_verwenden())
     {
-        wste.stdnamen(namen_std_vor, namen_std_nach);
+        QString baugruppe = wste.stdnamen(namen_std_vor, namen_std_nach);
+        ui->lineEdit_baugruppe->setText(baugruppe);
     }
 
     QApplication::restoreOverrideCursor();
@@ -1543,6 +1830,10 @@ void MainWindow::closeEvent(QCloseEvent *ce)
     dlg_prgtext.close();
     ce->accept();
 }
+
+
+
+
 
 
 

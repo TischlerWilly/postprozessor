@@ -2,12 +2,16 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.20.12.31"
+#define PROGRAMMVERSION "3.21.01.02"
 #endif //PROGRAMMVERSION
 /*
 
--->Einzel-Programm-Export
--->wst unbenennen
+-->Warnungen für den Detail-Modus (Aufschlagdämpfer fehlen etc.)
+    Label über Widget vorschaufenster oben
+-->Maus-Pos anzeigen
+    Label über Widget vorschaufenster unten
+-->Fenstergröße speichern
+-->Bessere Ansicht auf Programmzeilen
 
 
 
