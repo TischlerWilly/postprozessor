@@ -1733,12 +1733,14 @@ void MainWindow::import()
             }
         }
     }
-
+    //Std-Wst-Namen:
     if(Einstellung.std_dateinamen_verwenden())
     {
         QString baugruppe = wste.stdnamen(namen_std_vor, namen_std_nach);
         ui->lineEdit_baugruppe->setText(baugruppe);
     }
+    //wst-Sortieren:
+    wste.sortieren();
 
     QApplication::restoreOverrideCursor();
 }

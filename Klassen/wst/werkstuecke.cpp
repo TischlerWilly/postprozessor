@@ -5562,6 +5562,134 @@ QString werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen
     }
     return baugruppenname;
 }
+void werkstuecke::sortieren()
+{
+    text_zeilenweise    tmp_Namen;
+    text_zeilenweise    tmp_Quellformate;
+    QVector<werkstueck> tmp_Wste;
+    text_zeilenweise rankingList;
+    rankingList.zeile_anhaengen("Seite_li");
+    rankingList.zeile_anhaengen("Seite_re");
+    rankingList.zeile_anhaengen("Seite");
+    rankingList.zeile_anhaengen("MS_li");
+    rankingList.zeile_anhaengen("MS_re");
+    rankingList.zeile_anhaengen("MS");
+    rankingList.zeile_anhaengen("OB_li");
+    rankingList.zeile_anhaengen("OB_mi");
+    rankingList.zeile_anhaengen("OB_re");
+    rankingList.zeile_anhaengen("OB");
+    rankingList.zeile_anhaengen("UB_li");
+    rankingList.zeile_anhaengen("UB_mi");
+    rankingList.zeile_anhaengen("UB_re");
+    rankingList.zeile_anhaengen("UB");
+    rankingList.zeile_anhaengen("KB_ob");
+    rankingList.zeile_anhaengen("KB_li");
+    rankingList.zeile_anhaengen("KB_mi");
+    rankingList.zeile_anhaengen("KB_un");
+    rankingList.zeile_anhaengen("KB_re");
+    rankingList.zeile_anhaengen("KB");
+    rankingList.zeile_anhaengen("Trav_ob");
+    rankingList.zeile_anhaengen("Trav_un");
+    rankingList.zeile_anhaengen("Trav_vo");
+    rankingList.zeile_anhaengen("Trav_hi");
+    rankingList.zeile_anhaengen("Trav");
+    rankingList.zeile_anhaengen("Traver_ob");
+    rankingList.zeile_anhaengen("Traver_un");
+    rankingList.zeile_anhaengen("Traver_vo");
+    rankingList.zeile_anhaengen("Traver_hi");
+    rankingList.zeile_anhaengen("Traver");
+    rankingList.zeile_anhaengen("EB_ob");
+    rankingList.zeile_anhaengen("EB_li");
+    rankingList.zeile_anhaengen("EB_mi");
+    rankingList.zeile_anhaengen("EB_un");
+    rankingList.zeile_anhaengen("EB_re");
+    rankingList.zeile_anhaengen("EB");
+    rankingList.zeile_anhaengen("RW_ob");
+    rankingList.zeile_anhaengen("RW_li");
+    rankingList.zeile_anhaengen("RW_mi");
+    rankingList.zeile_anhaengen("RW_un");
+    rankingList.zeile_anhaengen("RW_re");
+    rankingList.zeile_anhaengen("RW");
+    rankingList.zeile_anhaengen("Tuer_li");
+    rankingList.zeile_anhaengen("Tuer_");
+    rankingList.zeile_anhaengen("Tuer_A");
+    rankingList.zeile_anhaengen("Tuer_B");
+    rankingList.zeile_anhaengen("Tuer_C");
+    rankingList.zeile_anhaengen("Tuer_D");
+    rankingList.zeile_anhaengen("Tuer_E");
+    rankingList.zeile_anhaengen("Tuer");
+    rankingList.zeile_anhaengen("Front_li");
+    rankingList.zeile_anhaengen("Front_");
+    rankingList.zeile_anhaengen("Front_A");
+    rankingList.zeile_anhaengen("Front_B");
+    rankingList.zeile_anhaengen("Front_C");
+    rankingList.zeile_anhaengen("Front_D");
+    rankingList.zeile_anhaengen("Front_E");
+    rankingList.zeile_anhaengen("Front");
+    rankingList.zeile_anhaengen("SF_A");
+    rankingList.zeile_anhaengen("SF_B");
+    rankingList.zeile_anhaengen("SF_C");
+    rankingList.zeile_anhaengen("SF_D");
+    rankingList.zeile_anhaengen("SF_E");
+    rankingList.zeile_anhaengen("SF");
+    rankingList.zeile_anhaengen("SS_A");
+    rankingList.zeile_anhaengen("SS_B");
+    rankingList.zeile_anhaengen("SS_C");
+    rankingList.zeile_anhaengen("SS_D");
+    rankingList.zeile_anhaengen("SS_E");
+    rankingList.zeile_anhaengen("SS");
+    rankingList.zeile_anhaengen("SV_A");
+    rankingList.zeile_anhaengen("SV_B");
+    rankingList.zeile_anhaengen("SV_C");
+    rankingList.zeile_anhaengen("SV_D");
+    rankingList.zeile_anhaengen("SV_E");
+    rankingList.zeile_anhaengen("SV");
+    rankingList.zeile_anhaengen("SH_A");
+    rankingList.zeile_anhaengen("SH_B");
+    rankingList.zeile_anhaengen("SH_C");
+    rankingList.zeile_anhaengen("SH_D");
+    rankingList.zeile_anhaengen("SH_E");
+    rankingList.zeile_anhaengen("SH");
+    rankingList.zeile_anhaengen("SB_A");
+    rankingList.zeile_anhaengen("SB_B");
+    rankingList.zeile_anhaengen("SB_C");
+    rankingList.zeile_anhaengen("SB_D");
+    rankingList.zeile_anhaengen("SB_E");
+    rankingList.zeile_anhaengen("SB");
+    rankingList.zeile_anhaengen("Sockel_li");
+    rankingList.zeile_anhaengen("Sockel_mi");
+    rankingList.zeile_anhaengen("Sockel_re");
+    rankingList.zeile_anhaengen("Sockel");
+    text_zeilenweise kopiert;
+    for(uint ii = 1; ii<=Namen.zeilenanzahl() ;ii++)
+    {
+        kopiert.zeile_anhaengen("nein");
+    }
+    for(uint i = 1; i<=rankingList.zeilenanzahl() ;i++)
+    {
+        QString akt_ranking_name =rankingList.zeile(i);
+        for(uint ii = 1; ii<=Namen.zeilenanzahl() ;ii++)
+        {
+            QString akt_wst_name = Namen.zeile(ii);
+            if(kopiert.zeile(ii) != "ja")
+            {
+                if(akt_wst_name.contains(akt_ranking_name))
+                {
+                    //kopieren:
+                    tmp_Namen.zeile_anhaengen(akt_wst_name);
+                    tmp_Quellformate.zeile_anhaengen(Quellformate.zeile(ii));
+                    werkstueck w = Wste.at(ii-1);
+                    w.set_name(akt_wst_name);
+                    tmp_Wste.append(w);
+                    kopiert.zeile_ersaetzen(ii, "ja");
+                }
+            }
+        }
+    }
+    Namen = tmp_Namen;
+    Quellformate = tmp_Quellformate;
+    Wste = tmp_Wste;
+}
 void werkstuecke::ersetzen(werkstueck w, uint index)
 {
     if(index > 0 && index <= Namen.zeilenanzahl())
