@@ -235,7 +235,7 @@ QString werkstueck::kante_re_ganx(QString drewi)
         return Kante_hi;
     }
 }
-QString werkstueck::cad_fehler()
+QString werkstueck::cad_fehler(bool kurz)
 {
     QString msg;
 
@@ -257,11 +257,22 @@ QString werkstueck::cad_fehler()
         }
         if(anz_asd < 2)
         {
-            msg += name();
-            msg += ": ";
-            msg += double_to_qstring(anz_asd);
-            msg += " Aufschlagdaempfer";
-            msg += "\n";
+            if(kurz)
+            {
+                if(!msg.isEmpty())
+                {
+                    msg += " / ";
+                }
+                msg += double_to_qstring(anz_asd);
+                msg += " Aufschlagdämpfer";
+            }else
+            {
+                msg += name();
+                msg += ": ";
+                msg += double_to_qstring(anz_asd);
+                msg += " Aufschlagdämpfer";
+                msg += "\n";
+            }
         }
     }
     if(Name.contains("SchubFront") || \
@@ -282,11 +293,22 @@ QString werkstueck::cad_fehler()
         }
         if(anz_asd < 4)
         {
-            msg += name();
-            msg += ": ";
-            msg += double_to_qstring(anz_asd);
-            msg += " Aufschlagdaempfer";
-            msg += "\n";
+            if(kurz)
+            {
+                if(!msg.isEmpty())
+                {
+                    msg += " / ";
+                }
+                msg += double_to_qstring(anz_asd);
+                msg += " Aufschlagdämpfer";
+            }else
+            {
+                msg += name();
+                msg += ": ";
+                msg += double_to_qstring(anz_asd);
+                msg += " Aufschlagdämpfer";
+                msg += "\n";
+            }
         }
     }
 
@@ -1782,7 +1804,7 @@ text_zeilenweise werkstueck::bearb(QString format, text_zeilenweise wkzmagazin, 
     }
     //Werte zurück schreiben:
     wst_l = tmp_l;
-    wst_b = tmp_b;
+    wst_b = tmp_b;    
     Versatz_y = 0;
     if(format == "fmc")
     {

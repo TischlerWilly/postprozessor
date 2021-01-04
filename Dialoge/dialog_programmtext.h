@@ -20,7 +20,7 @@ public:
 private:
     Ui::Dialog_programmtext *ui;
     werkstueck Wst;
-
+    QString bezug(QString b);
 
 signals:
     void signalIndexChange(int index);

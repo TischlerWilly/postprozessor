@@ -62,7 +62,7 @@ public:
     QString kante_hi_ganx(QString drewi = "0");
     QString kante_li_ganx(QString drewi = "0");
     QString kante_re_ganx(QString drewi = "0");
-    QString cad_fehler();
+    QString cad_fehler(bool kurz = false);
     QString fmc(text_zeilenweise wkzmagazin, QString& info, \
                     QString drehwinkel = "0", QString zust_fkon = "orgi",\
                     bool formartierungen_aufbrechen = false,\

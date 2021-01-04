@@ -132,6 +132,9 @@ public slots:
     void getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
     void getEinstellungGANX(einstellung_ganx e);
     void getEinstellung(einstellung e);
+    void getMausPosXY(QPoint p);
+    void getWarnungen(QString w);
+    void getWSTMas(double l, double b, double d);
 
 };
 

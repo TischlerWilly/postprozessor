@@ -33,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent) :
             &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
     connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint)),\
             &dlg_prgtext, SLOT(slot_zeilennummer(uint)));
+    connect(&vorschaufenster, SIGNAL(sende_maus_pos(QPoint)),\
+             this, SLOT(getMausPosXY(QPoint)));
+    connect(&vorschaufenster, SIGNAL(sende_wstmas(double,double,double)),\
+             this, SLOT(getWSTMas(double,double,double)));
     connect(this, SIGNAL(sendProgrammtext(werkstueck,QString,text_zeilenweise,QString)),\
             &dlg_prgtext, SLOT(slot_wst(werkstueck,QString,text_zeilenweise,QString)));
 
@@ -409,17 +413,19 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     ui->lineEdit_projektpfad->move(r.einfpunkt().x(), r.einfpunkt().y() + ly*1 + 2*1);
     ui->lineEdit_projektpfad->setFixedSize(r.l(),ly);
     //---Vorschaufenster:
+    ui->label_warnungen->move(5,r.einfpunkt().y()+r.b());
+    ui->label_warnungen->setFixedWidth(ui->tabWidget_main->width()-200);
     vorschaufenster.setParent(ui->tab_detail);
-    vorschaufenster.move(5,r.einfpunkt().y()+r.b()+5);
+    vorschaufenster.move(5,72);
     vorschaufenster.setFixedWidth(ui->tabWidget_main->width()-200);
-    vorschaufenster.setFixedHeight(ui->tabWidget_main->height()-r.einfpunkt().y()-r.b()-35);
+    vorschaufenster.setFixedHeight(ui->tabWidget_main->height()-100);
     //---rechter Bereich:
     ui->pushButton_import->move(ui->tabWidget_main->width()-190,5);
     ui->pushButton_import->setFixedWidth(180);
     ui->listWidget_wste->move(ui->pushButton_import->x(),\
                               ui->pushButton_import->y()+ui->pushButton_import->height()+5);
     ui->listWidget_wste->setFixedWidth(180);
-    ui->listWidget_wste->setFixedHeight(this->height()-300);
+    ui->listWidget_wste->setFixedHeight(this->height()-320);
     ui->groupBox_vorschauformat->move(ui->pushButton_import->x(),\
                                       ui->listWidget_wste->y()+ui->listWidget_wste->height()+5);
     ui->groupBox_vorschauformat->setFixedWidth(180);
@@ -431,11 +437,18 @@ void MainWindow::resizeEvent(QResizeEvent *event)
                                       ui->pushButton_einzelexport->y() + \
                                       ui->pushButton_einzelexport->height()+5);
     ui->pushButton_umbenennen->setFixedWidth(180);
+    ui->label_xypos->move(ui->pushButton_import->x(),\
+                          ui->pushButton_umbenennen->y() + \
+                          ui->pushButton_umbenennen->height()+5);
+    ui->label_xypos->setFixedWidth(180);
+    ui->label_wstmas->move(ui->pushButton_import->x(),\
+                           ui->label_xypos->y() + \
+                           ui->label_xypos->height()+5);
+    ui->label_wstmas->setFixedWidth(180);
     //-----
     ui->checkBox_fkon_kantenschonend->setDisabled(true);
     QMainWindow::resizeEvent(event);
 }
-
 //-----------------------------------------------------------------------public slots:
 void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin)
 {
@@ -539,6 +552,53 @@ void MainWindow::getEinstellungGANX(einstellung_ganx e)
         file.write(Einstellung_ganx.text().toLatin1());
     }
     file.close();
+}
+void MainWindow::getMausPosXY(QPoint p)
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        QString x = int_to_qstring(p.x());
+        QString y = int_to_qstring(p.y());
+        QString msg;
+        msg  = "X: ";
+        msg += x;
+        msg += " / Y: ";
+        msg += y;
+        ui->label_xypos->setText(msg);
+    }else
+    {
+        QString msg;
+        msg  = "X: ";
+        msg += "?";
+        msg += " / Y: ";
+        msg += "?";
+        ui->label_xypos->setText(msg);
+    }
+}
+void MainWindow::getWarnungen(QString w)
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        ui->label_warnungen->setText(w);
+        ui->label_warnungen->setToolTip(w);
+    }else
+    {
+        ui->label_warnungen->clear();
+        ui->label_warnungen->toolTip().clear();
+    }
+}
+void MainWindow::getWSTMas(double l, double b, double d)
+{
+    QString mas;
+    mas  = "L: ";
+    mas += double_to_qstring(l);
+    mas += " / ";
+    mas += "B: ";
+    mas += double_to_qstring(b);
+    mas += " / ";
+    mas += "D: ";
+    mas += double_to_qstring(d);
+    ui->label_wstmas->setText(mas);
 }
 //-----------------------------------------------------------------------LineEdits:
 void MainWindow::on_lineEdit_geraden_schwellenwert_editingFinished()
@@ -1502,22 +1562,26 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
     if(ui->radioButton_vorschau_eigen->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
+        getWarnungen(wste.wst(currentRow+1).cad_fehler(true));
         //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.        
     }else if(ui->radioButton_vorschau_ganx->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
+        getWarnungen(wste.wst(currentRow+1).cad_fehler(true));
     }else if(ui->radioButton_vorschau_fmc->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
+        getWarnungen(wste.wst(currentRow+1).cad_fehler(true));
     }else if(ui->radioButton_vorschau_ggf->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
+        getWarnungen(wste.wst(currentRow+1).cad_fehler(true));
     }
     if(dlg_prgtext.isVisible())
     {
         on_listWidget_wste_itemDoubleClicked();
     }
-    set_projektpfad();
+    set_projektpfad();   
 }
 void MainWindow::on_listWidget_wste_itemSelectionChanged()
 {
