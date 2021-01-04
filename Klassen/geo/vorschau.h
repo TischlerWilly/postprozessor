@@ -68,6 +68,7 @@ signals:
     void anfrage_werkstueckmasse();
     void sende_maus_pos(QPoint p);
     void sende_zeilennummer(uint nr);
+    void sende_wstmas(double l, double b, double d);
 
 public slots:
     void slot_aktualisieren(werkstueck w_neu, int aktive_zeile,\

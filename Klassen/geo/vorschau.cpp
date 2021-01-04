@@ -783,6 +783,7 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile, \
     werkstueck_darstellung_berechnen();
     Geotext = W.geo(format, wkzmagazin, drehwinkel).text_zw();
     this->update();
+    sende_wstmas(tmp_l, tmp_b, w_neu.dicke());
 }
 
 void vorschau::slot_aktives_Element_einfaerben(int zeilennummer)

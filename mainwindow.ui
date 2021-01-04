@@ -506,7 +506,7 @@
         <x>525</x>
         <y>40</y>
         <width>141</width>
-        <height>371</height>
+        <height>151</height>
        </rect>
       </property>
      </widget>
@@ -514,7 +514,7 @@
       <property name="geometry">
        <rect>
         <x>530</x>
-        <y>420</y>
+        <y>200</y>
         <width>131</width>
         <height>111</height>
        </rect>
@@ -649,7 +649,7 @@
       <property name="geometry">
        <rect>
         <x>550</x>
-        <y>530</y>
+        <y>320</y>
         <width>111</width>
         <height>23</height>
        </rect>
@@ -662,13 +662,64 @@
       <property name="geometry">
        <rect>
         <x>550</x>
-        <y>560</y>
+        <y>350</y>
         <width>111</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
        <string>umbenennen</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_xypos">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>380</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>X: / Y:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_warnungen">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="text">
+       <string>Warnungen</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_wstmas">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>400</y>
+        <width>111</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>L x B x D</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </widget>
