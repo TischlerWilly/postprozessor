@@ -108,6 +108,7 @@ private:
     void import();
     void closeEvent(QCloseEvent *ce);
     void set_projektpfad();
+    void speichere_ausgabepfad(QString pfad);
 
     //Dialoge:
     Dialog_WKZ dlg_wkz;
