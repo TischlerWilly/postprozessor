@@ -1440,6 +1440,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                 QString tmp = wste.wst(i).fmc(wkz_magazin_fmc, info, Einstellung.drehung_wst(), \
                                                       Einstellung.tiefeneinst_fkon(), foauf,fkonkanschon);
                 f.write(tmp.toUtf8());
+                schreibe_in_zwischenablage(pfad);
             }
             f.close();
         }else if(ui->radioButton_vorschau_ganx->isChecked())
@@ -1924,6 +1925,11 @@ void MainWindow::speichere_ausgabepfad(QString pfad)
         Einstellung.set_verzeichnis_ziel_auswahl(pfad);
         schreibe_ini();
     }
+}
+void MainWindow::schreibe_in_zwischenablage(QString s)
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(s);
 }
 
 

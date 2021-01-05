@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QFileDialog>
+#include <QClipboard>
 
 #include "Klassen/prgpfade.h"
 #include "Defines/dateinamen.h"
@@ -109,6 +110,7 @@ private:
     void closeEvent(QCloseEvent *ce);
     void set_projektpfad();
     void speichere_ausgabepfad(QString pfad);
+    void schreibe_in_zwischenablage(QString s);
 
     //Dialoge:
     Dialog_WKZ dlg_wkz;
