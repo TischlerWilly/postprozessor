@@ -15,6 +15,7 @@
 #include "Dialoge/dialog_einstellung_pfade.h"
 #include "Dialoge/dialog_einstellung_ganx.h"
 #include "Dialoge/dialog_programmtext.h"
+#include "Dialoge/dialog_exportuebersicht.h"
 
 #include "Funktionen/text.h"
 #include "Klassen/text_zeilenweise.h"
@@ -81,6 +82,7 @@ private slots:
     void on_listWidget_wste_itemSelectionChanged();
     void on_pushButton_einzelexport_clicked();
     void on_pushButton_umbenennen_clicked();
+    void on_actionExportUebersicht_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -111,6 +113,7 @@ private:
     void set_projektpfad();
     void speichere_ausgabepfad(QString pfad);
     void schreibe_in_zwischenablage(QString s);
+    QString fenstertitel_exportuebersicht();
 
     //Dialoge:
     Dialog_WKZ dlg_wkz;
@@ -118,6 +121,7 @@ private:
     Dialog_Einstellung_pfade dlg_Einstellung_pfade;
     Dialog_einstellung_ganx dlg_einstellung_ganx;
     Dialog_programmtext dlg_prgtext;
+    Dialog_ExportUebersicht dlg_exporte;
 
 
 signals:
@@ -129,6 +133,9 @@ signals:
                                    QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
     void sendProgrammtext(werkstueck w_neu,\
                           QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
+    void signal_exporte(text_zeilenweise daten);
+    void signal_wstexport(QString name, QString format, bool exportiert);
+    void signal_wst_umbenennen(QString name_vor, QString name_nach);
 
 public slots:
     void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);

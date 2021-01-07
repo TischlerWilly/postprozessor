@@ -15,6 +15,7 @@ TEMPLATE = app
 SOURCES += main.cpp\
     Dialoge/dialog_einstellung_ganx.cpp \
     Dialoge/dialog_einstellung_pfade.cpp \
+    Dialoge/dialog_exportuebersicht.cpp \
     Dialoge/dialog_programmtext.cpp \
     Klassen/einstellung.cpp \
     Klassen/einstellung_ganx.cpp \
@@ -61,6 +62,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     Dialoge/dialog_einstellung_ganx.h \
     Dialoge/dialog_einstellung_pfade.h \
+    Dialoge/dialog_exportuebersicht.h \
     Dialoge/dialog_programmtext.h \
     Klassen/einstellung.h \
     Klassen/einstellung_ganx.h \
@@ -116,6 +118,7 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     Dialoge/dialog_einstellung_ganx.ui \
     Dialoge/dialog_einstellung_pfade.ui \
+    Dialoge/dialog_exportuebersicht.ui \
     Dialoge/dialog_programmtext.ui \
     Dialoge/dialog_wkz.ui \
     Dialoge/dialog_bohrer.ui \
