@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(getMausPosXY(QPoint)));
     connect(&vorschaufenster, SIGNAL(sende_wstmas(double,double,double)),\
              this, SLOT(getWSTMas(double,double,double)));
+    connect(&vorschaufenster, SIGNAL(sende_drewi(QString)),\
+             this, SLOT(getDrewi(QString)));
     connect(this, SIGNAL(sendProgrammtext(werkstueck,QString,text_zeilenweise,QString)),\
             &dlg_prgtext, SLOT(slot_wst(werkstueck,QString,text_zeilenweise,QString)));
     connect(this, SIGNAL(signal_exporte(text_zeilenweise)),\
@@ -605,6 +607,10 @@ void MainWindow::getWSTMas(double l, double b, double d)
     mas += "D: ";
     mas += double_to_qstring(d);
     ui->label_wstmas->setText(mas);
+}
+void MainWindow::getDrewi(QString w)
+{
+    ui->radioButton_drehung_autom->setToolTip(w);
 }
 //-----------------------------------------------------------------------LineEdits:
 void MainWindow::on_lineEdit_geraden_schwellenwert_editingFinished()

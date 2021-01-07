@@ -145,6 +145,7 @@ public slots:
     void getMausPosXY(QPoint p);
     void getWarnungen(QString w);
     void getWSTMas(double l, double b, double d);
+    void getDrewi(QString w);
 
 };
 
