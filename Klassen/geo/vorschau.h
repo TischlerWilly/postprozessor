@@ -69,6 +69,7 @@ signals:
     void sende_maus_pos(QPoint p);
     void sende_zeilennummer(uint nr);
     void sende_wstmas(double l, double b, double d);
+    void sende_drewi(QString w);
 
 public slots:
     void slot_aktualisieren(werkstueck w_neu, int aktive_zeile,\

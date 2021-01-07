@@ -747,6 +747,7 @@
      <string>Extras</string>
     </property>
     <addaction name="actionInfo"/>
+    <addaction name="actionExportUebersicht"/>
    </widget>
    <widget class="QMenu" name="menuEinstellungen">
     <property name="title">
@@ -793,6 +794,11 @@
   <action name="actionEinstellung_pfade">
    <property name="text">
     <string>Pfade</string>
+   </property>
+  </action>
+  <action name="actionExportUebersicht">
+   <property name="text">
+    <string>Exportübersicht</string>
    </property>
   </action>
  </widget>

@@ -37,8 +37,16 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(getMausPosXY(QPoint)));
     connect(&vorschaufenster, SIGNAL(sende_wstmas(double,double,double)),\
              this, SLOT(getWSTMas(double,double,double)));
+    connect(&vorschaufenster, SIGNAL(sende_drewi(QString)),\
+             this, SLOT(getDrewi(QString)));
     connect(this, SIGNAL(sendProgrammtext(werkstueck,QString,text_zeilenweise,QString)),\
             &dlg_prgtext, SLOT(slot_wst(werkstueck,QString,text_zeilenweise,QString)));
+    connect(this, SIGNAL(signal_exporte(text_zeilenweise)),\
+            &dlg_exporte, SLOT(slot_wstnamen(text_zeilenweise)));
+    connect(this, SIGNAL(signal_wstexport(QString,QString,bool)),\
+            &dlg_exporte, SLOT(slot_wstexport(QString,QString,bool)));
+    connect(this, SIGNAL(signal_wst_umbenennen(QString,QString)),\
+            &dlg_exporte, SLOT(slot_wst_umbenennen(QString,QString)));
 
     //this->setWindowState(Qt::WindowMaximized);
 }
@@ -600,6 +608,10 @@ void MainWindow::getWSTMas(double l, double b, double d)
     mas += double_to_qstring(d);
     ui->label_wstmas->setText(mas);
 }
+void MainWindow::getDrewi(QString w)
+{
+    ui->radioButton_drehung_autom->setToolTip(w);
+}
 //-----------------------------------------------------------------------LineEdits:
 void MainWindow::on_lineEdit_geraden_schwellenwert_editingFinished()
 {
@@ -669,25 +681,30 @@ void MainWindow::set_projektpfad()
     QString pfad;
     QString dateiname;
     QString pfad_lokal;
+    QString format;
     pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
     pfad_lokal += QDir::separator();
     pfad_lokal += "DetailModus";    
     if(ui->radioButton_vorschau_fmc->isChecked())
     {
         pfad_lokal += QDir::separator();
-        pfad_lokal += "fmc";
+        format = "fmc";
+        pfad_lokal += format;
     }else if(ui->radioButton_vorschau_ganx->isChecked())
     {
         pfad_lokal += QDir::separator();
-        pfad_lokal += "ganx";
+        format = "ganx";
+        pfad_lokal += format;
     }else if(ui->radioButton_vorschau_ggf->isChecked())
     {
         pfad_lokal += QDir::separator();
-        pfad_lokal += "ggf";
+        format = "ggf";
+        pfad_lokal += format;
     }else //eigen
     {
         pfad_lokal += QDir::separator();
-        pfad_lokal += "eigen";
+        format = "eigen";
+        pfad_lokal += format;
     }
 
     if(ui->radioButton_vorschau_fmc->isChecked())
@@ -793,7 +810,7 @@ void MainWindow::set_projektpfad()
                     }else if(ui->radioButton_vorschau_ggf->isChecked())
                     {
                         dateiname += ".ggf";
-                    }else //eigen
+                    }else //eigen == ".ppf"
                     {
                         dateiname += ".ppf";
                     }
@@ -830,6 +847,8 @@ void MainWindow::set_projektpfad()
             palette.setColor(QPalette::Base,Qt::green);
             //palette.setColor(QPalette::Text,Qt::black);
             ui->lineEdit_projektpfad->setPalette(palette);
+            signal_wstexport(dateiname, format, true);
+            dlg_exporte.setWindowTitle(fenstertitel_exportuebersicht());
         }else if(!pfad.isEmpty())
         {
             QDir d(pfad);
@@ -870,6 +889,22 @@ void MainWindow::set_projektpfad()
         //palette.setColor(QPalette::Text,Qt::black);
         ui->lineEdit_projektpfad->setPalette(palette);
     }
+}
+QString MainWindow::fenstertitel_exportuebersicht()
+{
+    QString titel = "Exportübersicht ";
+    if(!ui->lineEdit_projekt->text().isEmpty() && !ui->lineEdit_pos->text().isEmpty())
+    {
+        titel += ui->lineEdit_projekt->text();
+        titel += " Pos: ";
+        titel += ui->lineEdit_pos->text();
+        if(!ui->lineEdit_baugruppe->text().isEmpty())
+        {
+            titel += " / ";
+            titel += ui->lineEdit_baugruppe->text();
+        }
+    }
+    return titel;
 }
 //-----------------------------------------------------------------------Checkboxen:
 void MainWindow::on_checkBox_quelldat_erhalt_stateChanged()
@@ -1089,6 +1124,10 @@ void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
 void MainWindow::on_actionEinstellung_ganx_triggered()
 {
     emit sendEinstellungGANX(Einstellung_ganx);
+}
+void MainWindow::on_actionExportUebersicht_triggered()
+{
+    dlg_exporte.show();
 }
 
 //-----------------------------------------------------------------------Buttons:
@@ -1326,6 +1365,7 @@ void MainWindow::on_pushButton_import_clicked()
     {
         ui->listWidget_wste->addItem(wste.wst(i).name());
     }
+    signal_exporte(wste.namen_tz());
 }
 void MainWindow::on_pushButton_einzelexport_clicked()
 {
@@ -1541,6 +1581,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                         ui->listWidget_wste->addItem(wste.wst(i).name());
                     }
                     ui->listWidget_wste->setCurrentRow(row);
+                    signal_wst_umbenennen(name, neuer_name);
                 }
             }
         }else
@@ -1898,6 +1939,7 @@ void MainWindow::closeEvent(QCloseEvent *ce)
     //    ce->accept();
     //}
     dlg_prgtext.close();
+    dlg_exporte.close();
     ce->accept();
 }
 void MainWindow::speichere_ausgabepfad(QString pfad)
@@ -1931,6 +1973,8 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
 
 
 

@@ -777,6 +777,7 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile, \
     double tmp_l = 0;
     double tmp_b = 0;
     text_zeilenweise tmp_bearb = W.bearb(format, wkzmagazin, drehwinkel, tmp_l, tmp_b);
+    sende_drewi(drehwinkel);
     Wst.set_laenge(tmp_l);
     Wst.set_breite(tmp_b);
     Aktuelle_zeilennummer = aktive_zeile;
