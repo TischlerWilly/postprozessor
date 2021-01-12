@@ -73,6 +73,7 @@ public:
                                 text_zeilenweise wkzmagazin,\
                                 bool formartierungen_aufbrechen = false,\
                                 bool fkon_kantenschonend = false);
+    QString warnungen(QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
     double max_x(QString format);
     double min_x(QString format);
     double max_y(QString format);
@@ -118,7 +119,10 @@ public:
     {
         return Versatz_y;
     }
-
+    inline bool export_moeglich()
+    {
+        return Export_moeglich;
+    }
     //--------------------------------------------------Manipulationen:
     text_zeilenweise gehr_3achs(text_zeilenweise bearb, double& tmp_l, double& tmp_b, QString ausgabeformat);
     //--------------------------------------------------
@@ -130,6 +134,7 @@ private:
     double Dicke;   //Z-Wert
     text_zeilenweise Bearbeitungen;
     int Bewertung;
+    bool Export_moeglich;
     QString Name;
     double Schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
     double Versatz_y;

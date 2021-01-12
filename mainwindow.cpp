@@ -583,7 +583,7 @@ void MainWindow::getMausPosXY(QPoint p)
         ui->label_xypos->setText(msg);
     }
 }
-void MainWindow::getWarnungen(QString w)
+void MainWindow::getCADFehler(QString w)
 {
     if(ui->listWidget_wste->selectedItems().count())
     {
@@ -593,6 +593,17 @@ void MainWindow::getWarnungen(QString w)
     {
         ui->label_warnungen->clear();
         ui->label_warnungen->toolTip().clear();
+    }
+}
+void MainWindow::getWarnungen(QString w)
+{
+    ui->pushButton_einzelexport->setToolTip(w);
+    if(!w.isEmpty())
+    {
+        ui->pushButton_einzelexport->setStyleSheet("border:3px solid #ff0000;");
+    }else
+    {
+        ui->pushButton_einzelexport->setStyleSheet(ui->pushButton_umbenennen->styleSheet());
     }
 }
 void MainWindow::getWSTMas(double l, double b, double d)
@@ -1466,77 +1477,94 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         }
         if(ui->radioButton_vorschau_fmc->isChecked())
         {
-            if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+            QString info = "";
+            int i = ui->listWidget_wste->currentRow()+1;
+            werkstueck tmp_wst = wste.wst(i);
+            QString tmp = tmp_wst.fmc(wkz_magazin_fmc, info, Einstellung.drehung_wst(), \
+                                      Einstellung.tiefeneinst_fkon(), foauf,fkonkanschon);
+            if(tmp_wst.export_moeglich())
             {
-                QString tmp = "Fehler beim Dateizugriff!\n";
-                tmp += pfad;
-                tmp += "\n";
-                tmp += "in der Funktion on_pushButton_einzelexport_clicked";
-                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-            }else
-            {
-                QString info = "";
-                int i = ui->listWidget_wste->currentRow()+1;
-                QString tmp = wste.wst(i).fmc(wkz_magazin_fmc, info, Einstellung.drehung_wst(), \
-                                                      Einstellung.tiefeneinst_fkon(), foauf,fkonkanschon);
-                f.write(tmp.toUtf8());
-                schreibe_in_zwischenablage(pfad);
+                if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+                {
+                    QString tmp = "Fehler beim Dateizugriff!\n";
+                    tmp += pfad;
+                    tmp += "\n";
+                    tmp += "in der Funktion on_pushButton_einzelexport_clicked";
+                    QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                }else
+                {
+                    f.write(tmp.toUtf8());
+                    schreibe_in_zwischenablage(pfad);
+                }
+                f.close();
             }
-            f.close();
         }else if(ui->radioButton_vorschau_ganx->isChecked())
         {
-            if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+            QString info = "";
+            int i = ui->listWidget_wste->currentRow()+1;
+            werkstueck tmp_wst = wste.wst(i);
+            QString tmp = tmp_wst.ganx(wkz_magazin_ganx, info, Einstellung.drehung_wst(), Einstellung_ganx);
+            if(tmp_wst.export_moeglich())
             {
-                QString tmp = "Fehler beim Dateizugriff!\n";
-                tmp += pfad;
-                tmp += "\n";
-                tmp += "in der Funktion on_pushButton_einzelexport_clicked";
-                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-            }else
-            {
-                QString info = "";
-                int i = ui->listWidget_wste->currentRow()+1;
-                QString tmp = wste.wst(i).ganx(wkz_magazin_ganx, info, Einstellung.drehung_wst(), Einstellung_ganx);
-                f.write(tmp.toUtf8());
+                if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+                {
+                    QString tmp = "Fehler beim Dateizugriff!\n";
+                    tmp += pfad;
+                    tmp += "\n";
+                    tmp += "in der Funktion on_pushButton_einzelexport_clicked";
+                    QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                }else
+                {
+                    f.write(tmp.toUtf8());
+                }
+                f.close();
             }
-            f.close();
         }else if(ui->radioButton_vorschau_ggf->isChecked())
         {
-            if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+            QString info = "";
+            int i = ui->listWidget_wste->currentRow()+1;
+            werkstueck tmp_wst = wste.wst(i);
+            QString tmp = tmp_wst.ggf(wkz_magazin_ggf, info, Einstellung.drehung_wst());
+            if(tmp_wst.export_moeglich())
             {
-                QString tmp = "Fehler beim Dateizugriff!\n";
-                tmp += pfad;
-                tmp += "\n";
-                tmp += "in der Funktion on_pushButton_einzelexport_clicked";
-                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-            }else
-            {
-                QString info = "";
-                int i = ui->listWidget_wste->currentRow()+1;
-                QString tmp = wste.wst(i).ggf(wkz_magazin_ggf, info, Einstellung.drehung_wst());
-                f.write(tmp.toUtf8());
+                if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+                {
+                    QString tmp = "Fehler beim Dateizugriff!\n";
+                    tmp += pfad;
+                    tmp += "\n";
+                    tmp += "in der Funktion on_pushButton_einzelexport_clicked";
+                    QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                }else
+                {
+
+                    f.write(tmp.toUtf8());
+                }
+                f.close();
             }
-            f.close();
         }else //eigen
         {
-            if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+            QString info = "";
+            int i = ui->listWidget_wste->currentRow()+1;
+            werkstueck tmp_wst = wste.wst(i);
+            QString tmp;
+            text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
+            tmp = tmp_wst.eigenses_format(Einstellung.drehung_wst(), EIGENES_FORMAT, \
+                                                      wkz_eigen, foauf, fkonkanschon);
+            if(tmp_wst.export_moeglich())
             {
-                QString tmp = "Fehler beim Dateizugriff!\n";
-                tmp += pfad;
-                tmp += "\n";
-                tmp += "in der Funktion on_pushButton_einzelexport_clicked";
-                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-            }else
-            {
-                QString info = "";
-                int i = ui->listWidget_wste->currentRow()+1;
-                QString tmp;
-                text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
-                tmp = wste.wst(i).eigenses_format(Einstellung.drehung_wst(), EIGENES_FORMAT, \
-                                                          wkz_eigen, foauf, fkonkanschon);
-                f.write(tmp.toUtf8());
+                if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+                {
+                    QString tmp = "Fehler beim Dateizugriff!\n";
+                    tmp += pfad;
+                    tmp += "\n";
+                    tmp += "in der Funktion on_pushButton_einzelexport_clicked";
+                    QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                }else
+                {
+                    f.write(tmp.toUtf8());
+                }
+                f.close();
             }
-            f.close();
         }
         QApplication::restoreOverrideCursor();
     }
@@ -1607,20 +1635,32 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
     if(ui->radioButton_vorschau_eigen->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
-        getWarnungen(wste.wst(currentRow+1).cad_fehler(true));
+        getCADFehler(wste.wst(currentRow+1).cad_fehler(true));
+        QString warnung;
+        warnung = wste.wst(currentRow+1).warnungen("eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
+        getWarnungen(warnung);
         //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.        
     }else if(ui->radioButton_vorschau_ganx->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
-        getWarnungen(wste.wst(currentRow+1).cad_fehler(true));
+        getCADFehler(wste.wst(currentRow+1).cad_fehler(true));
+        QString warnung;
+        warnung = wste.wst(currentRow+1).warnungen("ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
+        getWarnungen(warnung);
     }else if(ui->radioButton_vorschau_fmc->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
-        getWarnungen(wste.wst(currentRow+1).cad_fehler(true));
+        getCADFehler(wste.wst(currentRow+1).cad_fehler(true));
+        QString warnung;
+        warnung = wste.wst(currentRow+1).warnungen("fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
+        getWarnungen(warnung);
     }else if(ui->radioButton_vorschau_ggf->isChecked())
     {
         emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
-        getWarnungen(wste.wst(currentRow+1).cad_fehler(true));
+        getCADFehler(wste.wst(currentRow+1).cad_fehler(true));
+        QString warnung;
+        warnung = wste.wst(currentRow+1).warnungen("ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
+        getWarnungen(warnung);
     }
     if(dlg_prgtext.isVisible())
     {

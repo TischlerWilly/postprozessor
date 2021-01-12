@@ -143,6 +143,7 @@ public slots:
     void getEinstellungGANX(einstellung_ganx e);
     void getEinstellung(einstellung e);
     void getMausPosXY(QPoint p);
+    void getCADFehler(QString w);
     void getWarnungen(QString w);
     void getWSTMas(double l, double b, double d);
     void getDrewi(QString w);

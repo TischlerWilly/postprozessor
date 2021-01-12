@@ -10,6 +10,7 @@ werkstueck::werkstueck()
     Drehung = "0";
     Hbemiduebeltiefe_aktuell = false;
     Fraesergeraden_zusammenfassen_aktuell = false;
+    Export_moeglich = true;
 }
 werkstueck::werkstueck(QString neuer_name)
 {
@@ -22,6 +23,7 @@ werkstueck::werkstueck(QString neuer_name)
     Drehung = "0";
     Hbemiduebeltiefe_aktuell = false;
     Fraesergeraden_zusammenfassen_aktuell = false;
+    Export_moeglich = true;
 }
 //#######################################################################
 //Public:
@@ -318,6 +320,7 @@ QString werkstueck::cad_fehler(bool kurz)
 QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel, QString zust_fkon,\
                             bool formartierungen_aufbrechen, bool fkon_kantenschonend)
 {    
+    Export_moeglich = true;
     QString msg;
     double tmp_l = 0;
     double tmp_b = 0;
@@ -336,12 +339,13 @@ QString werkstueck::fmc(text_zeilenweise wkzmagazin, QString& info , QString dre
 }
 QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel, einstellung_ganx eganx)
 {
+    Export_moeglich = true;
     QString msg;
     double tmp_l = 0;
     double tmp_b = 0;
     text_zeilenweise tmp_bearb = bearb("ganx", wkzmagazin, drehwinkel, tmp_l, tmp_b);
     msg = ganx_dateitext(wkzmagazin, tmp_bearb, tmp_l, tmp_b, eganx);
-    QString warnungen = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+    QString warnungen = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
     info  = "  -> Drehung ";
     info += drehwinkel;
     info += " (";
@@ -353,6 +357,7 @@ QString werkstueck::ganx(text_zeilenweise wkzmagazin, QString& info , QString dr
 }
 QString werkstueck::ggf(text_zeilenweise wkzmagazin, QString& info , QString drehwinkel)
 {
+    Export_moeglich = true;
     QString msg;
     double tmp_l = 0;
     double tmp_b = 0;
@@ -371,6 +376,7 @@ QString werkstueck::ggf(text_zeilenweise wkzmagazin, QString& info , QString dre
 QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, text_zeilenweise wkzmagazin,\
                                         bool formartierungen_aufbrechen, bool fkon_kantenschonend)
 {
+    Export_moeglich = true;
     QString msg;
     double tmp_l = 0;
     double tmp_b = 0;
@@ -378,6 +384,28 @@ QString werkstueck::eigenses_format(QString drehwinkel, QString ausgabeformat, t
     msg = eigen_dateitext(tmp_bearb, tmp_l, tmp_b, ausgabeformat, wkzmagazin, \
                               formartierungen_aufbrechen, fkon_kantenschonend);
     return msg;
+}
+QString werkstueck::warnungen(QString format, text_zeilenweise wkzmagazin, QString drehwinkel)
+{
+    QString warn;
+    double tmp_l = 0;
+    double tmp_b = 0;
+    text_zeilenweise tmp_bearb = bearb(format, wkzmagazin, drehwinkel, tmp_l, tmp_b);
+    if(format == "fmc")
+    {
+        warn = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+    }else if(format == "ganx")
+    {
+        warn = warnungen_ganx(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+    }else if(format == "ggf")
+    {
+        warn = warnungen_fmc(tmp_bearb, tmp_l, tmp_b, wkzmagazin);
+        //identisch zu fmc jedoch wird anderes wkzmagazin übergeben
+    }else if(format == "eigen")
+    {
+        //keine Warnungen
+    }
+    return warn;
 }
 double werkstueck::max_x(QString format)
 {
@@ -2215,6 +2243,7 @@ QString werkstueck::warnungen_ggf(text_zeilenweise bearbeit, double tmp_l, doubl
 }
 QString werkstueck::fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbeitung)
 {
+    Export_moeglich = false;
     QString fehlermeldung;
 
     fehlermeldung += "Fehler bei ";
