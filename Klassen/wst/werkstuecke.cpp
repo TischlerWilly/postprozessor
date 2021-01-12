@@ -5684,21 +5684,21 @@ void werkstuecke::sortieren()
                     kopiert.zeile_ersaetzen(ii, "ja");
                 }
             }
-        }
-        //2. Durchlauf. Jetzt kommen alle wst die nicht sortierbar waren:
-        for(uint ii = 1; ii<=Namen.zeilenanzahl() ;ii++)
+        }        
+    }
+    //2. Durchlauf. Jetzt kommen alle wst die nicht sortierbar waren:
+    for(uint i = 1; i<=Namen.zeilenanzahl() ;i++)
+    {
+        QString akt_wst_name = Namen.zeile(i);
+        if(kopiert.zeile(i) != "ja")
         {
-            QString akt_wst_name = Namen.zeile(ii);
-            if(kopiert.zeile(ii) != "ja")
-            {
-                //kopieren:
-                tmp_Namen.zeile_anhaengen(akt_wst_name);
-                tmp_Quellformate.zeile_anhaengen(Quellformate.zeile(ii));
-                werkstueck w = Wste.at(ii-1);
-                w.set_name(akt_wst_name);
-                tmp_Wste.append(w);
-                kopiert.zeile_ersaetzen(ii, "ja");
-            }
+            //kopieren:
+            tmp_Namen.zeile_anhaengen(akt_wst_name);
+            tmp_Quellformate.zeile_anhaengen(Quellformate.zeile(i));
+            werkstueck w = Wste.at(i-1);
+            w.set_name(akt_wst_name);
+            tmp_Wste.append(w);
+            kopiert.zeile_ersaetzen(i, "ja");
         }
     }
     Namen = tmp_Namen;
