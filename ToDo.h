@@ -6,6 +6,9 @@
 #endif //PROGRAMMVERSION
 /*
 
+  >Detail-Modus:
+  -->Importdateien werden nicht in listwidget angezeigt z.B wenn
+  OB_li und OB_re importiert werden. Als Baugruppe wird OB erkannt
 
 
 text_zeilenweise werkstueck::fkon_kantengut(...)

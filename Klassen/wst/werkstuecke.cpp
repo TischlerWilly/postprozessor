@@ -5685,6 +5685,21 @@ void werkstuecke::sortieren()
                 }
             }
         }
+        //2. Durchlauf. Jetzt kommen alle wst die nicht sortierbar waren:
+        for(uint ii = 1; ii<=Namen.zeilenanzahl() ;ii++)
+        {
+            QString akt_wst_name = Namen.zeile(ii);
+            if(kopiert.zeile(ii) != "ja")
+            {
+                //kopieren:
+                tmp_Namen.zeile_anhaengen(akt_wst_name);
+                tmp_Quellformate.zeile_anhaengen(Quellformate.zeile(ii));
+                werkstueck w = Wste.at(ii-1);
+                w.set_name(akt_wst_name);
+                tmp_Wste.append(w);
+                kopiert.zeile_ersaetzen(ii, "ja");
+            }
+        }
     }
     Namen = tmp_Namen;
     Quellformate = tmp_Quellformate;
