@@ -5502,7 +5502,22 @@ QString werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen
                 break;
             }
         }
-        if(identisch == true)
+        bool istbaugruppenname = false;
+        if(tmp.at(0) == "S")//Schranknummer
+        {
+            if(tmp.at(1)=='0' || tmp.at(1)=='1' || tmp.at(1)=='2' || tmp.at(1)=='3' || tmp.at(1)=='4' || tmp.at(1)=='5' || tmp.at(1)=='6' || tmp.at(1)=='7' || tmp.at(1)=='8' || tmp.at(1)=='9')
+            {
+                istbaugruppenname = true;
+            }
+        }else if(tmp.at(0)=='#')//Baugruppenbezeichung
+        {
+            istbaugruppenname = true;
+        }else if(tmp.at(0)=='@')//Baugruppenbezeichung nicht im Barcode
+        {
+            istbaugruppenname = true;
+        }
+
+        if(identisch == true && istbaugruppenname == true)
         {
             if(Namen.zeilenanzahl() > 0)
             {
