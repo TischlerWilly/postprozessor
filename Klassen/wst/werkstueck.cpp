@@ -2039,7 +2039,7 @@ QString werkstueck::warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, doubl
                     minmass = rt.laenge();
                 }else
                 {
-                    minmass = breite();
+                    minmass = rt.breite();
                 }
                 tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, bezug);
             }
@@ -2173,7 +2173,7 @@ QString werkstueck::warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double
                     minmass = rt.laenge();
                 }else
                 {
-                    minmass = breite();
+                    minmass = rt.breite();
                 }
                 tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, bezug);
             }
@@ -11087,7 +11087,7 @@ void werkstueck::fraesergeraden_zusammenfassen()
 text_zeilenweise werkstueck::gehr_3achs(text_zeilenweise bearb, double &tmp_l, double &tmp_b, QString ausgabeformat)
 {
     //Diese Funktion löscht die Gehrungen aus den Bearbeitungen heraus
-    //Diese können mit einer 3-Achs-Maschine nicht ohne Spezial-WKS hergestellt werden.
+    //Diese können mit einer 3-Achs-Maschine nicht ohne Spezial-WKZ hergestellt werden.
     //und im Spezielle nicht mit beliebigem Winkel
     //ausgabeformate: fmc, ganx, eigen
 
