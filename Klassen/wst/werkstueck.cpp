@@ -3934,7 +3934,7 @@ QString werkstueck::fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise 
                     minmass = rt.laenge();
                 }else
                 {
-                    minmass = breite();
+                    minmass = rt.breite();
                 }
                 tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, bezug);
             }
@@ -5173,7 +5173,7 @@ QString werkstueck::fmc_dateitext(text_zeilenweise wkzmagazin, text_zeilenweise 
                         minmass = rt.laenge();
                     }else
                     {
-                        minmass = breite();
+                        minmass = rt.breite();
                     }
                     tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, bezug);
                 }

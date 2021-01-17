@@ -2,15 +2,11 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.21.01.16"
+#define PROGRAMMVERSION "3.21.01.17"
 #endif //PROGRAMMVERSION
 /*
 void wstzustand::erzeugen(...)
-void wstzustand::finde_drehwinkel_auto(int index)
-{
-    else if(format == "ganx")
-    else if(format == "ggf" || format == "eigen")
-}
+void wstzustand::geo(int index)
 
 
 text_zeilenweise werkstueck::fkon_kantengut(...)
