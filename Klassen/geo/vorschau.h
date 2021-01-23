@@ -74,6 +74,7 @@ signals:
 public slots:
     void slot_aktualisieren(werkstueck w_neu, int aktive_zeile,\
                             QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
+    void slot_aktualisieren(text_zeilenweise geo, double l, double b, int aktive_zeile);
     void slot_aktives_Element_einfaerben(int zeilennummer);
 
 private slots:

@@ -356,3 +356,33 @@ text_zeilenweise werkzeugmagazin::alle_bodm(QString hori_oder_vert)
     }
     return tz;
 }
+
+
+
+
+//-------------------Funktionen nicht innerhalb der Klasse:
+bool operator ==(werkzeugmagazin w1, werkzeugmagazin w2)
+{
+    if(w1.magazin().text() == w2.magazin().text())
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+bool operator !=(werkzeugmagazin w1, werkzeugmagazin w2)
+{
+    if(w1.magazin().text() == w2.magazin().text())
+    {
+        return false;
+    }else
+    {
+        return true;
+    }
+}
+
+
+
+
+

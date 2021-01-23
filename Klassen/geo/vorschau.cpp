@@ -786,6 +786,15 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile, \
     this->update();
     sende_wstmas(tmp_l, tmp_b, w_neu.dicke());
 }
+void vorschau::slot_aktualisieren(text_zeilenweise geo, double l, double b, int aktive_zeile)
+{
+    Geotext = geo;
+    Wst.set_laenge(l);
+    Wst.set_breite(b);
+    Aktuelle_zeilennummer = aktive_zeile;
+    werkstueck_darstellung_berechnen();
+    this->update();
+}
 
 void vorschau::slot_aktives_Element_einfaerben(int zeilennummer)
 {

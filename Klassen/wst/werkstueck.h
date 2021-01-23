@@ -7,7 +7,7 @@
 #include "Defines/werkzeug.h"
 #include "Klassen/einstellung_ganx.h"
 #include "Klassen/geo/geometrietext.h"
-
+#include "Klassen/wst/wstzustand.h"
 #include "Funktionen/umwandeln.h"
 #include "Funktionen/runden.h"
 #include "Funktionen/myfunktion.h"
@@ -46,7 +46,8 @@ public:
     void set_kante_li(QString artiklenummer);
     void set_kante_re(QString artiklenummer);
     void set_zugabe_gehrungen(double wert);
-
+    void set_zustand(QString format, text_zeilenweise wkzmag, QString drehung, \
+                     bool formartierungen_aufbrechen, QString zust_fkon);
 
     inline void set_name(QString neuer_name)
     {
@@ -123,6 +124,11 @@ public:
     {
         return Export_moeglich;
     }
+
+    inline wstzustand zustand()
+    {
+        return Zustand;
+    }
     //--------------------------------------------------Manipulationen:
     text_zeilenweise gehr_3achs(text_zeilenweise bearb, double& tmp_l, double& tmp_b, QString ausgabeformat);
     //--------------------------------------------------
@@ -146,6 +152,7 @@ private:
     double  Zugabe_gehrungen;
     bool Hbemiduebeltiefe_aktuell;
     bool Fraesergeraden_zusammenfassen_aktuell;
+    wstzustand Zustand;
 
     //Funktionen:
     //--------------------------------------------------set_xy:    

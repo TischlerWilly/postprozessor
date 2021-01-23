@@ -27,8 +27,14 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_einstellung_ganx, SLOT(slot_einstellung(einstellung_ganx)));
     connect(&dlg_einstellung_ganx, SIGNAL(send_einstellung(einstellung_ganx)),\
             this, SLOT(getEinstellungGANX(einstellung_ganx )));
+
+
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int,QString,text_zeilenweise,QString)),\
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int,QString,text_zeilenweise,QString)));
+    connect(this, SIGNAL(sendVorschauAktualisieren(text_zeilenweise,double,double,int)),\
+            &vorschaufenster, SLOT(slot_aktualisieren(text_zeilenweise,double,double,int)));
+
+
     connect(&dlg_prgtext, SIGNAL(signalIndexChange(int)),\
             &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
     connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint)),\
@@ -1649,7 +1655,18 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
         getWarnungen(warnung);
     }else if(ui->radioButton_vorschau_fmc->isChecked())
     {
-        emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
+        //wst zustand erzeugen:
+        wste.wst(currentRow+1).set_zustand("fmc", wkz_magazin_fmc, Einstellung.drehung_wst(), \
+                                           Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+        sendVorschauAktualisieren(wste.wst(currentRow+1).zustand().geo().text_zw(),\
+                                  wste.wst(currentRow+1).zustand().l(),\
+                                  wste.wst(currentRow+1).zustand().b(),\
+                                  0);
+        //wste.wst(currentRow+1).zustand().geo() liefert leeren Wert zurück
+        //Hier muss noch der/die Fehler gefunden werden!!!!
+
+
+        //emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
         getCADFehler(wste.wst(currentRow+1).cad_fehler(true));
         QString warnung;
         warnung = wste.wst(currentRow+1).warnungen("fmc", wkz_magazin_fmc, Einstellung.drehung_wst());

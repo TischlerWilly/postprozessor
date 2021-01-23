@@ -108,6 +108,21 @@ void werkstueck::set_zugabe_gehrungen(double wert)
 {
     Zugabe_gehrungen = wert;
 }
+void werkstueck::set_zustand(QString format, text_zeilenweise wkzmag, QString drehung, \
+                             bool formartierungen_aufbrechen, QString zust_fkon)
+{
+    Zustand.set_bearb(Bearbeitungen);
+    Zustand.set_dicke(dicke());
+    Zustand.set_kante_vo(Kante_vo);
+    Zustand.set_kante_hi(Kante_hi);
+    Zustand.set_kante_li(Kante_li);
+    Zustand.set_kante_re(Kante_re);
+    Zustand.set_zugabe_gehrungen(Zugabe_gehrungen);
+    Zustand.set_formartierungen_aufbrechen(formartierungen_aufbrechen);
+    Zustand.set_name(name());
+    Zustand.set_zust_fkon(zust_fkon);
+    Zustand.anfordern(format, wkzmag, drehung);
+}
 //--------------------------------------------------get_xy:
 QString werkstueck::kante_vo(QString drewi)
 {
