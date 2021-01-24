@@ -31,8 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int,QString,text_zeilenweise,QString)),\
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int,QString,text_zeilenweise,QString)));
-    connect(this, SIGNAL(sendVorschauAktualisieren(text_zeilenweise,double,double,int)),\
-            &vorschaufenster, SLOT(slot_aktualisieren(text_zeilenweise,double,double,int)));
+    connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
+            &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int)));
 
 
     connect(&dlg_prgtext, SIGNAL(signalIndexChange(int)),\
@@ -1242,7 +1242,7 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";
-                QString tmp = wste.wst(i).ganx(wkz_magazin_ganx, info, Einstellung.drehung_wst(), Einstellung_ganx);
+                QString tmp = wste.wst(i)->ganx(wkz_magazin_ganx, info, Einstellung.drehung_wst(), Einstellung_ganx);
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;
@@ -1268,7 +1268,7 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";                
-                QString tmp = wste.wst(i).fmc(wkz_magazin_fmc, info, Einstellung.drehung_wst(), \
+                QString tmp = wste.wst(i)->fmc(wkz_magazin_fmc, info, Einstellung.drehung_wst(), \
                                                       Einstellung.tiefeneinst_fkon(), foauf,fkonkanschon);
                 datei.write(tmp.toUtf8());
                 QString output;
@@ -1295,7 +1295,7 @@ void MainWindow::on_pushButton_start_clicked()
             }else
             {
                 QString info = "";
-                QString tmp = wste.wst(i).ggf(wkz_magazin_ggf, info, Einstellung.drehung_wst());
+                QString tmp = wste.wst(i)->ggf(wkz_magazin_ggf, info, Einstellung.drehung_wst());
                 datei.write(tmp.toUtf8());
                 QString output;
                 output = teilname;                
@@ -1323,16 +1323,16 @@ void MainWindow::on_pushButton_start_clicked()
                 QString tmp;
                 if(Einstellung.export_fmc()  &&  !Einstellung.export_ganx())
                 {
-                    tmp = wste.wst(i).eigenses_format(Einstellung.drehung_wst(), FMC, \
+                    tmp = wste.wst(i)->eigenses_format(Einstellung.drehung_wst(), FMC, \
                                                               wkz_magazin_fmc, foauf, fkonkanschon);
                 }else if(!Einstellung.export_fmc()  &&  Einstellung.export_ganx())
                 {
-                    tmp = wste.wst(i).eigenses_format(Einstellung.drehung_wst(), GANX, \
+                    tmp = wste.wst(i)->eigenses_format(Einstellung.drehung_wst(), GANX, \
                                                               wkz_magazin_ganx, foauf, fkonkanschon);
                 }else
                 {
                     text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
-                    tmp = wste.wst(i).eigenses_format(Einstellung.drehung_wst(), EIGENES_FORMAT, \
+                    tmp = wste.wst(i)->eigenses_format(Einstellung.drehung_wst(), EIGENES_FORMAT, \
                                                               wkz_eigen, foauf, fkonkanschon);
                 }
                 datei.write(tmp.toUtf8());
@@ -1361,13 +1361,13 @@ void MainWindow::on_pushButton_start_clicked()
     slist += "\n";
     for(uint i=1; i<=wste.anzahl() ;i++)
     {
-        slist += wste.wst(i).name();
+        slist += wste.wst(i)->name();
         slist += "\t";
-        slist += wste.wst(i).laenge_qstring();
+        slist += wste.wst(i)->laenge_qstring();
         slist += "\t";
-        slist += wste.wst(i).breite_qstring();
+        slist += wste.wst(i)->breite_qstring();
         slist += "\t";
-        slist += wste.wst(i).dicke_qstring();
+        slist += wste.wst(i)->dicke_qstring();
         slist += "\n";
     }
     ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + slist);
@@ -1380,7 +1380,7 @@ void MainWindow::on_pushButton_import_clicked()
     ui->listWidget_wste->clear();
     for(uint i=1; i<=wste.anzahl() ;i++)
     {
-        ui->listWidget_wste->addItem(wste.wst(i).name());
+        ui->listWidget_wste->addItem(wste.wst(i)->name());
     }
     signal_exporte(wste.namen_tz());
 }
@@ -1485,7 +1485,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         {
             QString info = "";
             int i = ui->listWidget_wste->currentRow()+1;
-            werkstueck tmp_wst = wste.wst(i);
+            werkstueck tmp_wst = *wste.wst(i);
             QString tmp = tmp_wst.fmc(wkz_magazin_fmc, info, Einstellung.drehung_wst(), \
                                       Einstellung.tiefeneinst_fkon(), foauf,fkonkanschon);
             if(tmp_wst.export_moeglich())
@@ -1508,7 +1508,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         {
             QString info = "";
             int i = ui->listWidget_wste->currentRow()+1;
-            werkstueck tmp_wst = wste.wst(i);
+            werkstueck tmp_wst = *wste.wst(i);
             QString tmp = tmp_wst.ganx(wkz_magazin_ganx, info, Einstellung.drehung_wst(), Einstellung_ganx);
             if(tmp_wst.export_moeglich())
             {
@@ -1529,7 +1529,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         {
             QString info = "";
             int i = ui->listWidget_wste->currentRow()+1;
-            werkstueck tmp_wst = wste.wst(i);
+            werkstueck tmp_wst = *wste.wst(i);
             QString tmp = tmp_wst.ggf(wkz_magazin_ggf, info, Einstellung.drehung_wst());
             if(tmp_wst.export_moeglich())
             {
@@ -1551,7 +1551,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         {
             QString info = "";
             int i = ui->listWidget_wste->currentRow()+1;
-            werkstueck tmp_wst = wste.wst(i);
+            werkstueck tmp_wst = *wste.wst(i);
             QString tmp;
             text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
             tmp = tmp_wst.eigenses_format(Einstellung.drehung_wst(), EIGENES_FORMAT, \
@@ -1606,13 +1606,13 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                 }else
                 {
                     int row = ui->listWidget_wste->currentRow();
-                    werkstueck w = wste.wst(row+1);
+                    werkstueck w = *wste.wst(row+1);
                     w.set_name(neuer_name);
                     wste.ersetzen(w, row+1);
                     ui->listWidget_wste->clear();
                     for(uint i=1; i<=wste.anzahl() ;i++)
                     {
-                        ui->listWidget_wste->addItem(wste.wst(i).name());
+                        ui->listWidget_wste->addItem(wste.wst(i)->name());
                     }
                     ui->listWidget_wste->setCurrentRow(row);
                     signal_wst_umbenennen(name, neuer_name);
@@ -1638,45 +1638,41 @@ void MainWindow::on_pushButton_umbenennen_clicked()
 //-----------------------------------------------------------------------ListeWidgets:
 void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
 {
+    const int wstindex = currentRow+1;
     if(ui->radioButton_vorschau_eigen->isChecked())
     {
-        emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
-        getCADFehler(wste.wst(currentRow+1).cad_fehler(true));
+        //--------------------------------------------------
+        //diesen Teil noch umstellen auf wstzustand:
+        emit sendVorschauAktualisieren(*wste.wst(currentRow+1),0,"eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
+        getCADFehler(wste.wst(currentRow+1)->cad_fehler(true));
         QString warnung;
-        warnung = wste.wst(currentRow+1).warnungen("eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
+        warnung = wste.wst(currentRow+1)->warnungen("eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
         getWarnungen(warnung);
         //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.        
     }else if(ui->radioButton_vorschau_ganx->isChecked())
     {
-        emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
-        getCADFehler(wste.wst(currentRow+1).cad_fehler(true));
+        //--------------------------------------------------
+        //diesen Teil noch umstellen auf wstzustand:
+        emit sendVorschauAktualisieren(*wste.wst(currentRow+1),0,"ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
+        getCADFehler(wste.wst(currentRow+1)->cad_fehler(true));
         QString warnung;
-        warnung = wste.wst(currentRow+1).warnungen("ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
+        warnung = wste.wst(currentRow+1)->warnungen("ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
         getWarnungen(warnung);
     }else if(ui->radioButton_vorschau_fmc->isChecked())
     {
-        //wst zustand erzeugen:
-        wste.wst(currentRow+1).set_zustand("fmc", wkz_magazin_fmc, Einstellung.drehung_wst(), \
+        wste.wst(wstindex)->set_zustand("fmc", wkz_magazin_fmc, Einstellung.drehung_wst(), \
                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
-        sendVorschauAktualisieren(wste.wst(currentRow+1).zustand().geo().text_zw(),\
-                                  wste.wst(currentRow+1).zustand().l(),\
-                                  wste.wst(currentRow+1).zustand().b(),\
-                                  0);
-        //wste.wst(currentRow+1).zustand().geo() liefert leeren Wert zurück
-        //Hier muss noch der/die Fehler gefunden werden!!!!
-
-
-        //emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
-        getCADFehler(wste.wst(currentRow+1).cad_fehler(true));
-        QString warnung;
-        warnung = wste.wst(currentRow+1).warnungen("fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
-        getWarnungen(warnung);
+        sendVorschauAktualisieren(*wste.wst(wstindex), 0);
+        getCADFehler(wste.wst(wstindex)->cad_fehler(true));
+        getWarnungen(wste.wst(wstindex)->zustand().warnungen());
     }else if(ui->radioButton_vorschau_ggf->isChecked())
     {
-        emit sendVorschauAktualisieren(wste.wst(currentRow+1),0,"ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
-        getCADFehler(wste.wst(currentRow+1).cad_fehler(true));
+        //--------------------------------------------------
+        //diesen Teil noch umstellen auf wstzustand:
+        emit sendVorschauAktualisieren(*wste.wst(currentRow+1),0,"ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
+        getCADFehler(wste.wst(currentRow+1)->cad_fehler(true));
         QString warnung;
-        warnung = wste.wst(currentRow+1).warnungen("ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
+        warnung = wste.wst(currentRow+1)->warnungen("ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
         getWarnungen(warnung);
     }
     if(dlg_prgtext.isVisible())
@@ -1696,20 +1692,20 @@ void MainWindow::on_listWidget_wste_itemDoubleClicked()
 {
     if(ui->radioButton_vorschau_eigen->isChecked())
     {
-        emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1), \
+        emit sendProgrammtext(*wste.wst(ui->listWidget_wste->currentRow()+1), \
                               "eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
         //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
     }else if(ui->radioButton_vorschau_ganx->isChecked())
     {
-        emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1), \
+        emit sendProgrammtext(*wste.wst(ui->listWidget_wste->currentRow()+1), \
                               "ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
     }else if(ui->radioButton_vorschau_fmc->isChecked())
     {
-        emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1), \
+        emit sendProgrammtext(*wste.wst(ui->listWidget_wste->currentRow()+1), \
                               "fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
     }else if(ui->radioButton_vorschau_ggf->isChecked())
     {
-        emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1), \
+        emit sendProgrammtext(*wste.wst(ui->listWidget_wste->currentRow()+1), \
                               "ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
     }
 

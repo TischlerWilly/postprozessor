@@ -5427,17 +5427,17 @@ bool werkstuecke::ist_bekannt(QString Werkstueckname)
     }
     return false;
 }
-werkstueck werkstuecke::wst(uint index)
+werkstueck* werkstuecke::wst(uint index)
 {
     //übergibt eine Kopie des Wst
     //Änderungen an dieser Kopie werden nicht zurück in diese Instanz geschrieben.
     if(index > 0 && index <= Namen.zeilenanzahl())
     {
-        return Wste.at(index-1);
+        return &Wste[index-1];
     }else
     {
-        werkstueck w;   //leeres Wst
-        return w;
+        //werkstueck w;   //leeres Wst
+        return NULL;
     }
 }
 QString werkstuecke::name(uint index)

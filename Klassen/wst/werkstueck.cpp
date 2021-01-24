@@ -112,6 +112,8 @@ void werkstueck::set_zustand(QString format, text_zeilenweise wkzmag, QString dr
                              bool formartierungen_aufbrechen, QString zust_fkon)
 {
     Zustand.set_bearb(Bearbeitungen);
+    Zustand.set_laenge(laenge());
+    Zustand.set_breite(breite());
     Zustand.set_dicke(dicke());
     Zustand.set_kante_vo(Kante_vo);
     Zustand.set_kante_hi(Kante_hi);

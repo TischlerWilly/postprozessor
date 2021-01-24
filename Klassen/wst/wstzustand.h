@@ -39,6 +39,10 @@ public:
     void set_zust_fkon(QString zust);
 
     //----------------------------------get_xy:
+    inline int count()
+    {
+        return Format.count();
+    }
     inline geometrietext geo()
     {
         if(Akt_zust != -1 && Akt_zust<Geotext.count())
@@ -48,6 +52,36 @@ public:
         {
             geometrietext tmp;
             return tmp;
+        }
+    }
+    inline QString exporttext()
+    {
+        if(Akt_zust != -1 && Akt_zust<Exporttext.count())
+        {
+            return Exporttext.at(Akt_zust);
+        }else
+        {
+            return "";
+        }
+    }
+    inline QString format()
+    {
+        if(Akt_zust != -1 && Akt_zust<Exporttext.count())
+        {
+            return Format.at(Akt_zust);
+        }else
+        {
+            return "";
+        }
+    }
+    inline QString warnungen()
+    {
+        if(Akt_zust != -1 && Akt_zust<Exporttext.count())
+        {
+            return Warnungen.at(Akt_zust);
+        }else
+        {
+            return "";
         }
     }
     inline double l()

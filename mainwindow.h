@@ -131,7 +131,7 @@ signals:
     void sendEinstellungGANX(einstellung_ganx e);
     void sendVorschauAktualisieren(werkstueck w_neu, int aktuelle_programmzeile,\
                                    QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
-    void sendVorschauAktualisieren(text_zeilenweise geo, double l, double b, int aktive_zeile);
+    void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
     void sendProgrammtext(werkstueck w_neu,\
                           QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
     void signal_exporte(text_zeilenweise daten);

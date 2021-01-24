@@ -28,7 +28,7 @@ public:
 
     //--------------------------------------------------get_xy:
     bool        ist_bekannt(QString Werkstueckname);
-    werkstueck  wst(uint index);
+    werkstueck* wst(uint index);
     QString     name(uint index);
     QString     cad_fehler();
 

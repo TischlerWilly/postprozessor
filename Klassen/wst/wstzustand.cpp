@@ -3,11 +3,15 @@
 wstzustand::wstzustand()
 {
     clear();
+    Laenge_bekommen = 0;
+    Breite_bekommen = 0;
+    Zugabe_gehrungen = 20;
+    Schwellenwert_ay = 230;
+    Formartierungen_aufbrechen = false;
+    Dicke = 0;
 }
 void wstzustand::clear()
-{
-    Schwellenwert_ay = 230;
-    Zugabe_gehrungen = 0;
+{    
     Akt_zust = -1;
     Format.clear();
     Wkzmag.clear();
@@ -32,24 +36,33 @@ void wstzustand::set_bearb(text_zeilenweise bearb)
 {
     if(bearb.text() != Bearbeitung_bekommen.text())
     {
-        Bearbeitung_bekommen = bearb;
-        clear();
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
+        Bearbeitung_bekommen = bearb;        
     }
 }
 void wstzustand::set_laenge(double l)
 {
     if(l != Laenge_bekommen)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Laenge_bekommen = l;
-        clear();
     }
 }
 void wstzustand::set_breite(double b)
 {
     if(b != Breite_bekommen)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Breite_bekommen = b;
-        clear();
     }
 }
 void wstzustand::set_dicke(double d)
@@ -58,7 +71,10 @@ void wstzustand::set_dicke(double d)
     {
         if(d != Dicke)
         {
-            clear();
+            if(!Format.isEmpty())
+            {
+                clear();
+            }
             Dicke = d;
         }
     }
@@ -67,32 +83,44 @@ void wstzustand::set_kante_vo(QString artiklenummer)
 {
     if(artiklenummer != Kante_vo)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Kante_vo = artiklenummer;
-        clear();
     }
 }
 void wstzustand::set_kante_hi(QString artiklenummer)
 {
     if(artiklenummer != Kante_hi)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Kante_hi = artiklenummer;
-        clear();
     }
 }
 void wstzustand::set_kante_li(QString artiklenummer)
 {
     if(artiklenummer != Kante_li)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Kante_li = artiklenummer;
-        clear();
     }
 }
 void wstzustand::set_kante_re(QString artiklenummer)
 {
     if(artiklenummer != Kante_re)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Kante_re = artiklenummer;
-        clear();
     }
 
 }
@@ -100,16 +128,22 @@ void wstzustand::set_zugabe_gehrungen(double zugabe)
 {
     if(zugabe != Zugabe_gehrungen)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Zugabe_gehrungen = zugabe;
-        clear();
     }
 }
 void wstzustand::set_formartierungen_aufbrechen(bool jn)
 {
     if(jn != Formartierungen_aufbrechen)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Formartierungen_aufbrechen = jn;
-        clear();
     }
 
 }
@@ -117,18 +151,24 @@ void wstzustand::set_name(QString neuer_name)
 {
     if(neuer_name != Name)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Name = neuer_name;
-        clear();
     }
 }
 void wstzustand::set_zust_fkon(QString zust)
 {
     if(zust != Zust_fkon)
     {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
         Zust_fkon = zust;
         //"wkz" == gemäß Werkzeugmagazin
         //"orgi" == gemäß Importdatei
-        clear();
     }
 }
 
@@ -170,13 +210,13 @@ void wstzustand::erzeugen(QString format, werkzeugmagazin wkzmag, QString drehun
     //  ->Warnungen
     //  ->Bearbeitung
     //  ->Laenge
-    //  ->Breite
+    //  ->Breite    
     if(format == "fmc")
     {
         fmc_dateitext(Format.count()-1);
         //  ->Exporttext
         //  ->Fehler_kein_wkz
-        //  ->Export_moeglich
+        //  ->Export_moeglich        
         geo(Format.count()-1);
         //  ->Geotext
         //  ->Versatz_y
@@ -206,7 +246,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
     //Drehung_bekommen
     //Bearbeitung_bekommen
     //Laenge_bekommen
-    //Laenge_bekommen
+    //Breite_bekommen
 
     //Diese Funktion berechnet den besten Drehwinkel für der wst
     //(indirekte) Rückgabewerte sind:
@@ -220,7 +260,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
     QString drehwinkel = Drehung_bekommen.at(index);
     QString format = Format.at(index);
     text_zeilenweise bearb = Bearbeitung_bekommen;
-    werkzeugmagazin wkzmag = Wkzmag.at(index);
+    werkzeugmagazin wkzmag = Wkzmag.at(index);    
 
     if(drehwinkel=="0" || drehwinkel=="90" || drehwinkel=="180" || drehwinkel=="270")
     {
@@ -244,20 +284,18 @@ void wstzustand::finde_drehwinkel_auto(int index)
         //Stufe 1:
         //heraus bekommen, für welche Lage es Warnungen gibt:
         text_zeilenweise bearb_kopie = bearb;
-        double l_kopie = tmp_l;
-        double b_kopie = tmp_b;
         text_zeilenweise bearb_0;
         text_zeilenweise bearb_90;
         text_zeilenweise bearb_180;
         text_zeilenweise bearb_270;
-        double l_0 = 0;
-        double l_90 = 0;
-        double l_180 = 0;
-        double l_270 = 0;
-        double b_0 = 0;
-        double b_90 = 0;
-        double b_180 = 0;
-        double b_270 = 0;
+        double l_0 = tmp_l;
+        double l_90 = tmp_l;
+        double l_180 = tmp_l;
+        double l_270 = tmp_l;
+        double b_0 = tmp_b;
+        double b_90 = tmp_b;
+        double b_180 = tmp_b;
+        double b_270 = tmp_b;
         QString warnung_0;
         QString warnung_90;
         QString warnung_180;
@@ -265,7 +303,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
 
         if(drehwinkel == "0" || drehwinkel == "AUTO")
         {
-            warnung_0 = warnungen_fmc(bearb_kopie, wkzmag, l_kopie, b_kopie);
+            warnung_0 = warnungen_fmc(bearb_kopie, wkzmag, l_0, b_0);
             if(warnung_0.isEmpty())
             {
                 bewertung_0 = 100;
@@ -274,13 +312,11 @@ void wstzustand::finde_drehwinkel_auto(int index)
                 bewertung_0 = 0;
             }
             bearb_0 = bearb_kopie;
-            l_0 = l_kopie;
-            b_0 = b_kopie;
         }
         if(drehwinkel == "90" || drehwinkel == "AUTO")
         {
-            bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-            warnung_90 = warnungen_fmc(bearb_kopie, wkzmag, l_kopie, b_kopie);
+            bearb_drehen_90(bearb_kopie, l_90, b_90);
+            warnung_90 = warnungen_fmc(bearb_kopie, wkzmag, l_90, b_90);
             if(warnung_90.isEmpty())
             {
                 bewertung_90 = 100;
@@ -289,20 +325,20 @@ void wstzustand::finde_drehwinkel_auto(int index)
                 bewertung_90 = 0;
             }
             bearb_90 = bearb_kopie;
-            l_90 = l_kopie;
-            b_90 = b_kopie;
         }
         if(drehwinkel == "180" || drehwinkel == "AUTO")
         {
             if(drehwinkel == "180")
             {
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+                bearb_drehen_90(bearb_kopie, l_180, b_180);
+                bearb_drehen_90(bearb_kopie, l_180, b_180);
             }else //AUTO
             {
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+                l_180 = l_90;//Drehung mitnehmen
+                b_180 = b_90;//Drehung mitnehmen
+                bearb_drehen_90(bearb_kopie, l_180, b_180);
             }
-            warnung_180 = warnungen_fmc(bearb_kopie, wkzmag, l_kopie, b_kopie);
+            warnung_180 = warnungen_fmc(bearb_kopie, wkzmag, l_180, b_180);
             if(warnung_180.isEmpty())
             {
                 bewertung_180 = 100;
@@ -311,21 +347,21 @@ void wstzustand::finde_drehwinkel_auto(int index)
                 bewertung_180 = 0;
             }
             bearb_180 = bearb_kopie;
-            l_180 = l_kopie;
-            b_180 = b_kopie;
         }
         if(drehwinkel == "0" || drehwinkel == "AUTO")
         {
             if(drehwinkel == "270")
             {
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
             }else //AUTO
             {
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+                l_270 = l_180;//Drehung mitnehmen
+                b_270 = b_180;//Drehung mitnehmen
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
             }
-            warnung_270 = warnungen_fmc(bearb_kopie, wkzmag, l_kopie, b_kopie);
+            warnung_270 = warnungen_fmc(bearb_kopie, wkzmag, l_270, b_270);
             if(warnung_270.isEmpty())
             {
                 bewertung_270 = 100;
@@ -334,8 +370,6 @@ void wstzustand::finde_drehwinkel_auto(int index)
                 bewertung_270 = 0;
             }
             bearb_270 = bearb_kopie;
-            l_270 = l_kopie;
-            b_270 = b_kopie;
         }
 
         //Stufe 2:
@@ -930,20 +964,18 @@ void wstzustand::finde_drehwinkel_auto(int index)
         //Stufe 1:
         //heraus bekommen, für welche Lage es Warnungen gibt:
         text_zeilenweise bearb_kopie = bearb;
-        double l_kopie = tmp_l;
-        double b_kopie = tmp_b;
         text_zeilenweise bearb_0;
         text_zeilenweise bearb_90;
         text_zeilenweise bearb_180;
         text_zeilenweise bearb_270;
-        double l_0 = 0;
-        double l_90 = 0;
-        double l_180 = 0;
-        double l_270 = 0;
-        double b_0 = 0;
-        double b_90 = 0;
-        double b_180 = 0;
-        double b_270 = 0;
+        double l_0 = tmp_l;
+        double l_90 = tmp_l;
+        double l_180 = tmp_l;
+        double l_270 = tmp_l;
+        double b_0 = tmp_b;
+        double b_90 = tmp_b;
+        double b_180 = tmp_b;
+        double b_270 = tmp_b;
         QString warnung_0;
         QString warnung_90;
         QString warnung_180;
@@ -951,7 +983,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
 
         if(drehwinkel == "0" || drehwinkel == "AUTO")
         {
-            warnung_0 = warnungen_ganx(bearb_kopie, wkzmag, l_kopie, b_kopie);
+            warnung_0 = warnungen_ganx(bearb_kopie, wkzmag, l_0, b_0);
             if(warnung_0.isEmpty())
             {
                 bewertung_0 = 100;
@@ -960,13 +992,11 @@ void wstzustand::finde_drehwinkel_auto(int index)
                 bewertung_0 = 0;
             }
             bearb_0 = bearb_kopie;
-            l_0 = l_kopie;
-            b_0 = b_kopie;
         }
         if(drehwinkel == "90" || drehwinkel == "AUTO")
         {
-            bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-            warnung_90 = warnungen_ganx(bearb_kopie, wkzmag, l_kopie, b_kopie);
+            bearb_drehen_90(bearb_kopie, l_90, b_90);
+            warnung_90 = warnungen_ganx(bearb_kopie, wkzmag, l_90, b_90);
             if(warnung_90.isEmpty())
             {
                 bewertung_90 = 100;
@@ -975,20 +1005,20 @@ void wstzustand::finde_drehwinkel_auto(int index)
                 bewertung_90 = 0;
             }
             bearb_90 = bearb_kopie;
-            l_90 = l_kopie;
-            b_90 = b_kopie;
         }
         if(drehwinkel == "180" || drehwinkel == "AUTO")
         {
             if(drehwinkel == "180")
             {
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+                bearb_drehen_90(bearb_kopie, l_180, b_180);
+                bearb_drehen_90(bearb_kopie, l_180, b_180);
             }else //AUTO
             {
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+                l_180 = l_90;//Drehung mitnehmen
+                b_180 = b_90;//Drehung mitnehmen
+                bearb_drehen_90(bearb_kopie, l_180, b_180);
             }
-            warnung_180 = warnungen_ganx(bearb_kopie, wkzmag, l_kopie, b_kopie);
+            warnung_180 = warnungen_ganx(bearb_kopie, wkzmag, l_180, b_180);
             if(warnung_180.isEmpty())
             {
                 bewertung_180 = 100;
@@ -997,21 +1027,21 @@ void wstzustand::finde_drehwinkel_auto(int index)
                 bewertung_180 = 0;
             }
             bearb_180 = bearb_kopie;
-            l_180 = l_kopie;
-            b_180 = b_kopie;
         }
         if(drehwinkel == "270" || drehwinkel == "AUTO")
         {
             if(drehwinkel == "270")
             {
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
             }else //AUTO
             {
-                bearb_drehen_90(bearb_kopie, l_kopie, b_kopie);
+                l_270 = l_180;//Drehung mitnehmen
+                b_270 = b_180;//Drehung mitnehmen
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
             }
-            warnung_270 = warnungen_ganx(bearb_kopie, wkzmag, l_kopie, b_kopie);
+            warnung_270 = warnungen_ganx(bearb_kopie, wkzmag, l_270, b_270);
             if(warnung_270.isEmpty())
             {
                 bewertung_270 = 100;
@@ -1020,8 +1050,6 @@ void wstzustand::finde_drehwinkel_auto(int index)
                 bewertung_270 = 0;
             }
             bearb_270 = bearb_kopie;
-            l_270 = l_kopie;
-            b_270 = b_kopie;
         }
 
         //Stufe 2:
