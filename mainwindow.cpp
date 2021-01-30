@@ -1055,7 +1055,10 @@ void MainWindow::on_radioButton_vorschau_eigen_clicked(bool checked)
 {
     if(checked == true)
     {
-        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        if(ui->listWidget_wste->selectedItems().count())
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        }
         set_projektpfad();
     }
 }
@@ -1063,7 +1066,10 @@ void MainWindow::on_radioButton_vorschau_ganx_clicked(bool checked)
 {
     if(checked == true)
     {
-        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        if(ui->listWidget_wste->selectedItems().count())
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        }
         set_projektpfad();
     }
 }
@@ -1071,7 +1077,10 @@ void MainWindow::on_radioButton_vorschau_fmc_clicked(bool checked)
 {
     if(checked == true)
     {
-        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        if(ui->listWidget_wste->selectedItems().count())
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        }
         set_projektpfad();
     }
 }
@@ -1079,7 +1088,10 @@ void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
 {
     if(checked == true)
     {
-        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        if(ui->listWidget_wste->selectedItems().count())
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        }
         set_projektpfad();
     }
 }
@@ -1641,25 +1653,30 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
     const int wstindex = currentRow+1;
     if(ui->radioButton_vorschau_eigen->isChecked())
     {
-        //--------------------------------------------------
-        //diesen Teil noch umstellen auf wstzustand:
-        emit sendVorschauAktualisieren(*wste.wst(currentRow+1),0,"eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
-        getCADFehler(wste.wst(currentRow+1)->cad_fehler(true));
-        QString warnung;
-        warnung = wste.wst(currentRow+1)->warnungen("eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
-        getWarnungen(warnung);
-        //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.        
+        wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
+        //->set_einstellung_fmc
+        //->set_einstellung_eigen
+        wste.wst(wstindex)->set_zustand("eigen", wkz_magazin_fmc, Einstellung.drehung_wst(), \
+                                           Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+        sendVorschauAktualisieren(*wste.wst(wstindex), 0);
+        getCADFehler(wste.wst(wstindex)->cad_fehler(true));
+        getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+        //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
     }else if(ui->radioButton_vorschau_ganx->isChecked())
     {
-        //--------------------------------------------------
-        //diesen Teil noch umstellen auf wstzustand:
-        emit sendVorschauAktualisieren(*wste.wst(currentRow+1),0,"ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
-        getCADFehler(wste.wst(currentRow+1)->cad_fehler(true));
-        QString warnung;
-        warnung = wste.wst(currentRow+1)->warnungen("ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
-        getWarnungen(warnung);
+        wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
+        //->set_einstellung_fmc
+        //->set_einstellung_eigen
+        wste.wst(wstindex)->set_zustand("ganx", wkz_magazin_ganx, Einstellung.drehung_wst(), \
+                                           Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+        sendVorschauAktualisieren(*wste.wst(wstindex), 0);
+        getCADFehler(wste.wst(wstindex)->cad_fehler(true));
+        getWarnungen(wste.wst(wstindex)->zustand().warnungen());
     }else if(ui->radioButton_vorschau_fmc->isChecked())
     {
+        wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
+        //->set_einstellung_fmc
+        //->set_einstellung_eigen
         wste.wst(wstindex)->set_zustand("fmc", wkz_magazin_fmc, Einstellung.drehung_wst(), \
                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
         sendVorschauAktualisieren(*wste.wst(wstindex), 0);
@@ -1667,13 +1684,14 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
         getWarnungen(wste.wst(wstindex)->zustand().warnungen());
     }else if(ui->radioButton_vorschau_ggf->isChecked())
     {
-        //--------------------------------------------------
-        //diesen Teil noch umstellen auf wstzustand:
-        emit sendVorschauAktualisieren(*wste.wst(currentRow+1),0,"ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
-        getCADFehler(wste.wst(currentRow+1)->cad_fehler(true));
-        QString warnung;
-        warnung = wste.wst(currentRow+1)->warnungen("ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
-        getWarnungen(warnung);
+        wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
+        //->set_einstellung_fmc
+        //->set_einstellung_eigen
+        wste.wst(wstindex)->set_zustand("ggf", wkz_magazin_ggf, Einstellung.drehung_wst(), \
+                                           Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+        sendVorschauAktualisieren(*wste.wst(wstindex), 0);
+        getCADFehler(wste.wst(wstindex)->cad_fehler(true));
+        getWarnungen(wste.wst(wstindex)->zustand().warnungen());
     }
     if(dlg_prgtext.isVisible())
     {

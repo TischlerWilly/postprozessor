@@ -48,6 +48,7 @@ public:
     void set_zugabe_gehrungen(double wert);
     void set_zustand(QString format, text_zeilenweise wkzmag, QString drehung, \
                      bool formartierungen_aufbrechen, QString zust_fkon);
+    void set_einstellung_ganx(einstellung_ganx e);
 
     inline void set_name(QString neuer_name)
     {

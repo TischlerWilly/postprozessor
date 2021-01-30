@@ -19,6 +19,9 @@
 #include "Defines/def_fmc.h"
 #include "Defines/def_ganx.h"
 #include "Funktionen/umwandeln.h"
+#include "Klassen/wst/ganx_gruppen.h"
+#include "Funktionen/runden.h"
+#include "Klassen/einstellung_ganx.h"
 
 class wstzustand
 {
@@ -37,6 +40,7 @@ public:
     void set_formartierungen_aufbrechen(bool jn);
     void set_name(QString neuer_name);
     void set_zust_fkon(QString zust);
+    void set_einst_ganx(einstellung_ganx e);
 
     //----------------------------------get_xy:
     inline int count()
@@ -140,6 +144,9 @@ private:
     QString fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbzeile);
     QString bearb_menschlich_lesbar(text_zeilenweise bearbzeile);
     void fmc_dateitext(int index);
+    void eigen_dateitext(int index);
+    void ganx_dateitext(int index);
+    void ggf_dateitext(int index);
     void geo(int index);
 
     QString kante_vo(QString drewi);
@@ -180,6 +187,7 @@ private:
     QString             Name;
     QString             Zust_fkon;
     int                 Akt_zust;
+    einstellung_ganx    Eganx;
 };
 
 #endif // WSTZUSTAND_H

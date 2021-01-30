@@ -125,6 +125,10 @@ void werkstueck::set_zustand(QString format, text_zeilenweise wkzmag, QString dr
     Zustand.set_zust_fkon(zust_fkon);
     Zustand.anfordern(format, wkzmag, drehung);
 }
+void werkstueck::set_einstellung_ganx(einstellung_ganx e)
+{
+    Zustand.set_einst_ganx(e);
+}
 //--------------------------------------------------get_xy:
 QString werkstueck::kante_vo(QString drewi)
 {
@@ -9863,7 +9867,7 @@ text_zeilenweise werkstueck::bearb_optimieren_ganx(text_zeilenweise bearb)
                 bo.set_z(Dicke-z);
             }
             zeile_neu = bo.text();
-        }else if(zeile.zeile(1) == BEARBART_BOHR)
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
         {
             bohrraster bora(zeile.text());
             double x = bora.x();
