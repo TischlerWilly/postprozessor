@@ -147,6 +147,16 @@ public:
             return false;
         }
     }
+    inline double ay()
+    {
+        if(Akt_zust != -1 && Akt_zust<Versatz_y.count())
+        {
+            return Versatz_y.at(Akt_zust);
+        }else
+        {
+            return 0;
+        }
+    }
 
     //----------------------------------Manipulationen:
     void anfordern(QString format, werkzeugmagazin wkzmag, QString drehung);

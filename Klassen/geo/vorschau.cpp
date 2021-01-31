@@ -869,7 +869,7 @@ punkt2d vorschau::mauspos_npwst()
     punkt2d p;
     p = mauspos_npanschlag();
     p.set_x(p.x()-0);
-    p.set_y(p.y()-W.ay());
+    p.set_y(p.y()-W.zustand().ay());
     return p;
 }
 
