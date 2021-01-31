@@ -49,7 +49,7 @@ public:
     void clear();
     QString stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
     void sortieren();
-    void ersetzen(werkstueck w, uint index);
+    //void ersetzen(werkstueck w, uint index);
 
     //--------------------------------------------------
 

@@ -53,6 +53,7 @@ public:
     inline void set_name(QString neuer_name)
     {
         Name = neuer_name;
+        Zustand.set_name(neuer_name);
     }
 
     //--------------------------------------------------get_xy:

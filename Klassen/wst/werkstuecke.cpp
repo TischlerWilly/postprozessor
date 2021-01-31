@@ -5720,6 +5720,7 @@ void werkstuecke::sortieren()
     Quellformate = tmp_Quellformate;
     Wste = tmp_Wste;
 }
+/*
 void werkstuecke::ersetzen(werkstueck w, uint index)
 {
     if(index > 0 && index <= Namen.zeilenanzahl())
@@ -5727,7 +5728,7 @@ void werkstuecke::ersetzen(werkstueck w, uint index)
         Wste.replace(index-1, w);
     }
 }
-
+*/
 //--------------------------------------------------
 //#######################################################################
 //Private:
