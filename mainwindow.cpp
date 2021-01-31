@@ -1489,12 +1489,8 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         }
         if(ui->radioButton_vorschau_fmc->isChecked())
         {
-            QString info = "";
             int i = ui->listWidget_wste->currentRow()+1;
-            werkstueck tmp_wst = *wste.wst(i);
-            QString tmp = tmp_wst.fmc(wkz_magazin_fmc, info, Einstellung.drehung_wst(), \
-                                      Einstellung.tiefeneinst_fkon(), foauf,fkonkanschon);
-            if(tmp_wst.export_moeglich())
+            if(wste.wst(i)->zustand().export_moeglich())
             {
                 if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
                 {
@@ -1505,18 +1501,15 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
                 }else
                 {
-                    f.write(tmp.toUtf8());
+                    f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                     schreibe_in_zwischenablage(pfad);
                 }
                 f.close();
             }
         }else if(ui->radioButton_vorschau_ganx->isChecked())
         {
-            QString info = "";
             int i = ui->listWidget_wste->currentRow()+1;
-            werkstueck tmp_wst = *wste.wst(i);
-            QString tmp = tmp_wst.ganx(wkz_magazin_ganx, info, Einstellung.drehung_wst(), Einstellung_ganx);
-            if(tmp_wst.export_moeglich())
+            if(wste.wst(i)->zustand().export_moeglich())
             {
                 if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
                 {
@@ -1527,17 +1520,14 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
                 }else
                 {
-                    f.write(tmp.toUtf8());
+                    f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                 }
                 f.close();
             }
         }else if(ui->radioButton_vorschau_ggf->isChecked())
         {
-            QString info = "";
             int i = ui->listWidget_wste->currentRow()+1;
-            werkstueck tmp_wst = *wste.wst(i);
-            QString tmp = tmp_wst.ggf(wkz_magazin_ggf, info, Einstellung.drehung_wst());
-            if(tmp_wst.export_moeglich())
+            if(wste.wst(i)->zustand().export_moeglich())
             {
                 if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
                 {
@@ -1549,20 +1539,14 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                 }else
                 {
 
-                    f.write(tmp.toUtf8());
+                    f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                 }
                 f.close();
             }
         }else //eigen
         {
-            QString info = "";
             int i = ui->listWidget_wste->currentRow()+1;
-            werkstueck tmp_wst = *wste.wst(i);
-            QString tmp;
-            text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
-            tmp = tmp_wst.eigenses_format(Einstellung.drehung_wst(), EIGENES_FORMAT, \
-                                                      wkz_eigen, foauf, fkonkanschon);
-            if(tmp_wst.export_moeglich())
+            if(wste.wst(i)->zustand().export_moeglich())
             {
                 if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
                 {
@@ -1573,7 +1557,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
                 }else
                 {
-                    f.write(tmp.toUtf8());
+                    f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                 }
                 f.close();
             }

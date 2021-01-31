@@ -6,8 +6,6 @@
 #endif //PROGRAMMVERSION
 /*
 
-void MainWindow::on_pushButton_einzelexport_clicked()
-  umstellen auf wstzustand
 
 
 

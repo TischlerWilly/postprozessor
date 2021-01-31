@@ -137,6 +137,16 @@ public:
             return tz;
         }
     }
+    inline bool export_moeglich()
+    {
+        if(Akt_zust != -1 && Akt_zust<Export_moeglich.count())
+        {
+            return Export_moeglich.at(Akt_zust);
+        }else
+        {
+            return false;
+        }
+    }
 
     //----------------------------------Manipulationen:
     void anfordern(QString format, werkzeugmagazin wkzmag, QString drehung);
