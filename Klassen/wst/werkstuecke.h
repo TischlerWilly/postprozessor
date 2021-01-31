@@ -28,7 +28,7 @@ public:
 
     //--------------------------------------------------get_xy:
     bool        ist_bekannt(QString Werkstueckname);
-    werkstueck  wst(uint index);
+    werkstueck* wst(uint index);
     QString     name(uint index);
     QString     cad_fehler();
 
@@ -49,7 +49,7 @@ public:
     void clear();
     QString stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
     void sortieren();
-    void ersetzen(werkstueck w, uint index);
+    //void ersetzen(werkstueck w, uint index);
 
     //--------------------------------------------------
 

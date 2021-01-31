@@ -7,7 +7,7 @@
 #include "Defines/werkzeug.h"
 #include "Klassen/einstellung_ganx.h"
 #include "Klassen/geo/geometrietext.h"
-
+#include "Klassen/wst/wstzustand.h"
 #include "Funktionen/umwandeln.h"
 #include "Funktionen/runden.h"
 #include "Funktionen/myfunktion.h"
@@ -46,42 +46,22 @@ public:
     void set_kante_li(QString artiklenummer);
     void set_kante_re(QString artiklenummer);
     void set_zugabe_gehrungen(double wert);
-
+    void set_zustand(QString format, text_zeilenweise wkzmag, QString drehung, \
+                     bool formartierungen_aufbrechen, QString zust_fkon);
+    void set_einstellung_ganx(einstellung_ganx e);
 
     inline void set_name(QString neuer_name)
     {
         Name = neuer_name;
+        Zustand.set_name(neuer_name);
     }
 
     //--------------------------------------------------get_xy:
-    QString kante_vo(QString drewi = "0");
-    QString kante_hi(QString drewi = "0");
-    QString kante_li(QString drewi = "0");
-    QString kante_re(QString drewi = "0");
-    QString kante_vo_ganx(QString drewi = "0");
-    QString kante_hi_ganx(QString drewi = "0");
-    QString kante_li_ganx(QString drewi = "0");
-    QString kante_re_ganx(QString drewi = "0");
     QString cad_fehler(bool kurz = false);
-    QString fmc(text_zeilenweise wkzmagazin, QString& info, \
-                    QString drehwinkel = "0", QString zust_fkon = "orgi",\
-                    bool formartierungen_aufbrechen = false,\
-                    bool fkon_kantenschonend = false);
-    QString ganx(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel,einstellung_ganx eganx);
-    QString ggf(text_zeilenweise wkzmagazin, QString& info ,QString drehwinkel = "0");
-    QString eigenses_format(QString drehwinkel, QString ausgabeformat, \
-                                text_zeilenweise wkzmagazin,\
-                                bool formartierungen_aufbrechen = false,\
-                                bool fkon_kantenschonend = false);
     double max_x(QString format);
     double min_x(QString format);
     double max_y(QString format);
     double min_y(QString format);
-    geometrietext geo(QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
-    QString finde_drehwinkel_auto(QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
-    text_zeilenweise bearb(QString format, text_zeilenweise wkzmagazin, QString& drehwinkel,\
-                           double& wst_l, double& wst_b);
-
     inline double   laenge() const
     {
         return Laenge;
@@ -114,13 +94,11 @@ public:
     {
         return Bearbeitungen;
     }
-    inline double ay()
+    inline wstzustand zustand()
     {
-        return Versatz_y;
+        return Zustand;
     }
-
     //--------------------------------------------------Manipulationen:
-    text_zeilenweise gehr_3achs(text_zeilenweise bearb, double& tmp_l, double& tmp_b, QString ausgabeformat);
     //--------------------------------------------------
 
 private:
@@ -129,62 +107,36 @@ private:
     double Breite;  //Y-Wert
     double Dicke;   //Z-Wert
     text_zeilenweise Bearbeitungen;
-    int Bewertung;
     QString Name;
-    double Schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
-    double Versatz_y;
-    QString Drehung;
     QString Kante_vo; //Kante an X
     QString Kante_hi;
     QString Kante_li; //Kante an Y
     QString Kante_re;
     double  Zugabe_gehrungen;
-    bool Hbemiduebeltiefe_aktuell;
-    bool Fraesergeraden_zusammenfassen_aktuell;
+    wstzustand Zustand;
 
     //Funktionen:
-    //--------------------------------------------------set_xy:    
 
-    //--------------------------------------------------get_xy:
-    QString warnungen_ganx(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
-    QString warnungen_fmc(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
-    QString warnungen_ggf(text_zeilenweise bearbeit,double tmp_l, double tmp_b, text_zeilenweise wkzmagazin);
-    QString fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbeitung);
-    QString bearb_menschlich_lesbar(text_zeilenweise bearbeitung);
-    QString fmc_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb , \
-                          double tmp_l, double tmp_b, QString zust_fkon,\
-                          QString drewi, bool formartierungen_aufbrechen,\
-                          bool fkon_kantenschonend);
-    QString ganx_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
-                           double tmp_l, double tmp_b,\
-                           einstellung_ganx eganx);
-    QString ggf_dateitext(text_zeilenweise wkzmagazin,text_zeilenweise bearb ,\
-                          double tmp_l, double tmp_b);
-    QString eigen_dateitext(text_zeilenweise bearb ,double tmp_l, double tmp_b, \
-                            QString ausgabeformat, text_zeilenweise wkzmagazin,\
-                            bool formartierungen_aufbrechen,\
-                            bool fkon_kantenschonend);
-    QString kommentar_fmc(QString kom);
-    QString kommentar_ggf(QString kom);
-    QString fmc_kommentar_gute_seite(text_zeilenweise bearb);
-    bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
-
-
-    //--------------------------------------------------Manipulationen:
-    void bearb_sortieren();    
-    text_zeilenweise bearb_drehen_90(text_zeilenweise bearb, double& tmp_l, double& tmp_b);
-    text_zeilenweise bearb_optimieren_ganx(text_zeilenweise bearb);
-    text_zeilenweise rasterbohrungen_finden_ganx(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
-    text_zeilenweise rasterbohrungen_finden_fmc(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
-    text_zeilenweise formartierung_zu_einzelfkon(text_zeilenweise bearb,double tmp_l, double tmp_b);
-    text_zeilenweise kurze_an_ab_geraden(text_zeilenweise bearb, text_zeilenweise wkzmagazin);
-    text_zeilenweise dubosplitten(text_zeilenweise bearb, text_zeilenweise wkzmagazin, double wstdicke);
-    text_zeilenweise fkon_kantengut(text_zeilenweise bearb, text_zeilenweise wkzmagazin,double tmp_l, double tmp_b);
-    void hbemiduebeltiefe();
-    void fraesergeraden_zusammenfassen();
-
-    text_zeilenweise drehen_um_b_halbe(text_zeilenweise bearb, double &tmp_l, double &tmp_b);
-    //--------------------------------------------------
+    inline QString drehung()
+    {
+        if(zustand().count())
+        {
+            return zustand().drehung();
+        }else
+        {
+            return 0;
+        }
+    }
+    inline double ay()
+    {
+        if(zustand().count())
+        {
+            return zustand().ay();
+        }else
+        {
+            return 0;
+        }
+    }
 
 };
 

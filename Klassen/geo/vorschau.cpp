@@ -736,9 +736,10 @@ void vorschau::zeichneFkon(QString geometrieElement, uint i)
 
 void vorschau::werkstueck_darstellung_berechnen()
 {
+    QString format = W.zustand().format();
     int randabstand = 10;
-    float maximallaenge = W.max_x(Format) - W.min_x(Format);
-    float maximalbreite = W.max_y(Format) - W.min_y(Format);
+    float maximallaenge = W.max_x(format) - W.min_x(format);
+    float maximalbreite = W.max_y(format) - W.min_y(format);
 
     float bildlaenge = width()-randabstand*2;
     float bildbreite = height()-randabstand*2;
@@ -764,27 +765,20 @@ void vorschau::werkstueck_darstellung_berechnen()
     basispunkt.x = randabstand;
     basispunkt.y = height()-randabstand;
 
-    N.x = basispunkt.x - W.min_x(Format)*Sf * Zf;
-    N.y = basispunkt.y + W.min_y(Format)*Sf * Zf;
+    N.x = basispunkt.x - W.min_x(format)*Sf * Zf;
+    N.y = basispunkt.y + W.min_y(format)*Sf * Zf;
 
 }
 
-void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile, \
-                                  QString format, text_zeilenweise wkzmagazin, QString drehwinkel)
+void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
-    Format = format;
-    double tmp_l = 0;
-    double tmp_b = 0;
-    text_zeilenweise tmp_bearb = W.bearb(format, wkzmagazin, drehwinkel, tmp_l, tmp_b);
-    sende_drewi(drehwinkel);
-    Wst.set_laenge(tmp_l);
-    Wst.set_breite(tmp_b);
+    Geotext = W.zustand().geo().text_zw();
+    Wst.set_laenge(w_neu.zustand().l());
+    Wst.set_breite(w_neu.zustand().b());
     Aktuelle_zeilennummer = aktive_zeile;
     werkstueck_darstellung_berechnen();
-    Geotext = W.geo(format, wkzmagazin, drehwinkel).text_zw();
     this->update();
-    sende_wstmas(tmp_l, tmp_b, w_neu.dicke());
 }
 
 void vorschau::slot_aktives_Element_einfaerben(int zeilennummer)
@@ -875,7 +869,7 @@ punkt2d vorschau::mauspos_npwst()
     punkt2d p;
     p = mauspos_npanschlag();
     p.set_x(p.x()-0);
-    p.set_y(p.y()-W.ay());
+    p.set_y(p.y()-W.zustand().ay());
     return p;
 }
 
@@ -1270,3 +1264,21 @@ Qt::PenStyle vorschau::set_linienstil(QString stil)
 
     return style;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

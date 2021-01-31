@@ -90,3 +90,27 @@ bool einstellung_ganx::bezugsmass_in_use()
 {
     return Bezugsmass_in_use;
 }
+
+//-------------------Funktionen nicht innerhalb der Klasse:
+bool operator ==(einstellung_ganx e1, einstellung_ganx e2)
+{
+    if(e1.bezugsmass() == e2.bezugsmass() && \
+       e1.bezugsmass_in_use() == e2.bezugsmass_in_use())
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+bool operator !=(einstellung_ganx e1, einstellung_ganx e2)
+{
+    if(e1.bezugsmass() == e2.bezugsmass() && \
+            e1.bezugsmass_in_use() == e2.bezugsmass_in_use())
+    {
+        return false;
+    }else
+    {
+        return true;
+    }
+}

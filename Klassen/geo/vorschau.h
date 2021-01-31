@@ -58,7 +58,6 @@ private:
     werkstueck  W;
     uint        Aktuelle_zeilennummer;
     text_zeilenweise Geotext;
-    QString     Format;//z.B. "fmc"
     int         Maus_pos_alt_x;
     int         Maus_pos_alt_y;
     uint        Zeile_von_maus_pos;//Zum Zwischenspeichern damit Ergebnis nicht verfälscht wird wenn Maus sich bewegt
@@ -72,8 +71,7 @@ signals:
     void sende_drewi(QString w);
 
 public slots:
-    void slot_aktualisieren(werkstueck w_neu, int aktive_zeile,\
-                            QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
+    void slot_aktualisieren(werkstueck w_neu, int aktive_zeile);
     void slot_aktives_Element_einfaerben(int zeilennummer);
 
 private slots:

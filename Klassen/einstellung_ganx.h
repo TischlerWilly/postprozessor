@@ -28,3 +28,7 @@ private:
 };
 
 #endif // EINSTELLUNG_GANX_H
+
+//-------------------Funktionen nicht innerhalb der Klasse:
+bool operator ==(einstellung_ganx e1, einstellung_ganx e2);
+bool operator !=(einstellung_ganx e1, einstellung_ganx e2);

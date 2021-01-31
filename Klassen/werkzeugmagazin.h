@@ -56,6 +56,11 @@ public:
     text_zeilenweise alle_bodm(QString hori_oder_vert);
     QString spiegelwkz(QString wkz_nr);
 
+    inline text_zeilenweise magazin()
+    {
+        return Magazin;
+    }
+
 
 private:
     text_zeilenweise Magazin;
@@ -69,5 +74,10 @@ private:
 
 
 };
+
+//-------------------Funktionen nicht innerhalb der Klasse:
+bool operator ==(werkzeugmagazin w1, werkzeugmagazin w2);
+bool operator !=(werkzeugmagazin w1, werkzeugmagazin w2);
+
 
 #endif // WERKZEUGMAGAZIN_H

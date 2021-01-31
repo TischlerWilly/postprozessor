@@ -20,37 +20,33 @@ void Dialog_programmtext::resizeEvent(QResizeEvent *event)
     ui->listWidget_prgtext->setFixedHeight(this->height()-10);
 }
 
-void Dialog_programmtext::slot_wst(werkstueck w_neu,\
-                                   QString format, text_zeilenweise wkzmagazin, QString drehwinkel)
+void Dialog_programmtext::slot_wst(werkstueck* w)
 {
-    Wst = w_neu;
     ui->listWidget_prgtext->clear();
     QString fenstertitel = "Programmtext von: ";
-    fenstertitel += Wst.name();
+    fenstertitel += w->name();
     this->setWindowTitle(fenstertitel);
-    double tmp_l = 0;
-    double tmp_b = 0;
-    text_zeilenweise tmp_bearb = Wst.bearb(format, wkzmagazin, drehwinkel, tmp_l, tmp_b);
     //Programmkopf als erste Zeile einfügen:
     text_zeilenweise pkopf;
     pkopf.set_trennzeichen(TRENNZ_BEARB_PARAM);
     QString param;
     param  = "L=";
-    param += double_to_qstring(tmp_l);
+    param += double_to_qstring(w->zustand().l());
     pkopf.zeile_anhaengen(param);
     param  = "B=";
-    param += double_to_qstring(tmp_b);
+    param += double_to_qstring(w->zustand().b());
     pkopf.zeile_anhaengen(param);
     param  = "D=";
-    param += Wst.dicke_qstring();
+    param += w->dicke_qstring();
     pkopf.zeile_anhaengen(param);
     param  = "Drehung ";
-    param += drehwinkel;
+    param += w->zustand().drehung();
     pkopf.zeile_anhaengen(param);
-    param = format;
+    param = w->zustand().format();
     pkopf.zeile_anhaengen(param);
     ui->listWidget_prgtext->addItem(pkopf.text());
     //Bearbeitungen ab 2. Zeile einfügen:
+    text_zeilenweise tmp_bearb = w->zustand().bearb();
     for(uint i=1; i<=tmp_bearb.zeilenanzahl() ;i++)
     {
         QString bearb = tmp_bearb.zeile(i);
@@ -78,6 +74,41 @@ void Dialog_programmtext::slot_wst(werkstueck w_neu,\
             msg += bo.afb();
             msg += "\tWKZ: ";
             msg += bo.wkznum();
+            bearb = msg;
+        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        {
+            QString msg = "BoRa von ";
+            bohrraster bo(zeile.text());
+            msg += bezug(bo.bezug());
+            msg += "\tØ: ";
+            msg += bo.dm_qstring();
+            msg += "\tTi: ";
+            msg += bo.tiefe_qstring();
+            msg += "\tX: ";
+            msg += bo.x_qstring();
+            msg += "\tY: ";
+            msg += bo.y_qstring();
+            msg += "\tZ: ";
+            msg += bo.z_qstring();
+            msg += "\tZSM: ";
+            msg += bo.zustellmass_qstring();
+            msg += "\tAFB: ";
+            msg += bo.afb();
+            msg += "\tWKZ: ";
+            msg += bo.wkznum();
+            msg += "\tAnz X: ";
+            msg += bo.anz_x_qstring();
+            msg += "\tAbst X: ";
+            msg += bo.raster_x_qstring();
+            msg += "\tAnz Y: ";
+            msg += bo.anz_y_qstring();
+            msg += "\tAbst Y: ";
+            msg += bo.raster_y_qstring();
+            msg += "\tAnz Z: ";
+            msg += bo.anz_z_qstring();
+            msg += "\tAbst Z: ";
+            msg += bo.raster_z_qstring();
+
             bearb = msg;
         }else if(zeile.zeile(1) == BEARBART_NUT)
         {
@@ -199,6 +230,7 @@ void Dialog_programmtext::slot_wst(werkstueck w_neu,\
     ui->listWidget_prgtext->addItem("...");
     this->show();
 }
+
 void Dialog_programmtext::slot_zeilennummer(uint nr)
 {
     if((int)nr < ui->listWidget_prgtext->count())

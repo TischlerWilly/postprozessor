@@ -26,6 +26,7 @@ SOURCES += main.cpp\
     Klassen/geo/wuerfel.cpp \
     Klassen/geo/zylinder.cpp \
     Klassen/wst/gehrung.cpp \
+    Klassen/wst/wstzustand.cpp \
         mainwindow.cpp \
     Klassen/formel.cpp \
     Klassen/text_zeilenweise.cpp \
@@ -82,6 +83,7 @@ HEADERS  += mainwindow.h \
     Funktionen/text.h \
     Funktionen/umwandeln.h \
     Klassen/wst/gehrung.h \
+    Klassen/wst/wstzustand.h \
     Struncts/punkt.h \
     ToDo.h \
     Defines/dateinamen.h \

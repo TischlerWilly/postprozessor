@@ -123,16 +123,13 @@ private:
     Dialog_programmtext dlg_prgtext;
     Dialog_ExportUebersicht dlg_exporte;
 
-
 signals:
     void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
     void sendStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
     void sendEinstellungPfade(einstellung e);
     void sendEinstellungGANX(einstellung_ganx e);
-    void sendVorschauAktualisieren(werkstueck w_neu, int aktuelle_programmzeile,\
-                                   QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
-    void sendProgrammtext(werkstueck w_neu,\
-                          QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
+    void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
+    void sendProgrammtext(werkstueck* w);
     void signal_exporte(text_zeilenweise daten);
     void signal_wstexport(QString name, QString format, bool exportiert);
     void signal_wst_umbenennen(QString name_vor, QString name_nach);
@@ -143,6 +140,7 @@ public slots:
     void getEinstellungGANX(einstellung_ganx e);
     void getEinstellung(einstellung e);
     void getMausPosXY(QPoint p);
+    void getCADFehler(QString w);
     void getWarnungen(QString w);
     void getWSTMas(double l, double b, double d);
     void getDrewi(QString w);

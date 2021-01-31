@@ -5427,17 +5427,17 @@ bool werkstuecke::ist_bekannt(QString Werkstueckname)
     }
     return false;
 }
-werkstueck werkstuecke::wst(uint index)
+werkstueck* werkstuecke::wst(uint index)
 {
     //übergibt eine Kopie des Wst
     //Änderungen an dieser Kopie werden nicht zurück in diese Instanz geschrieben.
     if(index > 0 && index <= Namen.zeilenanzahl())
     {
-        return Wste.at(index-1);
+        return &Wste[index-1];
     }else
     {
-        werkstueck w;   //leeres Wst
-        return w;
+        //werkstueck w;   //leeres Wst
+        return NULL;
     }
 }
 QString werkstuecke::name(uint index)
@@ -5502,7 +5502,22 @@ QString werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen
                 break;
             }
         }
-        if(identisch == true)
+        bool istbaugruppenname = false;
+        if(tmp.at(0) == "S")//Schranknummer
+        {
+            if(tmp.at(1)=='0' || tmp.at(1)=='1' || tmp.at(1)=='2' || tmp.at(1)=='3' || tmp.at(1)=='4' || tmp.at(1)=='5' || tmp.at(1)=='6' || tmp.at(1)=='7' || tmp.at(1)=='8' || tmp.at(1)=='9')
+            {
+                istbaugruppenname = true;
+            }
+        }else if(tmp.at(0)=='#')//Baugruppenbezeichung
+        {
+            istbaugruppenname = true;
+        }else if(tmp.at(0)=='@')//Baugruppenbezeichung nicht im Barcode
+        {
+            istbaugruppenname = true;
+        }
+
+        if(identisch == true && istbaugruppenname == true)
         {
             if(Namen.zeilenanzahl() > 0)
             {
@@ -5684,12 +5699,28 @@ void werkstuecke::sortieren()
                     kopiert.zeile_ersaetzen(ii, "ja");
                 }
             }
+        }        
+    }
+    //2. Durchlauf. Jetzt kommen alle wst die nicht sortierbar waren:
+    for(uint i = 1; i<=Namen.zeilenanzahl() ;i++)
+    {
+        QString akt_wst_name = Namen.zeile(i);
+        if(kopiert.zeile(i) != "ja")
+        {
+            //kopieren:
+            tmp_Namen.zeile_anhaengen(akt_wst_name);
+            tmp_Quellformate.zeile_anhaengen(Quellformate.zeile(i));
+            werkstueck w = Wste.at(i-1);
+            w.set_name(akt_wst_name);
+            tmp_Wste.append(w);
+            kopiert.zeile_ersaetzen(i, "ja");
         }
     }
     Namen = tmp_Namen;
     Quellformate = tmp_Quellformate;
     Wste = tmp_Wste;
 }
+/*
 void werkstuecke::ersetzen(werkstueck w, uint index)
 {
     if(index > 0 && index <= Namen.zeilenanzahl())
@@ -5697,7 +5728,7 @@ void werkstuecke::ersetzen(werkstueck w, uint index)
         Wste.replace(index-1, w);
     }
 }
-
+*/
 //--------------------------------------------------
 //#######################################################################
 //Private:
