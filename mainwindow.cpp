@@ -1214,29 +1214,11 @@ void MainWindow::on_pushButton_start_clicked()
     }
 
     for(uint i=1; i<=wste.anzahl() ;i++)
-    {
-        bool foauf;
-        if(Einstellung.formartierungen_aufbrechen())
-        {
-            foauf = true;
-        }else
-        {
-            foauf = false;
-        }
-        bool fkonkanschon;
-        if(Einstellung.fkon_kantenschonend())
-        {
-            fkonkanschon = true;
-        }else
-        {
-            fkonkanschon = false;
-        }
-
+    {        
         if(Einstellung.export_ganx())
         {
             QString teilname = wste.name(i);
             teilname += GANX;
-
             QFile datei(pfad_ganx + QDir::separator() + teilname);
             if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
             {
@@ -1247,13 +1229,21 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
-                QString info = "";
-                QString tmp = wste.wst(i)->ganx(wkz_magazin_ganx, info, Einstellung.drehung_wst(), Einstellung_ganx);
-                datei.write(tmp.toUtf8());
+                wste.wst(i)->set_einstellung_ganx(Einstellung_ganx);
+                //->set_einstellung_fmc
+                //->set_einstellung_eigen
+                wste.wst(i)->set_zustand("ganx", wkz_magazin_ganx, Einstellung.drehung_wst(), \
+                                         Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                QString info = wste.wst(i)->zustand().warnungen();
+                datei.write(wste.wst(i)->zustand().exporttext().toUtf8());
+
                 QString output;
                 output = teilname;
-                //output += "\n";
-                output += info;
+                output += "\n";
+                if(!info.isEmpty())
+                {
+                    output += info;
+                }
                 ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();
@@ -1262,7 +1252,6 @@ void MainWindow::on_pushButton_start_clicked()
         {
             QString teilname = wste.name(i);
             teilname += FMC;
-
             QFile datei(pfad_fmc + QDir::separator() + teilname);
             if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
             {
@@ -1273,14 +1262,21 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
-                QString info = "";                
-                QString tmp = wste.wst(i)->fmc(wkz_magazin_fmc, info, Einstellung.drehung_wst(), \
-                                                      Einstellung.tiefeneinst_fkon(), foauf,fkonkanschon);
-                datei.write(tmp.toUtf8());
+                wste.wst(i)->set_einstellung_ganx(Einstellung_ganx);
+                //->set_einstellung_fmc
+                //->set_einstellung_eigen
+                wste.wst(i)->set_zustand("fmc", wkz_magazin_fmc, Einstellung.drehung_wst(), \
+                                         Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                QString info = wste.wst(i)->zustand().warnungen();
+                datei.write(wste.wst(i)->zustand().exporttext().toUtf8());
+
                 QString output;
                 output = teilname;
-                //output += "\n";
-                output += info;
+                output += "\n";
+                if(!info.isEmpty())
+                {
+                    output += info;
+                }
                 ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();
@@ -1300,13 +1296,21 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
-                QString info = "";
-                QString tmp = wste.wst(i)->ggf(wkz_magazin_ggf, info, Einstellung.drehung_wst());
-                datei.write(tmp.toUtf8());
+                wste.wst(i)->set_einstellung_ganx(Einstellung_ganx);
+                //->set_einstellung_fmc
+                //->set_einstellung_eigen
+                wste.wst(i)->set_zustand("ggf", wkz_magazin_ggf, Einstellung.drehung_wst(), \
+                                         Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                QString info = wste.wst(i)->zustand().warnungen();
+                datei.write(wste.wst(i)->zustand().exporttext().toUtf8());
+
                 QString output;
-                output = teilname;                
-                output += info;
+                output = teilname;
                 output += "\n";
+                if(!info.isEmpty())
+                {
+                    output += info;
+                }
                 ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();
@@ -1326,25 +1330,21 @@ void MainWindow::on_pushButton_start_clicked()
                 QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
-                QString tmp;
-                if(Einstellung.export_fmc()  &&  !Einstellung.export_ganx())
-                {
-                    tmp = wste.wst(i)->eigenses_format(Einstellung.drehung_wst(), FMC, \
-                                                              wkz_magazin_fmc, foauf, fkonkanschon);
-                }else if(!Einstellung.export_fmc()  &&  Einstellung.export_ganx())
-                {
-                    tmp = wste.wst(i)->eigenses_format(Einstellung.drehung_wst(), GANX, \
-                                                              wkz_magazin_ganx, foauf, fkonkanschon);
-                }else
-                {
-                    text_zeilenweise wkz_eigen;//leeres werkzeugmagazin
-                    tmp = wste.wst(i)->eigenses_format(Einstellung.drehung_wst(), EIGENES_FORMAT, \
-                                                              wkz_eigen, foauf, fkonkanschon);
-                }
-                datei.write(tmp.toUtf8());
+                wste.wst(i)->set_einstellung_ganx(Einstellung_ganx);
+                //->set_einstellung_fmc
+                //->set_einstellung_eigen
+                wste.wst(i)->set_zustand("eigen", wkz_magazin_fmc, Einstellung.drehung_wst(), \
+                                         Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                QString info = wste.wst(i)->zustand().warnungen();
+                datei.write(wste.wst(i)->zustand().exporttext().toUtf8());
+
                 QString output;
                 output = teilname;
                 output += "\n";
+                if(!info.isEmpty())
+                {
+                    output += info;
+                }
                 ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
             }
             datei.close();
