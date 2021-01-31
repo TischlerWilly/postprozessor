@@ -19,15 +19,13 @@ public:
 
 private:
     Ui::Dialog_programmtext *ui;
-    werkstueck Wst;
     QString bezug(QString b);
 
 signals:
     void signalIndexChange(int index);
 
 public slots:
-    void slot_wst(werkstueck w_neu,\
-                  QString format, text_zeilenweise wkzmagazin, QString drehwinkel);
+    void slot_wst(werkstueck* w);
     void slot_zeilennummer(uint nr);
 
 private slots:

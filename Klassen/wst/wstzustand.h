@@ -116,6 +116,27 @@ public:
     {
         return double_to_qstring(Dicke);
     }
+    inline QString drehung()
+    {
+        if(Akt_zust != -1 && Akt_zust<Drehung.count())
+        {
+            return Drehung.at(Akt_zust);
+        }else
+        {
+            return "";
+        }
+    }
+    inline text_zeilenweise bearb()
+    {
+        if(Akt_zust != -1 && Akt_zust<Bearbeitung.count())
+        {
+            return Bearbeitung.at(Akt_zust);
+        }else
+        {
+            text_zeilenweise tz;
+            return tz;
+        }
+    }
 
     //----------------------------------Manipulationen:
     void anfordern(QString format, werkzeugmagazin wkzmag, QString drehung);

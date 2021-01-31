@@ -27,14 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_einstellung_ganx, SLOT(slot_einstellung(einstellung_ganx)));
     connect(&dlg_einstellung_ganx, SIGNAL(send_einstellung(einstellung_ganx)),\
             this, SLOT(getEinstellungGANX(einstellung_ganx )));
-
-
-    connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int,QString,text_zeilenweise,QString)),\
-            &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int,QString,text_zeilenweise,QString)));
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int)));
-
-
     connect(&dlg_prgtext, SIGNAL(signalIndexChange(int)),\
             &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
     connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint)),\
@@ -45,8 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(getWSTMas(double,double,double)));
     connect(&vorschaufenster, SIGNAL(sende_drewi(QString)),\
              this, SLOT(getDrewi(QString)));
-    connect(this, SIGNAL(sendProgrammtext(werkstueck,QString,text_zeilenweise,QString)),\
-            &dlg_prgtext, SLOT(slot_wst(werkstueck,QString,text_zeilenweise,QString)));
+    connect(this, SIGNAL(sendProgrammtext(werkstueck*)),\
+            &dlg_prgtext, SLOT(slot_wst(werkstueck*)));
     connect(this, SIGNAL(signal_exporte(text_zeilenweise)),\
             &dlg_exporte, SLOT(slot_wstnamen(text_zeilenweise)));
     connect(this, SIGNAL(signal_wstexport(QString,QString,bool)),\
@@ -1708,25 +1702,7 @@ void MainWindow::on_listWidget_wste_itemSelectionChanged()
 }
 void MainWindow::on_listWidget_wste_itemDoubleClicked()
 {
-    if(ui->radioButton_vorschau_eigen->isChecked())
-    {
-        emit sendProgrammtext(*wste.wst(ui->listWidget_wste->currentRow()+1), \
-                              "eigen", wkz_magazin_fmc, Einstellung.drehung_wst());
-        //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
-    }else if(ui->radioButton_vorschau_ganx->isChecked())
-    {
-        emit sendProgrammtext(*wste.wst(ui->listWidget_wste->currentRow()+1), \
-                              "ganx", wkz_magazin_ganx, Einstellung.drehung_wst());
-    }else if(ui->radioButton_vorschau_fmc->isChecked())
-    {
-        emit sendProgrammtext(*wste.wst(ui->listWidget_wste->currentRow()+1), \
-                              "fmc", wkz_magazin_fmc, Einstellung.drehung_wst());
-    }else if(ui->radioButton_vorschau_ggf->isChecked())
-    {
-        emit sendProgrammtext(*wste.wst(ui->listWidget_wste->currentRow()+1), \
-                              "ggf", wkz_magazin_ggf, Einstellung.drehung_wst());
-    }
-
+    emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1));
 }
 //-----------------------------------------------------------------------
 void MainWindow::dateien_erfassen()

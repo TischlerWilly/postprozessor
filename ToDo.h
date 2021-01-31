@@ -2,17 +2,13 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.21.01.30"
+#define PROGRAMMVERSION "3.21.01.31"
 #endif //PROGRAMMVERSION
 /*
-void wstzustand::rasterbohrungen_finden_ganx()
-  führt noch zu Fehlern
 
 void MainWindow::on_pushButton_einzelexport_clicked()
   umstellen auf wstzustand
 
-void MainWindow::on_listWidget_wste_itemDoubleClicked()
-  umstellen auf wstzustand
 
 
 

@@ -11454,12 +11454,15 @@ void wstzustand::geo(int index)
                     tmp_s2.verschieben_um(i*bo.raster_x(), 0);
                     for(uint ii=0; ii<bo.anz_y() ;ii++)
                     {
-                        tmp_k.verschieben_um(0, ii*bo.raster_y());
-                        tmp_s1.verschieben_um(0, ii*bo.raster_y());
-                        tmp_s2.verschieben_um(0, ii*bo.raster_y());
-                        gt.add_kreis(tmp_k);
-                        gt.add_strecke(tmp_s1);
-                        gt.add_strecke(tmp_s2);
+                        kreis tmp_kk = tmp_k;
+                        strecke tmp_s11 = tmp_s1;
+                        strecke tmp_s22 = tmp_s2;
+                        tmp_kk.verschieben_um(0, ii*bo.raster_y());
+                        tmp_s11.verschieben_um(0, ii*bo.raster_y());
+                        tmp_s22.verschieben_um(0, ii*bo.raster_y());
+                        gt.add_kreis(tmp_kk);
+                        gt.add_strecke(tmp_s11);
+                        gt.add_strecke(tmp_s22);
                     }
                 }
             }else if(bo.bezug() == WST_BEZUG_UNSEI)
@@ -11494,12 +11497,15 @@ void wstzustand::geo(int index)
                     tmp_s2.verschieben_um(i*bo.raster_x(), 0);
                     for(uint ii=0; ii<bo.anz_y() ;ii++)
                     {
-                        tmp_k.verschieben_um(0, ii*bo.raster_y());
-                        tmp_s1.verschieben_um(0, ii*bo.raster_y());
-                        tmp_s2.verschieben_um(0, ii*bo.raster_y());
-                        gt.add_kreis(tmp_k);
-                        gt.add_strecke(tmp_s1);
-                        gt.add_strecke(tmp_s2);
+                        kreis tmp_kk = tmp_k;
+                        strecke tmp_s11 = tmp_s1;
+                        strecke tmp_s22 = tmp_s2;
+                        tmp_kk.verschieben_um(0, ii*bo.raster_y());
+                        tmp_s11.verschieben_um(0, ii*bo.raster_y());
+                        tmp_s22.verschieben_um(0, ii*bo.raster_y());
+                        gt.add_kreis(tmp_kk);
+                        gt.add_strecke(tmp_s11);
+                        gt.add_strecke(tmp_s22);
                     }
                 }
             }else if(bo.bezug() == WST_BEZUG_LI)

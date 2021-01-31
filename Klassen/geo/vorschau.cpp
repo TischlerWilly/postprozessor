@@ -770,23 +770,6 @@ void vorschau::werkstueck_darstellung_berechnen()
 
 }
 
-void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile, \
-                                  QString format, text_zeilenweise wkzmagazin, QString drehwinkel)
-{
-    W = w_neu;
-    //Format = format;
-    double tmp_l = 0;
-    double tmp_b = 0;
-    text_zeilenweise tmp_bearb = W.bearb(format, wkzmagazin, drehwinkel, tmp_l, tmp_b);
-    sende_drewi(drehwinkel);
-    Wst.set_laenge(tmp_l);
-    Wst.set_breite(tmp_b);
-    Aktuelle_zeilennummer = aktive_zeile;
-    werkstueck_darstellung_berechnen();
-    Geotext = W.geo(format, wkzmagazin, drehwinkel).text_zw();
-    this->update();
-    sende_wstmas(tmp_l, tmp_b, w_neu.dicke());
-}
 void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
