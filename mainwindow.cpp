@@ -1383,8 +1383,8 @@ void MainWindow::on_pushButton_start_clicked()
 void MainWindow::on_pushButton_import_clicked()
 {
     import();
-    werkstueck w;
-    sendVorschauAktualisieren(w, 0);
+    werkstueck w;//leeres wst
+    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken
     ui->listWidget_wste->clear();
     for(uint i=1; i<=wste.anzahl() ;i++)
     {
