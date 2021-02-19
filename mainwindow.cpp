@@ -1507,6 +1507,15 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     schreibe_in_zwischenablage(pfad);
                 }
                 f.close();
+            }else
+            {
+                QString msg;
+                msg = "Export nicht möglich!";
+                msg += "\n";
+                msg += wste.wst(i)->zustand().exporttext();
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
             }
         }else if(ui->radioButton_vorschau_ganx->isChecked())
         {
@@ -1525,6 +1534,15 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                 }
                 f.close();
+            }else
+            {
+                QString msg;
+                msg = "Export nicht möglich!";
+                msg += "\n";
+                msg += wste.wst(i)->zustand().exporttext();
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
             }
         }else if(ui->radioButton_vorschau_ggf->isChecked())
         {
@@ -1544,6 +1562,15 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                 }
                 f.close();
+            }else
+            {
+                QString msg;
+                msg = "Export nicht möglich!";
+                msg += "\n";
+                msg += wste.wst(i)->zustand().exporttext();
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
             }
         }else //eigen
         {
@@ -1562,6 +1589,15 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                 }
                 f.close();
+            }else
+            {
+                QString msg;
+                msg = "Export nicht möglich!";
+                msg += "\n";
+                msg += wste.wst(i)->zustand().exporttext();
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
             }
         }
         QApplication::restoreOverrideCursor();
