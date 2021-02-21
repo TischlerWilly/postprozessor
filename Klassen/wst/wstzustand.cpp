@@ -2390,10 +2390,9 @@ void wstzustand::dubosplitten(text_zeilenweise& bearb, werkzeugmagazin wkzmag)
                     if(tnummer.isEmpty())
                     {
                         bohrung boA = bo;
-                        double boti = bo.tiefe();
-                        boti = boti -4; // jetzt boti == wst-Dicke
-                        boA.set_tiefe(boti/2 + 2);
-                        tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), boA.tiefe(), Dicke, bo.bezug());
+                        double boti = Dicke/2 + 2;
+                        boA.set_tiefe(boti);
+                        tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), boti, Dicke, bo.bezug());
                         if(!tnummer.isEmpty())
                         {
                             bohrung boB = boA;
@@ -4237,11 +4236,12 @@ QString wstzustand::kante_re_ganx(QString drewi)
 
 void wstzustand::fmc_dateitext(int index)
 {
-    text_zeilenweise bearb = Bearbeitung.at(index);
+    text_zeilenweise bearb = Bearbeitung.at(index);    
     QString drewi = Drehung.at(index);
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     werkzeugmagazin wkzmag = Wkzmag.at(index);
+    dubosplitten(bearb, wkzmag);
 
     text_zeilenweise bearb_kopie = bearb;
 
@@ -7396,6 +7396,7 @@ void wstzustand::eigen_dateitext(int index)
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     werkzeugmagazin wkzmag = Wkzmag.at(index);
+    dubosplitten(bearb, wkzmag);
 
     QString msg;
 
@@ -7445,6 +7446,7 @@ void wstzustand::ganx_dateitext(int index)
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     werkzeugmagazin wkzmag = Wkzmag.at(index);
+    dubosplitten(bearb, wkzmag);
 
     text_zeilenweise bearb_kopie = bearb;
 
@@ -10679,6 +10681,7 @@ void wstzustand::ggf_dateitext(int index)
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     werkzeugmagazin wkzmag = Wkzmag.at(index);
+    dubosplitten(bearb, wkzmag);
 
     text_zeilenweise bearb_kopie = bearb;
 
