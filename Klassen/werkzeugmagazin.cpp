@@ -179,6 +179,32 @@ QString werkzeugmagazin::dm(QString wkz_nr)
     returntext.replace(",",".");
     return returntext;
 }
+
+bool werkzeugmagazin::ist_dubo(QString wkz_nr)//Ist Durchgangsbohrer
+{
+    bool retbool = false;
+    text_zeilenweise zeile;
+    zeile.set_trennzeichen('\t');
+
+    for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
+    {
+        zeile.set_text(Magazin.zeile(i));
+
+        if(zeile.zeile(2) == wkz_nr)
+        {
+            if(zeile.zeile(1) == "B")//WKZ-Typ Borer
+            {
+                if(zeile.zeile(8) == "1")//WKZ-Typ Borer
+                {
+                    retbool = true;
+                }
+            }
+        }
+
+    }
+    return retbool;
+}
+
 QString werkzeugmagazin::vorschub(QString wkz_nr)
 {
     QString returntext = "";

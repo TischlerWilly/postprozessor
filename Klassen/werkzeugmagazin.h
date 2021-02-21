@@ -47,6 +47,7 @@ public:
                           QString bezugskante = WST_BEZUG_OBSEI);
     QString wkznummer_von_alias(QString alias);
     QString dm(QString wkz_nr);
+    bool ist_dubo(QString wkz_nr);
     QString vorschub(QString wkz_nr);
     QString zustellmass(QString wkz_nr);
     QString zustellmass_min(QString wkz_nr);
