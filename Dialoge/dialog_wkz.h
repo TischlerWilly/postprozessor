@@ -29,6 +29,8 @@ private:
     Dialog_fraeser difr;
     Dialog_saege disae;
 
+    void inaktive_grau();
+
 public slots:
     void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
     void getParamaterWKZ(text_zeilenweise wkz, bool ist_neues_wkz);

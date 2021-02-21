@@ -41,8 +41,9 @@ void Dialog_WKZ::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
     this->setWindowTitle(fenstertitel);
     for(uint i=1; i<=werkzeugmagazin.zeilenanzahl() ;i++)
     {
-        ui->listWidget_wkz->addItem(werkzeugmagazin.zeile(i));
+        ui->listWidget_wkz->addItem(werkzeugmagazin.zeile(i));        
     }
+    inaktive_grau();
     this->show();
 }
 
@@ -101,6 +102,7 @@ void Dialog_WKZ::getParamaterWKZ(text_zeilenweise wkz, bool ist_neues_wkz)
     {
         ui->listWidget_wkz->currentItem()->setText(wkz.text());
     }
+    inaktive_grau();
 }
 
 void Dialog_WKZ::on_pushButton_entfernen_clicked()
@@ -240,7 +242,25 @@ void Dialog_WKZ::on_pushButton_duplizieren_clicked()
     }
 }
 
+void Dialog_WKZ::inaktive_grau()
+{
+    //Inaktive Werkzeuge werden mit grauer Schrift angezeit
 
+    for(int i=1; i<=ui->listWidget_wkz->count() ;i++)
+    {
+        QString zeile = ui->listWidget_wkz->item(i-1)->text();
+        text_zeilenweise wkz;
+        wkz.set_trennzeichen('\t');
+        wkz.set_text(zeile);
+        if(wkz.zeile(15) == "1")//WKZ ist aktiv
+        {
+            ui->listWidget_wkz->item(i-1)->setForeground(Qt::black);
+        }else
+        {
+            ui->listWidget_wkz->item(i-1)->setForeground(Qt::gray);
+        }
+    }
+}
 
 
 

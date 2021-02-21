@@ -23,61 +23,64 @@ QString werkzeugmagazin::wkznummer(QString wkz_typ, \
     for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
     {
         zeile.set_text(Magazin.zeile(i));
-        if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
+        if(zeile.zeile(15) == "1")//WKZ ist aktiv
         {
-            if(zeile.zeile(7).toDouble() == dm)//Durchmesser aus Import == gesuchter DM?
+            if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
             {
-                if(bezugskante == WST_BEZUG_OBSEI || \
-                   bezugskante == WST_BEZUG_UNSEI)
+                if(zeile.zeile(7).toDouble() == dm)//Durchmesser aus Import == gesuchter DM?
                 {
-                    if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
+                    if(bezugskante == WST_BEZUG_OBSEI || \
+                       bezugskante == WST_BEZUG_UNSEI)
                     {
-                        if(bearbeitungstiefe >= werkstueckdicke || ((bearbeitungstiefe == 2)&&(dm == 5)))//Tiefe 2mm == Ankörnungen
+                        if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
                         {
-                            if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
+                            if(bearbeitungstiefe >= werkstueckdicke || ((bearbeitungstiefe == 2)&&(dm == 5)))//Tiefe 2mm == Ankörnungen
+                            {
+                                if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
+                                {
+                                    if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_VERT)//ist ein vertikaler Bohrer
+                                    {
+                                        returntext = zeile.zeile(2);
+                                    }
+                                }
+                            }else
                             {
                                 if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_VERT)//ist ein vertikaler Bohrer
                                 {
-                                    returntext = zeile.zeile(2);
-                                }
-                            }
-                        }else
-                        {
-                            if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_VERT)//ist ein vertikaler Bohrer
-                            {
-                                //nur Nicht-Durchgangsbohrer zulassen:
-                                if(zeile.zeile(8) == "0")//ist Durchgangsbohrer?
-                                {
-                                    returntext = zeile.zeile(2);
+                                    //nur Nicht-Durchgangsbohrer zulassen:
+                                    if(zeile.zeile(8) == "0")//ist Durchgangsbohrer?
+                                    {
+                                        returntext = zeile.zeile(2);
+                                    }
                                 }
                             }
                         }
-                    }
-                }else
-                {
-                    if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
+                    }else
                     {
-                        if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_HORI)//ist ein horizontaler Bohrer
+                        if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
                         {
-                            returntext = zeile.zeile(2);
+                            if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_HORI)//ist ein horizontaler Bohrer
+                            {
+                                returntext = zeile.zeile(2);
+                            }
                         }
                     }
                 }
-            }
-        }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_SAEGE)  )
-        {
-            returntext = zeile.zeile(2);
-        }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
-        {
-            double wkz_dm = zeile.zeile(3).toDouble();
-            if(  (wkz_dm <= dm-4)  &&  (wkz_dm > wkz_dm_tmp)  )
+            }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_SAEGE)  )
             {
-                if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
+                returntext = zeile.zeile(2);
+            }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
+            {
+                double wkz_dm = zeile.zeile(3).toDouble();
+                if(  (wkz_dm <= dm-4)  &&  (wkz_dm > wkz_dm_tmp)  )
                 {
-                    if(zeile.zeile(14) != "ja") //ist nicht nur direkt zuweisbar
+                    if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
                     {
-                        wkz_dm_tmp = wkz_dm;
-                        returntext = zeile.zeile(2);
+                        if(zeile.zeile(14) != "ja") //ist nicht nur direkt zuweisbar
+                        {
+                            wkz_dm_tmp = wkz_dm;
+                            returntext = zeile.zeile(2);
+                        }
                     }
                 }
             }
@@ -90,20 +93,23 @@ QString werkzeugmagazin::wkznummer(QString wkz_typ, \
         for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
         {
             zeile.set_text(Magazin.zeile(i));
-            if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
+            if(zeile.zeile(15) == "1")//WKZ ist aktiv
             {
-                if(zeile.zeile(7).toDouble() == dm)//Durchmesser aus Import == gesuchter DM?
+                if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_BOHRER)  )
                 {
-                    if(bezugskante == WST_BEZUG_OBSEI || \
-                       bezugskante == WST_BEZUG_UNSEI)
+                    if(zeile.zeile(7).toDouble() == dm)//Durchmesser aus Import == gesuchter DM?
                     {
-                        if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
+                        if(bezugskante == WST_BEZUG_OBSEI || \
+                           bezugskante == WST_BEZUG_UNSEI)
                         {
-                            if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_VERT)//ist ein vertikaler Bohrer
+                            if(zeile.zeile(4).toDouble() > bearbeitungstiefe)//Nutzlänge > Bohrtiefe?
                             {
-                                if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
+                                if(zeile.zeile(10) == WKZ_PARAMETER_LAGE_VERT)//ist ein vertikaler Bohrer
                                 {
-                                    returntext = zeile.zeile(2);
+                                    if(zeile.zeile(8) == "1")//ist Durchgangsbohrer?
+                                    {
+                                        returntext = zeile.zeile(2);
+                                    }
                                 }
                             }
                         }
@@ -118,17 +124,20 @@ QString werkzeugmagazin::wkznummer(QString wkz_typ, \
         for(uint i = 2; i<=Magazin.zeilenanzahl() ;i++)
         {
             zeile.set_text(Magazin.zeile(i));
-            if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
+            if(zeile.zeile(15) == "1")//WKZ ist aktiv
             {
-                double wkz_dm = zeile.zeile(3).toDouble();
-                if(  (wkz_dm <= dm-1)  &&  (wkz_dm > wkz_dm_tmp)  )
+                if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
                 {
-                    if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
+                    double wkz_dm = zeile.zeile(3).toDouble();
+                    if(  (wkz_dm <= dm-1)  &&  (wkz_dm > wkz_dm_tmp)  )
                     {
-                        if(zeile.zeile(14) != "ja") //ist nicht nur direkt zuweisbar
+                        if(zeile.zeile(4).toDouble() > bearbeitungstiefe)
                         {
-                            wkz_dm_tmp = wkz_dm;
-                            returntext = zeile.zeile(2);
+                            if(zeile.zeile(14) != "ja") //ist nicht nur direkt zuweisbar
+                            {
+                                wkz_dm_tmp = wkz_dm;
+                                returntext = zeile.zeile(2);
+                            }
                         }
                     }
                 }
@@ -147,13 +156,15 @@ QString werkzeugmagazin::wkznummer_von_alias(QString alias)
     for(uint i = 2; i<Magazin.zeilenanzahl() ;i++)//i<.. und nicht i<=... weil letzte Zeile nur \n enthällt
     {
         zeile.set_text(Magazin.zeile(i));
-
-        if(  (zeile.zeile(11) == alias) &&  !zeile.zeile(11).isEmpty()  )
+        if(zeile.zeile(15) == "1")//WKZ ist aktiv
         {
-            if(zeile.zeile(1) == WKZ_TYP_FRAESER)
+            if(  (zeile.zeile(11) == alias) &&  !zeile.zeile(11).isEmpty()  )
             {
-                returntext = zeile.zeile(2);
-                break;
+                if(zeile.zeile(1) == WKZ_TYP_FRAESER)
+                {
+                    returntext = zeile.zeile(2);
+                    break;
+                }
             }
         }
     }

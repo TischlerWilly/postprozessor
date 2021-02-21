@@ -30,6 +30,8 @@
     13: Spiegelwerkzeug
     14: nur direkt zuweisbar
         ja | nein
+    15: ist aktiv
+        1 | 0
 
 */
 

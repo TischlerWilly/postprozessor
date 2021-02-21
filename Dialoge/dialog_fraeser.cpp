@@ -35,6 +35,13 @@ void Dialog_fraeser::getData(text_zeilenweise msg)
     {
         ui->checkBox_nur_direkt_zuweisbar->setChecked(false);
     }
+    if(msg.zeile(15) == "1")
+    {
+        ui->checkBox_ist_aktiv->setChecked(true);
+    }else
+    {
+        ui->checkBox_ist_aktiv->setChecked(false);
+    }
 
     this->show();
 }
@@ -58,6 +65,7 @@ void Dialog_fraeser::clear()
     ui->lineEdit_zust_min->clear();
     ui->lineEdit_spiegel->clear();
     ui->checkBox_nur_direkt_zuweisbar->setChecked(false);
+    ui->checkBox_ist_aktiv->setChecked(true);
 }
 
 void Dialog_fraeser::setup()
@@ -96,6 +104,13 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     }else
     {
         wkz.zeile_anhaengen("nein");                            //14: nur_direkt_zuweisbar
+    }
+    if(ui->checkBox_ist_aktiv->isChecked())
+    {
+        wkz.zeile_anhaengen("1");                           //15: ist aktiv
+    }else
+    {
+        wkz.zeile_anhaengen("0");                           //15: ist nicht aktiv
     }
 
     //deutsche Zahlen in englische Zahlen umwandeln:

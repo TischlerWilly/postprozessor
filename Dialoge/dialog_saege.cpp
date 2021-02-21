@@ -23,6 +23,13 @@ void Dialog_saege::getData(text_zeilenweise msg)
     ui->lineEdit_dm->setText(msg.zeile(3));
     ui->lineEdit_zustm->setText(msg.zeile(6));
     ui->lineEdit_breite->setText(msg.zeile(9));
+    if(msg.zeile(15) == "1")
+    {
+        ui->checkBox_ist_aktiv->setChecked(true);
+    }else
+    {
+        ui->checkBox_ist_aktiv->setChecked(false);
+    }
 
     this->show();
 }
@@ -41,6 +48,7 @@ void Dialog_saege::clear()
     ui->lineEdit_nr->clear();
     ui->lineEdit_zustm->clear();
     ui->lineEdit_breite->clear();
+    ui->checkBox_ist_aktiv->setChecked(true);
 }
 
 void Dialog_saege::setup()
@@ -72,6 +80,14 @@ void Dialog_saege::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(" ");                               //11: Alias-Name
     wkz.zeile_anhaengen(" ");                               //12: Mindest Zustellmaß
     wkz.zeile_anhaengen(" ");                               //13: Spiegelwerkzeug
+    wkz.zeile_anhaengen(" ");                               //14: nur direkt zuweisbar
+    if(ui->checkBox_ist_aktiv->isChecked())
+    {
+        wkz.zeile_anhaengen("1");                           //15: ist aktiv
+    }else
+    {
+        wkz.zeile_anhaengen("0");                           //15: ist nicht aktiv
+    }
 
     //deutsche Zahlen in englische Zahlen umwandeln:
     for(uint i=3; i<=wkz.zeilenanzahl() ;i++)

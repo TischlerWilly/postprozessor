@@ -2,6 +2,7 @@
 #define DIALOG_SAEGE_H
 
 #include <QDialog>
+#include <QMessageBox>
 
 #include "Klassen/text_zeilenweise.h"
 #include "Defines/werkzeug.h"
