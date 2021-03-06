@@ -837,11 +837,11 @@ void MainWindow::set_projektpfad()
     }
     pfad.replace("\\", QDir::separator());
     pfad.replace("/", QDir::separator());
-    QString pfad_mit_dateinamen;
+    //QString pfad_mit_dateinamen;
     if(!pfad.isEmpty() && !dateiname.isEmpty())
     {
-        pfad_mit_dateinamen = pfad + QDir::separator() + dateiname;
-        ui->lineEdit_projektpfad->setText(pfad_mit_dateinamen);
+        Pfad_mit_dateinamen = pfad + QDir::separator() + dateiname;
+        ui->lineEdit_projektpfad->setText(Pfad_mit_dateinamen);
     }else
     {
         ui->lineEdit_projektpfad->setText(pfad);
@@ -849,9 +849,9 @@ void MainWindow::set_projektpfad()
 
 
     //lineEdit einfärben:
-    if(!pfad_mit_dateinamen.isEmpty())
+    if(!Pfad_mit_dateinamen.isEmpty())
     {
-        QFile f(pfad_mit_dateinamen);
+        QFile f(Pfad_mit_dateinamen);
         if(f.exists())
         {
             QPalette palette;
@@ -860,6 +860,21 @@ void MainWindow::set_projektpfad()
             ui->lineEdit_projektpfad->setPalette(palette);
             signal_wstexport(dateiname, format, true);
             dlg_exporte.setWindowTitle(fenstertitel_exportuebersicht());
+
+            QFileInfo fi(Pfad_mit_dateinamen);
+            QDateTime fi_lastMod = fi.lastModified();
+            QDateTime heute = QDateTime::currentDateTime();
+            QString zeitstempel = "\t";
+            if(fi_lastMod.date() == heute.date())
+            {
+                zeitstempel += "(Heute ";
+                zeitstempel += fi_lastMod.time().toString("hh:mm)");
+            }else
+            {
+                zeitstempel += fi_lastMod.toString("(yyyy.MM.dd / hh:mm)");
+            }
+            ui->lineEdit_projektpfad->setText(Pfad_mit_dateinamen + zeitstempel);
+
         }else if(!pfad.isEmpty())
         {
             QDir d(pfad);
@@ -1394,7 +1409,7 @@ void MainWindow::on_pushButton_import_clicked()
 }
 void MainWindow::on_pushButton_einzelexport_clicked()
 {
-    QString pfad = ui->lineEdit_projektpfad->text();
+    QString pfad = Pfad_mit_dateinamen;
     bool exportieren = false;
     if(!pfad.isEmpty())
     {

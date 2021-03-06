@@ -642,7 +642,7 @@
        </rect>
       </property>
       <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hintergrundfarben:&lt;/p&gt;&lt;p&gt;weiß: Ordner oder Datei existieren nicht&lt;/p&gt;&lt;p&gt;gelb: Ordner existiert bereits&lt;/p&gt;&lt;p&gt;grün: CNC-Programm existiert bereits&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hintergrundfarben:&lt;/p&gt;&lt;p&gt;weiß: Ordner oder Datei existieren nicht&lt;/p&gt;&lt;p&gt;gelb: Ordner existiert bereits&lt;/p&gt;&lt;p&gt;grün: CNC-Programm existiert bereits, hinter dem Dateipfad wird Datum der letzten Änderung angezeigt&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_einzelexport">
