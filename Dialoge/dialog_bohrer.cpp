@@ -41,6 +41,14 @@ void Dialog_bohrer::getData(text_zeilenweise msg)
         ui->comboBox_lage->setCurrentIndex(1);  //horizontal
     }
 
+    if(msg.zeile(15) == "1")
+    {
+        ui->checkBox_ist_aktiv->setChecked(true);
+    }else
+    {
+        ui->checkBox_ist_aktiv->setChecked(false);
+    }
+
     this->show();
 }
 void Dialog_bohrer::neuerBohrer()
@@ -60,6 +68,7 @@ void Dialog_bohrer::clear()
     ui->lineEdit__zustmass->clear();
     ui->comboBox_dubo->clear();
     ui->comboBox_lage->clear();
+    ui->checkBox_ist_aktiv->setChecked(true);
 }
 void Dialog_bohrer::setup()
 {
@@ -112,6 +121,16 @@ void Dialog_bohrer::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(" ");                               //11: Alias-Name
     wkz.zeile_anhaengen(" ");                               //12: Mindest Zustellmaß
     wkz.zeile_anhaengen(" ");                               //13: Spiegelwerkzeug
+    wkz.zeile_anhaengen(" ");                               //14: nur direkt zuweisbar
+
+    //15: ist aktiv
+    if(ui->checkBox_ist_aktiv->isChecked())
+    {
+        wkz.zeile_anhaengen("1");
+    }else
+    {
+        wkz.zeile_anhaengen("0");
+    }
 
     //deutsche Zahlen in englische Zahlen umwandeln:
     for(uint i=3; i<=wkz.zeilenanzahl() ;i++)

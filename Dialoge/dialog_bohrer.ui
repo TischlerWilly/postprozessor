@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>386</width>
-    <height>309</height>
+    <height>337</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,16 +22,18 @@
      <x>10</x>
      <y>10</y>
      <width>361</width>
-     <height>251</height>
+     <height>281</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_zustmass">
-      <property name="text">
-       <string>Zustellmaß</string>
-      </property>
-     </widget>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm_cad"/>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit__zustmass"/>
+    </item>
+    <item row="5" column="1">
+     <widget class="QComboBox" name="comboBox_dubo"/>
     </item>
     <item row="5" column="0">
      <widget class="QLabel" name="label_dubo">
@@ -43,19 +45,20 @@
     <item row="0" column="1">
      <widget class="QLineEdit" name="lineEdit_nr"/>
     </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_dm_real"/>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_dm_cad"/>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit__nutzlaenge"/>
-    </item>
     <item row="3" column="0">
      <widget class="QLabel" name="label_nutzlaenge">
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nutzlänge&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit__nutzlaenge"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_dm_real">
+      <property name="text">
+       <string>Durchmesser real</string>
       </property>
      </widget>
     </item>
@@ -66,13 +69,6 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_dm_real">
-      <property name="text">
-       <string>Durchmesser real</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="label_nr">
       <property name="text">
@@ -80,11 +76,18 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="lineEdit__zustmass"/>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_zustmass">
+      <property name="text">
+       <string>Zustellmaß</string>
+      </property>
+     </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QComboBox" name="comboBox_dubo"/>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm_real"/>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="comboBox_lage"/>
     </item>
     <item row="6" column="0">
      <widget class="QLabel" name="label_lage">
@@ -93,8 +96,12 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
-     <widget class="QComboBox" name="comboBox_lage"/>
+    <item row="7" column="1">
+     <widget class="QCheckBox" name="checkBox_ist_aktiv">
+      <property name="text">
+       <string>ist aktiv</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -102,7 +109,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>260</y>
+     <y>290</y>
      <width>211</width>
      <height>41</height>
     </rect>

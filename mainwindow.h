@@ -7,6 +7,7 @@
 #include <QInputDialog>
 #include <QFileDialog>
 #include <QClipboard>
+#include <QDateTime>
 
 #include "Klassen/prgpfade.h"
 #include "Defines/dateinamen.h"
@@ -102,6 +103,7 @@ private:
     vorschau vorschaufenster;
     QString Projektposition;
     bool Projektpfad_stimmt;
+    QString Pfad_mit_dateinamen;
 
     //Funktionen:
     void setup();

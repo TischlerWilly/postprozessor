@@ -588,11 +588,18 @@ void MainWindow::getCADFehler(QString w)
     if(ui->listWidget_wste->selectedItems().count())
     {
         ui->label_warnungen->setText(w);
-        ui->label_warnungen->setToolTip(w);
+        ui->label_warnungen->setToolTip(w);        
     }else
     {
         ui->label_warnungen->clear();
-        ui->label_warnungen->toolTip().clear();
+        ui->label_warnungen->toolTip().clear();        
+    }
+    if(!w.isEmpty())
+    {
+        ui->label_warnungen->setStyleSheet("QLabel { background-color : red; color : black; }");
+    }else
+    {
+        ui->label_warnungen->setStyleSheet("QLabel { background-color : white; color : black; }");
     }
 }
 void MainWindow::getWarnungen(QString w)
@@ -837,11 +844,11 @@ void MainWindow::set_projektpfad()
     }
     pfad.replace("\\", QDir::separator());
     pfad.replace("/", QDir::separator());
-    QString pfad_mit_dateinamen;
+    //QString pfad_mit_dateinamen;
     if(!pfad.isEmpty() && !dateiname.isEmpty())
     {
-        pfad_mit_dateinamen = pfad + QDir::separator() + dateiname;
-        ui->lineEdit_projektpfad->setText(pfad_mit_dateinamen);
+        Pfad_mit_dateinamen = pfad + QDir::separator() + dateiname;
+        ui->lineEdit_projektpfad->setText(Pfad_mit_dateinamen);
     }else
     {
         ui->lineEdit_projektpfad->setText(pfad);
@@ -849,9 +856,9 @@ void MainWindow::set_projektpfad()
 
 
     //lineEdit einfärben:
-    if(!pfad_mit_dateinamen.isEmpty())
+    if(!Pfad_mit_dateinamen.isEmpty())
     {
-        QFile f(pfad_mit_dateinamen);
+        QFile f(Pfad_mit_dateinamen);
         if(f.exists())
         {
             QPalette palette;
@@ -860,6 +867,21 @@ void MainWindow::set_projektpfad()
             ui->lineEdit_projektpfad->setPalette(palette);
             signal_wstexport(dateiname, format, true);
             dlg_exporte.setWindowTitle(fenstertitel_exportuebersicht());
+
+            QFileInfo fi(Pfad_mit_dateinamen);
+            QDateTime fi_lastMod = fi.lastModified();
+            QDateTime heute = QDateTime::currentDateTime();
+            QString zeitstempel = "\t";
+            if(fi_lastMod.date() == heute.date())
+            {
+                zeitstempel += "(Heute ";
+                zeitstempel += fi_lastMod.time().toString("hh:mm)");
+            }else
+            {
+                zeitstempel += fi_lastMod.toString("(yyyy.MM.dd / hh:mm)");
+            }
+            ui->lineEdit_projektpfad->setText(Pfad_mit_dateinamen + zeitstempel);
+
         }else if(!pfad.isEmpty())
         {
             QDir d(pfad);
@@ -1394,7 +1416,7 @@ void MainWindow::on_pushButton_import_clicked()
 }
 void MainWindow::on_pushButton_einzelexport_clicked()
 {
-    QString pfad = ui->lineEdit_projektpfad->text();
+    QString pfad = Pfad_mit_dateinamen;
     bool exportieren = false;
     if(!pfad.isEmpty())
     {
@@ -1507,6 +1529,15 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     schreibe_in_zwischenablage(pfad);
                 }
                 f.close();
+            }else
+            {
+                QString msg;
+                msg = "Export nicht möglich!";
+                msg += "\n";
+                msg += wste.wst(i)->zustand().exporttext();
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
             }
         }else if(ui->radioButton_vorschau_ganx->isChecked())
         {
@@ -1525,6 +1556,15 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                 }
                 f.close();
+            }else
+            {
+                QString msg;
+                msg = "Export nicht möglich!";
+                msg += "\n";
+                msg += wste.wst(i)->zustand().exporttext();
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
             }
         }else if(ui->radioButton_vorschau_ggf->isChecked())
         {
@@ -1544,6 +1584,15 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                 }
                 f.close();
+            }else
+            {
+                QString msg;
+                msg = "Export nicht möglich!";
+                msg += "\n";
+                msg += wste.wst(i)->zustand().exporttext();
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
             }
         }else //eigen
         {
@@ -1562,6 +1611,15 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                 }
                 f.close();
+            }else
+            {
+                QString msg;
+                msg = "Export nicht möglich!";
+                msg += "\n";
+                msg += wste.wst(i)->zustand().exporttext();
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
             }
         }
         QApplication::restoreOverrideCursor();
@@ -1601,6 +1659,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                     ui->listWidget_wste->item(row)->setText(neuer_name);
                     wste.wst(row+1)->set_name(neuer_name);
                     signal_wst_umbenennen(name, neuer_name);
+                    on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
                 }
             }
         }else

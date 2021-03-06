@@ -2390,10 +2390,9 @@ void wstzustand::dubosplitten(text_zeilenweise& bearb, werkzeugmagazin wkzmag)
                     if(tnummer.isEmpty())
                     {
                         bohrung boA = bo;
-                        double boti = bo.tiefe();
-                        boti = boti -4; // jetzt boti == wst-Dicke
-                        boA.set_tiefe(boti/2 + 2);
-                        tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), boA.tiefe(), Dicke, bo.bezug());
+                        double boti = Dicke/2 + 2;
+                        boA.set_tiefe(boti);
+                        tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), boti, Dicke, bo.bezug());
                         if(!tnummer.isEmpty())
                         {
                             bohrung boB = boA;
@@ -4237,11 +4236,12 @@ QString wstzustand::kante_re_ganx(QString drewi)
 
 void wstzustand::fmc_dateitext(int index)
 {
-    text_zeilenweise bearb = Bearbeitung.at(index);
+    text_zeilenweise bearb = Bearbeitung.at(index);    
     QString drewi = Drehung.at(index);
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     werkzeugmagazin wkzmag = Wkzmag.at(index);
+    dubosplitten(bearb, wkzmag);
 
     text_zeilenweise bearb_kopie = bearb;
 
@@ -4399,7 +4399,13 @@ void wstzustand::fmc_dateitext(int index)
                         tiefe = bo.tiefe();
                     }else
                     {
-                        tiefe = dicke() - bo.tiefe();
+                        if(wkzmag.ist_dubo(tnummer))
+                        {
+                            tiefe = -1 * bo.dm(); //Tiefe Durchgangsbohrung entspricht DM Bohrer
+                        }else
+                        {
+                            tiefe = dicke() - bo.tiefe();
+                        }
                     }
                     msg += FMC_BOHR_DM;
                     msg += "\n";
@@ -4735,7 +4741,13 @@ void wstzustand::fmc_dateitext(int index)
                         tiefe = bora.tiefe();
                     }else
                     {
-                        tiefe = dicke() - bora.tiefe();
+                        if(wkzmag.ist_dubo(tnummer))
+                        {
+                            tiefe = -1 * bora.dm(); //Tiefe Durchgangsbohrung entspricht DM Bohrer
+                        }else
+                        {
+                            tiefe = dicke() - bora.tiefe();
+                        }
                     }
 
                     //Lochreihen ausgeben
@@ -6152,7 +6164,13 @@ void wstzustand::fmc_dateitext(int index)
                             tiefe = bo.tiefe();
                         }else
                         {
-                            tiefe = dicke() - bo.tiefe();
+                            if(wkzmag.ist_dubo(tnummer))
+                            {
+                                tiefe = -1 * bo.dm(); //Tiefe Durchgangsbohrung entspricht DM Bohrer
+                            }else
+                            {
+                                tiefe = dicke() - bo.tiefe();
+                            }
                         }
                         msg += FMC_BOHR_DM;
                         msg += "\n";
@@ -6329,7 +6347,13 @@ void wstzustand::fmc_dateitext(int index)
                             tiefe = bora.tiefe();
                         }else
                         {
-                            tiefe = dicke() - bora.tiefe();
+                            if(wkzmag.ist_dubo(tnummer))
+                            {
+                                tiefe = -1 * bora.dm(); //Tiefe Durchgangsbohrung entspricht DM Bohrer
+                            }else
+                            {
+                                tiefe = dicke() - bora.tiefe();
+                            }
                         }
 
                         //Lochreihen ausgeben
@@ -7372,6 +7396,7 @@ void wstzustand::eigen_dateitext(int index)
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     werkzeugmagazin wkzmag = Wkzmag.at(index);
+    dubosplitten(bearb, wkzmag);
 
     QString msg;
 
@@ -7421,6 +7446,7 @@ void wstzustand::ganx_dateitext(int index)
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     werkzeugmagazin wkzmag = Wkzmag.at(index);
+    dubosplitten(bearb, wkzmag);
 
     text_zeilenweise bearb_kopie = bearb;
 
@@ -7540,6 +7566,14 @@ void wstzustand::ganx_dateitext(int index)
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                double boti = bo.tiefe();
+                if(  (bezug == WST_BEZUG_OBSEI)  ||  (bezug == WST_BEZUG_UNSEI)  )
+                {
+                    if(boti > Dicke && wkzmag.ist_dubo(tnummer))
+                    {
+                        boti = Dicke + bo.dm();//Tiefe Durchgangsbohrung entspricht DM Bohrer
+                    }
+                }
 
                 //Anzahl der Zustellungen berechnen:
                 double zustmass = bo.zustellmass();
@@ -7547,12 +7581,12 @@ void wstzustand::ganx_dateitext(int index)
                 {
                     zustmass = wkzmag.zustellmass(tnummer).toDouble();
                 }
-                int zustellungen = aufrunden(bo.tiefe() / zustmass);
+                int zustellungen = aufrunden(boti / zustmass);
                 if(zustellungen <= 0)
                 {
                     zustellungen = 1;
                 }
-                zustmass = bo.tiefe()/zustellungen;
+                zustmass = boti/zustellungen;
                 //-------------------------------
 
                 if(bezug == WST_BEZUG_OBSEI)
@@ -7562,7 +7596,7 @@ void wstzustand::ganx_dateitext(int index)
                     //z = Tiefe
                     double aktti; //aktuelle Tiefe
                     aktti = zustmass;
-                    while(aktti <= bo.tiefe())
+                    while(aktti <= boti)
                     {
                         msg += "  <PrgrFileWork>";
                         msg += "\n";
@@ -7655,7 +7689,7 @@ void wstzustand::ganx_dateitext(int index)
                     //z = Tiefe
                     double aktti; //aktuelle Tiefe
                     aktti = zustmass;
-                    while(aktti <= bo.tiefe())
+                    while(aktti <= boti)
                     {
                         msg += "  <PrgrFileWork>";
                         msg += "\n";
@@ -7747,7 +7781,7 @@ void wstzustand::ganx_dateitext(int index)
                     //z = Z-Pos
                     double aktti; //aktuelle Tiefe
                     aktti = zustmass;
-                    while(aktti <= bo.tiefe())
+                    while(aktti <= boti)
                     {
                         msg += "  <PrgrFileWork>";
                         msg += "\n";
@@ -7827,7 +7861,7 @@ void wstzustand::ganx_dateitext(int index)
                     //z = Z-Pos
                     double aktti; //aktuelle Tiefe
                     aktti = zustmass;
-                    while(aktti <= bo.tiefe())
+                    while(aktti <= boti)
                     {
                         msg += "  <PrgrFileWork>";
                         msg += "\n";
@@ -7907,7 +7941,7 @@ void wstzustand::ganx_dateitext(int index)
                     //z = Z-Pos
                     double aktti; //aktuelle Tiefe
                     aktti = zustmass;
-                    while(aktti <= bo.tiefe())
+                    while(aktti <= boti)
                     {
                         msg += "  <PrgrFileWork>";
                         msg += "\n";
@@ -7987,7 +8021,7 @@ void wstzustand::ganx_dateitext(int index)
                     //z = Z-Pos
                     double aktti; //aktuelle Tiefe
                     aktti = zustmass;
-                    while(aktti <= bo.tiefe())
+                    while(aktti <= boti)
                     {
                         msg += "  <PrgrFileWork>";
                         msg += "\n";
@@ -9034,6 +9068,14 @@ void wstzustand::ganx_dateitext(int index)
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                double boti = bo.tiefe();
+                if(  (bezug == WST_BEZUG_OBSEI)  ||  (bezug == WST_BEZUG_UNSEI)  )
+                {
+                    if(boti > Dicke && wkzmag.ist_dubo(tnummer))
+                    {
+                        boti = Dicke + bo.dm();//Tiefe Durchgangsbohrung entspricht DM Bohrer
+                    }
+                }
 
                 //Anzahl der Zustellungen berechnen:
                 double zustmass = bo.zustellmass();
@@ -9041,7 +9083,7 @@ void wstzustand::ganx_dateitext(int index)
                 {
                     zustmass = wkzmag.zustellmass(tnummer).toDouble();
                 }
-                int zustellungen = aufrunden(bo.tiefe() / zustmass);
+                int zustellungen = aufrunden(boti / zustmass);
                 if(zustellungen <= 0)
                 {
                     zustellungen = 1;
@@ -9106,7 +9148,7 @@ void wstzustand::ganx_dateitext(int index)
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += bo.tiefe_qstring().replace(".",",");
+                    msg += double_to_qstring(boti).replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -9206,7 +9248,7 @@ void wstzustand::ganx_dateitext(int index)
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += bo.tiefe_qstring().replace(".",",");
+                    msg += double_to_qstring(boti).replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -9306,7 +9348,7 @@ void wstzustand::ganx_dateitext(int index)
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += bo.tiefe_qstring().replace(".",",");
+                    msg += double_to_qstring(boti).replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -9406,7 +9448,7 @@ void wstzustand::ganx_dateitext(int index)
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += bo.tiefe_qstring().replace(".",",");
+                    msg += double_to_qstring(boti).replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -9497,7 +9539,7 @@ void wstzustand::ganx_dateitext(int index)
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += bo.tiefe_qstring().replace(".",",");
+                    msg += double_to_qstring(boti).replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -9588,7 +9630,7 @@ void wstzustand::ganx_dateitext(int index)
                     msg += "\n";
                     //----------------------
                     msg += "   <Depth>";
-                    msg += bo.tiefe_qstring().replace(".",",");
+                    msg += double_to_qstring(boti).replace(".",",");
                     msg += "</Depth>";
                     msg += "\n";
                     //----------------------
@@ -10639,6 +10681,7 @@ void wstzustand::ggf_dateitext(int index)
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     werkzeugmagazin wkzmag = Wkzmag.at(index);
+    dubosplitten(bearb, wkzmag);
 
     text_zeilenweise bearb_kopie = bearb;
 

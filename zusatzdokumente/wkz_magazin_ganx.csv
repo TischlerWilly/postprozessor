@@ -1,15 +1,15 @@
 Typ	Nr	DM	Nutzl	Vorschub	Zustellm	DM_CAD	DuBo	Saegebr	Lage	 
-B	T50	5	35	 	8	5	0	 	vert
-B	T50	5	35	 	8	5	0	 	hori	 	 	 
-B	T51	5.1	40	 	8	5	1	 	vert
-B	T60	6	35	 	8	6	0	 	vert
-B	T80	8	35	 	8	8	0	 	vert
-B	T80	8	35	 	21	8.2	0	 	hori	 	 	 
-B	T100	10	35	 	5	10	0	 	vert
-B	T150	15	35	 	8	15	0	 	vert	 	 	 
-B	T200	20	35	 	5	20	0	 	vert
-B	T350	35	35	 	5	35.3	0	 	vert	 	 	 
-S	S426	125	 	 	10	 	 	4.8	vert	 	 	 
-M	R602	18	46	7000	12	 	 	 	vert	IMA602	12	IMA601	nein
-M	R608	8	20	4500	5	 	 	 	vert	IMA608	0		nein
-M	R601	18	46	7000	12	 	 	 	vert	IMA601	12	IMA602	nein
+B	T50	5	35	 	8	5	0	 	vert	 	 	 	 	1
+B	T50	5	35	 	8	5	0	 	hori	 	 	 	 	1
+B	T51	5.1	40	 	8	5	1	 	vert	 	 	 	 	1
+B	T60	6	35	 	8	6	0	 	vert	 	 	 	 	1
+B	T80	8	35	 	8	8	0	 	vert	 	 	 	 	1
+B	T80	8	35	 	21	8.2	0	 	hori	 	 	 	 	1
+B	T100	10	35	 	5	10	0	 	vert	 	 	 	 	1
+B	T150	15	35	 	8	15	0	 	vert	 	 	 	 	1
+B	T200	20	35	 	5	20	0	 	vert	 	 	 	 	1
+B	T350	35	35	 	5	35.3	0	 	vert	 	 	 	 	1
+S	S426	125	 	 	10	 	 	4.8	vert	 	 	 	 	1
+M	R602	18	46	7000	12	 	 	 	vert	IMA602	12	IMA601	nein	1
+M	R608	8	20	4500	5	 	 	 	vert	IMA608	0		nein	1
+M	R601	18	46	7000	12	 	 	 	vert	IMA601	12	IMA602	nein	1
