@@ -1637,6 +1637,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                     ui->listWidget_wste->item(row)->setText(neuer_name);
                     wste.wst(row+1)->set_name(neuer_name);
                     signal_wst_umbenennen(name, neuer_name);
+                    on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
                 }
             }
         }else
