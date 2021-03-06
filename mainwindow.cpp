@@ -588,11 +588,18 @@ void MainWindow::getCADFehler(QString w)
     if(ui->listWidget_wste->selectedItems().count())
     {
         ui->label_warnungen->setText(w);
-        ui->label_warnungen->setToolTip(w);
+        ui->label_warnungen->setToolTip(w);        
     }else
     {
         ui->label_warnungen->clear();
-        ui->label_warnungen->toolTip().clear();
+        ui->label_warnungen->toolTip().clear();        
+    }
+    if(!w.isEmpty())
+    {
+        ui->label_warnungen->setStyleSheet("QLabel { background-color : red; color : black; }");
+    }else
+    {
+        ui->label_warnungen->setStyleSheet("QLabel { background-color : white; color : black; }");
     }
 }
 void MainWindow::getWarnungen(QString w)
