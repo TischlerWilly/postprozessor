@@ -44,6 +44,18 @@ void Dialog_programmtext::slot_wst(werkstueck* w)
     pkopf.zeile_anhaengen(param);
     param = w->zustand().format();
     pkopf.zeile_anhaengen(param);
+    param = "KaVo=";
+    param += w->zustand().kante_vo();
+    pkopf.zeile_anhaengen(param);
+    param = "KaHi=";
+    param += w->zustand().kante_hi();
+    pkopf.zeile_anhaengen(param);
+    param = "KaLi=";
+    param += w->zustand().kante_li();
+    pkopf.zeile_anhaengen(param);
+    param = "KaRe=";
+    param += w->zustand().kante_re();
+    pkopf.zeile_anhaengen(param);
     ui->listWidget_prgtext->addItem(pkopf.text());
     //Bearbeitungen ab 2. Zeile einfügen:
     text_zeilenweise tmp_bearb = w->zustand().bearb();

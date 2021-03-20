@@ -183,6 +183,79 @@ void wstzustand::set_einst_ganx(einstellung_ganx e)
     }
 }
 
+QString wstzustand::kante_vo()
+{
+    if(Akt_zust != -1 && Akt_zust<Exporttext.count())
+    {
+        QString f = Format.at(Akt_zust);
+        QString wi = Drehung.at(Akt_zust);
+        if (f == "ganx")
+        {
+            return kante_vo_ganx(wi);
+        }else
+        {
+            return kante_vo(wi);
+        }
+    }else
+    {
+        return "";
+    }
+}
+QString wstzustand::kante_hi()
+{
+    if(Akt_zust != -1 && Akt_zust<Exporttext.count())
+    {
+        QString f = Format.at(Akt_zust);
+        QString wi = Drehung.at(Akt_zust);
+        if (f == "ganx")
+        {
+            return kante_hi_ganx(wi);
+        }else
+        {
+            return kante_hi(wi);
+        }
+    }else
+    {
+        return "";
+    }
+}
+QString wstzustand::kante_li()
+{
+    if(Akt_zust != -1 && Akt_zust<Exporttext.count())
+    {
+        QString f = Format.at(Akt_zust);
+        QString wi = Drehung.at(Akt_zust);
+        if (f == "ganx")
+        {
+            return kante_li_ganx(wi);
+        }else
+        {
+            return kante_li(wi);
+        }
+    }else
+    {
+        return "";
+    }
+}
+QString wstzustand::kante_re()
+{
+    if(Akt_zust != -1 && Akt_zust<Exporttext.count())
+    {
+        QString f = Format.at(Akt_zust);
+        QString wi = Drehung.at(Akt_zust);
+        if (f == "ganx")
+        {
+            return kante_re_ganx(wi);
+        }else
+        {
+            return kante_re(wi);
+        }
+    }else
+    {
+        return "";
+    }
+}
+
 //----------------------------------Manipulationen:
 void wstzustand::anfordern(QString format, werkzeugmagazin wkzmag, QString drehung)
 {
@@ -4176,13 +4249,13 @@ QString wstzustand::kante_vo_ganx(QString drewi)
         return Kante_hi;
     }else if(drewi == "180")
     {
-        return Kante_li;
+        return Kante_re;
     }else if(drewi == "270")
     {
         return Kante_vo;
     }else
     {
-        return Kante_re;
+        return Kante_li;
     }
 }
 QString wstzustand::kante_hi_ganx(QString drewi)
@@ -4192,26 +4265,26 @@ QString wstzustand::kante_hi_ganx(QString drewi)
         return Kante_vo;
     }else if(drewi == "180")
     {
-        return Kante_re;
+        return Kante_li;
     }else if(drewi == "270")
     {
         return Kante_hi;
     }else
     {
-        return Kante_li;
+        return Kante_re;
     }
 }
 QString wstzustand::kante_li_ganx(QString drewi)
 {
     if(drewi == "90")
     {
-        return Kante_re;
+        return Kante_li;
     }else if(drewi == "180")
     {
         return Kante_hi;
     }else if(drewi == "270")
     {
-        return Kante_li;
+        return Kante_re;
     }else
     {
         return Kante_vo;
@@ -4221,13 +4294,13 @@ QString wstzustand::kante_re_ganx(QString drewi)
 {
     if(drewi == "90")
     {
-        return Kante_li;
+        return Kante_re;
     }else if(drewi == "180")
     {
         return Kante_vo;
     }else if(drewi == "270")
     {
-        return Kante_re;
+        return Kante_li;
     }else
     {
         return Kante_hi;
