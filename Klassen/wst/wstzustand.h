@@ -43,6 +43,11 @@ public:
     void set_einst_ganx(einstellung_ganx e);
 
     //----------------------------------get_xy:
+    QString kante_vo();
+    QString kante_hi();
+    QString kante_li();
+    QString kante_re();
+
     inline int count()
     {
         return Format.count();
@@ -189,7 +194,6 @@ private:
     void ganx_dateitext(int index);
     void ggf_dateitext(int index);
     void geo(int index);
-
     QString kante_vo(QString drewi);
     QString kante_hi(QString drewi);
     QString kante_li(QString drewi);
