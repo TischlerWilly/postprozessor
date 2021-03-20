@@ -1731,6 +1731,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
         {
             on_listWidget_wste_itemDoubleClicked();
         }
+        ui->radioButton_drehung_autom->setToolTip(wste.wst(wstindex)->zustand().drehung());
         set_projektpfad();
     }
 }
