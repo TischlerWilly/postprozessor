@@ -444,7 +444,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
             }
             bearb_180 = bearb_kopie;
         }
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
+        if(drehwinkel == "270" || drehwinkel == "AUTO")
         {
             if(drehwinkel == "270")
             {
@@ -965,21 +965,25 @@ void wstzustand::finde_drehwinkel_auto(int index)
         //Bewertungen auswerten:
         if(drehwinkel == "0")
         {
+            bewertung_0 = 9999;
             bewertung_90 = 0;
             bewertung_180 = 0;
             bewertung_270 = 0;
         }else if(drehwinkel == "90")
         {
+            bewertung_90 = 9999;
             bewertung_0 = 0;
             bewertung_180 = 0;
             bewertung_270 = 0;
         }else if(drehwinkel == "180")
         {
+            bewertung_180 = 9999;
             bewertung_0 = 0;
             bewertung_90 = 0;
             bewertung_270 = 0;
         }else if(drehwinkel == "270")
         {
+            bewertung_270 = 9999;
             bewertung_0 = 0;
             bewertung_90 = 0;
             bewertung_180 = 0;
@@ -1529,21 +1533,25 @@ void wstzustand::finde_drehwinkel_auto(int index)
         //Bewertungen auswerten:
         if(drehwinkel == "0")
         {
+            bewertung_0 = 9999;
             bewertung_90 = 0;
             bewertung_180 = 0;
             bewertung_270 = 0;
         }else if(drehwinkel == "90")
         {
+            bewertung_90 = 9999;
             bewertung_0 = 0;
             bewertung_180 = 0;
             bewertung_270 = 0;
         }else if(drehwinkel == "180")
         {
+            bewertung_180 = 9999;
             bewertung_0 = 0;
             bewertung_90 = 0;
             bewertung_270 = 0;
         }else if(drehwinkel == "270")
         {
+            bewertung_270 = 9999;
             bewertung_0 = 0;
             bewertung_90 = 0;
             bewertung_180 = 0;
