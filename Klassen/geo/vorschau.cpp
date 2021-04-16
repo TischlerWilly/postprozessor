@@ -768,6 +768,7 @@ void vorschau::werkstueck_darstellung_berechnen()
     N.x = basispunkt.x - W.min_x(format)*Sf * Zf;
     N.y = basispunkt.y + W.min_y(format)*Sf * Zf;
 
+    sende_wstmas(W.laenge(), W.breite(), W.dicke());
 }
 
 void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)

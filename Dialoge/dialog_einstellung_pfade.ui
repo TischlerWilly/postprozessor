@@ -16,7 +16,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -113,7 +113,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>260</x>
@@ -140,6 +140,20 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_quelle</tabstop>
+  <tabstop>lineEdit_ziel_server</tabstop>
+  <tabstop>lineEdit_ziel_lokal</tabstop>
+  <tabstop>lineEdit_root_ganx</tabstop>
+  <tabstop>lineEdit_root_fmc</tabstop>
+  <tabstop>pushButton_ok</tabstop>
+  <tabstop>pushButton_abbrechen</tabstop>
+  <tabstop>pushButton_quelle</tabstop>
+  <tabstop>pushButton_ziel_server</tabstop>
+  <tabstop>pushButton_ziel_lokal</tabstop>
+  <tabstop>pushButton_root_ganx</tabstop>
+  <tabstop>pushButton_root_fmc</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

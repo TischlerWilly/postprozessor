@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(signal_wst_umbenennen(QString,QString)),\
             &dlg_exporte, SLOT(slot_wst_umbenennen(QString,QString)));
 
-    //this->setWindowState(Qt::WindowMaximized);
+    this->setWindowState(Qt::WindowMaximized);
 }
 
 MainWindow::~MainWindow()
@@ -1647,7 +1647,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                     QString msg;
                     msg  = "Das Bauteil kann nicht umbenannt werden.";
                     msg += "\n";
-                    msg += "Es gibt bereits ein Baiteil mit dem Namen ";
+                    msg += "Es gibt bereits ein Bauteil mit dem Namen ";
                     msg += neuer_name;
                     msg += ".";
                     QMessageBox mb;
@@ -1657,8 +1657,9 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                 {
                     int row = ui->listWidget_wste->currentRow();
                     ui->listWidget_wste->item(row)->setText(neuer_name);
-                    wste.wst(row+1)->set_name(neuer_name);
-                    signal_wst_umbenennen(name, neuer_name);
+                    wste.set_name(row+1, neuer_name);//Namensliste in wste
+                    wste.wst(row+1)->set_name(neuer_name);//name des konkreten wst
+                    signal_wst_umbenennen(name, neuer_name);//gui
                     on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
                 }
             }
