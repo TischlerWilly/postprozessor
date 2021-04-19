@@ -40,6 +40,10 @@ void Dialog_ExportUebersicht::slot_wstnamen(text_zeilenweise namen)
     tabkopf << "Name" << "fmc" << "ganx" << "ggf" << "eigen";
     ui->tableWidget_exporte->setHorizontalHeaderLabels(tabkopf);
     ui->tableWidget_exporte->setColumnWidth(0,150);
+    ui->tableWidget_exporte->setColumnWidth(1,40);
+    ui->tableWidget_exporte->setColumnWidth(2,40);
+    ui->tableWidget_exporte->setColumnWidth(3,40);
+    ui->tableWidget_exporte->setColumnWidth(4,40);
     for(uint i=1; i<=namen.zeilenanzahl() ;i++)
     {
         for(int ii=0; ii<anz_spalten;ii++)

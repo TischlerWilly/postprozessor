@@ -5995,11 +5995,11 @@ void wstzustand::fmc_dateitext(int index)
                             sb = strecke_bezugspunkt_ende;
                             s.set_laenge_2d(s.laenge2d()+anweg, sb);
                             pein = s.stapu();
-                            msg += "anfahrpunkt X = ";
-                            msg += s.stapu().x_QString();
-                            msg += " / Y = ";
-                            msg += s.stapu().y_QString();
-                            msg += "\n";
+                            //msg += "anfahrpunkt X = ";
+                            //msg += s.stapu().x_QString();
+                            //msg += " / Y = ";
+                            //msg += s.stapu().y_QString();
+                            //msg += "\n";
                         }else if(folzei.zeile(1) == BEARBART_FRAESERBOGEN)
                         {
                             fraeserbogen fb(folzei.text());
@@ -6022,8 +6022,19 @@ void wstzustand::fmc_dateitext(int index)
                         bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
                         if(aufwst == true)
                         {
-                            msg += "TYPAN=1\n";     //Anfahrtyp
-                            msg += "TYPAB=1\n";     //Abfahrtyp
+                            if(radkor == "0")
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                msg += "=0\n";
+                            }else
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=1\n";
+                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                msg += "=1\n";
+                            }
                             msg += "TYPEIN=1\n";    //Eintauchtp
                             if(pos_z > 0)
                             {
@@ -6039,8 +6050,10 @@ void wstzustand::fmc_dateitext(int index)
                         }else
                         {
                             //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
-                            msg += "TYPAN=0\n";     //Anfahrtyp
-                            msg += "TYPAB=0\n";     //Abfahrtyp
+                            msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                            msg += "=0\n";
+                            msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                            msg += "=0\n";
                             msg += "TYPEIN=-1\n";   //Eintauchtp
                             msg += "LGEAN=2*WKZR+";    //Anfahrwert
                             msg += double_to_qstring(anweg);
@@ -7276,8 +7289,19 @@ void wstzustand::fmc_dateitext(int index)
                             bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
                             if(aufwst == true)
                             {
-                                msg += "TYPAN=1\n";     //Anfahrtyp
-                                msg += "TYPAB=1\n";     //Abfahrtyp
+                                if(radkor == "0")
+                                {
+                                    msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                    msg += "=0\n";
+                                    msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                    msg += "=0\n";
+                                }else
+                                {
+                                    msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                    msg += "=1\n";
+                                    msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                    msg += "=1\n";
+                                }
                                 msg += "TYPEIN=1\n";    //Eintauchtp
                                 if(pos_z > 0)
                                 {
@@ -7293,8 +7317,10 @@ void wstzustand::fmc_dateitext(int index)
                             }else
                             {
                                 //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
-                                msg += "TYPAN=0\n";     //Anfahrtyp
-                                msg += "TYPAB=0\n";     //Abfahrtyp
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                msg += "=0\n";
                                 msg += "TYPEIN=-1\n";   //Eintauchtp
                                 msg += "LGEAN=2*WKZR+";    //Anfahrwert
                                 msg += double_to_qstring(anweg);
