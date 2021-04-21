@@ -1687,10 +1687,11 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
     {
         const int wstindex = currentRow+1;
         if(ui->radioButton_vorschau_eigen->isChecked())
-        {
+        {            
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
             //->set_einstellung_fmc
             //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("eigen", wkz_magazin_fmc, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);
@@ -1698,10 +1699,11 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
             //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
         }else if(ui->radioButton_vorschau_ganx->isChecked())
-        {
+        {            
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
             //->set_einstellung_fmc
             //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ganx", wkz_magazin_ganx, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);
@@ -1712,6 +1714,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
             //->set_einstellung_fmc
             //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("fmc", wkz_magazin_fmc, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);
@@ -1722,6 +1725,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
             //->set_einstellung_fmc
             //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ggf", wkz_magazin_ggf, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);
