@@ -274,12 +274,18 @@
          <property name="text">
           <string>0</string>
          </property>
+         <property name="shortcut">
+          <string>8</string>
+         </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QRadioButton" name="radioButton_drehung_270">
          <property name="text">
           <string>270</string>
+         </property>
+         <property name="shortcut">
+          <string>4</string>
          </property>
         </widget>
        </item>
@@ -288,6 +294,9 @@
          <property name="text">
           <string>AUTO</string>
          </property>
+         <property name="shortcut">
+          <string>5</string>
+         </property>
         </widget>
        </item>
        <item row="1" column="2">
@@ -295,12 +304,18 @@
          <property name="text">
           <string>90</string>
          </property>
+         <property name="shortcut">
+          <string>6</string>
+         </property>
         </widget>
        </item>
        <item row="2" column="1">
         <widget class="QRadioButton" name="radioButton_drehung_180">
          <property name="text">
           <string>180</string>
+         </property>
+         <property name="shortcut">
+          <string>2</string>
          </property>
         </widget>
        </item>
@@ -499,6 +514,9 @@
       <property name="text">
        <string>importieren</string>
       </property>
+      <property name="shortcut">
+       <string>I</string>
+      </property>
      </widget>
      <widget class="QListWidget" name="listWidget_wste">
       <property name="geometry">
@@ -537,12 +555,18 @@
           <property name="text">
            <string>fmc</string>
           </property>
+          <property name="shortcut">
+           <string>Ctrl+F</string>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QRadioButton" name="radioButton_vorschau_ganx">
           <property name="text">
            <string>ganx</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+G</string>
           </property>
          </widget>
         </item>
@@ -657,6 +681,9 @@
       <property name="text">
        <string>exportieren</string>
       </property>
+      <property name="shortcut">
+       <string>E</string>
+      </property>
      </widget>
      <widget class="QPushButton" name="pushButton_umbenennen">
       <property name="geometry">
@@ -669,6 +696,9 @@
       </property>
       <property name="text">
        <string>umbenennen</string>
+      </property>
+      <property name="shortcut">
+       <string>F2</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_xypos">

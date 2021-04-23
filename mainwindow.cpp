@@ -1479,6 +1479,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
             msg = "Es ist kein Bauteil ausgewählt!";
             QMessageBox mb;
             mb.setText(msg);
+            mb.setWindowTitle("Programm exportieren");
             mb.exec();
         }
     }else
@@ -1487,6 +1488,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         msg = "Bitte Projekt und Positionsnummer angeben!";
         QMessageBox mb;
         mb.setText(msg);
+        mb.setWindowTitle("Programm exportieren");
         mb.exec();
     }
     if(exportieren == true)
@@ -1669,6 +1671,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
             msg = "Bauteil hat keinen Namen!";
             QMessageBox mb;
             mb.setText(msg);
+            mb.setWindowTitle("Werkstück umbenennen");
             mb.exec();
         }
     }else
@@ -1677,6 +1680,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
         msg = "Es ist kein Bauteil ausgewählt!";
         QMessageBox mb;
         mb.setText(msg);
+        mb.setWindowTitle("Werkstück umbenennen");
         mb.exec();
     }
 }
