@@ -271,6 +271,9 @@
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="1">
         <widget class="QRadioButton" name="radioButton_drehung_0">
+         <property name="toolTip">
+          <string>8</string>
+         </property>
          <property name="text">
           <string>0</string>
          </property>
@@ -281,6 +284,9 @@
        </item>
        <item row="1" column="0">
         <widget class="QRadioButton" name="radioButton_drehung_270">
+         <property name="toolTip">
+          <string>4</string>
+         </property>
          <property name="text">
           <string>270</string>
          </property>
@@ -291,6 +297,9 @@
        </item>
        <item row="1" column="1">
         <widget class="QRadioButton" name="radioButton_drehung_autom">
+         <property name="toolTip">
+          <string>0</string>
+         </property>
          <property name="text">
           <string>AUTO</string>
          </property>
@@ -301,6 +310,9 @@
        </item>
        <item row="1" column="2">
         <widget class="QRadioButton" name="radioButton_drehung_90">
+         <property name="toolTip">
+          <string>6</string>
+         </property>
          <property name="text">
           <string>90</string>
          </property>
@@ -311,6 +323,9 @@
        </item>
        <item row="2" column="1">
         <widget class="QRadioButton" name="radioButton_drehung_180">
+         <property name="toolTip">
+          <string>2</string>
+         </property>
          <property name="text">
           <string>180</string>
          </property>
@@ -511,6 +526,9 @@
         <height>23</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>I</string>
+      </property>
       <property name="text">
        <string>importieren</string>
       </property>
@@ -552,6 +570,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QRadioButton" name="radioButton_vorschau_fmc">
+          <property name="toolTip">
+           <string>Strg+F</string>
+          </property>
           <property name="text">
            <string>fmc</string>
           </property>
@@ -562,6 +583,12 @@
         </item>
         <item>
          <widget class="QRadioButton" name="radioButton_vorschau_ganx">
+          <property name="toolTip">
+           <string>Strg+G</string>
+          </property>
+          <property name="statusTip">
+           <string>Strg+G</string>
+          </property>
           <property name="text">
            <string>ganx</string>
           </property>
@@ -678,6 +705,9 @@
         <height>23</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>E</string>
+      </property>
       <property name="text">
        <string>exportieren</string>
       </property>
@@ -693,6 +723,9 @@
         <width>111</width>
         <height>23</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>F2</string>
       </property>
       <property name="text">
        <string>umbenennen</string>
