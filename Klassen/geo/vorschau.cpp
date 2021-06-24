@@ -738,8 +738,10 @@ void vorschau::werkstueck_darstellung_berechnen()
 {
     QString format = W.zustand().format();
     int randabstand = 10;
-    float maximallaenge = W.max_x(format) - W.min_x(format);
-    float maximalbreite = W.max_y(format) - W.min_y(format);
+    //float maximallaenge = W.max_x(format) - W.min_x(format);
+    float maximallaenge = W.max_x() - W.min_x();
+    //float maximalbreite = W.max_y(format) - W.min_y(format);
+    float maximalbreite = W.max_y() - W.min_y();
 
     float bildlaenge = width()-randabstand*2;
     float bildbreite = height()-randabstand*2;
@@ -768,7 +770,9 @@ void vorschau::werkstueck_darstellung_berechnen()
     N.x = basispunkt.x - W.min_x(format)*Sf * Zf;
     N.y = basispunkt.y + W.min_y(format)*Sf * Zf;
 
-    sende_wstmas(W.laenge(), W.breite(), W.dicke());
+    //sende_wstmas(W.laenge(), W.breite(), W.dicke());
+    sende_wstmas(W.zustand().l(), W.zustand().b(), W.dicke());
+
 }
 
 void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)

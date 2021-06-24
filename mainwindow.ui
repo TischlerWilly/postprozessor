@@ -245,6 +245,9 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Es wird keine keine Zugabe gegeben wenn die Gehrung bekantet ist&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
      </widget>
      <widget class="Line" name="line_6">
       <property name="geometry">

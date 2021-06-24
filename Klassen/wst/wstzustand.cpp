@@ -371,7 +371,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
         hbemiduebeltiefe(bearb);
         double tmp_l = Laenge_bekommen;
         double tmp_b = Breite_bekommen;
-        gehr_3achs(bearb, tmp_l, tmp_b, format);
+        gehr_3achs(bearb, tmp_l, tmp_b, format, "0");
         //Die beste Drehrichtung herausfinden:
         int bewertung_0    = 1;
         int bewertung_90   = 1;
@@ -1055,7 +1055,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
         double tmp_l = Breite_bekommen;
         double tmp_b = Laenge_bekommen;
         bearb_optimieren_ganx(bearb);
-        gehr_3achs(bearb, tmp_l, tmp_b, "ganx");
+        gehr_3achs(bearb, tmp_l, tmp_b, "ganx", "0");
         //Die beste Drehrichtung herausfinden:
         int bewertung_0    = 1;
         int bewertung_90   = 1;
@@ -1617,7 +1617,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
         hbemiduebeltiefe(bearb);
         double tmp_l = Laenge_bekommen;
         double tmp_b = Breite_bekommen;
-        gehr_3achs(bearb, tmp_l, tmp_b, format);
+        gehr_3achs(bearb, tmp_l, tmp_b, format, "0");
         if(drehwinkel == "0" || drehwinkel == "AUTO")
         {
             //tue nichts
@@ -1745,7 +1745,7 @@ void wstzustand::hbemiduebeltiefe(text_zeilenweise& bearbeitung)
     }
 }
 
-void wstzustand::gehr_3achs(text_zeilenweise& bearb, double &tmp_l, double &tmp_b, QString ausgabeformat)
+void wstzustand::gehr_3achs(text_zeilenweise& bearb, double &tmp_l, double &tmp_b, QString ausgabeformat, QString drehwi)
 {
     //Diese Funktion löscht die Gehrungen aus den Bearbeitungen heraus
     //Diese können mit einer 3-Achs-Maschine nicht ohne Spezial-WKZ hergestellt werden.
@@ -1794,6 +1794,68 @@ void wstzustand::gehr_3achs(text_zeilenweise& bearb, double &tmp_l, double &tmp_
             }
             bearb.zeile_loeschen(i);
             i--;
+        }
+    }
+
+    //Wo eine Kante ist wo eine Gehrung ist keine Maßzugabe geben:
+    if(li == true)
+    {
+        QString kante;
+        if (ausgabeformat == "ganx")
+        {
+            kante = kante_li_ganx(drehwi);
+        }else
+        {
+            kante = kante_li(drehwi);
+        }
+        if(!kante.isEmpty())
+        {
+            li = false;
+        }
+    }
+    if(re == true)
+    {
+        QString kante;
+        if (ausgabeformat == "ganx")
+        {
+            kante = kante_re_ganx(drehwi);
+        }else
+        {
+            kante = kante_re(drehwi);
+        }
+        if(!kante.isEmpty())
+        {
+            re = false;
+        }
+    }
+    if(ob == true)
+    {
+        QString kante;
+        if (ausgabeformat == "ganx")
+        {
+            kante = kante_hi_ganx(drehwi);
+        }else
+        {
+            kante = kante_hi(drehwi);
+        }
+        if(!kante.isEmpty())
+        {
+            ob = false;
+        }
+    }
+    if(un == true)
+    {
+        QString kante;
+        if (ausgabeformat == "ganx")
+        {
+            kante = kante_vo_ganx(drehwi);
+        }else
+        {
+            kante = kante_vo(drehwi);
+        }
+        if(!kante.isEmpty())
+        {
+            un = false;
         }
     }
 
