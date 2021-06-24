@@ -4566,7 +4566,8 @@ void wstzustand::fmc_dateitext(int index)
                     msg += "\n";
                     msg += FMC_BOHR_DM_DM;
                     msg += "=";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += "\n";
                     msg += "GRP=";                  //Bohrgruppe
                     msg += bohrgruppe;
@@ -4587,7 +4588,8 @@ void wstzustand::fmc_dateitext(int index)
                     msg += "TASTEIN=-1\n";
                     msg += "BEZB=";
                     msg += "Bohrung DM";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += " T";
                     msg += double_to_qstring(tiefe);
                     msg += "\n";
@@ -4615,7 +4617,8 @@ void wstzustand::fmc_dateitext(int index)
                     msg += bo.z_qstring();
                     msg += "\n";
                     msg += "DM=";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += "\n";
                     msg += "KETTE=0\n";
                     msg += "GRP=1\n";           //Bohrgruppe
@@ -4629,7 +4632,8 @@ void wstzustand::fmc_dateitext(int index)
 
                     msg += "BEZB=";
                     msg += "HBE X+ DM";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += " T";
                     msg += bo.tiefe_qstring();
                     msg += "\n";
@@ -4656,7 +4660,8 @@ void wstzustand::fmc_dateitext(int index)
                     msg += bo.z_qstring();
                     msg += "\n";
                     msg += "DM=";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += "\n";
                     msg += "KETTE=0\n";
                     msg += "GRP=1\n";           //Bohrgruppe
@@ -4670,7 +4675,8 @@ void wstzustand::fmc_dateitext(int index)
 
                     msg += "BEZB=";
                     msg += "HBE X- DM";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += " T";
                     msg += bo.tiefe_qstring();
                     msg += "\n";
@@ -4697,7 +4703,8 @@ void wstzustand::fmc_dateitext(int index)
                     msg += bo.z_qstring();
                     msg += "\n";
                     msg += "DM=";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += "\n";
                     msg += "KETTE=0\n";
                     msg += "GRP=1\n";           //Bohrgruppe
@@ -4711,7 +4718,8 @@ void wstzustand::fmc_dateitext(int index)
 
                     msg += "BEZB=";
                     msg += "HBE Y+ DM";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += " T";
                     msg += bo.tiefe_qstring();
                     msg += "\n";
@@ -4738,7 +4746,8 @@ void wstzustand::fmc_dateitext(int index)
                     msg += bo.z_qstring();
                     msg += "\n";
                     msg += "DM=";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += "\n";
                     msg += "KETTE=0\n";
                     msg += "GRP=1\n";           //Bohrgruppe
@@ -4752,7 +4761,8 @@ void wstzustand::fmc_dateitext(int index)
 
                     msg += "BEZB=";
                     msg += "HBE Y- DM";
-                    msg += bo.dm_qstring();
+                    //msg += bo.dm_qstring();
+                    msg += wkzmag.dm(tnummer);
                     msg += " T";
                     msg += bo.tiefe_qstring();
                     msg += "\n";
@@ -4910,14 +4920,16 @@ void wstzustand::fmc_dateitext(int index)
                             msg += FMC_LORAE_BEZ;       //Bezeichnung
                             msg += "=";
                             msg += "Lochreihe DM";
-                            msg += bora.dm_qstring();
+                            //msg += bora.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
                             msg += " T";
                             msg += double_to_qstring(tiefe);
                             msg += "\n";
                             //---------------------------------
                             msg += FMC_LORAE_DM;        //Durchmesser
                             msg += "=";
-                            msg += bora.dm_qstring();
+                            //msg += bora.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
                             msg += "\n";
                             //---------------------------------
                             msg += FMC_LORAE_XS;        //Startpunkt in X
@@ -5025,14 +5037,16 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "BEZB";
                                 msg += "=";
                                 msg += "Bohren in X  DM";
-                                msg += bora.dm_qstring();
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
                                 msg += " T";
                                 msg += double_to_qstring(tiefe);
                                 msg += "\n";
                                 //------------------------------
                                 msg += FMC_BOBIX_DM;
                                 msg += "=";
-                                msg += bora.dm_qstring();
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
                                 msg += "\n";
                                 //------------------------------
                                 msg += "F";                     //Vorschub
@@ -5181,14 +5195,16 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "BEZB";
                             msg += "=";
                             msg += "Bohren in Y  DM";
-                            msg += bora.dm_qstring();
+                            //msg += bora.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
                             msg += " T";
                             msg += double_to_qstring(tiefe);
                             msg += "\n";
                             //------------------------------
                             msg += FMC_BOBIX_DM;
                             msg += "=";
-                            msg += bora.dm_qstring();
+                            //msg += bora.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
                             msg += "\n";
                             //------------------------------
                             msg += "F";                     //Vorschub
@@ -5393,7 +5409,8 @@ void wstzustand::fmc_dateitext(int index)
                         msg += bora.z_qstring();
                         msg += "\n";
                         msg += "DM=";
-                        msg += bora.dm_qstring();
+                        //msg += bora.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += "\n";
                         msg += "KETTE=1\n";
                         msg += "GRP=1\n";           //Bohrgruppe
@@ -5407,7 +5424,8 @@ void wstzustand::fmc_dateitext(int index)
 
                         msg += "BEZB=";
                         msg += "HBE X+ DM";
-                        msg += bora.dm_qstring();
+                        //msg += bora.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += " T";
                         msg += bora.tiefe_qstring();
                         msg += "\n";
@@ -5485,7 +5503,8 @@ void wstzustand::fmc_dateitext(int index)
                         msg += bora.z_qstring();
                         msg += "\n";
                         msg += "DM=";
-                        msg += bora.dm_qstring();
+                        //msg += bora.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += "\n";
                         msg += "KETTE=1\n";
                         msg += "GRP=1\n";           //Bohrgruppe
@@ -5499,7 +5518,8 @@ void wstzustand::fmc_dateitext(int index)
 
                         msg += "BEZB=";
                         msg += "HBE X- DM";
-                        msg += bora.dm_qstring();
+                        //msg += bora.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += " T";
                         msg += bora.tiefe_qstring();
                         msg += "\n";
@@ -5576,7 +5596,8 @@ void wstzustand::fmc_dateitext(int index)
                         msg += bora.z_qstring();
                         msg += "\n";
                         msg += "DM=";
-                        msg += bora.dm_qstring();
+                        //msg += bora.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += "\n";
                         msg += "KETTE=1\n";
                         msg += "GRP=1\n";           //Bohrgruppe
@@ -5590,7 +5611,8 @@ void wstzustand::fmc_dateitext(int index)
 
                         msg += "BEZB=";
                         msg += "HBE Y+ DM";
-                        msg += bora.dm_qstring();
+                        //msg += bora.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += " T";
                         msg += bora.tiefe_qstring();
                         msg += "\n";
@@ -5667,7 +5689,8 @@ void wstzustand::fmc_dateitext(int index)
                         msg += bora.z_qstring();
                         msg += "\n";
                         msg += "DM=";
-                        msg += bora.dm_qstring();
+                        //msg += bora.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += "\n";
                         msg += "KETTE=1\n";
                         msg += "GRP=1\n";           //Bohrgruppe
@@ -5681,7 +5704,8 @@ void wstzustand::fmc_dateitext(int index)
 
                         msg += "BEZB=";
                         msg += "HBE Y- DM";
-                        msg += bora.dm_qstring();
+                        //msg += bora.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += " T";
                         msg += bora.tiefe_qstring();
                         msg += "\n";
@@ -6344,7 +6368,8 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         msg += FMC_BOHR_DM_DM;
                         msg += "=";
-                        msg += bo.dm_qstring();
+                        //msg += bo.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += "\n";
                         msg += "GRP=";                  //Bohrgruppe
                         msg += bohrgruppe;
@@ -6365,7 +6390,8 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "TASTEIN=-1\n";
                         msg += "BEZB=";
                         msg += "Bohrung DM";
-                        msg += bo.dm_qstring();
+                        //msg += bo.dm_qstring();
+                        msg += wkzmag.dm(tnummer);
                         msg += " T";
                         msg += double_to_qstring(tiefe);
                         msg += "\n";
@@ -6529,14 +6555,16 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += FMC_LORAE_BEZ;       //Bezeichnung
                                 msg += "=";
                                 msg += "Lochreihe DM";
-                                msg += bora.dm_qstring();
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
                                 msg += " T";
                                 msg += double_to_qstring(tiefe);
                                 msg += "\n";
                                 //---------------------------------
                                 msg += FMC_LORAE_DM;        //Durchmesser
                                 msg += "=";
-                                msg += bora.dm_qstring();
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
                                 msg += "\n";
                                 //---------------------------------
                                 msg += FMC_LORAE_XS;        //Startpunkt in X
@@ -6644,14 +6672,16 @@ void wstzustand::fmc_dateitext(int index)
                                     msg += "BEZB";
                                     msg += "=";
                                     msg += "Bohren in X  DM";
-                                    msg += bora.dm_qstring();
+                                    //msg += bora.dm_qstring();
+                                    msg += wkzmag.dm(tnummer);
                                     msg += " T";
                                     msg += double_to_qstring(tiefe);
                                     msg += "\n";
                                     //------------------------------
                                     msg += FMC_BOBIX_DM;
                                     msg += "=";
-                                    msg += bora.dm_qstring();
+                                    //msg += bora.dm_qstring();
+                                    msg += wkzmag.dm(tnummer);
                                     msg += "\n";
                                     //------------------------------
                                     msg += "F";                     //Vorschub
@@ -6800,14 +6830,16 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "BEZB";
                                 msg += "=";
                                 msg += "Bohren in Y  DM";
-                                msg += bora.dm_qstring();
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
                                 msg += " T";
                                 msg += double_to_qstring(tiefe);
                                 msg += "\n";
                                 //------------------------------
                                 msg += FMC_BOBIX_DM;
                                 msg += "=";
-                                msg += bora.dm_qstring();
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
                                 msg += "\n";
                                 //------------------------------
                                 msg += "F";                     //Vorschub
@@ -10931,7 +10963,8 @@ void wstzustand::ggf_dateitext(int index)
                    msg += "Durchmesser";
                    msg += ";";
                    msg += "[DM]";
-                   msg += bo.dm_qstring();
+                   //msg += bo.dm_qstring();
+                   msg += wkzmag.dm(tnummer);
                    msg += ";";
                    msg += "[X]";
                    msg += bo.x_qstring();
@@ -11035,7 +11068,8 @@ void wstzustand::ggf_dateitext(int index)
                        msg += bo.y_qstring();
                        msg += ";";
                        msg += "[DM]";
-                       msg += bo.dm_qstring();
+                       //msg += bo.dm_qstring();
+                       msg += wkzmag.dm(tnummer);
                        msg += ";";
                        msg += "[TT]";
                        msg += tiefe_qstring;

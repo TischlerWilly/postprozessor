@@ -58,14 +58,14 @@
     <item row="1" column="0">
      <widget class="QLabel" name="label_dm_real">
       <property name="text">
-       <string>Durchmesser real</string>
+       <string>Durchmesser export</string>
       </property>
      </widget>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_dm_cad">
       <property name="text">
-       <string>Durchmesser CAD</string>
+       <string>Durchmesser import</string>
       </property>
      </widget>
     </item>
