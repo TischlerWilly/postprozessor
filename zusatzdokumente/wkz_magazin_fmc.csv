@@ -1,12 +1,13 @@
 Typ	Nr	DM	Nutzl	Vorschub	Zustellm	DM_CAD	DuBo	Saegebr	Lage	 
 B	B4a KronBo	4	30	 	5	4	0	 	vert	 	 	 	 	1
 B	B5c DuBo	5	35	 	8	5	1	 	vert	 	 	 	 	1
+B	B5c Hori	5	35	 	8	5	1	 	hori	 	 	 	 	1
 B	B6a KronBo	6	35	 	8	6	0	 	vert	 	 	 	 	1
 B	B6c Hori	6	35	 	8	6	0	 	hori	 	 	 	 	1
 B	B7c Hori	7	35	 	20	7	0	 	hori	 	 	 	 	1
 B	B8a KronBo	8	35	 	8	8	0	 	vert	 	 	 	 	1
 B	B8b Hori	8.2	35	 	20	8.2	0	 	hori	 	 	 	 	1
-B	B8c DuBo	8.1	35	 	5	8	0	 	vert	 	 	 	 	1
+B	B8c DuBo	8.1	35	 	5	8	1	 	vert	 	 	 	 	1
 B	B10a KronBo	10	35	 	8	10	0	 	vert	 	 	 	 	1
 B	B10c DuBo	10.1	35	 	8	10	1	 	vert	 	 	 	 	0
 B	B15a KronBo	15	35	 	8	15	0	 	vert	 	 	 	 	1
