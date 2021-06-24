@@ -62,6 +62,10 @@ public:
     double min_x(QString format);
     double max_y(QString format);
     double min_y(QString format);
+    double max_x();
+    double min_x();
+    double max_y();
+    double min_y();
     inline double   laenge() const
     {
         return Laenge;

@@ -371,7 +371,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
         hbemiduebeltiefe(bearb);
         double tmp_l = Laenge_bekommen;
         double tmp_b = Breite_bekommen;
-        gehr_3achs(bearb, tmp_l, tmp_b, format);
+        gehr_3achs(bearb, tmp_l, tmp_b, format, "0");
         //Die beste Drehrichtung herausfinden:
         int bewertung_0    = 1;
         int bewertung_90   = 1;
@@ -1055,7 +1055,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
         double tmp_l = Breite_bekommen;
         double tmp_b = Laenge_bekommen;
         bearb_optimieren_ganx(bearb);
-        gehr_3achs(bearb, tmp_l, tmp_b, "ganx");
+        gehr_3achs(bearb, tmp_l, tmp_b, "ganx", "0");
         //Die beste Drehrichtung herausfinden:
         int bewertung_0    = 1;
         int bewertung_90   = 1;
@@ -1617,7 +1617,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
         hbemiduebeltiefe(bearb);
         double tmp_l = Laenge_bekommen;
         double tmp_b = Breite_bekommen;
-        gehr_3achs(bearb, tmp_l, tmp_b, format);
+        gehr_3achs(bearb, tmp_l, tmp_b, format, "0");
         if(drehwinkel == "0" || drehwinkel == "AUTO")
         {
             //tue nichts
@@ -1745,7 +1745,7 @@ void wstzustand::hbemiduebeltiefe(text_zeilenweise& bearbeitung)
     }
 }
 
-void wstzustand::gehr_3achs(text_zeilenweise& bearb, double &tmp_l, double &tmp_b, QString ausgabeformat)
+void wstzustand::gehr_3achs(text_zeilenweise& bearb, double &tmp_l, double &tmp_b, QString ausgabeformat, QString drehwi)
 {
     //Diese Funktion löscht die Gehrungen aus den Bearbeitungen heraus
     //Diese können mit einer 3-Achs-Maschine nicht ohne Spezial-WKZ hergestellt werden.
@@ -1794,6 +1794,68 @@ void wstzustand::gehr_3achs(text_zeilenweise& bearb, double &tmp_l, double &tmp_
             }
             bearb.zeile_loeschen(i);
             i--;
+        }
+    }
+
+    //Wo eine Kante ist wo eine Gehrung ist keine Maßzugabe geben:
+    if(li == true)
+    {
+        QString kante;
+        if (ausgabeformat == "ganx")
+        {
+            kante = kante_li_ganx(drehwi);
+        }else
+        {
+            kante = kante_li(drehwi);
+        }
+        if(!kante.isEmpty())
+        {
+            li = false;
+        }
+    }
+    if(re == true)
+    {
+        QString kante;
+        if (ausgabeformat == "ganx")
+        {
+            kante = kante_re_ganx(drehwi);
+        }else
+        {
+            kante = kante_re(drehwi);
+        }
+        if(!kante.isEmpty())
+        {
+            re = false;
+        }
+    }
+    if(ob == true)
+    {
+        QString kante;
+        if (ausgabeformat == "ganx")
+        {
+            kante = kante_hi_ganx(drehwi);
+        }else
+        {
+            kante = kante_hi(drehwi);
+        }
+        if(!kante.isEmpty())
+        {
+            ob = false;
+        }
+    }
+    if(un == true)
+    {
+        QString kante;
+        if (ausgabeformat == "ganx")
+        {
+            kante = kante_vo_ganx(drehwi);
+        }else
+        {
+            kante = kante_vo(drehwi);
+        }
+        if(!kante.isEmpty())
+        {
+            un = false;
         }
     }
 
@@ -5995,11 +6057,11 @@ void wstzustand::fmc_dateitext(int index)
                             sb = strecke_bezugspunkt_ende;
                             s.set_laenge_2d(s.laenge2d()+anweg, sb);
                             pein = s.stapu();
-                            msg += "anfahrpunkt X = ";
-                            msg += s.stapu().x_QString();
-                            msg += " / Y = ";
-                            msg += s.stapu().y_QString();
-                            msg += "\n";
+                            //msg += "anfahrpunkt X = ";
+                            //msg += s.stapu().x_QString();
+                            //msg += " / Y = ";
+                            //msg += s.stapu().y_QString();
+                            //msg += "\n";
                         }else if(folzei.zeile(1) == BEARBART_FRAESERBOGEN)
                         {
                             fraeserbogen fb(folzei.text());
@@ -6022,8 +6084,19 @@ void wstzustand::fmc_dateitext(int index)
                         bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
                         if(aufwst == true)
                         {
-                            msg += "TYPAN=1\n";     //Anfahrtyp
-                            msg += "TYPAB=1\n";     //Abfahrtyp
+                            if(radkor == "0")
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                msg += "=0\n";
+                            }else
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=1\n";
+                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                msg += "=1\n";
+                            }
                             msg += "TYPEIN=1\n";    //Eintauchtp
                             if(pos_z > 0)
                             {
@@ -6039,8 +6112,10 @@ void wstzustand::fmc_dateitext(int index)
                         }else
                         {
                             //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
-                            msg += "TYPAN=0\n";     //Anfahrtyp
-                            msg += "TYPAB=0\n";     //Abfahrtyp
+                            msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                            msg += "=0\n";
+                            msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                            msg += "=0\n";
                             msg += "TYPEIN=-1\n";   //Eintauchtp
                             msg += "LGEAN=2*WKZR+";    //Anfahrwert
                             msg += double_to_qstring(anweg);
@@ -7276,8 +7351,19 @@ void wstzustand::fmc_dateitext(int index)
                             bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
                             if(aufwst == true)
                             {
-                                msg += "TYPAN=1\n";     //Anfahrtyp
-                                msg += "TYPAB=1\n";     //Abfahrtyp
+                                if(radkor == "0")
+                                {
+                                    msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                    msg += "=0\n";
+                                    msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                    msg += "=0\n";
+                                }else
+                                {
+                                    msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                    msg += "=1\n";
+                                    msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                    msg += "=1\n";
+                                }
                                 msg += "TYPEIN=1\n";    //Eintauchtp
                                 if(pos_z > 0)
                                 {
@@ -7293,8 +7379,10 @@ void wstzustand::fmc_dateitext(int index)
                             }else
                             {
                                 //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
-                                msg += "TYPAN=0\n";     //Anfahrtyp
-                                msg += "TYPAB=0\n";     //Abfahrtyp
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                                msg += "=0\n";
                                 msg += "TYPEIN=-1\n";   //Eintauchtp
                                 msg += "LGEAN=2*WKZR+";    //Anfahrwert
                                 msg += double_to_qstring(anweg);

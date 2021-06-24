@@ -220,7 +220,15 @@ double werkstueck::max_x(QString format)
     }
     //Drehung "AUTO" kann hier nicht korrekt verarbeitet werden, muss aber auch nicht
 }
+double werkstueck::max_x()
+{
+    return zustand().l()+25;
+}
 double werkstueck::min_x(QString format)
+{
+    return 0-25;
+}
+double werkstueck::min_x()
 {
     return 0-25;
 }
@@ -247,7 +255,15 @@ double werkstueck::max_y(QString format)
     }
     //Drehung "AUTO" kann hier nicht korrekt verarbeitet werden, muss aber auch nicht
 }
+double werkstueck::max_y()
+{
+    return zustand().b()+25;
+}
 double werkstueck::min_y(QString format)
+{
+    return 0-25;
+}
+double werkstueck::min_y()
 {
     return 0-25;
 }

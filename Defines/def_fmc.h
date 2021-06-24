@@ -175,6 +175,8 @@
 #define FMC_FKON_KOR            "TRKOR"
 #define FMC_FKON_BEZ            "BEZB"
 #define FMC_FKON_AFB            "AFB"
+#define FMC_FKON_ANTYP          "TYPAN"
+#define FMC_FKON_ABTYP          "TYPAB"
 
 #define FMC_FKONG               "[G1]"
 #define FMC_FKONG_XE            "X"

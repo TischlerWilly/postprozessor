@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(signal_wst_umbenennen(QString,QString)),\
             &dlg_exporte, SLOT(slot_wst_umbenennen(QString,QString)));
 
-    //this->setWindowState(Qt::WindowMaximized);
+    this->setWindowState(Qt::WindowMaximized);
 }
 
 MainWindow::~MainWindow()
@@ -1479,6 +1479,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
             msg = "Es ist kein Bauteil ausgewählt!";
             QMessageBox mb;
             mb.setText(msg);
+            mb.setWindowTitle("Programm exportieren");
             mb.exec();
         }
     }else
@@ -1487,6 +1488,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         msg = "Bitte Projekt und Positionsnummer angeben!";
         QMessageBox mb;
         mb.setText(msg);
+        mb.setWindowTitle("Programm exportieren");
         mb.exec();
     }
     if(exportieren == true)
@@ -1647,7 +1649,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                     QString msg;
                     msg  = "Das Bauteil kann nicht umbenannt werden.";
                     msg += "\n";
-                    msg += "Es gibt bereits ein Baiteil mit dem Namen ";
+                    msg += "Es gibt bereits ein Bauteil mit dem Namen ";
                     msg += neuer_name;
                     msg += ".";
                     QMessageBox mb;
@@ -1657,8 +1659,9 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                 {
                     int row = ui->listWidget_wste->currentRow();
                     ui->listWidget_wste->item(row)->setText(neuer_name);
-                    wste.wst(row+1)->set_name(neuer_name);
-                    signal_wst_umbenennen(name, neuer_name);
+                    wste.set_name(row+1, neuer_name);//Namensliste in wste
+                    wste.wst(row+1)->set_name(neuer_name);//name des konkreten wst
+                    signal_wst_umbenennen(name, neuer_name);//gui
                     on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
                 }
             }
@@ -1668,6 +1671,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
             msg = "Bauteil hat keinen Namen!";
             QMessageBox mb;
             mb.setText(msg);
+            mb.setWindowTitle("Werkstück umbenennen");
             mb.exec();
         }
     }else
@@ -1676,6 +1680,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
         msg = "Es ist kein Bauteil ausgewählt!";
         QMessageBox mb;
         mb.setText(msg);
+        mb.setWindowTitle("Werkstück umbenennen");
         mb.exec();
     }
 }
@@ -1686,10 +1691,11 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
     {
         const int wstindex = currentRow+1;
         if(ui->radioButton_vorschau_eigen->isChecked())
-        {
+        {            
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
             //->set_einstellung_fmc
             //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("eigen", wkz_magazin_fmc, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);
@@ -1697,10 +1703,11 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
             //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
         }else if(ui->radioButton_vorschau_ganx->isChecked())
-        {
+        {            
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
             //->set_einstellung_fmc
             //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ganx", wkz_magazin_ganx, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);
@@ -1711,6 +1718,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
             //->set_einstellung_fmc
             //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("fmc", wkz_magazin_fmc, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);
@@ -1721,6 +1729,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
             //->set_einstellung_fmc
             //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ggf", wkz_magazin_ggf, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);

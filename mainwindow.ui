@@ -245,6 +245,9 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Es wird keine keine Zugabe gegeben wenn die Gehrung bekantet ist&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
      </widget>
      <widget class="Line" name="line_6">
       <property name="geometry">
@@ -271,36 +274,66 @@
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="1">
         <widget class="QRadioButton" name="radioButton_drehung_0">
+         <property name="toolTip">
+          <string>8</string>
+         </property>
          <property name="text">
           <string>0</string>
+         </property>
+         <property name="shortcut">
+          <string>8</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QRadioButton" name="radioButton_drehung_270">
+         <property name="toolTip">
+          <string>4</string>
+         </property>
          <property name="text">
           <string>270</string>
+         </property>
+         <property name="shortcut">
+          <string>4</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
         <widget class="QRadioButton" name="radioButton_drehung_autom">
+         <property name="toolTip">
+          <string>0</string>
+         </property>
          <property name="text">
           <string>AUTO</string>
+         </property>
+         <property name="shortcut">
+          <string>5</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
         <widget class="QRadioButton" name="radioButton_drehung_90">
+         <property name="toolTip">
+          <string>6</string>
+         </property>
          <property name="text">
           <string>90</string>
+         </property>
+         <property name="shortcut">
+          <string>6</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
         <widget class="QRadioButton" name="radioButton_drehung_180">
+         <property name="toolTip">
+          <string>2</string>
+         </property>
          <property name="text">
           <string>180</string>
+         </property>
+         <property name="shortcut">
+          <string>2</string>
          </property>
         </widget>
        </item>
@@ -350,7 +383,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_quick">
      <attribute name="title">
@@ -496,8 +529,14 @@
         <height>23</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>I</string>
+      </property>
       <property name="text">
        <string>importieren</string>
+      </property>
+      <property name="shortcut">
+       <string>I</string>
       </property>
      </widget>
      <widget class="QListWidget" name="listWidget_wste">
@@ -534,15 +573,30 @@
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QRadioButton" name="radioButton_vorschau_fmc">
+          <property name="toolTip">
+           <string>Strg+F</string>
+          </property>
           <property name="text">
            <string>fmc</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+F</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QRadioButton" name="radioButton_vorschau_ganx">
+          <property name="toolTip">
+           <string>Strg+G</string>
+          </property>
+          <property name="statusTip">
+           <string>Strg+G</string>
+          </property>
           <property name="text">
            <string>ganx</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+G</string>
           </property>
          </widget>
         </item>
@@ -654,8 +708,14 @@
         <height>23</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>E</string>
+      </property>
       <property name="text">
        <string>exportieren</string>
+      </property>
+      <property name="shortcut">
+       <string>E</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_umbenennen">
@@ -667,8 +727,14 @@
         <height>23</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>F2</string>
+      </property>
       <property name="text">
        <string>umbenennen</string>
+      </property>
+      <property name="shortcut">
+       <string>F2</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_xypos">

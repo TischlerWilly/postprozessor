@@ -172,7 +172,7 @@ private:
     void finde_drehwinkel_auto(int index);
     void fraesergeraden_zusammenfassen(text_zeilenweise& bearbeitung);
     void hbemiduebeltiefe(text_zeilenweise& bearbeitung);
-    void gehr_3achs(text_zeilenweise& bearb, double& tmp_l, double& tmp_b, QString ausgabeformat);
+    void gehr_3achs(text_zeilenweise& bearb, double& tmp_l, double& tmp_b, QString ausgabeformat, QString drehwi);
     void drehen_um_b_halbe(text_zeilenweise& bearb, double &tmp_b);
     void bearb_drehen_90(text_zeilenweise& bearb, double& tmp_l, double& tmp_b);
     void bearb_optimieren_ganx(text_zeilenweise& bearb);

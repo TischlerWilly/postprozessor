@@ -26,6 +26,10 @@ public:
     void set_kurze_geraden_importieren(bool wert);
     void set_zugabe_gehrungen(double wert);
 
+    inline void set_name(uint zeilennummer,  QString neuer_name)
+    {
+        Namen.zeile_ersaetzen(zeilennummer, neuer_name);
+    }
     //--------------------------------------------------get_xy:
     bool        ist_bekannt(QString Werkstueckname);
     werkstueck* wst(uint index);
