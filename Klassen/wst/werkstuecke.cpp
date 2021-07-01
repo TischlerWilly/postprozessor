@@ -5522,6 +5522,10 @@ QString werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen
             if(Namen.zeilenanzahl() > 0)
             {
                 baugruppenname = text_links(Namen.zeile(1),"_");
+                if(baugruppenname.at(0)=='#')
+                {
+                    baugruppenname = text_rechts(baugruppenname, "#");
+                }
             }
             for(uint i = 1; i<=Namen.zeilenanzahl() ;i++)
             {
