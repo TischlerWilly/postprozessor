@@ -814,7 +814,7 @@ void MainWindow::set_projektpfad()
                 pfad += QDir::separator();
                 pfad += ui->lineEdit_baugruppe->text();
             }
-            if(ui->listWidget_wste->selectedItems().count())
+            if(ui->listWidget_wste->selectedItems().count() && ui->listWidget_wste->currentItem())
             {
                 if(!ui->listWidget_wste->currentItem()->text().isEmpty())
                 {
