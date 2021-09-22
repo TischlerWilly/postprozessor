@@ -257,7 +257,7 @@ double werkstueck::max_y(QString format)
 }
 double werkstueck::max_y()
 {
-    return zustand().b()+25;
+    return zustand().b()+25+ay();
 }
 double werkstueck::min_y(QString format)
 {
