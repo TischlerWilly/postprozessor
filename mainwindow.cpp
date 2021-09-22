@@ -1074,8 +1074,8 @@ void MainWindow::on_radioButton_vorschau_eigen_clicked(bool checked)
         if(ui->listWidget_wste->selectedItems().count())
         {
             on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
-        }
-        set_projektpfad();
+            set_projektpfad();
+        }        
     }
 }
 void MainWindow::on_radioButton_vorschau_ganx_clicked(bool checked)
@@ -1085,8 +1085,8 @@ void MainWindow::on_radioButton_vorschau_ganx_clicked(bool checked)
         if(ui->listWidget_wste->selectedItems().count())
         {
             on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
-        }
-        set_projektpfad();
+            set_projektpfad();
+        }        
     }
 }
 void MainWindow::on_radioButton_vorschau_fmc_clicked(bool checked)
@@ -1096,8 +1096,8 @@ void MainWindow::on_radioButton_vorschau_fmc_clicked(bool checked)
         if(ui->listWidget_wste->selectedItems().count())
         {
             on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
-        }
-        set_projektpfad();
+            set_projektpfad();
+        }        
     }
 }
 void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
@@ -1107,8 +1107,8 @@ void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
         if(ui->listWidget_wste->selectedItems().count())
         {
             on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+            set_projektpfad();
         }
-        set_projektpfad();
     }
 }
 
