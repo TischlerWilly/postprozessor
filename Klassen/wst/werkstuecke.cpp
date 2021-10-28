@@ -5336,6 +5336,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         spx = ausdruck_auswerten(tmp).toDouble();
+                        spx = w.laenge()-spx;
                     }else if(schluessel == FMC_GEHR_SPY)
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -5346,6 +5347,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         epx = ausdruck_auswerten(tmp).toDouble();
+                        epx = w.laenge()-epx;
                     }else if(schluessel == FMC_GEHR_EPY)
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -5372,11 +5374,15 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         //...
                     }else if(schluessel == FMC_GEHR_WI)
                     {
+                        //Hier muss ggf korrigiert werden (Drehen um L/2)
+                        //Wenn die Werte später mal gebraucht werden
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         ge.set_winkel(ausdruck_auswerten(tmp));
                     }else if(schluessel == FMC_GEHR_BEZUG)
                     {
+                        //Hier muss ggf korrigiert werden (Drehen um L/2)
+                        //Wenn die Werte später mal gebraucht werden
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         tmp = ausdruck_auswerten(tmp).toDouble();
