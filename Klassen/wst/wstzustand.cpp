@@ -491,7 +491,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
                         {
                             bewertung_0 += ranking_abst_zwanzig;
                         }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
                     {
                         if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                         {
@@ -527,7 +527,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
                         {
                             bewertung_90 += ranking_abst_zwanzig;
                         }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
                     {
                         if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                         {
@@ -562,7 +562,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
                         {
                             bewertung_180 += ranking_abst_zwanzig;
                         }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
                     {
                         if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                         {
@@ -598,7 +598,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
                         {
                             bewertung_270 += ranking_abst_zwanzig;
                         }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
                     {
                         if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                         {
