@@ -114,6 +114,7 @@ private:
     void closeEvent(QCloseEvent *ce);
     void set_projektpfad();
     void speichere_ausgabepfad(QString pfad);
+    void speichere_ausgabepfad_fmc(QString pfad);
     void schreibe_in_zwischenablage(QString s);
     QString fenstertitel_exportuebersicht();
 

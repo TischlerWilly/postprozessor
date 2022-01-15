@@ -1209,7 +1209,7 @@ void MainWindow::on_pushButton_start_clicked()
     ui->plainTextEdit_zusatzinfo->setPlainText(wste.cad_fehler());
 
     //Dateien exportieren:
-    speichere_ausgabepfad(verzeichnis_ziel());
+    speichere_ausgabepfad_fmc(verzeichnis_ziel());
     QDir dir_ganx;
     QString pfad_ganx = verzeichnis_ziel() + QDir::separator() + "ganx";
     if(Einstellung.export_ganx())
@@ -1497,7 +1497,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
     if(exportieren == true)
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
-        speichere_ausgabepfad(pfad);
+        speichere_ausgabepfad_fmc(pfad);
         //Exportieren:
         QFile f(pfad);
         bool foauf;
@@ -2048,6 +2048,32 @@ void MainWindow::speichere_ausgabepfad(QString pfad)
     if(!pfad.isEmpty())
     {
         if(pfad.contains(".fmc") | pfad.contains(".ganx") | pfad.contains(".ggf") | pfad.contains(".eigen"))
+        {
+            QString pfad_neu = text_links(pfad, QDir::separator());;
+            pfad_neu += QDir::separator();
+            QString restpfad = text_rechts(pfad, pfad_neu);
+            for(int i=1; i<pfad.count(QDir::separator()) ;i++)
+            {
+                QString tmp;
+                tmp += text_links(restpfad, QDir::separator());
+                if(i != pfad.count(QDir::separator())-1)
+                {
+                    tmp += QDir::separator();
+                }
+                pfad_neu += tmp;
+                restpfad = text_rechts(restpfad, tmp);
+            }
+            pfad = pfad_neu;
+        }
+        Einstellung.set_verzeichnis_ziel_auswahl(pfad);
+        schreibe_ini();
+    }
+}
+void MainWindow::speichere_ausgabepfad_fmc(QString pfad)
+{
+    if(!pfad.isEmpty())
+    {
+        if(pfad.contains(".fmc"))
         {
             QString pfad_neu = text_links(pfad, QDir::separator());;
             pfad_neu += QDir::separator();
