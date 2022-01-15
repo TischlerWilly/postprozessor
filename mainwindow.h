@@ -84,6 +84,7 @@ private slots:
     void on_pushButton_einzelexport_clicked();
     void on_pushButton_umbenennen_clicked();
     void on_actionExportUebersicht_triggered();
+    void on_actionWST_ausblenden_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -136,6 +137,7 @@ signals:
     void signal_exporte(text_zeilenweise daten);
     void signal_wstexport(QString name, QString format, bool exportiert);
     void signal_wst_umbenennen(QString name_vor, QString name_nach);
+    void signal_wst_ausblenden(QString name, bool ausblenden);
 
 public slots:
     void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);

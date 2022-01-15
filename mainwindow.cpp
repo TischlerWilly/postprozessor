@@ -47,8 +47,11 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_exporte, SLOT(slot_wstexport(QString,QString,bool)));
     connect(this, SIGNAL(signal_wst_umbenennen(QString,QString)),\
             &dlg_exporte, SLOT(slot_wst_umbenennen(QString,QString)));
+    connect(this, SIGNAL(signal_wst_ausblenden(QString,bool)),\
+            &dlg_exporte, SLOT(slot_wst_ausblenden(QString,bool)));
 
     this->setWindowState(Qt::WindowMaximized);
+    ui->lineEdit_projekt->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -1177,7 +1180,36 @@ void MainWindow::on_actionExportUebersicht_triggered()
 {
     dlg_exporte.show();
 }
-
+void MainWindow::on_actionWST_ausblenden_triggered()
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        if(!ui->listWidget_wste->currentItem()->text().isEmpty())
+        {
+            ui->listWidget_wste->currentItem()->setHidden(true);
+            signal_wst_ausblenden(ui->listWidget_wste->currentItem()->text(), true);
+            for(int index = ui->listWidget_wste->currentRow() ; index > 0 ; index--)
+            {
+                if(!ui->listWidget_wste->item(index)->isHidden())
+                {
+                    ui->listWidget_wste->setCurrentRow(index);
+                    index = 0;
+                }
+            }
+            if(ui->listWidget_wste->currentItem()->isHidden())
+            {
+                for(int index = 0 ; index < ui->listWidget_wste->count() ; index++)
+                {
+                    if(!ui->listWidget_wste->item(index)->isHidden())
+                    {
+                        ui->listWidget_wste->setCurrentRow(index);
+                        index = ui->listWidget_wste->count();
+                    }
+                }
+            }
+        }
+    }
+}
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
 {
@@ -1496,8 +1528,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
     }
     if(exportieren == true)
     {
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-        speichere_ausgabepfad_fmc(pfad);
+        QApplication::setOverrideCursor(Qt::WaitCursor);        
         //Exportieren:
         QFile f(pfad);
         bool foauf;
@@ -1532,6 +1563,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                 {
                     f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                     schreibe_in_zwischenablage(pfad);
+                    speichere_ausgabepfad_fmc(pfad);
                 }
                 f.close();
             }else
@@ -2100,6 +2132,10 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
+
+
 
 
 
