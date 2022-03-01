@@ -6140,7 +6140,7 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "=0\n";
                             msg += FMC_FKON_ABTYP;    //Abfahrtyp
                             msg += "=0\n";
-                            msg += "TYPEIN=-1\n";   //Eintauchtp
+                            msg += "TYPEIN=1\n";   //Eintauchtp
                             msg += "LGEAN=2*WKZR+";    //Anfahrwert
                             msg += double_to_qstring(anweg);
                             msg += "\n";
@@ -7415,7 +7415,7 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "=0\n";
                                 msg += FMC_FKON_ABTYP;    //Abfahrtyp
                                 msg += "=0\n";
-                                msg += "TYPEIN=-1\n";   //Eintauchtp
+                                msg += "TYPEIN=1\n";   //Eintauchtp
                                 msg += "LGEAN=2*WKZR+";    //Anfahrwert
                                 msg += double_to_qstring(anweg);
                                 msg += "\n";
