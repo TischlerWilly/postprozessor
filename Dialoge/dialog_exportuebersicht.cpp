@@ -133,7 +133,50 @@ void Dialog_ExportUebersicht::slot_wst_umbenennen(QString name_vor, QString name
     }
 }
 
-
+void Dialog_ExportUebersicht::slot_wst_ausblenden(QString name, bool ausblenden)
+{
+    if(name.contains(".fmc"))
+    {
+        name = text_links(name, ".fmc");
+    }else if(name.contains(".ganx"))
+    {
+        name = text_links(name, ".ganx");
+    }else if(name.contains(".ggf"))
+    {
+        name = text_links(name, ".ggf");
+    }else if(name.contains(".ppf"))
+    {
+        name = text_links(name, ".ppf");
+    }
+    int zeile = -1;
+    if(ui->tableWidget_exporte->rowCount())
+    {
+        for(int i=0; i<=ui->tableWidget_exporte->rowCount() ;i++)
+        {
+            if(ui->tableWidget_exporte->item(i, spalte_namen)->text() == name)
+            {
+                zeile = i;
+                break;
+            }
+        }
+    }
+    if(zeile >= 0)
+    {
+        QColor farbe;
+        if(ausblenden == true)
+        {
+            farbe.setRgb(192,192,192);
+        }else
+        {
+            farbe.setRgb(0,0,0);
+        }
+        ui->tableWidget_exporte->item(zeile, spalte_namen)->setTextColor(farbe);
+        ui->tableWidget_exporte->item(zeile, spalte_fmc)->setTextColor(farbe);
+        ui->tableWidget_exporte->item(zeile, spalte_ganx)->setTextColor(farbe);
+        ui->tableWidget_exporte->item(zeile, spalte_ggf)->setTextColor(farbe);
+        ui->tableWidget_exporte->item(zeile, spalte_eigen)->setTextColor(farbe);
+    }
+}
 
 
 

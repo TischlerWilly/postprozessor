@@ -491,7 +491,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
                         {
                             bewertung_0 += ranking_abst_zwanzig;
                         }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
                     {
                         if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                         {
@@ -527,7 +527,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
                         {
                             bewertung_90 += ranking_abst_zwanzig;
                         }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
                     {
                         if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                         {
@@ -562,7 +562,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
                         {
                             bewertung_180 += ranking_abst_zwanzig;
                         }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
                     {
                         if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                         {
@@ -598,7 +598,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
                         {
                             bewertung_270 += ranking_abst_zwanzig;
                         }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
+                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
                     {
                         if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
                         {
@@ -4939,7 +4939,7 @@ void wstzustand::fmc_dateitext(int index)
                             //---------------------------------
                             msg += FMC_LORAE_XE;        //Endpunkt in X
                             msg += "=";
-                            msg += double_to_qstring(bora.x() + (bora.anz_x()*(bora.raster_x()-1))  );
+                            msg += double_to_qstring(bora.x() + ((bora.anz_x()-1)*bora.raster_x())  );
                             msg += "+0.5";              //Sonst ist es zu genau und es wird ggf 1 Bohrung zu wenig gebohrt
                             msg += "\n";
                             //---------------------------------
@@ -6140,7 +6140,7 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "=0\n";
                             msg += FMC_FKON_ABTYP;    //Abfahrtyp
                             msg += "=0\n";
-                            msg += "TYPEIN=-1\n";   //Eintauchtp
+                            msg += "TYPEIN=1\n";   //Eintauchtp
                             msg += "LGEAN=2*WKZR+";    //Anfahrwert
                             msg += double_to_qstring(anweg);
                             msg += "\n";
@@ -6574,7 +6574,7 @@ void wstzustand::fmc_dateitext(int index)
                                 //---------------------------------
                                 msg += FMC_LORAE_XE;        //Endpunkt in X
                                 msg += "=";
-                                msg += double_to_qstring(bora.x() + (bora.anz_x()*(bora.raster_x()-1))  );
+                                msg += double_to_qstring(bora.x() + ((bora.anz_x()-1)*bora.raster_x())  );
                                 msg += "+0.5";              //Sonst ist es zu genau und es wird ggf 1 Bohrung zu wenig gebohrt
                                 msg += "\n";
                                 //---------------------------------
@@ -7415,7 +7415,7 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "=0\n";
                                 msg += FMC_FKON_ABTYP;    //Abfahrtyp
                                 msg += "=0\n";
-                                msg += "TYPEIN=-1\n";   //Eintauchtp
+                                msg += "TYPEIN=1\n";   //Eintauchtp
                                 msg += "LGEAN=2*WKZR+";    //Anfahrwert
                                 msg += double_to_qstring(anweg);
                                 msg += "\n";

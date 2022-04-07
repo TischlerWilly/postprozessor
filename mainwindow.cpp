@@ -47,8 +47,11 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_exporte, SLOT(slot_wstexport(QString,QString,bool)));
     connect(this, SIGNAL(signal_wst_umbenennen(QString,QString)),\
             &dlg_exporte, SLOT(slot_wst_umbenennen(QString,QString)));
+    connect(this, SIGNAL(signal_wst_ausblenden(QString,bool)),\
+            &dlg_exporte, SLOT(slot_wst_ausblenden(QString,bool)));
 
     this->setWindowState(Qt::WindowMaximized);
+    ui->lineEdit_projekt->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -659,7 +662,7 @@ void MainWindow::on_lineEdit_projekt_editingFinished()
     set_projektpfad();
 }
 void MainWindow::on_lineEdit_pos_editingFinished()
-{
+{    
     QString eingabe = ui->lineEdit_pos->text();
     eingabe.replace(",", ".");
     double eingabe_double = eingabe.toDouble();
@@ -695,193 +698,212 @@ void MainWindow::on_lineEdit_baugruppe_editingFinished()
 }
 void MainWindow::set_projektpfad()
 {
-    Projektpfad_stimmt = false;
-    QString pfad;
-    QString dateiname;
-    QString pfad_lokal;
-    QString format;
-    pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
-    pfad_lokal += QDir::separator();
-    pfad_lokal += "DetailModus";    
-    if(ui->radioButton_vorschau_fmc->isChecked())
+    if(ui->listWidget_wste->selectedItems().count())
     {
+        Projektpfad_stimmt = false;
+        QString pfad;
+        QString dateiname;
+        QString pfad_lokal;
+        QString format;
+        pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
         pfad_lokal += QDir::separator();
-        format = "fmc";
-        pfad_lokal += format;
-    }else if(ui->radioButton_vorschau_ganx->isChecked())
-    {
-        pfad_lokal += QDir::separator();
-        format = "ganx";
-        pfad_lokal += format;
-    }else if(ui->radioButton_vorschau_ggf->isChecked())
-    {
-        pfad_lokal += QDir::separator();
-        format = "ggf";
-        pfad_lokal += format;
-    }else //eigen
-    {
-        pfad_lokal += QDir::separator();
-        format = "eigen";
-        pfad_lokal += format;
-    }
+        pfad_lokal += "DetailModus";
+        if(ui->radioButton_vorschau_fmc->isChecked())
+        {
+            pfad_lokal += QDir::separator();
+            format = "fmc";
+            pfad_lokal += format;
+        }else if(ui->radioButton_vorschau_ganx->isChecked())
+        {
+            pfad_lokal += QDir::separator();
+            format = "ganx";
+            pfad_lokal += format;
+        }else if(ui->radioButton_vorschau_ggf->isChecked())
+        {
+            pfad_lokal += QDir::separator();
+            format = "ggf";
+            pfad_lokal += format;
+        }else //eigen
+        {
+            pfad_lokal += QDir::separator();
+            format = "eigen";
+            pfad_lokal += format;
+        }
 
-    if(ui->radioButton_vorschau_fmc->isChecked())
-    {
-        QDir d(Einstellung.verzeichnis_root_fmc());
-        if(d.exists())
+        if(ui->radioButton_vorschau_fmc->isChecked())
         {
-            pfad = Einstellung.verzeichnis_root_fmc();
-            pfad += QDir::separator();
-        }else
-        {
-            pfad = pfad_lokal;
-            pfad += QDir::separator();
-        }
-    }else if(ui->radioButton_vorschau_ganx->isChecked())
-    {
-        QDir d(Einstellung.verzeichnis_root_ganx());
-        if(d.exists())
-        {
-            pfad = Einstellung.verzeichnis_root_ganx();
-            pfad += QDir::separator();
-        }else
-        {
-            pfad = pfad_lokal;
-            pfad += QDir::separator();
-        }
-    }else
-    {
-        pfad = pfad_lokal;
-        pfad += QDir::separator();
-    }
-    if(!ui->lineEdit_projekt->text().isEmpty())
-    {
-        pfad += ui->lineEdit_projekt->text();
-        if(!ui->lineEdit_pos->text().isEmpty())
-        {
-            QString tmp = ui->lineEdit_pos->text();
-            QString barcode;
-            if(tmp.contains(","))
+            QDir d(Einstellung.verzeichnis_root_fmc());
+            if(d.exists())
             {
-                QString li = text_links(tmp, ",");
-                QString re = text_rechts(tmp, ",");
-                if(li.length()==4)
+                pfad = Einstellung.verzeichnis_root_fmc();
+                pfad += QDir::separator();
+            }else
+            {
+                pfad = pfad_lokal;
+                pfad += QDir::separator();
+            }
+        }else if(ui->radioButton_vorschau_ganx->isChecked())
+        {
+            QDir d(Einstellung.verzeichnis_root_ganx());
+            if(d.exists())
+            {
+                pfad = Einstellung.verzeichnis_root_ganx();
+                pfad += QDir::separator();
+            }else
+            {
+                pfad = pfad_lokal;
+                pfad += QDir::separator();
+            }
+        }else
+        {
+            pfad = pfad_lokal;
+            pfad += QDir::separator();
+        }
+        if(!ui->lineEdit_projekt->text().isEmpty())
+        {
+            pfad += ui->lineEdit_projekt->text();
+            if(!ui->lineEdit_pos->text().isEmpty())
+            {
+                QString tmp = ui->lineEdit_pos->text();
+                QString barcode;
+                if(tmp.contains(","))
                 {
-                    barcode += tmp;
-                }else if(li.length()==3)
+                    QString li = text_links(tmp, ",");
+                    QString re = text_rechts(tmp, ",");
+                    if(li.length()==4)
+                    {
+                        barcode += tmp;
+                    }else if(li.length()==3)
+                    {
+                        barcode += "0";
+                        barcode += li;
+                        barcode += ",";
+                        barcode += re;
+                    }else if(li.length()==2)
+                    {
+                        barcode += "00";
+                        barcode += li;
+                        barcode += ",";
+                        barcode += re;
+                    }else if(li.length()==1)
+                    {
+                        barcode += "000";
+                        barcode += li;
+                        barcode += ",";
+                        barcode += re;
+                    }
+                }else
                 {
-                    barcode += "0";
-                    barcode += li;
-                    barcode += ",";
-                    barcode += re;
-                }else if(li.length()==2)
+                    if(tmp.length()==4)
+                    {
+                        barcode += tmp;
+                    }else if(tmp.length()==3)
+                    {
+                        barcode += "0";
+                        barcode += tmp;
+                    }else if(tmp.length()==2)
+                    {
+                        barcode += "00";
+                        barcode += tmp;
+                    }else if(tmp.length()==1)
+                    {
+                        barcode += "000";
+                        barcode += tmp;
+                    }
+                }
+                pfad += QDir::separator();
+                pfad += barcode;
+                Projektpfad_stimmt = true;
+                if(!ui->lineEdit_baugruppe->text().isEmpty())
                 {
-                    barcode += "00";
-                    barcode += li;
-                    barcode += ",";
-                    barcode += re;
-                }else if(li.length()==1)
+                    pfad += QDir::separator();
+                    pfad += ui->lineEdit_baugruppe->text();
+                }
+                if(ui->listWidget_wste->selectedItems().count() && ui->listWidget_wste->currentItem())
                 {
-                    barcode += "000";
-                    barcode += li;
-                    barcode += ",";
-                    barcode += re;
+                    if(!ui->listWidget_wste->currentItem()->text().isEmpty())
+                    {
+                        dateiname = ui->listWidget_wste->currentItem()->text();
+                        if(ui->radioButton_vorschau_fmc->isChecked())
+                        {
+                            dateiname += ".fmc";
+                        }else if(ui->radioButton_vorschau_ganx->isChecked())
+                        {
+                            dateiname += ".ganx";
+                        }else if(ui->radioButton_vorschau_ggf->isChecked())
+                        {
+                            dateiname += ".ggf";
+                        }else //eigen == ".ppf"
+                        {
+                            dateiname += ".ppf";
+                        }
+                    }
                 }
             }else
             {
-                if(tmp.length()==4)
-                {
-                    barcode += tmp;
-                }else if(tmp.length()==3)
-                {
-                    barcode += "0";
-                    barcode += tmp;
-                }else if(tmp.length()==2)
-                {
-                    barcode += "00";
-                    barcode += tmp;
-                }else if(tmp.length()==1)
-                {
-                    barcode += "000";
-                    barcode += tmp;
-                }
-            }
-            pfad += QDir::separator();
-            pfad += barcode;
-            Projektpfad_stimmt = true;
-            if(!ui->lineEdit_baugruppe->text().isEmpty())
-            {
-                pfad += QDir::separator();
-                pfad += ui->lineEdit_baugruppe->text();
-            }
-            if(ui->listWidget_wste->selectedItems().count() && ui->listWidget_wste->currentItem())
-            {
-                if(!ui->listWidget_wste->currentItem()->text().isEmpty())
-                {
-                    dateiname = ui->listWidget_wste->currentItem()->text();
-                    if(ui->radioButton_vorschau_fmc->isChecked())
-                    {
-                        dateiname += ".fmc";
-                    }else if(ui->radioButton_vorschau_ganx->isChecked())
-                    {
-                        dateiname += ".ganx";
-                    }else if(ui->radioButton_vorschau_ggf->isChecked())
-                    {
-                        dateiname += ".ggf";
-                    }else //eigen == ".ppf"
-                    {
-                        dateiname += ".ppf";
-                    }
-                }
+                pfad.clear();
             }
         }else
         {
             pfad.clear();
         }
-    }else
-    {
-        pfad.clear();
-    }
-    pfad.replace("\\", QDir::separator());
-    pfad.replace("/", QDir::separator());
-    //QString pfad_mit_dateinamen;
-    if(!pfad.isEmpty() && !dateiname.isEmpty())
-    {
-        Pfad_mit_dateinamen = pfad + QDir::separator() + dateiname;
-        ui->lineEdit_projektpfad->setText(Pfad_mit_dateinamen);
-    }else
-    {
-        ui->lineEdit_projektpfad->setText(pfad);
-    }
-
-
-    //lineEdit einfärben:
-    if(!Pfad_mit_dateinamen.isEmpty())
-    {
-        QFile f(Pfad_mit_dateinamen);
-        if(f.exists())
+        pfad.replace("\\", QDir::separator());
+        pfad.replace("/", QDir::separator());
+        //QString pfad_mit_dateinamen;
+        if(!pfad.isEmpty() && !dateiname.isEmpty())
         {
-            QPalette palette;
-            palette.setColor(QPalette::Base,Qt::green);
-            //palette.setColor(QPalette::Text,Qt::black);
-            ui->lineEdit_projektpfad->setPalette(palette);
-            signal_wstexport(dateiname, format, true);
-            dlg_exporte.setWindowTitle(fenstertitel_exportuebersicht());
+            Pfad_mit_dateinamen = pfad + QDir::separator() + dateiname;
+            ui->lineEdit_projektpfad->setText(Pfad_mit_dateinamen);
+        }else
+        {
+            ui->lineEdit_projektpfad->setText(pfad);
+        }
 
-            QFileInfo fi(Pfad_mit_dateinamen);
-            QDateTime fi_lastMod = fi.lastModified();
-            QDateTime heute = QDateTime::currentDateTime();
-            QString zeitstempel = "\t";
-            if(fi_lastMod.date() == heute.date())
+
+        //lineEdit einfärben:
+        if(!Pfad_mit_dateinamen.isEmpty())
+        {
+            QFile f(Pfad_mit_dateinamen);
+            if(f.exists())
             {
-                zeitstempel += "(Heute ";
-                zeitstempel += fi_lastMod.time().toString("hh:mm)");
-            }else
+                QPalette palette;
+                palette.setColor(QPalette::Base,Qt::green);
+                //palette.setColor(QPalette::Text,Qt::black);
+                ui->lineEdit_projektpfad->setPalette(palette);
+                signal_wstexport(dateiname, format, true);
+                dlg_exporte.setWindowTitle(fenstertitel_exportuebersicht());
+
+                QFileInfo fi(Pfad_mit_dateinamen);
+                QDateTime fi_lastMod = fi.lastModified();
+                QDateTime heute = QDateTime::currentDateTime();
+                QString zeitstempel = "\t";
+                if(fi_lastMod.date() == heute.date())
+                {
+                    zeitstempel += "(Heute ";
+                    zeitstempel += fi_lastMod.time().toString("hh:mm)");
+                }else
+                {
+                    zeitstempel += fi_lastMod.toString("(yyyy.MM.dd / hh:mm)");
+                }
+                ui->lineEdit_projektpfad->setText(Pfad_mit_dateinamen + zeitstempel);
+
+            }else if(!pfad.isEmpty())
             {
-                zeitstempel += fi_lastMod.toString("(yyyy.MM.dd / hh:mm)");
+                QDir d(pfad);
+                if(d.exists())
+                {
+                    QPalette palette;
+                    palette.setColor(QPalette::Base,Qt::yellow);
+                    //palette.setColor(QPalette::Text,Qt::black);
+                    ui->lineEdit_projektpfad->setPalette(palette);
+                }else
+                {
+                    QPalette palette;
+                    palette.setColor(QPalette::Base,Qt::white);
+                    //palette.setColor(QPalette::Text,Qt::black);
+                    ui->lineEdit_projektpfad->setPalette(palette);
+                }
             }
-            ui->lineEdit_projektpfad->setText(Pfad_mit_dateinamen + zeitstempel);
-
         }else if(!pfad.isEmpty())
         {
             QDir d(pfad);
@@ -898,16 +920,6 @@ void MainWindow::set_projektpfad()
                 //palette.setColor(QPalette::Text,Qt::black);
                 ui->lineEdit_projektpfad->setPalette(palette);
             }
-        }
-    }else if(!pfad.isEmpty())
-    {
-        QDir d(pfad);
-        if(d.exists())
-        {
-            QPalette palette;
-            palette.setColor(QPalette::Base,Qt::yellow);
-            //palette.setColor(QPalette::Text,Qt::black);
-            ui->lineEdit_projektpfad->setPalette(palette);
         }else
         {
             QPalette palette;
@@ -915,12 +927,6 @@ void MainWindow::set_projektpfad()
             //palette.setColor(QPalette::Text,Qt::black);
             ui->lineEdit_projektpfad->setPalette(palette);
         }
-    }else
-    {
-        QPalette palette;
-        palette.setColor(QPalette::Base,Qt::white);
-        //palette.setColor(QPalette::Text,Qt::black);
-        ui->lineEdit_projektpfad->setPalette(palette);
     }
 }
 QString MainWindow::fenstertitel_exportuebersicht()
@@ -1174,7 +1180,36 @@ void MainWindow::on_actionExportUebersicht_triggered()
 {
     dlg_exporte.show();
 }
-
+void MainWindow::on_actionWST_ausblenden_triggered()
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        if(!ui->listWidget_wste->currentItem()->text().isEmpty())
+        {
+            ui->listWidget_wste->currentItem()->setHidden(true);
+            signal_wst_ausblenden(ui->listWidget_wste->currentItem()->text(), true);
+            for(int index = ui->listWidget_wste->currentRow() ; index > 0 ; index--)
+            {
+                if(!ui->listWidget_wste->item(index)->isHidden())
+                {
+                    ui->listWidget_wste->setCurrentRow(index);
+                    index = 0;
+                }
+            }
+            if(ui->listWidget_wste->currentItem()->isHidden())
+            {
+                for(int index = 0 ; index < ui->listWidget_wste->count() ; index++)
+                {
+                    if(!ui->listWidget_wste->item(index)->isHidden())
+                    {
+                        ui->listWidget_wste->setCurrentRow(index);
+                        index = ui->listWidget_wste->count();
+                    }
+                }
+            }
+        }
+    }
+}
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
 {
@@ -1206,7 +1241,7 @@ void MainWindow::on_pushButton_start_clicked()
     ui->plainTextEdit_zusatzinfo->setPlainText(wste.cad_fehler());
 
     //Dateien exportieren:
-    speichere_ausgabepfad(verzeichnis_ziel());
+    speichere_ausgabepfad_fmc(verzeichnis_ziel());
     QDir dir_ganx;
     QString pfad_ganx = verzeichnis_ziel() + QDir::separator() + "ganx";
     if(Einstellung.export_ganx())
@@ -1493,8 +1528,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
     }
     if(exportieren == true)
     {
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-        speichere_ausgabepfad(pfad);
+        QApplication::setOverrideCursor(Qt::WaitCursor);        
         //Exportieren:
         QFile f(pfad);
         bool foauf;
@@ -1529,6 +1563,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                 {
                     f.write(wste.wst(i)->zustand().exporttext().toUtf8());
                     schreibe_in_zwischenablage(pfad);
+                    speichere_ausgabepfad_fmc(pfad);
                 }
                 f.close();
             }else
@@ -2066,11 +2101,41 @@ void MainWindow::speichere_ausgabepfad(QString pfad)
         schreibe_ini();
     }
 }
+void MainWindow::speichere_ausgabepfad_fmc(QString pfad)
+{
+    if(!pfad.isEmpty())
+    {
+        if(pfad.contains(".fmc"))
+        {
+            QString pfad_neu = text_links(pfad, QDir::separator());;
+            pfad_neu += QDir::separator();
+            QString restpfad = text_rechts(pfad, pfad_neu);
+            for(int i=1; i<pfad.count(QDir::separator()) ;i++)
+            {
+                QString tmp;
+                tmp += text_links(restpfad, QDir::separator());
+                if(i != pfad.count(QDir::separator())-1)
+                {
+                    tmp += QDir::separator();
+                }
+                pfad_neu += tmp;
+                restpfad = text_rechts(restpfad, tmp);
+            }
+            pfad = pfad_neu;
+        }
+        Einstellung.set_verzeichnis_ziel_auswahl(pfad);
+        schreibe_ini();
+    }
+}
 void MainWindow::schreibe_in_zwischenablage(QString s)
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
+
+
 
 
 
