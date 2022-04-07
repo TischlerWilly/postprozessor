@@ -4939,7 +4939,7 @@ void wstzustand::fmc_dateitext(int index)
                             //---------------------------------
                             msg += FMC_LORAE_XE;        //Endpunkt in X
                             msg += "=";
-                            msg += double_to_qstring(bora.x() + (bora.anz_x()*(bora.raster_x()-1))  );
+                            msg += double_to_qstring(bora.x() + ((bora.anz_x()-1)*bora.raster_x())  );
                             msg += "+0.5";              //Sonst ist es zu genau und es wird ggf 1 Bohrung zu wenig gebohrt
                             msg += "\n";
                             //---------------------------------
@@ -6574,7 +6574,7 @@ void wstzustand::fmc_dateitext(int index)
                                 //---------------------------------
                                 msg += FMC_LORAE_XE;        //Endpunkt in X
                                 msg += "=";
-                                msg += double_to_qstring(bora.x() + (bora.anz_x()*(bora.raster_x()-1))  );
+                                msg += double_to_qstring(bora.x() + ((bora.anz_x()-1)*bora.raster_x())  );
                                 msg += "+0.5";              //Sonst ist es zu genau und es wird ggf 1 Bohrung zu wenig gebohrt
                                 msg += "\n";
                                 //---------------------------------
