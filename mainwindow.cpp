@@ -1812,6 +1812,7 @@ void MainWindow::import()
     QString fmc = FMC;
     QString fmcA = FMC_PRGA;
     QString fmcB = FMC_PRGB;
+    QString dxf = DXF;
 
     //Dateien einlesen:
     for(uint i=1; i<=dateien_alle.zeilenanzahl() ;i++)
@@ -1970,6 +1971,38 @@ void MainWindow::import()
                             QFile originaldatei(pfad);
                             originaldatei.remove();
                         }
+                    }
+                }
+            }
+        }else if(dateien_alle.zeile(i).right(fmc.length()) == DXF  || \
+                 dateien_alle.zeile(i).right(fmc.length()) == DXF_     )
+        {
+            QString nam_ohn_end = dateien_alle.zeile(i).left(dateien_alle.zeile(i).length()-dxf.length());
+            QString nam_ohn_pref = nam_ohn_end;
+            if(wste.neu(nam_ohn_pref, DXF))//Wenn es das Wst bereits gibt
+            {
+
+            }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+            {
+                //Bearbeitungen auf der Wst-Obererseite importieren
+                QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
+                QFile datei(pfad);
+                if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                {
+                    QString tmp = "Fehler beim Dateizugriff!\n";
+                    tmp += pfad;
+                    tmp += "\n";
+                    tmp += "in der Funktion on_pushButton_start_clicked";
+                    QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                }else
+                {
+                    QString inhalt = datei.readAll();
+                    wste.import_dxf_oberseite(nam_ohn_pref, inhalt);
+                    datei.close();
+                    if(Einstellung.quelldateien_erhalten() == false)
+                    {
+                        QFile originaldatei(pfad);
+                        originaldatei.remove();
                     }
                 }
             }

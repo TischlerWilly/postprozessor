@@ -9,6 +9,7 @@
 #include "Klassen/text_zeilenweise.h"
 #include "Defines/dateinamen.h"
 #include "Defines/def_fmc.h"
+#include "Defines/def_dxf.h"
 #include "Defines/def_vw.h"
 #include "Funktionen/text.h"
 #include "Funktionen/myfunktion.h"
@@ -22,6 +23,7 @@ public:
     bool neu(QString Werkstueckname, QString Quellformat);
     bool import_fmc_oberseite(QString Werkstueckname, QString importtext);
     bool import_fmc_unterseite(QString Werkstueckname, QString importtext);
+    bool import_dxf_oberseite(QString Werkstueckname, QString importtext);
     void set_fkon_gerade_laenge(double wert);
     void set_kurze_geraden_importieren(bool wert);
     void set_zugabe_gehrungen(double wert);

@@ -5408,6 +5408,164 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
 
     return 0;
 }
+bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtext)
+{
+    QString wstklasse = "Werkstk";//Bezeichner aus Pytha, später noch einstellbar gestallten über GUI
+
+    uint Index = index(Werkstueckname);
+    if(Index == 0)
+    {
+        neu(Werkstueckname, DXF);
+        Index = index(Werkstueckname);
+    }
+    text_zeilenweise tz, tz_name, tz_wert;
+    tz.set_text(importtext);
+    werkstueck w = Wste.at(Index-1);
+
+    bool schalter = true;
+    for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+    {
+        if(schalter == true)
+        {
+            tz_name.zeile_anhaengen(tz.zeile(i));
+        }else
+        {
+            tz_wert.zeile_anhaengen(tz.zeile(i));
+        }
+        schalter = !schalter;
+    }
+    QString dxf_version;
+    for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+    {
+        QString zeile = tz.zeile(i);
+        if(zeile.contains(DXF_VERSION))
+        {
+            dxf_version = tz.zeile(i+2);
+            break;//for
+        }
+    }
+    if(dxf_version == "AC1009")
+    {
+        //Start und Ende finden:
+        uint i_start = 0;
+        uint i_ende  = 0;
+        for(uint i=1; i<=tz_name.zeilenanzahl() ;i++)
+        {
+            if(tz_name.zeile(i).toInt() == 2)// A name Attribute tag, Block name, and so on. Also used to identify a DXF section or table name
+            {
+                if(tz_wert.zeile(i) == "ENTITIES")
+                {
+                    i_start = i;
+                }
+            }
+            if(i_start > 0 && tz_name.zeile(i).toInt() == 0)
+            {
+                if(tz_wert.zeile(i) == DXF_AC1009_ENDSEC)
+                {
+                    i_ende = i;
+                    break;//for i
+                }
+            }
+        }
+        uint i_block_start = i_start;
+        uint i_block_ende  = i_block_start;
+
+        //--------------------------------------------------
+        //Werkstück-Größe bestimmen:
+        double x = 0;
+        double y = 0;
+        for(uint i=i_start+1; i<=i_ende ;i++)
+        {
+            if(tz_name.zeile(i).toInt() == 0)//Blocktrenner ist die 0
+            {
+                i_block_start = i_block_ende;
+                i_block_ende = i;
+
+                QString block_klasse;
+                for(uint ii=i_block_start; ii<=i_block_ende ;ii++)//den aktuellen Block durchlaufen
+                {
+                    if(tz_name.zeile(ii) == DXF_AC1009_KLASSE)
+                    {
+                        block_klasse = tz_wert.zeile(ii);
+                    }
+                    if(tz_name.zeile(ii) == DXF_AC1009_POLYENDE)
+                    {
+                        i = i_ende+1;//Letzter Durchlauf der i-for-schleife
+                    }
+                }                
+
+                if(block_klasse.contains(wstklasse))
+                {                    
+                    for(uint ii=i_block_start; ii<=i_block_ende ;ii++)//den aktuellen Block durchlaufen
+                    {                        
+                        if(tz_name.zeile(ii) == DXF_AC1009_WST_X)
+                        {
+                            double neu_x = tz_wert.zeile(ii).toDouble();
+                            /*
+                            QString msg;
+                            msg += "Start: ";
+                            msg += int_to_qstring(i_start);
+                            msg += "\nEnde: ";
+                            msg += int_to_qstring(i_ende);
+                            msg += "\nBlock-Start: ";
+                            msg += int_to_qstring(i_block_start);
+                            msg += "\nBlock-Ende: ";
+                            msg += int_to_qstring(i_block_ende);
+                            msg += "\nKlasse: ";
+                            msg += block_klasse;
+                            msg += "\n\n";
+                            msg += "Zeile: ";
+                            msg += int_to_qstring(ii);
+                            msg += "\nName: ";
+                            msg += tz_name.zeile(ii);
+                            msg += "\nWert: ";
+                            msg += tz_wert.zeile(ii);
+                            msg += "\n";
+                            msg += "\nX:";
+                            msg += int_to_qstring(x);
+                            msg += "\nX-Neu:";
+                            msg += int_to_qstring(neu_x);
+                            */
+                            if(neu_x > x)
+                            {
+                                x = neu_x;
+                            }
+                            /*
+                            msg += "\n\nX:";
+                            msg += int_to_qstring(x);
+                            msg += "\nX-Neu:";
+                            msg += int_to_qstring(neu_x);
+                            QMessageBox mb;
+                            mb.setText(msg);
+                            mb.exec();
+                            */
+                        }
+                        if(tz_name.zeile(ii) == DXF_AC1009_WST_Y)
+                        {
+                            double neu_y = tz_wert.zeile(ii).toDouble();
+                            if(neu_y > y)
+                            {
+                                y = neu_y;
+                            }
+                        }
+                    }
+                    w.set_laenge(x);
+                    w.set_breite(y);
+                }
+            }
+
+        }
+        //--------------------------------------------------
+        //nächster Auswertugnsschritt:
+        x = 0;//Wert resetten
+        y = 0;//Wert resetten
+
+    }
+
+    Wste.replace(Index-1, w);
+    return 0;
+}
+
 void werkstuecke::set_fkon_gerade_laenge(double wert)
 {
     Min_fkon_gerade_laenge = wert;

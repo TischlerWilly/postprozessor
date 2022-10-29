@@ -2,13 +2,14 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.22.04.07"
+#define PROGRAMMVERSION "3.22.10.29"
 #endif //PROGRAMMVERSION
 /*
 
+bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtext)
 
-
-
+void MainWindow::import()
+    noch anpassen für WST mit Bearbeitung von beiden Seiten
 
 
 

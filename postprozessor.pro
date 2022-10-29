@@ -61,6 +61,7 @@ SOURCES += main.cpp\
     Dialoge/dialog_stdname.cpp
 
 HEADERS  += mainwindow.h \
+    Defines/def_dxf.h \
     Dialoge/dialog_einstellung_ganx.h \
     Dialoge/dialog_einstellung_pfade.h \
     Dialoge/dialog_exportuebersicht.h \
