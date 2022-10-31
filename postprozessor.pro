@@ -13,11 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+    Dialoge/dialog_einstellung_dxf_klassen.cpp \
     Dialoge/dialog_einstellung_ganx.cpp \
     Dialoge/dialog_einstellung_pfade.cpp \
     Dialoge/dialog_exportuebersicht.cpp \
     Dialoge/dialog_programmtext.cpp \
     Klassen/einstellung.cpp \
+    Klassen/einstellung_dxf_klassen.cpp \
     Klassen/einstellung_ganx.cpp \
     Klassen/geo/geometrietext.cpp \
     Klassen/geo/kreis.cpp \
@@ -62,11 +64,13 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     Defines/def_dxf.h \
+    Dialoge/dialog_einstellung_dxf_klassen.h \
     Dialoge/dialog_einstellung_ganx.h \
     Dialoge/dialog_einstellung_pfade.h \
     Dialoge/dialog_exportuebersicht.h \
     Dialoge/dialog_programmtext.h \
     Klassen/einstellung.h \
+    Klassen/einstellung_dxf_klassen.h \
     Klassen/einstellung_ganx.h \
     Klassen/formel.h \
     Klassen/geo/defines_geometrie.h \
@@ -119,6 +123,7 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_stdname.h \
 
 FORMS    += mainwindow.ui \
+    Dialoge/dialog_einstellung_dxf_klassen.ui \
     Dialoge/dialog_einstellung_ganx.ui \
     Dialoge/dialog_einstellung_pfade.ui \
     Dialoge/dialog_exportuebersicht.ui \

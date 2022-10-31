@@ -5410,7 +5410,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
 }
 bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtext)
 {
-    QString wstklasse = "Werkstk";//Bezeichner aus Pytha, später noch einstellbar gestallten über GUI
+    QString wstklasse = Einstellung_dxf_klassen.wst();
 
     uint Index = index(Werkstueckname);
     if(Index == 0)
@@ -5444,6 +5444,7 @@ bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtex
             break;//for
         }
     }
+
     if(dxf_version == "AC1009")
     {
         //Start und Ende finden:
@@ -5495,7 +5496,11 @@ bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtex
                 }                
 
                 if(block_klasse.contains(wstklasse))
-                {                    
+                {
+                    QString dicke = text_rechts(block_klasse, "_");
+                    dicke.replace("_",".");
+                    w.set_dicke(dicke);
+
                     for(uint ii=i_block_start; ii<=i_block_ende ;ii++)//den aktuellen Block durchlaufen
                     {                        
                         if(tz_name.zeile(ii) == DXF_AC1009_WST_X)

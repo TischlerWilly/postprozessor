@@ -13,6 +13,7 @@
 #include "Defines/def_vw.h"
 #include "Funktionen/text.h"
 #include "Funktionen/myfunktion.h"
+#include "Klassen/einstellung_dxf_klassen.h"
 
 class werkstuecke
 {
@@ -28,6 +29,10 @@ public:
     void set_kurze_geraden_importieren(bool wert);
     void set_zugabe_gehrungen(double wert);
 
+    inline void set_einstellung_dxf_klassen(einstellung_dxf_klassen e)
+    {
+        Einstellung_dxf_klassen = e;
+    }
     inline void set_name(uint zeilennummer,  QString neuer_name)
     {
         Namen.zeile_ersaetzen(zeilennummer, neuer_name);
@@ -67,6 +72,7 @@ private:
     double              Min_fkon_gerade_laenge;  //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
     bool                Kurze_geraden_import;
     double              Zugabe_gehrungen;
+    einstellung_dxf_klassen Einstellung_dxf_klassen;
 
     //Funktionen:
     //--------------------------------------------------set_xy:

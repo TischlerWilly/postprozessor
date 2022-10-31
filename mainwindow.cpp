@@ -26,7 +26,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(sendEinstellungGANX(einstellung_ganx)),\
             &dlg_einstellung_ganx, SLOT(slot_einstellung(einstellung_ganx)));
     connect(&dlg_einstellung_ganx, SIGNAL(send_einstellung(einstellung_ganx)),\
-            this, SLOT(getEinstellungGANX(einstellung_ganx )));
+            this, SLOT(getEinstellungGANX(einstellung_ganx )));    
+    connect(this, SIGNAL(sendEinstellungDxfKlassen(einstellung_dxf_klassen)),\
+            &dlg_einstellung_dxf_klassen, SLOT(slot_einstellung(einstellung_dxf_klassen)));
+    connect(&dlg_einstellung_dxf_klassen, SIGNAL(send_einstellung(einstellung_dxf_klassen)),\
+            this, SLOT(getEinstellungDxfKlassen(einstellung_dxf_klassen )));
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int)));
     connect(&dlg_prgtext, SIGNAL(signalIndexChange(int)),\
@@ -63,12 +67,13 @@ void MainWindow::setup()
 {
     Projektpfad_stimmt = false;
     //Schauen ob alle Konfigurationsdateien vorhanden sind:
-    bool inifile_gefunden = false;      //user-Ordner
-    bool wkz_ganx_gefunden = false;     //user-Ordner
-    bool wkz_fmc_gefunden = false;      //user-Ordner
-    bool wkz_ggf_gefunden = false;      //user-Ordner
-    bool namen_std_gefunden = false;    //user-Ordner
-    bool ini_ganx_gefunden = false;     //user-Ordner
+    bool inifile_gefunden           = false;    //user-Ordner
+    bool wkz_ganx_gefunden          = false;    //user-Ordner
+    bool wkz_fmc_gefunden           = false;    //user-Ordner
+    bool wkz_ggf_gefunden           = false;    //user-Ordner
+    bool namen_std_gefunden         = false;    //user-Ordner
+    bool ini_ganx_gefunden          = false;    //user-Ordner
+    bool ini_dxf_klassen_gefunden   = false;    //user-Ordner
     QDir user_ordner(pf.path_user());
     QStringList ordnerinhalt;
     ordnerinhalt = user_ordner.entryList(QDir::Files);
@@ -98,6 +103,10 @@ void MainWindow::setup()
         if(name.contains(pf.name_ini_ganx()))
         {
             ini_ganx_gefunden = true;
+        }
+        if(name.contains(pf.name_ini_dxf_klassen()))
+        {
+            ini_dxf_klassen_gefunden = true;
         }
     }
 
@@ -238,6 +247,38 @@ void MainWindow::setup()
         }else
         {
             Einstellung_ganx.set_text(file.readAll());
+        }
+        file.close();
+    }
+
+    if(ini_dxf_klassen_gefunden == false)
+    {
+        QFile file(pf.path_ini_dxf_klassen());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_ini_dxf_klassen();
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            file.write(Einstellung_dxf_klassen.text().toLatin1());
+        }
+        file.close();
+    }else
+    {
+        QFile file(pf.path_ini_dxf_klassen());
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_ini_dxf_klassen();
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            Einstellung_dxf_klassen.set_text(file.readAll());
         }
         file.close();
     }
@@ -561,6 +602,24 @@ void MainWindow::getEinstellungGANX(einstellung_ganx e)
     }else
     {
         file.write(Einstellung_ganx.text().toLatin1());
+    }
+    file.close();
+}
+void MainWindow::getEinstellungDxfKlassen(einstellung_dxf_klassen e)
+{
+    Einstellung_dxf_klassen = e;
+
+    QFile file(pf.path_ini_dxf_klassen());
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QString tmp = "Fehler beim Dateizugriff!\n";
+        tmp += pf.path_ini_dxf_klassen();
+        tmp += "\n";
+        tmp += "in der Funktion getEinstellungDxfKlassen";
+        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+    }else
+    {
+        file.write(Einstellung_dxf_klassen.text().toLatin1());
     }
     file.close();
 }
@@ -1175,6 +1234,10 @@ void MainWindow::on_actionStandard_Namen_anzeigen_triggered()
 void MainWindow::on_actionEinstellung_ganx_triggered()
 {
     emit sendEinstellungGANX(Einstellung_ganx);
+}
+void MainWindow::on_actionEinstellung_dxf_klassen_triggered()
+{
+    emit sendEinstellungDxfKlassen(Einstellung_dxf_klassen);
 }
 void MainWindow::on_actionExportUebersicht_triggered()
 {
@@ -1808,6 +1871,7 @@ void MainWindow::import()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     wste.clear();
+    wste.set_einstellung_dxf_klassen(Einstellung_dxf_klassen);
     dateien_erfassen();
     QString fmc = FMC;
     QString fmcA = FMC_PRGA;
@@ -2165,6 +2229,8 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
 
 
 

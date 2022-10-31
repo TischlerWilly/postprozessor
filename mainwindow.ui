@@ -832,6 +832,7 @@
     <addaction name="actionEinstellung_pfade"/>
     <addaction name="actionStandard_Namen_anzeigen"/>
     <addaction name="actionEinstellung_ganx"/>
+    <addaction name="actionEinstellung_dxf_klassen"/>
    </widget>
    <addaction name="menuWerkzeug"/>
    <addaction name="menuEinstellungen"/>
@@ -883,6 +884,11 @@
    </property>
    <property name="shortcut">
     <string>Del</string>
+   </property>
+  </action>
+  <action name="actionEinstellung_dxf_klassen">
+   <property name="text">
+    <string>DXF-Klasseneinstellung</string>
    </property>
   </action>
  </widget>
