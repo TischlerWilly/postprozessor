@@ -15,6 +15,7 @@
 #include "Dialoge/dialog_stdnamen.h"
 #include "Dialoge/dialog_einstellung_pfade.h"
 #include "Dialoge/dialog_einstellung_ganx.h"
+#include "Dialoge/dialog_einstellung_dxf.h"
 #include "Dialoge/dialog_einstellung_dxf_klassen.h"
 #include "Dialoge/dialog_programmtext.h"
 #include "Dialoge/dialog_exportuebersicht.h"
@@ -87,6 +88,7 @@ private slots:
     void on_actionExportUebersicht_triggered();
     void on_actionWST_ausblenden_triggered();
     void on_actionEinstellung_dxf_klassen_triggered();
+    void on_actionEinstellung_dxf_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -103,6 +105,7 @@ private:
     text_zeilenweise namen_std_nach;        //Standard-Dateinamen eigen
     einstellung Einstellung;
     einstellung_ganx Einstellung_ganx;
+    einstellung_dxf Einstellung_dxf;
     einstellung_dxf_klassen Einstellung_dxf_klassen;
     vorschau vorschaufenster;
     QString Projektposition;
@@ -127,6 +130,7 @@ private:
     Dialog_stdnamen dlg_stdnamen;
     Dialog_Einstellung_pfade dlg_Einstellung_pfade;
     Dialog_einstellung_ganx dlg_einstellung_ganx;
+    Dialog_einstellung_dxf dlg_einstellung_dxf;
     Dialog_einstellung_dxf_klassen dlg_einstellung_dxf_klassen;
     Dialog_programmtext dlg_prgtext;
     Dialog_ExportUebersicht dlg_exporte;
@@ -136,7 +140,8 @@ signals:
     void sendStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
     void sendEinstellungPfade(einstellung e);
     void sendEinstellungGANX(einstellung_ganx e);
-    void sendEinstellungDxfKlassen(einstellung_dxf_klassen e);
+    void sendEinstellungDxf(einstellung_dxf e);
+    void sendEinstellungDxfKlassen(einstellung_dxf eg, einstellung_dxf_klassen ek);
     void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
     void sendProgrammtext(werkstueck* w);
     void signal_exporte(text_zeilenweise daten);
@@ -148,6 +153,7 @@ public slots:
     void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
     void getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
     void getEinstellungGANX(einstellung_ganx e);
+    void getEinstellungDxf(einstellung_dxf e);
     void getEinstellungDxfKlassen(einstellung_dxf_klassen e);
     void getEinstellung(einstellung e);
     void getMausPosXY(QPoint p);

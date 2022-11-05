@@ -832,6 +832,7 @@
     <addaction name="actionEinstellung_pfade"/>
     <addaction name="actionStandard_Namen_anzeigen"/>
     <addaction name="actionEinstellung_ganx"/>
+    <addaction name="actionEinstellung_dxf"/>
     <addaction name="actionEinstellung_dxf_klassen"/>
    </widget>
    <addaction name="menuWerkzeug"/>
@@ -889,6 +890,11 @@
   <action name="actionEinstellung_dxf_klassen">
    <property name="text">
     <string>DXF-Klasseneinstellung</string>
+   </property>
+  </action>
+  <action name="actionEinstellung_dxf">
+   <property name="text">
+    <string>DXF-Grundeinstellungen</string>
    </property>
   </action>
  </widget>

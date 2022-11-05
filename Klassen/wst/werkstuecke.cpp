@@ -5422,6 +5422,7 @@ bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtex
     tz.set_text(importtext);
     werkstueck w = Wste.at(Index-1);
 
+    //tz_name und tz_wert mit Daten füllen:
     bool schalter = true;
     for(uint i=1; i<=tz.zeilenanzahl() ;i++)
     {
@@ -5434,6 +5435,8 @@ bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtex
         }
         schalter = !schalter;
     }
+
+    //DXF-Version prüfen:
     QString dxf_version;
     for(uint i=1; i<=tz.zeilenanzahl() ;i++)
     {
@@ -5445,11 +5448,13 @@ bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtex
         }
     }
 
+    //------------------------------
     if(dxf_version == "AC1009")
     {
         //Start und Ende finden:
         uint i_start = 0;
         uint i_ende  = 0;
+        //Geometriebereich ermitteln (Start und Ende):
         for(uint i=1; i<=tz_name.zeilenanzahl() ;i++)
         {
             if(tz_name.zeile(i).toInt() == 2)// A name Attribute tag, Block name, and so on. Also used to identify a DXF section or table name
@@ -5497,8 +5502,8 @@ bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtex
 
                 if(block_klasse.contains(wstklasse))
                 {
-                    QString dicke = text_rechts(block_klasse, "_");
-                    dicke.replace("_",".");
+                    QString dicke = text_rechts(block_klasse, Einstellung_dxf.paramtren());
+                    dicke.replace(Einstellung_dxf.dezitren(),".");
                     w.set_dicke(dicke);
 
                     for(uint ii=i_block_start; ii<=i_block_ende ;ii++)//den aktuellen Block durchlaufen
@@ -5506,44 +5511,10 @@ bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtex
                         if(tz_name.zeile(ii) == DXF_AC1009_WST_X)
                         {
                             double neu_x = tz_wert.zeile(ii).toDouble();
-                            /*
-                            QString msg;
-                            msg += "Start: ";
-                            msg += int_to_qstring(i_start);
-                            msg += "\nEnde: ";
-                            msg += int_to_qstring(i_ende);
-                            msg += "\nBlock-Start: ";
-                            msg += int_to_qstring(i_block_start);
-                            msg += "\nBlock-Ende: ";
-                            msg += int_to_qstring(i_block_ende);
-                            msg += "\nKlasse: ";
-                            msg += block_klasse;
-                            msg += "\n\n";
-                            msg += "Zeile: ";
-                            msg += int_to_qstring(ii);
-                            msg += "\nName: ";
-                            msg += tz_name.zeile(ii);
-                            msg += "\nWert: ";
-                            msg += tz_wert.zeile(ii);
-                            msg += "\n";
-                            msg += "\nX:";
-                            msg += int_to_qstring(x);
-                            msg += "\nX-Neu:";
-                            msg += int_to_qstring(neu_x);
-                            */
                             if(neu_x > x)
                             {
                                 x = neu_x;
                             }
-                            /*
-                            msg += "\n\nX:";
-                            msg += int_to_qstring(x);
-                            msg += "\nX-Neu:";
-                            msg += int_to_qstring(neu_x);
-                            QMessageBox mb;
-                            mb.setText(msg);
-                            mb.exec();
-                            */
                         }
                         if(tz_name.zeile(ii) == DXF_AC1009_WST_Y)
                         {
