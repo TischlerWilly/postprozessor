@@ -26,6 +26,8 @@ public:
     QString kenObsei();
     QString kenUnsei();
     QString drehtypUnsei();
+    bool drehtyp_L();
+    bool drehtyp_B();
 
 private:
     QString Paramtren;

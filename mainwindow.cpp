@@ -2106,32 +2106,43 @@ void MainWindow::import()
                  dateien_alle.zeile(i).right(fmc.length()) == DXF_     )
         {
             QString nam_ohn_end = dateien_alle.zeile(i).left(dateien_alle.zeile(i).length()-dxf.length());
-            QString nam_ohn_pref = nam_ohn_end;
-            if(wste.neu(nam_ohn_pref, DXF))//Wenn es das Wst bereits gibt
+            QString kenOb = Einstellung_dxf.kenObsei();
+            QString kenUn = Einstellung_dxf.kenUnsei();
+            QString nam_ohn_pref;
+            bool ist_oberseite = true;
+            if(nam_ohn_end.right(kenOb.length()) == kenOb)
             {
+                nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-kenOb.length());
+                ist_oberseite = true;
+            }else if(nam_ohn_end.right(kenUn.length()) == kenUn)
+            {
+                nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-kenUn.length());
+                ist_oberseite = false;
+            }else
+            {
+                nam_ohn_pref = nam_ohn_end;
+                ist_oberseite = true;
+            }
+            wste.neu(nam_ohn_pref, DXF);;//Wst wird nur angelegt wenn es nicht schon existiert
 
-            }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
+            QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
+            QFile datei(pfad);
+            if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
             {
-                //Bearbeitungen auf der Wst-Obererseite importieren
-                QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.zeile(i);
-                QFile datei(pfad);
-                if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_start_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+            }else
+            {
+                QString inhalt = datei.readAll();
+                wste.import_dxf(nam_ohn_pref, inhalt, ist_oberseite);
+                datei.close();
+                if(Einstellung.quelldateien_erhalten() == false)
                 {
-                    QString tmp = "Fehler beim Dateizugriff!\n";
-                    tmp += pfad;
-                    tmp += "\n";
-                    tmp += "in der Funktion on_pushButton_start_clicked";
-                    QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                }else
-                {
-                    QString inhalt = datei.readAll();
-                    wste.import_dxf_oberseite(nam_ohn_pref, inhalt);
-                    datei.close();
-                    if(Einstellung.quelldateien_erhalten() == false)
-                    {
-                        QFile originaldatei(pfad);
-                        originaldatei.remove();
-                    }
+                    QFile originaldatei(pfad);
+                    originaldatei.remove();
                 }
             }
         }

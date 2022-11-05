@@ -4,8 +4,8 @@ einstellung_dxf::einstellung_dxf()
 {
     Paramtren = "_";
     Dezitren = "_";
-    KennungOberseite = "1";
-    KennungUnterseite = "2";
+    KennungOberseite = "_1";
+    KennungUnterseite = "_2";
     DrehtypUnterseite = "B";
 }
 void einstellung_dxf::set_text(QString t)
@@ -40,6 +40,7 @@ void einstellung_dxf::set_text(QString t)
     }
 }
 
+//-------------------------------------------set:
 QString einstellung_dxf::text()
 {
     QString text;
@@ -71,7 +72,6 @@ QString einstellung_dxf::text()
 
     return text;
 }
-
 void einstellung_dxf::set_paramtren(QString parametertrennzeichen)
 {
     Paramtren = parametertrennzeichen;
@@ -93,6 +93,7 @@ void einstellung_dxf::set_dretypUnsei(QString drehtyp)
     DrehtypUnterseite = drehtyp;
 }
 
+//-------------------------------------------get:
 QString einstellung_dxf::paramtren()
 {
     return Paramtren;
@@ -113,6 +114,27 @@ QString einstellung_dxf::drehtypUnsei()
 {
     return DrehtypUnterseite;
 }
+bool einstellung_dxf::drehtyp_L()
+{
+    if(drehtypUnsei() == "L")
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+bool einstellung_dxf::drehtyp_B()
+{
+    if(drehtypUnsei() == "B")
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+
 
 //-------------------Funktionen nicht innerhalb der Klasse:
 bool operator ==(einstellung_dxf e1, einstellung_dxf e2)

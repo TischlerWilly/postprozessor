@@ -5408,7 +5408,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
 
     return 0;
 }
-bool werkstuecke::import_dxf_oberseite(QString Werkstueckname, QString importtext)
+bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 {
     QString wstklasse = Einstellung_dxf_klassen.wst();
 
