@@ -5408,10 +5408,25 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
 
     return 0;
 }
+QString werkstuecke::dxf_wert(QString namen, QString werte, QString gesucht)
+{
+    text_zeilenweise tz_name;
+    text_zeilenweise tz_wert;
+    tz_name.set_text(namen);
+    tz_wert.set_text(werte);
+    QString ret;
+    for(uint i=1; i<=tz_name.zeilenanzahl() ;i++)
+    {
+        if(tz_name.zeile(i) == gesucht)
+        {
+            ret = tz_wert.zeile(i);
+            break;
+        }
+    }
+    return ret;
+}
 bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 {
-    QString wstklasse = Einstellung_dxf_klassen.wst();
-
     uint Index = index(Werkstueckname);
     if(Index == 0)
     {
@@ -5424,7 +5439,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
 
     //tz_name und tz_wert mit Daten füllen:
     bool schalter = true;
-    for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+    for(uint i=1; i<tz.zeilenanzahl() ;i++)
     {
         if(schalter == true)
         {
@@ -5447,14 +5462,13 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             break;//for
         }
     }
-
     //------------------------------
     if(dxf_version == "AC1009")
     {
         //Start und Ende finden:
         uint i_start = 0;
         uint i_ende  = 0;
-        //Geometriebereich ermitteln (Start und Ende):
+        //------------------------------Geometriebereich ermitteln (Start und Ende):
         for(uint i=1; i<=tz_name.zeilenanzahl() ;i++)
         {
             if(tz_name.zeile(i).toInt() == 2)// A name Attribute tag, Block name, and so on. Also used to identify a DXF section or table name
@@ -5473,71 +5487,66 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 }
             }
         }
-        uint i_block_start = i_start;
-        uint i_block_ende  = i_block_start;
-
-        //--------------------------------------------------
-        //Werkstück-Größe bestimmen:
-        double x = 0;
-        double y = 0;
-        for(uint i=i_start+1; i<=i_ende ;i++)
+        //------------------------------Unterblöcke ermitteln:
+        text_zeilenweise block;
+        //Ersten Block finden:
+        for(uint i=i_start; i<=i_ende ;i++)
         {
-            if(tz_name.zeile(i).toInt() == 0)//Blocktrenner ist die 0
+            if(tz_name.zeile(i) == DXF_AC1009_NULL)
             {
-                i_block_start = i_block_ende;
-                i_block_ende = i;
-
-                QString block_klasse;
-                for(uint ii=i_block_start; ii<=i_block_ende ;ii++)//den aktuellen Block durchlaufen
+                QString start = int_to_qstring(i_start);
+                QString ende = int_to_qstring(i);
+                QString tren = "|";
+                block.set_text(start+tren+ende);
+                break;
+            }
+        }
+        //restliche Blöcke finden:
+        for(uint i=i_start; i<=i_ende ;i++)
+        {
+            if(tz_name.zeile(i) == DXF_AC1009_NULL)
+            {
+                QString tren = "|";
+                QString start = text_rechts(block.zeile(block.zeilenanzahl()),tren);
+                QString ende = int_to_qstring(i);
+                block.zeile_anhaengen(start+tren+ende);
+            }
+        }
+        block.zeile_loeschen(block.zeilenanzahl());
+        block.zeile_loeschen(1);
+        block.zeile_loeschen(1);
+        //------------------------------Werkstück-Größe bestimmen:
+        for(uint i=1;i<=block.zeilenanzahl();i++)
+        {
+            uint sta = text_links(block.zeile(i),"|").toUInt();
+            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint anz = end-sta;
+            QString klasse;
+            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                              DXF_AC1009_KLASSE);
+            if(klasse.contains(Einstellung_dxf_klassen.wst()))
+            {
+                if(w.dicke()<=0)
                 {
-                    if(tz_name.zeile(ii) == DXF_AC1009_KLASSE)
-                    {
-                        block_klasse = tz_wert.zeile(ii);
-                    }
-                    if(tz_name.zeile(ii) == DXF_AC1009_POLYENDE)
-                    {
-                        i = i_ende+1;//Letzter Durchlauf der i-for-schleife
-                    }
-                }                
-
-                if(block_klasse.contains(wstklasse))
-                {
-                    QString dicke = text_rechts(block_klasse, Einstellung_dxf.paramtren());
+                    QString dicke = text_rechts(klasse, Einstellung_dxf.paramtren());
                     dicke.replace(Einstellung_dxf.dezitren(),".");
                     w.set_dicke(dicke);
-
-                    for(uint ii=i_block_start; ii<=i_block_ende ;ii++)//den aktuellen Block durchlaufen
-                    {                        
-                        if(tz_name.zeile(ii) == DXF_AC1009_WST_X)
-                        {
-                            double neu_x = tz_wert.zeile(ii).toDouble();
-                            if(neu_x > x)
-                            {
-                                x = neu_x;
-                            }
-                        }
-                        if(tz_name.zeile(ii) == DXF_AC1009_WST_Y)
-                        {
-                            double neu_y = tz_wert.zeile(ii).toDouble();
-                            if(neu_y > y)
-                            {
-                                y = neu_y;
-                            }
-                        }
-                    }
+                }
+                QString x = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                     DXF_AC1009_WST_X);
+                if(x.toDouble() > w.laenge())
+                {
                     w.set_laenge(x);
+                }
+                QString y = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                     DXF_AC1009_WST_Y);
+                if(y.toDouble() > w.breite())
+                {
                     w.set_breite(y);
                 }
             }
-
         }
-        //--------------------------------------------------
-        //nächster Auswertugnsschritt:
-        x = 0;//Wert resetten
-        y = 0;//Wert resetten
-
     }
-
     Wste.replace(Index-1, w);
     return 0;
 }
