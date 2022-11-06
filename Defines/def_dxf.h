@@ -15,6 +15,11 @@
 #define DXF_AC1009_WST_Y            "20"
 #define DXF_AC1009_WST_Z            "30"
 
+#define DXF_AC1009_KREIS            "CIRCLE"
+#define DXF_AC1009_KREIS_RAD        "40"
+#define DXF_AC1009_KREIS_X          "10"
+#define DXF_AC1009_KREIS_Y          "20"
+
 
 
 

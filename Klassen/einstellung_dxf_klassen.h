@@ -14,13 +14,16 @@ public:
     //set:
     void set_text(QString t);
     void set_wst(QString wstklasse);
+    void set_bohr_vert(QString klasse);
 
     //get:
     QString text();
     QString wst();
+    QString bohr_vert();
 
     private:
         QString Wst;
+        QString BohrVert;
 
 };
 

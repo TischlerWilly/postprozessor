@@ -5480,7 +5480,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             }
             if(i_start > 0 && tz_name.zeile(i).toInt() == 0)
             {
-                if(tz_wert.zeile(i) == DXF_AC1009_ENDSEC)
+                if(tz_wert.zeile(i) == DXF_AC1009_EOF)
                 {
                     i_ende = i;
                     break;//for i
@@ -5528,7 +5528,9 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             {
                 if(w.dicke()<=0)
                 {
-                    QString dicke = text_rechts(klasse, Einstellung_dxf.paramtren());
+                    QString dicke;
+                    dicke = text_rechts(klasse, Einstellung_dxf_klassen.wst());
+                    dicke = text_rechts(dicke, Einstellung_dxf.paramtren());
                     dicke.replace(Einstellung_dxf.dezitren(),".");
                     w.set_dicke(dicke);
                 }
@@ -5543,6 +5545,57 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 if(y.toDouble() > w.breite())
                 {
                     w.set_breite(y);
+                }
+            }
+        }
+        //------------------------------Bohrungen vertikal:
+        for(uint i=1;i<=block.zeilenanzahl();i++)
+        {
+            uint sta = text_links(block.zeile(i),"|").toUInt();
+            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint anz = end-sta;
+            QString klasse;
+            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                              DXF_AC1009_KLASSE);
+            if(klasse.contains(Einstellung_dxf_klassen.bohr_vert()))
+            {
+                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                       DXF_AC1009_NULL);
+                if(typ == DXF_AC1009_KREIS)
+                {
+                    bohrung bo;
+                    bo.set_afb("1");
+                    QString r = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                         DXF_AC1009_KREIS_RAD);
+                    bo.set_dm(r.toDouble()*2);
+                    QString ti;
+                    ti = text_rechts(klasse, Einstellung_dxf_klassen.bohr_vert());
+                    ti = text_rechts(ti, Einstellung_dxf.paramtren());
+                    ti.replace(Einstellung_dxf.dezitren(),".");
+                    bo.set_tiefe(ti);
+                    QString x = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                         DXF_AC1009_KREIS_X);
+                    QString y = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                         DXF_AC1009_KREIS_Y);
+                    if(istOberseite)
+                    {
+                        bo.set_bezug(WST_BEZUG_OBSEI);
+                        bo.set_x(x);
+                        bo.set_y(y);
+                    }else
+                    {
+                        bo.set_bezug(WST_BEZUG_UNSEI);
+                        if(Einstellung_dxf.drehtyp_L())
+                        {
+                            bo.set_x(w.laenge()-x.toDouble());
+                            bo.set_y(y);
+                        }else //if(Einstellung_dxf.drehtyp_B())
+                        {
+                            bo.set_x(x);
+                            bo.set_y(w.breite()-y.toDouble());
+                        }
+                    }
+                    w.neue_bearbeitung(bo.text());
                 }
             }
         }
