@@ -10,7 +10,6 @@ void geometrietext::clear()
     Text.clear();
     zeilenvorschub();
 }
-
 void geometrietext::zeilenvorschub()
 {
     Text.zeilen_anhaengen(" ");//fügt dem QString im tz ein "\n" und anschließend ein " " an
@@ -18,6 +17,19 @@ void geometrietext::zeilenvorschub()
     Aktuelle_zeile = Text.zeilenanzahl();
     //jede Zeile beginnt mit einem Leerzeichen
     //jede Zeile endet vor dem "\n"
+}
+bool geometrietext::isempty()
+{
+    QString tmp = Text.text();
+    tmp.replace("\n","");
+    tmp.replace(" ","");
+    if(tmp.isEmpty())
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
 }
 
 void geometrietext::add_punkt(punkt3d p)

@@ -5425,6 +5425,21 @@ QString werkstuecke::dxf_wert(QString namen, QString werte, QString gesucht)
     }
     return ret;
 }
+strecke werkstuecke::dxf_strecke(QString namen, QString werte, QString dxf_version)
+{
+    strecke s;
+    if(dxf_version == "AC1009")
+    {
+        punkt3d p;
+        p.set_x(dxf_wert(namen, werte, DXF_AC1009_STRECKE_SX));
+        p.set_y(dxf_wert(namen, werte, DXF_AC1009_STRECKE_SY));
+        s.set_start(p);
+        p.set_x(dxf_wert(namen, werte, DXF_AC1009_STRECKE_EX));
+        p.set_y(dxf_wert(namen, werte, DXF_AC1009_STRECKE_EY));
+        s.set_ende(p);
+    }
+    return s;
+}
 bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 {
     uint Index = index(Werkstueckname);
@@ -5599,6 +5614,86 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 }
             }
         }
+        //------------------------------Bohrungen horizontal:
+        geometrietext geo;
+        for(uint i=1;i<=block.zeilenanzahl();i++)
+        {
+            uint sta = text_links(block.zeile(i),"|").toUInt();
+            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint anz = end-sta;
+            QString klasse;
+            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                              DXF_AC1009_KLASSE);
+            if(klasse.contains(Einstellung_dxf_klassen.bohr_hori()))
+            {
+                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                       DXF_AC1009_NULL);
+                //Bohrung wird durch 2 Strecken definiert:
+                if(typ == DXF_AC1009_STRECKE)
+                {
+                    strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    if(geo.isempty())
+                    {
+                        geo.add_strecke(s);
+                    }else
+                    {
+                        strecke s2 = geo.text_zw().zeile(1);
+                        geo.clear();
+                        if(s.wink()==0 || s.wink()==180)//waagerecht
+                        {
+                            if(s.stapu().x()==0 || s.endpu().x()==0)//HBE von links
+                            {
+                                if(s.stapu().x() > s.endpu().x())
+                                {
+                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                }
+                                if(s2.stapu().x() > s2.endpu().x())
+                                {
+                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                }
+                                //.....
+                            }else//HBE von rechts
+                            {
+
+                            }
+                        }else //senkrecht
+                        {
+                            if(s.stapu().y()==0 || s.endpu().y()==0)//HBE von vorne (Süden)
+                            {
+                                if(s.stapu().y() > s.endpu().y())
+                                {
+                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                }
+                                if(s2.stapu().y() > s2.endpu().y())
+                                {
+                                    s2.drenen_um_mittelpunkt_2d(180,true);
+                                }
+                                strecke grundlinie;
+                                grundlinie.set_start(s.stapu());
+                                grundlinie.set_ende(s2.stapu());
+                                bohrung bo;
+                                bo.set_afb("1");
+                                bo.set_dm(grundlinie.laenge2d());
+                                bo.set_tiefe(s.laenge2d());
+                                bo.set_x(grundlinie.mitpu2d().x());
+                                bo.set_y(grundlinie.mitpu2d().y());
+                                QString z;
+                                z = text_rechts(klasse, Einstellung_dxf_klassen.bohr_hori());
+                                z = text_rechts(z, Einstellung_dxf.paramtren());
+                                z.replace(Einstellung_dxf.dezitren(),".");
+                                bo.set_z(z);
+                                bo.set_bezug(WST_BEZUG_VO);
+                                w.neue_bearbeitung(bo.text());
+                            }else//HBE von hinten (Norden)
+                            {
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        geo.clear();
     }
     Wste.replace(Index-1, w);
     return 0;

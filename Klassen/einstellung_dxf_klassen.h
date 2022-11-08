@@ -15,15 +15,18 @@ public:
     void set_text(QString t);
     void set_wst(QString wstklasse);
     void set_bohr_vert(QString klasse);
+    void set_bohr_hori(QString klasse);
 
     //get:
     QString text();
     QString wst();
     QString bohr_vert();
+    QString bohr_hori();
 
     private:
         QString Wst;
         QString BohrVert;
+        QString BohrHori;
 
 };
 

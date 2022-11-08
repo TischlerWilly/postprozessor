@@ -88,6 +88,7 @@ private:
     QString wert_nach_istgleich(QString text);
     bool    ist_ziffer(const QChar zeichen);
     QString dxf_wert(QString namen, QString werte, QString gesucht);
+    strecke dxf_strecke(QString namen, QString werte, QString dxf_version);
 
     //--------------------------------------------------Manipulationen:
     QString var_einsetzen(werkstueck w, QString formel);

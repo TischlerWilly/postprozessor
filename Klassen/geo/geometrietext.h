@@ -37,6 +37,7 @@ public:
     void add_rechteck(rechteck3d rec, uint zeile);
     void add_wuerfel(wuerfel w);
     void add_wuerfel(wuerfel w, uint zeile);
+    bool isempty();
 
     void set_text(QString neuer_text);
 

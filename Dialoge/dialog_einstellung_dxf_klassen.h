@@ -29,6 +29,7 @@ private slots:
     void on_pushButton_speichern_clicked();
     void on_lineEdit_wst_textChanged(const QString &arg1);    
     void on_lineEdit_bohr_vert_textChanged(const QString &arg1);
+    void on_lineEdit_bohr_hori_textChanged(const QString &arg1);
 
 private:
     Ui::Dialog_einstellung_dxf_klassen *ui;

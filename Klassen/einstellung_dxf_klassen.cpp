@@ -4,6 +4,7 @@ einstellung_dxf_klassen::einstellung_dxf_klassen()
 {
     Wst             = "Werkstk";
     BohrVert        = "V_Bohr";
+    BohrHori        = "H_Bohr";
 }
 
 //--------------------------set_xy():
@@ -24,6 +25,10 @@ void einstellung_dxf_klassen::set_text(QString t)
         {
             set_bohr_vert(spalten.zeile(2));
         }
+        if(spalten.zeile(1) == "Bohrung horizontal:")
+        {
+            set_bohr_hori(spalten.zeile(2));
+        }
     }
 }
 QString einstellung_dxf_klassen::text()
@@ -40,6 +45,11 @@ QString einstellung_dxf_klassen::text()
     text += bohr_vert();
     text += "\n";
 
+    text += "Bohrung horizontal:";
+    text += "\t";
+    text += bohr_hori();
+    text += "\n";
+
     return text;
 }
 
@@ -51,6 +61,10 @@ void einstellung_dxf_klassen::set_bohr_vert(QString klasse)
 {
     BohrVert = klasse;
 }
+void einstellung_dxf_klassen::set_bohr_hori(QString klasse)
+{
+    BohrHori = klasse;
+}
 
 //--------------------------get_xy():
 QString einstellung_dxf_klassen::wst()
@@ -61,12 +75,17 @@ QString einstellung_dxf_klassen::bohr_vert()
 {
     return BohrVert;
 }
+QString einstellung_dxf_klassen::bohr_hori()
+{
+    return BohrHori;
+}
 
 //-------------------Funktionen nicht innerhalb der Klasse:
 bool operator ==(einstellung_dxf_klassen e1, einstellung_dxf_klassen e2)
 {
     if(e1.wst() == e2.wst() &&\
-       e1.bohr_vert() == e2.bohr_vert())
+       e1.bohr_vert() == e2.bohr_vert()&&\
+       e1.bohr_hori() == e2.bohr_hori())
     {
         return true;
     }else
@@ -77,7 +96,8 @@ bool operator ==(einstellung_dxf_klassen e1, einstellung_dxf_klassen e2)
 bool operator !=(einstellung_dxf_klassen e1, einstellung_dxf_klassen e2)
 {
     if(e1.wst() == e2.wst() &&\
-       e1.bohr_vert() == e2.bohr_vert())
+       e1.bohr_vert() == e2.bohr_vert()&&\
+       e1.bohr_hori() == e2.bohr_hori())
     {
         return false;
     }else

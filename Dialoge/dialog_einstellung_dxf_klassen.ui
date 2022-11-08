@@ -19,20 +19,10 @@
      <x>20</x>
      <y>20</y>
      <width>461</width>
-     <height>73</height>
+     <height>99</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_wst"/>
-    </item>
-    <item row="1" column="2">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>19,6mm Dick</string>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="3">
      <widget class="QLineEdit" name="lineEdit_wst_beispiel">
       <property name="readOnly">
@@ -40,8 +30,12 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="3">
-     <widget class="QLineEdit" name="lineEdit_bohr_vert_beispiel"/>
+    <item row="1" column="2">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>19,6mm Dick</string>
+      </property>
+     </widget>
     </item>
     <item row="0" column="1">
      <widget class="QLabel" name="label">
@@ -54,6 +48,13 @@
       </property>
       <property name="text">
        <string>Klassenname</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Bohrung vertikal</string>
       </property>
      </widget>
     </item>
@@ -71,6 +72,19 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Bauteil</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_wst"/>
+    </item>
+    <item row="2" column="3">
+     <widget class="QLineEdit" name="lineEdit_bohr_vert_beispiel"/>
+    </item>
     <item row="2" column="1">
      <widget class="QLineEdit" name="lineEdit_bohr_vert"/>
     </item>
@@ -81,19 +95,25 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_5">
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_7">
       <property name="text">
-       <string>Bauteil</string>
+       <string>Bohrung horizontal</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_6">
+    <item row="3" column="2">
+     <widget class="QLabel" name="label_8">
       <property name="text">
-       <string>Bohrung vertikal</string>
+       <string>14,2mm tief</string>
       </property>
      </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_bohr_hori"/>
+    </item>
+    <item row="3" column="3">
+     <widget class="QLineEdit" name="lineEdit_bohr_hori_beispiel"/>
     </item>
    </layout>
   </widget>

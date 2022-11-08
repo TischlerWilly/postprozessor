@@ -20,7 +20,13 @@
 #define DXF_AC1009_KREIS_X          "10"
 #define DXF_AC1009_KREIS_Y          "20"
 
-
+#define DXF_AC1009_STRECKE          "LINE"
+#define DXF_AC1009_STRECKE_SX       "10"
+#define DXF_AC1009_STRECKE_EX       "11"
+#define DXF_AC1009_STRECKE_SY       "20"
+#define DXF_AC1009_STRECKE_EY       "21"
+#define DXF_AC1009_STRECKE_SZ       "30"
+#define DXF_AC1009_STRECKE_EZ       "31"
 
 
 
