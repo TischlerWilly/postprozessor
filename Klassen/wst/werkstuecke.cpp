@@ -5440,6 +5440,20 @@ strecke werkstuecke::dxf_strecke(QString namen, QString werte, QString dxf_versi
     }
     return s;
 }
+kreis werkstuecke::dxf_kreis(QString namen, QString werte, QString dxf_version)
+{
+    kreis k;
+    if(dxf_version == "AC1009")
+    {
+        k.set_radius(dxf_wert(namen, werte, DXF_AC1009_KREIS_RAD));
+        punkt3d p;
+        p.set_x(dxf_wert(namen, werte, DXF_AC1009_KREIS_X));
+        p.set_y(dxf_wert(namen, werte, DXF_AC1009_KREIS_Y));
+        p.set_z(dxf_wert(namen, werte, DXF_AC1009_KREIS_Z));
+        k.set_mittelpunkt(p);
+    }
+    return k;
+}
 bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 {
     uint Index = index(Werkstueckname);
@@ -5578,36 +5592,31 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                                        DXF_AC1009_NULL);
                 if(typ == DXF_AC1009_KREIS)
                 {
+                    kreis k = dxf_kreis(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
                     bohrung bo;
                     bo.set_afb("1");
-                    QString r = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
-                                         DXF_AC1009_KREIS_RAD);
-                    bo.set_dm(r.toDouble()*2);
                     QString ti;
                     ti = text_rechts(klasse, Einstellung_dxf_klassen.bohr_vert());
                     ti = text_rechts(ti, Einstellung_dxf.paramtren());
                     ti.replace(Einstellung_dxf.dezitren(),".");
                     bo.set_tiefe(ti);
-                    QString x = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
-                                         DXF_AC1009_KREIS_X);
-                    QString y = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
-                                         DXF_AC1009_KREIS_Y);
+                    bo.set_dm(k.radius()*2);
                     if(istOberseite)
                     {
                         bo.set_bezug(WST_BEZUG_OBSEI);
-                        bo.set_x(x);
-                        bo.set_y(y);
+                        bo.set_x(k.mitte3d().x());
+                        bo.set_y(k.mitte3d().y());
                     }else
                     {
                         bo.set_bezug(WST_BEZUG_UNSEI);
                         if(Einstellung_dxf.drehtyp_L())
                         {
-                            bo.set_x(w.laenge()-x.toDouble());
-                            bo.set_y(y);
+                            bo.set_x(w.laenge()-k.mitte3d().x());
+                            bo.set_y(k.mitte3d().y());
                         }else //if(Einstellung_dxf.drehtyp_B())
                         {
-                            bo.set_x(x);
-                            bo.set_y(w.breite()-y.toDouble());
+                            bo.set_x(k.mitte3d().x());
+                            bo.set_y(w.breite()-k.mitte3d().y());
                         }
                     }
                     w.neue_bearbeitung(bo.text());
@@ -5719,6 +5728,74 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             }
                         }
                         w.neue_bearbeitung(bo.text());
+                    }
+                }
+            }
+        }
+        geo.clear();
+        //------------------------------Nut vertikal:
+        for(uint i=1;i<=block.zeilenanzahl();i++)
+        {
+            uint sta = text_links(block.zeile(i),"|").toUInt();
+            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint anz = end-sta;
+            QString klasse;
+            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                              DXF_AC1009_KLASSE);
+            if(klasse.contains(Einstellung_dxf_klassen.nut_vert()))
+            {
+                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                       DXF_AC1009_NULL);
+                //Nut wird durch 2 Strecken definiert:
+                if(typ == DXF_AC1009_STRECKE)
+                {
+                    strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    if(geo.isempty())
+                    {
+                        geo.add_strecke(s);
+                    }else
+                    {
+                        strecke s2 = geo.text_zw().zeile(1);
+                        geo.clear();
+                        nut nu;
+                        nu.set_afb("1");
+                        QString ti;
+                        ti = text_rechts(klasse, Einstellung_dxf_klassen.nut_vert());
+                        ti = text_rechts(ti, Einstellung_dxf.paramtren());
+                        ti.replace(Einstellung_dxf.dezitren(),".");
+                        nu.set_tiefe(ti);
+                        strecke grundlinie_start;
+                        grundlinie_start.set_start(s.stapu());
+                        grundlinie_start.set_ende(s2.stapu());
+                        strecke grundlinie_ende;
+                        grundlinie_ende.set_start(s.endpu());
+                        grundlinie_ende.set_ende(s2.endpu());
+                        nu.set_breite(grundlinie_start.laenge2d());
+                        if(istOberseite)
+                        {
+                            nu.set_bezug(WST_BEZUG_OBSEI);
+                            nu.set_xs(grundlinie_start.mitpu3d().x());
+                            nu.set_ys(grundlinie_start.mitpu3d().y());
+                            nu.set_xe(grundlinie_ende.mitpu3d().x());
+                            nu.set_ye(grundlinie_ende.mitpu3d().y());
+                        }else
+                        {
+                            nu.set_bezug(WST_BEZUG_UNSEI);
+                            if(Einstellung_dxf.drehtyp_L())
+                            {
+                                nu.set_xs(w.laenge()-grundlinie_start.mitpu3d().x());
+                                nu.set_ys(grundlinie_start.mitpu3d().y());
+                                nu.set_xe(w.laenge()-grundlinie_ende.mitpu3d().x());
+                                nu.set_ye(grundlinie_ende.mitpu3d().y());
+                            }else //if(Einstellung_dxf.drehtyp_B())
+                            {
+                                nu.set_xs(grundlinie_start.mitpu3d().x());
+                                nu.set_ys(w.breite()-grundlinie_start.mitpu3d().y());
+                                nu.set_xe(grundlinie_ende.mitpu3d().x());
+                                nu.set_ye(w.breite()-grundlinie_ende.mitpu3d().y());
+                            }
+                        }
+                        w.neue_bearbeitung(nu.text());
                     }
                 }
             }

@@ -19,6 +19,7 @@
 #define DXF_AC1009_KREIS_RAD        "40"
 #define DXF_AC1009_KREIS_X          "10"
 #define DXF_AC1009_KREIS_Y          "20"
+#define DXF_AC1009_KREIS_Z          "30"
 
 #define DXF_AC1009_STRECKE          "LINE"
 #define DXF_AC1009_STRECKE_SX       "10"

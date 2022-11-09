@@ -35,6 +35,8 @@ void Dialog_einstellung_dxf_klassen::slot_einstellung(einstellung_dxf eg, einste
     ui->lineEdit_bohr_vert->setText(Einstellung_klassen.bohr_vert());
     ui->lineEdit_bohr_hori->clear();
     ui->lineEdit_bohr_hori->setText(Einstellung_klassen.bohr_hori());
+    ui->lineEdit_nut_vert->clear();
+    ui->lineEdit_nut_vert->setText(Einstellung_klassen.nut_vert());
     this->show();
 }
 
@@ -51,7 +53,6 @@ void Dialog_einstellung_dxf_klassen::on_lineEdit_wst_textChanged(const QString &
     beispiel += "6";
     ui->lineEdit_wst_beispiel->setText(beispiel);
 }
-
 void Dialog_einstellung_dxf_klassen::on_lineEdit_bohr_vert_textChanged(const QString &arg1)
 {
     QString beispiel = arg1;
@@ -60,7 +61,6 @@ void Dialog_einstellung_dxf_klassen::on_lineEdit_bohr_vert_textChanged(const QSt
     beispiel += "2";
     ui->lineEdit_bohr_vert_beispiel->setText(beispiel);
 }
-
 void Dialog_einstellung_dxf_klassen::on_lineEdit_bohr_hori_textChanged(const QString &arg1)
 {
     QString beispiel = arg1;
@@ -68,4 +68,12 @@ void Dialog_einstellung_dxf_klassen::on_lineEdit_bohr_hori_textChanged(const QSt
     beispiel += Einstellung_allgem.dezitren();
     beispiel += "2";
     ui->lineEdit_bohr_hori_beispiel->setText(beispiel);
+}
+void Dialog_einstellung_dxf_klassen::on_lineEdit_nut_vert_textChanged(const QString &arg1)
+{
+    QString beispiel = arg1;
+    beispiel += "_8";
+    beispiel += Einstellung_allgem.dezitren();
+    beispiel += "5";
+    ui->lineEdit_nut_vert_beispiel->setText(beispiel);
 }
