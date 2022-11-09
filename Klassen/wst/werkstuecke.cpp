@@ -5639,6 +5639,13 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                     {
                         strecke s2 = geo.text_zw().zeile(1);
                         geo.clear();
+                        bohrung bo;
+                        bo.set_afb("1");
+                        QString z;
+                        z = text_rechts(klasse, Einstellung_dxf_klassen.bohr_hori());
+                        z = text_rechts(z, Einstellung_dxf.paramtren());
+                        z.replace(Einstellung_dxf.dezitren(),".");
+                        bo.set_z(z);
                         if(s.wink()==0 || s.wink()==180)//waagerecht
                         {
                             if(s.stapu().x()==0 || s.endpu().x()==0)//HBE von links
@@ -5651,10 +5658,18 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                                 {
                                     s.drenen_um_mittelpunkt_2d(180,true);
                                 }
-                                //.....
+                                bo.set_bezug(WST_BEZUG_LI);
                             }else//HBE von rechts
                             {
-
+                                if(s.stapu().x() < s.endpu().x())
+                                {
+                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                }
+                                if(s2.stapu().x() < s2.endpu().x())
+                                {
+                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                }
+                                bo.set_bezug(WST_BEZUG_RE);
                             }
                         }else //senkrecht
                         {
@@ -5668,27 +5683,42 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                                 {
                                     s2.drenen_um_mittelpunkt_2d(180,true);
                                 }
-                                strecke grundlinie;
-                                grundlinie.set_start(s.stapu());
-                                grundlinie.set_ende(s2.stapu());
-                                bohrung bo;
-                                bo.set_afb("1");
-                                bo.set_dm(grundlinie.laenge2d());
-                                bo.set_tiefe(s.laenge2d());
-                                bo.set_x(grundlinie.mitpu2d().x());
-                                bo.set_y(grundlinie.mitpu2d().y());
-                                QString z;
-                                z = text_rechts(klasse, Einstellung_dxf_klassen.bohr_hori());
-                                z = text_rechts(z, Einstellung_dxf.paramtren());
-                                z.replace(Einstellung_dxf.dezitren(),".");
-                                bo.set_z(z);
                                 bo.set_bezug(WST_BEZUG_VO);
-                                w.neue_bearbeitung(bo.text());
                             }else//HBE von hinten (Norden)
                             {
-
+                                if(s.stapu().y() < s.endpu().y())
+                                {
+                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                }
+                                if(s2.stapu().y() < s2.endpu().y())
+                                {
+                                    s2.drenen_um_mittelpunkt_2d(180,true);
+                                }
+                                bo.set_bezug(WST_BEZUG_HI);
+                            }                            
+                        }
+                        strecke grundlinie;
+                        grundlinie.set_start(s.stapu());
+                        grundlinie.set_ende(s2.stapu());
+                        bo.set_dm(grundlinie.laenge2d());
+                        bo.set_tiefe(s.laenge2d());
+                        if(istOberseite)
+                        {
+                            bo.set_x(grundlinie.mitpu2d().x());
+                            bo.set_y(grundlinie.mitpu2d().y());
+                        }else
+                        {
+                            if(Einstellung_dxf.drehtyp_L())
+                            {
+                                bo.set_x(w.laenge()-grundlinie.mitpu2d().x());
+                                bo.set_y(grundlinie.mitpu2d().y());
+                            }else //if(Einstellung_dxf.drehtyp_B())
+                            {
+                                bo.set_x(grundlinie.mitpu2d().x());
+                                bo.set_y(w.breite()-grundlinie.mitpu2d().y());
                             }
                         }
+                        w.neue_bearbeitung(bo.text());
                     }
                 }
             }
