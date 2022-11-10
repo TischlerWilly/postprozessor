@@ -18,6 +18,10 @@ public:
     void set_kenObsei(QString kennung_oberseite);
     void set_kenUnsei(QString kennung_unterseite);
     void set_dretypUnsei(QString drehtyp);
+    void set_kenWKZnr(QString kennung);
+    void set_kenRadKorLi(QString kennung);
+    void set_kenRadKorMi(QString kennung);
+    void set_kenRadKorRe(QString kennung);
 
     //get:
     QString text();
@@ -28,6 +32,10 @@ public:
     QString drehtypUnsei();
     bool drehtyp_L();
     bool drehtyp_B();
+    QString kenWKZnr();
+    QString kenRadKorLi();
+    QString kenRadKorMi();
+    QString kenRadKorRe();
 
 private:
     QString Paramtren;
@@ -35,6 +43,10 @@ private:
     QString KennungOberseite;
     QString KennungUnterseite;
     QString DrehtypUnterseite; // "L" "B"
+    QString KennungWKZnr;
+    QString KennungRadKorLi;
+    QString KennungRadKorMi;
+    QString KennungRadKorRe;
 
 };
 

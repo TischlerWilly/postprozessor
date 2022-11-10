@@ -21,6 +21,10 @@ void Dialog_einstellung_dxf_klassen::on_pushButton_abbrechen_clicked()
 void Dialog_einstellung_dxf_klassen::on_pushButton_speichern_clicked()
 {
     Einstellung_klassen.set_wst(ui->lineEdit_wst->text());
+    Einstellung_klassen.set_bohr_vert(ui->lineEdit_bohr_vert->text());
+    Einstellung_klassen.set_bohr_hori(ui->lineEdit_bohr_hori->text());
+    Einstellung_klassen.set_nut_vert(ui->lineEdit_nut_vert->text());
+    Einstellung_klassen.set_fraes_vert(ui->lineEdit_fraes_vert->text());
     this->close();
     emit send_einstellung(Einstellung_klassen);
 }
@@ -37,6 +41,8 @@ void Dialog_einstellung_dxf_klassen::slot_einstellung(einstellung_dxf eg, einste
     ui->lineEdit_bohr_hori->setText(Einstellung_klassen.bohr_hori());
     ui->lineEdit_nut_vert->clear();
     ui->lineEdit_nut_vert->setText(Einstellung_klassen.nut_vert());
+    ui->lineEdit_fraes_vert->clear();
+    ui->lineEdit_fraes_vert->setText(Einstellung_klassen.fraes_vert());
     this->show();
 }
 
@@ -76,4 +82,22 @@ void Dialog_einstellung_dxf_klassen::on_lineEdit_nut_vert_textChanged(const QStr
     beispiel += Einstellung_allgem.dezitren();
     beispiel += "5";
     ui->lineEdit_nut_vert_beispiel->setText(beispiel);
+}
+void Dialog_einstellung_dxf_klassen::on_lineEdit_fraes_vert_textChanged(const QString &arg1)
+{
+    QString beispiel = arg1;
+    beispiel += "_-2";
+    beispiel += Einstellung_allgem.kenWKZnr();
+    beispiel += "601";
+    beispiel += Einstellung_allgem.kenRadKorLi();
+    ui->lineEdit_fraes_vert_beispiel1->setText(beispiel);
+
+    beispiel = arg1;
+    beispiel += "_5";
+    beispiel += Einstellung_allgem.dezitren();
+    beispiel += "0";
+    beispiel += Einstellung_allgem.kenWKZnr();
+    beispiel += "601";
+    beispiel += Einstellung_allgem.kenRadKorLi();
+    ui->lineEdit_fraes_vert_beispiel2->setText(beispiel);
 }

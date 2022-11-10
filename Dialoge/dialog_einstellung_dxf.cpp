@@ -70,6 +70,54 @@ void Dialog_einstellung_dxf::on_pushButton_ok_clicked()
     tmp = ui->comboBox_drehdypUnterseite->currentText();
     Einstellung.set_dretypUnsei(tmp);
 
+    tmp = ui->lineEdit_KennungWKZnr->text();
+    if(tmp.isEmpty())
+    {
+        QString msg;
+        msg = "Es wurde noch kein Kennung für die Werkzeugnummer angegeben!";
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.exec();
+        return;
+    }
+    Einstellung.set_kenWKZnr(tmp);
+
+    tmp = ui->lineEdit_KennungRadKorLi->text();
+    if(tmp.isEmpty())
+    {
+        QString msg;
+        msg = "Es wurde noch kein Kennung für die Radiuskorrektur links angegeben!";
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.exec();
+        return;
+    }
+    Einstellung.set_kenRadKorLi(tmp);
+
+    tmp = ui->lineEdit_KennungRadKorMi->text();
+    if(tmp.isEmpty())
+    {
+        QString msg;
+        msg = "Es wurde noch kein Kennung für die Radiuskorrektur mitte angegeben!";
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.exec();
+        return;
+    }
+    Einstellung.set_kenRadKorMi(tmp);
+
+    tmp = ui->lineEdit_KennungRadKorRe->text();
+    if(tmp.isEmpty())
+    {
+        QString msg;
+        msg = "Es wurde noch kein Kennung für die Radiuskorrektur rechts angegeben!";
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.exec();
+        return;
+    }
+    Einstellung.set_kenRadKorRe(tmp);
+
     this->close();
     emit send_einstellung(Einstellung);
 }
@@ -86,7 +134,6 @@ void Dialog_einstellung_dxf::slot_einstellung(einstellung_dxf e)
     ui->lineEdit_dezimaltrenner->setText(Einstellung.dezitren());
     ui->lineEdit_KennungOberseite->setText(Einstellung.kenObsei());
     ui->lineEdit_KennungUnterseite->setText(Einstellung.kenUnsei());
-
     if(Einstellung.drehtypUnsei() == "L")
     {
         ui->comboBox_drehdypUnterseite->setCurrentIndex(0);
@@ -94,6 +141,10 @@ void Dialog_einstellung_dxf::slot_einstellung(einstellung_dxf e)
     {
         ui->comboBox_drehdypUnterseite->setCurrentIndex(1);
     }
+    ui->lineEdit_KennungWKZnr->setText(Einstellung.kenWKZnr());
+    ui->lineEdit_KennungRadKorLi->setText(Einstellung.kenRadKorLi());
+    ui->lineEdit_KennungRadKorMi->setText(Einstellung.kenRadKorMi());
+    ui->lineEdit_KennungRadKorRe->setText(Einstellung.kenRadKorRe());
     this->show();
 }
 
