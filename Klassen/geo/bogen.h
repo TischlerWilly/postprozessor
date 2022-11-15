@@ -19,6 +19,7 @@ public:
     bogen(punkt3d startpunkt, punkt3d endpunkt);
     bogen(punkt3d startpunkt, punkt3d endpunkt, float radiuswert, bool im_uhrzeigersinn);
     bogen(punkt2d mipu, double rad, double startwinkel, double endwinkel);
+    bogen(punkt3d mipu, double rad, double startwinkel, double endwinkel);
 
     //------------------------------------------------------set_xy:
     void set_text(QString geotext);

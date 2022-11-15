@@ -7,15 +7,18 @@
 #include "Klassen/geo/punkt2d.h"
 #include "Klassen/geo/strecke.h"
 #include "Klassen/geo/bogen.h"
+#include "Klassen/geo/bogenac.h"
 
 
 
 punkt drehen(punkt drehzentrum, punkt alter_punkt, \
              float drehwinkel, bool drehrichtung_im_uhrzeigersinn);
 punkt2d drehen(punkt2d drehzentrum, punkt2d alter_punkt, \
-             float drehwinkel, bool drehrichtung_im_uhrzeigersinn);
+               float drehwinkel, bool drehrichtung_im_uhrzeigersinn);
 punkt3d drehen(punkt3d drehzentrum, punkt3d alter_punkt, \
-             float drehwinkel, bool drehrichtung_im_uhrzeigersinn);
+               float drehwinkel, bool drehrichtung_im_uhrzeigersinn);
+punkt3d drehen(punkt3d drehzentrum, punkt3d alter_punkt, \
+               double drehwinkel, bool drehrichtung_im_uhrzeigersinn);
 
 punkt drehen_ij(punkt drehzentrum, float drehwinkel, \
                 bool drehrichtung_im_uhrzeigersinn, \

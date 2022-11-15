@@ -21,6 +21,14 @@
 #define DXF_AC1009_KREIS_Y          "20"
 #define DXF_AC1009_KREIS_Z          "30"
 
+#define DXF_AC1009_BOGEN            "ARC"
+#define DXF_AC1009_BOGEN_MIPUX      "10"
+#define DXF_AC1009_BOGEN_MIPUY      "20"
+#define DXF_AC1009_BOGEN_MIPUZ      "30"
+#define DXF_AC1009_BOGEN_RAD        "40"
+#define DXF_AC1009_BOGEN_SWI        "50"
+#define DXF_AC1009_BOGEN_EWI        "51"
+
 #define DXF_AC1009_STRECKE          "LINE"
 #define DXF_AC1009_STRECKE_SX       "10"
 #define DXF_AC1009_STRECKE_EX       "11"

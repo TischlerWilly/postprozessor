@@ -5454,6 +5454,42 @@ kreis werkstuecke::dxf_kreis(QString namen, QString werte, QString dxf_version)
     }
     return k;
 }
+bogen werkstuecke::dxf_bogen(QString namen, QString werte, QString dxf_version)
+{
+    bogen b;
+    if(dxf_version == "AC1009")
+    {
+        punkt3d mipu;
+        mipu.set_x(dxf_wert(namen, werte, DXF_AC1009_BOGEN_MIPUX));
+        mipu.set_y(dxf_wert(namen, werte, DXF_AC1009_BOGEN_MIPUY));
+        mipu.set_z(dxf_wert(namen, werte, DXF_AC1009_BOGEN_MIPUZ));
+        double rad = dxf_wert(namen, werte, DXF_AC1009_BOGEN_RAD).toDouble();
+        double swi = dxf_wert(namen, werte, DXF_AC1009_BOGEN_SWI).toDouble();
+        double ewi = dxf_wert(namen, werte, DXF_AC1009_BOGEN_EWI).toDouble();
+        bogen tmp(mipu, rad, swi, ewi);
+        b = tmp;
+    }
+    return b;
+}
+bogenac werkstuecke::dxf_bogenac(QString namen, QString werte, QString dxf_version)
+{
+    bogenac b;
+    if(dxf_version == "AC1009")
+    {
+        punkt3d mipu;
+        mipu.set_x(dxf_wert(namen, werte, DXF_AC1009_BOGEN_MIPUX));
+        mipu.set_y(dxf_wert(namen, werte, DXF_AC1009_BOGEN_MIPUY));
+        mipu.set_z(dxf_wert(namen, werte, DXF_AC1009_BOGEN_MIPUZ));
+        double rad = dxf_wert(namen, werte, DXF_AC1009_BOGEN_RAD).toDouble();
+        double swi = dxf_wert(namen, werte, DXF_AC1009_BOGEN_SWI).toDouble();
+        double ewi = dxf_wert(namen, werte, DXF_AC1009_BOGEN_EWI).toDouble();
+        b.set_mipu(mipu);
+        b.set_rad(rad);
+        b.set_swi(swi);
+        b.set_ewi(ewi);
+    }
+    return b;
+}
 bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 {
     uint Index = index(Werkstueckname);
@@ -5797,6 +5833,105 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         }
                         w.neue_bearbeitung(nu.text());
                     }
+                }
+            }
+        }
+        geo.clear();
+        //------------------------------Fräsung vertikal:
+        punkt3d letztepos;
+        bool konturanfang = true;
+        for(uint i=1;i<=block.zeilenanzahl();i++)
+        {
+            uint sta = text_links(block.zeile(i),"|").toUInt();
+            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint anz = end-sta;
+            QString klasse;
+            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                              DXF_AC1009_KLASSE);
+            if(klasse.contains(Einstellung_dxf_klassen.fraes_vert()))
+            {
+                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                       DXF_AC1009_NULL);
+                //Nut wird durch 2 Strecken definiert:
+                if(typ == DXF_AC1009_STRECKE)
+                {
+
+                }else if(typ == DXF_AC1009_BOGEN)
+                {
+                    //wenn der erste Bogen falsch herum liegt dann nimmt er den falschen punkt
+                    //für letztepos
+
+                    //noch Z-Wert einarbeiten
+                    //noch Fräser abfahren?
+                    bogenac b = dxf_bogenac(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    if(konturanfang == true && i+1<=block.zeilenanzahl())
+                    {
+                        uint sta = text_links(block.zeile(i),"|").toUInt();
+                        uint end = text_rechts(block.zeile(i),"|").toUInt();
+                        uint anz = end-sta;
+                        QString klasse;
+                        klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                          DXF_AC1009_KLASSE);
+                        if(klasse.contains(Einstellung_dxf_klassen.fraes_vert()))
+                        {
+                            QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                                   DXF_AC1009_NULL);
+                            //Nut wird durch 2 Strecken definiert:
+                            if(typ == DXF_AC1009_STRECKE)
+                            {
+
+                            }else if(typ == DXF_AC1009_BOGEN)
+                            {
+                                bogenac b2 = dxf_bogenac(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                                if(  cagleich(b.spu(), b2.spu(),0.1)  ||\
+                                     cagleich(b.spu(), b2.epu(),0.1))
+                                {
+                                    b.richtung_unkehren();
+                                }
+                            }
+                        }
+                    }
+
+
+
+                    fraeserbogen fb;
+                    if(istOberseite)
+                    {                        
+                        double tolleranz = 1;
+                        if(cagleich(b.spu(), letztepos, tolleranz))
+                        {
+                            konturanfang = false;
+                        }else if(cagleich(b.epu(), letztepos, tolleranz))
+                        {
+                            b.richtung_unkehren();
+                            konturanfang = false;
+                        }else
+                        {
+                            fraueseraufruf fa;
+                            fa.set_x(b.spu().x());
+                            fa.set_y(b.spu().y());
+                            fa.set_z(b.spu().z());
+                            w.neue_bearbeitung(fa.text());
+                            konturanfang = true;
+                        }
+                        fb.set_bezug(WST_BEZUG_OBSEI);
+                        fb.set_uzs(b.im_uzs());
+                        fb.set_startpunkt(b.spu());
+                        fb.set_endpunkt(b.epu());
+                        fb.set_rad(b.rad());
+                    }else
+                    {
+                        fb.set_bezug(WST_BEZUG_UNSEI);
+                        if(Einstellung_dxf.drehtyp_L())
+                        {
+
+                        }else //if(Einstellung_dxf.drehtyp_B())
+                        {
+
+                        }
+                    }
+                    w.neue_bearbeitung(fb.text());
+                    letztepos = b.epu();
                 }
             }
         }

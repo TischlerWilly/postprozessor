@@ -23,6 +23,7 @@ SOURCES += main.cpp\
     Klassen/einstellung_dxf.cpp \
     Klassen/einstellung_dxf_klassen.cpp \
     Klassen/einstellung_ganx.cpp \
+    Klassen/geo/bogenac.cpp \
     Klassen/geo/geometrietext.cpp \
     Klassen/geo/kreis.cpp \
     Klassen/geo/rechteck3d.cpp \
@@ -77,6 +78,7 @@ HEADERS  += mainwindow.h \
     Klassen/einstellung_dxf_klassen.h \
     Klassen/einstellung_ganx.h \
     Klassen/formel.h \
+    Klassen/geo/bogenac.h \
     Klassen/geo/defines_geometrie.h \
     Klassen/geo/geometrietext.h \
     Klassen/geo/kreis.h \
