@@ -2,13 +2,14 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.22.11.15"
+#define PROGRAMMVERSION "3.22.11.16"
 #endif //PROGRAMMVERSION
 /*
 
 bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 
-
+Zuordnung Fräserhöhe noch einstellbar machen, ob Z-Pos sich auf
+OK oder UK wst bezieht
 
 
 
