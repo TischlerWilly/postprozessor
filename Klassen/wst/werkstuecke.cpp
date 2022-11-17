@@ -5861,8 +5861,14 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 fraeserhoehe = posz.toDouble();
                 if(fraeserhoehe > 0)
                 {
-                    fti = fraeserhoehe;
-                    fraeserhoehe = w.dicke()-fraeserhoehe;
+                    if(Einstellung_dxf.bezugTiFkonObSei())
+                    {
+                        fti = fraeserhoehe;
+                        fraeserhoehe = w.dicke()-fraeserhoehe;
+                    }else
+                    {
+                        fti = w.dicke()-fraeserhoehe;
+                    }
                 }else
                 {
                     fti = fraeserhoehe * -1;

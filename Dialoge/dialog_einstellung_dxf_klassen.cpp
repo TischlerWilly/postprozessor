@@ -93,9 +93,17 @@ void Dialog_einstellung_dxf_klassen::on_lineEdit_fraes_vert_textChanged(const QS
     ui->lineEdit_fraes_vert_beispiel1->setText(beispiel);
 
     beispiel = arg1;
-    beispiel += "_5";
-    beispiel += Einstellung_allgem.dezitren();
-    beispiel += "0";
+    if(Einstellung_allgem.bezugTiFkonObSei())
+    {
+        beispiel += "_5";
+        beispiel += Einstellung_allgem.dezitren();
+        beispiel += "0";
+    }else
+    {
+        beispiel += "_14";
+        beispiel += Einstellung_allgem.dezitren();
+        beispiel += "0";
+    }
     beispiel += Einstellung_allgem.kenWKZnr();
     beispiel += "601";
     beispiel += Einstellung_allgem.kenRadKorLi();

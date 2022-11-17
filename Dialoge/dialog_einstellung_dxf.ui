@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>363</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,10 +19,27 @@
      <x>10</x>
      <y>11</y>
      <width>381</width>
-     <height>230</height>
+     <height>256</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Kennung Datei für Oberseite</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Kennung Werkzeugnummer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_KennungOberseite"/>
+    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
@@ -30,18 +47,12 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_KennungOberseite"/>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_6">
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>Kennung Radiuskorrektur links</string>
+       <string>Kennung Datei für Unterseite</string>
       </property>
      </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit_parametertrenner"/>
     </item>
     <item row="7" column="0">
      <widget class="QLabel" name="label_7">
@@ -57,42 +68,15 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_KennungUnterseite"/>
-    </item>
-    <item row="4" column="1">
-     <widget class="QComboBox" name="comboBox_drehdypUnterseite"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_5">
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>Kennung Werkzeugnummer</string>
+       <string>Kennung Radiuskorrektur links</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Kennung Datei für Unterseite</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Kennung Datei für Oberseite</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_dezimaltrenner"/>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>Unterseite ist gedreht um</string>
-      </property>
-     </widget>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_parametertrenner"/>
     </item>
     <item row="8" column="0">
      <widget class="QLabel" name="label_8">
@@ -101,17 +85,43 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="lineEdit_KennungWKZnr"/>
+    <item row="8" column="1">
+     <widget class="QLineEdit" name="lineEdit_KennungRadKorRe"/>
     </item>
     <item row="6" column="1">
      <widget class="QLineEdit" name="lineEdit_KennungRadKorLi"/>
     </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEdit_KennungWKZnr"/>
+    </item>
+    <item row="4" column="1">
+     <widget class="QComboBox" name="comboBox_drehdypUnterseite"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Unterseite ist gedreht um</string>
+      </property>
+     </widget>
+    </item>
     <item row="7" column="1">
      <widget class="QLineEdit" name="lineEdit_KennungRadKorMi"/>
     </item>
-    <item row="8" column="1">
-     <widget class="QLineEdit" name="lineEdit_KennungRadKorRe"/>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dezimaltrenner"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_KennungUnterseite"/>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Angabe Frästiefe hat Bezug</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QComboBox" name="comboBox_bezugTiFkon"/>
     </item>
    </layout>
   </widget>
@@ -119,7 +129,7 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>260</y>
+     <y>320</y>
      <width>221</width>
      <height>31</height>
     </rect>

@@ -1256,7 +1256,9 @@ void MainWindow::on_actionInfo_triggered()
     tmp += "Mögliche Importformate:\n";
     tmp += "  *.FMC (IMAWOP4)\n";
     tmp += "  *.fmc  (IMAWOP4)\n";
-    tmp += "\n";
+    tmp += "  *.DXF mit Versionskennung AC1009\n";
+    tmp += "  *.dxf mit Versionskennung AC1009\n";
+    tmp += "\n";    
 
     tmp += "Hinweis zum GANX-Export:\n";
     tmp += "  Fräskonturen werden nicht ausgegeben.\n";

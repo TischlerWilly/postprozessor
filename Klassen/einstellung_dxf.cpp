@@ -11,6 +11,7 @@ einstellung_dxf::einstellung_dxf()
     KennungRadKorLi         = "L";
     KennungRadKorMi         = "N";
     KennungRadKorRe         = "R";
+    BezugTiFkon             = "Unterseite Bauteil";
 }
 void einstellung_dxf::set_text(QString t)
 {
@@ -56,6 +57,10 @@ void einstellung_dxf::set_text(QString t)
         if(spalten.zeile(1) == "Kennung Radiuskorrektur re:")
         {
             set_kenRadKorRe(spalten.zeile(2));
+        }
+        if(spalten.zeile(1) == "Tiefenangabe Fraeskontur:")
+        {
+            set_bezugTiFkon(spalten.zeile(2));
         }
     }
 }
@@ -110,6 +115,11 @@ QString einstellung_dxf::text()
     text += kenRadKorRe();
     text += "\n";
 
+    text += "Tiefenangabe Fraeskontur:";
+    text += "\t";
+    text += bezugTiFkon();
+    text += "\n";
+
     return text;
 }
 void einstellung_dxf::set_paramtren(QString parametertrennzeichen)
@@ -147,6 +157,10 @@ void einstellung_dxf::set_kenRadKorMi(QString kennung)
 void einstellung_dxf::set_kenRadKorRe(QString kennung)
 {
     KennungRadKorRe = kennung;
+}
+void einstellung_dxf::set_bezugTiFkon(QString bezug)
+{
+    BezugTiFkon = bezug;
 }
 
 //-------------------------------------------get:
@@ -206,7 +220,30 @@ QString einstellung_dxf::kenRadKorRe()
 {
     return KennungRadKorRe;
 }
-
+QString einstellung_dxf::bezugTiFkon()
+{
+    return BezugTiFkon;
+}
+bool einstellung_dxf::bezugTiFkonObSei()
+{
+    if(bezugTiFkon() == "Oberseite Bauteil")
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+bool einstellung_dxf::bezugTiFkonUnSei()
+{
+    if(bezugTiFkon() == "Unterseite Bauteil")
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
 
 //-------------------Funktionen nicht innerhalb der Klasse:
 bool operator ==(einstellung_dxf e1, einstellung_dxf e2)
@@ -219,7 +256,8 @@ bool operator ==(einstellung_dxf e1, einstellung_dxf e2)
        e1.kenWKZnr() == e2.kenWKZnr()&& \
        e1.kenRadKorLi() == e2.kenRadKorLi()&& \
        e1.kenRadKorMi() == e2.kenRadKorMi()&& \
-       e1.kenRadKorRe() == e2.kenRadKorRe()  )
+       e1.kenRadKorRe() == e2.kenRadKorRe()&&\
+       e1.bezugTiFkon() == e2.bezugTiFkon()  )
     {
         return true;
     }else
@@ -237,7 +275,8 @@ bool operator !=(einstellung_dxf e1, einstellung_dxf e2)
        e1.kenWKZnr() == e2.kenWKZnr()&& \
        e1.kenRadKorLi() == e2.kenRadKorLi()&& \
        e1.kenRadKorMi() == e2.kenRadKorMi()&& \
-       e1.kenRadKorRe() == e2.kenRadKorRe()  )
+       e1.kenRadKorRe() == e2.kenRadKorRe()&&\
+       e1.bezugTiFkon() == e2.bezugTiFkon()  )
     {
         return false;
     }else

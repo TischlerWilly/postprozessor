@@ -22,6 +22,7 @@ public:
     void set_kenRadKorLi(QString kennung);
     void set_kenRadKorMi(QString kennung);
     void set_kenRadKorRe(QString kennung);
+    void set_bezugTiFkon(QString bezug);
 
     //get:
     QString text();
@@ -36,6 +37,9 @@ public:
     QString kenRadKorLi();
     QString kenRadKorMi();
     QString kenRadKorRe();
+    QString bezugTiFkon();
+    bool bezugTiFkonObSei();
+    bool bezugTiFkonUnSei();
 
 private:
     QString Paramtren;
@@ -47,6 +51,7 @@ private:
     QString KennungRadKorLi;
     QString KennungRadKorMi;
     QString KennungRadKorRe;
+    QString BezugTiFkon;
 
 };
 

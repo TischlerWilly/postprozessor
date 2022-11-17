@@ -8,6 +8,8 @@ Dialog_einstellung_dxf::Dialog_einstellung_dxf(QWidget *parent) :
     ui->setupUi(this);
     ui->comboBox_drehdypUnterseite->addItem("L");
     ui->comboBox_drehdypUnterseite->addItem("B");
+    ui->comboBox_bezugTiFkon->addItem("Unterseite Bauteil");
+    ui->comboBox_bezugTiFkon->addItem("Oberseite Bauteil");
 }
 
 Dialog_einstellung_dxf::~Dialog_einstellung_dxf()
@@ -118,6 +120,9 @@ void Dialog_einstellung_dxf::on_pushButton_ok_clicked()
     }
     Einstellung.set_kenRadKorRe(tmp);
 
+    tmp = ui->comboBox_bezugTiFkon->currentText();
+    Einstellung.set_bezugTiFkon(tmp);
+
     this->close();
     emit send_einstellung(Einstellung);
 }
@@ -145,6 +150,13 @@ void Dialog_einstellung_dxf::slot_einstellung(einstellung_dxf e)
     ui->lineEdit_KennungRadKorLi->setText(Einstellung.kenRadKorLi());
     ui->lineEdit_KennungRadKorMi->setText(Einstellung.kenRadKorMi());
     ui->lineEdit_KennungRadKorRe->setText(Einstellung.kenRadKorRe());
+    if(Einstellung.bezugTiFkonUnSei())
+    {
+        ui->comboBox_bezugTiFkon->setCurrentIndex(0);
+    }else
+    {
+        ui->comboBox_bezugTiFkon->setCurrentIndex(1);
+    }
     this->show();
 }
 
