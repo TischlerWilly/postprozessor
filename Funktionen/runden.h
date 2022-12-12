@@ -6,6 +6,7 @@
 int aufrunden(float zahl);
 int abrunden(float zahl);
 float runden (float alte_zahl, int anzahl_der_nachkommastellen);
+double runden (double alte_zahl, int anzahl_der_nachkommastellen);
 
 
 

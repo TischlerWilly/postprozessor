@@ -5636,7 +5636,9 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                     ti = text_rechts(ti, Einstellung_dxf.paramtren());
                     ti.replace(Einstellung_dxf.dezitren(),".");
                     bo.set_tiefe(ti);
-                    bo.set_dm(k.radius()*2);
+                    double dm = k.radius()*2;
+                    dm = runden(dm, 1);
+                    bo.set_dm(dm);
                     if(istOberseite)
                     {
                         bo.set_bezug(WST_BEZUG_OBSEI);
@@ -5745,7 +5747,9 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         strecke grundlinie;
                         grundlinie.set_start(s.stapu());
                         grundlinie.set_ende(s2.stapu());
-                        bo.set_dm(grundlinie.laenge2d());
+                        double dm = grundlinie.laenge2d();
+                        dm = runden(dm, 1);
+                        bo.set_dm(dm);
                         bo.set_tiefe(s.laenge2d());
                         if(istOberseite)
                         {
