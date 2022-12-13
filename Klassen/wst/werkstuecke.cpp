@@ -5635,7 +5635,12 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                     ti = text_rechts(klasse, Einstellung_dxf_klassen.bohr_vert());
                     ti = text_rechts(ti, Einstellung_dxf.paramtren());
                     ti.replace(Einstellung_dxf.dezitren(),".");
-                    bo.set_tiefe(ti);
+                    double ti_double = ti.toDouble();
+                    if(ti_double == w.dicke())
+                    {
+                        ti_double = ti_double + 4;
+                    }
+                    bo.set_tiefe(ti_double);
                     double dm = k.radius()*2;
                     dm = runden(dm, 1);
                     bo.set_dm(dm);
