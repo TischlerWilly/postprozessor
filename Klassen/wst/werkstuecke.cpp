@@ -5913,6 +5913,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 }
             }
         }
+        geo.clear();
         //------------------------------Rechtecktasche:
         for(uint i=1;i<=block.zeilenanzahl();i++)
         {
@@ -5924,9 +5925,87 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                               DXF_AC1009_KLASSE);
             if(klasse.contains(Einstellung_dxf_klassen.rta()))
             {
-
+                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                       DXF_AC1009_NULL);
+                //RTA wird durch 4 Strecken definiert:
+                if(typ == DXF_AC1009_STRECKE)
+                {
+                    strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    text_zeilenweise geotz = geo.text_zw();
+                    geotz.set_trennzeichen(';');
+                    if(geotz.zeilenanzahl() < 4)
+                    {
+                        geo.add_strecke(s);
+                    }else
+                    {
+                        strecke s1 = geotz.zeile(1);//von OL nach OR
+                        strecke s2 = geotz.zeile(2);//von OR nach UR
+                        strecke s3 = geotz.zeile(3);//von UR nach UL
+                        strecke s4 = s;             //von UL nach OL
+                        rechtecktasche rt;
+                        rt.set_afb("1");
+                        QString ti;
+                        ti = text_rechts(klasse, Einstellung_dxf_klassen.rta());
+                        ti = text_rechts(ti, Einstellung_dxf.paramtren());
+                        if(ti.contains(Einstellung_dxf.kenWKZnr()))
+                        {
+                            QString wkznr = text_rechts(ti, Einstellung_dxf.kenWKZnr());
+                            rt.set_wkznum(wkznr);
+                            ti = text_links(ti, Einstellung_dxf.kenWKZnr());
+                        }
+                        ti.replace(Einstellung_dxf.dezitren(),".");
+                        double ti_double = ti.toDouble();
+                        if(ti_double == w.dicke())
+                        {
+                            ti_double = ti_double + 2;
+                        }
+                        if(ti_double < 0)
+                        {
+                            ti_double = w.dicke() - ti_double;
+                        }
+                        rt.set_tiefe(ti_double);
+                        rt.set_laenge(s.laenge2d());
+                        rt.set_breite(s2.laenge2d());
+                        strecke tmp;
+                        tmp.set_start(s2.mitpu3d());
+                        tmp.set_ende(s4.mitpu3d());
+                        if(istOberseite)
+                        {
+                            rt.set_bezug(WST_BEZUG_OBSEI);
+                            rt.set_x(tmp.mitpu3d().x());
+                            rt.set_y(tmp.mitpu3d().y());
+                            rt.set_drewi(s1.wink());
+                        }else
+                        {
+                            rt.set_bezug(WST_BEZUG_UNSEI);
+                            if(Einstellung_dxf.drehtyp_L())
+                            {
+                                rt.set_x(w.laenge()-tmp.mitpu3d().x());
+                                rt.set_y(tmp.mitpu3d().y());
+                            }else //if(Einstellung_dxf.drehtyp_B())
+                            {
+                                rt.set_x(tmp.mitpu3d().x());
+                                rt.set_y(w.breite()-tmp.mitpu3d().y());
+                            }
+                            //Der Winkel hau einen Werk zwischen 0 und 360°
+                            //1° entspricht 181° usw.
+                            //das heißt, der Winkel kann bei Bedarf gekürzt werden:
+                            double winkel = s1.wink();
+                            if(winkel > 180)
+                            {
+                                winkel = winkel -180;
+                            }
+                            //Auf die Unterseite drehen, weil Drehen um L/2
+                            //Bei drehen um B/2 verhällt sich der winkel genauso:
+                            winkel = 180 - winkel;
+                            rt.set_drewi(winkel);
+                        }
+                        w.neue_bearbeitung(rt.text());
+                    }
+                }
             }
         }
+        geo.clear();
         //------------------------------Fräsung vertikal:
         punkt3d letztepos;
         bool konturanfang = true;
