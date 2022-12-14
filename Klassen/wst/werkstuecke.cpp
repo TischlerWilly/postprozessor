@@ -5640,6 +5640,10 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                     {
                         ti_double = ti_double + 4;
                     }
+                    if(ti_double < 0)
+                    {
+                        ti_double = w.dicke() - ti_double;
+                    }
                     bo.set_tiefe(ti_double);
                     double dm = k.radius()*2;
                     dm = runden(dm, 1);
@@ -5846,6 +5850,83 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             }
         }
         geo.clear();
+        //------------------------------Kreistasche:
+        for(uint i=1;i<=block.zeilenanzahl();i++)
+        {
+            uint sta = text_links(block.zeile(i),"|").toUInt();
+            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint anz = end-sta;
+            QString klasse;
+            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                              DXF_AC1009_KLASSE);
+            if(klasse.contains(Einstellung_dxf_klassen.kta()))
+            {
+                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                                       DXF_AC1009_NULL);
+                if(typ == DXF_AC1009_KREIS)
+                {
+                    kreis k = dxf_kreis(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    bohrung bo;
+                    bo.set_afb("1");
+                    QString ti;
+                    ti = text_rechts(klasse, Einstellung_dxf_klassen.kta());
+                    ti = text_rechts(ti, Einstellung_dxf.paramtren());
+                    if(ti.contains(Einstellung_dxf.kenWKZnr()))
+                    {
+                        QString wkznr = text_rechts(ti, Einstellung_dxf.kenWKZnr());
+                        bo.set_wkznum(wkznr);
+                        ti = text_links(ti, Einstellung_dxf.kenWKZnr());
+                    }
+                    ti.replace(Einstellung_dxf.dezitren(),".");
+                    double ti_double = ti.toDouble();
+                    if(ti_double == w.dicke())
+                    {
+                        ti_double = ti_double + 2;
+                    }
+                    if(ti_double < 0)
+                    {
+                        ti_double = w.dicke() - ti_double;
+                    }
+                    bo.set_tiefe(ti_double);
+                    double dm = k.radius()*2;
+                    dm = runden(dm, 1);
+                    bo.set_dm(dm);
+                    if(istOberseite)
+                    {
+                        bo.set_bezug(WST_BEZUG_OBSEI);
+                        bo.set_x(k.mitte3d().x());
+                        bo.set_y(k.mitte3d().y());
+                    }else
+                    {
+                        bo.set_bezug(WST_BEZUG_UNSEI);
+                        if(Einstellung_dxf.drehtyp_L())
+                        {
+                            bo.set_x(w.laenge()-k.mitte3d().x());
+                            bo.set_y(k.mitte3d().y());
+                        }else //if(Einstellung_dxf.drehtyp_B())
+                        {
+                            bo.set_x(k.mitte3d().x());
+                            bo.set_y(w.breite()-k.mitte3d().y());
+                        }
+                    }
+                    w.neue_bearbeitung(bo.text());
+                }
+            }
+        }
+        //------------------------------Rechtecktasche:
+        for(uint i=1;i<=block.zeilenanzahl();i++)
+        {
+            uint sta = text_links(block.zeile(i),"|").toUInt();
+            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint anz = end-sta;
+            QString klasse;
+            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                              DXF_AC1009_KLASSE);
+            if(klasse.contains(Einstellung_dxf_klassen.rta()))
+            {
+
+            }
+        }
         //------------------------------Fräsung vertikal:
         punkt3d letztepos;
         bool konturanfang = true;

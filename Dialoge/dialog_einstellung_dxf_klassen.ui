@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>568</width>
-    <height>335</height>
+    <height>416</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,19 +19,85 @@
      <x>20</x>
      <y>20</y>
      <width>541</width>
-     <height>222</height>
+     <height>326</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_bohr_hori"/>
+    <item row="3" column="2">
+     <widget class="QLabel" name="label_17">
+      <property name="text">
+       <string>14,2mm tief</string>
+      </property>
+     </widget>
     </item>
-    <item row="1" column="3">
-     <widget class="QLineEdit" name="lineEdit_wst_beispiel">
+    <item row="10" column="0" colspan="4">
+     <widget class="QLabel" name="label_14">
+      <property name="text">
+       <string>Beispiel jeweil mit Werkzeug 601 mit Radiuskorrektur links bei einem Bauteil mit 19mm Dicke:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QLabel" name="label_19">
+      <property name="text">
+       <string>mit WKZ</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_16">
+      <property name="text">
+       <string>Rechtecktaschen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="2">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>durchgefräst 2mm</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>Fräser vertikal</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="3">
+     <widget class="QLineEdit" name="lineEdit_bohr_hori_beispiel">
       <property name="readOnly">
        <bool>true</bool>
       </property>
      </widget>
+    </item>
+    <item row="7" column="2">
+     <widget class="QLabel" name="label_18">
+      <property name="text">
+       <string>14,2mm tief</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Bohrung horizontal</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="3">
+     <widget class="QLineEdit" name="lineEdit_rta_beispiel">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="lineEdit_rta"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_wst"/>
     </item>
     <item row="0" column="1">
      <widget class="QLabel" name="label">
@@ -47,18 +113,8 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_9">
-      <property name="text">
-       <string>Nut vertikal</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_bohr_vert"/>
-    </item>
-    <item row="4" column="3">
-     <widget class="QLineEdit" name="lineEdit_nut_vert_beispiel">
+    <item row="2" column="3">
+     <widget class="QLineEdit" name="lineEdit_bohr_vert_beispiel">
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -71,24 +127,64 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="2">
-     <widget class="QLabel" name="label_10">
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit_nut_vert"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>8,5mm breit</string>
+       <string>Bohrung vertikal</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="2">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>19,6mm Dick</string>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEdit_kta"/>
+    </item>
+    <item row="11" column="3">
+     <widget class="QLineEdit" name="lineEdit_fraes_vert_beispiel1">
+      <property name="readOnly">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
-    <item row="3" column="2">
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="lineEdit_wst_beispiel">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="3">
+     <widget class="QLineEdit" name="lineEdit_kta_beispiel">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
      <widget class="QLabel" name="label_8">
       <property name="text">
        <string>14,2mm tief</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="3">
+     <widget class="QLineEdit" name="lineEdit_2"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Nut vertikal</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_bohr_vert"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_15">
+      <property name="text">
+       <string>Kreistaschen</string>
       </property>
      </widget>
     </item>
@@ -99,29 +195,19 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="3">
-     <widget class="QLineEdit" name="lineEdit_bohr_hori_beispiel">
+    <item row="6" column="3">
+     <widget class="QLineEdit" name="lineEdit_kta_beispiel2">
       <property name="readOnly">
        <bool>true</bool>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_6">
+    <item row="1" column="2">
+     <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>Bohrung vertikal</string>
+       <string>19,6mm Dick</string>
       </property>
      </widget>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_11">
-      <property name="text">
-       <string>Fräser vertikal</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="lineEdit_nut_vert"/>
     </item>
     <item row="0" column="2" colspan="2">
      <widget class="QLabel" name="label_2">
@@ -137,41 +223,34 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
+    <item row="4" column="2">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>8,5mm breit</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
      <widget class="QLineEdit" name="lineEdit_fraes_vert"/>
     </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_wst"/>
-    </item>
-    <item row="7" column="3">
-     <widget class="QLineEdit" name="lineEdit_fraes_vert_beispiel1">
+    <item row="4" column="3">
+     <widget class="QLineEdit" name="lineEdit_nut_vert_beispiel">
       <property name="readOnly">
        <bool>true</bool>
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_7">
-      <property name="text">
-       <string>Bohrung horizontal</string>
-      </property>
-     </widget>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_bohr_hori"/>
     </item>
-    <item row="7" column="2">
-     <widget class="QLabel" name="label_12">
-      <property name="text">
-       <string>durchgefräst 2mm</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QLineEdit" name="lineEdit_bohr_vert_beispiel">
+    <item row="12" column="3">
+     <widget class="QLineEdit" name="lineEdit_fraes_vert_beispiel2">
       <property name="readOnly">
        <bool>true</bool>
       </property>
      </widget>
     </item>
-    <item row="8" column="2">
+    <item row="12" column="2">
      <widget class="QLabel" name="label_13">
       <property name="text">
        <string>5mm tief eingefräst</string>
@@ -179,16 +258,16 @@
      </widget>
     </item>
     <item row="8" column="3">
-     <widget class="QLineEdit" name="lineEdit_fraes_vert_beispiel2">
+     <widget class="QLineEdit" name="lineEdit_rta_beispiel2">
       <property name="readOnly">
        <bool>true</bool>
       </property>
      </widget>
     </item>
-    <item row="6" column="0" colspan="4">
-     <widget class="QLabel" name="label_14">
+    <item row="8" column="2">
+     <widget class="QLabel" name="label_20">
       <property name="text">
-       <string>Beispiel jeweil mit Werkzeug 601 mit Radiuskorrektur links bei einem Bauteil mit 19mm Dicke:</string>
+       <string>mit WKZ</string>
       </property>
      </widget>
     </item>
@@ -198,7 +277,7 @@
    <property name="geometry">
     <rect>
      <x>220</x>
-     <y>300</y>
+     <y>380</y>
      <width>261</width>
      <height>25</height>
     </rect>
@@ -221,6 +300,25 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_wst</tabstop>
+  <tabstop>lineEdit_bohr_vert</tabstop>
+  <tabstop>lineEdit_bohr_hori</tabstop>
+  <tabstop>lineEdit_nut_vert</tabstop>
+  <tabstop>lineEdit_kta</tabstop>
+  <tabstop>lineEdit_rta</tabstop>
+  <tabstop>lineEdit_fraes_vert</tabstop>
+  <tabstop>lineEdit_wst_beispiel</tabstop>
+  <tabstop>lineEdit_bohr_vert_beispiel</tabstop>
+  <tabstop>lineEdit_bohr_hori_beispiel</tabstop>
+  <tabstop>lineEdit_nut_vert_beispiel</tabstop>
+  <tabstop>lineEdit_kta_beispiel</tabstop>
+  <tabstop>lineEdit_rta_beispiel</tabstop>
+  <tabstop>lineEdit_fraes_vert_beispiel1</tabstop>
+  <tabstop>lineEdit_fraes_vert_beispiel2</tabstop>
+  <tabstop>pushButton_speichern</tabstop>
+  <tabstop>pushButton_abbrechen</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

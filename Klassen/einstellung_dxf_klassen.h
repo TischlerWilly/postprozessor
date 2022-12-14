@@ -17,6 +17,8 @@ public:
     void set_bohr_vert(QString klasse);
     void set_bohr_hori(QString klasse);
     void set_nut_vert(QString klasse);
+    void set_kta(QString klasse);
+    void set_rta(QString klasse);
     void set_fraes_vert(QString klasse);
 
     //get:
@@ -25,6 +27,8 @@ public:
     QString bohr_vert();
     QString bohr_hori();
     QString nut_vert();
+    QString kta();
+    QString rta();
     QString fraes_vert();
 
     private:
@@ -33,6 +37,8 @@ public:
         QString BohrHori;
         QString NutVert;
         QString FraesVert;
+        QString Kta;
+        QString Rta;
 
 };
 

@@ -7,6 +7,8 @@ einstellung_dxf_klassen::einstellung_dxf_klassen()
     BohrHori        = "H_Bohr";
     NutVert         = "V_Saeg";
     FraesVert       = "V_Fraes";
+    Kta             = "F_Tasche";
+    Rta             = "F_Tasche";
 }
 
 //--------------------------set_xy():
@@ -34,6 +36,14 @@ void einstellung_dxf_klassen::set_text(QString t)
         if(spalten.zeile(1) == "Nut vertikal:")
         {
             set_nut_vert(spalten.zeile(2));
+        }
+        if(spalten.zeile(1) == "Kreistasche:")
+        {
+            set_kta(spalten.zeile(2));
+        }
+        if(spalten.zeile(1) == "Rechtecktasche:")
+        {
+            set_rta(spalten.zeile(2));
         }
         if(spalten.zeile(1) == "Fraeser vertikal:")
         {
@@ -65,6 +75,16 @@ QString einstellung_dxf_klassen::text()
     text += nut_vert();
     text += "\n";
 
+    text += "Kreistasche:";
+    text += "\t";
+    text += kta();
+    text += "\n";
+
+    text += "Rechtecktasche:";
+    text += "\t";
+    text += rta();
+    text += "\n";
+
     text += "Fraeser vertikal:";
     text += "\t";
     text += fraes_vert();
@@ -89,6 +109,14 @@ void einstellung_dxf_klassen::set_nut_vert(QString klasse)
 {
     NutVert = klasse;
 }
+void einstellung_dxf_klassen::set_kta(QString klasse)
+{
+    Kta = klasse;
+}
+void einstellung_dxf_klassen::set_rta(QString klasse)
+{
+    Rta = klasse;
+}
 void einstellung_dxf_klassen::set_fraes_vert(QString klasse)
 {
     FraesVert = klasse;
@@ -111,6 +139,14 @@ QString einstellung_dxf_klassen::nut_vert()
 {
     return NutVert;
 }
+QString einstellung_dxf_klassen::kta()
+{
+    return Kta;
+}
+QString einstellung_dxf_klassen::rta()
+{
+    return Rta;
+}
 QString einstellung_dxf_klassen::fraes_vert()
 {
     return FraesVert;
@@ -123,6 +159,8 @@ bool operator ==(einstellung_dxf_klassen e1, einstellung_dxf_klassen e2)
        e1.bohr_vert() == e2.bohr_vert()&&\
        e1.bohr_hori() == e2.bohr_hori()&&\
        e1.nut_vert() == e2.nut_vert()&&\
+       e1.kta() == e2.kta()&&\
+       e1.rta() == e2.rta()&&\
        e1.fraes_vert() == e2.fraes_vert())
     {
         return true;
@@ -137,6 +175,8 @@ bool operator !=(einstellung_dxf_klassen e1, einstellung_dxf_klassen e2)
        e1.bohr_vert() == e2.bohr_vert()&&\
        e1.bohr_hori() == e2.bohr_hori()&&\
        e1.nut_vert() == e2.nut_vert()&&\
+       e1.kta() == e2.kta()&&\
+       e1.rta() == e2.rta()&&\
        e1.fraes_vert() == e2.fraes_vert())
     {
         return false;
