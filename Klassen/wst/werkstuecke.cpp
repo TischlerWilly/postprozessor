@@ -5964,7 +5964,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             ti_double = w.dicke() - ti_double;
                         }
                         rt.set_tiefe(ti_double);
-                        rt.set_laenge(s.laenge2d());
+                        rt.set_laenge(s1.laenge2d());
                         rt.set_breite(s2.laenge2d());
                         strecke tmp;
                         tmp.set_start(s2.mitpu3d());
