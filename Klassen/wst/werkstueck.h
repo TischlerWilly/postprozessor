@@ -102,6 +102,10 @@ public:
     {
         return Zustand;
     }
+    inline wstzustand *zustand_ptr()
+    {
+        return &Zustand;
+    }
     //--------------------------------------------------Manipulationen:
     //--------------------------------------------------
 

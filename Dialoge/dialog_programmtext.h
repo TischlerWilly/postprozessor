@@ -2,8 +2,10 @@
 #define DIALOG_PROGRAMMTEXT_H
 
 #include <QDialog>
+#include <QListWidgetItem>
 
 #include "Klassen/wst/werkstueck.h"
+#include "Dialoge/dialog_bearb_rta.h"
 
 namespace Ui {
 class Dialog_programmtext;
@@ -20,6 +22,7 @@ public:
 private:
     Ui::Dialog_programmtext *ui;
     QString bezug(QString b);
+    werkstueck *Wst;
 
 signals:
     void signalIndexChange(int index);
@@ -31,6 +34,7 @@ public slots:
 private slots:
     void resizeEvent(QResizeEvent *event);
     void on_listWidget_prgtext_currentRowChanged(int currentRow);
+    void on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item);
 };
 
 #endif // DIALOG_PROGRAMMTEXT_H

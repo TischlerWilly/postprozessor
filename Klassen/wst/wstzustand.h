@@ -142,6 +142,16 @@ public:
             return tz;
         }
     }
+    inline text_zeilenweise *bearb_ptr()
+    {
+        if(Akt_zust != -1 && Akt_zust<Bearbeitung.count())
+        {
+            return &Bearbeitung[Akt_zust];
+        }else
+        {
+            return NULL;
+        }
+    }
     inline bool export_moeglich()
     {
         if(Akt_zust != -1 && Akt_zust<Export_moeglich.count())

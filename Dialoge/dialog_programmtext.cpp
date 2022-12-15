@@ -6,6 +6,7 @@ Dialog_programmtext::Dialog_programmtext(QWidget *parent) :
     ui(new Ui::Dialog_programmtext)
 {
     ui->setupUi(this);
+    Wst = NULL;
 }
 
 Dialog_programmtext::~Dialog_programmtext()
@@ -22,6 +23,7 @@ void Dialog_programmtext::resizeEvent(QResizeEvent *event)
 
 void Dialog_programmtext::slot_wst(werkstueck* w)
 {
+    Wst = w;
     ui->listWidget_prgtext->clear();
     QString fenstertitel = "Programmtext von: ";
     fenstertitel += w->name();
@@ -281,5 +283,32 @@ QString Dialog_programmtext::bezug(QString b)
     return msg;
 }
 
+void Dialog_programmtext::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    if(index == 0)
+    {
+        return;
+    }
+    //Zeile Auslesen:
+    text_zeilenweise bearb;
+    bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
+    bearb.set_text(Wst->zustand().bearb().zeile(index));
+    //Dialogfenster aufrufen:
+    if(bearb.zeile(1) == BEARBART_RTA)
+    {
+        Dialog_bearb_rta dlg_rta;
+        dlg_rta.set_data(bearb.text());
+        dlg_rta.exec();
+    }
+    //Werte zurück speichern:
+    QString zeile;
+    zeile = bearb.text();
+    Wst->zustand_ptr()->bearb_ptr()->zeile_ersaetzen(index, zeile);
 
-
+    //QString msg;
+    //msg = Wst->zustand().bearb().zeile(index);
+    //QMessageBox mb;
+    //mb.setText(msg);
+    //mb.exec();
+}

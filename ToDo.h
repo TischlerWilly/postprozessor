@@ -2,12 +2,15 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.22.12.14"
+#define PROGRAMMVERSION "3.22.12.15"
 #endif //PROGRAMMVERSION
 /*
 
 bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 
+void Dialog_programmtext::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
+
+void Dialog_bearb_rta::on_btn_ok_clicked()
 
 
 
