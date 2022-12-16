@@ -1919,6 +1919,36 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         n.set_ye(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_NUT_KOR)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        QString kor = ausdruck_auswerten(tmp);
+                        if(kor.toInt() != 0)//Korrektur nach links
+                        {
+                            punkt3d sp,ep;
+                            sp.set_x(n.xs());
+                            sp.set_y(n.ys());
+                            ep.set_x(n.xe());
+                            ep.set_y(n.ye());
+                            strecke s;
+                            s.set_start(sp);
+                            s.set_ende(ep);
+                            strecke stmp = s;
+                            stmp.set_laenge_2d(n.breite()/2, strecke_bezugspunkt_start);
+                            if(kor.toInt() == 1)//Korrektur nach links
+                            {
+                                stmp.drenen_um_endpunkt_2d(90, true);
+                            }else //if(kor.toInt() == 2)//Korrektur nach rechts
+                            {
+                                stmp.drenen_um_endpunkt_2d(90, false);
+                            }
+                            s.verschieben_um(stmp.stapu().x()-s.stapu().x(), stmp.stapu().y()-s.stapu().y());
+                            n.set_xs(s.stapu().x());
+                            n.set_ys(s.stapu().y());
+                            n.set_xe(s.endpu().x());
+                            n.set_ye(s.endpu().y());
+                        }
                     }
                 }
             }
@@ -4769,6 +4799,36 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
                         n.set_ye(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_NUT_KOR)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        QString kor = ausdruck_auswerten(tmp);
+                        if(kor.toInt() != 0)//Korrektur nach links
+                        {
+                            punkt3d sp,ep;
+                            sp.set_x(n.xs());
+                            sp.set_y(n.ys());
+                            ep.set_x(n.xe());
+                            ep.set_y(n.ye());
+                            strecke s;
+                            s.set_start(sp);
+                            s.set_ende(ep);
+                            strecke stmp = s;
+                            stmp.set_laenge_2d(n.breite()/2, strecke_bezugspunkt_start);
+                            if(kor.toInt() == 1)//Korrektur nach links
+                            {
+                                stmp.drenen_um_endpunkt_2d(90, true);
+                            }else //if(kor.toInt() == 2)//Korrektur nach rechts
+                            {
+                                stmp.drenen_um_endpunkt_2d(90, false);
+                            }
+                            s.verschieben_um(stmp.stapu().x()-s.stapu().x(), stmp.stapu().y()-s.stapu().y());
+                            n.set_xs(s.stapu().x());
+                            n.set_ys(s.stapu().y());
+                            n.set_xe(s.endpu().x());
+                            n.set_ye(s.endpu().y());
+                        }
                     }
                 }
             }
