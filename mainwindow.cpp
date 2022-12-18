@@ -57,6 +57,8 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_exporte, SLOT(slot_wst_umbenennen(QString,QString)));
     connect(this, SIGNAL(signal_wst_ausblenden(QString,bool)),\
             &dlg_exporte, SLOT(slot_wst_ausblenden(QString,bool)));
+    connect(&dlg_prgtext, SIGNAL(signalWstChanged(werkstueck*,int)),\
+            this, SLOT(slotWstChanged(werkstueck*,int)));
 
     this->setWindowState(Qt::WindowMaximized);
     ui->lineEdit_projekt->setFocus();
@@ -750,6 +752,12 @@ void MainWindow::getWSTMas(double l, double b, double d)
 void MainWindow::getDrewi(QString w)
 {
     ui->radioButton_drehung_autom->setToolTip(w);
+}
+void MainWindow::slotWstChanged(werkstueck *w, int index)
+{
+    //int index = ui->listWidget_wste->currentRow();
+    //on_listWidget_wste_currentRowChanged(index);
+    sendVorschauAktualisieren(*w, index);
 }
 //-----------------------------------------------------------------------LineEdits:
 void MainWindow::on_lineEdit_geraden_schwellenwert_editingFinished()

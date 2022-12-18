@@ -2,7 +2,7 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.22.12.16"
+#define PROGRAMMVERSION "3.22.12.18"
 #endif //PROGRAMMVERSION
 /*
 
@@ -10,7 +10,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
 
 void Dialog_programmtext::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
 
-void Dialog_bearb_rta::on_btn_ok_clicked()
+void Dialog_programmtext::slot_rta(rechtecktasche rta)
 
 
 

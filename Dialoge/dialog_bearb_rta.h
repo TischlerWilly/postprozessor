@@ -21,9 +21,12 @@ private slots:
     void on_btn_abbrechen_clicked();
     void on_btn_ok_clicked();
 
+signals:
+    void signal_rta(rechtecktasche rta);
+
 private:
     Ui::Dialog_bearb_rta *ui;
-    rechtecktasche Rta;
+
 };
 
 #endif // DIALOG_BEARB_RTA_H

@@ -21,6 +21,38 @@ void Dialog_programmtext::resizeEvent(QResizeEvent *event)
     ui->listWidget_prgtext->setFixedHeight(this->height()-10);
 }
 
+QString Dialog_programmtext::rta_zu_prgeile(QString text)
+{
+    QString msg = "RTA von ";
+    rechtecktasche rt(text);
+    msg += bezug(rt.bezug());
+    msg += "\tL: ";
+    msg += rt.laenge_qstring();
+    msg += "\tB: ";
+    msg += rt.breite_qstring();
+    msg += "\tTi: ";
+    msg += rt.tiefe_qstring();
+    msg += "\tX: ";
+    msg += rt.x_qstring();
+    msg += "\tY: ";
+    msg += rt.y_qstring();
+    msg += "\tZ: ";
+    msg += rt.z_qstring();
+    msg += "\tZSM: ";
+    msg += rt.zustellmass_qstring();
+    msg += "\tWi: ";
+    msg += rt.drewi_qstring();
+    msg += "\tRAD: ";
+    msg += rt.rad_qstring();
+    msg += "\tausr: ";
+    msg += rt.ausraeumen_qstring();
+    msg += "\tAFB: ";
+    msg += rt.afb();
+    msg += "\tWKZ: ";
+    msg += rt.wkznum();
+    return msg;
+}
+
 void Dialog_programmtext::slot_wst(werkstueck* w)
 {
     Wst = w;
@@ -146,34 +178,7 @@ void Dialog_programmtext::slot_wst(werkstueck* w)
             bearb = msg;
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
-            QString msg = "RTA von ";
-            rechtecktasche rt(zeile.text());
-            msg += bezug(rt.bezug());
-            msg += "\tL: ";
-            msg += rt.laenge_qstring();
-            msg += "\tB: ";
-            msg += rt.breite_qstring();
-            msg += "\tTi: ";
-            msg += rt.tiefe_qstring();
-            msg += "\tX: ";
-            msg += rt.x_qstring();
-            msg += "\tY: ";
-            msg += rt.y_qstring();
-            msg += "\tZ: ";
-            msg += rt.z_qstring();
-            msg += "\tZSM: ";
-            msg += rt.zustellmass_qstring();
-            msg += "\tWi: ";
-            msg += rt.drewi_qstring();
-            msg += "\tRAD: ";
-            msg += rt.rad_qstring();
-            msg += "\tausr: ";
-            msg += rt.ausraeumen_qstring();
-            msg += "\tAFB: ";
-            msg += rt.afb();
-            msg += "\tWKZ: ";
-            msg += rt.wkznum();
-            bearb = msg;
+            bearb = rta_zu_prgeile(zeile.text());
         }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
         {
             QString msg = "Fräser von ";
@@ -290,7 +295,7 @@ void Dialog_programmtext::on_listWidget_prgtext_itemDoubleClicked(QListWidgetIte
     {
         return;
     }
-    //Zeile Auslesen:
+    //Zeile Auslesen:    
     text_zeilenweise bearb;
     bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
     bearb.set_text(Wst->zustand().bearb().zeile(index));
@@ -298,17 +303,29 @@ void Dialog_programmtext::on_listWidget_prgtext_itemDoubleClicked(QListWidgetIte
     if(bearb.zeile(1) == BEARBART_RTA)
     {
         Dialog_bearb_rta dlg_rta;
+        dlg_rta.setModal(true);
+        connect(&dlg_rta, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
         dlg_rta.set_data(bearb.text());
         dlg_rta.exec();
     }
+}
+
+void Dialog_programmtext::slot_rta(rechtecktasche rta)
+{
+    int index = ui->listWidget_prgtext->currentRow();
     //Werte zurück speichern:
     QString zeile;
-    zeile = bearb.text();
-    Wst->zustand_ptr()->bearb_ptr()->zeile_ersaetzen(index, zeile);
+    zeile = rta.text();
+    ui->listWidget_prgtext->item(index)->setText(rta_zu_prgeile(zeile));
 
-    //QString msg;
-    //msg = Wst->zustand().bearb().zeile(index);
+    text_zeilenweise bearbeitungen = Wst->zustand().bearb();
+    bearbeitungen.zeile_ersaetzen(index, zeile);
+    Wst->zustand_ptr()->set_bearb(bearbeitungen);
+
+    //emit signalWstChanged(Wst, index);//Vorschaufenster aktualisieren anstoßen
+
     //QMessageBox mb;
-    //mb.setText(msg);
+    //mb.setText(Wst->zustand().bearb().text());
+    //mb.setText(rta_zu_prgeile(zeile));
     //mb.exec();
 }

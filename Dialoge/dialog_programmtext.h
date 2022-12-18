@@ -24,17 +24,22 @@ private:
     QString bezug(QString b);
     werkstueck *Wst;
 
+    QString rta_zu_prgeile(QString text);
+
 signals:
     void signalIndexChange(int index);
+    void signalWstChanged(werkstueck *w, int index);
 
 public slots:
     void slot_wst(werkstueck* w);
     void slot_zeilennummer(uint nr);
+    void slot_rta(rechtecktasche rta);
 
 private slots:
     void resizeEvent(QResizeEvent *event);
     void on_listWidget_prgtext_currentRowChanged(int currentRow);
     void on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item);
+
 };
 
 #endif // DIALOG_PROGRAMMTEXT_H

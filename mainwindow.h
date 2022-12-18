@@ -161,6 +161,7 @@ public slots:
     void getWarnungen(QString w);
     void getWSTMas(double l, double b, double d);
     void getDrewi(QString w);
+    void slotWstChanged(werkstueck *w, int index);
 
 };
 
