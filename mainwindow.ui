@@ -824,6 +824,7 @@
     <addaction name="actionInfo"/>
     <addaction name="actionExportUebersicht"/>
     <addaction name="actionWST_ausblenden"/>
+    <addaction name="actionWST_bearbeiten"/>
    </widget>
    <widget class="QMenu" name="menuEinstellungen">
     <property name="title">
@@ -895,6 +896,11 @@
   <action name="actionEinstellung_dxf">
    <property name="text">
     <string>DXF-Grundeinstellungen</string>
+   </property>
+  </action>
+  <action name="actionWST_bearbeiten">
+   <property name="text">
+    <string>WST bearbeiten</string>
    </property>
   </action>
  </widget>

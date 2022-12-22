@@ -5,6 +5,7 @@
 #include <QListWidgetItem>
 
 #include "Klassen/wst/werkstueck.h"
+#include "Funktionen/funktionen_prgtext.h"
 #include "Dialoge/dialog_bearb_rta.h"
 
 namespace Ui {
@@ -21,10 +22,10 @@ public:
 
 private:
     Ui::Dialog_programmtext *ui;
-    QString bezug(QString b);
+    //QString bezug(QString b);
     werkstueck *Wst;
 
-    QString rta_zu_prgeile(QString text);
+    //QString rta_zu_prgeile(QString text);
 
 signals:
     void signalIndexChange(int index);

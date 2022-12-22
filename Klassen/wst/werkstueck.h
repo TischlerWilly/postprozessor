@@ -66,6 +66,7 @@ public:
     double min_x();
     double max_y();
     double min_y();
+    geometrietext geo();
     inline double   laenge() const
     {
         return Laenge;
@@ -105,6 +106,22 @@ public:
     inline wstzustand *zustand_ptr()
     {
         return &Zustand;
+    }
+    inline QString kante_vo()
+    {
+        return Kante_vo;
+    }
+    inline QString kante_hi()
+    {
+        return Kante_hi;
+    }
+    inline QString kante_li()
+    {
+        return Kante_li;
+    }
+    inline QString kante_re()
+    {
+        return Kante_re;
     }
     //--------------------------------------------------Manipulationen:
     //--------------------------------------------------

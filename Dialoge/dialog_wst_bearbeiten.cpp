@@ -1,98 +1,87 @@
-﻿#include "dialog_programmtext.h"
-#include "ui_dialog_programmtext.h"
+#include "dialog_wst_bearbeiten.h"
+#include "ui_dialog_wst_bearbeiten.h"
 
-Dialog_programmtext::Dialog_programmtext(QWidget *parent) :
+Dialog_wst_bearbeiten::Dialog_wst_bearbeiten(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Dialog_programmtext)
+    ui(new Ui::Dialog_wst_bearbeiten)
 {
     ui->setupUi(this);
-    Wst = NULL;
+    clear();
+
+    connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
+            &vorschaufenster, SLOT(slot_aktualisieren_einzelwst(werkstueck,int)));
+    connect(this, SIGNAL(signalIndexChange(int)),\
+            &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
+    connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint)),\
+            this, SLOT(slot_zeilennummer(uint)));
+    //connect(&vorschaufenster, SIGNAL(sende_maus_pos(QPoint)),\
+    //         this, SLOT(getMausPosXY(QPoint)));
+
+    this->setWindowState(Qt::WindowMaximized);
 }
 
-Dialog_programmtext::~Dialog_programmtext()
+Dialog_wst_bearbeiten::~Dialog_wst_bearbeiten()
 {
     delete ui;
 }
 
-void Dialog_programmtext::resizeEvent(QResizeEvent *event)
+void Dialog_wst_bearbeiten::clear()
 {
-    ui->listWidget_prgtext->move(5,5);
-    ui->listWidget_prgtext->setFixedWidth(this->width()-10);
-    ui->listWidget_prgtext->setFixedHeight(this->height()-10);
-}
-/*
-QString Dialog_programmtext::rta_zu_prgeile(QString text)
-{
-    QString msg = "RTA von ";
-    rechtecktasche rt(text);
-    msg += bezug(rt.bezug());
-    msg += "\tL: ";
-    msg += rt.laenge_qstring();
-    msg += "\tB: ";
-    msg += rt.breite_qstring();
-    msg += "\tTi: ";
-    msg += rt.tiefe_qstring();
-    msg += "\tX: ";
-    msg += rt.x_qstring();
-    msg += "\tY: ";
-    msg += rt.y_qstring();
-    msg += "\tZ: ";
-    msg += rt.z_qstring();
-    msg += "\tZSM: ";
-    msg += rt.zustellmass_qstring();
-    msg += "\tWi: ";
-    msg += rt.drewi_qstring();
-    msg += "\tRAD: ";
-    msg += rt.rad_qstring();
-    msg += "\tausr: ";
-    msg += rt.ausraeumen_qstring();
-    msg += "\tAFB: ";
-    msg += rt.afb();
-    msg += "\tWKZ: ";
-    msg += rt.wkznum();
-    return msg;
-}
-*/
-void Dialog_programmtext::slot_wst(werkstueck* w)
-{
-    Wst = w;
+    Wst = nullptr;
     ui->listWidget_prgtext->clear();
-    QString fenstertitel = "Programmtext von: ";
-    fenstertitel += w->name();
-    this->setWindowTitle(fenstertitel);
+}
+
+void Dialog_wst_bearbeiten::resizeEvent(QResizeEvent *event)
+{
+    vorschaufenster.setParent(this);
+    vorschaufenster.move(5,5);
+    vorschaufenster.setFixedWidth(this->width()-400-15);
+    vorschaufenster.setFixedHeight(this->height()-20);
+    //----------------------
+    ui->listWidget_prgtext->move(vorschaufenster.pos().x()+vorschaufenster.width()+5, 5);
+    ui->listWidget_prgtext->setFixedWidth(400);
+    ui->listWidget_prgtext->setFixedHeight(this->height()-20);
+}
+
+void Dialog_wst_bearbeiten::set_wst(werkstueck *w)
+{
+    clear();
+    Wst = w;
+    update_listwidget();
+    ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
+    sendVorschauAktualisieren(*Wst, 0);
+}
+
+void Dialog_wst_bearbeiten::update_listwidget()
+{
     //Programmkopf als erste Zeile einfügen:
     text_zeilenweise pkopf;
     pkopf.set_trennzeichen(TRENNZ_BEARB_PARAM);
     QString param;
     param  = "L=";
-    param += double_to_qstring(w->zustand().l());
+    param += Wst->laenge_qstring();
     pkopf.zeile_anhaengen(param);
     param  = "B=";
-    param += double_to_qstring(w->zustand().b());
+    param += Wst->breite_qstring();
     pkopf.zeile_anhaengen(param);
     param  = "D=";
-    param += w->dicke_qstring();
-    pkopf.zeile_anhaengen(param);
-    param  = "Drehung ";
-    param += w->zustand().drehung();
-    pkopf.zeile_anhaengen(param);
-    param = w->zustand().format();
+    param += Wst->dicke_qstring();
     pkopf.zeile_anhaengen(param);
     param = "KaVo=";
-    param += w->zustand().kante_vo();
+    param += Wst->kante_vo();
     pkopf.zeile_anhaengen(param);
     param = "KaHi=";
-    param += w->zustand().kante_hi();
+    param += Wst->kante_hi();
     pkopf.zeile_anhaengen(param);
     param = "KaLi=";
-    param += w->zustand().kante_li();
+    param += Wst->kante_li();
     pkopf.zeile_anhaengen(param);
     param = "KaRe=";
-    param += w->zustand().kante_re();
+    param += Wst->kante_re();
     pkopf.zeile_anhaengen(param);
     ui->listWidget_prgtext->addItem(pkopf.text());
     //Bearbeitungen ab 2. Zeile einfügen:
-    text_zeilenweise tmp_bearb = w->zustand().bearb();
+    text_zeilenweise tmp_bearb = Wst->bearb();
     for(uint i=1; i<=tmp_bearb.zeilenanzahl() ;i++)
     {
         QString bearb = tmp_bearb.zeile(i);
@@ -247,10 +236,9 @@ void Dialog_programmtext::slot_wst(werkstueck* w)
         ui->listWidget_prgtext->addItem(bearb);
     }
     ui->listWidget_prgtext->addItem("...");
-    this->show();
 }
 
-void Dialog_programmtext::slot_zeilennummer(uint nr)
+void Dialog_wst_bearbeiten::slot_zeilennummer(uint nr)
 {
     if((int)nr < ui->listWidget_prgtext->count())
     {
@@ -258,74 +246,7 @@ void Dialog_programmtext::slot_zeilennummer(uint nr)
     }
 }
 
-void Dialog_programmtext::on_listWidget_prgtext_currentRowChanged(int currentRow)
+void Dialog_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int currentRow)
 {
     emit signalIndexChange(currentRow+1);
-}
-/*
-QString Dialog_programmtext::bezug(QString b)
-{
-    QString msg;
-    if(b == WST_BEZUG_OBSEI)
-    {
-        msg += "ob";
-    }else if(b == WST_BEZUG_UNSEI)
-    {
-        msg += "un";
-    }else if(b == WST_BEZUG_LI)
-    {
-        msg += "li";
-    }else if(b == WST_BEZUG_RE)
-    {
-        msg += "re";
-    }else if(b == WST_BEZUG_VO)
-    {
-        msg += "vo";
-    }else if(b == WST_BEZUG_HI)
-    {
-        msg += "hi";
-    }
-    return msg;
-}
-*/
-void Dialog_programmtext::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
-{
-    int index = ui->listWidget_prgtext->currentRow();
-    if(index == 0)
-    {
-        return;
-    }
-    //Zeile Auslesen:    
-    text_zeilenweise bearb;
-    bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    bearb.set_text(Wst->zustand().bearb().zeile(index));
-    //Dialogfenster aufrufen:
-    if(bearb.zeile(1) == BEARBART_RTA)
-    {
-        Dialog_bearb_rta dlg_rta;
-        dlg_rta.setModal(true);
-        connect(&dlg_rta, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
-        dlg_rta.set_data(bearb.text());
-        dlg_rta.exec();
-    }
-}
-
-void Dialog_programmtext::slot_rta(rechtecktasche rta)
-{
-    int index = ui->listWidget_prgtext->currentRow();
-    //Werte zurück speichern:
-    QString zeile;
-    zeile = rta.text();
-    ui->listWidget_prgtext->item(index)->setText(rta_zu_prgeile(zeile));
-
-    text_zeilenweise bearbeitungen = Wst->zustand().bearb();
-    bearbeitungen.zeile_ersaetzen(index, zeile);
-    Wst->zustand_ptr()->set_bearb(bearbeitungen);
-
-    //emit signalWstChanged(Wst, index);//Vorschaufenster aktualisieren anstoßen
-
-    //QMessageBox mb;
-    //mb.setText(Wst->zustand().bearb().text());
-    //mb.setText(rta_zu_prgeile(zeile));
-    //mb.exec();
 }

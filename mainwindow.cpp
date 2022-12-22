@@ -1346,6 +1346,17 @@ void MainWindow::on_actionWST_ausblenden_triggered()
         }
     }
 }
+void MainWindow::on_actionWST_bearbeiten_triggered()
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        const int wstindex = ui->listWidget_wste->currentRow()+1;
+        werkstueck *w = wste.wst(wstindex);
+        dlg_wst_bearbeiten.setWindowTitle(w->name());
+        dlg_wst_bearbeiten.set_wst(w);
+        dlg_wst_bearbeiten.show();
+    }
+}
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
 {
@@ -1913,6 +1924,10 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
         }
         ui->radioButton_drehung_autom->setToolTip(wste.wst(wstindex)->zustand().drehung());
         set_projektpfad();
+        if(dlg_wst_bearbeiten.isVisible())
+        {
+            on_actionWST_bearbeiten_triggered();
+        }
     }
 }
 void MainWindow::on_listWidget_wste_itemSelectionChanged()
@@ -2314,6 +2329,8 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
 
 
 

@@ -19,6 +19,7 @@
 #include "Dialoge/dialog_einstellung_dxf_klassen.h"
 #include "Dialoge/dialog_programmtext.h"
 #include "Dialoge/dialog_exportuebersicht.h"
+#include "Dialoge/dialog_wst_bearbeiten.h"
 
 #include "Funktionen/text.h"
 #include "Klassen/text_zeilenweise.h"
@@ -90,6 +91,8 @@ private slots:
     void on_actionEinstellung_dxf_klassen_triggered();
     void on_actionEinstellung_dxf_triggered();
 
+    void on_actionWST_bearbeiten_triggered();
+
 private:
     Ui::MainWindow *ui;
     text_zeilenweise wkz_magazin_ganx;
@@ -134,6 +137,7 @@ private:
     Dialog_einstellung_dxf_klassen dlg_einstellung_dxf_klassen;
     Dialog_programmtext dlg_prgtext;
     Dialog_ExportUebersicht dlg_exporte;
+    Dialog_wst_bearbeiten dlg_wst_bearbeiten;
 
 signals:
     void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);

@@ -2,15 +2,22 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.22.12.18"
+#define PROGRAMMVERSION "3.22.12.22"
 #endif //PROGRAMMVERSION
 /*
 
 bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 
-void Dialog_programmtext::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
 
-void Dialog_programmtext::slot_rta(rechtecktasche rta)
+Dialog_wst_bearbeiten --Funktionalität in diese Klasse verschieben von:
+    void Dialog_programmtext::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
+    void Dialog_programmtext::slot_rta(rechtecktasche rta)
+
+Funktionen/funktionen_prgtext.h
+    Funktionen vervollständigen und verwenden in
+        Dialog_wst_bearbeiten
+        Dialog_programmtext
+
 
 
 

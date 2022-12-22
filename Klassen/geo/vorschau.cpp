@@ -786,6 +786,17 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
     this->update();
 }
 
+void vorschau::slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile)
+{
+    W = w_neu;
+    Geotext = W.geo().text_zw();
+    Wst.set_laenge(w_neu.laenge());
+    Wst.set_breite(w_neu.breite());
+    Aktuelle_zeilennummer = aktive_zeile;
+    werkstueck_darstellung_berechnen();
+    this->update();
+}
+
 void vorschau::slot_aktives_Element_einfaerben(int zeilennummer)
 {
     //Element aus dieser Zeile farbig markieren

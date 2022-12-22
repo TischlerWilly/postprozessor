@@ -20,6 +20,8 @@ SOURCES += main.cpp\
     Dialoge/dialog_einstellung_pfade.cpp \
     Dialoge/dialog_exportuebersicht.cpp \
     Dialoge/dialog_programmtext.cpp \
+    Dialoge/dialog_wst_bearbeiten.cpp \
+    Funktionen/funktionen_prgtext.cpp \
     Klassen/einstellung.cpp \
     Klassen/einstellung_dxf.cpp \
     Klassen/einstellung_dxf_klassen.cpp \
@@ -75,6 +77,8 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_einstellung_pfade.h \
     Dialoge/dialog_exportuebersicht.h \
     Dialoge/dialog_programmtext.h \
+    Dialoge/dialog_wst_bearbeiten.h \
+    Funktionen/funktionen_prgtext.h \
     Klassen/einstellung.h \
     Klassen/einstellung_dxf.h \
     Klassen/einstellung_dxf_klassen.h \
@@ -144,6 +148,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_saege.ui \
     Dialoge/dialog_stdnamen.ui \
     Dialoge/dialog_stdname.ui \
+    Dialoge/dialog_wst_bearbeiten.ui
 
 DISTFILES += \
     Klassen/geo/makro_geometrie.h~ \

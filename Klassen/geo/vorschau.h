@@ -72,6 +72,7 @@ signals:
 
 public slots:
     void slot_aktualisieren(werkstueck w_neu, int aktive_zeile);
+    void slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile);
     void slot_aktives_Element_einfaerben(int zeilennummer);
 
 private slots:
