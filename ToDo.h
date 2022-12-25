@@ -8,11 +8,6 @@
 
 bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 
-
-Dialog_wst_bearbeiten --Funktionalität in diese Klasse verschieben von:
-    void Dialog_programmtext::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
-    void Dialog_programmtext::slot_rta(rechtecktasche rta)
-
 Funktionen/funktionen_prgtext.h
     Funktionen vervollständigen und verwenden in
         Dialog_wst_bearbeiten

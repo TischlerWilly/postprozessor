@@ -1941,6 +1941,10 @@ void MainWindow::on_listWidget_wste_itemDoubleClicked()
 {
     emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1));
 }
+void MainWindow::on_listWidget_wste_itemClicked(QListWidgetItem *item)
+{
+    on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+}
 //-----------------------------------------------------------------------
 void MainWindow::dateien_erfassen()
 {
@@ -2329,6 +2333,8 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
 
 
 

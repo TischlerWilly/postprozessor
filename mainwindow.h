@@ -93,6 +93,8 @@ private slots:
 
     void on_actionWST_bearbeiten_triggered();
 
+    void on_listWidget_wste_itemClicked(QListWidgetItem *item);
+
 private:
     Ui::MainWindow *ui;
     text_zeilenweise wkz_magazin_ganx;

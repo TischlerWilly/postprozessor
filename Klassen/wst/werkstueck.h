@@ -99,6 +99,10 @@ public:
     {
         return Bearbeitungen;
     }
+    inline text_zeilenweise *bearb_ptr()
+    {
+        return &Bearbeitungen;
+    }
     inline wstzustand zustand()
     {
         return Zustand;

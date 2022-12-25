@@ -2,6 +2,7 @@
 #define DIALOG_WST_BEARBEITEN_H
 
 #include <QDialog>
+#include <QListWidgetItem>
 #include "Klassen/geo/vorschau.h"
 #include "Klassen/wst/werkstueck.h"
 #include "Dialoge/dialog_bearb_rta.h"
@@ -34,8 +35,13 @@ signals:
 
 private slots:
     void resizeEvent(QResizeEvent *event);
+    void getMausPosXY(QPoint p);
     void slot_zeilennummer(uint nr);
-    void on_listWidget_prgtext_currentRowChanged(int currentRow);
+    void on_listWidget_prgtext_currentRowChanged(int currentRow);    
+    void on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item);
+
+public slots:
+    void slot_rta(rechtecktasche rta);
 };
 
 #endif // DIALOG_WST_BEARBEITEN_H

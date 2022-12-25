@@ -34,12 +34,10 @@ signals:
 public slots:
     void slot_wst(werkstueck* w);
     void slot_zeilennummer(uint nr);
-    void slot_rta(rechtecktasche rta);
 
 private slots:
     void resizeEvent(QResizeEvent *event);
     void on_listWidget_prgtext_currentRowChanged(int currentRow);
-    void on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item);
 
 };
 

@@ -14,9 +14,9 @@ Dialog_wst_bearbeiten::Dialog_wst_bearbeiten(QWidget *parent) :
             &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
     connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint)),\
             this, SLOT(slot_zeilennummer(uint)));
-    //connect(&vorschaufenster, SIGNAL(sende_maus_pos(QPoint)),\
-    //         this, SLOT(getMausPosXY(QPoint)));
-
+    connect(&vorschaufenster, SIGNAL(sende_maus_pos(QPoint)),\
+            this, SLOT(getMausPosXY(QPoint)));
+    this->setWindowFlags(Qt::Window);
     this->setWindowState(Qt::WindowMaximized);
 }
 
@@ -36,11 +36,38 @@ void Dialog_wst_bearbeiten::resizeEvent(QResizeEvent *event)
     vorschaufenster.setParent(this);
     vorschaufenster.move(5,5);
     vorschaufenster.setFixedWidth(this->width()-400-15);
-    vorschaufenster.setFixedHeight(this->height()-20);
+    vorschaufenster.setFixedHeight(this->height()-30);
     //----------------------
     ui->listWidget_prgtext->move(vorschaufenster.pos().x()+vorschaufenster.width()+5, 5);
     ui->listWidget_prgtext->setFixedWidth(400);
-    ui->listWidget_prgtext->setFixedHeight(this->height()-20);
+    ui->listWidget_prgtext->setFixedHeight(this->height()-30);
+    //----------------------
+    ui->label_xypos->move(ui->listWidget_prgtext->pos().x(),\
+                          ui->listWidget_prgtext->pos().y() + ui->listWidget_prgtext->height()+2);
+    ui->label_xypos->setFixedWidth(ui->listWidget_prgtext->width());
+}
+
+void Dialog_wst_bearbeiten::getMausPosXY(QPoint p)
+{
+    if(ui->listWidget_prgtext->selectedItems().count())
+    {
+        QString x = int_to_qstring(p.x());
+        QString y = int_to_qstring(p.y());
+        QString msg;
+        msg  = "X: ";
+        msg += x;
+        msg += " / Y: ";
+        msg += y;
+        ui->label_xypos->setText(msg);
+    }else
+    {
+        QString msg;
+        msg  = "X: ";
+        msg += "?";
+        msg += " / Y: ";
+        msg += "?";
+        ui->label_xypos->setText(msg);
+    }
 }
 
 void Dialog_wst_bearbeiten::set_wst(werkstueck *w)
@@ -249,4 +276,40 @@ void Dialog_wst_bearbeiten::slot_zeilennummer(uint nr)
 void Dialog_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int currentRow)
 {
     emit signalIndexChange(currentRow+1);
+}
+
+void Dialog_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    if(index == 0)
+    {
+        return;
+    }
+    //Zeile Auslesen:
+    text_zeilenweise bearb;
+    bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
+    bearb.set_text(Wst->bearb_ptr()->zeile(index));
+    //Dialogfenster aufrufen:
+    if(bearb.zeile(1) == BEARBART_RTA)
+    {
+        Dialog_bearb_rta dlg_rta;
+        dlg_rta.setModal(true);
+        connect(&dlg_rta, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
+        dlg_rta.set_data(bearb.text());
+        dlg_rta.exec();
+    }
+}
+
+void Dialog_wst_bearbeiten::slot_rta(rechtecktasche rta)
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    //Werte zurück speichern:
+    QString zeile;
+    zeile = rta.text();
+    ui->listWidget_prgtext->item(index)->setText(rta_zu_prgeile(zeile));
+
+    text_zeilenweise bearbeitungen = Wst->bearb();
+    bearbeitungen.zeile_ersaetzen(index, zeile);
+    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
+    emit sendVorschauAktualisieren(*Wst, index);
 }
