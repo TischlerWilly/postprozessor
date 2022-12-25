@@ -169,11 +169,18 @@ void Dialog_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetI
     //Dialogfenster aufrufen:
     if(bearb.zeile(1) == BEARBART_RTA)
     {
-        Dialog_bearb_rta dlg_rta;
-        dlg_rta.setModal(true);
-        connect(&dlg_rta, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
-        dlg_rta.set_data(bearb.text());
-        dlg_rta.exec();
+        Dialog_bearb_rta dlg;
+        dlg.setModal(true);
+        connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
+        dlg.set_data(bearb.text());
+        dlg.exec();
+    }else if(bearb.zeile(1) == BEARBART_BOHR)
+    {
+        Dialog_bearb_bohrung dlg;
+        dlg.setModal(true);
+        connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_bo(bohrung)));
+        dlg.set_data(bearb.text());
+        dlg.exec();
     }
 }
 
@@ -184,6 +191,19 @@ void Dialog_wst_bearbeiten::slot_rta(rechtecktasche rta)
     QString zeile;
     zeile = rta.text();
     ui->listWidget_prgtext->item(index)->setText(rta_zu_prgeile(zeile));
+
+    text_zeilenweise bearbeitungen = Wst->bearb();
+    bearbeitungen.zeile_ersaetzen(index, zeile);
+    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
+    emit sendVorschauAktualisieren(*Wst, index);
+}
+void Dialog_wst_bearbeiten::slot_bo(bohrung bo)
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    //Werte zurück speichern:
+    QString zeile;
+    zeile = bo.text();
+    ui->listWidget_prgtext->item(index)->setText(bohr_zu_prgeile(zeile));
 
     text_zeilenweise bearbeitungen = Wst->bearb();
     bearbeitungen.zeile_ersaetzen(index, zeile);
