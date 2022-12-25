@@ -2,11 +2,21 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.22.04.07"
+#define PROGRAMMVERSION "3.22.12.25"
 #endif //PROGRAMMVERSION
 /*
 
+bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
+    prüfung beim Import rta ob linien rechteck sind
 
+dialog_wst_bearbeiten
+    dlg erstellen für
+        faufruf
+            POS_XY ausgegraut!!
+        fgerade
+            POS_XY ausgegraut!!
+        fbogen
+            POS_XY ausgegraut!!
 
 
 

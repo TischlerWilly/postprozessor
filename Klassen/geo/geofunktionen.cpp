@@ -47,7 +47,7 @@ punkt2d drehen(punkt2d drehzentrum, punkt2d alter_punkt, \
 }
 
 punkt3d drehen(punkt3d drehzentrum, punkt3d alter_punkt, \
-             float drehwinkel, bool drehrichtung_im_uhrzeigersinn)
+               double drehwinkel, bool drehrichtung_im_uhrzeigersinn = false)
 {
     if(drehwinkel == 0)
     {

@@ -132,6 +132,7 @@
 #define FMC_NUT_YE              "EPY"
 #define FMC_NUT_TI              "TI"
 #define FMC_NUT_BR              "NB"
+#define FMC_NUT_KOR             "TRKOR"
 #define FMC_NUT_AFB             "AFB"
 
 #define FMC_LORAE               "[VBLAEN40]"    //Lochreihe Anfang Ende

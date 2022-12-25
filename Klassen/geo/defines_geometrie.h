@@ -46,6 +46,19 @@
 13) Breite der Linie
 14) Stil der Linie
 */
+
+#define BOGENAC     "cadBogenAc"
+/*
+ 2) x-Mittelpunkt
+ 3) y-Mittelpunkt
+ 4) z-Mittelpunkt
+ 5) Radius
+ 6) Startwinkel
+ 7) Endwinkel
+ 8) Farbe der Linie
+ 9) Breite der Linie
+10) Stil der Linie
+*/
 #define KREIS       "cadkreis"
 /*
  2) x-Mitte

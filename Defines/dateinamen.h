@@ -13,6 +13,9 @@
 
 #define GGF         ".ggf"
 
+#define DXF         ".dxf"
+#define DXF_        ".DXF"
+
 
 #define EIGENES_FORMAT  ".ppf"  //Post-Prozessor-Format
 

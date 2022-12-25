@@ -13,12 +13,22 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+    Dialoge/dialog_bearb_bohrung.cpp \
+    Dialoge/dialog_bearb_nut.cpp \
+    Dialoge/dialog_bearb_rta.cpp \
+    Dialoge/dialog_einstellung_dxf.cpp \
+    Dialoge/dialog_einstellung_dxf_klassen.cpp \
     Dialoge/dialog_einstellung_ganx.cpp \
     Dialoge/dialog_einstellung_pfade.cpp \
     Dialoge/dialog_exportuebersicht.cpp \
     Dialoge/dialog_programmtext.cpp \
+    Dialoge/dialog_wst_bearbeiten.cpp \
+    Funktionen/funktionen_prgtext.cpp \
     Klassen/einstellung.cpp \
+    Klassen/einstellung_dxf.cpp \
+    Klassen/einstellung_dxf_klassen.cpp \
     Klassen/einstellung_ganx.cpp \
+    Klassen/geo/bogenac.cpp \
     Klassen/geo/geometrietext.cpp \
     Klassen/geo/kreis.cpp \
     Klassen/geo/rechteck3d.cpp \
@@ -61,13 +71,24 @@ SOURCES += main.cpp\
     Dialoge/dialog_stdname.cpp
 
 HEADERS  += mainwindow.h \
+    Defines/def_dxf.h \
+    Dialoge/dialog_bearb_bohrung.h \
+    Dialoge/dialog_bearb_nut.h \
+    Dialoge/dialog_bearb_rta.h \
+    Dialoge/dialog_einstellung_dxf.h \
+    Dialoge/dialog_einstellung_dxf_klassen.h \
     Dialoge/dialog_einstellung_ganx.h \
     Dialoge/dialog_einstellung_pfade.h \
     Dialoge/dialog_exportuebersicht.h \
     Dialoge/dialog_programmtext.h \
+    Dialoge/dialog_wst_bearbeiten.h \
+    Funktionen/funktionen_prgtext.h \
     Klassen/einstellung.h \
+    Klassen/einstellung_dxf.h \
+    Klassen/einstellung_dxf_klassen.h \
     Klassen/einstellung_ganx.h \
     Klassen/formel.h \
+    Klassen/geo/bogenac.h \
     Klassen/geo/defines_geometrie.h \
     Klassen/geo/geometrietext.h \
     Klassen/geo/kreis.h \
@@ -118,6 +139,11 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_stdname.h \
 
 FORMS    += mainwindow.ui \
+    Dialoge/dialog_bearb_bohrung.ui \
+    Dialoge/dialog_bearb_nut.ui \
+    Dialoge/dialog_bearb_rta.ui \
+    Dialoge/dialog_einstellung_dxf.ui \
+    Dialoge/dialog_einstellung_dxf_klassen.ui \
     Dialoge/dialog_einstellung_ganx.ui \
     Dialoge/dialog_einstellung_pfade.ui \
     Dialoge/dialog_exportuebersicht.ui \
@@ -128,6 +154,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_saege.ui \
     Dialoge/dialog_stdnamen.ui \
     Dialoge/dialog_stdname.ui \
+    Dialoge/dialog_wst_bearbeiten.ui
 
 DISTFILES += \
     Klassen/geo/makro_geometrie.h~ \

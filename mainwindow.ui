@@ -824,6 +824,7 @@
     <addaction name="actionInfo"/>
     <addaction name="actionExportUebersicht"/>
     <addaction name="actionWST_ausblenden"/>
+    <addaction name="actionWST_bearbeiten"/>
    </widget>
    <widget class="QMenu" name="menuEinstellungen">
     <property name="title">
@@ -832,6 +833,8 @@
     <addaction name="actionEinstellung_pfade"/>
     <addaction name="actionStandard_Namen_anzeigen"/>
     <addaction name="actionEinstellung_ganx"/>
+    <addaction name="actionEinstellung_dxf"/>
+    <addaction name="actionEinstellung_dxf_klassen"/>
    </widget>
    <addaction name="menuWerkzeug"/>
    <addaction name="menuEinstellungen"/>
@@ -876,6 +879,9 @@
    <property name="text">
     <string>Exportübersicht</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
   </action>
   <action name="actionWST_ausblenden">
    <property name="text">
@@ -883,6 +889,24 @@
    </property>
    <property name="shortcut">
     <string>Del</string>
+   </property>
+  </action>
+  <action name="actionEinstellung_dxf_klassen">
+   <property name="text">
+    <string>DXF-Klasseneinstellung</string>
+   </property>
+  </action>
+  <action name="actionEinstellung_dxf">
+   <property name="text">
+    <string>DXF-Grundeinstellungen</string>
+   </property>
+  </action>
+  <action name="actionWST_bearbeiten">
+   <property name="text">
+    <string>WST bearbeiten</string>
+   </property>
+   <property name="shortcut">
+    <string>F3</string>
    </property>
   </action>
  </widget>

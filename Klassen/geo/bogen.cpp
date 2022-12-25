@@ -43,6 +43,26 @@ bogen::bogen(punkt2d mipu, double rad, double startwinkel, double endwinkel)
 
 }
 
+bogen::bogen(punkt3d mipu, double rad, double startwinkel, double endwinkel)
+{
+    Rad = rad;
+    punkt3d p;
+    p.set_x(mipu.x());
+    p.set_y(mipu.y());
+    p.set_z(mipu.z());
+    strecke ssp;
+    ssp.set_start(p);
+    p.set_x(mipu.x()+rad);
+    ssp.set_ende(p);
+    strecke sep = ssp;
+    ssp.drenen_um_startpunkt_2d(startwinkel, false);
+    sep.drenen_um_startpunkt_2d(endwinkel, false);
+    Stapu = ssp.endpu();
+    Endpu = sep.endpu();
+    Bogen_im_uzs = false;
+
+}
+
 void bogen::set_text(QString geotext)
 {
     text_zeilenweise tz;
