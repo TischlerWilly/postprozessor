@@ -8,10 +8,6 @@ Dialog_bearb_rta::Dialog_bearb_rta(QWidget *parent) :
     ui->setupUi(this);
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
-    ui->comboBox_bezug->addItem("Links");       //2
-    ui->comboBox_bezug->addItem("Rechts");      //3
-    ui->comboBox_bezug->addItem("Vorne");       //4
-    ui->comboBox_bezug->addItem("Hinten");      //5
 }
 
 Dialog_bearb_rta::~Dialog_bearb_rta()
@@ -82,18 +78,6 @@ void Dialog_bearb_rta::on_btn_ok_clicked()
     }else if(bezug == "Unterseite")
     {
         rta.set_bezug(WST_BEZUG_UNSEI);
-    }else if(bezug == "Links")
-    {
-        rta.set_bezug(WST_BEZUG_LI);
-    }else if(bezug == "Rechts")
-    {
-        rta.set_bezug(WST_BEZUG_RE);
-    }else if(bezug == "Vorne")
-    {
-        rta.set_bezug(WST_BEZUG_VO);
-    }else if(bezug == "Hinten")
-    {
-        rta.set_bezug(WST_BEZUG_HI);
     }
     rta.set_afb(ui->lineEdit_afb->text());
     rta.set_wkznum(ui->lineEdit_wkz->text());
