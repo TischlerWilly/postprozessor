@@ -7,6 +7,8 @@
 #include "Klassen/wst/werkstueck.h"
 #include "Dialoge/dialog_bearb_rta.h"
 #include "Dialoge/dialog_bearb_bohrung.h"
+#include "Dialoge/dialog_bearb_nut.h"
+
 #include "Funktionen/funktionen_prgtext.h"
 
 namespace Ui {
@@ -44,6 +46,7 @@ private slots:
 public slots:
     void slot_rta(rechtecktasche rta);
     void slot_bo(bohrung bo);
+    void slot_nut(nut nu);
 };
 
 #endif // DIALOG_WST_BEARBEITEN_H
