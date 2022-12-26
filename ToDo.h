@@ -6,8 +6,6 @@
 #endif //PROGRAMMVERSION
 /*
 
-bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
-    prüfung beim Import rta ob linien rechteck sind
 
 
 

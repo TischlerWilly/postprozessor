@@ -6048,65 +6048,88 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         strecke s2 = geotz.zeile(2);//von OR nach UR
                         strecke s3 = geotz.zeile(3);//von UR nach UL
                         strecke s4 = s;             //von UL nach OL
-                        rechtecktasche rt;
-                        rt.set_afb("1");
-                        QString ti;
-                        ti = text_rechts(klasse, Einstellung_dxf_klassen.rta());
-                        ti = text_rechts(ti, Einstellung_dxf.paramtren());
-                        if(ti.contains(Einstellung_dxf.kenWKZnr()))
+                        bool gesund = true;
+                        if(!cagleich(s1.laenge2d(), s3.laenge2d(),0.1))
                         {
-                            QString wkznr = text_rechts(ti, Einstellung_dxf.kenWKZnr());
-                            rt.set_wkznum(wkznr);
-                            ti = text_links(ti, Einstellung_dxf.kenWKZnr());
+                            gesund = false;
                         }
-                        ti.replace(Einstellung_dxf.dezitren(),".");
-                        double ti_double = ti.toDouble();
-                        if(ti_double == w.dicke())
+                        if(!cagleich(s2.laenge2d(), s4.laenge2d(),0.1))
                         {
-                            ti_double = ti_double + 2;
+                            gesund = false;
                         }
-                        if(ti_double < 0)
+                        strecke dg1;//Diagonale 1
+                        dg1.set_start(s1.stapu());
+                        dg1.set_ende(s3.stapu());
+                        strecke dg2;//Diagonale 2
+                        dg2.set_start(s1.endpu());
+                        dg2.set_ende(s3.endpu());
+                        //Wenn die Diagonalen gleich lang sind ist das 4Eck rechtwinkelig:
+                        if(!cagleich(dg1.laenge2d(), dg2.laenge2d(),0.1))
                         {
-                            ti_double = w.dicke() - ti_double;
+                            gesund = false;
                         }
-                        rt.set_tiefe(ti_double);
-                        rt.set_laenge(s1.laenge2d());
-                        rt.set_breite(s2.laenge2d());
-                        strecke tmp;
-                        tmp.set_start(s2.mitpu3d());
-                        tmp.set_ende(s4.mitpu3d());
-                        if(istOberseite)
+                        if(gesund == true)
                         {
-                            rt.set_bezug(WST_BEZUG_OBSEI);
-                            rt.set_x(tmp.mitpu3d().x());
-                            rt.set_y(tmp.mitpu3d().y());
-                            rt.set_drewi(s1.wink());
-                        }else
-                        {
-                            rt.set_bezug(WST_BEZUG_UNSEI);
-                            if(Einstellung_dxf.drehtyp_L())
+                            rechtecktasche rt;
+                            rt.set_afb("1");
+                            QString ti;
+                            ti = text_rechts(klasse, Einstellung_dxf_klassen.rta());
+                            ti = text_rechts(ti, Einstellung_dxf.paramtren());
+                            if(ti.contains(Einstellung_dxf.kenWKZnr()))
                             {
-                                rt.set_x(w.laenge()-tmp.mitpu3d().x());
-                                rt.set_y(tmp.mitpu3d().y());
-                            }else //if(Einstellung_dxf.drehtyp_B())
+                                QString wkznr = text_rechts(ti, Einstellung_dxf.kenWKZnr());
+                                rt.set_wkznum(wkznr);
+                                ti = text_links(ti, Einstellung_dxf.kenWKZnr());
+                            }
+                            ti.replace(Einstellung_dxf.dezitren(),".");
+                            double ti_double = ti.toDouble();
+                            if(ti_double == w.dicke())
                             {
+                                ti_double = ti_double + 2;
+                            }
+                            if(ti_double < 0)
+                            {
+                                ti_double = w.dicke() - ti_double;
+                            }
+                            rt.set_tiefe(ti_double);
+                            rt.set_laenge(s1.laenge2d());
+                            rt.set_breite(s2.laenge2d());
+                            strecke tmp;
+                            tmp.set_start(s2.mitpu3d());
+                            tmp.set_ende(s4.mitpu3d());
+                            if(istOberseite)
+                            {
+                                rt.set_bezug(WST_BEZUG_OBSEI);
                                 rt.set_x(tmp.mitpu3d().x());
-                                rt.set_y(w.breite()-tmp.mitpu3d().y());
-                            }
-                            //Der Winkel hau einen Werk zwischen 0 und 360°
-                            //1° entspricht 181° usw.
-                            //das heißt, der Winkel kann bei Bedarf gekürzt werden:
-                            double winkel = s1.wink();
-                            if(winkel > 180)
+                                rt.set_y(tmp.mitpu3d().y());
+                                rt.set_drewi(s1.wink());
+                            }else
                             {
-                                winkel = winkel -180;
+                                rt.set_bezug(WST_BEZUG_UNSEI);
+                                if(Einstellung_dxf.drehtyp_L())
+                                {
+                                    rt.set_x(w.laenge()-tmp.mitpu3d().x());
+                                    rt.set_y(tmp.mitpu3d().y());
+                                }else //if(Einstellung_dxf.drehtyp_B())
+                                {
+                                    rt.set_x(tmp.mitpu3d().x());
+                                    rt.set_y(w.breite()-tmp.mitpu3d().y());
+                                }
+                                //Der Winkel hau einen Werk zwischen 0 und 360°
+                                //1° entspricht 181° usw.
+                                //das heißt, der Winkel kann bei Bedarf gekürzt werden:
+                                double winkel = s1.wink();
+                                if(winkel > 180)
+                                {
+                                    winkel = winkel -180;
+                                }
+                                //Auf die Unterseite drehen, weil Drehen um L/2
+                                //Bei drehen um B/2 verhällt sich der winkel genauso:
+                                winkel = 180 - winkel;
+                                rt.set_drewi(winkel);
                             }
-                            //Auf die Unterseite drehen, weil Drehen um L/2
-                            //Bei drehen um B/2 verhällt sich der winkel genauso:
-                            winkel = 180 - winkel;
-                            rt.set_drewi(winkel);
+                            w.neue_bearbeitung(rt.text());
                         }
-                        w.neue_bearbeitung(rt.text());
                     }
                 }
             }
