@@ -6,6 +6,7 @@ Dialog_bearb_bohrung::Dialog_bearb_bohrung(QWidget *parent) :
     ui(new Ui::Dialog_bearb_bohrung)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Bohrung/Kreistasche");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
     ui->comboBox_bezug->addItem("Links");       //2

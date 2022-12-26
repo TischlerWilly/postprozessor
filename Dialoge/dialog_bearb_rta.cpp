@@ -6,6 +6,7 @@ Dialog_bearb_rta::Dialog_bearb_rta(QWidget *parent) :
     ui(new Ui::Dialog_bearb_rta)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Rechtecktasche");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
 }

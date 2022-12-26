@@ -6,6 +6,7 @@ Dialog_bearb_nut::Dialog_bearb_nut(QWidget *parent) :
     ui(new Ui::Dialog_bearb_nut)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Nut");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
 }

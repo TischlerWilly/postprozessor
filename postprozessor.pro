@@ -14,6 +14,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     Dialoge/dialog_bearb_bohrung.cpp \
+    Dialoge/dialog_bearb_faufruf.cpp \
+    Dialoge/dialog_bearb_fbogen.cpp \
+    Dialoge/dialog_bearb_fgerade.cpp \
     Dialoge/dialog_bearb_nut.cpp \
     Dialoge/dialog_bearb_rta.cpp \
     Dialoge/dialog_einstellung_dxf.cpp \
@@ -73,6 +76,9 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     Defines/def_dxf.h \
     Dialoge/dialog_bearb_bohrung.h \
+    Dialoge/dialog_bearb_faufruf.h \
+    Dialoge/dialog_bearb_fbogen.h \
+    Dialoge/dialog_bearb_fgerade.h \
     Dialoge/dialog_bearb_nut.h \
     Dialoge/dialog_bearb_rta.h \
     Dialoge/dialog_einstellung_dxf.h \
@@ -140,6 +146,9 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     Dialoge/dialog_bearb_bohrung.ui \
+    Dialoge/dialog_bearb_faufruf.ui \
+    Dialoge/dialog_bearb_fbogen.ui \
+    Dialoge/dialog_bearb_fgerade.ui \
     Dialoge/dialog_bearb_nut.ui \
     Dialoge/dialog_bearb_rta.ui \
     Dialoge/dialog_einstellung_dxf.ui \

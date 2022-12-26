@@ -8,6 +8,9 @@
 #include "Dialoge/dialog_bearb_rta.h"
 #include "Dialoge/dialog_bearb_bohrung.h"
 #include "Dialoge/dialog_bearb_nut.h"
+#include "Dialoge/dialog_bearb_faufruf.h"
+#include "Dialoge/dialog_bearb_fgerade.h"
+#include "Dialoge/dialog_bearb_fbogen.h"
 
 #include "Funktionen/funktionen_prgtext.h"
 
@@ -47,6 +50,9 @@ public slots:
     void slot_rta(rechtecktasche rta);
     void slot_bo(bohrung bo);
     void slot_nut(nut nu);
+    void slot_faufruf(fraueseraufruf fa);
+    void slot_fgerade(fraesergerade fg);
+    void slot_fbogen(fraeserbogen fb);
 };
 
 #endif // DIALOG_WST_BEARBEITEN_H

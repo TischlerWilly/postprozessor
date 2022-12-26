@@ -188,6 +188,27 @@ void Dialog_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetI
         connect(&dlg, SIGNAL(signal_nut(nut)), this, SLOT(slot_nut(nut)));
         dlg.set_data(bearb.text());
         dlg.exec();
+    }else if(bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
+    {
+        Dialog_bearb_faufruf dlg;
+        dlg.setModal(true);
+        connect(&dlg, SIGNAL(signal_faufruf(fraueseraufruf)), this, SLOT(slot_faufruf(fraueseraufruf)));
+        dlg.set_data(bearb.text());
+        dlg.exec();
+    }else if(bearb.zeile(1) == BEARBART_FRAESERGERADE)
+    {
+        Dialog_bearb_fgerade dlg;
+        dlg.setModal(true);
+        connect(&dlg, SIGNAL(signal_fgerade(fraesergerade)), this, SLOT(slot_fgerade(fraesergerade)));
+        dlg.set_data(bearb.text());
+        dlg.exec();
+    }else if(bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+    {
+        Dialog_bearb_fbogen dlg;
+        dlg.setModal(true);
+        connect(&dlg, SIGNAL(signal_fbogen(fraeserbogen)), this, SLOT(slot_fbogen(fraeserbogen)));
+        dlg.set_data(bearb.text());
+        dlg.exec();
     }
 }
 
@@ -224,6 +245,45 @@ void Dialog_wst_bearbeiten::slot_nut(nut nu)
     QString zeile;
     zeile = nu.text();
     ui->listWidget_prgtext->item(index)->setText(nut_zu_prgeile(zeile));
+
+    text_zeilenweise bearbeitungen = Wst->bearb();
+    bearbeitungen.zeile_ersaetzen(index, zeile);
+    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
+    emit sendVorschauAktualisieren(*Wst, index);
+}
+void Dialog_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    //Werte zurück speichern:
+    QString zeile;
+    zeile = fa.text();
+    ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgeile(zeile));
+
+    text_zeilenweise bearbeitungen = Wst->bearb();
+    bearbeitungen.zeile_ersaetzen(index, zeile);
+    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
+    emit sendVorschauAktualisieren(*Wst, index);
+}
+void Dialog_wst_bearbeiten::slot_fgerade(fraesergerade fg)
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    //Werte zurück speichern:
+    QString zeile;
+    zeile = fg.text();
+    ui->listWidget_prgtext->item(index)->setText(fgerade_zu_prgeile(zeile));
+
+    text_zeilenweise bearbeitungen = Wst->bearb();
+    bearbeitungen.zeile_ersaetzen(index, zeile);
+    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
+    emit sendVorschauAktualisieren(*Wst, index);
+}
+void Dialog_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    //Werte zurück speichern:
+    QString zeile;
+    zeile = fb.text();
+    ui->listWidget_prgtext->item(index)->setText(fbogen_zu_prgeile(zeile));
 
     text_zeilenweise bearbeitungen = Wst->bearb();
     bearbeitungen.zeile_ersaetzen(index, zeile);
