@@ -95,7 +95,7 @@ void Dialog_programmtext::slot_wst(werkstueck* w)
     this->show();
 }
 
-void Dialog_programmtext::slot_zeilennummer(uint nr)
+void Dialog_programmtext::slot_zeilennummer(uint nr, bool bearbeiten)
 {
     if((int)nr < ui->listWidget_prgtext->count())
     {

@@ -6,7 +6,7 @@
 #endif //PROGRAMMVERSION
 /*
 
-
+dlg für Programmkopf
 
 
 

@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int)));
     connect(&dlg_prgtext, SIGNAL(signalIndexChange(int)),\
             &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
-    connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint)),\
-            &dlg_prgtext, SLOT(slot_zeilennummer(uint)));
+    connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint, bool)),\
+            &dlg_prgtext, SLOT(slot_zeilennummer(uint, bool)));
     connect(&vorschaufenster, SIGNAL(sende_maus_pos(QPoint)),\
              this, SLOT(getMausPosXY(QPoint)));
     connect(&vorschaufenster, SIGNAL(sende_wstmas(double,double,double)),\

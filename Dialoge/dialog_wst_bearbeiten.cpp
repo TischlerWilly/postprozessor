@@ -8,12 +8,14 @@ Dialog_wst_bearbeiten::Dialog_wst_bearbeiten(QWidget *parent) :
     ui->setupUi(this);
     clear();
 
+    vorschaufenster.set_bearb_erlaubt(true);
+
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
             &vorschaufenster, SLOT(slot_aktualisieren_einzelwst(werkstueck,int)));
     connect(this, SIGNAL(signalIndexChange(int)),\
             &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
-    connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint)),\
-            this, SLOT(slot_zeilennummer(uint)));
+    connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint, bool)),\
+            this, SLOT(slot_zeilennummer(uint, bool)));
     connect(&vorschaufenster, SIGNAL(sende_maus_pos(QPoint)),\
             this, SLOT(getMausPosXY(QPoint)));
     this->setWindowFlags(Qt::Window);
@@ -142,11 +144,15 @@ void Dialog_wst_bearbeiten::update_listwidget()
     ui->listWidget_prgtext->addItem("...");
 }
 
-void Dialog_wst_bearbeiten::slot_zeilennummer(uint nr)
+void Dialog_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
 {
     if((int)nr < ui->listWidget_prgtext->count())
     {
         ui->listWidget_prgtext->item(nr-1)->setSelected(true);
+        if(bearbeiten == true)
+        {
+            zeile_bearbeiten(nr);
+        }
     }
 }
 
@@ -158,14 +164,19 @@ void Dialog_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int currentR
 void Dialog_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
 {
     int index = ui->listWidget_prgtext->currentRow();
-    if(index == 0)
+    zeile_bearbeiten(index);
+}
+
+void Dialog_wst_bearbeiten::zeile_bearbeiten(int zeile)
+{
+    if(zeile == 0)
     {
         return;
     }
     //Zeile Auslesen:
     text_zeilenweise bearb;
     bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    bearb.set_text(Wst->bearb_ptr()->zeile(index));
+    bearb.set_text(Wst->bearb_ptr()->zeile(zeile));
     //Dialogfenster aufrufen:
     if(bearb.zeile(1) == BEARBART_RTA)
     {

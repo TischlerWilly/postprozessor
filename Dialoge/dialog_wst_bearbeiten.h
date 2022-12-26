@@ -34,6 +34,7 @@ private:
 
     void clear();
     void update_listwidget();
+    void zeile_bearbeiten(int zeile);
 
 signals:
     void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
@@ -42,7 +43,7 @@ signals:
 private slots:
     void resizeEvent(QResizeEvent *event);
     void getMausPosXY(QPoint p);
-    void slot_zeilennummer(uint nr);
+    void slot_zeilennummer(uint nr, bool bearbeiten);
     void on_listWidget_prgtext_currentRowChanged(int currentRow);    
     void on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item);
 
