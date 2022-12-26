@@ -2,6 +2,7 @@
 #define DIALOG_BEARB_FGERADE_H
 
 #include "Klassen/wst/fraesergerade.h"
+#include "Klassen/formel.h"
 #include <QDialog>
 
 namespace Ui {

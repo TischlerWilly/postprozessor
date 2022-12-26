@@ -8,7 +8,7 @@ class Formel
 public:
     Formel();
     Formel(QString formel);
-    float bekomme_Ergebnis_als_float();
+    double bekomme_Ergebnis_als_double();
     QString bekomme_Ergebnis_als_String();
     bool ist_fehlerhaft();
     QString bekomme_fehler_text();
@@ -16,8 +16,8 @@ public:
 protected:
     void formelText_setzen(QString text);
     QString formelText_bekommen();
-    float ergebnis_berechnen(QString formelText);
-    void ergebnis_setzen(float wert);
+    double ergebnis_berechnen(QString formelText);
+    void ergebnis_setzen(double wert);
     void fehler_melden(QString neuerFehlerText);
     void fehler_nullen();
     bool ist_ziffer(const QChar zeichen);
@@ -33,11 +33,11 @@ protected:
     bool ist_ohne_ungueltige_Klammernhaelften(const  QString text);
     bool ist_ohne_ungueltige_Kommas(QString text);
     bool ist_ohne_ungueltige_Rechenzeichen(const QString text);
-    float zahl_aus_string(QString text);
-    float addition(QString text);
-    float subtraktion(QString text);
-    float multiplikation(QString text);
-    float division(QString text);
+    double zahl_aus_string(QString text);
+    double addition(QString text);
+    double subtraktion(QString text);
+    double multiplikation(QString text);
+    double division(QString text);
     QString berechne(QString text);
     QString Verschachtelung_aufloesen(QString text);
     QString Verschachtelung_text_links(const QString text, const QChar rechenzeichen);
@@ -57,7 +57,7 @@ private:
     //Variablen:
     //QString formelAlsString;
     QString FormelText;
-    float ergebnis;
+    double ergebnis;
     bool istFehlerhaft;
     QString fehlerText;
 };

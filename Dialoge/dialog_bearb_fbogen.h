@@ -2,6 +2,7 @@
 #define DIALOG_BEARB_FBOGEN_H
 
 #include "Klassen/wst/fraeserbogen.h"
+#include "Klassen/formel.h"
 #include <QDialog>
 
 namespace Ui {

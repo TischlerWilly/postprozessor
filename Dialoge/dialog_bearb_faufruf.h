@@ -2,6 +2,7 @@
 #define DIALOG_BEARB_FAUFRUF_H
 
 #include "Klassen/wst/fraueseraufruf.h"
+#include "Klassen/formel.h"
 #include <QDialog>
 
 namespace Ui {

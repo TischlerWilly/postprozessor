@@ -24,7 +24,7 @@ QString Formel::formelText_bekommen()
     return FormelText;
 }
 
-float Formel::ergebnis_berechnen(QString formelText)
+double Formel::ergebnis_berechnen(QString formelText)
 {
     fehler_nullen();
 
@@ -50,7 +50,7 @@ float Formel::ergebnis_berechnen(QString formelText)
     return 0;
 }
 
-void Formel::ergebnis_setzen(float wert)
+void Formel::ergebnis_setzen(double wert)
 {
     ergebnis = wert;
 }
@@ -399,12 +399,12 @@ bool Formel::ist_ohne_ungueltige_Rechenzeichen(const QString text)
     return true;
 }
 
-float Formel::zahl_aus_string(QString text)
+double Formel::zahl_aus_string(QString text)
 {
-    return text.toFloat();
+    return text.toDouble();
 }
 
-float Formel::bekomme_Ergebnis_als_float()
+double Formel::bekomme_Ergebnis_als_double()
 {
     if(!ist_fehlerhaft())
     {
@@ -416,11 +416,11 @@ float Formel::bekomme_Ergebnis_als_float()
 QString Formel::bekomme_Ergebnis_als_String()
 {
     QString ergebnis_als_String;
-    ergebnis_als_String.setNum(bekomme_Ergebnis_als_float());
+    ergebnis_als_String.setNum(bekomme_Ergebnis_als_double());
     return ergebnis_als_String;
 }
 
-float Formel::addition(QString text)
+double Formel::addition(QString text)
 {
     int index = text.indexOf("+");
     QString links;
@@ -433,13 +433,13 @@ float Formel::addition(QString text)
     {
         rechts += text.at(i);
     }
-    float links_zahlenwert = zahl_aus_string(links);
-    float rechts_zahlenwert = zahl_aus_string(rechts);
+    double links_zahlenwert = zahl_aus_string(links);
+    double rechts_zahlenwert = zahl_aus_string(rechts);
 
     return links_zahlenwert + rechts_zahlenwert;
 }
 
-float Formel::subtraktion(QString text)
+double Formel::subtraktion(QString text)
 {
     int index = text.indexOf("-");
     QString links;
@@ -452,13 +452,13 @@ float Formel::subtraktion(QString text)
     {
         rechts += text.at(i);
     }
-    float links_zahlenwert = zahl_aus_string(links);
-    float rechts_zahlenwert = zahl_aus_string(rechts);
+    double links_zahlenwert = zahl_aus_string(links);
+    double rechts_zahlenwert = zahl_aus_string(rechts);
 
     return links_zahlenwert - rechts_zahlenwert;
 }
 
-float Formel::multiplikation(QString text)
+double Formel::multiplikation(QString text)
 {
     int index = text.indexOf("*");
     QString links;
@@ -471,13 +471,13 @@ float Formel::multiplikation(QString text)
     {
         rechts += text.at(i);
     }
-    float links_zahlenwert = zahl_aus_string(links);
-    float rechts_zahlenwert = zahl_aus_string(rechts);
+    double links_zahlenwert = zahl_aus_string(links);
+    double rechts_zahlenwert = zahl_aus_string(rechts);
 
     return links_zahlenwert * rechts_zahlenwert;
 }
 
-float Formel::division(QString text)
+double Formel::division(QString text)
 {
     int index = text.indexOf("/");
     QString links;
@@ -490,8 +490,8 @@ float Formel::division(QString text)
     {
         rechts += text.at(i);
     }
-    float links_zahlenwert = zahl_aus_string(links);
-    float rechts_zahlenwert = zahl_aus_string(rechts);
+    double links_zahlenwert = zahl_aus_string(links);
+    double rechts_zahlenwert = zahl_aus_string(rechts);
 
     return links_zahlenwert / rechts_zahlenwert;
 }

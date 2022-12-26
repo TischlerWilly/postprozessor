@@ -2,6 +2,7 @@
 #define DIALOG_BEARB_RTA_H
 
 #include "Klassen/wst/rechtecktasche.h"
+#include "Klassen/formel.h"
 #include <QDialog>
 
 namespace Ui {

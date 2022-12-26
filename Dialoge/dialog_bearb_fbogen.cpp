@@ -55,13 +55,13 @@ void Dialog_bearb_fbogen::set_data(QString d)
 void Dialog_bearb_fbogen::on_btn_ok_clicked()
 {
     fraeserbogen fb;
-    fb.set_xs(ui->lineEdit_xs->text());
-    fb.set_ys(ui->lineEdit_ys->text());
-    fb.set_zs(ui->lineEdit_zs->text());
-    fb.set_xe(ui->lineEdit_xe->text());
-    fb.set_ye(ui->lineEdit_ye->text());
-    fb.set_ze(ui->lineEdit_ze->text());
-    fb.set_rad(ui->lineEdit_rad->text());
+    fb.set_xs(Formel(ui->lineEdit_xs->text()).bekomme_Ergebnis_als_String());
+    fb.set_ys(Formel(ui->lineEdit_ys->text()).bekomme_Ergebnis_als_String());
+    fb.set_zs(Formel(ui->lineEdit_zs->text()).bekomme_Ergebnis_als_String());
+    fb.set_xe(Formel(ui->lineEdit_xe->text()).bekomme_Ergebnis_als_String());
+    fb.set_ye(Formel(ui->lineEdit_ye->text()).bekomme_Ergebnis_als_String());
+    fb.set_ze(Formel(ui->lineEdit_ze->text()).bekomme_Ergebnis_als_String());
+    fb.set_rad(Formel(ui->lineEdit_rad->text()).bekomme_Ergebnis_als_String());
     QString uzs = ui->comboBox_uzs->currentText();
     if(uzs == "UZS")
     {

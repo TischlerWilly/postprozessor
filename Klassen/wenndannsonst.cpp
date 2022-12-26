@@ -156,8 +156,8 @@ bool WennDannSonst::vergleich_ist_wahr(const QString text)
     QString links = "";
     QString op = "";
     QString rechts = "";
-    float linksZahl = 0;
-    float rechtsZahl = 0;
+    double linksZahl = 0;
+    double rechtsZahl = 0;
 
     links = vergleich_links(text);
     op = vergleich_oparator(text);
@@ -171,7 +171,7 @@ bool WennDannSonst::vergleich_ist_wahr(const QString text)
     Formel ausdruck_links(links);
     if(!ausdruck_links.ist_fehlerhaft())
     {
-        linksZahl = ausdruck_links.bekomme_Ergebnis_als_float();
+        linksZahl = ausdruck_links.bekomme_Ergebnis_als_double();
     }else
     {
         fehler_melden(ausdruck_links.bekomme_fehler_text());
@@ -184,7 +184,7 @@ bool WennDannSonst::vergleich_ist_wahr(const QString text)
     Formel ausdruck_rechts(rechts);
     if(!ausdruck_rechts.ist_fehlerhaft())
     {
-        rechtsZahl = ausdruck_rechts.bekomme_Ergebnis_als_float();
+        rechtsZahl = ausdruck_rechts.bekomme_Ergebnis_als_double();
     }else
     {
         fehler_melden(ausdruck_rechts.bekomme_fehler_text());
@@ -472,7 +472,7 @@ QString WennDannSonst::weDaSo(const QString text)
     return returnString;
 }
 
-float WennDannSonst::ergebnis_berechnen(QString formelText)
+double WennDannSonst::ergebnis_berechnen(QString formelText)
 {
     fehler_nullen();
     formelText = leerzeichen_entfernen(formelText);
@@ -519,5 +519,5 @@ float WennDannSonst::ergebnis_berechnen(QString formelText)
     {
         fehler_melden(f.bekomme_fehler_text());
     }
-    return f.bekomme_Ergebnis_als_float();
+    return f.bekomme_Ergebnis_als_double();
 }

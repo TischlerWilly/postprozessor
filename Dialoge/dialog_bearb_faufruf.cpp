@@ -57,10 +57,10 @@ void Dialog_bearb_faufruf::set_data(QString d)
 void Dialog_bearb_faufruf::on_btn_ok_clicked()
 {
     fraueseraufruf fa;
-    fa.set_tiefe(ui->lineEdit_ti->text());
-    fa.set_x(ui->lineEdit_x->text());
-    fa.set_y(ui->lineEdit_y->text());
-    fa.set_z(ui->lineEdit_z->text());
+    fa.set_tiefe(Formel(ui->lineEdit_ti->text()).bekomme_Ergebnis_als_String());
+    fa.set_x(Formel(ui->lineEdit_x->text()).bekomme_Ergebnis_als_String());
+    fa.set_y(Formel(ui->lineEdit_y->text()).bekomme_Ergebnis_als_String());
+    fa.set_z(Formel(ui->lineEdit_z->text()).bekomme_Ergebnis_als_String());
     QString kor = ui->comboBox_kor->currentText();
     if(kor == "Links")
     {

@@ -42,12 +42,12 @@ void Dialog_bearb_fgerade::set_data(QString d)
 void Dialog_bearb_fgerade::on_btn_ok_clicked()
 {
     fraesergerade fg;
-    fg.set_xs(ui->lineEdit_xs->text());
-    fg.set_ys(ui->lineEdit_ys->text());
-    fg.set_zs(ui->lineEdit_zs->text());
-    fg.set_xe(ui->lineEdit_xe->text());
-    fg.set_ye(ui->lineEdit_ye->text());
-    fg.set_ze(ui->lineEdit_ze->text());
+    fg.set_xs(Formel(ui->lineEdit_xs->text()).bekomme_Ergebnis_als_String());
+    fg.set_ys(Formel(ui->lineEdit_ys->text()).bekomme_Ergebnis_als_String());
+    fg.set_zs(Formel(ui->lineEdit_zs->text()).bekomme_Ergebnis_als_String());
+    fg.set_xe(Formel(ui->lineEdit_xe->text()).bekomme_Ergebnis_als_String());
+    fg.set_ye(Formel(ui->lineEdit_ye->text()).bekomme_Ergebnis_als_String());
+    fg.set_ze(Formel(ui->lineEdit_ze->text()).bekomme_Ergebnis_als_String());
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")
     {

@@ -28,7 +28,13 @@ void Dialog_bearb_rta::set_data(QString d)
     ui->lineEdit_z->setText(rta.z_qstring());
     ui->lineEdit_wi->setText(rta.drewi_qstring());
     ui->lineEdit_zust->setText(rta.zustellmass_qstring());
-    ui->lineEdit_raeumen->setText(rta.ausraeumen_qstring());
+    if(rta.ausraeumen() == true)
+    {
+        ui->checkBox_raeumen->setChecked(true);
+    }else
+    {
+        ui->checkBox_raeumen->setChecked(false);
+    }
     //---------
     //Bezug:
     if(rta.bezug() == WST_BEZUG_OBSEI)
@@ -63,15 +69,15 @@ void Dialog_bearb_rta::on_btn_abbrechen_clicked()
 void Dialog_bearb_rta::on_btn_ok_clicked()
 {
     rechtecktasche rta;
-    rta.set_laenge(ui->lineEdit_l->text());
-    rta.set_breite(ui->lineEdit_b->text());
-    rta.set_tiefe(ui->lineEdit_ti->text());
-    rta.set_x(ui->lineEdit_x->text());
-    rta.set_y(ui->lineEdit_y->text());
-    rta.set_z(ui->lineEdit_z->text());
-    rta.set_drewi(ui->lineEdit_wi->text());
-    rta.set_zustellmass(ui->lineEdit_zust->text());
-    rta.set_ausraeumen(ui->lineEdit_raeumen->text());
+    rta.set_laenge(Formel(ui->lineEdit_l->text()).bekomme_Ergebnis_als_String());
+    rta.set_breite(Formel(ui->lineEdit_b->text()).bekomme_Ergebnis_als_String());
+    rta.set_tiefe(Formel(ui->lineEdit_ti->text()).bekomme_Ergebnis_als_String());
+    rta.set_x(Formel(ui->lineEdit_x->text()).bekomme_Ergebnis_als_String());
+    rta.set_y(Formel(ui->lineEdit_y->text()).bekomme_Ergebnis_als_String());
+    rta.set_z(Formel(ui->lineEdit_z->text()).bekomme_Ergebnis_als_String());
+    rta.set_drewi(Formel(ui->lineEdit_wi->text()).bekomme_Ergebnis_als_String());
+    rta.set_zustellmass(Formel(ui->lineEdit_zust->text()).bekomme_Ergebnis_als_String());
+    rta.set_ausraeumen(ui->checkBox_raeumen->isChecked());
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")
     {
