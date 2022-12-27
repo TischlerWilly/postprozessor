@@ -47,7 +47,6 @@ private slots:
     void resizeEvent(QResizeEvent *event);
     void on_checkBox_quelldat_erhalt_stateChanged();
     void on_checkBox_std_namen_zuweisen_stateChanged();
-    void on_checkBox_af_ganx_stateChanged();
     void on_radioButton_drehung_0_toggled(bool checked);
     void on_radioButton_drehung_90_toggled(bool checked);
     void on_radioButton_drehung_180_toggled(bool checked);
@@ -56,10 +55,7 @@ private slots:
     void on_actionWerkzeug_ganx_anzeigen_triggered();
     void on_actionInfo_triggered();
     void on_pushButton_dateien_auflisten_clicked();
-    void on_pushButton_start_clicked();
-    void on_checkBox_af_fmc_stateChanged();
     void on_actionWerkzeug_fmc_anzeigen_triggered();
-    void on_checkBox_af_eigen_stateChanged();
     void on_actionStandard_Namen_anzeigen_triggered();
     void zielordner_leeren();
     void on_radioButton_fkon_ti_quell_toggled(bool checked);
@@ -68,7 +64,6 @@ private slots:
     void on_lineEdit_geraden_schwellenwert_editingFinished();
     void on_checkBox_formatierung_aufbrechen_stateChanged();
     void on_checkBox_fkon_kantenschonend_stateChanged();
-    void on_checkBox_af_ggf_stateChanged();
     void on_actionWerkzeug_ggf_anzeigen_triggered();
     void on_lineEdit_zugabe_gehr_editingFinished();
     void on_actionEinstellung_ganx_triggered();
@@ -90,9 +85,7 @@ private slots:
     void on_actionWST_ausblenden_triggered();
     void on_actionEinstellung_dxf_klassen_triggered();
     void on_actionEinstellung_dxf_triggered();
-
     void on_actionWST_bearbeiten_triggered();
-
     void on_listWidget_wste_itemClicked(QListWidgetItem *item);
 
 private:
@@ -129,6 +122,7 @@ private:
     void speichere_ausgabepfad_fmc(QString pfad);
     void schreibe_in_zwischenablage(QString s);
     QString fenstertitel_exportuebersicht();
+    void set_prginfo();
 
     //Dialoge:
     Dialog_WKZ dlg_wkz;

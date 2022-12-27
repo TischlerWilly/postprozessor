@@ -2,11 +2,10 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.22.12.26"
+#define PROGRAMMVERSION "3.22.12.27"
 #endif //PROGRAMMVERSION
 /*
 
-dlg für Programmkopf
 
 
 

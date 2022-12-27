@@ -5854,7 +5854,7 @@ void wstzustand::fmc_dateitext(int index)
                     msg += " T";
                     msg += nu.tiefe_qstring();
                     msg += "\n";
-                    msg += FMC_BOHR_DM_AFB;
+                    msg += FMC_NUT_AFB;
                     msg += "=";
                     msg += nu.afb();
                     msg += "\n";

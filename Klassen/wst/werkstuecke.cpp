@@ -5855,7 +5855,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             {
                 QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
                                        DXF_AC1009_NULL);
-                //Nut wird durch 2 Strecken definiert:
+                //Nut wird durch 2 oder 4 Strecken definiert:
                 if(typ == DXF_AC1009_STRECKE)
                 {
                     strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");

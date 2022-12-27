@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pf.ordner_erstellen();
     tz = QDir::separator(); //Systemspezifischer Separator (Linux: Ordner/Unterordner/...)
     setup();
-    on_actionInfo_triggered();
+    set_prginfo();
 
     connect(this, SIGNAL(sendDialogDataWKZ(QString,text_zeilenweise)), \
             &dlg_wkz, SLOT(getDialogDataWKZ(QString,text_zeilenweise)) );
@@ -181,10 +181,6 @@ void MainWindow::setup()
             ui->checkBox_formatierung_aufbrechen->setChecked(Einstellung.formartierungen_aufbrechen());
             ui->checkBox_fkon_kantenschonend->setChecked(Einstellung.fkon_kantenschonend());
             ui->lineEdit_zugabe_gehr->setText(double_to_qstring(Einstellung.gehrungen_zugabe()));
-            ui->checkBox_af_ganx->setChecked(Einstellung.export_ganx());
-            ui->checkBox_af_fmc->setChecked(Einstellung.export_fmc());
-            ui->checkBox_af_ggf->setChecked(Einstellung.export_ggf());
-            ui->checkBox_af_eigen->setChecked(Einstellung.export_eigen());
         }
         file.close();
     }
@@ -464,27 +460,16 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     ui->tabWidget_main->move(ui->scrollArea_einstellungen->width()+10, 10);
     ui->tabWidget_main->setFixedWidth(this->width()-ui->scrollArea_einstellungen->width()-20);
     ui->tabWidget_main->setFixedHeight(this->height()-40);
-    //tab-Schnell-Modus:
+    //tab-(Schnell-Modus) Info:
     //---links:
     ui->plainTextEdit_eldungen->move(5,5);
     ui->plainTextEdit_eldungen->setFixedWidth(ui->tabWidget_main->width()-150);
-    ui->plainTextEdit_eldungen->setFixedHeight(ui->tabWidget_main->height()-180);
-    ui->plainTextEdit_zusatzinfo->move(5,ui->plainTextEdit_eldungen->y()+ui->plainTextEdit_eldungen->height()+10);
-    ui->plainTextEdit_zusatzinfo->setFixedWidth(ui->plainTextEdit_eldungen->width());
-    ui->plainTextEdit_zusatzinfo->setFixedHeight(135);
+    ui->plainTextEdit_eldungen->setFixedHeight(ui->tabWidget_main->height()-5);
     //---rechts:
-    ui->groupBox_ausgabeformate->move(ui->plainTextEdit_eldungen->x()+ui->plainTextEdit_eldungen->width()+10,\
-                                      5);
-    ui->groupBox_ausgabeformate->setFixedWidth(120);
-    ui->pushButton_dateien_auflisten->move(ui->groupBox_ausgabeformate->x(), \
-                                           ui->groupBox_ausgabeformate->y() \
-                                           + ui->groupBox_ausgabeformate->height() +5);
+    ui->pushButton_dateien_auflisten->move(ui->plainTextEdit_eldungen->x() \
+                                           +ui->plainTextEdit_eldungen->width()+5, 5);
     ui->pushButton_dateien_auflisten->setFixedWidth(120);
-    ui->pushButton_start->move(ui->pushButton_dateien_auflisten->x(), \
-                               ui->pushButton_dateien_auflisten->y() \
-                               + ui->pushButton_dateien_auflisten->height() +5);
-    ui->pushButton_start->setFixedWidth(ui->pushButton_dateien_auflisten->width());
-    //tab-Detail-Modus:
+    //tab(-Detail-Modus) Export:
     //---Projektpfad:
     rechteck3d r;
     r.set_bezugspunkt(OBEN_LINKS);
@@ -1082,25 +1067,6 @@ void MainWindow::on_checkBox_std_namen_zuweisen_stateChanged()
     Einstellung.set_std_dateinamen_verwenden(ui->checkBox_std_namen_zuweisen->isChecked());
     schreibe_ini();
 }
-void MainWindow::on_checkBox_af_ganx_stateChanged()
-{
-    Einstellung.set_export_ganx(ui->checkBox_af_ganx->isChecked());
-    schreibe_ini();
-}
-void MainWindow::on_checkBox_af_fmc_stateChanged()
-{
-    Einstellung.set_export_fmc(ui->checkBox_af_fmc->isChecked());
-    schreibe_ini();
-}
-void MainWindow::on_checkBox_af_ggf_stateChanged()
-{
-    Einstellung.set_export_ggf(ui->checkBox_af_ggf->isChecked());schreibe_ini();
-}
-void MainWindow::on_checkBox_af_eigen_stateChanged()
-{
-    Einstellung.set_export_eigen(ui->checkBox_af_eigen->isChecked());
-    schreibe_ini();
-}
 void MainWindow::on_checkBox_geraden_stateChanged()
 {
     Einstellung.set_kurze_geraden_importieren(!ui->checkBox_geraden->isChecked());//invertiert weil im ui anders herum
@@ -1245,7 +1211,7 @@ void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
 }
 
 //-----------------------------------------------------------------------Menüs:
-void MainWindow::on_actionInfo_triggered()
+void MainWindow::set_prginfo()
 {
     QString tmp;
     tmp = "Postprozessor ";
@@ -1266,19 +1232,75 @@ void MainWindow::on_actionInfo_triggered()
     tmp += "  *.fmc  (IMAWOP4)\n";
     tmp += "  *.DXF mit Versionskennung AC1009\n";
     tmp += "  *.dxf mit Versionskennung AC1009\n";
-    tmp += "\n";    
+    tmp += "\n";
 
     tmp += "Hinweis zum GANX-Export:\n";
     tmp += "  Fräskonturen werden nicht ausgegeben.\n";
 
+    tmp += "\n\n";
+    tmp += "--- Leistungsumfang ----\n\n";
+    tmp += "Import von fmc:\n";
+    tmp += "- Werkstückgröße [PGKOPF40]\n";
+    tmp += "- Kanteninformation (über Kommentare)\n";
+    tmp += "- Gehrung [ZYSCHN40]\n";
+    tmp += "- Einzelbohrung vertikal [VBDMES40]\n";
+    tmp += "- HBE x+ [HBXPLU40]\n";
+    tmp += "- HBE x- [HBXMIN40]\n";
+    tmp += "- HBE y+ [HBYPLU40]\n";
+    tmp += "- HBE y- [HBYMIN40]\n";
+    tmp += "- Bohrbild in X [VBX_40]\n";
+    tmp += "- Bohrbild in Y [VBY_40]\n";
+    tmp += "- Lochreihe Anfang-Ende [VBLAEN40]\n";
+    tmp += "- Lochreihe Mitte-Anfang [VBLMIT40]\n";
+    tmp += "- Topfbandbohrung [VBTOPF41]\n";
+    tmp += "- Kreistasche [ZYKTFR40]\n";
+    tmp += "- Rechtecktasche [ZYRTFR40]\n";
+    tmp += "- Nut [ZYSNUT40]\n";
+    tmp += "- Falz [ZYFALZ40]\n";
+    tmp += "- Aufruf Fräser [KAFRAE40]\n";
+    tmp += "- Gerade Fräsbahn [G1]\n";
+    tmp += "- Bogen fräsen im UZS [G2]\n";
+    tmp += "- Bogen fräsen im GUZS [G3]\n";
+    tmp += "\n";
+    tmp += "\n";
+    tmp += "Import von dxf:\n";
+    tmp += "- Werkstückgröße (Polilinie)\n";
+    tmp += "- Einzelbohrung vertikal (Kreis)\n";
+    tmp += "- Einzelbohrung horizontal (2 Linien)\n";
+    tmp += "- Nut vertikal (2 oder 4 Linien)\n";
+    tmp += "- Kreistasche vertikal (Kreis)\n";
+    tmp += "- Rechtecktasche vertikal (4 Linien)\n";
+    tmp += "- Fräsung vertikal (Linien, Bögen)\n";
+    tmp += "\n";
+    tmp += "\n";
+    tmp += "Bearbeitungsoptimierungen:\n";
+    tmp += "- Drehen AUTO\n";
+    tmp += "- Borraster-Erkennung\n";
+    tmp += "- Durchgangsbohungen splitten\n";
+    tmp += "- Automatische Werkzeugzuweisung\n";
+    tmp += "- Plausibilitätsprüfung (Warnungen)\n";
+    tmp += "\n";
+    tmp += "\n";
+    tmp += "Weiteren Funktionen:\n";
+    tmp += "- Doppelte (identische) Bohrungen werden beim Import ignoriert\n";
+    tmp += "- Werkzeugmagazin für jedes Exportformat\n";
+    tmp += "- Werkstücke beim Import automatisch benennen\n";
+    tmp += "- Werkstücke dem Namen nach sortieren (bei Import)\n";
+    tmp += "- Werkstücke umbenennen\n";
+    tmp += "- Exportübersicht\n";
+    tmp += "- Werkstücke bearbeiten\n";
+    tmp += "- Kurze Geraden ignorieren mit Angabe des Schwellenwertes (fmc)\n";
+    tmp += "- Formartierungen aufbrechen (fmc)\n";
+    tmp += "- Werkstück vergrößern als Zugabe für Gehrungen (fmc)\n";
+    tmp += "- Werkstücke ausblenden\n";
+    tmp += "- Export in hierarchischen Projekt-Unterordnern\n";
+
     ui->plainTextEdit_eldungen->setPlainText(tmp);
-
-    //----------------------------------------------------------
-
-    tmp  = "Der Postpozessor versucht fehlerhaft ausgegebene Bauteile zu erkennen.\n";
-    tmp += "In diesem Textfeld werden die gefundenen Auffälligkeiten aufgelistet.";
-
-    ui->plainTextEdit_zusatzinfo->setPlainText(tmp);
+}
+void MainWindow::on_actionInfo_triggered()
+{
+    ui->tabWidget_main->setCurrentIndex(0);
+    set_prginfo();
 }
 void MainWindow::on_actionWerkzeug_ganx_anzeigen_triggered()
 {
@@ -1371,217 +1393,6 @@ void MainWindow::on_pushButton_dateien_auflisten_clicked()
     QString vortext = int_to_qstring(dateien_alle.zeilenanzahl()) + " Dateien gefunden:\n";
     vortext += dateien_alle.text();
     ui->plainTextEdit_eldungen->setPlainText(vortext);
-    ui->plainTextEdit_zusatzinfo->clear();
-
-    QApplication::restoreOverrideCursor();
-}
-void MainWindow::on_pushButton_start_clicked()
-{
-    zielordner_leeren();
-    import();
-    QApplication::setOverrideCursor(Qt::WaitCursor);    
-
-    QString msg;
-    msg = int_to_qstring(wste.namen_tz().zeilenanzahl()) + " eingelesene Dateien\n\n";
-    msg += "------------------\n";
-    ui->plainTextEdit_eldungen->setPlainText(msg);
-    ui->plainTextEdit_zusatzinfo->setPlainText(wste.cad_fehler());
-
-    //Dateien exportieren:
-    speichere_ausgabepfad_fmc(verzeichnis_ziel());
-    QDir dir_ganx;
-    QString pfad_ganx = verzeichnis_ziel() + QDir::separator() + "ganx";
-    if(Einstellung.export_ganx())
-    {
-        dir_ganx.mkpath(pfad_ganx);
-    }
-
-    QDir dir_fmc;
-    QString pfad_fmc = verzeichnis_ziel() + QDir::separator() + "fmc";
-    if(Einstellung.export_fmc())
-    {
-        dir_fmc.mkpath(pfad_fmc);
-    }
-
-    QDir dir_eigen;
-    QString pfad_eigen = verzeichnis_ziel() + QDir::separator() + "eigen";
-    if(Einstellung.export_eigen())
-    {
-        dir_eigen.mkpath(pfad_eigen);
-    }
-
-    QDir dir_ggf;
-    QString pfad_ggf = verzeichnis_ziel() + QDir::separator() + "ggf";
-    if(Einstellung.export_ggf())
-    {
-        dir_eigen.mkpath(pfad_ggf);
-    }
-
-    for(uint i=1; i<=wste.anzahl() ;i++)
-    {        
-        if(Einstellung.export_ganx())
-        {
-            QString teilname = wste.name(i);
-            teilname += GANX;
-            QFile datei(pfad_ganx + QDir::separator() + teilname);
-            if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                QString tmp = "Fehler beim Dateizugriff!\n";
-                tmp += pfad_ganx + QDir::separator() + teilname;
-                tmp += "\n";
-                tmp += "in der Funktion on_pushButton_start_clicked";
-                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-            }else
-            {
-                wste.wst(i)->set_einstellung_ganx(Einstellung_ganx);
-                //->set_einstellung_fmc
-                //->set_einstellung_eigen
-                wste.wst(i)->set_zustand("ganx", wkz_magazin_ganx, Einstellung.drehung_wst(), \
-                                         Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
-                QString info = wste.wst(i)->zustand().warnungen();
-                datei.write(wste.wst(i)->zustand().exporttext().toUtf8());
-
-                QString output;
-                output = teilname;
-                output += "\n";
-                if(!info.isEmpty())
-                {
-                    output += info;
-                }
-                ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
-            }
-            datei.close();
-        }
-        if(Einstellung.export_fmc())
-        {
-            QString teilname = wste.name(i);
-            teilname += FMC;
-            QFile datei(pfad_fmc + QDir::separator() + teilname);
-            if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                QString tmp = "Fehler beim Dateizugriff!\n";
-                tmp += pfad_fmc + QDir::separator() + teilname;
-                tmp += "\n";
-                tmp += "in der Funktion on_pushButton_start_clicked";
-                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-            }else
-            {
-                wste.wst(i)->set_einstellung_ganx(Einstellung_ganx);
-                //->set_einstellung_fmc
-                //->set_einstellung_eigen
-                wste.wst(i)->set_zustand("fmc", wkz_magazin_fmc, Einstellung.drehung_wst(), \
-                                         Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
-                QString info = wste.wst(i)->zustand().warnungen();
-                datei.write(wste.wst(i)->zustand().exporttext().toUtf8());
-
-                QString output;
-                output = teilname;
-                output += "\n";
-                if(!info.isEmpty())
-                {
-                    output += info;
-                }
-                ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
-            }
-            datei.close();
-        }
-        if(Einstellung.export_ggf())
-        {
-            QString teilname = wste.name(i);
-            teilname += GGF;
-
-            QFile datei(pfad_ggf + QDir::separator() + teilname);
-            if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                QString tmp = "Fehler beim Dateizugriff!\n";
-                tmp += pfad_fmc + QDir::separator() + teilname;
-                tmp += "\n";
-                tmp += "in der Funktion on_pushButton_start_clicked";
-                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-            }else
-            {
-                wste.wst(i)->set_einstellung_ganx(Einstellung_ganx);
-                //->set_einstellung_fmc
-                //->set_einstellung_eigen
-                wste.wst(i)->set_zustand("ggf", wkz_magazin_ggf, Einstellung.drehung_wst(), \
-                                         Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
-                QString info = wste.wst(i)->zustand().warnungen();
-                datei.write(wste.wst(i)->zustand().exporttext().toUtf8());
-
-                QString output;
-                output = teilname;
-                output += "\n";
-                if(!info.isEmpty())
-                {
-                    output += info;
-                }
-                ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
-            }
-            datei.close();
-        }
-        if(Einstellung.export_eigen())
-        {
-            QString teilname = wste.name(i);
-            teilname += EIGENES_FORMAT;
-
-            QFile datei(pfad_eigen + QDir::separator() + teilname);
-            if(!datei.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                QString tmp = "Fehler beim Dateizugriff!\n";
-                tmp += pfad_eigen + QDir::separator() + teilname;
-                tmp += "\n";
-                tmp += "in der Funktion on_pushButton_start_clicked";
-                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-            }else
-            {
-                wste.wst(i)->set_einstellung_ganx(Einstellung_ganx);
-                //->set_einstellung_fmc
-                //->set_einstellung_eigen
-                wste.wst(i)->set_zustand("eigen", wkz_magazin_fmc, Einstellung.drehung_wst(), \
-                                         Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
-                QString info = wste.wst(i)->zustand().warnungen();
-                datei.write(wste.wst(i)->zustand().exporttext().toUtf8());
-
-                QString output;
-                output = teilname;
-                output += "\n";
-                if(!info.isEmpty())
-                {
-                    output += info;
-                }
-                ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + output);
-            }
-            datei.close();
-        }
-
-
-    }
-
-    QString slist; //Stückliste
-    slist += "\n";
-    slist += "----------------------------Stückliste----------------------------";
-    slist += "\n";
-    slist += "Bezeichnung";
-    slist += "\t";
-    slist += "Länge";
-    slist += "\t";
-    slist += "Breite";
-    slist += "\t";
-    slist += "Dicke";
-    slist += "\n";
-    for(uint i=1; i<=wste.anzahl() ;i++)
-    {
-        slist += wste.wst(i)->name();
-        slist += "\t";
-        slist += wste.wst(i)->laenge_qstring();
-        slist += "\t";
-        slist += wste.wst(i)->breite_qstring();
-        slist += "\t";
-        slist += wste.wst(i)->dicke_qstring();
-        slist += "\n";
-    }
-    ui->plainTextEdit_eldungen->setPlainText(ui->plainTextEdit_eldungen->toPlainText() + slist);
-
     QApplication::restoreOverrideCursor();
 }
 void MainWindow::on_pushButton_import_clicked()
@@ -2260,7 +2071,6 @@ void MainWindow::zielordner_leeren()
         }
     }
     ui->plainTextEdit_eldungen->setPlainText("Zielordner wurden geleert.");
-    ui->plainTextEdit_zusatzinfo->clear();
     QApplication::restoreOverrideCursor();
 }
 void MainWindow::closeEvent(QCloseEvent *ce)
