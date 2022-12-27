@@ -20,6 +20,7 @@ class vorschau : public QWidget
     Q_OBJECT
 public:
     explicit vorschau(QWidget *parent = 0);
+    void set_bearb_erlaubt(bool erlaubt);
 
 
 protected:
@@ -62,11 +63,12 @@ private:
     int         Maus_pos_alt_y;
     uint        Zeile_von_maus_pos;//Zum Zwischenspeichern damit Ergebnis nicht verfälscht wird wenn Maus sich bewegt
     bool        Mrg;  //Mausrad gedrückt
+    bool        Bearb_erlaubt;
     
 signals:
     void anfrage_werkstueckmasse();
     void sende_maus_pos(QPoint p);
-    void sende_zeilennummer(uint nr);
+    void sende_zeilennummer(uint nr, bool bearbeiten);
     void sende_wstmas(double l, double b, double d);
     void sende_drewi(QString w);
 

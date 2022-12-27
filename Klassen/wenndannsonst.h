@@ -26,7 +26,7 @@ protected:
     bool vergleichskette_ist_wahr(const QString text);
     bool vergleichskette_ist_wahr_nur_ODER(const QString text);
 
-    float ergebnis_berechnen(QString formelText);
+    double ergebnis_berechnen(QString formelText);
 
 private:
 

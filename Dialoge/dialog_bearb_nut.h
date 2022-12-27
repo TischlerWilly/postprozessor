@@ -1,7 +1,8 @@
 #ifndef DIALOG_BEARB_NUT_H
 #define DIALOG_BEARB_NUT_H
 
-#include <Klassen/wst/nut.h>
+#include "Klassen/wst/nut.h"
+#include "Klassen/formel.h"
 #include <QDialog>
 
 namespace Ui {

@@ -2,6 +2,7 @@
 #define DIALOG_BEARB_BOHRUNG_H
 
 #include "Klassen/wst/bohrung.h"
+#include "Klassen/wenndannsonst.h"
 #include <QDialog>
 
 namespace Ui {

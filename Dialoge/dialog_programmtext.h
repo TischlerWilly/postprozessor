@@ -33,7 +33,7 @@ signals:
 
 public slots:
     void slot_wst(werkstueck* w);
-    void slot_zeilennummer(uint nr);
+    void slot_zeilennummer(uint nr, bool bearbeiten);
 
 private slots:
     void resizeEvent(QResizeEvent *event);

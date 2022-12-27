@@ -6,6 +6,7 @@ Dialog_bearb_nut::Dialog_bearb_nut(QWidget *parent) :
     ui(new Ui::Dialog_bearb_nut)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Nut");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
 }
@@ -41,12 +42,12 @@ void Dialog_bearb_nut::set_data(QString d)
 void Dialog_bearb_nut::on_btn_ok_clicked()
 {
     nut nu;
-    nu.set_breite(ui->lineEdit_b->text());
-    nu.set_tiefe(ui->lineEdit_ti->text());
-    nu.set_xs(ui->lineEdit_xs->text());
-    nu.set_ys(ui->lineEdit_ys->text());
-    nu.set_xe(ui->lineEdit_xe->text());
-    nu.set_ye(ui->lineEdit_ye->text());
+    nu.set_breite(Formel(ui->lineEdit_b->text()).bekomme_Ergebnis_als_String());
+    nu.set_tiefe(Formel(ui->lineEdit_ti->text()).bekomme_Ergebnis_als_String());
+    nu.set_xs(Formel(ui->lineEdit_xs->text()).bekomme_Ergebnis_als_String());
+    nu.set_ys(Formel(ui->lineEdit_ys->text()).bekomme_Ergebnis_als_String());
+    nu.set_xe(Formel(ui->lineEdit_xe->text()).bekomme_Ergebnis_als_String());
+    nu.set_ye(Formel(ui->lineEdit_ye->text()).bekomme_Ergebnis_als_String());
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")
     {
