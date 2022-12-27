@@ -5,6 +5,7 @@
 #include <QListWidgetItem>
 #include "Klassen/geo/vorschau.h"
 #include "Klassen/wst/werkstueck.h"
+#include "Dialoge/dialog_bearb_pkopf.h"
 #include "Dialoge/dialog_bearb_rta.h"
 #include "Dialoge/dialog_bearb_bohrung.h"
 #include "Dialoge/dialog_bearb_nut.h"

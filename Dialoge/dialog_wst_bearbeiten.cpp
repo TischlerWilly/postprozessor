@@ -171,6 +171,11 @@ void Dialog_wst_bearbeiten::zeile_bearbeiten(int zeile)
 {
     if(zeile == 0)
     {
+        Dialog_bearb_pkopf dlg;
+        dlg.setModal(true);
+        dlg.set_data(Wst);
+        dlg.exec();
+        emit sendVorschauAktualisieren(*Wst, 0);
         return;
     }
     //Zeile Auslesen:
