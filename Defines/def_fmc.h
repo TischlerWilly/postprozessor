@@ -238,5 +238,24 @@
 #define FMC_GEHR_WKZNR          "WKZID"
 #define FMC_GEHR_AFB            "AFB"
 
+#define FMC_STULP               "[ZYSTUL40]"    //Stulp
+#define FMC_STULP_WKZ           "WKZID"
+#define FMC_STULP_WKZAKT        "WKZAKTUELL"
+#define FMC_STULP_X             "MPX"           //Mittelpunkt in X
+#define FMC_STULP_Y             "MPY"           //Mittelpunkt in Y
+#define FMC_STULP_Z             "MPZ"           //Mittelpunkt in Z
+#define FMC_STULP_L             "LGET1"         //Länge
+#define FMC_STULP_B             "LGET2"         //Breite
+#define FMC_STULP_TI            "TI"            //Tiefe
+#define FMC_STULP_RAD           "R"             //Radius
+#define FMC_STULP_VERSATZ       "FB"            //Falz-Versatz
+#define FMC_STULP_ZUST          "LGEZU"         //Zustellmaß
+#define FMC_STULP_GEGENL        "GEGENL"        //Gegenlauf
+#define FMC_STULP_SEITE         "BRICHT"        //Seite von der Eingetaucht wird
+#define FMC_STULP_FEIN          "FAN"           //Eintauchvorschub
+#define FMC_STULP_F             "F"             //Vorschub
+#define FMC_STULP_N             "N"             //Drahzahl
+#define FMC_STULP_BEZ           "BEZB"          //Beichnung
+#define FMC_STULP_AFB           "AFB"           //Ausführbedingung
 
 #endif // DEF_FMC_H

@@ -607,34 +607,65 @@ geometrietext werkstueck::geo()
         {
             rechtecktasche rt(zeile.text());
             rechteck3d r;
-            r.set_bezugspunkt(MITTE);
-            if(rt.tiefe() >= dicke())
-            {
-                r.set_farbe_fuellung(FARBE_WEISS);
-            }else
-            {
-                if(rt.bezug() == WST_BEZUG_OBSEI)
+            if(  (rt.bezug() == WST_BEZUG_OBSEI) ||  (rt.bezug() == WST_BEZUG_UNSEI)  )
+            {                
+                r.set_bezugspunkt(MITTE);
+                if(rt.tiefe() >= dicke())
                 {
-                    r.set_farbe_fuellung(FARBE_DUNKELGRAU);
+                    r.set_farbe_fuellung(FARBE_WEISS);
                 }else
                 {
-                    r.set_farbe_fuellung(farbe_unterseite);
-                    r.set_stil(STIL_GESTRICHELT);
+                    if(rt.bezug() == WST_BEZUG_OBSEI)
+                    {
+                        r.set_farbe_fuellung(FARBE_DUNKELGRAU);
+                    }else
+                    {
+                        r.set_farbe_fuellung(farbe_unterseite);
+                        r.set_stil(STIL_GESTRICHELT);
+                    }
                 }
-            }
-            r.set_laenge(rt.laenge());
-            r.set_breite(rt.breite());
-            r.set_mipu(rt.x(), rt.y(), rt.z());
-            r.set_drewi(rt.drewi());
-            r.verschieben_um(versatz_x, versatz_y);
-            gt.add_rechteck(r);
-            if(rt.ausraeumen() == false)
-            {
-                r.set_laenge(r.l()/8*5);
-                r.set_breite(r.b()/8*5);
-                r.set_farbe_fuellung(FARBE_WEISS);
+                r.set_laenge(rt.laenge());
+                r.set_breite(rt.breite());
+                r.set_mipu(rt.x(), rt.y(), rt.z());
+                r.set_drewi(rt.drewi());
+                r.verschieben_um(versatz_x, versatz_y);
+                gt.add_rechteck(r);
+                if(rt.ausraeumen() == false)
+                {
+                    r.set_laenge(r.l()/8*5);
+                    r.set_breite(r.b()/8*5);
+                    r.set_farbe_fuellung(FARBE_WEISS);
+                    gt.add_rechteck(r);
+                }
+            }else
+            {                
+                if(rt.bezug() == WST_BEZUG_LI)
+                {
+                    r.set_bezugspunkt(LINKS);
+                    r.set_laenge(rt.breite());
+                    r.set_breite(rt.laenge());
+                }else if(rt.bezug() == WST_BEZUG_RE)
+                {
+                    r.set_bezugspunkt(RECHTS);
+                    r.set_laenge(rt.breite());
+                    r.set_breite(rt.laenge());
+                }else if(rt.bezug() == WST_BEZUG_VO)
+                {
+                    r.set_bezugspunkt(UNTEN);
+                    r.set_laenge(rt.laenge());
+                    r.set_breite(rt.breite());
+                }else if(rt.bezug() == WST_BEZUG_HI)
+                {
+                    r.set_bezugspunkt(OBEN);
+                    r.set_laenge(rt.laenge());
+                    r.set_breite(rt.breite());
+                }
+                r.set_farbe_fuellung(FARBE_GRUEN);
+                r.set_einfuegepunkt(rt.x(), rt.y(), rt.z());
+                r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }
+
         }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
         {
             fraueseraufruf fa(zeile.text());

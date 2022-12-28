@@ -2927,6 +2927,94 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }
                 }
             }
+        }else if(zeile.contains(FMC_STULP))
+        {
+            rechtecktasche rt;
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    //Bezugsfläche ermitteln:
+                    if(cagleich(rt.x(), 0, 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_LI);
+                    }else if(cagleich(rt.x(), w.laenge(), 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_RE);
+                    }else if(cagleich(rt.y(), 0, 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_VO);
+                    }else if(cagleich(rt.y(), w.breite(), 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_HI);
+                    }
+
+                    w.neue_bearbeitung(rt.text());
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_STULP_AFB)
+                    {
+                        rt.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_STULP_L)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_laenge(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_B)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_breite(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_TI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        rt.set_tiefe(tiefe);
+                    }else if(schluessel == FMC_STULP_X)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_x(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_Y)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_y(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_Z)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_z(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_ZUST)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_zustellmass(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_RAD)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_rad(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_WKZ)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        rt.set_wkznum(tmp);
+                    }
+                }
+            }
         }
 
     }

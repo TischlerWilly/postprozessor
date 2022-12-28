@@ -151,7 +151,7 @@ void Dialog_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
         ui->listWidget_prgtext->item(nr-1)->setSelected(true);
         if(bearbeiten == true)
         {
-            zeile_bearbeiten(nr);
+            zeile_bearbeiten(nr-1);
         }
     }
 }

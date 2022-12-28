@@ -1261,6 +1261,7 @@ void MainWindow::set_prginfo()
     tmp += "- Gerade Fräsbahn [G1]\n";
     tmp += "- Bogen fräsen im UZS [G2]\n";
     tmp += "- Bogen fräsen im GUZS [G3]\n";
+    tmp += "- Stulp [ZYSTUL40]";
     tmp += "\n";
     tmp += "\n";
     tmp += "Import von dxf:\n";
