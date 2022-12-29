@@ -27,6 +27,7 @@ signals:
 
 private:
     Ui::Dialog_bearb_bohrung *ui;
+    QString berechnen(QString term);
 };
 
 #endif // DIALOG_BEARB_BOHRUNG_H

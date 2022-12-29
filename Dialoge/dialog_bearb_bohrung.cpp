@@ -59,12 +59,12 @@ void Dialog_bearb_bohrung::set_data(QString d)
 void Dialog_bearb_bohrung::on_btn_ok_clicked()
 {
     bohrung bo;
-    bo.set_dm(Formel(ui->lineEdit_dm->text()).bekomme_Ergebnis_als_String());
-    bo.set_tiefe(Formel(ui->lineEdit_ti->text()).bekomme_Ergebnis_als_String());
-    bo.set_x(Formel(ui->lineEdit_x->text()).bekomme_Ergebnis_als_String());
-    bo.set_y(Formel(ui->lineEdit_y->text()).bekomme_Ergebnis_als_String());
-    bo.set_z(Formel(ui->lineEdit_z->text()).bekomme_Ergebnis_als_String());
-    bo.set_zustellmass(Formel(ui->lineEdit_zust->text()).bekomme_Ergebnis_als_String());
+    bo.set_dm(berechnen(ui->lineEdit_dm->text()));
+    bo.set_tiefe(berechnen(ui->lineEdit_ti->text()));
+    bo.set_x(berechnen(ui->lineEdit_x->text()));
+    bo.set_y(berechnen(ui->lineEdit_y->text()));
+    bo.set_z(berechnen(ui->lineEdit_z->text()));
+    bo.set_zustellmass(berechnen(ui->lineEdit_zust->text()));
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")
     {
@@ -95,4 +95,10 @@ void Dialog_bearb_bohrung::on_btn_ok_clicked()
 void Dialog_bearb_bohrung::on_btn_abbrechen_clicked()
 {
     this->close();
+}
+
+QString Dialog_bearb_bohrung::berechnen(QString term)
+{
+    term.replace(",",".");
+    return Formel(term).bekomme_Ergebnis_als_String();
 }

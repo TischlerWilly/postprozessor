@@ -240,7 +240,7 @@ void MainWin_wst_bearbeiten::slot_rta(rechtecktasche rta)
     text_zeilenweise bearbeitungen = Wst->bearb();
     bearbeitungen.zeile_ersaetzen(index, zeile);
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index);
+    emit sendVorschauAktualisieren(*Wst, index+1);
 }
 void MainWin_wst_bearbeiten::slot_bo(bohrung bo)
 {
@@ -253,7 +253,7 @@ void MainWin_wst_bearbeiten::slot_bo(bohrung bo)
     text_zeilenweise bearbeitungen = Wst->bearb();
     bearbeitungen.zeile_ersaetzen(index, zeile);
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index);
+    emit sendVorschauAktualisieren(*Wst, index+1);
 }
 void MainWin_wst_bearbeiten::slot_nut(nut nu)
 {
@@ -266,7 +266,7 @@ void MainWin_wst_bearbeiten::slot_nut(nut nu)
     text_zeilenweise bearbeitungen = Wst->bearb();
     bearbeitungen.zeile_ersaetzen(index, zeile);
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index);
+    emit sendVorschauAktualisieren(*Wst, index+1);
 }
 void MainWin_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
 {
@@ -279,7 +279,7 @@ void MainWin_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
     text_zeilenweise bearbeitungen = Wst->bearb();
     bearbeitungen.zeile_ersaetzen(index, zeile);
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index);
+    emit sendVorschauAktualisieren(*Wst, index+1);
 }
 void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
 {
@@ -292,7 +292,7 @@ void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
     text_zeilenweise bearbeitungen = Wst->bearb();
     bearbeitungen.zeile_ersaetzen(index, zeile);
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index);
+    emit sendVorschauAktualisieren(*Wst, index+1);
 }
 void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
 {
@@ -305,7 +305,7 @@ void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
     text_zeilenweise bearbeitungen = Wst->bearb();
     bearbeitungen.zeile_ersaetzen(index, zeile);
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index);
+    emit sendVorschauAktualisieren(*Wst, index+1);
 }
 
 //----------------------------------Make:
