@@ -19,7 +19,8 @@
 #include "Dialoge/dialog_einstellung_dxf_klassen.h"
 #include "Dialoge/dialog_programmtext.h"
 #include "Dialoge/dialog_exportuebersicht.h"
-#include "Dialoge/dialog_wst_bearbeiten.h"
+
+#include "mainwin_wst_bearbeiten.h"
 
 #include "Funktionen/text.h"
 #include "Klassen/text_zeilenweise.h"
@@ -133,7 +134,7 @@ private:
     Dialog_einstellung_dxf_klassen dlg_einstellung_dxf_klassen;
     Dialog_programmtext dlg_prgtext;
     Dialog_ExportUebersicht dlg_exporte;
-    Dialog_wst_bearbeiten dlg_wst_bearbeiten;
+    MainWin_wst_bearbeiten dlg_wst_bearbeiten;
 
 signals:
     void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);

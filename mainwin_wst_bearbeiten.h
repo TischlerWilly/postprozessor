@@ -1,7 +1,7 @@
-#ifndef DIALOG_WST_BEARBEITEN_H
-#define DIALOG_WST_BEARBEITEN_H
+#ifndef MAINWIN_WST_BEARBEITEN_H
+#define MAINWIN_WST_BEARBEITEN_H
 
-#include <QDialog>
+#include <QMainWindow>
 #include <QListWidgetItem>
 #include "Klassen/geo/vorschau.h"
 #include "Klassen/wst/werkstueck.h"
@@ -15,21 +15,21 @@
 
 #include "Funktionen/funktionen_prgtext.h"
 
-namespace Ui {
-class Dialog_wst_bearbeiten;
-}
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWin_wst_bearbeiten; }
+QT_END_NAMESPACE
 
-class Dialog_wst_bearbeiten : public QDialog
+class MainWin_wst_bearbeiten : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit Dialog_wst_bearbeiten(QWidget *parent = nullptr);
-    ~Dialog_wst_bearbeiten();
+    MainWin_wst_bearbeiten(QWidget *parent = nullptr);
+    ~MainWin_wst_bearbeiten();
     void set_wst(werkstueck *w);
 
 private:
-    Ui::Dialog_wst_bearbeiten *ui;
+    Ui::MainWin_wst_bearbeiten *ui;
     vorschau vorschaufenster;
     werkstueck *Wst;
 
@@ -45,7 +45,7 @@ private slots:
     void resizeEvent(QResizeEvent *event);
     void getMausPosXY(QPoint p);
     void slot_zeilennummer(uint nr, bool bearbeiten);
-    void on_listWidget_prgtext_currentRowChanged(int currentRow);    
+    void on_listWidget_prgtext_currentRowChanged(int currentRow);
     void on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item);
 
 public slots:
@@ -56,5 +56,4 @@ public slots:
     void slot_fgerade(fraesergerade fg);
     void slot_fbogen(fraeserbogen fb);
 };
-
-#endif // DIALOG_WST_BEARBEITEN_H
+#endif // MAINWIN_WST_BEARBEITEN_H

@@ -26,7 +26,6 @@ SOURCES += main.cpp\
     Dialoge/dialog_einstellung_pfade.cpp \
     Dialoge/dialog_exportuebersicht.cpp \
     Dialoge/dialog_programmtext.cpp \
-    Dialoge/dialog_wst_bearbeiten.cpp \
     Funktionen/funktionen_prgtext.cpp \
     Klassen/einstellung.cpp \
     Klassen/einstellung_dxf.cpp \
@@ -41,6 +40,7 @@ SOURCES += main.cpp\
     Klassen/geo/zylinder.cpp \
     Klassen/wst/gehrung.cpp \
     Klassen/wst/wstzustand.cpp \
+    mainwin_wst_bearbeiten.cpp \
         mainwindow.cpp \
     Klassen/formel.cpp \
     Klassen/text_zeilenweise.cpp \
@@ -89,7 +89,6 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_einstellung_pfade.h \
     Dialoge/dialog_exportuebersicht.h \
     Dialoge/dialog_programmtext.h \
-    Dialoge/dialog_wst_bearbeiten.h \
     Funktionen/funktionen_prgtext.h \
     Klassen/einstellung.h \
     Klassen/einstellung_dxf.h \
@@ -145,6 +144,7 @@ HEADERS  += mainwindow.h \
     Defines//def_vw.h \
     Dialoge/dialog_stdnamen.h \
     Dialoge/dialog_stdname.h \
+    mainwin_wst_bearbeiten.h
 
 FORMS    += mainwindow.ui \
     Dialoge/dialog_bearb_bohrung.ui \
@@ -166,7 +166,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_saege.ui \
     Dialoge/dialog_stdnamen.ui \
     Dialoge/dialog_stdname.ui \
-    Dialoge/dialog_wst_bearbeiten.ui
+    mainwin_wst_bearbeiten.ui
 
 DISTFILES += \
     Klassen/geo/makro_geometrie.h~ \

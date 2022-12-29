@@ -1,9 +1,9 @@
-#include "dialog_wst_bearbeiten.h"
-#include "ui_dialog_wst_bearbeiten.h"
+#include "mainwin_wst_bearbeiten.h"
+#include "ui_mainwin_wst_bearbeiten.h"
 
-Dialog_wst_bearbeiten::Dialog_wst_bearbeiten(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Dialog_wst_bearbeiten)
+MainWin_wst_bearbeiten::MainWin_wst_bearbeiten(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWin_wst_bearbeiten)
 {
     ui->setupUi(this);
     clear();
@@ -22,34 +22,34 @@ Dialog_wst_bearbeiten::Dialog_wst_bearbeiten(QWidget *parent) :
     this->setWindowState(Qt::WindowMaximized);
 }
 
-Dialog_wst_bearbeiten::~Dialog_wst_bearbeiten()
+MainWin_wst_bearbeiten::~MainWin_wst_bearbeiten()
 {
     delete ui;
 }
 
-void Dialog_wst_bearbeiten::clear()
+void MainWin_wst_bearbeiten::clear()
 {
     Wst = nullptr;
     ui->listWidget_prgtext->clear();
 }
 
-void Dialog_wst_bearbeiten::resizeEvent(QResizeEvent *event)
+void MainWin_wst_bearbeiten::resizeEvent(QResizeEvent *event)
 {
     vorschaufenster.setParent(this);
-    vorschaufenster.move(5,5);
-    vorschaufenster.setFixedWidth(this->width()-400-15);
-    vorschaufenster.setFixedHeight(this->height()-30);
+    vorschaufenster.move(5,25);
+    vorschaufenster.setFixedWidth(this->width()-400-25);
+    vorschaufenster.setFixedHeight(this->height()-50);
     //----------------------
     ui->listWidget_prgtext->move(vorschaufenster.pos().x()+vorschaufenster.width()+5, 5);
     ui->listWidget_prgtext->setFixedWidth(400);
-    ui->listWidget_prgtext->setFixedHeight(this->height()-30);
+    ui->listWidget_prgtext->setFixedHeight(this->height());
     //----------------------
     ui->label_xypos->move(ui->listWidget_prgtext->pos().x(),\
                           ui->listWidget_prgtext->pos().y() + ui->listWidget_prgtext->height()+2);
     ui->label_xypos->setFixedWidth(ui->listWidget_prgtext->width());
 }
 
-void Dialog_wst_bearbeiten::getMausPosXY(QPoint p)
+void MainWin_wst_bearbeiten::getMausPosXY(QPoint p)
 {
     if(ui->listWidget_prgtext->selectedItems().count())
     {
@@ -72,7 +72,7 @@ void Dialog_wst_bearbeiten::getMausPosXY(QPoint p)
     }
 }
 
-void Dialog_wst_bearbeiten::set_wst(werkstueck *w)
+void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
 {
     clear();
     Wst = w;
@@ -81,7 +81,7 @@ void Dialog_wst_bearbeiten::set_wst(werkstueck *w)
     sendVorschauAktualisieren(*Wst, 0);
 }
 
-void Dialog_wst_bearbeiten::update_listwidget()
+void MainWin_wst_bearbeiten::update_listwidget()
 {
     //Programmkopf als erste Zeile einfügen:
     text_zeilenweise pkopf;
@@ -144,7 +144,7 @@ void Dialog_wst_bearbeiten::update_listwidget()
     ui->listWidget_prgtext->addItem("...");
 }
 
-void Dialog_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
+void MainWin_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
 {
     if((int)nr < ui->listWidget_prgtext->count())
     {
@@ -156,18 +156,18 @@ void Dialog_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
     }
 }
 
-void Dialog_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int currentRow)
+void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int currentRow)
 {
     emit signalIndexChange(currentRow+1);
 }
 
-void Dialog_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
+void MainWin_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
 {
     int index = ui->listWidget_prgtext->currentRow();
     zeile_bearbeiten(index);
 }
 
-void Dialog_wst_bearbeiten::zeile_bearbeiten(int zeile)
+void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
 {
     if(zeile == 0)
     {
@@ -228,7 +228,7 @@ void Dialog_wst_bearbeiten::zeile_bearbeiten(int zeile)
     }
 }
 
-void Dialog_wst_bearbeiten::slot_rta(rechtecktasche rta)
+void MainWin_wst_bearbeiten::slot_rta(rechtecktasche rta)
 {
     int index = ui->listWidget_prgtext->currentRow();
     //Werte zurück speichern:
@@ -241,7 +241,7 @@ void Dialog_wst_bearbeiten::slot_rta(rechtecktasche rta)
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
     emit sendVorschauAktualisieren(*Wst, index);
 }
-void Dialog_wst_bearbeiten::slot_bo(bohrung bo)
+void MainWin_wst_bearbeiten::slot_bo(bohrung bo)
 {
     int index = ui->listWidget_prgtext->currentRow();
     //Werte zurück speichern:
@@ -254,7 +254,7 @@ void Dialog_wst_bearbeiten::slot_bo(bohrung bo)
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
     emit sendVorschauAktualisieren(*Wst, index);
 }
-void Dialog_wst_bearbeiten::slot_nut(nut nu)
+void MainWin_wst_bearbeiten::slot_nut(nut nu)
 {
     int index = ui->listWidget_prgtext->currentRow();
     //Werte zurück speichern:
@@ -267,7 +267,7 @@ void Dialog_wst_bearbeiten::slot_nut(nut nu)
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
     emit sendVorschauAktualisieren(*Wst, index);
 }
-void Dialog_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
+void MainWin_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
 {
     int index = ui->listWidget_prgtext->currentRow();
     //Werte zurück speichern:
@@ -280,7 +280,7 @@ void Dialog_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
     emit sendVorschauAktualisieren(*Wst, index);
 }
-void Dialog_wst_bearbeiten::slot_fgerade(fraesergerade fg)
+void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
 {
     int index = ui->listWidget_prgtext->currentRow();
     //Werte zurück speichern:
@@ -293,7 +293,7 @@ void Dialog_wst_bearbeiten::slot_fgerade(fraesergerade fg)
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
     emit sendVorschauAktualisieren(*Wst, index);
 }
-void Dialog_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
+void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
 {
     int index = ui->listWidget_prgtext->currentRow();
     //Werte zurück speichern:
@@ -306,3 +306,4 @@ void Dialog_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
     emit sendVorschauAktualisieren(*Wst, index);
 }
+
