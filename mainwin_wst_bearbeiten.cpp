@@ -83,6 +83,7 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
 
 void MainWin_wst_bearbeiten::update_listwidget()
 {
+    ui->listWidget_prgtext->clear();
     //Programmkopf als erste Zeile einfügen:
     text_zeilenweise pkopf;
     pkopf.set_trennzeichen(TRENNZ_BEARB_PARAM);
@@ -306,4 +307,34 @@ void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
     Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
     emit sendVorschauAktualisieren(*Wst, index);
 }
+
+//----------------------------------Make:
+void MainWin_wst_bearbeiten::on_actionMakeBohrung_triggered()
+{
+    Dialog_bearb_bohrung dlg;
+    dlg.setModal(true);
+    bohrung bo;//Default-Daten
+    dlg.set_data(bo.text());
+    connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_make_bo(bohrung)));
+    dlg.exec();
+}
+//----------------------------------Slot_Make:
+void MainWin_wst_bearbeiten::slot_make_bo(bohrung bo)
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    //Werte zurück speichern:
+    if(index == 0)
+    {
+        Wst->bearb_ptr()->zeile_vorwegsetzen(bo.text());
+    }else if(index+1 < ui->listWidget_prgtext->count())
+    {
+        Wst->bearb_ptr()->zeile_einfuegen(index-1, bo.text());
+    }else
+    {
+        Wst->bearb_ptr()->zeile_anhaengen(bo.text());
+    }
+    update_listwidget();
+    emit sendVorschauAktualisieren(*Wst, index);
+}
+//----------------------------------
 

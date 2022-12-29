@@ -52,12 +52,18 @@
    </property>
    <widget class="QMenu" name="menuHallo_Welt">
     <property name="title">
-     <string>Hallo Welt</string>
+     <string>Einfügen</string>
     </property>
+    <addaction name="actionMakeBohrung"/>
    </widget>
    <addaction name="menuHallo_Welt"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionMakeBohrung">
+   <property name="text">
+    <string>Bohrung</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

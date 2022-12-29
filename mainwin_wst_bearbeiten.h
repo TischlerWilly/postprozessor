@@ -47,13 +47,17 @@ private slots:
     void slot_zeilennummer(uint nr, bool bearbeiten);
     void on_listWidget_prgtext_currentRowChanged(int currentRow);
     void on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item);
+    void on_actionMakeBohrung_triggered();
 
 public slots:
+    //Bearbeiten
     void slot_rta(rechtecktasche rta);
-    void slot_bo(bohrung bo);
+    void slot_bo(bohrung bo);    
     void slot_nut(nut nu);
     void slot_faufruf(fraueseraufruf fa);
     void slot_fgerade(fraesergerade fg);
     void slot_fbogen(fraeserbogen fb);
+    //Erstellen/Make:
+    void slot_make_bo(bohrung bo);
 };
 #endif // MAINWIN_WST_BEARBEITEN_H
