@@ -41,6 +41,7 @@ public:
     void set_dicke(double d);
     void set_dicke(QString d);
     void neue_bearbeitung(QString text);
+    void set_bearb(text_zeilenweise b);
     void set_kante_vo(QString artiklenummer);
     void set_kante_hi(QString artiklenummer);
     void set_kante_li(QString artiklenummer);

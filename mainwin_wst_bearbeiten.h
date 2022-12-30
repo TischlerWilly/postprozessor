@@ -14,6 +14,7 @@
 #include "Dialoge/dialog_bearb_fbogen.h"
 
 #include "Funktionen/funktionen_prgtext.h"
+#include "Klassen/undo_redo_tz.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWin_wst_bearbeiten; }
@@ -32,6 +33,7 @@ private:
     Ui::MainWin_wst_bearbeiten *ui;
     vorschau vorschaufenster;
     werkstueck *Wst;
+    undo_redo_tz UnReDo;
 
     void clear();
     void update_listwidget();
@@ -48,10 +50,11 @@ private slots:
     void on_listWidget_prgtext_currentRowChanged(int currentRow);
     void on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item);
     void on_actionMakeBohrung_triggered();
-
     void on_actionMakeRTA_triggered();
-
     void on_actionMakeNut_triggered();
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
+    void on_actionEntf_triggered();
 
 public slots:
     //Bearbeiten

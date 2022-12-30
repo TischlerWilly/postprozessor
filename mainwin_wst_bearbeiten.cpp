@@ -42,7 +42,7 @@ void MainWin_wst_bearbeiten::resizeEvent(QResizeEvent *event)
     //----------------------
     ui->listWidget_prgtext->move(vorschaufenster.pos().x()+vorschaufenster.width()+5, 5);
     ui->listWidget_prgtext->setFixedWidth(400);
-    ui->listWidget_prgtext->setFixedHeight(this->height());
+    ui->listWidget_prgtext->setFixedHeight(this->height()-70);
     //----------------------
     ui->label_xypos->move(ui->listWidget_prgtext->pos().x(),\
                           ui->listWidget_prgtext->pos().y() + ui->listWidget_prgtext->height()+2);
@@ -78,6 +78,7 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
     Wst = w;
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
+    UnReDo.neu(Wst->bearb());
     sendVorschauAktualisieren(*Wst, 0);
 }
 
@@ -144,30 +145,26 @@ void MainWin_wst_bearbeiten::update_listwidget()
     }
     ui->listWidget_prgtext->addItem("...");
 }
-
 void MainWin_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
 {
     if((int)nr < ui->listWidget_prgtext->count())
     {
-        ui->listWidget_prgtext->item(nr-1)->setSelected(true);
+        ui->listWidget_prgtext->setCurrentRow(nr-1);
         if(bearbeiten == true)
         {
             zeile_bearbeiten(nr-1);
         }
     }
 }
-
 void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int currentRow)
 {
     emit signalIndexChange(currentRow+1);
 }
-
 void MainWin_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
 {
     int index = ui->listWidget_prgtext->currentRow();
     zeile_bearbeiten(index);
 }
-
 void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
 {
     if(zeile == 0)
@@ -352,6 +349,7 @@ void MainWin_wst_bearbeiten::slot_make(QString bearb)
         Wst->bearb_ptr()->zeile_anhaengen(bearb);
     }
     update_listwidget();
+    UnReDo.neu(Wst->bearb());
     emit sendVorschauAktualisieren(*Wst, index);
 }
 void MainWin_wst_bearbeiten::slot_make_bo(bohrung bo)
@@ -366,9 +364,36 @@ void MainWin_wst_bearbeiten::slot_make_nut(nut nu)
 {
     slot_make(nu.text());
 }
-//----------------------------------
-
-
-
-
-
+//----------------------------------Bearbeiten:
+void MainWin_wst_bearbeiten::on_actionUndo_triggered()
+{
+    Wst->set_bearb(UnReDo.undo());
+    update_listwidget();
+    ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
+    sendVorschauAktualisieren(*Wst, 0);
+}
+void MainWin_wst_bearbeiten::on_actionRedo_triggered()
+{
+    Wst->set_bearb(UnReDo.redo());
+    update_listwidget();
+    ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
+    sendVorschauAktualisieren(*Wst, 0);
+}
+void MainWin_wst_bearbeiten::on_actionEntf_triggered()
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    if(index == 0)
+    {
+        return;
+    }else if(index+1 >= ui->listWidget_prgtext->count())
+    {
+        return;
+    }else
+    {
+        Wst->bearb_ptr()->zeile_loeschen(index);
+        update_listwidget();
+        UnReDo.neu(Wst->bearb());
+        ui->listWidget_prgtext->setCurrentRow(index-1);
+        emit sendVorschauAktualisieren(*Wst, index);
+    }
+}

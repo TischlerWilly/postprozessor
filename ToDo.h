@@ -6,8 +6,6 @@
 #endif //PROGRAMMVERSION
 /*
 
-- wkzmag
-    -> säge hori
 - fmc-export nut hori
 
 - bearb-menü

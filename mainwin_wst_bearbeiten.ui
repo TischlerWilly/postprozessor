@@ -58,7 +58,17 @@
     <addaction name="actionMakeRTA"/>
     <addaction name="actionMakeNut"/>
    </widget>
+   <widget class="QMenu" name="menuBearbeiten">
+    <property name="title">
+     <string>Bearbeiten</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionEntf"/>
+   </widget>
    <addaction name="menuHallo_Welt"/>
+   <addaction name="menuBearbeiten"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionMakeBohrung">
@@ -74,6 +84,30 @@
   <action name="actionMakeNut">
    <property name="text">
     <string>Nut</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Rückgängig</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Wiederholen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionEntf">
+   <property name="text">
+    <string>Entfernen</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>

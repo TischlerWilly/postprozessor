@@ -74,6 +74,10 @@ void werkstueck::neue_bearbeitung(QString text)
         Bearbeitungen.zeilen_anhaengen(text);
     }
 }
+void werkstueck::set_bearb(text_zeilenweise b)
+{
+    Bearbeitungen = b;
+}
 void werkstueck::set_kante_vo(QString artiklenummer)
 {
     Kante_vo = artiklenummer;
