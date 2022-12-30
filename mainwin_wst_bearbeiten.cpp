@@ -382,18 +382,97 @@ void MainWin_wst_bearbeiten::on_actionRedo_triggered()
 void MainWin_wst_bearbeiten::on_actionEntf_triggered()
 {
     int index = ui->listWidget_prgtext->currentRow();
-    if(index == 0)
+    if((ui->listWidget_prgtext->currentIndex().isValid())  &&  \
+       (ui->listWidget_prgtext->currentItem()->isSelected())    )
     {
-        return;
-    }else if(index+1 >= ui->listWidget_prgtext->count())
+        QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
+        int items_menge = items.count();
+        int row_erstes = 0;//Nummer des ersten Elementes
+        for(int i=0; i<ui->listWidget_prgtext->count() ;i++)
+        {
+            if(ui->listWidget_prgtext->item(i)->isSelected())
+            {
+                row_erstes = i;
+                break;
+            }
+        }
+        if(items_menge==1)
+        {
+            if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
+            {
+                Wst->bearb_ptr()->zeile_loeschen(index);
+                update_listwidget();
+                UnReDo.neu(Wst->bearb());
+                ui->listWidget_prgtext->setCurrentRow(index-1);
+                emit sendVorschauAktualisieren(*Wst, index);
+            }
+        }else
+        {
+            index = row_erstes;
+            if(index == 0)
+            {
+                index = 1;
+                items_menge = items_menge-1;
+            }
+            if(index+items_menge >= ui->listWidget_prgtext->count())
+            {
+                items_menge = ui->listWidget_prgtext->count()-index-1;
+            }
+            Wst->bearb_ptr()->zeilen_loeschen(index, items_menge);
+            update_listwidget();
+            UnReDo.neu(Wst->bearb());
+            ui->listWidget_prgtext->setCurrentRow(index-1);
+            emit sendVorschauAktualisieren(*Wst, index);
+        }
+    } else
     {
-        return;
-    }else
+        QMessageBox mb;
+        mb.setText("Sie haben noch nichts ausgewaelt was entfernt werden kann!");
+        mb.exec();
+    }
+}
+void MainWin_wst_bearbeiten::on_actionKopieren_triggered()
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    if((ui->listWidget_prgtext->currentIndex().isValid())  &&  \
+       (ui->listWidget_prgtext->currentItem()->isSelected())    )
     {
-        Wst->bearb_ptr()->zeile_loeschen(index);
-        update_listwidget();
-        UnReDo.neu(Wst->bearb());
-        ui->listWidget_prgtext->setCurrentRow(index-1);
-        emit sendVorschauAktualisieren(*Wst, index);
+        QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
+        int items_menge = items.count();
+        int row_erstes = 0;//Nummer des ersten Elementes
+        for(int i=0; i<ui->listWidget_prgtext->count() ;i++)
+        {
+            if(ui->listWidget_prgtext->item(i)->isSelected())
+            {
+                row_erstes = i;
+                break;
+            }
+        }
+        if(items_menge==1)
+        {
+            if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
+            {
+                KopierterEintrag = Wst->bearb_ptr()->zeile(index);
+            }
+        }else
+        {
+            index = row_erstes;
+            if(index == 0)
+            {
+                index = 1;
+                items_menge = items_menge-1;
+            }
+            if(index+items_menge >= ui->listWidget_prgtext->count())
+            {
+                items_menge = ui->listWidget_prgtext->count()-index-1;
+            }
+            QString tmp = Wst->bearb_ptr()->zeilen(index, items_menge);
+            KopierterEintrag = tmp;
+        }
+    } else
+    {
+        QMessageBox mb;
+        mb.setText("Sie haben noch nichts ausgewaelt was kopiert werden kann!");
+        mb.exec();
     }
 }

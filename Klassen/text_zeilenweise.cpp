@@ -64,7 +64,7 @@ QString text_zeilenweise::zeile(uint zeilennummer)
 }
 QString text_zeilenweise::zeilen(uint zeilennummer_beginn, uint zeilenmenge)
 {
-    if(zeilennummer_beginn+zeilenmenge > Anzahl_der_zeilen)
+    if(zeilennummer_beginn+zeilenmenge-1 > Anzahl_der_zeilen)
     {
         return "Zeilennummer ist groesser als Anzahl der Zeilen!!!";
     }

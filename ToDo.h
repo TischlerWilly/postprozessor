@@ -9,9 +9,6 @@
 - fmc-export nut hori
 
 - bearb-menü
-    -> undo/redo
-    -> entfernen von bearb
-    -> kopieren
     -> einfügen
 
 

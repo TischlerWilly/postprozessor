@@ -34,6 +34,7 @@ private:
     vorschau vorschaufenster;
     werkstueck *Wst;
     undo_redo_tz UnReDo;
+    QString KopierterEintrag;
 
     void clear();
     void update_listwidget();
@@ -55,6 +56,7 @@ private slots:
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
     void on_actionEntf_triggered();
+    void on_actionKopieren_triggered();
 
 public slots:
     //Bearbeiten
