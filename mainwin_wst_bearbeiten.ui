@@ -70,9 +70,17 @@
     <addaction name="separator"/>
     <addaction name="actionEntf"/>
     <addaction name="actionKopieren"/>
+    <addaction name="actionEinfuegen"/>
+   </widget>
+   <widget class="QMenu" name="menuManipulation">
+    <property name="title">
+     <string>Manipulation</string>
+    </property>
+    <addaction name="actionVerschieben"/>
    </widget>
    <addaction name="menuHallo_Welt"/>
    <addaction name="menuBearbeiten"/>
+   <addaction name="menuManipulation"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionMakeBohrung">
@@ -120,6 +128,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionEinfuegen">
+   <property name="text">
+    <string>Einfügen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionVerschieben">
+   <property name="text">
+    <string>Verschieben</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
    </property>
   </action>
  </widget>

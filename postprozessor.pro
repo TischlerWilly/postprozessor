@@ -20,6 +20,7 @@ SOURCES += main.cpp\
     Dialoge/dialog_bearb_nut.cpp \
     Dialoge/dialog_bearb_pkopf.cpp \
     Dialoge/dialog_bearb_rta.cpp \
+    Dialoge/dialog_bearb_verschieben.cpp \
     Dialoge/dialog_einstellung_dxf.cpp \
     Dialoge/dialog_einstellung_dxf_klassen.cpp \
     Dialoge/dialog_einstellung_ganx.cpp \
@@ -84,6 +85,7 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_bearb_nut.h \
     Dialoge/dialog_bearb_pkopf.h \
     Dialoge/dialog_bearb_rta.h \
+    Dialoge/dialog_bearb_verschieben.h \
     Dialoge/dialog_einstellung_dxf.h \
     Dialoge/dialog_einstellung_dxf_klassen.h \
     Dialoge/dialog_einstellung_ganx.h \
@@ -156,6 +158,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_bearb_nut.ui \
     Dialoge/dialog_bearb_pkopf.ui \
     Dialoge/dialog_bearb_rta.ui \
+    Dialoge/dialog_bearb_verschieben.ui \
     Dialoge/dialog_einstellung_dxf.ui \
     Dialoge/dialog_einstellung_dxf_klassen.ui \
     Dialoge/dialog_einstellung_ganx.ui \

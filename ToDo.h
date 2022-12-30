@@ -6,10 +6,16 @@
 #endif //PROGRAMMVERSION
 /*
 
+- QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, double ay, double az)
+    ->restliche bearb noch programmieren
+
+void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
+    ->Beim Ändern der wst-Größe Kantenbezogenen Bearb verschieben
+
+
+
 - fmc-export nut hori
 
-- bearb-menü
-    -> einfügen
 
 
 text_zeilenweise werkstueck::fkon_kantengut(...)

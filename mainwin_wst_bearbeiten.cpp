@@ -173,6 +173,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         dlg.setModal(true);
         dlg.set_data(Wst);
         dlg.exec();
+        update_listwidget();
         emit sendVorschauAktualisieren(*Wst, 0);
         return;
     }
@@ -226,83 +227,57 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
     }
 }
 
+void MainWin_wst_bearbeiten::zeile_aendern(int index, QString bearb)
+{
+    //index ist der indes des list-widgets
+    //bearb ist eine Zeile der Bearbeitugen
+    text_zeilenweise bearbeitungen = Wst->bearb();
+    bearbeitungen.zeile_ersaetzen(index, bearb);
+    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
+    update_listwidget();
+    emit sendVorschauAktualisieren(*Wst, index+1);
+}
 void MainWin_wst_bearbeiten::slot_rta(rechtecktasche rta)
 {
     int index = ui->listWidget_prgtext->currentRow();
-    //Werte zurück speichern:
-    QString zeile;
-    zeile = rta.text();
-    ui->listWidget_prgtext->item(index)->setText(rta_zu_prgeile(zeile));
-
-    text_zeilenweise bearbeitungen = Wst->bearb();
-    bearbeitungen.zeile_ersaetzen(index, zeile);
-    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index+1);
+    QString bearb = rta.text();
+    ui->listWidget_prgtext->item(index)->setText(rta_zu_prgeile(bearb));
+    zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_bo(bohrung bo)
 {
     int index = ui->listWidget_prgtext->currentRow();
-    //Werte zurück speichern:
-    QString zeile;
-    zeile = bo.text();
-    ui->listWidget_prgtext->item(index)->setText(bohr_zu_prgeile(zeile));
-
-    text_zeilenweise bearbeitungen = Wst->bearb();
-    bearbeitungen.zeile_ersaetzen(index, zeile);
-    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index+1);
+    QString bearb = bo.text();
+    ui->listWidget_prgtext->item(index)->setText(bohr_zu_prgeile(bearb));
+    zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_nut(nut nu)
 {
     int index = ui->listWidget_prgtext->currentRow();
-    //Werte zurück speichern:
-    QString zeile;
-    zeile = nu.text();
-    ui->listWidget_prgtext->item(index)->setText(nut_zu_prgeile(zeile));
-
-    text_zeilenweise bearbeitungen = Wst->bearb();
-    bearbeitungen.zeile_ersaetzen(index, zeile);
-    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index+1);
+    QString bearb = nu.text();
+    ui->listWidget_prgtext->item(index)->setText(nut_zu_prgeile(bearb));
+    zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
 {
     int index = ui->listWidget_prgtext->currentRow();
-    //Werte zurück speichern:
-    QString zeile;
-    zeile = fa.text();
-    ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgeile(zeile));
-
-    text_zeilenweise bearbeitungen = Wst->bearb();
-    bearbeitungen.zeile_ersaetzen(index, zeile);
-    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index+1);
+    QString bearb = fa.text();
+    ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgeile(bearb));
+    zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
 {
     int index = ui->listWidget_prgtext->currentRow();
-    //Werte zurück speichern:
-    QString zeile;
-    zeile = fg.text();
-    ui->listWidget_prgtext->item(index)->setText(fgerade_zu_prgeile(zeile));
-
-    text_zeilenweise bearbeitungen = Wst->bearb();
-    bearbeitungen.zeile_ersaetzen(index, zeile);
-    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index+1);
+    QString bearb = fg.text();
+    ui->listWidget_prgtext->item(index)->setText(fgerade_zu_prgeile(bearb));
+    zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
 {
     int index = ui->listWidget_prgtext->currentRow();
-    //Werte zurück speichern:
-    QString zeile;
-    zeile = fb.text();
-    ui->listWidget_prgtext->item(index)->setText(fbogen_zu_prgeile(zeile));
-
-    text_zeilenweise bearbeitungen = Wst->bearb();
-    bearbeitungen.zeile_ersaetzen(index, zeile);
-    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
-    emit sendVorschauAktualisieren(*Wst, index+1);
+    QString bearb = fb.text();
+    ui->listWidget_prgtext->item(index)->setText(fbogen_zu_prgeile(bearb));
+    zeile_aendern(index, bearb);
 }
 
 //----------------------------------Make:
@@ -469,10 +444,148 @@ void MainWin_wst_bearbeiten::on_actionKopieren_triggered()
             QString tmp = Wst->bearb_ptr()->zeilen(index, items_menge);
             KopierterEintrag = tmp;
         }
-    } else
+    }else
     {
         QMessageBox mb;
         mb.setText("Sie haben noch nichts ausgewaelt was kopiert werden kann!");
         mb.exec();
     }
+}
+void MainWin_wst_bearbeiten::on_actionEinfuegen_triggered()
+{
+    if(!KopierterEintrag.isEmpty())
+    {
+        int index = ui->listWidget_prgtext->currentRow();
+        if(index == 0)
+        {
+            index = 1;
+        }
+        if(index == ui->listWidget_prgtext->count()-1)
+        {
+            Wst->bearb_ptr()->zeilen_anhaengen(KopierterEintrag);
+        }else
+        {
+            Wst->bearb_ptr()->zeilen_einfuegen(index-1, KopierterEintrag);
+        }
+        update_listwidget();
+        UnReDo.neu(Wst->bearb());
+        ui->listWidget_prgtext->setCurrentRow(index);
+        emit sendVorschauAktualisieren(*Wst, index+1);
+    }
+}
+//----------------------------------Manipulation:
+void MainWin_wst_bearbeiten::on_actionVerschieben_triggered()
+{
+    if((ui->listWidget_prgtext->currentIndex().isValid())  &&  \
+       (ui->listWidget_prgtext->currentItem()->isSelected())    )
+    {
+        Dialog_bearb_verschieben dlg;
+        dlg.setModal(true);
+        connect(&dlg, SIGNAL(signal_punkt(punkt3d)), this, SLOT(slot_verschieben(punkt3d)));
+        dlg.exec();
+    }else
+    {
+        QMessageBox mb;
+        mb.setText("Sie haben noch nichts ausgewaelt was verschoben werden kann!");
+        mb.exec();
+    }
+}
+//----------------------------------Slot_Manipulation:
+void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    //Die index-Prüfung erfolgt bereits in der Funktion on_actionVerschieben_triggered()
+
+    QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
+    int items_menge = items.count();
+    int row_erstes = 0;//Nummer des ersten Elementes
+    for(int i=0; i<ui->listWidget_prgtext->count() ;i++)
+    {
+        if(ui->listWidget_prgtext->item(i)->isSelected())
+        {
+            row_erstes = i;
+            break;
+        }
+    }
+    if(items_menge==1)
+    {
+        if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
+        {
+            QString bearb = Wst->bearb_ptr()->zeile(index);
+            bearb = verschiebe_einen(bearb, p.x(), p.y(), p.z());
+            zeile_aendern(index, bearb);
+        }
+    }else
+    {
+        index = row_erstes;
+        if(index == 0)
+        {
+            index = 1;
+            items_menge = items_menge-1;
+        }
+        if(index+items_menge >= ui->listWidget_prgtext->count())
+        {
+            items_menge = ui->listWidget_prgtext->count()-index-1;
+        }
+        //do something...
+        QMessageBox mb;
+        mb.setText("Das Verschieben von Bearbeitungen aus mehreren Zeilen gleichzeitig ist noch nich programmiert.");
+        mb.exec();
+    }
+}
+QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, double ay, double az)
+{
+    text_zeilenweise tz;
+    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
+    tz.set_text(bearb);
+    if(tz.zeile(1) == BEARBART_BOHR)
+    {
+        bohrung bo;
+        bo.set_text(bearb);
+        //bo.set_x(bo.x()+ax);
+        //bo.set_y(bo.y()+ay);
+        //bo.set_z(bo.z()+az);
+        if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+        {
+            bo.set_x(bo.x()+ax);
+            bo.set_y(bo.y()+ay);
+        }else if(bo.bezug() == WST_BEZUG_LI)
+        {
+            bo.set_x(0);
+            bo.set_y(bo.y()+ay);
+            bo.set_z(bo.z()+az);
+        }else if(bo.bezug() == WST_BEZUG_RE)
+        {
+            bo.set_x(Wst->laenge());
+            bo.set_y(bo.y()+ay);
+            bo.set_z(bo.z()+az);
+        }else if(bo.bezug() == WST_BEZUG_VO)
+        {
+            bo.set_x(bo.x()+ax);
+            bo.set_y(0);
+            bo.set_z(bo.z()+az);
+        }else if(bo.bezug() == WST_BEZUG_HI)
+        {
+            bo.set_x(bo.x()+ax);
+            bo.set_y(Wst->breite());
+            bo.set_z(bo.z()+az);
+        }
+        bearb = bo.text();
+    }else if(tz.zeile(1) == BEARBART_RTA)
+    {
+
+    }if(tz.zeile(1) == BEARBART_NUT)
+    {
+
+    }if(tz.zeile(1) == BEARBART_FRAESERAUFRUF)
+    {
+
+    }if(tz.zeile(1) == BEARBART_FRAESERGERADE)
+    {
+
+    }if(tz.zeile(1) == BEARBART_FRAESERBOGEN)
+    {
+
+    }
+    return bearb;
 }

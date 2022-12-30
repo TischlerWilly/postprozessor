@@ -12,6 +12,7 @@
 #include "Dialoge/dialog_bearb_faufruf.h"
 #include "Dialoge/dialog_bearb_fgerade.h"
 #include "Dialoge/dialog_bearb_fbogen.h"
+#include "Dialoge/dialog_bearb_verschieben.h"
 
 #include "Funktionen/funktionen_prgtext.h"
 #include "Klassen/undo_redo_tz.h"
@@ -39,6 +40,7 @@ private:
     void clear();
     void update_listwidget();
     void zeile_bearbeiten(int zeile);
+    QString verschiebe_einen(QString bearb, double ax, double ay, double az);
 
 signals:
     void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
@@ -57,9 +59,12 @@ private slots:
     void on_actionRedo_triggered();
     void on_actionEntf_triggered();
     void on_actionKopieren_triggered();
+    void on_actionEinfuegen_triggered();
+    void on_actionVerschieben_triggered();
 
 public slots:
     //Bearbeiten
+    void zeile_aendern(int index, QString bearb);
     void slot_rta(rechtecktasche rta);
     void slot_bo(bohrung bo);    
     void slot_nut(nut nu);
@@ -71,5 +76,7 @@ public slots:
     void slot_make_bo(bohrung bo);
     void slot_make_rta(rechtecktasche rt);
     void slot_make_nut(nut nu);
+    //Manipulation:
+    void slot_verschieben(punkt3d p);
 };
 #endif // MAINWIN_WST_BEARBEITEN_H
