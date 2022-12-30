@@ -31,6 +31,7 @@ void Dialog_bearb_rta::set_data(QString d)
     ui->lineEdit_y->setText(rta.y_qstring());
     ui->lineEdit_z->setText(rta.z_qstring());
     ui->lineEdit_wi->setText(rta.drewi_qstring());
+    ui->lineEdit_rad->setText(rta.rad_qstring());
     ui->lineEdit_zust->setText(rta.zustellmass_qstring());
     if(rta.ausraeumen() == true)
     {
@@ -80,6 +81,7 @@ void Dialog_bearb_rta::on_btn_ok_clicked()
     rta.set_y(berechnen(ui->lineEdit_y->text()));
     rta.set_z(berechnen(ui->lineEdit_z->text()));
     rta.set_drewi(berechnen(ui->lineEdit_wi->text()));
+    rta.set_rad(berechnen(ui->lineEdit_rad->text()));
     rta.set_zustellmass(berechnen(ui->lineEdit_zust->text()));
     rta.set_ausraeumen(ui->checkBox_raeumen->isChecked());
     QString bezug = ui->comboBox_bezug->currentText();

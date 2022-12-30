@@ -49,6 +49,10 @@ private slots:
     void on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item);
     void on_actionMakeBohrung_triggered();
 
+    void on_actionMakeRTA_triggered();
+
+    void on_actionMakeNut_triggered();
+
 public slots:
     //Bearbeiten
     void slot_rta(rechtecktasche rta);
@@ -58,6 +62,9 @@ public slots:
     void slot_fgerade(fraesergerade fg);
     void slot_fbogen(fraeserbogen fb);
     //Erstellen/Make:
+    void slot_make(QString bearb);
     void slot_make_bo(bohrung bo);
+    void slot_make_rta(rechtecktasche rt);
+    void slot_make_nut(nut nu);
 };
 #endif // MAINWIN_WST_BEARBEITEN_H

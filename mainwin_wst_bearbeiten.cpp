@@ -318,23 +318,57 @@ void MainWin_wst_bearbeiten::on_actionMakeBohrung_triggered()
     connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_make_bo(bohrung)));
     dlg.exec();
 }
+void MainWin_wst_bearbeiten::on_actionMakeRTA_triggered()
+{
+    Dialog_bearb_rta dlg;
+    dlg.setModal(true);
+    rechtecktasche rt;//Default-Daten
+    dlg.set_data(rt.text());
+    connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_make_rta(rechtecktasche)));
+    dlg.exec();
+}
+void MainWin_wst_bearbeiten::on_actionMakeNut_triggered()
+{
+    Dialog_bearb_nut dlg;
+    dlg.setModal(true);
+    nut nu;//Default-Daten
+    dlg.set_data(nu.text());
+    connect(&dlg, SIGNAL(signal_nut(nut)), this, SLOT(slot_make_nut(nut)));
+    dlg.exec();
+}
 //----------------------------------Slot_Make:
-void MainWin_wst_bearbeiten::slot_make_bo(bohrung bo)
+void MainWin_wst_bearbeiten::slot_make(QString bearb)
 {
     int index = ui->listWidget_prgtext->currentRow();
     //Werte zurück speichern:
     if(index == 0)
     {
-        Wst->bearb_ptr()->zeile_vorwegsetzen(bo.text());
+        Wst->bearb_ptr()->zeile_vorwegsetzen(bearb);
     }else if(index+1 < ui->listWidget_prgtext->count())
     {
-        Wst->bearb_ptr()->zeile_einfuegen(index-1, bo.text());
+        Wst->bearb_ptr()->zeile_einfuegen(index-1, bearb);
     }else
     {
-        Wst->bearb_ptr()->zeile_anhaengen(bo.text());
+        Wst->bearb_ptr()->zeile_anhaengen(bearb);
     }
     update_listwidget();
     emit sendVorschauAktualisieren(*Wst, index);
 }
+void MainWin_wst_bearbeiten::slot_make_bo(bohrung bo)
+{
+    slot_make(bo.text());
+}
+void MainWin_wst_bearbeiten::slot_make_rta(rechtecktasche rt)
+{
+    slot_make(rt.text());
+}
+void MainWin_wst_bearbeiten::slot_make_nut(nut nu)
+{
+    slot_make(nu.text());
+}
 //----------------------------------
+
+
+
+
 

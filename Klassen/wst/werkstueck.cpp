@@ -629,6 +629,7 @@ geometrietext werkstueck::geo()
                 r.set_mipu(rt.x(), rt.y(), rt.z());
                 r.set_drewi(rt.drewi());
                 r.verschieben_um(versatz_x, versatz_y);
+                r.set_rad(rt.rad());
                 gt.add_rechteck(r);
                 if(rt.ausraeumen() == false)
                 {
@@ -663,6 +664,7 @@ geometrietext werkstueck::geo()
                 r.set_farbe_fuellung(FARBE_GRUEN);
                 r.set_einfuegepunkt(rt.x(), rt.y(), rt.z());
                 r.verschieben_um(versatz_x, versatz_y);
+                r.set_rad(rt.rad());
                 gt.add_rechteck(r);
             }
 

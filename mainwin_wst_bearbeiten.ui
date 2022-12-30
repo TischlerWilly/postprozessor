@@ -55,6 +55,8 @@
      <string>Einfügen</string>
     </property>
     <addaction name="actionMakeBohrung"/>
+    <addaction name="actionMakeRTA"/>
+    <addaction name="actionMakeNut"/>
    </widget>
    <addaction name="menuHallo_Welt"/>
   </widget>
@@ -62,6 +64,16 @@
   <action name="actionMakeBohrung">
    <property name="text">
     <string>Bohrung</string>
+   </property>
+  </action>
+  <action name="actionMakeRTA">
+   <property name="text">
+    <string>Rechtecktasche</string>
+   </property>
+  </action>
+  <action name="actionMakeNut">
+   <property name="text">
+    <string>Nut</string>
    </property>
   </action>
  </widget>
