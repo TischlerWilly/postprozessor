@@ -6,9 +6,15 @@
 #endif //PROGRAMMVERSION
 /*
 
+- wkzmag
+    -> säge hori
+- fmc-export nut hori
 
-
-
+- bearb-menü
+    -> undo/redo
+    -> entfernen von bearb
+    -> kopieren
+    -> einfügen
 
 
 text_zeilenweise werkstueck::fkon_kantengut(...)

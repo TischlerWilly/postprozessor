@@ -588,21 +588,51 @@ geometrietext werkstueck::geo()
             s.set_start(nu.xs(), nu.ys(), 0);
             s.set_ende(nu.xe(), nu.ye(), 0);
             rechteck3d r;
-            if(nu.bezug() == WST_BEZUG_OBSEI)
+            if(  (nu.bezug() == WST_BEZUG_OBSEI) ||  (nu.bezug() == WST_BEZUG_UNSEI)  )
             {
-                r.set_farbe_fuellung(FARBE_BLAU);
+                if(nu.bezug() == WST_BEZUG_OBSEI)
+                {
+                    r.set_farbe_fuellung(FARBE_BLAU);
+                }else
+                {
+                    r.set_farbe_fuellung(farbe_unterseite);
+                    r.set_stil(STIL_GESTRICHELT);
+                }
+                r.set_laenge(s.laenge2d());
+                r.set_breite(nu.breite());
+                r.set_bezugspunkt(MITTE);
+                r.set_einfuegepunkt(s.mitpu3d());
+                r.set_drewi(s.wink());
+                r.verschieben_um(versatz_x, versatz_y);
+                gt.add_rechteck(r);
             }else
             {
-                r.set_farbe_fuellung(farbe_unterseite);
-                r.set_stil(STIL_GESTRICHELT);
+                if(nu.bezug() == WST_BEZUG_LI)
+                {
+                    r.set_bezugspunkt(LINKS);
+                    r.set_laenge(nu.tiefe());
+                    r.set_breite(s.laenge2d());
+                }else if(nu.bezug() == WST_BEZUG_RE)
+                {
+                    r.set_bezugspunkt(RECHTS);
+                    r.set_laenge(nu.tiefe());
+                    r.set_breite(s.laenge2d());
+                }else if(nu.bezug() == WST_BEZUG_VO)
+                {
+                    r.set_bezugspunkt(UNTEN);
+                    r.set_laenge(s.laenge2d());
+                    r.set_breite(nu.tiefe());
+                }else if(nu.bezug() == WST_BEZUG_HI)
+                {
+                    r.set_bezugspunkt(OBEN);
+                    r.set_laenge(s.laenge2d());
+                    r.set_breite(nu.tiefe());
+                }
+                r.set_farbe_fuellung(FARBE_GELB);
+                r.set_einfuegepunkt(s.mitpu3d());
+                r.verschieben_um(versatz_x, versatz_y);
+                gt.add_rechteck(r);
             }
-            r.set_laenge(s.laenge2d());
-            r.set_breite(nu.breite());
-            r.set_bezugspunkt(MITTE);
-            r.set_einfuegepunkt(s.mitpu3d());
-            r.set_drewi(s.wink());
-            r.verschieben_um(versatz_x, versatz_y);
-            gt.add_rechteck(r);
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());

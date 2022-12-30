@@ -5744,122 +5744,6 @@ void wstzustand::fmc_dateitext(int index)
                     mb.setText(msg);
                     mb.exec();
                 }
-                if(bezug == WST_BEZUG_OBSEI)
-                {
-                    //Bezugskante der Nut finden:
-                    QString bezugskante = "0"; //Maß gibt Mittellinie der nut an
-                    QString posys = nu.ys_qstring();
-                    QString posye = nu.ye_qstring();
-                    if(posys == posye)
-                    {
-                        if(nu.ys() < (tmp_b-nu.ys()))
-                        {
-                            posys = double_to_qstring(  nu.ys() - nu.breite()/2  );
-                            posye = "SY";
-                            bezugskante = "2"; //Maß gibt linke Flanke der nut an
-                        }else
-                        {
-                            if(nu.breite() == 8.5 && nu.tiefe() == 6.5)
-                            {
-                                posys = "B-";
-                                posys += double_to_qstring(  (tmp_b - nu.ys()) + nu.breite()/2  );
-                                posye = "SY";
-                                bezugskante = "2"; //Maß gibt linke Flanke der nut an
-                            }else
-                            {
-                                posys = "B-";
-                                posys += double_to_qstring(  (tmp_b - nu.ys()) - nu.breite()/2  );
-                                posye = "SY";
-                                bezugskante = "1"; //Maß gibt rechte Flanke der nut an
-                            }
-                        }
-                    }
-
-                    msg += FMC_NUT;
-                    msg += "\n";
-                    msg += "WKZID=";                //WKZ-Nummer
-                    msg += tnummer;
-                    msg += "\n";
-                    msg += "SWKZID=";               //Spiegel-WKZ-Nummer
-                    msg += tnummer;
-                    msg += "\n";
-                    msg += "WERKZEUGNAME=";         //WKZ-Nummer
-                    msg += tnummer;
-                    msg += "\n";
-                    msg += "WKZAKTUELL=1";
-                    msg += "\n";
-                    msg += "SPX=";
-                    //Nuten auf unserer BIMA310 müssen immer von L zu 0 verlaufen
-                    //Da Agregat versetzt wenn es gedreht wird
-                    if(nu.ys() == nu.ye())
-                    {
-                        if(nu.xs() > nu.xe())
-                        {
-                            msg += nu.xs_qstring();
-                        }else
-                        {
-                            msg += nu.xe_qstring();
-                        }
-                    }else
-                    {
-                        msg += nu.xs_qstring();
-                    }
-                    msg += "\n";
-
-
-                    msg += "SPY=";
-                    msg += posys;
-                    msg += "\n";
-                    msg += "EPX=";
-                    if(nu.ys() == nu.ye())
-                    {
-                        if(nu.xs() < nu.xe())
-                        {
-                            msg += nu.xs_qstring();
-                        }else
-                        {
-                            msg += nu.xe_qstring();
-                        }
-                    }else
-                    {
-                         msg += nu.xe_qstring();
-                    }
-                    msg += "\n";
-                    msg += "EPY=";
-                    msg += posye;
-                    msg += "\n";
-                    msg += "TI=";
-                    msg += nu.tiefe_qstring();
-                    msg += "\n";
-                    msg += "NB=";
-                    msg += nu.breite_qstring();
-                    msg += "\n";
-                    msg += "TYPA=1\n";              //Auslauf
-                    msg += "TRKOR=";                //Korrektur/Bezugskante
-                    msg += bezugskante;
-                    msg += "\n";
-                    msg += "GEGENL=0\n";            //Genenlauf
-                    msg += "TWKL=0\n";              //Neigungswinkel
-                    msg += "TYPN=1\n";              //Neigungstyp
-                    msg += "ABSTN=10\n";            //Abstand auf Neigung
-                    msg += "Z=D/2\n";               //POs in Z
-
-                    //Eintauchvorschub gem. Voreinstellung IMAWOP
-                    //Vorschub gem. Voreinstellung IMAWOP
-                    //Drehzahl gem. Voreinstellung IMAWOP
-
-                    msg += "BEZB=";
-                    msg += "Nut B";
-                    msg += nu.breite_qstring();
-                    msg += " T";
-                    msg += nu.tiefe_qstring();
-                    msg += "\n";
-                    msg += FMC_NUT_AFB;
-                    msg += "=";
-                    msg += nu.afb();
-                    msg += "\n";
-                    msg += "\n";
-                }
             }else
             {
                 //Mit Fehlermeldung abbrechen:
@@ -5868,6 +5752,125 @@ void wstzustand::fmc_dateitext(int index)
                 Exporttext.append(msg);
                 Export_moeglich.append(false);
                 return;
+            }
+            if(nu.bezug() == WST_BEZUG_OBSEI)
+            {
+                //Bezugskante der Nut finden:
+                QString bezugskante = "0"; //Maß gibt Mittellinie der nut an
+                QString posys = nu.ys_qstring();
+                QString posye = nu.ye_qstring();
+                if(posys == posye)
+                {
+                    if(nu.ys() < (tmp_b-nu.ys()))
+                    {
+                        posys = double_to_qstring(  nu.ys() - nu.breite()/2  );
+                        posye = "SY";
+                        bezugskante = "2"; //Maß gibt linke Flanke der nut an
+                    }else
+                    {
+                        if(nu.breite() == 8.5 && nu.tiefe() == 6.5)
+                        {
+                            posys = "B-";
+                            posys += double_to_qstring(  (tmp_b - nu.ys()) + nu.breite()/2  );
+                            posye = "SY";
+                            bezugskante = "2"; //Maß gibt linke Flanke der nut an
+                        }else
+                        {
+                            posys = "B-";
+                            posys += double_to_qstring(  (tmp_b - nu.ys()) - nu.breite()/2  );
+                            posye = "SY";
+                            bezugskante = "1"; //Maß gibt rechte Flanke der nut an
+                        }
+                    }
+                }
+
+                msg += FMC_NUT;
+                msg += "\n";
+                msg += "WKZID=";                //WKZ-Nummer
+                msg += tnummer;
+                msg += "\n";
+                msg += "SWKZID=";               //Spiegel-WKZ-Nummer
+                msg += tnummer;
+                msg += "\n";
+                msg += "WERKZEUGNAME=";         //WKZ-Nummer
+                msg += tnummer;
+                msg += "\n";
+                msg += "WKZAKTUELL=1";
+                msg += "\n";
+                msg += "SPX=";
+                //Nuten auf unserer BIMA310 müssen immer von L zu 0 verlaufen
+                //Da Agregat versetzt wenn es gedreht wird
+                if(nu.ys() == nu.ye())
+                {
+                    if(nu.xs() > nu.xe())
+                    {
+                        msg += nu.xs_qstring();
+                    }else
+                    {
+                        msg += nu.xe_qstring();
+                    }
+                }else
+                {
+                    msg += nu.xs_qstring();
+                }
+                msg += "\n";
+
+
+                msg += "SPY=";
+                msg += posys;
+                msg += "\n";
+                msg += "EPX=";
+                if(nu.ys() == nu.ye())
+                {
+                    if(nu.xs() < nu.xe())
+                    {
+                        msg += nu.xs_qstring();
+                    }else
+                    {
+                        msg += nu.xe_qstring();
+                    }
+                }else
+                {
+                     msg += nu.xe_qstring();
+                }
+                msg += "\n";
+                msg += "EPY=";
+                msg += posye;
+                msg += "\n";
+                msg += "TI=";
+                msg += nu.tiefe_qstring();
+                msg += "\n";
+                msg += "NB=";
+                msg += nu.breite_qstring();
+                msg += "\n";
+                msg += "TYPA=1\n";              //Auslauf
+                msg += "TRKOR=";                //Korrektur/Bezugskante
+                msg += bezugskante;
+                msg += "\n";
+                msg += "GEGENL=0\n";            //Genenlauf
+                msg += "TWKL=0\n";              //Neigungswinkel
+                msg += "TYPN=1\n";              //Neigungstyp
+                msg += "ABSTN=10\n";            //Abstand auf Neigung
+                msg += "Z=D/2\n";               //POs in Z
+
+                //Eintauchvorschub gem. Voreinstellung IMAWOP
+                //Vorschub gem. Voreinstellung IMAWOP
+                //Drehzahl gem. Voreinstellung IMAWOP
+
+                msg += "BEZB=";
+                msg += "Nut B";
+                msg += nu.breite_qstring();
+                msg += " T";
+                msg += nu.tiefe_qstring();
+                msg += "\n";
+                msg += FMC_NUT_AFB;
+                msg += "=";
+                msg += nu.afb();
+                msg += "\n";
+                msg += "\n";
+            }else if(nu.bezug() != WST_BEZUG_UNSEI)
+            {
+
             }
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
@@ -8711,214 +8714,84 @@ void wstzustand::ganx_dateitext(int index)
         }else if(zeile.zeile(1)==BEARBART_NUT)
         {
             nut nu(zeile.text());
-            if(nu.xs() != nu.xe())
+            if(nu.bezug() == WST_BEZUG_OBSEI  ||  nu.bezug() == WST_BEZUG_UNSEI)
             {
-                //Warnung ausgeben und Nut unterdrücken:
-                QString msg = "";
-                msg += "Achtung bei ganx-Export!\n";
-                msg += "Teilname: ";
-                msg += Name;
-                msg += "\n";
-                msg += "Nut ist nicht parallel zur X-Achse:\n";
-                msg += bearb_menschlich_lesbar(zeile);
-                msg += "\n";
-                msg += "Bearbeitung wird unterdrueckt.";
-
-                QMessageBox mb;
-                mb.setText(msg);
-                mb.exec();
-                continue;
-            }
-            double x = nu.xs();
-            double y;
-            double z = nu.tiefe(); //Tiefe
-            double l = 0;
-            //Nutlänge berechnen:
-            if(nu.ys() < nu.ye())
-            {
-                l = nu.ye() - nu.ys();
-                y = nu.ys();
-            }else
-            {
-                l = nu.ys() - nu.ye();
-                y = nu.ye();
-            }
-            y = tmp_b - y;
-            y = y-l;
-            QString tnummer = wkzmag.wkznummer(WKZ_TYP_SAEGE);
-            if(tnummer.isEmpty())
-            {
-                //Mit Fehlermeldung abbrechen:
-                QString msg = fehler_kein_WKZ("ganx", zeile);
-                Fehler_kein_wkz.append(msg);
-                Exporttext.append(msg);
-                Export_moeglich.append(false);
-                return;
-            }
-            double wkz_dm = wkzmag.dm(tnummer).toDouble();
-
-            QString nutvariante_qstring = "Var2";
-            //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
-            //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
-
-            QString nutrichtung = "Y";
-            //Mögliche Werte:
-            //"X" = Nut von links nach rechts = entlang der Y-Achse
-            //"Y" = Nut von vorne nach hinten = entlang der X-Achse
-
-            double nutblattbreite = wkzmag.saegeblattbreite(tnummer).toDouble();
-
-            if(nu.breite() < nutblattbreite)
-            {
-                //Warnung ausgeben und Nut unterdrücken:
-                QString msg = "";
-                msg += "Achtung bei ganx-Export!\n";
-                msg += "Teilname: ";
-                msg += Name;
-                msg += "\n";
-                msg += "Saegeblatt zu breit fuer ";
-                msg += bearb_menschlich_lesbar(zeile);
-                msg += "\n";
-                msg += "Bearbeitung wird unterdrueckt.";
-
-                QMessageBox mb;
-                mb.setText(msg);
-                mb.exec();
-                continue;
-            }else if(nu.breite() == nutblattbreite)
-            {
-                msg += "  <PrgrFileWork>";
-                msg += "\n";
-                //----------------------
-                msg += "    <CntID>";
-                msg += int_to_qstring(id);               //ID-Nummer
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Plane>";
-                if(nu.bezug() == WST_BEZUG_OBSEI)
+                if(nu.xs() != nu.xe())
                 {
-                    msg += GANX_WST_BEZUG_OBSEI;
-                }else
-                {
-                    msg += GANX_WST_BEZUG_UNSEI;
+                    //Warnung ausgeben und Nut unterdrücken:
+                    QString msg = "";
+                    msg += "Achtung bei ganx-Export!\n";
+                    msg += "Teilname: ";
+                    msg += Name;
+                    msg += "\n";
+                    msg += "Nut ist nicht parallel zur X-Achse:\n";
+                    msg += bearb_menschlich_lesbar(zeile);
+                    msg += "\n";
+                    msg += "Bearbeitung wird unterdrueckt.";
+
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    continue;
                 }
-                msg += "</Plane>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Ref>";
-                msg += GANX_REF_OBEN_LINKS;
-                msg += "</Ref>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Typ>S</Typ>";
-                msg += "\n";
-                //----------------------
-                msg += "    <X>";
-                msg += double_to_qstring(x);
-                msg += "</X>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Y>";
-                msg += double_to_qstring(y);
-                msg += "</Y>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Z>";
-                msg += double_to_qstring(0);
-                msg += "</Z>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += double_to_qstring(wkz_dm);
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Depth>";
-                msg += double_to_qstring(z);
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Tool>";
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <SVar>";
-                msg += nutvariante_qstring;
-                msg += "</SVar>";
-                msg += "\n";
-                //----------------------
-                msg += "    <SParallel>";
-                msg += nutrichtung;
-                msg += "</SParallel>";
-                msg += "\n";
-                //----------------------
-                msg += "    <SGrooveLength>";
-                msg += double_to_qstring(l);
-                msg += "</SGrooveLength>";
-                msg += "\n";
-                //----------------------
-                msg += "    <OldID>";
-                if(nu.bezug() == WST_BEZUG_OBSEI)
-                {
-                    msg += GANX_WST_BEZUG_OBSEI;
-                }else
-                {
-                    msg += GANX_WST_BEZUG_UNSEI;
-                }
-                msg += "\\";
-                msg += GANX_REF_OBEN_LINKS;
-                msg += "\\";
-                msg += "S-";
-                msg += int_to_qstring(ideditor);               //ID-Nummer
-                msg += "</OldID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <KleiGeTei>";
-                msg += "0";
-                msg += "</KleiGeTei>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFileWork>";
-                msg += "\n";
-
-                id++;
-                ideditor++;
-
-            }else if(nu.breite() > nutblattbreite)
-            {
-                //Wir müssen mehrere Nuten fahren Nuten
-                uint anz_nuten = aufrunden(nu.breite() / nutblattbreite);
                 double x = nu.xs();
-
-                for(uint ii=1; ii<=anz_nuten ;ii++)
+                double y;
+                double z = nu.tiefe(); //Tiefe
+                double l = 0;
+                //Nutlänge berechnen:
+                if(nu.ys() < nu.ye())
                 {
-                    //Beispiel:
-                    //Nutbreite = 8,5
-                    //blattbreite = 5
-                    //Anzahl Nuten = 2
-                    //x-Versatz  Nut:
-                    //8,5/2 - 5/2 = 1,75
-                    //Versatz = +-1,75
+                    l = nu.ye() - nu.ys();
+                    y = nu.ys();
+                }else
+                {
+                    l = nu.ys() - nu.ye();
+                    y = nu.ye();
+                }
+                y = tmp_b - y;
+                y = y-l;
+                QString tnummer = wkzmag.wkznummer(WKZ_TYP_SAEGE);
+                if(tnummer.isEmpty())
+                {
+                    //Mit Fehlermeldung abbrechen:
+                    QString msg = fehler_kein_WKZ("ganx", zeile);
+                    Fehler_kein_wkz.append(msg);
+                    Exporttext.append(msg);
+                    Export_moeglich.append(false);
+                    return;
+                }
+                double wkz_dm = wkzmag.dm(tnummer).toDouble();
 
-                    double versatz = nu.breite()/2 - nutblattbreite/2 ;
+                QString nutvariante_qstring = "Var2";
+                //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
 
-                    if(ii == 1)
-                    {
-                        x = x - versatz;
+                QString nutrichtung = "Y";
+                //Mögliche Werte:
+                //"X" = Nut von links nach rechts = entlang der Y-Achse
+                //"Y" = Nut von vorne nach hinten = entlang der X-Achse
 
-                    }else if(ii==anz_nuten)
-                    {
-                        x = nu.xs();
-                        x = x + versatz;
-                    }else
-                    {
-                        double schleifenversatz;
-                        schleifenversatz = nutblattbreite - ((nutblattbreite*anz_nuten)-nu.breite()) /(anz_nuten-1);
-                        x = nu.xs() - versatz + (ii-1)*schleifenversatz;
-                    }
+                double nutblattbreite = wkzmag.saegeblattbreite(tnummer).toDouble();
 
+                if(nu.breite() < nutblattbreite)
+                {
+                    //Warnung ausgeben und Nut unterdrücken:
+                    QString msg = "";
+                    msg += "Achtung bei ganx-Export!\n";
+                    msg += "Teilname: ";
+                    msg += Name;
+                    msg += "\n";
+                    msg += "Saegeblatt zu breit fuer ";
+                    msg += bearb_menschlich_lesbar(zeile);
+                    msg += "\n";
+                    msg += "Bearbeitung wird unterdrueckt.";
+
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    continue;
+                }else if(nu.breite() == nutblattbreite)
+                {
                     msg += "  <PrgrFileWork>";
                     msg += "\n";
                     //----------------------
@@ -9018,10 +8891,142 @@ void wstzustand::ganx_dateitext(int index)
                     id++;
                     ideditor++;
 
+                }else if(nu.breite() > nutblattbreite)
+                {
+                    //Wir müssen mehrere Nuten fahren Nuten
+                    uint anz_nuten = aufrunden(nu.breite() / nutblattbreite);
+                    double x = nu.xs();
+
+                    for(uint ii=1; ii<=anz_nuten ;ii++)
+                    {
+                        //Beispiel:
+                        //Nutbreite = 8,5
+                        //blattbreite = 5
+                        //Anzahl Nuten = 2
+                        //x-Versatz  Nut:
+                        //8,5/2 - 5/2 = 1,75
+                        //Versatz = +-1,75
+
+                        double versatz = nu.breite()/2 - nutblattbreite/2 ;
+
+                        if(ii == 1)
+                        {
+                            x = x - versatz;
+
+                        }else if(ii==anz_nuten)
+                        {
+                            x = nu.xs();
+                            x = x + versatz;
+                        }else
+                        {
+                            double schleifenversatz;
+                            schleifenversatz = nutblattbreite - ((nutblattbreite*anz_nuten)-nu.breite()) /(anz_nuten-1);
+                            x = nu.xs() - versatz + (ii-1)*schleifenversatz;
+                        }
+
+                        msg += "  <PrgrFileWork>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <CntID>";
+                        msg += int_to_qstring(id);               //ID-Nummer
+                        msg += "</CntID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Plane>";
+                        if(nu.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            msg += GANX_WST_BEZUG_OBSEI;
+                        }else
+                        {
+                            msg += GANX_WST_BEZUG_UNSEI;
+                        }
+                        msg += "</Plane>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Ref>";
+                        msg += GANX_REF_OBEN_LINKS;
+                        msg += "</Ref>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Typ>S</Typ>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <X>";
+                        msg += double_to_qstring(x);
+                        msg += "</X>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Y>";
+                        msg += double_to_qstring(y);
+                        msg += "</Y>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Z>";
+                        msg += double_to_qstring(0);
+                        msg += "</Z>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Diameter>";
+                        msg += double_to_qstring(wkz_dm);
+                        msg += "</Diameter>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Depth>";
+                        msg += double_to_qstring(z);
+                        msg += "</Depth>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Tool>";
+                        msg += tnummer;
+                        msg += "</Tool>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <SVar>";
+                        msg += nutvariante_qstring;
+                        msg += "</SVar>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <SParallel>";
+                        msg += nutrichtung;
+                        msg += "</SParallel>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <SGrooveLength>";
+                        msg += double_to_qstring(l);
+                        msg += "</SGrooveLength>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <OldID>";
+                        if(nu.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            msg += GANX_WST_BEZUG_OBSEI;
+                        }else
+                        {
+                            msg += GANX_WST_BEZUG_UNSEI;
+                        }
+                        msg += "\\";
+                        msg += GANX_REF_OBEN_LINKS;
+                        msg += "\\";
+                        msg += "S-";
+                        msg += int_to_qstring(ideditor);               //ID-Nummer
+                        msg += "</OldID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <KleiGeTei>";
+                        msg += "0";
+                        msg += "</KleiGeTei>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "  </PrgrFileWork>";
+                        msg += "\n";
+
+                        id++;
+                        ideditor++;
+
+                    }
                 }
+
             }
-
-
         }else if(zeile.zeile(1)==BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());
@@ -10327,208 +10332,91 @@ void wstzustand::ganx_dateitext(int index)
         {
 
             nut nu(zeile.text());
-            if(nu.xs() != nu.xe())
+            if(nu.bezug() == WST_BEZUG_OBSEI  ||  nu.bezug() == WST_BEZUG_UNSEI)
             {
-                /*
-                //Warnung ausgeben und Nut unterdrücken:
-                QString msg = "";
-                msg += "Achtung bei Export ganx!\n";
-                msg += "Teilname: ";
-                msg += Name;
-                msg += "\n";
-                msg += "Nut ist nicht parallel zur X-Achse:\n";
-                msg += zeile.text();
-                msg += "\n";
-                msg += "Bearbeitung wird unterdrueckt.";
-
-                QMessageBox mb;
-                mb.setText(msg);
-                mb.exec();
-                */
-                continue;
-            }
-            double x = nu.xs();
-            double y;
-            double z = nu.tiefe(); //Tiefe
-            double l = 0;
-            //Nutlänge berechnen:
-            if(nu.ys() < nu.ye())
-            {
-                l = nu.ye() - nu.ys();
-                y = nu.ys();
-            }else
-            {
-                l = nu.ys() - nu.ye();
-                y = nu.ye();
-            }
-            y = tmp_b - y;
-            y = y-l;
-            QString tnummer = wkzmag.wkznummer(WKZ_TYP_SAEGE);
-            if(tnummer.isEmpty())
-            {
-                //Diese Stelle des Codes wird theoretisch niemals erreicht,
-                //da die Funktion bereits in er ersten For-Schleife abbricht.
-
-                //Mit Fehlermeldung abbrechen:
-                QString msg = fehler_kein_WKZ("ganx", zeile);
-                Fehler_kein_wkz.append(msg);
-                Exporttext.append(msg);
-                Export_moeglich.append(false);
-                return;
-            }
-            //double wkz_dm = wkzmag.dm(tnummer).toDouble();
-
-            QString nutvariante_qstring = "Var2";
-            //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
-            //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
-
-            QString nutrichtung = "Y";
-            //Mögliche Werte:
-            //"X" = Nut von links nach rechts = entlang der Y-Achse
-            //"Y" = Nut von vorne nach hinten = entlang der X-Achse
-
-            double nutblattbreite = wkzmag.saegeblattbreite(tnummer).toDouble();
-
-            if(nu.breite() < nutblattbreite)
-            {
-                /*
-                //Warnung ausgeben und Nut unterdrücken:
-                QString msg = "";
-                msg += "Achtung bei Export ganx!\n";
-                msg += "Teilname: ";
-                msg += Name;
-                msg += "\n";
-                msg += "Saegeblatt zu breit fuer Nut:\n";
-                msg += zeile.text();
-                msg += "\n";
-                msg += "Bearbeitung wird unterdrueckt.";
-
-                QMessageBox mb;
-                mb.setText(msg);
-                mb.exec();
-                */
-                continue;
-            }else if(nu.breite() == nutblattbreite)
-            {
-                msg += "  <PrgrFile>";
-                msg += "\n";
-                //----------------------
-                msg += "    <CntID>";
-                msg += int_to_qstring(id);               //ID-Nummer
-                msg += "</CntID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <ID>";
-                if(nu.bezug() == WST_BEZUG_OBSEI)
+                if(nu.xs() != nu.xe())
                 {
-                    msg += GANX_WST_BEZUG_OBSEI;
+                    /*
+                    //Warnung ausgeben und Nut unterdrücken:
+                    QString msg = "";
+                    msg += "Achtung bei Export ganx!\n";
+                    msg += "Teilname: ";
+                    msg += Name;
+                    msg += "\n";
+                    msg += "Nut ist nicht parallel zur X-Achse:\n";
+                    msg += zeile.text();
+                    msg += "\n";
+                    msg += "Bearbeitung wird unterdrueckt.";
+
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    */
+                    continue;
+                }
+                double x = nu.xs();
+                double y;
+                double z = nu.tiefe(); //Tiefe
+                double l = 0;
+                //Nutlänge berechnen:
+                if(nu.ys() < nu.ye())
+                {
+                    l = nu.ye() - nu.ys();
+                    y = nu.ys();
                 }else
                 {
-                    msg += GANX_WST_BEZUG_UNSEI;
+                    l = nu.ys() - nu.ye();
+                    y = nu.ye();
                 }
-                msg += "\\";
-                msg += GANX_REF_OBEN_LINKS;
-                msg += "\\";
-                msg += "S-";
-                msg += int_to_qstring(id);               //ID-Nummer
-                msg += "</ID>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal1>";
-                msg += double_to_qstring(y).replace(".",",");
-                msg += "</RefVal1>";
-                msg += "\n";
-                //----------------------
-                msg += "    <RefVal2>";
-                msg += double_to_qstring(x).replace(".",",");
-                msg += "</RefVal2>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Diameter>";
-                msg += "0";
-                msg += "</Diameter>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Depth>";
-                msg += double_to_qstring(z).replace(".",",");
-                msg += "</Depth>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoDbl>false</DoDbl>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblB>false</DblB>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblL>false</DblL>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DblE>false</DblE>";
-                msg += "\n";
-                //----------------------
-                msg += "    <DoMF>false</DoMF>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Tool>";
-                msg += tnummer;
-                msg += "</Tool>";
-                msg += "\n";
-                //----------------------
-                msg += "    <SVar>";
-                msg += nutvariante_qstring;
-                msg += "</SVar>";
-                msg += "\n";
-                //----------------------
-                msg += "    <SParallel>";
-                msg += nutrichtung;
-                msg += "</SParallel>";
-                msg += "\n";
-                //----------------------
-                msg += "    <SGrooveLength>";
-                msg += double_to_qstring(l);
-                msg += "</SGrooveLength>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Cyclic>0</Cyclic>";//Zustellung?? Testen!!!
-                msg += "\n";
-                //----------------------
-                msg += "    <ImageKey>S</ImageKey>";
-                msg += "\n";
-                //----------------------
-                msg += "    <Step>1</Step>";
-                msg += "\n";
-                //----------------------
-                msg += "  </PrgrFile>";
-                msg += "\n";
-                //----------------------
-
-                id++;
-
-            }else if(nu.breite() > nutblattbreite)
-            {
-                //Wir müssen mehrere Nuten fahren Nuten
-                uint anz_nuten = aufrunden(nu.breite() / nutblattbreite);
-                double x = nu.xs();
-
-                for(uint ii=1; ii<=anz_nuten ;ii++)
+                y = tmp_b - y;
+                y = y-l;
+                QString tnummer = wkzmag.wkznummer(WKZ_TYP_SAEGE);
+                if(tnummer.isEmpty())
                 {
-                    double versatz = nu.breite()/2 - nutblattbreite/2 ;
+                    //Diese Stelle des Codes wird theoretisch niemals erreicht,
+                    //da die Funktion bereits in er ersten For-Schleife abbricht.
 
-                    if(ii == 1)
-                    {
-                        x = x - versatz;
+                    //Mit Fehlermeldung abbrechen:
+                    QString msg = fehler_kein_WKZ("ganx", zeile);
+                    Fehler_kein_wkz.append(msg);
+                    Exporttext.append(msg);
+                    Export_moeglich.append(false);
+                    return;
+                }
+                //double wkz_dm = wkzmag.dm(tnummer).toDouble();
 
-                    }else if(ii==anz_nuten)
-                    {
-                        x = nu.xs();
-                        x = x + versatz;
-                    }else
-                    {
-                        double schleifenversatz;
-                        schleifenversatz = nutblattbreite - ((nutblattbreite*anz_nuten)-nu.breite()) /(anz_nuten-1);
-                        x = nu.xs() - versatz + (ii-1)*schleifenversatz;
-                    }
+                QString nutvariante_qstring = "Var2";
+                //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
 
+                QString nutrichtung = "Y";
+                //Mögliche Werte:
+                //"X" = Nut von links nach rechts = entlang der Y-Achse
+                //"Y" = Nut von vorne nach hinten = entlang der X-Achse
+
+                double nutblattbreite = wkzmag.saegeblattbreite(tnummer).toDouble();
+
+                if(nu.breite() < nutblattbreite)
+                {
+                    /*
+                    //Warnung ausgeben und Nut unterdrücken:
+                    QString msg = "";
+                    msg += "Achtung bei Export ganx!\n";
+                    msg += "Teilname: ";
+                    msg += Name;
+                    msg += "\n";
+                    msg += "Saegeblatt zu breit fuer Nut:\n";
+                    msg += zeile.text();
+                    msg += "\n";
+                    msg += "Bearbeitung wird unterdrueckt.";
+
+                    QMessageBox mb;
+                    mb.setText(msg);
+                    mb.exec();
+                    */
+                    continue;
+                }else if(nu.breite() == nutblattbreite)
+                {
                     msg += "  <PrgrFile>";
                     msg += "\n";
                     //----------------------
@@ -10623,11 +10511,127 @@ void wstzustand::ganx_dateitext(int index)
 
                     id++;
 
+                }else if(nu.breite() > nutblattbreite)
+                {
+                    //Wir müssen mehrere Nuten fahren Nuten
+                    uint anz_nuten = aufrunden(nu.breite() / nutblattbreite);
+                    double x = nu.xs();
+
+                    for(uint ii=1; ii<=anz_nuten ;ii++)
+                    {
+                        double versatz = nu.breite()/2 - nutblattbreite/2 ;
+
+                        if(ii == 1)
+                        {
+                            x = x - versatz;
+
+                        }else if(ii==anz_nuten)
+                        {
+                            x = nu.xs();
+                            x = x + versatz;
+                        }else
+                        {
+                            double schleifenversatz;
+                            schleifenversatz = nutblattbreite - ((nutblattbreite*anz_nuten)-nu.breite()) /(anz_nuten-1);
+                            x = nu.xs() - versatz + (ii-1)*schleifenversatz;
+                        }
+
+                        msg += "  <PrgrFile>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <CntID>";
+                        msg += int_to_qstring(id);               //ID-Nummer
+                        msg += "</CntID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <ID>";
+                        if(nu.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            msg += GANX_WST_BEZUG_OBSEI;
+                        }else
+                        {
+                            msg += GANX_WST_BEZUG_UNSEI;
+                        }
+                        msg += "\\";
+                        msg += GANX_REF_OBEN_LINKS;
+                        msg += "\\";
+                        msg += "S-";
+                        msg += int_to_qstring(id);               //ID-Nummer
+                        msg += "</ID>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <RefVal1>";
+                        msg += double_to_qstring(y).replace(".",",");
+                        msg += "</RefVal1>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <RefVal2>";
+                        msg += double_to_qstring(x).replace(".",",");
+                        msg += "</RefVal2>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Diameter>";
+                        msg += "0";
+                        msg += "</Diameter>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Depth>";
+                        msg += double_to_qstring(z).replace(".",",");
+                        msg += "</Depth>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <DoDbl>false</DoDbl>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <DblB>false</DblB>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <DblL>false</DblL>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <DblE>false</DblE>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <DoMF>false</DoMF>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Tool>";
+                        msg += tnummer;
+                        msg += "</Tool>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <SVar>";
+                        msg += nutvariante_qstring;
+                        msg += "</SVar>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <SParallel>";
+                        msg += nutrichtung;
+                        msg += "</SParallel>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <SGrooveLength>";
+                        msg += double_to_qstring(l);
+                        msg += "</SGrooveLength>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Cyclic>0</Cyclic>";//Zustellung?? Testen!!!
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <ImageKey>S</ImageKey>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "    <Step>1</Step>";
+                        msg += "\n";
+                        //----------------------
+                        msg += "  </PrgrFile>";
+                        msg += "\n";
+                        //----------------------
+
+                        id++;
+                    }
                 }
             }
-
-
-
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());
@@ -11915,21 +11919,51 @@ void wstzustand::geo(int index)
             s.set_start(nu.xs(), nu.ys(), 0);
             s.set_ende(nu.xe(), nu.ye(), 0);
             rechteck3d r;
-            if(nu.bezug() == WST_BEZUG_OBSEI)
+            if(  (nu.bezug() == WST_BEZUG_OBSEI) ||  (nu.bezug() == WST_BEZUG_UNSEI)  )
             {
-                r.set_farbe_fuellung(FARBE_BLAU);
+                if(nu.bezug() == WST_BEZUG_OBSEI)
+                {
+                    r.set_farbe_fuellung(FARBE_BLAU);
+                }else
+                {
+                    r.set_farbe_fuellung(farbe_unterseite);
+                    r.set_stil(STIL_GESTRICHELT);
+                }
+                r.set_laenge(s.laenge2d());
+                r.set_breite(nu.breite());
+                r.set_bezugspunkt(MITTE);
+                r.set_einfuegepunkt(s.mitpu3d());
+                r.set_drewi(s.wink());
+                r.verschieben_um(versatz_x, versatz_y);
+                gt.add_rechteck(r);
             }else
             {
-                r.set_farbe_fuellung(farbe_unterseite);
-                r.set_stil(STIL_GESTRICHELT);
+                if(nu.bezug() == WST_BEZUG_LI)
+                {
+                    r.set_bezugspunkt(LINKS);
+                    r.set_laenge(nu.tiefe());
+                    r.set_breite(s.laenge2d());
+                }else if(nu.bezug() == WST_BEZUG_RE)
+                {
+                    r.set_bezugspunkt(RECHTS);
+                    r.set_laenge(nu.tiefe());
+                    r.set_breite(s.laenge2d());
+                }else if(nu.bezug() == WST_BEZUG_VO)
+                {
+                    r.set_bezugspunkt(UNTEN);
+                    r.set_laenge(s.laenge2d());
+                    r.set_breite(nu.tiefe());
+                }else if(nu.bezug() == WST_BEZUG_HI)
+                {
+                    r.set_bezugspunkt(OBEN);
+                    r.set_laenge(s.laenge2d());
+                    r.set_breite(nu.tiefe());
+                }
+                r.set_farbe_fuellung(FARBE_GELB);
+                r.set_einfuegepunkt(s.mitpu3d());
+                r.verschieben_um(versatz_x, versatz_y);
+                gt.add_rechteck(r);
             }
-            r.set_laenge(s.laenge2d());
-            r.set_breite(nu.breite());
-            r.set_bezugspunkt(MITTE);
-            r.set_einfuegepunkt(s.mitpu3d());
-            r.set_drewi(s.wink());
-            r.verschieben_um(versatz_x, versatz_y);
-            gt.add_rechteck(r);
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());

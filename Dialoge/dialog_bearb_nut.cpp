@@ -9,6 +9,10 @@ Dialog_bearb_nut::Dialog_bearb_nut(QWidget *parent) :
     this->setWindowTitle("Nut");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
+    ui->comboBox_bezug->addItem("Links");       //2
+    ui->comboBox_bezug->addItem("Rechts");      //3
+    ui->comboBox_bezug->addItem("Vorne");       //4
+    ui->comboBox_bezug->addItem("Hinten");      //5
 }
 
 Dialog_bearb_nut::~Dialog_bearb_nut()
@@ -24,8 +28,10 @@ void Dialog_bearb_nut::set_data(QString d)
     ui->lineEdit_ti->setText(nu.tiefe_qstring());
     ui->lineEdit_xs->setText(nu.xs_qstring());
     ui->lineEdit_ys->setText(nu.ys_qstring());
+    ui->lineEdit_zs->setText(nu.zs_qstring());
     ui->lineEdit_xe->setText(nu.xe_qstring());
     ui->lineEdit_ye->setText(nu.ye_qstring());
+    ui->lineEdit_ze->setText(nu.ze_qstring());
     //---------
     //Bezug:
     if(nu.bezug() == WST_BEZUG_OBSEI)
@@ -34,6 +40,18 @@ void Dialog_bearb_nut::set_data(QString d)
     }else if(nu.bezug() == WST_BEZUG_UNSEI)
     {
         ui->comboBox_bezug->setCurrentIndex(1);
+    }else if(nu.bezug() == WST_BEZUG_LI)
+    {
+        ui->comboBox_bezug->setCurrentIndex(2);
+    }else if(nu.bezug() == WST_BEZUG_RE)
+    {
+        ui->comboBox_bezug->setCurrentIndex(3);
+    }else if(nu.bezug() == WST_BEZUG_VO)
+    {
+        ui->comboBox_bezug->setCurrentIndex(4);
+    }else if(nu.bezug() == WST_BEZUG_HI)
+    {
+        ui->comboBox_bezug->setCurrentIndex(5);
     }
     //---------
     ui->lineEdit_afb->setText(nu.afb());
@@ -46,8 +64,10 @@ void Dialog_bearb_nut::on_btn_ok_clicked()
     nu.set_tiefe(berechnen(ui->lineEdit_ti->text()));
     nu.set_xs(berechnen(ui->lineEdit_xs->text()));
     nu.set_ys(berechnen(ui->lineEdit_ys->text()));
+    nu.set_zs(berechnen(ui->lineEdit_zs->text()));
     nu.set_xe(berechnen(ui->lineEdit_xe->text()));
     nu.set_ye(berechnen(ui->lineEdit_ye->text()));
+    nu.set_ze(berechnen(ui->lineEdit_ze->text()));
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")
     {
@@ -55,6 +75,18 @@ void Dialog_bearb_nut::on_btn_ok_clicked()
     }else if(bezug == "Unterseite")
     {
         nu.set_bezug(WST_BEZUG_UNSEI);
+    }else if(bezug == "Links")
+    {
+        nu.set_bezug(WST_BEZUG_LI);
+    }else if(bezug == "Rechts")
+    {
+        nu.set_bezug(WST_BEZUG_RE);
+    }else if(bezug == "Vorne")
+    {
+        nu.set_bezug(WST_BEZUG_VO);
+    }else if(bezug == "Hinten")
+    {
+        nu.set_bezug(WST_BEZUG_HI);
     }
     nu.set_afb(ui->lineEdit_afb->text());
 

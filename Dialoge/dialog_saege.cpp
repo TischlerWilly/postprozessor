@@ -30,6 +30,20 @@ void Dialog_saege::getData(text_zeilenweise msg)
     {
         ui->checkBox_ist_aktiv->setChecked(false);
     }
+    if(msg.zeile(16) == "1")
+    {
+        ui->checkBox_hori->setChecked(true);
+    }else
+    {
+        ui->checkBox_hori->setChecked(false);
+    }
+    if(msg.zeile(17) == "1")
+    {
+        ui->checkBox_vert->setChecked(true);
+    }else
+    {
+        ui->checkBox_vert->setChecked(false);
+    }
 
     this->show();
 }
@@ -49,6 +63,8 @@ void Dialog_saege::clear()
     ui->lineEdit_zustm->clear();
     ui->lineEdit_breite->clear();
     ui->checkBox_ist_aktiv->setChecked(true);
+    ui->checkBox_hori->setChecked(false);
+    ui->checkBox_vert->setChecked(false);
 }
 
 void Dialog_saege::setup()
@@ -87,6 +103,20 @@ void Dialog_saege::on_pushButton_ok_clicked()
     }else
     {
         wkz.zeile_anhaengen("0");                           //15: ist nicht aktiv
+    }
+    if(ui->checkBox_hori->isChecked())
+    {
+        wkz.zeile_anhaengen("1");                           //16: ist horizontal verwendbar
+    }else
+    {
+        wkz.zeile_anhaengen("0");                           //16: ist nicht horizontal verwendbar
+    }
+    if(ui->checkBox_vert->isChecked())
+    {
+        wkz.zeile_anhaengen("1");                           //17: ist vertikal verwendbar
+    }else
+    {
+        wkz.zeile_anhaengen("0");                           //17: ist nicht vertikal verwendbar
     }
 
     //deutsche Zahlen in englische Zahlen umwandeln:
