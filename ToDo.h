@@ -2,11 +2,11 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.22.12.29"
+#define PROGRAMMVERSION "3.22.12.30"
 #endif //PROGRAMMVERSION
 /*
 
-berechnen-Funktion bon dlg_bohrung übernehmen für andere Dialoge
+
 
 
 

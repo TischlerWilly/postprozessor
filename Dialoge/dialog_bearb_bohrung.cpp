@@ -97,8 +97,4 @@ void Dialog_bearb_bohrung::on_btn_abbrechen_clicked()
     this->close();
 }
 
-QString Dialog_bearb_bohrung::berechnen(QString term)
-{
-    term.replace(",",".");
-    return Formel(term).bekomme_Ergebnis_als_String();
-}
+

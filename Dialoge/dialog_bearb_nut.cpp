@@ -42,12 +42,12 @@ void Dialog_bearb_nut::set_data(QString d)
 void Dialog_bearb_nut::on_btn_ok_clicked()
 {
     nut nu;
-    nu.set_breite(Formel(ui->lineEdit_b->text()).bekomme_Ergebnis_als_String());
-    nu.set_tiefe(Formel(ui->lineEdit_ti->text()).bekomme_Ergebnis_als_String());
-    nu.set_xs(Formel(ui->lineEdit_xs->text()).bekomme_Ergebnis_als_String());
-    nu.set_ys(Formel(ui->lineEdit_ys->text()).bekomme_Ergebnis_als_String());
-    nu.set_xe(Formel(ui->lineEdit_xe->text()).bekomme_Ergebnis_als_String());
-    nu.set_ye(Formel(ui->lineEdit_ye->text()).bekomme_Ergebnis_als_String());
+    nu.set_breite(berechnen(ui->lineEdit_b->text()));
+    nu.set_tiefe(berechnen(ui->lineEdit_ti->text()));
+    nu.set_xs(berechnen(ui->lineEdit_xs->text()));
+    nu.set_ys(berechnen(ui->lineEdit_ys->text()));
+    nu.set_xe(berechnen(ui->lineEdit_xe->text()));
+    nu.set_ye(berechnen(ui->lineEdit_ye->text()));
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")
     {

@@ -64,6 +64,8 @@ private:
 
 #endif // FORMEL_H
 
+QString berechnen(QString term);
+
 /*
 
 Zeichensatz:
