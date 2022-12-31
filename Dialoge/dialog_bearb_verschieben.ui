@@ -82,6 +82,13 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_ax</tabstop>
+  <tabstop>lineEdit_ay</tabstop>
+  <tabstop>lineEdit_az</tabstop>
+  <tabstop>pushButton_ok</tabstop>
+  <tabstop>pushButton_abbrechen</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

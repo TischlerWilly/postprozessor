@@ -2,15 +2,11 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.22.12.30"
+#define PROGRAMMVERSION "3.22.12.31"
 #endif //PROGRAMMVERSION
 /*
 
-- QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, double ay, double az)
-    ->restliche bearb noch programmieren
 
-void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
-    ->Beim Ändern der wst-Größe Kantenbezogenen Bearb verschieben
 
 
 

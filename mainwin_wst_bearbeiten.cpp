@@ -78,6 +78,7 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
     Wst = w;
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
+    UnReDo.clear();
     UnReDo.neu(Wst->bearb());
     sendVorschauAktualisieren(*Wst, 0);
 }
@@ -173,6 +174,21 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         dlg.setModal(true);
         dlg.set_data(Wst);
         dlg.exec();
+        text_zeilenweise bearb_alt = Wst->bearb();
+        text_zeilenweise bearb_neu;
+        for (uint i = 1; i<=bearb_alt.zeilenanzahl() ; i++)
+        {
+            if(i==1)
+            {
+                bearb_neu.set_text(verschiebe_einen(bearb_alt.zeile(i), 0, 0, 0));
+                //0,0,0 verschiebt die bearb auf die Wst-kanten
+            }else
+            {
+                bearb_neu.zeile_anhaengen(verschiebe_einen(bearb_alt.zeile(i), 0, 0, 0));
+                //0,0,0 verschiebt die bearb auf die Wst-kanten
+            }
+        }
+        Wst->set_bearb(bearb_neu);
         update_listwidget();
         emit sendVorschauAktualisieren(*Wst, 0);
         return;
@@ -527,10 +543,12 @@ void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
         {
             items_menge = ui->listWidget_prgtext->count()-index-1;
         }
-        //do something...
-        QMessageBox mb;
-        mb.setText("Das Verschieben von Bearbeitungen aus mehreren Zeilen gleichzeitig ist noch nich programmiert.");
-        mb.exec();
+        for (int i=0 ; i<items_menge ; i++)
+        {
+            QString bearb = Wst->bearb_ptr()->zeile(index+i);
+            bearb = verschiebe_einen(bearb, p.x(), p.y(), p.z());
+            zeile_aendern(index+i, bearb);
+        }
     }
 }
 QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, double ay, double az)
@@ -573,19 +591,103 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
         bearb = bo.text();
     }else if(tz.zeile(1) == BEARBART_RTA)
     {
-
+        rechtecktasche rt;
+        rt.set_text(bearb);
+        if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+        {
+            rt.set_x(rt.x()+ax);
+            rt.set_y(rt.y()+ay);
+        }else if(rt.bezug() == WST_BEZUG_LI)
+        {
+            rt.set_x(0);
+            rt.set_y(rt.y()+ay);
+            rt.set_z(rt.z()+az);
+        }else if(rt.bezug() == WST_BEZUG_RE)
+        {
+            rt.set_x(Wst->laenge());
+            rt.set_y(rt.y()+ay);
+            rt.set_z(rt.z()+az);
+        }else if(rt.bezug() == WST_BEZUG_VO)
+        {
+            rt.set_x(rt.x()+ax);
+            rt.set_y(0);
+            rt.set_z(rt.z()+az);
+        }else if(rt.bezug() == WST_BEZUG_HI)
+        {
+            rt.set_x(rt.x()+ax);
+            rt.set_y(Wst->breite());
+            rt.set_z(rt.z()+az);
+        }
+        bearb = rt.text();
     }if(tz.zeile(1) == BEARBART_NUT)
     {
-
+        nut nu;
+        nu.set_text(bearb);
+        if(nu.bezug() == WST_BEZUG_OBSEI || nu.bezug() == WST_BEZUG_UNSEI)
+        {
+            nu.set_xs(nu.xs()+ax);
+            nu.set_xe(nu.xe()+ax);
+            nu.set_ys(nu.ys()+ay);
+            nu.set_ye(nu.ye()+ay);
+        }else if(nu.bezug() == WST_BEZUG_LI)
+        {
+            nu.set_xs(0);
+            nu.set_xe(0);
+            nu.set_ys(nu.ys()+ay);
+            nu.set_ye(nu.ye()+ay);
+            nu.set_zs(nu.zs()+az);
+            nu.set_ze(nu.ze()+az);
+        }else if(nu.bezug() == WST_BEZUG_RE)
+        {
+            nu.set_xs(Wst->laenge());
+            nu.set_xe(Wst->laenge());
+            nu.set_ys(nu.ys()+ay);
+            nu.set_ye(nu.ye()+ay);
+            nu.set_zs(nu.zs()+az);
+            nu.set_ze(nu.ze()+az);
+        }else if(nu.bezug() == WST_BEZUG_VO)
+        {
+            nu.set_xs(nu.xs()+ax);
+            nu.set_xe(nu.xe()+ax);
+            nu.set_ys(0);
+            nu.set_ye(0);
+            nu.set_zs(nu.zs()+az);
+            nu.set_ze(nu.ze()+az);
+        }else if(nu.bezug() == WST_BEZUG_HI)
+        {
+            nu.set_xs(nu.xs()+ax);
+            nu.set_xe(nu.xe()+ax);
+            nu.set_ys(Wst->breite());
+            nu.set_ye(Wst->breite());
+            nu.set_zs(nu.zs()+az);
+            nu.set_ze(nu.ze()+az);
+        }
+        bearb = nu.text();
     }if(tz.zeile(1) == BEARBART_FRAESERAUFRUF)
     {
-
+        fraueseraufruf fa;
+        fa.set_text(bearb);
+        fa.set_x(fa.x()+ax);
+        fa.set_y(fa.y()+ay);
+        bearb = fa.text();
     }if(tz.zeile(1) == BEARBART_FRAESERGERADE)
     {
-
+        fraesergerade fg;
+        fg.set_text(bearb);
+        fg.set_xs(fg.xs()+ax);
+        fg.set_xe(fg.xe()+ax);
+        fg.set_ys(fg.ys()+ay);
+        fg.set_ye(fg.ye()+ay);
+        bearb = fg.text();
     }if(tz.zeile(1) == BEARBART_FRAESERBOGEN)
     {
-
+        fraeserbogen fb;
+        fb.set_text(bearb);
+        fb.set_xs(fb.xs()+ax);
+        fb.set_xe(fb.xe()+ax);
+        fb.set_ys(fb.ys()+ay);
+        fb.set_ye(fb.ye()+ay);
+        bearb = fb.text();
     }
     return bearb;
 }
