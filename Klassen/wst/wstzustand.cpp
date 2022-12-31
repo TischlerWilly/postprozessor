@@ -12570,30 +12570,35 @@ void wstzustand::geo(int index)
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }else
-            {
+            {                
                 if(nu.bezug() == WST_BEZUG_LI)
-                {
-                    r.set_bezugspunkt(LINKS);
+                {                    
                     r.set_laenge(nu.tiefe());
                     r.set_breite(s.laenge2d());
                 }else if(nu.bezug() == WST_BEZUG_RE)
                 {
-                    r.set_bezugspunkt(RECHTS);
                     r.set_laenge(nu.tiefe());
                     r.set_breite(s.laenge2d());
                 }else if(nu.bezug() == WST_BEZUG_VO)
                 {
-                    r.set_bezugspunkt(UNTEN);
                     r.set_laenge(s.laenge2d());
                     r.set_breite(nu.tiefe());
                 }else if(nu.bezug() == WST_BEZUG_HI)
                 {
-                    r.set_bezugspunkt(OBEN);
                     r.set_laenge(s.laenge2d());
                     r.set_breite(nu.tiefe());
                 }
                 r.set_farbe_fuellung(FARBE_GELB);
-                r.set_einfuegepunkt(s.mitpu3d());
+                punkt3d mipu = s.mitpu3d();
+                r.set_bezugspunkt(MITTE);
+                strecke s_mipu;
+                s_mipu.set_start(mipu);
+                s_mipu.set_ende(s.endpu());
+                s_mipu.set_laenge_2d(nu.tiefe()/2, strecke_bezugspunkt_start);
+                s_mipu.drenen_um_startpunkt_2d(90, false);
+                mipu = s_mipu.endpu();
+                r.set_drewi(drehwinkel);
+                r.set_einfuegepunkt(mipu);
                 r.verschieben_um(versatz_x, versatz_y);
                 //Start anzeigen:
                 strecke stmp = s;
@@ -12605,7 +12610,7 @@ void wstzustand::geo(int index)
                 k.set_radius(30);
                 k.set_farbe(FARBE_GELB);
                 gt.add_kreis(k);
-                //---
+                //---                
                 gt.add_rechteck(r);
             }
         }else if(zeile.zeile(1) == BEARBART_RTA)
