@@ -184,6 +184,7 @@ private:
     void formartierung_zu_einzelfkon(text_zeilenweise& bearb,double tmp_l, double tmp_b);
     void kurze_an_ab_geraden(text_zeilenweise& bearb, werkzeugmagazin wkzmag);
     QString kommentar_fmc(QString kom);
+    QString variable_fmc(QString bez, QString wert);
     QString kommentar_ggf(QString kom);
     QString fmc_kommentar_gute_seite(text_zeilenweise& bearb);
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);

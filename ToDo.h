@@ -7,10 +7,11 @@
 /*
 
 
+- dlg nut
+    ->btn´s für Vorbelegung hori-nuten
 
 
 
-- fmc-export nut hori
 
 
 

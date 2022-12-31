@@ -163,6 +163,36 @@
 #define FMC_KOMMENTAR           "[SWKOMT40]"    //Kommentar
 #define FMC_KOMMENTAR_TEXT      "BEZB"
 
+#define FMC_VAR                 "[SWVD1_40]"  //Variable
+#define FMC_VAR_NAME            "VAR"
+#define FMC_VAR_WERT            "WERT"
+#define FMC_VAR_BEZ             "BEZB"
+#define FMC_VAR_AFB             "AFB"
+
+#define FMC_VAR10               "[SWVARD40]"  //10 Variablen
+#define FMC_VAR10_NAME1         "VAR1"
+#define FMC_VAR10_NAME2         "VAR2"
+#define FMC_VAR10_NAME3         "VAR3"
+#define FMC_VAR10_NAME4         "VAR4"
+#define FMC_VAR10_NAME5         "VAR5"
+#define FMC_VAR10_NAME6         "VAR6"
+#define FMC_VAR10_NAME7         "VAR7"
+#define FMC_VAR10_NAME8         "VAR8"
+#define FMC_VAR10_NAME9         "VAR9"
+#define FMC_VAR10_NAME10        "VAR10"
+#define FMC_VAR10_WERT1         "WERT1"
+#define FMC_VAR10_WERT2         "WERT2"
+#define FMC_VAR10_WERT3         "WERT3"
+#define FMC_VAR10_WERT4         "WERT4"
+#define FMC_VAR10_WERT5         "WERT5"
+#define FMC_VAR10_WERT6         "WERT6"
+#define FMC_VAR10_WERT7         "WERT7"
+#define FMC_VAR10_WERT8         "WERT8"
+#define FMC_VAR10_WERT9         "WERT9"
+#define FMC_VAR10_WERT10        "WERT10"
+#define FMC_VAR10_BEZ           "BEZB"
+#define FMC_VAR10_AFB           "AFB"
+
 #define FMC_ENDE                "[PGENDE40]"
 #define FMC_HALT                "[SNHALT40]"
 
@@ -178,6 +208,14 @@
 #define FMC_FKON_AFB            "AFB"
 #define FMC_FKON_ANTYP          "TYPAN"
 #define FMC_FKON_ABTYP          "TYPAB"
+#define FMC_FKON_EINTYP         "TYPEIN"
+#define FMC_FKON_ANWEG          "LGEAN"
+#define FMC_FKON_ABWEG          "LGEAB"
+#define FMC_FKON_ANVO           "FAN"
+#define FMC_FKON_VO             "F"
+#define FMC_FKON_DREHZ          "N"
+#define FMC_FKON_ECKVERSCHL     "EVS"
+#define FMC_FKON_WKZAKT         "WKZAKTUELL"
 
 #define FMC_FKONG               "[G1]"
 #define FMC_FKONG_XE            "X"

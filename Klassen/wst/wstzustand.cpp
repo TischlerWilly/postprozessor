@@ -3872,6 +3872,31 @@ QString wstzustand::kommentar_fmc(QString kom)
     text += "\n";
     return text;
 }
+QString wstzustand::variable_fmc(QString bez, QString wert)
+{
+    QString text;
+    text = FMC_VAR;
+    text += "\n";
+    text += FMC_VAR_NAME;
+    text += "=";
+    text += bez;
+    text += "\n";
+    text += FMC_VAR_WERT;
+    text += "=";
+    text += wert;
+    text += "\n";
+    text += FMC_VAR_BEZ;
+    text += "=";
+    text += "Variable ";
+    text += bez;
+    text += "\n";
+    text += FMC_VAR_AFB;
+    text += "=";
+    text += "1";
+    text += "\n";
+    text += "\n";
+    return text;
+}
 QString wstzustand::kommentar_ggf(QString kom)
 {
     QString text;
@@ -4522,6 +4547,32 @@ void wstzustand::fmc_dateitext(int index)
         }
     }
     //---------------------------------------Bearbeitungen Oberseite und Hirnseiten:
+    //Prüfen ob es Horizontale Nuten gibt:
+    bool hat_horizontale_nut = false;
+    for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+    {
+        zeile.set_text(bearb.zeile(i));
+        if(zeile.zeile(1) == BEARBART_NUT)
+        {
+            nut nu(zeile.text());
+            if(nu.bezug() == WST_BEZUG_LI  ||  nu.bezug() == WST_BEZUG_RE  ||  \
+               nu.bezug() == WST_BEZUG_VO  ||  nu.bezug() == WST_BEZUG_HI  )
+            {
+                hat_horizontale_nut = true;
+                break;
+            }
+        }
+    }
+    if(hat_horizontale_nut == true)
+    {
+        msg += kommentar_fmc("----------------------------");
+        msg += variable_fmc("BLATTDICKE", "3.70");
+        msg += variable_fmc("BLATTDM", "120");
+        msg += kommentar_fmc("BLATTDICKE muss WKZNL");
+        msg += kommentar_fmc("aus Maschienendaten sein !!!");
+        msg += kommentar_fmc("----------------------------");
+    }
+    //---
     for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
     {
         zeile.set_text(bearb.zeile(i));
@@ -5870,7 +5921,568 @@ void wstzustand::fmc_dateitext(int index)
                 msg += "\n";
             }else if(nu.bezug() != WST_BEZUG_UNSEI)
             {
+                msg += kommentar_fmc("----------------------------");
+                //10er-Variable
+                msg += FMC_VAR10;
+                msg += "\n";
+                msg += FMC_VAR10_BEZ;
+                msg += "=";
+                msg += "Variablen hori-Nut";
+                msg += "\n";
+                msg += FMC_VAR10_AFB;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_VAR10_NAME1;
+                msg += "=";
+                msg += "POS_Z_MITE_NUT";
+                msg += "\n";
+                msg += FMC_VAR10_NAME2;
+                msg += "=";
+                msg += "NUTBREITE";
+                msg += "\n";
+                msg += FMC_VAR10_NAME3;
+                msg += "=";
+                msg += "NUTTIEFE";
+                msg += "\n";
+                msg += FMC_VAR10_NAME4;
+                msg += "=";
+                msg += "";
+                msg += "\n";
+                msg += FMC_VAR10_NAME5;
+                msg += "=";
+                msg += "";
+                msg += "\n";
+                msg += FMC_VAR10_NAME6;
+                msg += "=";
+                msg += "START_X";
+                msg += "\n";
+                msg += FMC_VAR10_NAME7;
+                msg += "=";
+                msg += "START_Y";
+                msg += "\n";
+                msg += FMC_VAR10_NAME8;
+                msg += "=";
+                msg += "END_X";
+                msg += "\n";
+                msg += FMC_VAR10_NAME9;
+                msg += "=";
+                msg += "END_Y";
+                msg += "\n";
+                msg += FMC_VAR10_NAME10;
+                msg += "=";
+                msg += "AN_AB_WERT";
+                msg += "\n";
 
+                msg += FMC_VAR10_WERT1; //POS_Z_MITE_NUT
+                msg += "=";
+                msg += nu.zs_qstring();
+                msg += "\n";
+                msg += FMC_VAR10_WERT2; //NUTBREITE
+                msg += "=";
+                msg += nu.breite_qstring();
+                msg += "\n";
+                msg += FMC_VAR10_WERT3; //NUTTIEFE
+                msg += "=";
+                msg += nu.tiefe_qstring();
+                msg += "\n";
+                msg += FMC_VAR10_WERT4;
+                msg += "=";
+                msg += "";
+                msg += "\n";
+                msg += FMC_VAR10_WERT5;
+                msg += "=";
+                msg += "";
+                msg += "\n";
+                msg += FMC_VAR10_WERT6; //START_X
+                msg += "=";
+                msg += nu.xs_qstring();
+                msg += "\n";
+                msg += FMC_VAR10_WERT7; //START_Y
+                msg += "=";
+                msg += nu.ys_qstring();
+                msg += "\n";
+                msg += FMC_VAR10_WERT8; //END_X
+                msg += "=";
+                msg += nu.xe_qstring();
+                msg += "\n";
+                msg += FMC_VAR10_WERT9; //END_Y
+                msg += "=";
+                msg += nu.ye_qstring();
+                msg += "\n";
+                msg += FMC_VAR10_WERT10; //AN_AB_WERT
+                msg += "=";
+                msg += "130";
+                msg += "\n";
+
+                msg += "\n";
+                //---
+                msg += kommentar_fmc("---");
+                msg += kommentar_fmc("bis Nutbreiten max 7mm :");
+                //---Aufruf Fraeser:
+                msg += FMC_FKON;
+                msg += "\n";
+                msg += FMC_FKON_WKZ;
+                msg += "=";
+                msg += tnummer;
+                msg += "\n";
+                msg += FMC_FKON_X;
+                msg += "=";
+                msg += "START_X";
+                msg += "\n";
+                msg += FMC_FKON_Y;
+                msg += "=";
+                msg += "START_Y";
+                msg += "\n";
+                msg += FMC_FKON_Z;
+                msg += "=";
+                msg += "-(NUTBREITE/2)+POS_Z_MITE_NUT";
+                msg += "\n";
+                msg += FMC_FKON_RAD;
+                msg += "=";
+                msg += "0";
+                msg += "\n";
+                msg += FMC_FKON_KADI;
+                msg += "=";
+                msg += "NUTTIEFE";
+                msg += "\n";
+                msg += FMC_FKON_KOR;
+                msg += "=";
+                msg += "2";
+                msg += "\n";
+                msg += FMC_FKON_BEZ;
+                msg += "=";
+                msg += "Aufruf Fraeser (unten)";
+                msg += "\n";
+                msg += FMC_FKON_AFB;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_ANTYP;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_ABTYP;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_EINTYP;
+                msg += "=";
+                msg += "0";
+                msg += "\n";
+                msg += FMC_FKON_ANWEG;
+                msg += "=";
+                msg += "AN_AB_WERT";
+                msg += "\n";
+                msg += FMC_FKON_ABWEG;
+                msg += "=";
+                msg += "AN_AB_WERT";
+                msg += "\n";
+                msg += FMC_FKON_ANVO;
+                msg += "=";
+                msg += "3500";
+                msg += "\n";
+                msg += FMC_FKON_VO;
+                msg += "=";
+                msg += "6000";
+                msg += "\n";
+                msg += FMC_FKON_DREHZ;
+                msg += "=";
+                msg += "AUTO";
+                msg += "\n";
+                msg += FMC_FKON_ECKVERSCHL;
+                msg += "=";
+                msg += "0.05";
+                msg += "\n";
+                msg += FMC_FKON_WKZAKT;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += "\n";
+                //---Gerade Fräsen:
+                msg += FMC_FKONG;
+                msg += "\n";
+                msg += FMC_FKONG_XE;
+                msg += "=";
+                msg += "END_X";
+                msg += "\n";
+                msg += FMC_FKONG_YE;
+                msg += "=";
+                msg += "END_Y";
+                msg += "\n";
+                msg += FMC_FKONG_ZE;
+                msg += "=";
+                msg += "Z";
+                msg += "\n";
+                msg += FMC_FKONG_AFB;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += "EB=EBG\n";
+                msg += "F=V\n";
+                msg += "AGGD=AGGDREHBAR\n";
+                msg += "AGGO=AGGOFFSET\n";
+                msg += "AGGFWKL=AGGWKL\n";
+                msg += "BEZB=Gerade\n";
+                msg += "\n";
+                //---Abfahren:
+                msg += "[KOABFA40]\n";
+                msg += "AGGD=AGGDREHBAR\n";
+                msg += "AGGO=AGGOFFSET\n";
+                msg += "AGGFWKL=AGGFWKL\n";
+                msg += "BEZB=Abfahren\n";
+                msg += "AFB=1\n";
+                msg += "\n";
+                //---
+                //---Aufruf Fraeser:
+                msg += FMC_FKON;
+                msg += "\n";
+                msg += FMC_FKON_WKZ;
+                msg += "=";
+                msg += tnummer;
+                msg += "\n";
+                msg += FMC_FKON_X;
+                msg += "=";
+                msg += "START_X";
+                msg += "\n";
+                msg += FMC_FKON_Y;
+                msg += "=";
+                msg += "START_Y";
+                msg += "\n";
+                msg += FMC_FKON_Z;
+                msg += "=";
+                msg += "NUTBREITE/2-BLATTDICKE+POS_Z_MITE_NUT";
+                msg += "\n";
+                msg += FMC_FKON_RAD;
+                msg += "=";
+                msg += "0";
+                msg += "\n";
+                msg += FMC_FKON_KADI;
+                msg += "=";
+                msg += "NUTTIEFE";
+                msg += "\n";
+                msg += FMC_FKON_KOR;
+                msg += "=";
+                msg += "2";
+                msg += "\n";
+                msg += FMC_FKON_BEZ;
+                msg += "=";
+                msg += "Aufruf Fraeser (oben)";
+                msg += "\n";
+                msg += FMC_FKON_AFB;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_ANTYP;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_ABTYP;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_EINTYP;
+                msg += "=";
+                msg += "0";
+                msg += "\n";
+                msg += FMC_FKON_ANWEG;
+                msg += "=";
+                msg += "AN_AB_WERT";
+                msg += "\n";
+                msg += FMC_FKON_ABWEG;
+                msg += "=";
+                msg += "AN_AB_WERT";
+                msg += "\n";
+                msg += FMC_FKON_ANVO;
+                msg += "=";
+                msg += "3500";
+                msg += "\n";
+                msg += FMC_FKON_VO;
+                msg += "=";
+                msg += "6000";
+                msg += "\n";
+                msg += FMC_FKON_DREHZ;
+                msg += "=";
+                msg += "AUTO";
+                msg += "\n";
+                msg += FMC_FKON_ECKVERSCHL;
+                msg += "=";
+                msg += "0.05";
+                msg += "\n";
+                msg += FMC_FKON_WKZAKT;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += "\n";
+                //---Gerade Fräsen:
+                msg += FMC_FKONG;
+                msg += "\n";
+                msg += FMC_FKONG_XE;
+                msg += "=";
+                msg += "END_X";
+                msg += "\n";
+                msg += FMC_FKONG_YE;
+                msg += "=";
+                msg += "END_Y";
+                msg += "\n";
+                msg += FMC_FKONG_ZE;
+                msg += "=";
+                msg += "Z";
+                msg += "\n";
+                msg += FMC_FKONG_AFB;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += "EB=EBG\n";
+                msg += "F=V\n";
+                msg += "AGGD=AGGDREHBAR\n";
+                msg += "AGGO=AGGOFFSET\n";
+                msg += "AGGFWKL=AGGWKL\n";
+                msg += "BEZB=Gerade\n";
+                msg += "\n";
+                //---Abfahren:
+                msg += "[KOABFA40]\n";
+                msg += "AGGD=AGGDREHBAR\n";
+                msg += "AGGO=AGGOFFSET\n";
+                msg += "AGGFWKL=AGGFWKL\n";
+                msg += "BEZB=Abfahren\n";
+                msg += "AFB=1\n";
+                msg += "\n";
+                //---
+                msg += kommentar_fmc("---");//--------------------------------------------------------
+                msg += kommentar_fmc("bis Nutbreiten max 13mm :");
+                msg += variable_fmc("AFB_AUSRAEUMEN", "(NUTBREITE>BLATTDICKE*2)?1:0");
+                //---Aufruf Fraeser:
+                msg += FMC_FKON;
+                msg += "\n";
+                msg += FMC_FKON_WKZ;
+                msg += "=";
+                msg += tnummer;
+                msg += "\n";
+                msg += FMC_FKON_X;
+                msg += "=";
+                msg += "START_X";
+                msg += "\n";
+                msg += FMC_FKON_Y;
+                msg += "=";
+                msg += "START_Y";
+                msg += "\n";
+                msg += FMC_FKON_Z;
+                msg += "=";
+                msg += "-(NUTBREITE/2)+POS_Z_MITE_NUT+(BLATTDICKE-0.5)";
+                msg += "\n";
+                msg += FMC_FKON_RAD;
+                msg += "=";
+                msg += "0";
+                msg += "\n";
+                msg += FMC_FKON_KADI;
+                msg += "=";
+                msg += "NUTTIEFE";
+                msg += "\n";
+                msg += FMC_FKON_KOR;
+                msg += "=";
+                msg += "2";
+                msg += "\n";
+                msg += FMC_FKON_BEZ;
+                msg += "=";
+                msg += "Aufruf Fraeser (unten2)";
+                msg += "\n";
+                msg += FMC_FKON_AFB;
+                msg += "=";
+                msg += "AFB_AUSRAEUMEN";
+                msg += "\n";
+                msg += FMC_FKON_ANTYP;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_ABTYP;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_EINTYP;
+                msg += "=";
+                msg += "0";
+                msg += "\n";
+                msg += FMC_FKON_ANWEG;
+                msg += "=";
+                msg += "AN_AB_WERT";
+                msg += "\n";
+                msg += FMC_FKON_ABWEG;
+                msg += "=";
+                msg += "AN_AB_WERT";
+                msg += "\n";
+                msg += FMC_FKON_ANVO;
+                msg += "=";
+                msg += "3500";
+                msg += "\n";
+                msg += FMC_FKON_VO;
+                msg += "=";
+                msg += "6000";
+                msg += "\n";
+                msg += FMC_FKON_DREHZ;
+                msg += "=";
+                msg += "AUTO";
+                msg += "\n";
+                msg += FMC_FKON_ECKVERSCHL;
+                msg += "=";
+                msg += "0.05";
+                msg += "\n";
+                msg += FMC_FKON_WKZAKT;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += "\n";
+                //---Gerade Fräsen:
+                msg += FMC_FKONG;
+                msg += "\n";
+                msg += FMC_FKONG_XE;
+                msg += "=";
+                msg += "END_X";
+                msg += "\n";
+                msg += FMC_FKONG_YE;
+                msg += "=";
+                msg += "END_Y";
+                msg += "\n";
+                msg += FMC_FKONG_ZE;
+                msg += "=";
+                msg += "Z";
+                msg += "\n";
+                msg += FMC_FKONG_AFB;
+                msg += "=";
+                msg += "AFB_AUSRAEUMEN";
+                msg += "\n";
+                msg += "EB=EBG\n";
+                msg += "F=V\n";
+                msg += "AGGD=AGGDREHBAR\n";
+                msg += "AGGO=AGGOFFSET\n";
+                msg += "AGGFWKL=AGGWKL\n";
+                msg += "BEZB=Gerade\n";
+                msg += "\n";
+                //---Abfahren:
+                msg += "[KOABFA40]\n";
+                msg += "AGGD=AGGDREHBAR\n";
+                msg += "AGGO=AGGOFFSET\n";
+                msg += "AGGFWKL=AGGFWKL\n";
+                msg += "BEZB=Abfahren\n";
+                msg += "AFB=AFB_AUSRAEUMEN\n";
+                msg += "\n";
+                //---
+                //---Aufruf Fraeser:
+                msg += FMC_FKON;
+                msg += "\n";
+                msg += FMC_FKON_WKZ;
+                msg += "=";
+                msg += tnummer;
+                msg += "\n";
+                msg += FMC_FKON_X;
+                msg += "=";
+                msg += "START_X";
+                msg += "\n";
+                msg += FMC_FKON_Y;
+                msg += "=";
+                msg += "START_Y";
+                msg += "\n";
+                msg += FMC_FKON_Z;
+                msg += "=";
+                msg += "NUTBREITE/2-BLATTDICKE+POS_Z_MITE_NUT-(BLATTDICKE-0.5)";
+                msg += "\n";
+                msg += FMC_FKON_RAD;
+                msg += "=";
+                msg += "0";
+                msg += "\n";
+                msg += FMC_FKON_KADI;
+                msg += "=";
+                msg += "NUTTIEFE";
+                msg += "\n";
+                msg += FMC_FKON_KOR;
+                msg += "=";
+                msg += "2";
+                msg += "\n";
+                msg += FMC_FKON_BEZ;
+                msg += "=";
+                msg += "Aufruf Fraeser (oben2)";
+                msg += "\n";
+                msg += FMC_FKON_AFB;
+                msg += "=";
+                msg += "AFB_AUSRAEUMEN";
+                msg += "\n";
+                msg += FMC_FKON_ANTYP;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_ABTYP;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += FMC_FKON_EINTYP;
+                msg += "=";
+                msg += "0";
+                msg += "\n";
+                msg += FMC_FKON_ANWEG;
+                msg += "=";
+                msg += "AN_AB_WERT";
+                msg += "\n";
+                msg += FMC_FKON_ABWEG;
+                msg += "=";
+                msg += "AN_AB_WERT";
+                msg += "\n";
+                msg += FMC_FKON_ANVO;
+                msg += "=";
+                msg += "3500";
+                msg += "\n";
+                msg += FMC_FKON_VO;
+                msg += "=";
+                msg += "6000";
+                msg += "\n";
+                msg += FMC_FKON_DREHZ;
+                msg += "=";
+                msg += "AUTO";
+                msg += "\n";
+                msg += FMC_FKON_ECKVERSCHL;
+                msg += "=";
+                msg += "0.05";
+                msg += "\n";
+                msg += FMC_FKON_WKZAKT;
+                msg += "=";
+                msg += "1";
+                msg += "\n";
+                msg += "\n";
+                //---Gerade Fräsen:
+                msg += FMC_FKONG;
+                msg += "\n";
+                msg += FMC_FKONG_XE;
+                msg += "=";
+                msg += "END_X";
+                msg += "\n";
+                msg += FMC_FKONG_YE;
+                msg += "=";
+                msg += "END_Y";
+                msg += "\n";
+                msg += FMC_FKONG_ZE;
+                msg += "=";
+                msg += "Z";
+                msg += "\n";
+                msg += FMC_FKONG_AFB;
+                msg += "=";
+                msg += "AFB_AUSRAEUMEN";
+                msg += "\n";
+                msg += "EB=EBG\n";
+                msg += "F=V\n";
+                msg += "AGGD=AGGDREHBAR\n";
+                msg += "AGGO=AGGOFFSET\n";
+                msg += "AGGFWKL=AGGWKL\n";
+                msg += "BEZB=Gerade\n";
+                msg += "\n";
+                //---Abfahren:
+                msg += "[KOABFA40]\n";
+                msg += "AGGD=AGGDREHBAR\n";
+                msg += "AGGO=AGGOFFSET\n";
+                msg += "AGGFWKL=AGGFWKL\n";
+                msg += "BEZB=Abfahren\n";
+                msg += "AFB=AFB_AUSRAEUMEN\n";
+                msg += "\n";
+                //---
+                msg += kommentar_fmc("----------------------------");
             }
         }else if(zeile.zeile(1) == BEARBART_RTA)
         {
