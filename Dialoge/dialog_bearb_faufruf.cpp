@@ -6,6 +6,7 @@ Dialog_bearb_faufruf::Dialog_bearb_faufruf(QWidget *parent) :
     ui(new Ui::Dialog_bearb_faufruf)
 {
     ui->setupUi(this);
+    Wst = nullptr;
     this->setWindowTitle("Fräseraufruf");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
@@ -20,8 +21,9 @@ Dialog_bearb_faufruf::~Dialog_bearb_faufruf()
     delete ui;
 }
 
-void Dialog_bearb_faufruf::set_data(QString d)
+void Dialog_bearb_faufruf::set_data(QString d, werkstueck *w)
 {
+    Wst = w;
     fraueseraufruf fa;
     fa.set_text(d);
     ui->lineEdit_ti->setText(fa.tiefe_qstring());
@@ -54,13 +56,29 @@ void Dialog_bearb_faufruf::set_data(QString d)
     ui->lineEdit_wkz->setText(fa.wkznum());
 }
 
+QString Dialog_bearb_faufruf::var_zu_wert(QString term)
+{
+    if(Wst != nullptr)
+    {
+        term = term.toUpper();
+        term.replace("L", Wst->laenge_qstring());
+        term.replace("B", Wst->breite_qstring());
+        term.replace("D", Wst->dicke_qstring());
+        term = berechnen(term);
+    }else
+    {
+        berechnen(term);
+    }
+    return term;
+}
+
 void Dialog_bearb_faufruf::on_btn_ok_clicked()
 {
     fraueseraufruf fa;
-    fa.set_tiefe(berechnen(ui->lineEdit_ti->text()));
-    fa.set_x(berechnen(ui->lineEdit_x->text()));
-    fa.set_y(berechnen(ui->lineEdit_y->text()));
-    fa.set_z(berechnen(ui->lineEdit_z->text()));
+    fa.set_tiefe(var_zu_wert(ui->lineEdit_ti->text()));
+    fa.set_x(var_zu_wert(ui->lineEdit_x->text()));
+    fa.set_y(var_zu_wert(ui->lineEdit_y->text()));
+    fa.set_z(var_zu_wert(ui->lineEdit_z->text()));
     QString kor = ui->comboBox_kor->currentText();
     if(kor == "Links")
     {

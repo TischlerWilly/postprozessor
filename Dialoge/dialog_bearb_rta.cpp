@@ -6,6 +6,7 @@ Dialog_bearb_rta::Dialog_bearb_rta(QWidget *parent) :
     ui(new Ui::Dialog_bearb_rta)
 {
     ui->setupUi(this);
+    Wst = nullptr;
     this->setWindowTitle("Rechtecktasche");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
@@ -20,8 +21,9 @@ Dialog_bearb_rta::~Dialog_bearb_rta()
     delete ui;
 }
 
-void Dialog_bearb_rta::set_data(QString d)
+void Dialog_bearb_rta::set_data(QString d, werkstueck *w)
 {
+    Wst = w;
     rechtecktasche rta;
     rta.set_text(d);
     ui->lineEdit_l->setText(rta.laenge_qstring());
@@ -71,18 +73,34 @@ void Dialog_bearb_rta::on_btn_abbrechen_clicked()
     this->close();
 }
 
+QString Dialog_bearb_rta::var_zu_wert(QString term)
+{
+    if(Wst != nullptr)
+    {
+        term = term.toUpper();
+        term.replace("L", Wst->laenge_qstring());
+        term.replace("B", Wst->breite_qstring());
+        term.replace("D", Wst->dicke_qstring());
+        term = berechnen(term);
+    }else
+    {
+        berechnen(term);
+    }
+    return term;
+}
+
 void Dialog_bearb_rta::on_btn_ok_clicked()
 {
     rechtecktasche rta;
-    rta.set_laenge(berechnen(ui->lineEdit_l->text()));
-    rta.set_breite(berechnen(ui->lineEdit_b->text()));
-    rta.set_tiefe(berechnen(ui->lineEdit_ti->text()));
-    rta.set_x(berechnen(ui->lineEdit_x->text()));
-    rta.set_y(berechnen(ui->lineEdit_y->text()));
-    rta.set_z(berechnen(ui->lineEdit_z->text()));
-    rta.set_drewi(berechnen(ui->lineEdit_wi->text()));
-    rta.set_rad(berechnen(ui->lineEdit_rad->text()));
-    rta.set_zustellmass(berechnen(ui->lineEdit_zust->text()));
+    rta.set_laenge(var_zu_wert(ui->lineEdit_l->text()));
+    rta.set_breite(var_zu_wert(ui->lineEdit_b->text()));
+    rta.set_tiefe(var_zu_wert(ui->lineEdit_ti->text()));
+    rta.set_x(var_zu_wert(ui->lineEdit_x->text()));
+    rta.set_y(var_zu_wert(ui->lineEdit_y->text()));
+    rta.set_z(var_zu_wert(ui->lineEdit_z->text()));
+    rta.set_drewi(var_zu_wert(ui->lineEdit_wi->text()));
+    rta.set_rad(var_zu_wert(ui->lineEdit_rad->text()));
+    rta.set_zustellmass(var_zu_wert(ui->lineEdit_zust->text()));
     rta.set_ausraeumen(ui->checkBox_raeumen->isChecked());
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")

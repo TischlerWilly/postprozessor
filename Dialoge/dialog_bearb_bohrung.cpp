@@ -6,6 +6,7 @@ Dialog_bearb_bohrung::Dialog_bearb_bohrung(QWidget *parent) :
     ui(new Ui::Dialog_bearb_bohrung)
 {
     ui->setupUi(this);
+    Wst = nullptr;
     this->setWindowTitle("Bohrung/Kreistasche");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
@@ -20,8 +21,9 @@ Dialog_bearb_bohrung::~Dialog_bearb_bohrung()
     delete ui;
 }
 
-void Dialog_bearb_bohrung::set_data(QString d)
+void Dialog_bearb_bohrung::set_data(QString d, werkstueck *w)
 {
+    Wst = w;
     bohrung bo;
     bo.set_text(d);
     ui->lineEdit_dm->setText(bo.dm_qstring());
@@ -56,15 +58,31 @@ void Dialog_bearb_bohrung::set_data(QString d)
     ui->lineEdit_wkz->setText(bo.wkznum());
 }
 
+QString Dialog_bearb_bohrung::var_zu_wert(QString term)
+{
+    if(Wst != nullptr)
+    {
+        term = term.toUpper();
+        term.replace("L", Wst->laenge_qstring());
+        term.replace("B", Wst->breite_qstring());
+        term.replace("D", Wst->dicke_qstring());
+        term = berechnen(term);
+    }else
+    {
+        berechnen(term);
+    }
+    return term;
+}
+
 void Dialog_bearb_bohrung::on_btn_ok_clicked()
 {
     bohrung bo;
-    bo.set_dm(berechnen(ui->lineEdit_dm->text()));
-    bo.set_tiefe(berechnen(ui->lineEdit_ti->text()));
-    bo.set_x(berechnen(ui->lineEdit_x->text()));
-    bo.set_y(berechnen(ui->lineEdit_y->text()));
-    bo.set_z(berechnen(ui->lineEdit_z->text()));
-    bo.set_zustellmass(berechnen(ui->lineEdit_zust->text()));
+    bo.set_dm(var_zu_wert(ui->lineEdit_dm->text()));
+    bo.set_tiefe(var_zu_wert(ui->lineEdit_ti->text()));
+    bo.set_x(var_zu_wert(ui->lineEdit_x->text()));
+    bo.set_y(var_zu_wert(ui->lineEdit_y->text()));
+    bo.set_z(var_zu_wert(ui->lineEdit_z->text()));
+    bo.set_zustellmass(var_zu_wert(ui->lineEdit_zust->text()));
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")
     {

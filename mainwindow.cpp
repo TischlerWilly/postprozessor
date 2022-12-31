@@ -1290,6 +1290,11 @@ void MainWindow::set_prginfo()
     tmp += "- Werkstücke umbenennen\n";
     tmp += "- Exportübersicht\n";
     tmp += "- Werkstücke bearbeiten\n";
+    tmp += "  ->Werkstückgröße ändern\n";
+    tmp += "  ->Bearbeitungen einfügen\n";
+    tmp += "  ->Bearbeitungen ändern\n";
+    tmp += "  ->Bearbeitungen verschieben (mehrere gleichzeitig möglich)\n";
+    tmp += "  ->Verwenden der Platzhalter L B und D möglch\n";
     tmp += "- Kurze Geraden ignorieren mit Angabe des Schwellenwertes (fmc)\n";
     tmp += "- Formartierungen aufbrechen (fmc)\n";
     tmp += "- Werkstück vergrößern als Zugabe für Gehrungen (fmc)\n";

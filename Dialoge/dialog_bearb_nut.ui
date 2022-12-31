@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>490</width>
-    <height>587</height>
+    <width>491</width>
+    <height>566</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>471</width>
-     <height>491</height>
+     <height>421</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -128,9 +128,9 @@
   <widget class="QWidget" name="layoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>540</y>
-     <width>231</width>
+     <x>230</x>
+     <y>530</y>
+     <width>251</width>
      <height>31</height>
     </rect>
    </property>
@@ -146,6 +146,60 @@
      <widget class="QPushButton" name="btn_abbrechen">
       <property name="text">
        <string>Abbrechen</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>440</y>
+     <width>161</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="3" column="2">
+     <widget class="QPushButton" name="pushButton_vo">
+      <property name="text">
+       <string>Vorne</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="pushButton_hi">
+      <property name="text">
+       <string>Hinten</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pushButton_li">
+      <property name="text">
+       <string>Links</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QPushButton" name="pushButton_re">
+      <property name="text">
+       <string>Rechts</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="pushButton_ob">
+      <property name="text">
+       <string>Oben</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" colspan="3">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Vorbelegung:</string>
       </property>
      </widget>
     </item>

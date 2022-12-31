@@ -62,6 +62,8 @@ private slots:
     void on_actionEinfuegen_triggered();
     void on_actionVerschieben_triggered();
 
+    void on_actionBearbeiten_triggered();
+
 public slots:
     //Bearbeiten
     void zeile_aendern(int index, QString bearb);

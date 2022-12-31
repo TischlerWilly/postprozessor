@@ -166,6 +166,11 @@ void MainWin_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidget
     int index = ui->listWidget_prgtext->currentRow();
     zeile_bearbeiten(index);
 }
+void MainWin_wst_bearbeiten::on_actionBearbeiten_triggered()
+{
+    int index = ui->listWidget_prgtext->currentRow();
+    zeile_bearbeiten(index);
+}
 void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
 {
     if(zeile == 0)
@@ -203,42 +208,42 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Dialog_bearb_rta dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
-        dlg.set_data(bearb.text());
+        dlg.set_data(bearb.text(), Wst);
         dlg.exec();
     }else if(bearb.zeile(1) == BEARBART_BOHR)
     {
         Dialog_bearb_bohrung dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_bo(bohrung)));
-        dlg.set_data(bearb.text());
+        dlg.set_data(bearb.text(), Wst);
         dlg.exec();
     }else if(bearb.zeile(1) == BEARBART_NUT)
     {
         Dialog_bearb_nut dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_nut(nut)), this, SLOT(slot_nut(nut)));
-        dlg.set_data(bearb.text());
+        dlg.set_data(bearb.text(), Wst);
         dlg.exec();
     }else if(bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
     {
         Dialog_bearb_faufruf dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_faufruf(fraueseraufruf)), this, SLOT(slot_faufruf(fraueseraufruf)));
-        dlg.set_data(bearb.text());
+        dlg.set_data(bearb.text(), Wst);
         dlg.exec();
     }else if(bearb.zeile(1) == BEARBART_FRAESERGERADE)
     {
         Dialog_bearb_fgerade dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_fgerade(fraesergerade)), this, SLOT(slot_fgerade(fraesergerade)));
-        dlg.set_data(bearb.text());
+        dlg.set_data(bearb.text(), Wst);
         dlg.exec();
     }else if(bearb.zeile(1) == BEARBART_FRAESERBOGEN)
     {
         Dialog_bearb_fbogen dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_fbogen(fraeserbogen)), this, SLOT(slot_fbogen(fraeserbogen)));
-        dlg.set_data(bearb.text());
+        dlg.set_data(bearb.text(), Wst);
         dlg.exec();
     }
 }
@@ -302,7 +307,7 @@ void MainWin_wst_bearbeiten::on_actionMakeBohrung_triggered()
     Dialog_bearb_bohrung dlg;
     dlg.setModal(true);
     bohrung bo;//Default-Daten
-    dlg.set_data(bo.text());
+    dlg.set_data(bo.text(), Wst);
     connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_make_bo(bohrung)));
     dlg.exec();
 }
@@ -311,7 +316,7 @@ void MainWin_wst_bearbeiten::on_actionMakeRTA_triggered()
     Dialog_bearb_rta dlg;
     dlg.setModal(true);
     rechtecktasche rt;//Default-Daten
-    dlg.set_data(rt.text());
+    dlg.set_data(rt.text(), Wst);
     connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_make_rta(rechtecktasche)));
     dlg.exec();
 }
@@ -320,7 +325,7 @@ void MainWin_wst_bearbeiten::on_actionMakeNut_triggered()
     Dialog_bearb_nut dlg;
     dlg.setModal(true);
     nut nu;//Default-Daten
-    dlg.set_data(nu.text());
+    dlg.set_data(nu.text(), Wst);
     connect(&dlg, SIGNAL(signal_nut(nut)), this, SLOT(slot_make_nut(nut)));
     dlg.exec();
 }
@@ -691,3 +696,5 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
     }
     return bearb;
 }
+
+

@@ -7,8 +7,7 @@
 /*
 
 
-- dlg nut
-    ->btn´s für Vorbelegung hori-nuten
+
 
 
 

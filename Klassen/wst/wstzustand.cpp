@@ -5921,6 +5921,27 @@ void wstzustand::fmc_dateitext(int index)
                 msg += "\n";
             }else if(nu.bezug() != WST_BEZUG_UNSEI)
             {
+                QString xs = nu.xs_qstring();
+                if(xs.toDouble() == tmp_l)
+                {
+                    xs = "L";
+                }
+                QString xe = nu.xe_qstring();
+                if(xe.toDouble() == tmp_l)
+                {
+                    xe = "L";
+                }
+                QString ys = nu.ys_qstring();
+                if(ys.toDouble() == tmp_b)
+                {
+                    ys = "B";
+                }
+                QString ye = nu.ye_qstring();
+                if(ye.toDouble() == tmp_b)
+                {
+                    ye = "B";
+                }
+
                 msg += kommentar_fmc("----------------------------");
                 //10er-Variable
                 msg += FMC_VAR10;
@@ -5996,19 +6017,19 @@ void wstzustand::fmc_dateitext(int index)
                 msg += "\n";
                 msg += FMC_VAR10_WERT6; //START_X
                 msg += "=";
-                msg += nu.xs_qstring();
+                msg += xs;
                 msg += "\n";
                 msg += FMC_VAR10_WERT7; //START_Y
                 msg += "=";
-                msg += nu.ys_qstring();
+                msg += ys;
                 msg += "\n";
                 msg += FMC_VAR10_WERT8; //END_X
                 msg += "=";
-                msg += nu.xe_qstring();
+                msg += xe;
                 msg += "\n";
                 msg += FMC_VAR10_WERT9; //END_Y
                 msg += "=";
-                msg += nu.ye_qstring();
+                msg += ye;
                 msg += "\n";
                 msg += FMC_VAR10_WERT10; //AN_AB_WERT
                 msg += "=";
@@ -12574,6 +12595,17 @@ void wstzustand::geo(int index)
                 r.set_farbe_fuellung(FARBE_GELB);
                 r.set_einfuegepunkt(s.mitpu3d());
                 r.verschieben_um(versatz_x, versatz_y);
+                //Start anzeigen:
+                strecke stmp = s;
+                stmp.drenen_um_startpunkt_2d(90, true);
+                stmp.set_laenge_2d(stmp.laenge2d()+nu.tiefe(), strecke_bezugspunkt_ende);
+                stmp.set_laenge_2d(30, strecke_bezugspunkt_start);
+                kreis k;
+                k.set_mittelpunkt(stmp.endpu());
+                k.set_radius(30);
+                k.set_farbe(FARBE_GELB);
+                gt.add_kreis(k);
+                //---
                 gt.add_rechteck(r);
             }
         }else if(zeile.zeile(1) == BEARBART_RTA)

@@ -65,6 +65,8 @@
     <property name="title">
      <string>Bearbeiten</string>
     </property>
+    <addaction name="actionBearbeiten"/>
+    <addaction name="separator"/>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
@@ -144,6 +146,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionBearbeiten">
+   <property name="text">
+    <string>Bearbeiten</string>
+   </property>
+   <property name="shortcut">
+    <string>Return</string>
    </property>
   </action>
  </widget>

@@ -615,7 +615,7 @@ geometrietext werkstueck::geo()
                 {
                     r.set_bezugspunkt(LINKS);
                     r.set_laenge(nu.tiefe());
-                    r.set_breite(s.laenge2d());
+                    r.set_breite(s.laenge2d());                    
                 }else if(nu.bezug() == WST_BEZUG_RE)
                 {
                     r.set_bezugspunkt(RECHTS);
@@ -635,6 +635,17 @@ geometrietext werkstueck::geo()
                 r.set_farbe_fuellung(FARBE_GELB);
                 r.set_einfuegepunkt(s.mitpu3d());
                 r.verschieben_um(versatz_x, versatz_y);
+                //Start anzeigen:
+                strecke stmp = s;
+                stmp.drenen_um_startpunkt_2d(90, true);
+                stmp.set_laenge_2d(stmp.laenge2d()+nu.tiefe(), strecke_bezugspunkt_ende);
+                stmp.set_laenge_2d(30, strecke_bezugspunkt_start);
+                kreis k;
+                k.set_mittelpunkt(stmp.endpu());
+                k.set_radius(30);
+                k.set_farbe(FARBE_GELB);
+                gt.add_kreis(k);
+                //---
                 gt.add_rechteck(r);
             }
         }else if(zeile.zeile(1) == BEARBART_RTA)
