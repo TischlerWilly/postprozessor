@@ -12674,7 +12674,7 @@ void wstzustand::geo(int index)
                 r.set_farbe_fuellung(FARBE_GRUEN);
                 r.set_einfuegepunkt(rt.x(), rt.y(), rt.z());
                 r.verschieben_um(versatz_x, versatz_y);
-                r.set_rad(rt.rad());
+                //r.set_rad(rt.rad()); //hier darf nicht der rad gesetzt werden weil Draufsicht
                 gt.add_rechteck(r);
             }
 
