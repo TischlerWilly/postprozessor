@@ -41,6 +41,9 @@ private:
     void update_listwidget();
     void zeile_bearbeiten(int zeile);
     QString verschiebe_einen(QString bearb, double ax, double ay, double az);
+    int auswahl_erster();
+    int auswahl_letzter();
+    int auswahl_menge();
 
 signals:
     void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
@@ -61,7 +64,6 @@ private slots:
     void on_actionKopieren_triggered();
     void on_actionEinfuegen_triggered();
     void on_actionVerschieben_triggered();
-
     void on_actionBearbeiten_triggered();
 
 public slots:

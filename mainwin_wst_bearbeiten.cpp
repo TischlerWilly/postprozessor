@@ -495,11 +495,80 @@ void MainWin_wst_bearbeiten::on_actionEinfuegen_triggered()
     }
 }
 //----------------------------------Manipulation:
+int MainWin_wst_bearbeiten::auswahl_erster()
+{
+    QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
+    int row_erstes = 0;//Nummer des ersten Elementes
+    for(int i=0; i<ui->listWidget_prgtext->count() ;i++)
+    {
+        if(ui->listWidget_prgtext->item(i)->isSelected())
+        {
+            row_erstes = i;
+            break;
+        }
+    }
+    return row_erstes;
+}
+int MainWin_wst_bearbeiten::auswahl_letzter()
+{
+    int erster = auswahl_erster();
+    int menge = auswahl_menge();
+    return erster+menge-1;
+}
+int MainWin_wst_bearbeiten::auswahl_menge()
+{
+    QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
+    return items.count();
+}
 void MainWin_wst_bearbeiten::on_actionVerschieben_triggered()
 {
     if((ui->listWidget_prgtext->currentIndex().isValid())  &&  \
        (ui->listWidget_prgtext->currentItem()->isSelected())    )
     {
+        //Prüfen ob Fräsbahnen durch das Verschieben geteilt werden:
+        bool gesund = true;
+        //--Prüfen ob eine Fräsbahn nach der Auswahl weiter geht:
+        if(auswahl_letzter() < ui->listWidget_prgtext->count()-2)
+        {
+            int zeile_dannach = auswahl_letzter()+1;//index von QListwidget
+            text_zeilenweise bearb;
+            bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            bearb.set_text(Wst->bearb_ptr()->zeile(zeile_dannach));
+            if(bearb.zeile(1) == BEARBART_FRAESERGERADE  || \
+               bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+            {
+                gesund = false;
+            }
+        }
+        //---Prüfen ob eine Fräsbahn vor der Auswahl beginnt:
+        if(auswahl_erster() >= 2)
+        {
+            int zeile_davor = auswahl_erster()-1;//index von QListwidget
+            text_zeilenweise bearb;
+            bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            bearb.set_text(Wst->bearb_ptr()->zeile(zeile_davor));
+            text_zeilenweise bearb_erster;
+            bearb_erster.set_trennzeichen(TRENNZ_BEARB_PARAM);
+            bearb_erster.set_text(Wst->bearb_ptr()->zeile(auswahl_erster()));
+            if(bearb_erster.zeile(1) != BEARBART_FRAESERAUFRUF)
+            {
+                if(bearb.zeile(1) == BEARBART_FRAESERAUFRUF  || \
+                   bearb.zeile(1) == BEARBART_FRAESERGERADE  || \
+                   bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+                {
+                    gesund = false;
+                }
+            }
+        }
+        //---
+        if(gesund == false)
+        {
+            QMessageBox mb;
+            mb.setText("Das Verschieben dieser Zeilenauswahl ist nicht möglich weil eine Fräsbahn nur vollständig verschoben werden kann!");
+            mb.exec();
+            return;
+        }
+        //---
         Dialog_bearb_verschieben dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_punkt(punkt3d)), this, SLOT(slot_verschieben(punkt3d)));
@@ -516,18 +585,8 @@ void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
 {
     int index = ui->listWidget_prgtext->currentRow();
     //Die index-Prüfung erfolgt bereits in der Funktion on_actionVerschieben_triggered()
-
-    QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
-    int items_menge = items.count();
-    int row_erstes = 0;//Nummer des ersten Elementes
-    for(int i=0; i<ui->listWidget_prgtext->count() ;i++)
-    {
-        if(ui->listWidget_prgtext->item(i)->isSelected())
-        {
-            row_erstes = i;
-            break;
-        }
-    }
+    int row_erstes = auswahl_erster();
+    int items_menge = auswahl_menge();
     if(items_menge==1)
     {
         if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
