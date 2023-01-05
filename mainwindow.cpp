@@ -1775,6 +1775,24 @@ void MainWindow::dateien_erfassen()
         tz.zeile_anhaengen(name);
     }
     dateien_alle = tz;
+
+    //zum Testen:
+    /*
+    QString msg;
+    msg += "Zeile 0\n";
+    msg += "Zeile 1\n";
+    msg += "Zeile 2\n";
+    msg += "Zeile 3\n";
+    msg += "Zeile 4";
+    text_zw test(msg);
+    QMessageBox mb;
+    //mb.setText(test.zeile(2));
+    //mb.setText(test.zeilen(2,2));
+    test.add_before("davor\n123");
+    test.add_after("danach\n123");
+    mb.setText(test.text());
+    mb.exec();
+    */
 }
 void MainWindow::import()
 {

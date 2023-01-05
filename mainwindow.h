@@ -24,6 +24,7 @@
 
 #include "Funktionen/text.h"
 #include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Klassen/wst/werkstuecke.h"
 #include "Klassen/werkzeugmagazin.h"
 #include "Klassen/einstellung.h"

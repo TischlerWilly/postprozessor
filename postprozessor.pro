@@ -39,6 +39,7 @@ SOURCES += main.cpp\
     Klassen/geo/vorschau.cpp \
     Klassen/geo/wuerfel.cpp \
     Klassen/geo/zylinder.cpp \
+    Klassen/text_zw.cpp \
     Klassen/undo_redo_tz.cpp \
     Klassen/wst/gehrung.cpp \
     Klassen/wst/wstzustand.cpp \
@@ -108,6 +109,7 @@ HEADERS  += mainwindow.h \
     Klassen/geo/wuerfel.h \
     Klassen/geo/zylinder.h \
     Klassen/text_zeilenweise.h \
+    Klassen/text_zw.h \
     Klassen/undo_redo_tz.h \
     Klassen/wenndannsonst.h \
     Funktionen/myfunktion.h \
