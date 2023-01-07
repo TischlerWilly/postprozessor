@@ -41,6 +41,7 @@ SOURCES += main.cpp\
     Klassen/geo/zylinder.cpp \
     Klassen/text_zw.cpp \
     Klassen/undo_redo_tz.cpp \
+    Klassen/wkz/wkz_bohrer.cpp \
     Klassen/wst/gehrung.cpp \
     Klassen/wst/wstzustand.cpp \
     mainwin_wst_bearbeiten.cpp \
@@ -116,6 +117,7 @@ HEADERS  += mainwindow.h \
     Funktionen/runden.h \
     Funktionen/text.h \
     Funktionen/umwandeln.h \
+    Klassen/wkz/wkz_bohrer.h \
     Klassen/wst/gehrung.h \
     Klassen/wst/wstzustand.h \
     Struncts/punkt.h \

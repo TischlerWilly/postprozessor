@@ -22,7 +22,7 @@ void text_zw::set_trenz(char trennzeichen)
 }
 
 //---------------------------------------------get_xy:
-QString text_zw::zeile(uint zeilennummer)
+QString text_zw::at(uint zeilennummer)
 {
     QString ret;
     if(zeilennummer < Daten.size())
@@ -34,7 +34,7 @@ QString text_zw::zeile(uint zeilennummer)
     }
     return ret;
 }
-QString text_zw::zeilen(uint zeilennummer_beginn, uint zeilenmenge)
+QString text_zw::at(uint zeilennummer_beginn, uint zeilenmenge)
 {
     QString ret;
     uint zeilennummer_ende = zeilennummer_beginn + zeilenmenge - 1 ;

@@ -1789,10 +1789,11 @@ void MainWindow::dateien_erfassen()
     //mb.setText(test.zeile(2));
     //mb.setText(test.zeilen(2,2));
     //test.add_vo("davor\n123");
-    //test.add_hi("danach\n123");
+    test.add_hi("");
+    test.add_hi("danach\n123");
     //test.add_mi(19 ,"danach\n123");
     //test.edit(5, "getauscht");
-    test.entf(2,3);
+    //test.entf(2,3);
     mb.setText(test.text());
     mb.exec();
     */

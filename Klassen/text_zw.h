@@ -14,8 +14,8 @@ public:
     void    set_trenz(char trennzeichen);
 
     //---------------------------------------------get_xy:
-    QString     zeile(uint zeilennummer);
-    QString     zeilen(uint zeilennummer_beginn, uint zeilenmenge);
+    QString     at(uint zeilennummer);
+    QString     at(uint zeilennummer_beginn, uint zeilenmenge);
     QString     text();
     char        trennz();
     uint        count();
