@@ -11,6 +11,7 @@ public:
 
     //---------------------------------------------set_xy:
     void    set_text(QString text, char trennzeichen = '\n');
+    void    set_trenz(char trennzeichen);
 
     //---------------------------------------------get_xy:
     QString     zeile(uint zeilennummer);
@@ -21,8 +22,11 @@ public:
 
     //---------------------------------------------Manipulationen:
     void    clear();
-    void    add_before(QString text);
-    void    add_after(QString text);
+    void    add_vo(QString text);
+    void    add_hi(QString text);
+    int     add_mi(uint index_vor, QString text);
+    int     edit(uint index, QString neuer_text);
+    int     entf(uint index, uint menge = 1);
 
 private:
     std::vector<QString> Daten;
