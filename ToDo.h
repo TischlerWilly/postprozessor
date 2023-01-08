@@ -9,10 +9,6 @@
 - text_zw
     -->void MainWindow::dateien_erfassen() in dieser Funktion habe ich die Testaufrufe unter gebracht
 
-Klasser erstellen für Werkzeuge:
-- Bohrer
-- Fräser
-- Säge
 - neue Klasse für wkzmag
 ->(werkzeigmagazin.h)
 
