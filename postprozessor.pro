@@ -43,6 +43,7 @@ SOURCES += main.cpp\
     Klassen/undo_redo_tz.cpp \
     Klassen/wkz/wkz_bohrer.cpp \
     Klassen/wkz/wkz_fraeser.cpp \
+    Klassen/wkz/wkz_magazin.cpp \
     Klassen/wkz/wkz_saege.cpp \
     Klassen/wst/gehrung.cpp \
     Klassen/wst/wstzustand.cpp \
@@ -121,6 +122,7 @@ HEADERS  += mainwindow.h \
     Funktionen/umwandeln.h \
     Klassen/wkz/wkz_bohrer.h \
     Klassen/wkz/wkz_fraeser.h \
+    Klassen/wkz/wkz_magazin.h \
     Klassen/wkz/wkz_saege.h \
     Klassen/wst/gehrung.h \
     Klassen/wst/wstzustand.h \

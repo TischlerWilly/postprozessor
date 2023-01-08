@@ -79,8 +79,8 @@ void wkz_saege::set_istverti(bool ja)
 text_zw wkz_saege::daten()
 {
     text_zw wkz;
-    wkz.set_trenz('\t');
-    wkz.add_hi("S");                                //0: WKZ-Typ
+    wkz.set_trenz(WKZ_TRENNZ);
+    wkz.add_hi(WKZ_TYP_SAEGE);                      //0: WKZ-Typ
     wkz.add_hi(Wkznr);                              //1: Werkzeugnummer
     if(IstAktiv == true)                            //2: Ist Aktiv
     {

@@ -101,8 +101,8 @@ void wkz_bohrer::set_istverti(bool ja)
 text_zw wkz_bohrer::daten()
 {
     text_zw wkz;
-    wkz.set_trenz('\t');
-    wkz.add_hi("B");                            //0: WKZ-Typ
+    wkz.set_trenz(WKZ_TRENNZ);
+    wkz.add_hi(WKZ_TYP_BOHRER);                 //0: WKZ-Typ
     wkz.add_hi(Wkznr);                          //1: Werkzeugnummer
     if(IstAktiv == true)                        //2: Ist Aktiv
     {

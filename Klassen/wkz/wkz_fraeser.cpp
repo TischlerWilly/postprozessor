@@ -120,8 +120,8 @@ void wkz_fraeser::set_istverti(bool ja)
 text_zw wkz_fraeser::daten()
 {
     text_zw wkz;
-    wkz.set_trenz('\t');
-    wkz.add_hi("M");                            //0: WKZ-Typ
+    wkz.set_trenz(WKZ_TRENNZ);
+    wkz.add_hi(WKZ_TYP_FRAESER);                //0: WKZ-Typ
     wkz.add_hi(Wkznr);                          //1: Werkzeugnummer
     if(IstAktiv == true)                        //2: Ist Aktiv
     {

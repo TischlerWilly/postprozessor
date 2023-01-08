@@ -11,6 +11,7 @@
 
 - neue Klasse für wkzmag
 ->(werkzeigmagazin.h)
+ >QString wkz_magazin::wkznummer(...)
 
 
 

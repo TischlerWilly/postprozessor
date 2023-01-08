@@ -4,6 +4,7 @@
 #include <QString>
 #include "Klassen/text_zw.h"
 #include "Funktionen/umwandeln.h"
+#include "Defines/werkzeug.h"
 
 class wkz_fraeser
 {
