@@ -14,6 +14,10 @@ void text_zw::set_text(QString text, char trennzeichen)
 {
     clear();
     Trennzeichen = trennzeichen;
+    if(text.isEmpty())
+    {
+        return;
+    }
     Daten = to_vector(text, trennzeichen);
 }
 void text_zw::set_trenz(char trennzeichen)

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainwin_wkzmagazin</class>
+ <widget class="QMainWindow" name="mainwin_wkzmagazin">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>580</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>mainwin_wkzmagazin</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QListWidget" name="listWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>256</width>
+      <height>541</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>310</y>
+      <width>301</width>
+      <height>241</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>580</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuneues_Werkzeug">
+    <property name="title">
+     <string>neues Werkzeug</string>
+    </property>
+    <addaction name="actionFraeser_anlegen"/>
+    <addaction name="actionBohrer_anlegen"/>
+    <addaction name="actionSaege_anlegen"/>
+   </widget>
+   <addaction name="menuneues_Werkzeug"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionFraeser_anlegen">
+   <property name="text">
+    <string>Fräser anlegen</string>
+   </property>
+  </action>
+  <action name="actionBohrer_anlegen">
+   <property name="text">
+    <string>Bohrer anlegen</string>
+   </property>
+  </action>
+  <action name="actionSaege_anlegen">
+   <property name="text">
+    <string>Säge anlegen</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

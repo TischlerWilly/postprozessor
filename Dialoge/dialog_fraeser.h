@@ -4,6 +4,9 @@
 #include <QDialog>
 
 #include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
+#include "Klassen/wkz/wkz_fraeser.h"
+#include "Klassen/wenndannsonst.h"
 #include "Defines/werkzeug.h"
 
 namespace Ui {
@@ -30,6 +33,7 @@ public slots:
 
 signals:
     void sendData(text_zeilenweise wkz, bool ist_neues_wkz);
+    void sendData(text_zw wkz, bool ist_neues_wkz);
 
 
 private slots:

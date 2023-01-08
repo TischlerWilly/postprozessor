@@ -12,6 +12,7 @@
 #include "Klassen/prgpfade.h"
 #include "Defines/dateinamen.h"
 #include "Dialoge/dialog_wkz.h"
+#include "mainwin_wkzmagazin.h"
 #include "Dialoge/dialog_stdnamen.h"
 #include "Dialoge/dialog_einstellung_pfade.h"
 #include "Dialoge/dialog_einstellung_ganx.h"
@@ -90,11 +91,18 @@ private slots:
     void on_actionWST_bearbeiten_triggered();
     void on_listWidget_wste_itemClicked(QListWidgetItem *item);
 
+    void on_actionEntwicklermodus_triggered(bool checked);
+
+    void on_actionTestfunktion_triggered();
+
 private:
     Ui::MainWindow *ui;
-    text_zeilenweise wkz_magazin_ganx;
-    text_zeilenweise wkz_magazin_fmc;
-    text_zeilenweise wkz_magazin_ggf;
+    text_zeilenweise wkz_magazin_ganx;//alt
+    text_zeilenweise wkz_magazin_fmc;//alt
+    text_zeilenweise wkz_magazin_ggf;//alt
+    wkz_magazin wkz_mag_ganx;//neu
+    wkz_magazin wkz_mag_fmc;//neu
+    wkz_magazin wkz_mag_ggf;//neu
     prgpfade pf;
 
     //Variablen:
@@ -136,6 +144,7 @@ private:
     Dialog_programmtext dlg_prgtext;
     Dialog_ExportUebersicht dlg_exporte;
     MainWin_wst_bearbeiten dlg_wst_bearbeiten;
+    mainwin_wkzmagazin dlg_wkzmag;
 
 signals:
     void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);

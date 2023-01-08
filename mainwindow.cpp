@@ -150,6 +150,7 @@ void MainWindow::setup()
         }else
         {
             Einstellung.set_text(file.readAll());
+            ui->actionEntwicklermodus->setChecked(Einstellung.entwicklermodus());
             ui->checkBox_quelldat_erhalt->setChecked(Einstellung.quelldateien_erhalten());
             ui->checkBox_std_namen_zuweisen->setChecked(Einstellung.std_dateinamen_verwenden());
             QString drehung = Einstellung.drehung_wst();
@@ -351,7 +352,8 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            wkz_magazin_ganx.set_text(file.readAll());
+            wkz_magazin_ganx.set_text(file.readAll());//alt
+            //wkz_mag_ganx.set_text(file.readAll());//neu
         }
         file.close();
     }
@@ -385,7 +387,8 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            wkz_magazin_fmc.set_text(file.readAll());
+            wkz_magazin_fmc.set_text(file.readAll());//alt
+            //wkz_mag_fmc.set_text(file.readAll());//neu
         }
         file.close();
     }
@@ -402,9 +405,10 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            werkzeugmagazin wm;
-            file.write(wm.tabellenkopf().toUtf8());
-            wkz_magazin_ggf.set_text(wm.tabellenkopf());
+            //werkzeugmagazin wm;//alt
+            wkz_magazin wm;//neu
+            file.write(wm.text().toUtf8());
+            wkz_magazin_ggf.set_text(wm.text());
         }
         file.close();
     }else
@@ -419,7 +423,8 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            wkz_magazin_ggf.set_text(file.readAll());
+            wkz_magazin_ggf.set_text(file.readAll());//alt
+            wkz_mag_ggf.set_text(file.readAll());//neu
         }
         file.close();
     }
@@ -450,6 +455,13 @@ void MainWindow::schreibe_ini()
         file.write(Einstellung.text().toLatin1());
     }
     file.close();
+    if(Einstellung.entwicklermodus())
+    {
+        ui->actionTestfunktion->setVisible(true);
+    }else
+    {
+        ui->actionTestfunktion->setVisible(false);
+    }
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
@@ -1211,6 +1223,32 @@ void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
 }
 
 //-----------------------------------------------------------------------Menüs:
+void MainWindow::on_actionTestfunktion_triggered()
+{
+
+    //Test für text_zw:
+    QString msg;
+    //msg += "Zeile 0\n";
+    //msg += "Zeile 1\n";
+    //msg += "Zeile 2\n";
+    //msg += "Zeile 3\n";
+    //msg += "Zeile 4";
+    //text_zw test(msg);
+    text_zw test;
+    QMessageBox mb;
+    //mb.setText(test.zeile(2));
+    //mb.setText(test.zeilen(2,2));
+    //test.add_vo("davor\n123");
+    //test.add_hi("");
+    //test.add_hi("danach\n123");
+    //test.add_mi(19 ,"danach\n123");
+    //test.edit(5, "getauscht");
+    //test.entf(2,3);
+    mb.setText(test.text());
+    mb.setWindowTitle(int_to_qstring(test.count()));
+    mb.exec();
+
+}
 void MainWindow::set_prginfo()
 {
     QString tmp;
@@ -1308,6 +1346,11 @@ void MainWindow::on_actionInfo_triggered()
     ui->tabWidget_main->setCurrentIndex(0);
     set_prginfo();
 }
+void MainWindow::on_actionEntwicklermodus_triggered(bool checked)
+{
+    Einstellung.set_entwicklermodus(checked);
+    schreibe_ini();
+}
 void MainWindow::on_actionWerkzeug_ganx_anzeigen_triggered()
 {
     emit sendDialogDataWKZ("Werkzeug GANX", wkz_magazin_ganx);
@@ -1318,7 +1361,11 @@ void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
 }
 void MainWindow::on_actionWerkzeug_ggf_anzeigen_triggered()
 {
-    emit sendDialogDataWKZ("Werkzeug GGF", wkz_magazin_ggf);
+    //emit sendDialogDataWKZ("Werkzeug GGF", wkz_magazin_ggf);//alt
+    //neu:
+    dlg_wkzmag.setWindowTitle("Werkzeugmagazin ggf");
+    dlg_wkzmag.set_wkzmag(wkz_mag_ggf);
+    dlg_wkzmag.show();
 }
 void MainWindow::on_actionEinstellung_pfade_triggered()
 {
@@ -1775,28 +1822,6 @@ void MainWindow::dateien_erfassen()
         tz.zeile_anhaengen(name);
     }
     dateien_alle = tz;
-
-    //zum Testen:
-    /*
-    QString msg;
-    msg += "Zeile 0\n";
-    msg += "Zeile 1\n";
-    msg += "Zeile 2\n";
-    msg += "Zeile 3\n";
-    msg += "Zeile 4";
-    text_zw test(msg);
-    QMessageBox mb;
-    //mb.setText(test.zeile(2));
-    //mb.setText(test.zeilen(2,2));
-    //test.add_vo("davor\n123");
-    test.add_hi("");
-    test.add_hi("danach\n123");
-    //test.add_mi(19 ,"danach\n123");
-    //test.edit(5, "getauscht");
-    //test.entf(2,3);
-    mb.setText(test.text());
-    mb.exec();
-    */
 }
 void MainWindow::import()
 {
@@ -2171,6 +2196,10 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
+
+
 
 
 

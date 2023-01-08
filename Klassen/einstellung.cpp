@@ -2,6 +2,7 @@
 
 einstellung::einstellung()
 {
+    Entwicklermodus             = false;
     Verzeichnis_quelle          = "./";
     Verzeichnis_ziel_server     = "./";
     Verzeichnis_ziel_lokal      = "./";
@@ -33,7 +34,10 @@ void einstellung::set_text(QString t)
         text_zeilenweise spalten;
         spalten.set_trennzeichen('\t');
         spalten.set_text(tz.zeile(i));
-        if(spalten.zeile(1) == "verzeichnis_quelle:")
+        if(spalten.zeile(1) == "Entwicklermodus:")
+        {
+            set_entwicklermodus(spalten.zeile(2));
+        }else if(spalten.zeile(1) == "verzeichnis_quelle:")
         {
             set_verzeichnis_quelle(spalten.zeile(2));
         }else if(spalten.zeile(1) == "verzeichnis_ziel_server:")
@@ -91,6 +95,20 @@ void einstellung::set_text(QString t)
         {
             set_export_eigen(spalten.zeile(2));
         }
+    }
+}
+void einstellung::set_entwicklermodus(bool ja)
+{
+    Entwicklermodus = ja;
+}
+void einstellung::set_entwicklermodus(QString jn)
+{
+    if(jn == "ja")
+    {
+        set_entwicklermodus(true);
+    }else
+    {
+        set_entwicklermodus(false);
     }
 }
 void einstellung::set_verzeichnis_quelle(QString v)
@@ -292,6 +310,17 @@ QString einstellung::text()
 {
     QString text;
 
+    text += "Entwicklermodus:";
+    text += "\t";
+    if(entwicklermodus() == true)
+    {
+        text += "ja";
+    }else
+    {
+        text += "nein";
+    }
+    text += "\n";
+
     text += "verzeichnis_quelle:";
     text += "\t";
     text += verzeichnis_quelle();
@@ -442,6 +471,10 @@ QString einstellung::text()
     text += "\n";
 
     return text;
+}
+bool einstellung::entwicklermodus()
+{
+    return Entwicklermodus;
 }
 QString einstellung::verzeichnis_quelle()
 {

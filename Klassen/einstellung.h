@@ -12,6 +12,8 @@ public:
 
     //set:
     void set_text(QString t);
+    void set_entwicklermodus(bool ja);
+    void set_entwicklermodus(QString jn);
     void set_verzeichnis_quelle(QString v);
     void set_verzeichnis_ziel_server(QString v);
     void set_verzeichnis_ziel_lokal(QString v);
@@ -42,8 +44,9 @@ public:
     void set_export_eigen(QString jn);
 
 
-    //get:
+    //get:    
     QString text();
+    bool entwicklermodus();
     QString verzeichnis_quelle();
     QString verzeichnis_ziel_server();
     QString verzeichnis_ziel_lokal();
@@ -65,6 +68,7 @@ public:
     bool export_eigen();
 
 private:
+    bool Entwicklermodus;
     QString Verzeichnis_quelle;
     QString Verzeichnis_ziel_server;
     QString Verzeichnis_ziel_lokal;

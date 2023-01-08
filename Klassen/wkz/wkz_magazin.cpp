@@ -8,7 +8,20 @@ wkz_magazin::wkz_magazin(text_zw neues_magazin)
 {
     Magazin = neues_magazin;
 }
+//----------------------------------set:
+void wkz_magazin::set_text(QString werkzeuge)
+{
+    Magazin.set_text(werkzeuge);
+}
 //----------------------------------get:
+text_zw *wkz_magazin::magazin_ptr()
+{
+    return &Magazin;
+}
+QString wkz_magazin::text()
+{
+    return Magazin.text();
+}
 QString wkz_magazin::wkznummer(QString wkz_typ, \
                                double dm, \
                                double bearbeitungstiefe, \
@@ -159,6 +172,10 @@ QString wkz_magazin::wkznummer(QString wkz_typ, \
 }
 QString wkz_magazin::wkznummer_von_alias(QString alias)
 {
+    if(alias.isEmpty())
+    {
+        return "";
+    }
     for(uint i=0; i<Magazin.count();i++)
     {
         QString zeile = Magazin.at(i);
@@ -167,7 +184,7 @@ QString wkz_magazin::wkznummer_von_alias(QString alias)
             if(  typ(zeile) == WKZ_TYP_FRAESER  )
             {
                 wkz_fraeser fraeser(zeile);
-                if(  fraeser.alias() == alias &&  !alias.isEmpty()  )
+                if(fraeser.alias() == alias)
                 {
                     return fraeser.wkznr();
                 }
@@ -177,6 +194,230 @@ QString wkz_magazin::wkznummer_von_alias(QString alias)
     //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
     return "";
 }
+QString wkz_magazin::dm(QString wkz_nr)
+{
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(wkznr(zeile) == wkz_nr)
+        {
+            if(typ(zeile) == WKZ_TYP_FRAESER)
+            {
+                wkz_fraeser fraeser(zeile);
+                return double_to_qstring(fraeser.dm());
+            }else if(typ(zeile) == WKZ_TYP_BOHRER)
+            {
+                wkz_bohrer bohrer(zeile);
+                return double_to_qstring(bohrer.dmimport());
+            }else if(typ(zeile) == WKZ_TYP_SAEGE)
+            {
+                wkz_saege saege(zeile);
+                return double_to_qstring(saege.dm());
+            }
+        }
+    }
+    //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
+    return "0";
+}
+bool wkz_magazin::ist_dubo(QString wkz_nr)
+{
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(wkznr(zeile) == wkz_nr)
+        {
+            if(typ(zeile) == WKZ_TYP_BOHRER)
+            {
+                wkz_bohrer bohrer(zeile);
+                return bohrer.istdubo();
+            }
+        }
+    }
+    //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
+    return false;
+}
+QString wkz_magazin::vorschub(QString wkz_nr)
+{
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(wkznr(zeile) == wkz_nr)
+        {
+            if(typ(zeile) == WKZ_TYP_FRAESER)
+            {
+                wkz_fraeser fraeser(zeile);
+                return double_to_qstring(fraeser.vorschub());
+            }else if(typ(zeile) == WKZ_TYP_BOHRER)
+            {
+                //wkz_bohrer bohrer(zeile);
+                //return double_to_qstring(...);
+                return "0";
+            }else if(typ(zeile) == WKZ_TYP_SAEGE)
+            {
+                //wkz_saege saege(zeile);
+                //return double_to_qstring(...);
+                return "0";
+            }
+        }
+    }
+    //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
+    return "0";
+}
+QString wkz_magazin::zustellmass(QString wkz_nr)
+{
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(wkznr(zeile) == wkz_nr)
+        {
+            if(typ(zeile) == WKZ_TYP_FRAESER)
+            {
+                wkz_fraeser fraeser(zeile);
+                return double_to_qstring(fraeser.zustma());
+            }else if(typ(zeile) == WKZ_TYP_BOHRER)
+            {
+                wkz_bohrer bohrer(zeile);
+                return double_to_qstring(bohrer.zustma());
+            }else if(typ(zeile) == WKZ_TYP_SAEGE)
+            {
+                wkz_saege saege(zeile);
+                return double_to_qstring(saege.zustma());
+            }
+        }
+    }
+    //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
+    return "0";
+}
+QString wkz_magazin::zustellmass_min(QString wkz_nr)
+{
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(wkznr(zeile) == wkz_nr)
+        {
+            if(typ(zeile) == WKZ_TYP_FRAESER)
+            {
+                wkz_fraeser fraeser(zeile);
+                return double_to_qstring(fraeser.minzust());
+            }else if(typ(zeile) == WKZ_TYP_BOHRER)
+            {
+                //wkz_bohrer bohrer(zeile);
+                //return double_to_qstring(...);
+                return "0";
+            }else if(typ(zeile) == WKZ_TYP_SAEGE)
+            {
+                //wkz_saege saege(zeile);
+                //return double_to_qstring(...);
+                return "0";
+            }
+        }
+    }
+    //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
+    return "0";
+}
+QString wkz_magazin::saegeblattbreite(QString wkz_nr)
+{
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(wkznr(zeile) == wkz_nr)
+        {
+            if(typ(zeile) == WKZ_TYP_SAEGE)
+            {
+                wkz_saege saege(zeile);
+                return double_to_qstring(saege.sbreite());
+            }
+        }
+    }
+    //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
+    return "0";
+}
+QString wkz_magazin::nutzlaenge(QString wkz_nr)
+{
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(wkznr(zeile) == wkz_nr)
+        {
+            if(typ(zeile) == WKZ_TYP_FRAESER)
+            {
+                wkz_fraeser fraeser(zeile);
+                return double_to_qstring(fraeser.nutzl());
+            }else if(typ(zeile) == WKZ_TYP_BOHRER)
+            {
+                wkz_bohrer bohrer(zeile);
+                return double_to_qstring(bohrer.nutzl());
+            }else if(typ(zeile) == WKZ_TYP_SAEGE)
+            {
+                //wkz_saege saege(zeile);
+                //return double_to_qstring(...);
+                return "0";
+            }
+        }
+    }
+    //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
+    return "0";
+}
+text_zw wkz_magazin::alle_bodm_hori()
+{
+    text_zw tz;
+    tz.set_trenz(WKZ_TRENNZ);
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(istaktiv(zeile))
+        {
+            if(typ(zeile) == WKZ_TYP_BOHRER)
+            {
+                wkz_bohrer bohrer(zeile);
+                if(bohrer.isthori())
+                {
+                    tz.add_hi(double_to_qstring(bohrer.dmimport()));
+                }
+            }
+        }
+    }
+    return tz;
+}
+text_zw wkz_magazin::alle_bodm_verti()
+{
+    text_zw tz;
+    tz.set_trenz(WKZ_TRENNZ);
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(istaktiv(zeile))
+        {
+            if(typ(zeile) == WKZ_TYP_BOHRER)
+            {
+                wkz_bohrer bohrer(zeile);
+                if(bohrer.istverti())
+                {
+                    tz.add_hi(double_to_qstring(bohrer.dmimport()));
+                }
+            }
+        }
+    }
+    return tz;
+}
+QString wkz_magazin::spiegelwkz(QString wkz_nr)
+{
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        QString zeile = Magazin.at(i);
+        if(wkznr(zeile) == wkz_nr)
+        {
+            if(typ(zeile) == WKZ_TYP_FRAESER)
+            {
+                wkz_fraeser fraeser(zeile);
+                return fraeser.spiegelwkz();
+            }
+        }
+    }
+    //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
+    return "";
+}
+
 
 //----------------------------------private get:
 QString wkz_magazin::typ(QString wkz)
@@ -197,3 +438,10 @@ bool wkz_magazin::istaktiv(QString wkz)
         return false;
     }
 }
+QString wkz_magazin::wkznr(QString wkz)
+{
+    //1: Werkzeugnummer
+    text_zw wkz_tz(wkz, WKZ_TRENNZ);
+    return wkz_tz.at(1);
+}
+//----------------------------------

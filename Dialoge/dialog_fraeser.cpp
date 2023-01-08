@@ -81,6 +81,7 @@ void Dialog_fraeser::on_pushButton_abbrechen_clicked()
 void Dialog_fraeser::on_pushButton_ok_clicked()
 {
     this->hide();
+    //-------------------------------------------------------------alt:
     text_zeilenweise wkz;
     wkz.set_trennzeichen('\t');
 
@@ -119,4 +120,20 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
         wkz.zeile_ersaetzen(i, wkz.zeile(i).replace(",","."));
     }
     emit sendData(wkz, wkz_ist_neu);
+    //-------------------------------------------------------------neu:
+    wkz_fraeser fraeser;
+    fraeser.set_wkznr(ui->lineEdit_nr->text());
+    fraeser.set_dm(berechnen(ui->lineEdit_dm->text()).toDouble());
+    fraeser.set_nutzl(berechnen(ui->lineEdit_nutzl->text()).toDouble());
+    fraeser.set_vorschub(berechnen(ui->lineEdit_voers->text()).toDouble());
+    fraeser.set_zustma(berechnen(ui->lineEdit_zustm->text()).toDouble());
+    fraeser.set_isthori(false);//noch checkbox in gui ergänzen
+    fraeser.set_istverti(true);//noch checkbox in gui ergänzen
+    fraeser.set_alias(ui->lineEdit_alias->text().toUpper());
+        //Beim Einlesen der FMC-Datei werden alle kleinen Buchstaben durch große ersetzt
+    fraeser.set_minzust(berechnen(ui->lineEdit_zust_min->text()).toDouble());
+    fraeser.set_spiegelwkz(ui->lineEdit_spiegel->text());
+    fraeser.set_nurdirektzuw(ui->checkBox_nur_direkt_zuweisbar->isChecked());
+    fraeser.set_istaktiv(ui->checkBox_ist_aktiv->isChecked());
+    emit sendData(fraeser.daten(), wkz_ist_neu);
 }

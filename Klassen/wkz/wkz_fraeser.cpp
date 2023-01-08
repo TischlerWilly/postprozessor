@@ -180,6 +180,10 @@ double wkz_fraeser::zustma()
 {
     return Zustellmass;
 }
+double wkz_fraeser::minzust()
+{
+    return MinZust;
+}
 double wkz_fraeser::vorschub()
 {
     return Vorschub;

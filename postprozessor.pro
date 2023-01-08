@@ -47,6 +47,7 @@ SOURCES += main.cpp\
     Klassen/wkz/wkz_saege.cpp \
     Klassen/wst/gehrung.cpp \
     Klassen/wst/wstzustand.cpp \
+    mainwin_wkzmagazin.cpp \
     mainwin_wst_bearbeiten.cpp \
         mainwindow.cpp \
     Klassen/formel.cpp \
@@ -158,6 +159,7 @@ HEADERS  += mainwindow.h \
     Defines//def_vw.h \
     Dialoge/dialog_stdnamen.h \
     Dialoge/dialog_stdname.h \
+    mainwin_wkzmagazin.h \
     mainwin_wst_bearbeiten.h
 
 FORMS    += mainwindow.ui \
@@ -181,6 +183,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_saege.ui \
     Dialoge/dialog_stdnamen.ui \
     Dialoge/dialog_stdname.ui \
+    mainwin_wkzmagazin.ui \
     mainwin_wst_bearbeiten.ui
 
 DISTFILES += \

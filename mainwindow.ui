@@ -731,11 +731,14 @@
     <addaction name="actionExportUebersicht"/>
     <addaction name="actionWST_ausblenden"/>
     <addaction name="actionWST_bearbeiten"/>
+    <addaction name="separator"/>
+    <addaction name="actionTestfunktion"/>
    </widget>
    <widget class="QMenu" name="menuEinstellungen">
     <property name="title">
      <string>Einstellungen</string>
     </property>
+    <addaction name="actionEntwicklermodus"/>
     <addaction name="actionEinstellung_pfade"/>
     <addaction name="actionStandard_Namen_anzeigen"/>
     <addaction name="actionEinstellung_ganx"/>
@@ -813,6 +816,19 @@
    </property>
    <property name="shortcut">
     <string>F3</string>
+   </property>
+  </action>
+  <action name="actionEntwicklermodus">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Entwicklermodus</string>
+   </property>
+  </action>
+  <action name="actionTestfunktion">
+   <property name="text">
+    <string>Testfunktion</string>
    </property>
   </action>
  </widget>

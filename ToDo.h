@@ -2,16 +2,14 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.23.01.01"
+#define PROGRAMMVERSION "3.23.01.08"
 #endif //PROGRAMMVERSION
 /*
 
-- text_zw
-    -->void MainWindow::dateien_erfassen() in dieser Funktion habe ich die Testaufrufe unter gebracht
 
-- neue Klasse für wkzmag
-->(werkzeigmagazin.h)
- >QString wkz_magazin::wkznummer(...)
+void MainWindow::on_actionTestfunktion_triggered()
+-->neuer dlg für wkzmag (mainwin_wkzmagazin.h)
+-->void MainWindow::on_actionWerkzeug_ggf_anzeigen_triggered()
 
 
 
