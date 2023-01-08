@@ -13,7 +13,8 @@ Klasser erstellen für Werkzeuge:
 - Bohrer
 - Fräser
 - Säge
-->werkzeigmagazin.h
+- neue Klasse für wkzmag
+->(werkzeigmagazin.h)
 
 
 

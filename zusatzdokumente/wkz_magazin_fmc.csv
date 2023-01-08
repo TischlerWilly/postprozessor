@@ -8,10 +8,11 @@ B	B7c Hori	7	35	 	20	7	0	 	hori	 	 	 	 	1
 B	B8a KronBo	8	35	 	8	8	0	 	vert	 	 	 	 	1
 B	B8b Hori	8.2	35	 	20	8.2	0	 	hori	 	 	 	 	1
 B	B8c DuBo	8.1	35	 	5	8	1	 	vert	 	 	 	 	1
+B	B9b Hori	9	35	 	20	9	0	 	hori	 	 	 	 	1
 B	B10a KronBo	10	35	 	8	10	0	 	vert	 	 	 	 	1
 B	B10c DuBo	10.1	35	 	8	10	1	 	vert	 	 	 	 	0
 B	B15a KronBo	15	35	 	8	15	0	 	vert	 	 	 	 	1
-S	Saege- 425	200	 	 	10	 	 	3.5	vert	 	 	 	 	1
+S	Saege- 425	200	 	 	10	 	 	3.5	vert	 	 	 	 	1	0	1
 M	IMA608	8	20	4500	5	 	 	 	vert	IMA608	0		nein	1
 M	IMA602	18	46	7000	12	 	 	 	vert	IMA602	12	IMA601	nein	1
 M	IMA602	18	46	7000	12	 	 	 	vert	602	12	IMA601	nein	1
@@ -25,3 +26,5 @@ M	IMA642 DIA Rechts	20	60	4500	10	 	 	 	vert	IMA642 DIA RECHTS	0		ja	1
 M	IMA643 DIA Links	20	60	4500	10	 	 	 	vert	IMA643 DIA LINKS	0		ja	1
 M	IMA 652 Wendep 16mm NL50 Schlichten	16	50	5000	50	 	 	 	vert	652	0	IMA 652 Wendep 16mm NL50 Schlichten	ja	1
 M	613 nut Dreieck	1	8	5000	2	 	 	 	vert	613 NUT DREIECK	0		ja	1
+M	IMA 4354	10	35	4500	5	 	 	 	vert	IMA 4354	0		ja	1
+S	IMA 611 Horizontal nut 4mm D20	120	 	 	0	 	 	4	vert	 	 	 	 	1	1	0

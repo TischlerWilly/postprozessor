@@ -1,10 +1,12 @@
 Typ	Nr	DM	Nutzl	Vorschub	Zustellm	DM_CAD	DoBor	Saegebr	Lage	Alias	MindZust	SpiegelWKZ	 
 B	8er Spiral 2	8	40	 	6	8	0	 	vert	 	 	 	 	1
+B	608	8	40	 	6	8	0	 	vert	 	 	 	 	1
 B	6er Spiral 2	6	22	 	4	6	0	 	vert	 	 	 	 	1
 B	4er Spiral 2	4	16	 	4	4	0	 	vert	 	 	 	 	1
 B	V-Nutfraeser	1	10	 	2	1	0	 	vert	 	 	 	 	1
 M	8er Spiral 2	8	40	1200	4	 	 	 	vert	602	0		nein	1
 M	8er Spiral 2	8	40	1200	4	 	 	 	vert	IMA602	0		nein	1
+M	8er Spiral 2	8	40	1200	4	 	 	 	vert	608	0		nein	1
 M	6er Spiral 2	6	22	1200	6	 	 	 	vert	6ER SPIRAL 2	0		nein	1
 M	4er Spiral 2	4	16	1100	4	 	 	 	vert	4ER SPIRAL 2	0		nein	1
 M	16r Wendeplatte	16	30	700	4	 	 	 	vert	16R WENDEPLATTE	0		nein	1
