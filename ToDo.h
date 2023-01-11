@@ -2,10 +2,12 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.23.01.08"
+#define PROGRAMMVERSION "3.23.01.11"
 #endif //PROGRAMMVERSION
 /*
 
+bug: das Einlesen von fmc-Dateien mit Halt liest Bohrungen nicht ein die von
+     der Unterseite und von der Oberseite gleich sind
 
 void MainWindow::on_actionTestfunktion_triggered()
 -->neuer dlg für wkzmag (mainwin_wkzmagazin.h)

@@ -34,7 +34,7 @@ QString text_zw::at(uint zeilennummer)
         ret = Daten.at(zeilennummer);
     }else
     {
-        ret = "Fehler! Zeilennummer zu hoch.";
+        ret = "Fehler in Funktion text_zw::at(...)! Zeilennummer zu hoch.";
     }
     return ret;
 }
@@ -54,7 +54,7 @@ QString text_zw::at(uint zeilennummer_beginn, uint zeilenmenge)
         }
     }else
     {
-        ret = "Fehler! Zeilennummer + Menge > Wertebereich";
+        ret = "Fehler in Funktion text_zw::at(...)! Zeilennummer + Menge > Wertebereich";
     }
     return ret;
 }

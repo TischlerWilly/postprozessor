@@ -72,8 +72,6 @@ void geometrietext::add_bogen(bogen b)
 }
 void geometrietext::add_bogen(bogen b, uint zeile)
 {
-    //b.get_mb();
-
     QString alter_inhalt = Text.zeile(zeile);
     Text.zeile_ersaetzen(zeile, alter_inhalt + BOGEN + TRZ_PA + \
                          b.start().x_QString() + TRZ_PA + \

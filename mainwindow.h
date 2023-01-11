@@ -90,9 +90,7 @@ private slots:
     void on_actionEinstellung_dxf_triggered();
     void on_actionWST_bearbeiten_triggered();
     void on_listWidget_wste_itemClicked(QListWidgetItem *item);
-
     void on_actionEntwicklermodus_triggered(bool checked);
-
     void on_actionTestfunktion_triggered();
 
 private:
