@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>401</height>
+    <height>440</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>360</y>
+     <y>400</y>
      <width>231</width>
      <height>31</height>
     </rect>
@@ -48,14 +48,14 @@
      <x>20</x>
      <y>10</y>
      <width>371</width>
-     <height>351</height>
+     <height>381</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_alias">
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_vors">
       <property name="text">
-       <string>Alias-Name</string>
+       <string>Vorschub</string>
       </property>
      </widget>
     </item>
@@ -73,8 +73,48 @@
       </property>
      </widget>
     </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_spiegel">
+      <property name="text">
+       <string>Spiegelwerkzeug</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QCheckBox" name="checkBox_ist_hori">
+      <property name="text">
+       <string>kann horizontal fräsen</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="1">
      <widget class="QLineEdit" name="lineEdit_nr"/>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit_zust_min"/>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEdit_voers"/>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="lineEdit_spiegel"/>
+    </item>
+    <item row="12" column="1">
+     <widget class="QCheckBox" name="checkBox_ist_aktiv">
+      <property name="text">
+       <string>ist aktiv</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_zust_min">
+      <property name="text">
+       <string>Mind. Zustellung</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm"/>
     </item>
     <item row="8" column="1">
      <widget class="QCheckBox" name="checkBox_nur_direkt_zuweisbar">
@@ -83,10 +123,10 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_vors">
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_alias">
       <property name="text">
-       <string>Vorschub</string>
+       <string>Alias-Name</string>
       </property>
      </widget>
     </item>
@@ -100,26 +140,13 @@
     <item row="3" column="1">
      <widget class="QLineEdit" name="lineEdit_zustm"/>
     </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="lineEdit_voers"/>
-    </item>
-    <item row="7" column="1">
-     <widget class="QLineEdit" name="lineEdit_spiegel"/>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_nutzl"/>
     </item>
     <item row="6" column="1">
      <widget class="QLineEdit" name="lineEdit_alias">
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ein Alias-Name ist ein zweiter Name für das selbe Werkzeug. Wird mehr als ein Alias-Name benötigt, so kann das Werkzeug dupliziert werden und dem Duplikat ein anderer Alias-Name zugewiesen werden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="lineEdit_zust_min"/>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_zust_min">
-      <property name="text">
-       <string>Mind. Zustellung</string>
       </property>
      </widget>
     </item>
@@ -130,23 +157,10 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_nutzl"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_dm"/>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="label_spiegel">
-      <property name="text">
-       <string>Spiegelwerkzeug</string>
-      </property>
-     </widget>
-    </item>
     <item row="9" column="1">
-     <widget class="QCheckBox" name="checkBox_ist_aktiv">
+     <widget class="QCheckBox" name="checkBox_ist_veti">
       <property name="text">
-       <string>ist aktiv</string>
+       <string>kann vertikal fräsen</string>
       </property>
      </widget>
     </item>
@@ -163,6 +177,10 @@
   <tabstop>lineEdit_voers</tabstop>
   <tabstop>lineEdit_alias</tabstop>
   <tabstop>lineEdit_spiegel</tabstop>
+  <tabstop>checkBox_nur_direkt_zuweisbar</tabstop>
+  <tabstop>checkBox_ist_veti</tabstop>
+  <tabstop>checkBox_ist_hori</tabstop>
+  <tabstop>checkBox_ist_aktiv</tabstop>
   <tabstop>pushButton_abbrechen</tabstop>
  </tabstops>
  <resources/>

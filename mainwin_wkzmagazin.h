@@ -2,6 +2,7 @@
 #define MAINWIN_WKZMAGAZIN_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 #include "Klassen/wkz/wkz_magazin.h"
 #include "Dialoge/dialog_fraeser.h"
 #include "Dialoge/dialog_bohrer.h"
@@ -26,13 +27,19 @@ private slots:
     void on_actionFraeser_anlegen_triggered();
     void on_actionBohrer_anlegen_triggered();
     void on_actionSaege_anlegen_triggered();
+    void on_actionRunter_triggered();
+    void on_actionHoch_triggered();
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+    void on_listWidget_currentRowChanged(int currentRow);
+    void on_actionL_schen_triggered();
 
 public slots:
     void getData(text_zw wkz, bool ist_neues_wkz);
 
 private:
-
     void liste_aktualisieren();
+    void info_aktualisieren(uint index);
+    void edit(uint index);
 
     Ui::mainwin_wkzmagazin *ui;
     wkz_magazin     Magazin;

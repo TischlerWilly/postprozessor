@@ -20,15 +20,16 @@ class Dialog_fraeser : public QDialog
 public:
     explicit Dialog_fraeser(QWidget *parent = 0);
     ~Dialog_fraeser();
+    void clear();
 
 private:
-    Ui::Dialog_fraeser *ui;
-    void clear();
+    Ui::Dialog_fraeser *ui;    
     void setup();
     bool wkz_ist_neu;
 
 public slots:
     void getData(text_zeilenweise msg);
+    void getData(text_zw msg);
     void neuerFraeser();
 
 signals:

@@ -194,3 +194,6 @@ DISTFILES += \
     postprozessor.ico
 
 RC_ICONS = postprozessor.ico
+
+RESOURCES += \
+    toolbaricons.qrc

@@ -417,8 +417,35 @@ QString wkz_magazin::spiegelwkz(QString wkz_nr)
     //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
     return "";
 }
-
-
+//----------------------------------manipulation:
+void wkz_magazin::item_down(uint index)
+{
+    if(index+1 < Magazin.count())
+    {
+        QString tmp = Magazin.at(index);
+        Magazin.entf(index);
+        Magazin.add_mi(index, tmp);
+    }
+}
+void wkz_magazin::item_up(uint index)
+{
+    if(index < Magazin.count() && index > 0)
+    {
+        QString tmp = Magazin.at(index);
+        Magazin.entf(index);
+        if(index == 1)
+        {
+            Magazin.add_vo(tmp);
+        }else
+        {
+            Magazin.add_mi(index-2, tmp);
+        }
+    }
+}
+void wkz_magazin::entf(uint index)
+{
+    Magazin.entf(index);
+}
 //----------------------------------private get:
 QString wkz_magazin::typ(QString wkz)
 {

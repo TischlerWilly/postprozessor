@@ -45,6 +45,36 @@ void Dialog_fraeser::getData(text_zeilenweise msg)
 
     this->show();
 }
+void Dialog_fraeser::getData(text_zw msg)
+{
+    clear();
+    setup();
+    wkz_ist_neu = false;
+    wkz_fraeser wkz(msg);
+
+    QString m;
+    m += "tz:\n";
+    m += msg.text();
+    m += "\nwe\n:";
+    m += wkz.daten().text();;
+    QMessageBox mb;
+    mb.setText(m);
+    //mb.exec();
+
+    ui->lineEdit_nr->setText(wkz.wkznr());
+    ui->lineEdit_dm->setText(double_to_qstring(wkz.dm()));
+    ui->lineEdit_nutzl->setText(double_to_qstring(wkz.nutzl()));
+    ui->lineEdit_zustm->setText(double_to_qstring(wkz.zustma()));
+    ui->lineEdit_voers->setText(double_to_qstring(wkz.vorschub()));
+    ui->lineEdit_alias->setText(wkz.alias());
+    ui->lineEdit_zust_min->setText(double_to_qstring(wkz.minzust()));
+    ui->lineEdit_spiegel->setText(wkz.spiegelwkz());
+    ui->checkBox_nur_direkt_zuweisbar->setChecked(wkz.nurdirektzuw());
+    ui->checkBox_ist_aktiv->setChecked(wkz.istaktiv());
+    ui->checkBox_ist_hori->setChecked(wkz.isthori());
+    ui->checkBox_ist_veti->setChecked(wkz.istverti());
+    this->show();
+}
 
 void Dialog_fraeser::neuerFraeser()
 {
@@ -135,5 +165,7 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     fraeser.set_spiegelwkz(ui->lineEdit_spiegel->text());
     fraeser.set_nurdirektzuw(ui->checkBox_nur_direkt_zuweisbar->isChecked());
     fraeser.set_istaktiv(ui->checkBox_ist_aktiv->isChecked());
+    fraeser.set_isthori(ui->checkBox_ist_hori->isChecked());
+    fraeser.set_istverti(ui->checkBox_ist_veti->isChecked());
     emit sendData(fraeser.daten(), wkz_ist_neu);
 }

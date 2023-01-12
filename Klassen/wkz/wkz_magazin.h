@@ -34,7 +34,10 @@ public:
     text_zw alle_bodm_hori();
     text_zw alle_bodm_verti();
     QString spiegelwkz(QString wkz_nr);
-
+    //----------------------------------manipulation:
+    void item_down(uint index);
+    void item_up(uint index);
+    void entf(uint index);
 
 private:
     QString typ(QString wkz);
