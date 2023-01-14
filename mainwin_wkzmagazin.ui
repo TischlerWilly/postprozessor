@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>581</width>
-    <height>600</height>
+    <width>590</width>
+    <height>642</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>581</width>
+     <width>590</width>
      <height>21</height>
     </rect>
    </property>
@@ -68,6 +68,15 @@
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>35</width>
+     <height>35</height>
+    </size>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -76,8 +85,16 @@
    </attribute>
    <addaction name="actionHoch"/>
    <addaction name="actionRunter"/>
+   <addaction name="separator"/>
+   <addaction name="actionFraeser_anlegen"/>
+   <addaction name="actionBohrer_anlegen"/>
+   <addaction name="actionSaege_anlegen"/>
   </widget>
   <action name="actionFraeser_anlegen">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/Fraese 100x100.png</normaloff>:/new/toolbaricons/toolbaricons/Fraese 100x100.png</iconset>
+   </property>
    <property name="text">
     <string>Fräser anlegen</string>
    </property>
