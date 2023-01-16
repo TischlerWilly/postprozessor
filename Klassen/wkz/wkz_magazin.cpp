@@ -6,17 +6,25 @@ wkz_magazin::wkz_magazin()
 }
 wkz_magazin::wkz_magazin(text_zw neues_magazin)
 {
-    Magazin = neues_magazin;
+    set_text(neues_magazin);
 }
 //----------------------------------set:
 void wkz_magazin::set_text(QString werkzeuge)
 {
     Magazin.set_text(werkzeuge);
 }
+void wkz_magazin::set_text(text_zw werkzeuge)
+{
+    Magazin = werkzeuge;
+}
 //----------------------------------get:
 text_zw *wkz_magazin::magazin_ptr()
 {
     return &Magazin;
+}
+text_zw wkz_magazin::magazin()
+{
+    return Magazin;
 }
 QString wkz_magazin::text()
 {

@@ -18,7 +18,7 @@ void Dialog_fraeser::getData(text_zeilenweise msg)
 {
     clear();
     setup();
-    wkz_ist_neu = false;
+    Wkz_ist_neu = false;
     ui->lineEdit_nr->setText(msg.zeile(2));
     ui->lineEdit_dm->setText(msg.zeile(3));
     ui->lineEdit_nutzl->setText(msg.zeile(4));
@@ -45,11 +45,11 @@ void Dialog_fraeser::getData(text_zeilenweise msg)
 
     this->show();
 }
-void Dialog_fraeser::getData(text_zw msg)
+void Dialog_fraeser::getData(text_zw msg, bool ist_neues_wkz)
 {
     clear();
     setup();
-    wkz_ist_neu = false;
+    Wkz_ist_neu = ist_neues_wkz;
     wkz_fraeser wkz(msg);
 
     QString m;
@@ -80,7 +80,7 @@ void Dialog_fraeser::neuerFraeser()
 {
     clear();
     setup();
-    wkz_ist_neu = true;
+    Wkz_ist_neu = true;
     this->show();
 }
 
@@ -149,7 +149,7 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     {
         wkz.zeile_ersaetzen(i, wkz.zeile(i).replace(",","."));
     }
-    emit sendData(wkz, wkz_ist_neu);
+    emit sendData(wkz, Wkz_ist_neu);
     //-------------------------------------------------------------neu:
     wkz_fraeser fraeser;
     fraeser.set_wkznr(ui->lineEdit_nr->text());
@@ -167,5 +167,5 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     fraeser.set_istaktiv(ui->checkBox_ist_aktiv->isChecked());
     fraeser.set_isthori(ui->checkBox_ist_hori->isChecked());
     fraeser.set_istverti(ui->checkBox_ist_veti->isChecked());
-    emit sendData(fraeser.daten(), wkz_ist_neu);
+    emit sendData(fraeser.daten(), Wkz_ist_neu);
 }

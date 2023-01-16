@@ -6,5 +6,8 @@
         <file>toolbaricons/drill.png</file>
         <file>toolbaricons/saw.png</file>
         <file>toolbaricons/Fraese 100x100.png</file>
+        <file>toolbaricons/kopieren.png</file>
+        <file>toolbaricons/redo.png</file>
+        <file>toolbaricons/undo.png</file>
     </qresource>
 </RCC>

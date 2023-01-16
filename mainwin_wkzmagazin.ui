@@ -56,9 +56,15 @@
     <property name="title">
      <string>Bearbeiten</string>
     </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
     <addaction name="actionHoch"/>
     <addaction name="actionRunter"/>
+    <addaction name="separator"/>
     <addaction name="actionL_schen"/>
+    <addaction name="separator"/>
+    <addaction name="actionDuplizieren"/>
    </widget>
    <addaction name="menuneues_Werkzeug"/>
    <addaction name="menuBearbeiten"/>
@@ -86,9 +92,16 @@
    <addaction name="actionHoch"/>
    <addaction name="actionRunter"/>
    <addaction name="separator"/>
+   <addaction name="actionDuplizieren"/>
+   <addaction name="separator"/>
+   <addaction name="actionL_schen"/>
+   <addaction name="separator"/>
    <addaction name="actionFraeser_anlegen"/>
    <addaction name="actionBohrer_anlegen"/>
    <addaction name="actionSaege_anlegen"/>
+   <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
   </widget>
   <action name="actionFraeser_anlegen">
    <property name="icon">
@@ -145,6 +158,39 @@
    </property>
    <property name="shortcut">
     <string>Del</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/undo.png</normaloff>:/new/toolbaricons/toolbaricons/undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rückgängig</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/redo.png</normaloff>:/new/toolbaricons/toolbaricons/redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Wiederholen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionDuplizieren">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/kopieren.png</normaloff>:/new/toolbaricons/toolbaricons/kopieren.png</iconset>
+   </property>
+   <property name="text">
+    <string>Duplizieren</string>
    </property>
   </action>
  </widget>

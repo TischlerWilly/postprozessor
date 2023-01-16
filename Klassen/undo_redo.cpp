@@ -1,5 +1,5 @@
-#include "undo_redo_tz.h"
-
+#include "undo_redo.h"
+/*
 undo_redo_tz::undo_redo_tz()
 {
     set_groesse_max(20);
@@ -88,7 +88,7 @@ text_zeilenweise undo_redo_tz::redo()
 }
 
 //----------------------------------------
-
+*/
 
 
 

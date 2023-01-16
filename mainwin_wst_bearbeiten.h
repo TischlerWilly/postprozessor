@@ -15,7 +15,7 @@
 #include "Dialoge/dialog_bearb_verschieben.h"
 
 #include "Funktionen/funktionen_prgtext.h"
-#include "Klassen/undo_redo_tz.h"
+#include "Klassen/undo_redo.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWin_wst_bearbeiten; }
@@ -34,7 +34,7 @@ private:
     Ui::MainWin_wst_bearbeiten *ui;
     vorschau vorschaufenster;
     werkstueck *Wst;
-    undo_redo_tz UnReDo;
+    undo_redo<text_zeilenweise> UnReDo;
     QString KopierterEintrag;
 
     void clear();

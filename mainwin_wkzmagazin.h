@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
+#include <Klassen/undo_redo.h>
 #include "Klassen/wkz/wkz_magazin.h"
 #include "Dialoge/dialog_fraeser.h"
 #include "Dialoge/dialog_bohrer.h"
@@ -32,6 +33,9 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_listWidget_currentRowChanged(int currentRow);
     void on_actionL_schen_triggered();
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
+    void on_actionDuplizieren_triggered();
 
 public slots:
     void getData(text_zw wkz, bool ist_neues_wkz);
@@ -43,6 +47,7 @@ private:
 
     Ui::mainwin_wkzmagazin *ui;
     wkz_magazin     Magazin;
+    undo_redo<wkz_magazin> UnReDo;
     Dialog_fraeser  dlg_fraeser;
     Dialog_bohrer   dlg_bohrer;
     Dialog_saege    dlg_saege;

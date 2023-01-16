@@ -18,6 +18,7 @@ mainwin_wkzmagazin::~mainwin_wkzmagazin()
 void mainwin_wkzmagazin::set_wkzmag(wkz_magazin w)
 {
     Magazin = w;
+    UnReDo.neu(Magazin);
     liste_aktualisieren();
 }
 //-------------------------------------get:
@@ -118,11 +119,13 @@ void mainwin_wkzmagazin::getData(text_zw wkz, bool ist_neues_wkz)
     if(ist_neues_wkz)
     {
         Magazin.magazin_ptr()->add_hi(wkz.text());
+        UnReDo.neu(Magazin);
         liste_aktualisieren();
     }else
     {
         int index = ui->listWidget->currentRow();
         Magazin.magazin_ptr()->edit(index, wkz.text());
+        UnReDo.neu(Magazin);
         liste_aktualisieren();
         ui->listWidget->setCurrentRow(index);
     }
@@ -148,6 +151,7 @@ void mainwin_wkzmagazin::on_actionRunter_triggered()
        (ui->listWidget->currentItem()->isSelected())    )
     {
         Magazin.item_down(index);
+        UnReDo.neu(Magazin);
         liste_aktualisieren();
         if(index+2 < ui->listWidget->count())
         {
@@ -156,7 +160,7 @@ void mainwin_wkzmagazin::on_actionRunter_triggered()
         {
             ui->listWidget->setCurrentRow(index);
         }
-    }
+    }    
 }
 void mainwin_wkzmagazin::on_actionHoch_triggered()
 {
@@ -165,6 +169,7 @@ void mainwin_wkzmagazin::on_actionHoch_triggered()
        (ui->listWidget->currentItem()->isSelected())    )
     {
         Magazin.item_up(index);
+        UnReDo.neu(Magazin);
         liste_aktualisieren();
         if(index > 0)
         {
@@ -191,6 +196,37 @@ void mainwin_wkzmagazin::on_actionL_schen_triggered()
        (ui->listWidget->currentItem()->isSelected())    )
     {
         Magazin.entf(index);
+        UnReDo.neu(Magazin);
         liste_aktualisieren();
+    }
+}
+void mainwin_wkzmagazin::on_actionUndo_triggered()
+{
+    Magazin = UnReDo.undo();
+    liste_aktualisieren();
+}
+void mainwin_wkzmagazin::on_actionRedo_triggered()
+{
+    Magazin = UnReDo.redo();
+    liste_aktualisieren();
+}
+void mainwin_wkzmagazin::on_actionDuplizieren_triggered()
+{
+    int index = ui->listWidget->currentRow();
+    if((ui->listWidget->currentIndex().isValid())  &&  \
+       (ui->listWidget->currentItem()->isSelected())    )
+    {
+        text_zw wkz;
+        wkz.set_text(Magazin.magazin_ptr()->at(index), WKZ_TRENNZ);
+        if(wkz.at(0) == WKZ_TYP_FRAESER)
+        {
+            dlg_fraeser.getData(wkz, true);
+        }else if(wkz.at(0) == WKZ_TYP_BOHRER)
+        {
+
+        }else if(wkz.at(0) == WKZ_TYP_SAEGE)
+        {
+
+        }
     }
 }

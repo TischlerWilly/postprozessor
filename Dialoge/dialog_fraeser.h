@@ -25,11 +25,11 @@ public:
 private:
     Ui::Dialog_fraeser *ui;    
     void setup();
-    bool wkz_ist_neu;
+    bool Wkz_ist_neu;
 
 public slots:
     void getData(text_zeilenweise msg);
-    void getData(text_zw msg);
+    void getData(text_zw msg, bool ist_neues_wkz = false);
     void neuerFraeser();
 
 signals:

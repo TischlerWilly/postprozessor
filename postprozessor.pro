@@ -41,7 +41,7 @@ SOURCES += main.cpp\
     Klassen/geo/wuerfel.cpp \
     Klassen/geo/zylinder.cpp \
     Klassen/text_zw.cpp \
-    Klassen/undo_redo_tz.cpp \
+    Klassen/undo_redo.cpp \
     Klassen/wkz/wkz_bohrer.cpp \
     Klassen/wkz/wkz_fraeser.cpp \
     Klassen/wkz/wkz_magazin.cpp \
@@ -117,7 +117,7 @@ HEADERS  += mainwindow.h \
     Klassen/geo/zylinder.h \
     Klassen/text_zeilenweise.h \
     Klassen/text_zw.h \
-    Klassen/undo_redo_tz.h \
+    Klassen/undo_redo.h \
     Klassen/wenndannsonst.h \
     Funktionen/myfunktion.h \
     Funktionen/runden.h \

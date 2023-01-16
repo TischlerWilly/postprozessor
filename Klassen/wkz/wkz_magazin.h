@@ -15,8 +15,10 @@ public:
 
     //----------------------------------set:
     void set_text(QString werkzeuge);
+    void set_text(text_zw werkzeuge);
     //----------------------------------get:
     text_zw *magazin_ptr();
+    text_zw magazin();
     QString text();
     QString wkznummer(QString wkz_typ, \
                           double dm = 0, \
