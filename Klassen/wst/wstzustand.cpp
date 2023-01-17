@@ -12653,23 +12653,23 @@ void wstzustand::geo(int index)
                 if(rt.bezug() == WST_BEZUG_LI)
                 {
                     r.set_bezugspunkt(LINKS);
-                    r.set_laenge(rt.breite());
+                    r.set_laenge(rt.tiefe());
                     r.set_breite(rt.laenge());
                 }else if(rt.bezug() == WST_BEZUG_RE)
                 {
                     r.set_bezugspunkt(RECHTS);
                     r.set_laenge(rt.breite());
-                    r.set_breite(rt.laenge());
+                    r.set_breite(rt.tiefe());
                 }else if(rt.bezug() == WST_BEZUG_VO)
                 {
                     r.set_bezugspunkt(UNTEN);
                     r.set_laenge(rt.laenge());
-                    r.set_breite(rt.breite());
+                    r.set_breite(rt.tiefe());
                 }else if(rt.bezug() == WST_BEZUG_HI)
                 {
                     r.set_bezugspunkt(OBEN);
                     r.set_laenge(rt.laenge());
-                    r.set_breite(rt.breite());
+                    r.set_breite(rt.tiefe());
                 }
                 r.set_farbe_fuellung(FARBE_GRUEN);
                 r.set_einfuegepunkt(rt.x(), rt.y(), rt.z());
