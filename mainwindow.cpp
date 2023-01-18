@@ -11,10 +11,17 @@ MainWindow::MainWindow(QWidget *parent) :
     setup();
     set_prginfo();
 
+    //alt:
     connect(this, SIGNAL(sendDialogDataWKZ(QString,text_zeilenweise)), \
             &dlg_wkz, SLOT(getDialogDataWKZ(QString,text_zeilenweise)) );
     connect(&dlg_wkz, SIGNAL(sendData_wkzmagazin(QString,text_zeilenweise)), \
             this, SLOT(getDialogDataWKZ(QString,text_zeilenweise))     );
+    //neu:
+    connect(this, SIGNAL(sendDialogDataWKZ(QString,wkz_magazin)), \
+            &dlg_wkzmag, SLOT(set_wkzmag(QString,wkz_magazin)) );
+    connect(&dlg_wkzmag, SIGNAL(wkzmag(QString,wkz_magazin)), \
+            this, SLOT(getDialogDataWKZ(QString,wkz_magazin))     );
+    //---
     connect(this, SIGNAL(sendStdNamen(text_zeilenweise, text_zeilenweise)),\
             &dlg_stdnamen, SLOT(slot_setup(text_zeilenweise,text_zeilenweise)));
     connect(&dlg_stdnamen, SIGNAL(signal_sendData(text_zeilenweise,text_zeilenweise)),\
@@ -423,7 +430,7 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            wkz_magazin_ggf.set_text(file.readAll());//alt
+            //wkz_magazin_ggf.set_text(file.readAll());//alt
             wkz_mag_ggf.set_text(file.readAll());//neu
         }
         file.close();
@@ -589,6 +596,58 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
         }else
         {
             wkz_magazin_ggf = werkzeugmagazin;
+            file.write(werkzeugmagazin.text().toUtf8());
+        }
+        file.close();
+    }
+}
+void MainWindow::getDialogDataWKZ(QString fenstertitel, wkz_magazin werkzeugmagazin)
+{
+    if(fenstertitel.contains("GANX"))
+    {
+        QFile file(pf.path_wkz_ganx());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_wkz_ganx();
+            tmp += "\n";
+            tmp += "in der Funktion getDialogDataWKZ";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            wkz_mag_ganx = werkzeugmagazin;
+            file.write(werkzeugmagazin.text().toUtf8());
+        }
+        file.close();
+    }else if(fenstertitel.contains("FMC"))
+    {
+        QFile file(pf.path_wkz_fmc());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_wkz_fmc();
+            tmp += "\n";
+            tmp += "in der Funktion getDialogDataWKZ";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            wkz_mag_fmc = werkzeugmagazin;
+            file.write(werkzeugmagazin.text().toUtf8());
+        }
+        file.close();
+    }else if(fenstertitel.contains("GGF"))
+    {
+        QFile file(pf.path_wkz_ggf());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_wkz_ggf();
+            tmp += "\n";
+            tmp += "in der Funktion getDialogDataWKZ";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            wkz_mag_ggf = werkzeugmagazin;
             file.write(werkzeugmagazin.text().toUtf8());
         }
         file.close();
@@ -1353,19 +1412,15 @@ void MainWindow::on_actionEntwicklermodus_triggered(bool checked)
 }
 void MainWindow::on_actionWerkzeug_ganx_anzeigen_triggered()
 {
-    emit sendDialogDataWKZ("Werkzeug GANX", wkz_magazin_ganx);
+    emit sendDialogDataWKZ("Werkzeug GANX", wkz_magazin_ganx);//alt
 }
 void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
 {
-    emit sendDialogDataWKZ("Werkzeug FMC", wkz_magazin_fmc);
+    emit sendDialogDataWKZ("Werkzeug FMC", wkz_magazin_fmc);//alt
 }
 void MainWindow::on_actionWerkzeug_ggf_anzeigen_triggered()
 {
-    //emit sendDialogDataWKZ("Werkzeug GGF", wkz_magazin_ggf);//alt
-    //neu:
-    dlg_wkzmag.setWindowTitle("Werkzeugmagazin ggf");
-    dlg_wkzmag.set_wkzmag(wkz_mag_ggf);
-    dlg_wkzmag.show();
+    dlg_wkzmag.set_wkzmag("Werkzeugmagazin GGF", wkz_mag_ggf);//neu
 }
 void MainWindow::on_actionEinstellung_pfade_triggered()
 {

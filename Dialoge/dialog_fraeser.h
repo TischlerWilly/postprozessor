@@ -24,18 +24,16 @@ public:
 
 private:
     Ui::Dialog_fraeser *ui;    
-    void setup();
     bool Wkz_ist_neu;
 
 public slots:
-    void getData(text_zeilenweise msg);
-    void getData(text_zw msg, bool ist_neues_wkz = false);
+    void set_Data(text_zeilenweise msg);
+    void set_Data(text_zw msg, bool ist_neues_wkz = false);
     void neuerFraeser();
 
 signals:
-    void sendData(text_zeilenweise wkz, bool ist_neues_wkz);
-    void sendData(text_zw wkz, bool ist_neues_wkz);
-
+    void Data(text_zeilenweise wkz, bool ist_neues_wkz);
+    void Data(text_zw wkz, bool ist_neues_wkz);
 
 private slots:
     void on_pushButton_abbrechen_clicked();

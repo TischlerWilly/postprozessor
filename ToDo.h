@@ -2,9 +2,13 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "3.23.01.17"
+#define PROGRAMMVERSION "3.23.01.18"
 #endif //PROGRAMMVERSION
 /*
+
+mainwin_wkzmagazin:
+-->resize-event()
+-->Bild vom wkz
 
 bug: das Einlesen von fmc-Dateien mit Halt liest Bohrungen nicht ein die von
      der Unterseite und von der Oberseite gleich sind

@@ -6,7 +6,9 @@ mainwin_wkzmagazin::mainwin_wkzmagazin(QWidget *parent)
     , ui(new Ui::mainwin_wkzmagazin)
 {
     ui->setupUi(this);
-    connect(&dlg_fraeser, SIGNAL(sendData(text_zw,bool)),this, SLOT(getData(text_zw,bool)));
+    connect(&dlg_fraeser, SIGNAL(Data(text_zw,bool)),this, SLOT(set_Data(text_zw,bool)));
+    connect(&dlg_bohrer, SIGNAL(Data(text_zw,bool)),this, SLOT(set_Data(text_zw,bool)));
+    connect(&dlg_saege, SIGNAL(Data(text_zw,bool)),this, SLOT(set_Data(text_zw,bool)));
 }
 
 mainwin_wkzmagazin::~mainwin_wkzmagazin()
@@ -15,12 +17,7 @@ mainwin_wkzmagazin::~mainwin_wkzmagazin()
 }
 
 //-------------------------------------set:
-void mainwin_wkzmagazin::set_wkzmag(wkz_magazin w)
-{
-    Magazin = w;
-    UnReDo.neu(Magazin);
-    liste_aktualisieren();
-}
+
 //-------------------------------------get:
 
 //-------------------------------------private Funktionen:
@@ -42,10 +39,20 @@ void mainwin_wkzmagazin::liste_aktualisieren()
             zeile += double_to_qstring(fraeser.dm());
         }else if(wkz.at(0) == WKZ_TYP_BOHRER)
         {
-            //..
+            wkz_bohrer bohrer(wkz);
+            istaktiv = bohrer.istaktiv();
+            zeile  = "Bohrer ";
+            zeile += bohrer.wkznr();
+            zeile += " / DM:";
+            zeile += double_to_qstring(bohrer.dmexport());
         }else if(wkz.at(0) == WKZ_TYP_SAEGE)
         {
-            //..
+            wkz_saege saege(wkz);
+            istaktiv = saege.istaktiv();
+            zeile  = "Säge ";
+            zeile += saege.wkznr();
+            zeile += " / DM:";
+            zeile += double_to_qstring(saege.dm());
         }
         ui->listWidget->addItem(zeile);
         if(!istaktiv)
@@ -86,15 +93,82 @@ void mainwin_wkzmagazin::info_aktualisieren(uint index)
         info += "\n";
         info += "Vorschub:\t";
         info += double_to_qstring(f.vorschub());
-        info += "\n";
-        info += "Nutzlänge:\t";
-        info += double_to_qstring(f.nutzl());
     }else if(wkz.at(0) == WKZ_TYP_BOHRER)
     {
-
+        wkz_bohrer b(wkz);
+        info += "Name:\t";
+        info += b.wkznr();
+        info += "\n";
+        info += "Import-DM:\t";
+        info += double_to_qstring(b.dmimport());
+        info += "\n";
+        info += "Export-DM:\t";
+        info += double_to_qstring(b.dmexport());
+        info += "\n";
+        info += "Nutzlänge:\t";
+        info += double_to_qstring(b.nutzl());
+        info += "\n";
+        info += "Zustellmaß:\t";
+        info += double_to_qstring(b.zustma());
+        info += "\n";
+        info += "Ist Durchgangsbohrer:\t";
+        if(b.istdubo())
+        {
+            info += "ja";
+        }else
+        {
+            info += "nein";
+        }
+        info += "\n";
+        info += "Kann horizontal bohren:\t";
+        if(b.isthori())
+        {
+            info += "ja";
+        }else
+        {
+            info += "nein";
+        }
+        info += "\n";
+        info += "Kann vertikal bohren:\t";
+        if(b.istverti())
+        {
+            info += "ja";
+        }else
+        {
+            info += "nein";
+        }
     }else if(wkz.at(0) == WKZ_TYP_SAEGE)
     {
-
+        wkz_saege s(wkz);
+        info += "Name:\t";
+        info += s.wkznr();
+        info += "\n";
+        info += "Durchmesser:\t";
+        info += double_to_qstring(s.dm());
+        info += "\n";
+        info += "Zustellmaß:\t";
+        info += double_to_qstring(s.zustma());
+        info += "\n";
+        info += "Schnittbreite:\t";
+        info += double_to_qstring(s.sbreite());
+        info += "\n";
+        info += "Kann horizontal sägen:\t";
+        if(s.isthori())
+        {
+            info += "ja";
+        }else
+        {
+            info += "nein";
+        }
+        info += "\n";
+        info += "Kann vertikal sägen:\t";
+        if(s.istverti())
+        {
+            info += "ja";
+        }else
+        {
+            info += "nein";
+        }
     }
     ui->plainTextEdit->setPlainText(info);
 }
@@ -104,17 +178,17 @@ void mainwin_wkzmagazin::edit(uint index)
     wkz.set_text(Magazin.magazin_ptr()->at(index), WKZ_TRENNZ);
     if(wkz.at(0) == WKZ_TYP_FRAESER)
     {
-        dlg_fraeser.getData(wkz);
+        dlg_fraeser.set_Data(wkz);
     }else if(wkz.at(0) == WKZ_TYP_BOHRER)
     {
-
+        dlg_bohrer.set_Data(wkz);
     }else if(wkz.at(0) == WKZ_TYP_SAEGE)
     {
-
+        dlg_saege.set_Data(wkz);
     }
 }
 //-------------------------------------public slots
-void mainwin_wkzmagazin::getData(text_zw wkz, bool ist_neues_wkz)
+void mainwin_wkzmagazin::set_Data(text_zw wkz, bool ist_neues_wkz)
 {
     if(ist_neues_wkz)
     {
@@ -130,19 +204,26 @@ void mainwin_wkzmagazin::getData(text_zw wkz, bool ist_neues_wkz)
         ui->listWidget->setCurrentRow(index);
     }
 }
+void mainwin_wkzmagazin::set_wkzmag(QString fenstertitel, wkz_magazin wkzmag)
+{
+    this->setWindowTitle(fenstertitel);
+    Magazin = wkzmag;
+    UnReDo.neu(Magazin);
+    liste_aktualisieren();
+    this->show();
+}
 //-------------------------------------private slots:
 void mainwin_wkzmagazin::on_actionFraeser_anlegen_triggered()
 {
-    dlg_fraeser.clear();
-    dlg_fraeser.show();
+    dlg_fraeser.neuerFraeser();
 }
 void mainwin_wkzmagazin::on_actionBohrer_anlegen_triggered()
 {
-
+    dlg_bohrer.neuerBohrer();
 }
 void mainwin_wkzmagazin::on_actionSaege_anlegen_triggered()
 {
-
+    dlg_saege.neueSaege();
 }
 void mainwin_wkzmagazin::on_actionRunter_triggered()
 {
@@ -220,13 +301,22 @@ void mainwin_wkzmagazin::on_actionDuplizieren_triggered()
         wkz.set_text(Magazin.magazin_ptr()->at(index), WKZ_TRENNZ);
         if(wkz.at(0) == WKZ_TYP_FRAESER)
         {
-            dlg_fraeser.getData(wkz, true);
+            dlg_fraeser.set_Data(wkz, true);
         }else if(wkz.at(0) == WKZ_TYP_BOHRER)
         {
-
+            dlg_bohrer.set_Data(wkz, true);
         }else if(wkz.at(0) == WKZ_TYP_SAEGE)
         {
-
+            dlg_saege.set_Data(wkz, true);
         }
     }
+}
+void mainwin_wkzmagazin::on_pushButton_abbrechen_clicked()
+{
+    this->hide();
+}
+void mainwin_wkzmagazin::on_pushButton_speichern_clicked()
+{
+    emit wkzmag(this->windowTitle(), Magazin);
+    this->hide();
 }

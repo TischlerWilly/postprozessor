@@ -6,7 +6,6 @@ Dialog_bohrer::Dialog_bohrer(QWidget *parent) :
     ui(new Ui::Dialog_bohrer)
 {
     ui->setupUi(this);
-    setup();
 }
 
 Dialog_bohrer::~Dialog_bohrer()
@@ -14,31 +13,32 @@ Dialog_bohrer::~Dialog_bohrer()
     delete ui;
 }
 
-void Dialog_bohrer::getData(text_zeilenweise msg)
+void Dialog_bohrer::set_Data(text_zeilenweise msg)
 {
     clear();
-    setup();
-    wkz_ist_neu = false;
+    Wkz_ist_neu = false;
     ui->lineEdit_nr->setText(msg.zeile(2));
     ui->lineEdit_dm_real->setText(msg.zeile(3));
     ui->lineEdit_dm_cad->setText(msg.zeile(7));
-    ui->lineEdit__nutzlaenge->setText(msg.zeile(4));
-    ui->lineEdit__zustmass->setText(msg.zeile(6));
+    ui->lineEdit_nutzlaenge->setText(msg.zeile(4));
+    ui->lineEdit_zustmass->setText(msg.zeile(6));
 
     if(msg.zeile(8) == "1")
     {
-        ui->comboBox_dubo->setCurrentIndex(0);  //ja
+        ui->checkBox_istdubo->setChecked(true);
     }else
     {
-        ui->comboBox_dubo->setCurrentIndex(1);  //nein
+        ui->checkBox_istdubo->setChecked(false);
     }
 
     if(msg.zeile(10) == WKZ_PARAMETER_LAGE_VERT)
     {
-        ui->comboBox_lage->setCurrentIndex(0);  //vertikal
+        ui->checkBox_verti->setChecked(true);
+        ui->checkBox_hori->setChecked(false);
     }else
     {
-        ui->comboBox_lage->setCurrentIndex(1);  //horizontal
+        ui->checkBox_verti->setChecked(false);
+        ui->checkBox_hori->setChecked(true);
     }
 
     if(msg.zeile(15) == "1")
@@ -48,14 +48,29 @@ void Dialog_bohrer::getData(text_zeilenweise msg)
     {
         ui->checkBox_ist_aktiv->setChecked(false);
     }
-
     this->show();
 }
+void Dialog_bohrer::set_Data(text_zw msg, bool ist_neues_wkz)
+{
+    clear();
+    Wkz_ist_neu = ist_neues_wkz;
+    wkz_bohrer wkz(msg);
+    ui->lineEdit_nr->setText(wkz.wkznr());
+    ui->lineEdit_dm_real->setText(double_to_qstring(wkz.dmexport()));
+    ui->lineEdit_dm_cad->setText(double_to_qstring(wkz.dmimport()));
+    ui->lineEdit_nutzlaenge->setText(double_to_qstring(wkz.nutzl()));
+    ui->lineEdit_zustmass->setText(double_to_qstring(wkz.zustma()));
+    ui->checkBox_istdubo->setChecked(wkz.istdubo());
+    ui->checkBox_hori->setChecked(wkz.isthori());
+    ui->checkBox_verti->setChecked(wkz.istverti());
+    ui->checkBox_ist_aktiv->setChecked(wkz.istaktiv());
+    this->show();
+}
+
 void Dialog_bohrer::neuerBohrer()
 {
     clear();
-    setup();
-    wkz_ist_neu = true;
+    Wkz_ist_neu = true;
     this->show();
 }
 
@@ -64,19 +79,12 @@ void Dialog_bohrer::clear()
     ui->lineEdit_dm_cad->clear();
     ui->lineEdit_dm_real->clear();
     ui->lineEdit_nr->clear();
-    ui->lineEdit__nutzlaenge->clear();
-    ui->lineEdit__zustmass->clear();
-    ui->comboBox_dubo->clear();
-    ui->comboBox_lage->clear();
+    ui->lineEdit_nutzlaenge->clear();
+    ui->lineEdit_zustmass->clear();
+    ui->checkBox_istdubo->setChecked(false);
+    ui->checkBox_verti->setChecked(false);
+    ui->checkBox_hori->setChecked(false);
     ui->checkBox_ist_aktiv->setChecked(true);
-}
-void Dialog_bohrer::setup()
-{
-    ui->comboBox_dubo->addItem("ja");
-    ui->comboBox_dubo->addItem("nein");
-
-    ui->comboBox_lage->addItem("vertikal");
-    ui->comboBox_lage->addItem("horizontal");
 }
 
 void Dialog_bohrer::on_pushButton_abbrechen_clicked()
@@ -87,19 +95,20 @@ void Dialog_bohrer::on_pushButton_abbrechen_clicked()
 void Dialog_bohrer::on_pushButton_ok_clicked()
 {
     this->hide();
+    //-------------------------------------------------------------alt:
     text_zeilenweise wkz;
     wkz.set_trennzeichen('\t');
 
     wkz.zeile_anhaengen(WKZ_TYP_BOHRER);                    //1 : Werkzeigtyp
     wkz.zeile_anhaengen(ui->lineEdit_nr->text());           //2 : Nummer
     wkz.zeile_anhaengen(ui->lineEdit_dm_real->text());      //3 : Durchmesser des realen Werkzeuges
-    wkz.zeile_anhaengen(ui->lineEdit__nutzlaenge->text());  //4 : Nutzlänge
+    wkz.zeile_anhaengen(ui->lineEdit_nutzlaenge->text());  //4 : Nutzlänge
     wkz.zeile_anhaengen(" ");                               //5 : Vorschub
-    wkz.zeile_anhaengen(ui->lineEdit__zustmass->text());    //6 : Zustellmaß
+    wkz.zeile_anhaengen(ui->lineEdit_zustmass->text());    //6 : Zustellmaß
     wkz.zeile_anhaengen(ui->lineEdit_dm_cad->text());       //7 : Durchmesser aus Import
 
     //8 : ist Durchgangsbohrer:
-    if(ui->comboBox_dubo->currentIndex() == 0)//"ja"
+    if(ui->checkBox_istdubo->isChecked())
     {
         wkz.zeile_anhaengen("1");
     }else
@@ -110,7 +119,7 @@ void Dialog_bohrer::on_pushButton_ok_clicked()
     wkz.zeile_anhaengen(" ");                               //9 : Sägeblattbreite
 
     //10: Lage:
-    if(ui->comboBox_lage->currentIndex() == 0)//vertikal
+    if(ui->checkBox_verti->isChecked())
     {
         wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);
     }else
@@ -137,5 +146,17 @@ void Dialog_bohrer::on_pushButton_ok_clicked()
     {
         wkz.zeile_ersaetzen(i, wkz.zeile(i).replace(",","."));
     }
-    emit sendData(wkz, wkz_ist_neu);
+    emit Data(wkz, Wkz_ist_neu);
+    //-------------------------------------------------------------neu:
+    wkz_bohrer bohrer;
+    bohrer.set_wkznr(ui->lineEdit_nr->text());
+    bohrer.set_istaktiv(ui->checkBox_ist_aktiv->isChecked());
+    bohrer.set_dmimport(berechnen(ui->lineEdit_dm_cad->text()).toDouble());
+    bohrer.set_dmexport(berechnen(ui->lineEdit_dm_real->text()).toDouble());
+    bohrer.set_nutzl(berechnen(ui->lineEdit_nutzlaenge->text()).toDouble());
+    bohrer.set_zustma(berechnen(ui->lineEdit_zustmass->text()).toDouble());
+    bohrer.set_istdubo(ui->checkBox_istdubo->isChecked());
+    bohrer.set_isthori(ui->checkBox_hori->isChecked());
+    bohrer.set_istverti(ui->checkBox_verti->isChecked());
+    emit Data(bohrer.daten(), Wkz_ist_neu);
 }

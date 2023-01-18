@@ -4,6 +4,9 @@
 #include <QDialog>
 
 #include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
+#include "Klassen/wkz/wkz_bohrer.h"
+#include "Klassen/wenndannsonst.h"
 #include "Defines/werkzeug.h"
 
 namespace Ui {
@@ -17,25 +20,24 @@ class Dialog_bohrer : public QDialog
 public:
     explicit Dialog_bohrer(QWidget *parent = 0);
     ~Dialog_bohrer();
+    void clear();
 
 private:
     Ui::Dialog_bohrer *ui;
-    void clear();
-    void setup();
-    bool wkz_ist_neu;
+    bool Wkz_ist_neu;
 
 public slots:
-    void getData(text_zeilenweise msg);
+    void set_Data(text_zeilenweise msg);
+    void set_Data(text_zw msg, bool ist_neues_wkz = false);
     void neuerBohrer();
 
+signals:
+    void Data(text_zeilenweise wkz, bool ist_neues_wkz);
+    void Data(text_zw wkz, bool ist_neues_wkz);
 
 private slots:
     void on_pushButton_abbrechen_clicked();
     void on_pushButton_ok_clicked();
-
-signals:
-    void sendData(text_zeilenweise wkz, bool ist_neues_wkz);
-
 };
 
 #endif // DIALOG_BOHRER_H

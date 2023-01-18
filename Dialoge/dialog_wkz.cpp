@@ -8,11 +8,11 @@ Dialog_WKZ::Dialog_WKZ(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(this, SIGNAL(sendData_Bohrer(text_zeilenweise)), \
-            &dibo, SLOT(getData(text_zeilenweise))        );
+            &dibo, SLOT(set_Data(text_zeilenweise))        );
     connect(this, SIGNAL(sendData_Fraeser(text_zeilenweise)), \
-            &difr, SLOT(getData(text_zeilenweise))        );
+            &difr, SLOT(set_Data(text_zeilenweise))        );
     connect(this, SIGNAL(sendData_Saege(text_zeilenweise)), \
-            &disae, SLOT(getData(text_zeilenweise))        );
+            &disae, SLOT(set_Data(text_zeilenweise))        );
 
     connect(this, SIGNAL(neues_wkz_bohrer()), \
             &dibo, SLOT(neuerBohrer())     );
@@ -21,11 +21,11 @@ Dialog_WKZ::Dialog_WKZ(QWidget *parent) :
     connect(this, SIGNAL(neues_wkz_saege()), \
             &disae, SLOT(neueSaege())     );
 
-    connect(&dibo, SIGNAL(sendData(text_zeilenweise,bool)), \
+    connect(&dibo, SIGNAL(Data(text_zeilenweise,bool)), \
             this, SLOT(getParamaterWKZ(text_zeilenweise,bool))     );
-    connect(&difr, SIGNAL(sendData(text_zeilenweise,bool)), \
+    connect(&difr, SIGNAL(Data(text_zeilenweise,bool)), \
             this, SLOT(getParamaterWKZ(text_zeilenweise,bool))     );
-    connect(&disae, SIGNAL(sendData(text_zeilenweise,bool)), \
+    connect(&disae, SIGNAL(Data(text_zeilenweise,bool)), \
             this, SLOT(getParamaterWKZ(text_zeilenweise,bool))     );
 
 }

@@ -22,7 +22,7 @@ public:
     ~mainwin_wkzmagazin();
 
     //-------------------------------------set:
-    void set_wkzmag(wkz_magazin w);
+    //void set_wkzmag(wkz_magazin w);
 
 private slots:
     void on_actionFraeser_anlegen_triggered();
@@ -35,10 +35,16 @@ private slots:
     void on_actionL_schen_triggered();
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
-    void on_actionDuplizieren_triggered();
+    void on_actionDuplizieren_triggered();    
+    void on_pushButton_abbrechen_clicked();
+    void on_pushButton_speichern_clicked();
 
 public slots:
-    void getData(text_zw wkz, bool ist_neues_wkz);
+    void set_Data(text_zw wkz, bool ist_neues_wkz);
+    void set_wkzmag(QString fenstertitel, wkz_magazin wkzmag);
+
+signals:
+    void wkzmag(QString fenstertitel, wkz_magazin wkzmag);
 
 private:
     void liste_aktualisieren();

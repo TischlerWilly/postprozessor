@@ -6,7 +6,6 @@ Dialog_fraeser::Dialog_fraeser(QWidget *parent) :
     ui(new Ui::Dialog_fraeser)
 {
     ui->setupUi(this);
-    setup();
 }
 
 Dialog_fraeser::~Dialog_fraeser()
@@ -14,10 +13,9 @@ Dialog_fraeser::~Dialog_fraeser()
     delete ui;
 }
 
-void Dialog_fraeser::getData(text_zeilenweise msg)
+void Dialog_fraeser::set_Data(text_zeilenweise msg)
 {
     clear();
-    setup();
     Wkz_ist_neu = false;
     ui->lineEdit_nr->setText(msg.zeile(2));
     ui->lineEdit_dm->setText(msg.zeile(3));
@@ -42,25 +40,13 @@ void Dialog_fraeser::getData(text_zeilenweise msg)
     {
         ui->checkBox_ist_aktiv->setChecked(false);
     }
-
     this->show();
 }
-void Dialog_fraeser::getData(text_zw msg, bool ist_neues_wkz)
+void Dialog_fraeser::set_Data(text_zw msg, bool ist_neues_wkz)
 {
     clear();
-    setup();
     Wkz_ist_neu = ist_neues_wkz;
     wkz_fraeser wkz(msg);
-
-    QString m;
-    m += "tz:\n";
-    m += msg.text();
-    m += "\nwe\n:";
-    m += wkz.daten().text();;
-    QMessageBox mb;
-    mb.setText(m);
-    //mb.exec();
-
     ui->lineEdit_nr->setText(wkz.wkznr());
     ui->lineEdit_dm->setText(double_to_qstring(wkz.dm()));
     ui->lineEdit_nutzl->setText(double_to_qstring(wkz.nutzl()));
@@ -79,7 +65,6 @@ void Dialog_fraeser::getData(text_zw msg, bool ist_neues_wkz)
 void Dialog_fraeser::neuerFraeser()
 {
     clear();
-    setup();
     Wkz_ist_neu = true;
     this->show();
 }
@@ -96,11 +81,6 @@ void Dialog_fraeser::clear()
     ui->lineEdit_spiegel->clear();
     ui->checkBox_nur_direkt_zuweisbar->setChecked(false);
     ui->checkBox_ist_aktiv->setChecked(true);
-}
-
-void Dialog_fraeser::setup()
-{
-
 }
 
 void Dialog_fraeser::on_pushButton_abbrechen_clicked()
@@ -149,7 +129,7 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     {
         wkz.zeile_ersaetzen(i, wkz.zeile(i).replace(",","."));
     }
-    emit sendData(wkz, Wkz_ist_neu);
+    emit Data(wkz, Wkz_ist_neu);
     //-------------------------------------------------------------neu:
     wkz_fraeser fraeser;
     fraeser.set_wkznr(ui->lineEdit_nr->text());
@@ -157,8 +137,8 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     fraeser.set_nutzl(berechnen(ui->lineEdit_nutzl->text()).toDouble());
     fraeser.set_vorschub(berechnen(ui->lineEdit_voers->text()).toDouble());
     fraeser.set_zustma(berechnen(ui->lineEdit_zustm->text()).toDouble());
-    fraeser.set_isthori(false);//noch checkbox in gui ergänzen
-    fraeser.set_istverti(true);//noch checkbox in gui ergänzen
+    fraeser.set_isthori(ui->checkBox_ist_hori->isChecked());
+    fraeser.set_istverti(ui->checkBox_ist_veti->isChecked());
     fraeser.set_alias(ui->lineEdit_alias->text().toUpper());
         //Beim Einlesen der FMC-Datei werden alle kleinen Buchstaben durch große ersetzt
     fraeser.set_minzust(berechnen(ui->lineEdit_zust_min->text()).toDouble());
@@ -167,5 +147,5 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     fraeser.set_istaktiv(ui->checkBox_ist_aktiv->isChecked());
     fraeser.set_isthori(ui->checkBox_ist_hori->isChecked());
     fraeser.set_istverti(ui->checkBox_ist_veti->isChecked());
-    emit sendData(fraeser.daten(), Wkz_ist_neu);
+    emit Data(fraeser.daten(), Wkz_ist_neu);
 }

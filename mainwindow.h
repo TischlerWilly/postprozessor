@@ -133,7 +133,8 @@ private:
     void set_prginfo();
 
     //Dialoge:
-    Dialog_WKZ dlg_wkz;
+    Dialog_WKZ dlg_wkz;//alt
+    mainwin_wkzmagazin dlg_wkzmag;//neu
     Dialog_stdnamen dlg_stdnamen;
     Dialog_Einstellung_pfade dlg_Einstellung_pfade;
     Dialog_einstellung_ganx dlg_einstellung_ganx;
@@ -141,11 +142,11 @@ private:
     Dialog_einstellung_dxf_klassen dlg_einstellung_dxf_klassen;
     Dialog_programmtext dlg_prgtext;
     Dialog_ExportUebersicht dlg_exporte;
-    MainWin_wst_bearbeiten dlg_wst_bearbeiten;
-    mainwin_wkzmagazin dlg_wkzmag;
+    MainWin_wst_bearbeiten dlg_wst_bearbeiten;    
 
 signals:
-    void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
+    void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);//alt
+    void sendDialogDataWKZ(QString fenstertitel, wkz_magazin werkzeugmagazin);//neu
     void sendStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
     void sendEinstellungPfade(einstellung e);
     void sendEinstellungGANX(einstellung_ganx e);
@@ -160,6 +161,7 @@ signals:
 
 public slots:
     void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
+    void getDialogDataWKZ(QString fenstertitel, wkz_magazin werkzeugmagazin);
     void getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
     void getEinstellungGANX(einstellung_ganx e);
     void getEinstellungDxf(einstellung_dxf e);
