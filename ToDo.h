@@ -6,19 +6,11 @@
 #endif //PROGRAMMVERSION
 /*
 
-mainwin_wkzmagazin:
--->resize-event()
--->Bild vom wkz
+ggf-export anpassen an neues wkzmag
+
 
 bug: das Einlesen von fmc-Dateien mit Halt liest Bohrungen nicht ein die von
      der Unterseite und von der Oberseite gleich sind
-
-void MainWindow::on_actionTestfunktion_triggered()
--->neuer dlg für wkzmag (mainwin_wkzmagazin.h)
--->void MainWindow::on_actionWerkzeug_ggf_anzeigen_triggered()
-
-
-
 
 text_zeilenweise werkstueck::fkon_kantengut(...)
     -->Kann erst umgesetzt werden wenn quelldatei Kanteninfo enthällt

@@ -24,16 +24,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>230</y>
-      <width>301</width>
-      <height>241</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_speichern">
     <property name="geometry">
      <rect>
@@ -59,6 +49,25 @@
     <property name="text">
      <string>Abbrechen</string>
     </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget_info">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>320</y>
+      <width>301</width>
+      <height>192</height>
+     </rect>
+    </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

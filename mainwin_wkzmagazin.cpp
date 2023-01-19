@@ -33,26 +33,29 @@ void mainwin_wkzmagazin::liste_aktualisieren()
         {
             wkz_fraeser fraeser(wkz);
             istaktiv = fraeser.istaktiv();
-            zeile  = "Fräser ";
+            zeile  = "Fräser           ";
             zeile += fraeser.wkznr();
-            zeile += " / DM:";
+            zeile += "\t";
             zeile += double_to_qstring(fraeser.dm());
+            zeile += "mm";
         }else if(wkz.at(0) == WKZ_TYP_BOHRER)
         {
             wkz_bohrer bohrer(wkz);
             istaktiv = bohrer.istaktiv();
-            zeile  = "Bohrer ";
+            zeile  = "Bohrer         ";
             zeile += bohrer.wkznr();
-            zeile += " / DM:";
+            zeile += "\t";
             zeile += double_to_qstring(bohrer.dmexport());
+            zeile += "mm";
         }else if(wkz.at(0) == WKZ_TYP_SAEGE)
         {
             wkz_saege saege(wkz);
             istaktiv = saege.istaktiv();
-            zeile  = "Säge ";
+            zeile  = "Säge           ";
             zeile += saege.wkznr();
-            zeile += " / DM:";
+            zeile += "\t";
             zeile += double_to_qstring(saege.dm());
+            zeile += "mm";
         }
         ui->listWidget->addItem(zeile);
         if(!istaktiv)
@@ -66,111 +69,153 @@ void mainwin_wkzmagazin::info_aktualisieren(uint index)
 {
     text_zw wkz;
     wkz.set_text(Magazin.magazin_ptr()->at(index), WKZ_TRENNZ);
-    QString info;
+    ui->tableWidget_info->clear();
+    ui->tableWidget_info->setColumnCount(2);
+    ui->tableWidget_info->setColumnWidth(0, ui->tableWidget_info->width()/2-1);
+    ui->tableWidget_info->setColumnWidth(1, ui->tableWidget_info->width()/2-1);
     if(wkz.at(0) == WKZ_TYP_FRAESER)
     {
         wkz_fraeser f(wkz);
-        info += "Name:\t";
-        info += f.wkznr();
-        info += "\n";
-        info += "Alias:\t";
-        info += f.alias();
-        info += "\n";
-        info += "Spiegel-WKZ:\t";
-        info += f.spiegelwkz();
-        info += "\n";
-        info += "Durchmesser:\t";
-        info += double_to_qstring(f.dm());
-        info += "\n";
-        info += "Nutzlänge:\t";
-        info += double_to_qstring(f.nutzl());
-        info += "\n";
-        info += "Zustellmaß:\t";
-        info += double_to_qstring(f.zustma());
-        info += "\n";
-        info += "Mind-Zust.:\t";
-        info += double_to_qstring(f.minzust());
-        info += "\n";
-        info += "Vorschub:\t";
-        info += double_to_qstring(f.vorschub());
+        text_zw kopf, rumpf;
+        kopf.add_hi("Name/Nummer");
+        rumpf.add_hi(f.wkznr());
+        kopf.add_hi("Alias");
+        rumpf.add_hi(f.alias());
+        kopf.add_hi("Spiegelwerkzeug");
+        rumpf.add_hi(f.spiegelwkz());
+        kopf.add_hi("Durchmesser");
+        rumpf.add_hi(double_to_qstring(f.dm()));
+        kopf.add_hi("Nutzlänge");
+        rumpf.add_hi(double_to_qstring(f.nutzl()));
+        kopf.add_hi("Zustellmaß");
+        rumpf.add_hi(double_to_qstring(f.zustma()));
+        kopf.add_hi("Mindestzustellung");
+        rumpf.add_hi(double_to_qstring(f.minzust()));
+        kopf.add_hi("Vorschub");
+        rumpf.add_hi(double_to_qstring(f.vorschub()));
+        kopf.add_hi("Zuweisbar");
+        if(f.nurdirektzuw())
+        {
+            rumpf.add_hi("nur direkt");
+        }else
+        {
+            rumpf.add_hi("nicht nur direkt");
+        }
+        kopf.add_hi("Vertikal fräsen");
+        if(f.istverti())
+        {
+            rumpf.add_hi("ja");
+        }else
+        {
+            rumpf.add_hi("nein");
+        }
+        kopf.add_hi("Horizontal fräsen");
+        if(f.isthori())
+        {
+            rumpf.add_hi("ja");
+        }else
+        {
+            rumpf.add_hi("nein");
+        }
+        ui->tableWidget_info->setRowCount(kopf.count());
+        for(uint i=0;i<kopf.count();i++)
+        {
+            ui->tableWidget_info->setItem(i,0, new QTableWidgetItem(kopf.at(i)));
+        }
+        for(uint i=0;i<rumpf.count();i++)
+        {
+            ui->tableWidget_info->setItem(i,1, new QTableWidgetItem(rumpf.at(i)));
+        }
     }else if(wkz.at(0) == WKZ_TYP_BOHRER)
     {
         wkz_bohrer b(wkz);
-        info += "Name:\t";
-        info += b.wkznr();
-        info += "\n";
-        info += "Import-DM:\t";
-        info += double_to_qstring(b.dmimport());
-        info += "\n";
-        info += "Export-DM:\t";
-        info += double_to_qstring(b.dmexport());
-        info += "\n";
-        info += "Nutzlänge:\t";
-        info += double_to_qstring(b.nutzl());
-        info += "\n";
-        info += "Zustellmaß:\t";
-        info += double_to_qstring(b.zustma());
-        info += "\n";
-        info += "Ist Durchgangsbohrer:\t";
+        text_zw kopf, rumpf;
+        kopf.add_hi("Name/Nummer");
+        rumpf.add_hi(b.wkznr());
+        kopf.add_hi("Import-DM");
+        rumpf.add_hi(double_to_qstring(b.dmimport()));
+        kopf.add_hi("Export-DM");
+        rumpf.add_hi(double_to_qstring(b.dmexport()));
+        kopf.add_hi("Nutzlänge");
+        rumpf.add_hi(double_to_qstring(b.nutzl()));
+        kopf.add_hi("Zustellmaß");
+        rumpf.add_hi(double_to_qstring(b.zustma()));
+        kopf.add_hi("Ist Durchgangsbohrer");
         if(b.istdubo())
         {
-            info += "ja";
+            rumpf.add_hi("ja");
         }else
         {
-            info += "nein";
+            rumpf.add_hi("nein");
         }
-        info += "\n";
-        info += "Kann horizontal bohren:\t";
-        if(b.isthori())
-        {
-            info += "ja";
-        }else
-        {
-            info += "nein";
-        }
-        info += "\n";
-        info += "Kann vertikal bohren:\t";
+        kopf.add_hi("Vertikal bohren");
         if(b.istverti())
         {
-            info += "ja";
+            rumpf.add_hi("ja");
         }else
         {
-            info += "nein";
+            rumpf.add_hi("nein");
+        }
+        kopf.add_hi("Horizontal bohren");
+        if(b.isthori())
+        {
+            rumpf.add_hi("ja");
+        }else
+        {
+            rumpf.add_hi("nein");
+        }
+        ui->tableWidget_info->setRowCount(kopf.count());
+        for(uint i=0;i<kopf.count();i++)
+        {
+            ui->tableWidget_info->setItem(i,0, new QTableWidgetItem(kopf.at(i)));
+        }
+        for(uint i=0;i<rumpf.count();i++)
+        {
+            ui->tableWidget_info->setItem(i,1, new QTableWidgetItem(rumpf.at(i)));
         }
     }else if(wkz.at(0) == WKZ_TYP_SAEGE)
     {
         wkz_saege s(wkz);
-        info += "Name:\t";
-        info += s.wkznr();
-        info += "\n";
-        info += "Durchmesser:\t";
-        info += double_to_qstring(s.dm());
-        info += "\n";
-        info += "Zustellmaß:\t";
-        info += double_to_qstring(s.zustma());
-        info += "\n";
-        info += "Schnittbreite:\t";
-        info += double_to_qstring(s.sbreite());
-        info += "\n";
-        info += "Kann horizontal sägen:\t";
-        if(s.isthori())
-        {
-            info += "ja";
-        }else
-        {
-            info += "nein";
-        }
-        info += "\n";
-        info += "Kann vertikal sägen:\t";
+        text_zw kopf, rumpf;
+        kopf.add_hi("Name/Nummer");
+        rumpf.add_hi(s.wkznr());
+        kopf.add_hi("Durchmesser");
+        rumpf.add_hi(double_to_qstring(s.dm()));
+        kopf.add_hi("Zustellmaß");
+        rumpf.add_hi(double_to_qstring(s.zustma()));
+        kopf.add_hi("Schnittbreite");
+        rumpf.add_hi(double_to_qstring(s.sbreite()));
+        kopf.add_hi("Vertikal Sägen");
         if(s.istverti())
         {
-            info += "ja";
+            rumpf.add_hi("ja");
         }else
         {
-            info += "nein";
+            rumpf.add_hi("nein");
         }
+        kopf.add_hi("Horizontal Sägen");
+        if(s.isthori())
+        {
+            rumpf.add_hi("ja");
+        }else
+        {
+            rumpf.add_hi("nein");
+        }
+        ui->tableWidget_info->setRowCount(kopf.count());
+        for(uint i=0;i<kopf.count();i++)
+        {
+            ui->tableWidget_info->setItem(i,0, new QTableWidgetItem(kopf.at(i)));
+        }
+        for(uint i=0;i<rumpf.count();i++)
+        {
+            ui->tableWidget_info->setItem(i,1, new QTableWidgetItem(rumpf.at(i)));
+        }
+    }else
+    {
+        ui->tableWidget_info->clear();
+        ui->tableWidget_info->setColumnCount(0);
+        ui->tableWidget_info->setRowCount(0);
     }
-    ui->plainTextEdit->setPlainText(info);
 }
 void mainwin_wkzmagazin::edit(uint index)
 {
@@ -213,6 +258,28 @@ void mainwin_wkzmagazin::set_wkzmag(QString fenstertitel, wkz_magazin wkzmag)
     this->show();
 }
 //-------------------------------------private slots:
+void mainwin_wkzmagazin::resizeEvent(QResizeEvent *event)
+{
+    ui->listWidget->setFixedWidth(250);
+    ui->listWidget->setFixedHeight(this->height()-100);
+    ui->listWidget->move(5,5);
+    //----------------------
+    int abst_unten = 30;
+    ui->tableWidget_info->setFixedWidth(this->width()-ui->listWidget->width()-5*3);
+    ui->tableWidget_info->setFixedHeight(ui->listWidget->height()-abst_unten);
+    ui->tableWidget_info->move(ui->listWidget->pos().x()+ui->listWidget->width()+5,\
+                            ui->listWidget->pos().y());
+    //----------------------
+    int breite_un = ui->tableWidget_info->width()\
+                   -ui->pushButton_speichern->width()\
+                   -ui->pushButton_abbrechen->width()\
+                   -5;
+    ui->pushButton_speichern->move(ui->tableWidget_info->pos().x()+breite_un/2,\
+                                   ui->tableWidget_info->pos().y()+ui->tableWidget_info->height()+5);
+    ui->pushButton_abbrechen->move(ui->pushButton_speichern->pos().x()+ui->pushButton_speichern->width()+5,\
+                                   ui->pushButton_speichern->pos().y());
+}
+
 void mainwin_wkzmagazin::on_actionFraeser_anlegen_triggered()
 {
     dlg_fraeser.neuerFraeser();

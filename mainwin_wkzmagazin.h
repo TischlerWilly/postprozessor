@@ -25,6 +25,7 @@ public:
     //void set_wkzmag(wkz_magazin w);
 
 private slots:
+    void resizeEvent(QResizeEvent *event);
     void on_actionFraeser_anlegen_triggered();
     void on_actionBohrer_anlegen_triggered();
     void on_actionSaege_anlegen_triggered();

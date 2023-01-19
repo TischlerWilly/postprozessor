@@ -26,32 +26,11 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_nr">
-      <property name="text">
-       <string>Werkzeugnummer</string>
-      </property>
-     </widget>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_zustm"/>
     </item>
     <item row="0" column="1">
      <widget class="QLineEdit" name="lineEdit_nr"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_dm"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_dm">
-      <property name="text">
-       <string>Durchmesser</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_breite">
-      <property name="text">
-       <string>Schnittbreite</string>
-      </property>
-     </widget>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_zustm">
@@ -60,27 +39,48 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_breite"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_breite">
+      <property name="text">
+       <string>Schnittbreite</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_nr">
+      <property name="text">
+       <string>Werkzeugnummer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
      <widget class="QCheckBox" name="checkBox_ist_aktiv">
       <property name="text">
        <string>ist aktiv</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="5" column="1">
      <widget class="QCheckBox" name="checkBox_hori">
       <property name="text">
        <string>Horizontal</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_breite"/>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_dm">
+      <property name="text">
+       <string>Durchmesser</string>
+      </property>
+     </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_zustm"/>
-    </item>
-    <item row="5" column="1">
+    <item row="4" column="1">
      <widget class="QCheckBox" name="checkBox_vert">
       <property name="text">
        <string>Vertikal</string>
@@ -117,11 +117,14 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>pushButton_ok</tabstop>
   <tabstop>lineEdit_nr</tabstop>
   <tabstop>lineEdit_dm</tabstop>
   <tabstop>lineEdit_zustm</tabstop>
   <tabstop>lineEdit_breite</tabstop>
+  <tabstop>checkBox_vert</tabstop>
+  <tabstop>checkBox_hori</tabstop>
+  <tabstop>checkBox_ist_aktiv</tabstop>
+  <tabstop>pushButton_ok</tabstop>
   <tabstop>pushButton_abbrechen</tabstop>
  </tabstops>
  <resources/>

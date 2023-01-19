@@ -168,7 +168,6 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>pushButton_ok</tabstop>
   <tabstop>lineEdit_nr</tabstop>
   <tabstop>lineEdit_dm</tabstop>
   <tabstop>lineEdit_nutzl</tabstop>
@@ -181,6 +180,7 @@
   <tabstop>checkBox_ist_veti</tabstop>
   <tabstop>checkBox_ist_hori</tabstop>
   <tabstop>checkBox_ist_aktiv</tabstop>
+  <tabstop>pushButton_ok</tabstop>
   <tabstop>pushButton_abbrechen</tabstop>
  </tabstops>
  <resources/>
