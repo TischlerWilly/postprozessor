@@ -480,3 +480,25 @@ QString wkz_magazin::wkznr(QString wkz)
     return wkz_tz.at(1);
 }
 //----------------------------------
+
+//-------------------Funktionen nicht innerhalb der Klasse:
+bool operator ==(wkz_magazin w1, wkz_magazin w2)
+{
+    if(w1.magazin() == w2.magazin())
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+bool operator !=(wkz_magazin w1, wkz_magazin w2)
+{
+    if(w1.magazin() != w2.magazin())
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}

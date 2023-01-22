@@ -4,6 +4,7 @@
 #include <QString>
 
 #include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Defines/def_bearbeitungen.h"
 #include "Funktionen/umwandeln.h"
 #include "Funktionen/myfunktion.h"
@@ -84,6 +85,11 @@ public:
     }
 
     bool finde_bohrraster(text_zeilenweise *bearb, \
+                          QString Bezug, double dm, \
+                          double tiefe, QString rasterrichtung, \
+                          double wst_L, double wst_B, double wst_D,\
+                          uint mindanz, double rasterabst);
+    bool finde_bohrraster(text_zw *bearb, \
                           QString Bezug, double dm, \
                           double tiefe, QString rasterrichtung, \
                           double wst_L, double wst_B, double wst_D,\

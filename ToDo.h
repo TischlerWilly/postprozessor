@@ -6,6 +6,10 @@
 #endif //PROGRAMMVERSION
 /*
 
+void werkstueck::set_zustand(...)
+
+
+
 ggf-export anpassen an neues wkzmag
 
 

@@ -48,5 +48,8 @@ private:
 
     text_zw Magazin;
 };
+//-------------------Funktionen nicht innerhalb der Klasse:
+bool operator ==(wkz_magazin w1, wkz_magazin w2);
+bool operator !=(wkz_magazin w1, wkz_magazin w2);
 
 #endif // WKZ_MAGAZIN_H

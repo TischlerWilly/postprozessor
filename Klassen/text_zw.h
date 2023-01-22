@@ -37,5 +37,8 @@ private:
 
 
 };
+//-------------------Funktionen nicht innerhalb der Klasse:
+bool operator ==(text_zw t1, text_zw t2);
+bool operator !=(text_zw t1, text_zw t2);
 
 #endif // TEXT_TZ_H

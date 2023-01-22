@@ -216,3 +216,25 @@ std::vector<QString> text_zw::to_vector(QString text, char trennzeichen)
     }
     return v;
 }
+
+//-------------------Funktionen nicht innerhalb der Klasse:
+bool operator ==(text_zw t1, text_zw t2)
+{
+    if(t1.text() == t2.text())
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+bool operator !=(text_zw t1, text_zw t2)
+{
+    if(t1.text() != t2.text())
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}

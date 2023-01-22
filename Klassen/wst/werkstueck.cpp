@@ -78,6 +78,10 @@ void werkstueck::set_bearb(text_zeilenweise b)
 {
     Bearbeitungen = b;
 }
+void werkstueck::set_bearb(text_zw b)
+{
+    Bearb = b;
+}
 void werkstueck::set_kante_vo(QString artiklenummer)
 {
     Kante_vo = artiklenummer;
@@ -114,6 +118,23 @@ void werkstueck::set_zustand(QString format, text_zeilenweise wkzmag, QString dr
     Zustand.set_name(name());
     Zustand.set_zust_fkon(zust_fkon);
     Zustand.anfordern(format, wkzmag, drehung);
+}
+void werkstueck::set_zustand(QString format, wkz_magazin* wkzmag, QString drehung, \
+                             bool formartierungen_aufbrechen, QString zust_fkon)
+{
+    Zustand.set_bearb(Bearbeitungen);
+    Zustand.set_laenge(laenge());
+    Zustand.set_breite(breite());
+    Zustand.set_dicke(dicke());
+    Zustand.set_kante_vo(Kante_vo);
+    Zustand.set_kante_hi(Kante_hi);
+    Zustand.set_kante_li(Kante_li);
+    Zustand.set_kante_re(Kante_re);
+    Zustand.set_zugabe_gehrungen(Zugabe_gehrungen);
+    Zustand.set_formartierungen_aufbrechen(formartierungen_aufbrechen);
+    Zustand.set_name(name());
+    Zustand.set_zust_fkon(zust_fkon);
+    Zustand.anfordern(format, *wkzmag, drehung);
 }
 void werkstueck::set_einstellung_ganx(einstellung_ganx e)
 {
