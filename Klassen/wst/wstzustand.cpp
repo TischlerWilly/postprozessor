@@ -15028,8 +15028,8 @@ void wstzustand::geo(int index)
                 }else if(rt.bezug() == WST_BEZUG_RE)
                 {
                     r.set_bezugspunkt(RECHTS);
-                    r.set_laenge(rt.breite());
-                    r.set_breite(rt.tiefe());
+                    r.set_laenge(rt.tiefe());
+                    r.set_breite(rt.laenge());
                 }else if(rt.bezug() == WST_BEZUG_VO)
                 {
                     r.set_bezugspunkt(UNTEN);
