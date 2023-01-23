@@ -174,7 +174,8 @@ private:
     void clear();
     void erzeugen(QString format, werkzeugmagazin wkzmag, QString drehung);//alt
     void erzeugen(QString format, wkz_magazin wkzmag, QString drehung);//neu
-    void finde_drehwinkel_auto(int index);
+    void finde_drehwinkel_auto(int index);//alt
+    void finde_drehwinkel_auto_(int index);//neu
     void fraesergeraden_zusammenfassen(text_zeilenweise& bearbeitung);//alt
     void fraesergeraden_zusammenfassen(text_zw& bearbeitung);//neu
     void hbemiduebeltiefe(text_zeilenweise& bearbeitung);//alt
@@ -201,7 +202,8 @@ private:
     void rasterbohrungen_finden_ganx(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b);//neu
     void formartierung_zu_einzelfkon(text_zeilenweise& bearb,double tmp_l, double tmp_b);//alt
     void formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double tmp_b);//neu
-    void kurze_an_ab_geraden(text_zeilenweise& bearb, werkzeugmagazin wkzmag);
+    void kurze_an_ab_geraden(text_zeilenweise& bearb, werkzeugmagazin wkzmag);//alt
+    void kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag);//neu
     QString kommentar_fmc(QString kom);
     QString variable_fmc(QString bez, QString wert);
     QString kommentar_ggf(QString kom);

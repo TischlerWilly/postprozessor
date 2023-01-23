@@ -1832,7 +1832,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ggf", &wkz_mag_ggf, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                     Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());

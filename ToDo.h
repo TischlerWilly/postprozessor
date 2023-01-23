@@ -6,6 +6,9 @@
 #endif //PROGRAMMVERSION
 /*
 
+Programm stürtzt ab dieser Funktion ab:
+void wstzustand::erzeugen(...)
+
 void werkstueck::set_zustand(...)
 
 
