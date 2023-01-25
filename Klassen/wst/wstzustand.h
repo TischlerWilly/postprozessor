@@ -4,10 +4,8 @@
 #include <QVector>
 #include <QMessageBox>
 
-#include "Klassen/text_zeilenweise.h"
 #include "Klassen/text_zw.h"
-#include "Klassen/werkzeugmagazin.h"    //alt
-#include "Klassen/wkz/wkz_magazin.h"    //neu
+#include "Klassen/wkz/wkz_magazin.h"
 #include "Klassen/geo/geometrietext.h"
 #include "Klassen/wst/fraesergerade.h"
 #include "Klassen/wst/bohrung.h"
@@ -167,14 +165,12 @@ public:
     }
 
     //----------------------------------Manipulationen:
-    void anfordern(QString format, werkzeugmagazin wkzmag, QString drehung);//alt
-    void anfordern(QString format, wkz_magazin wkzmag, QString drehung);//neu
+    void anfordern(QString format, wkz_magazin wkzmag, QString drehung);
 
 private:
     void clear();
-    void erzeugen(QString format, werkzeugmagazin wkzmag, QString drehung);//alt
     void erzeugen(QString format, wkz_magazin wkzmag, QString drehung);//neu
-    void finde_drehwinkel_auto(int index);//alt
+    //void finde_drehwinkel_auto(int index);//alt
     void finde_drehwinkel_auto_(int index);//neu
     void fraesergeraden_zusammenfassen(text_zeilenweise& bearbeitung);//alt
     void fraesergeraden_zusammenfassen(text_zw& bearbeitung);//neu
@@ -190,19 +186,13 @@ private:
     void bearb_drehen_90(text_zw& bearb, double& tmp_l, double& tmp_b);//neu
     void bearb_optimieren_ganx(text_zeilenweise& bearb);//alt
     void bearb_optimieren_ganx(text_zw& bearb);//neu
-    void dubosplitten(text_zeilenweise& bearb, werkzeugmagazin wkzmag);//alt
-    void dubosplitten(text_zw& bearb, wkz_magazin& wkzmag);//neu
-    QString warnungen_fmc(text_zeilenweise bearb, werkzeugmagazin wkzmag, double tmp_l, double tmp_b);//alt
+    void dubosplitten(text_zw& bearb, wkz_magazin& wkzmag);
     QString warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b);//neu
-    QString warnungen_ganx(text_zeilenweise bearb, werkzeugmagazin wkzmag, double tmp_l, double tmp_b);//alt
     QString warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b);//alt
-    void rasterbohrungen_finden_fmc(text_zeilenweise& bearb, werkzeugmagazin wkzmag,double tmp_l, double tmp_b);//alt
     void rasterbohrungen_finden_fmc(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b);//neu
-    void rasterbohrungen_finden_ganx(text_zeilenweise& bearb, werkzeugmagazin wkzmag,double tmp_l, double tmp_b);//alt
     void rasterbohrungen_finden_ganx(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b);//neu
     void formartierung_zu_einzelfkon(text_zeilenweise& bearb,double tmp_l, double tmp_b);//alt
     void formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double tmp_b);//neu
-    void kurze_an_ab_geraden(text_zeilenweise& bearb, werkzeugmagazin wkzmag);//alt
     void kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag);//neu
     QString kommentar_fmc(QString kom);
     QString variable_fmc(QString bez, QString wert);
@@ -228,7 +218,6 @@ private:
     QString kante_re_ganx(QString drewi);
 
     QVector<QString>            Format;
-    QVector<werkzeugmagazin>    Wkzmag;     //alt
     QVector<wkz_magazin>        Wkzm;       //neu
     QVector<QString>            Drehung_bekommen;    
     QVector<QString>            Drehung;

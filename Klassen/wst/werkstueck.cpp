@@ -54,14 +54,13 @@ void werkstueck::neue_bearbeitung(QString text)
 {
     bool bereits_vorhanden = false;
 
-    for(uint i=0; i<=Bearbeitungen.zeilenanzahl() ;i++)
+    for(uint i=0; i<Bearb.count() ;i++)
     {
-        if(Bearbeitungen.zeile(i) == text)
+        if(Bearb.at(i) == text)
         {
-            text_zeilenweise zeile;//Folgezeile
-            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            zeile.set_text(text);
-            if(zeile.zeile(1) == BEARBART_BOHR)//Nur doppelte Bohrungen unterdrücken, Doppelte Fräsbahnen können gewollt sein!
+            text_zw zeile;//Folgezeile
+            zeile.set_text(text, TRENNZ_BEARB_PARAM);
+            if(zeile.at(0) == BEARBART_BOHR)//Nur doppelte Bohrungen unterdrücken, Doppelte Fräsbahnen können gewollt sein!
             {
                 bereits_vorhanden = true;
                 break;
@@ -71,12 +70,8 @@ void werkstueck::neue_bearbeitung(QString text)
 
     if(bereits_vorhanden == false)
     {
-        Bearbeitungen.zeilen_anhaengen(text);
+        Bearb.add_hi(text);
     }
-}
-void werkstueck::set_bearb(text_zeilenweise b)
-{
-    Bearbeitungen = b;
 }
 void werkstueck::set_bearb(text_zw b)
 {
@@ -102,27 +97,10 @@ void werkstueck::set_zugabe_gehrungen(double wert)
 {
     Zugabe_gehrungen = wert;
 }
-void werkstueck::set_zustand(QString format, text_zeilenweise wkzmag, QString drehung, \
-                             bool formartierungen_aufbrechen, QString zust_fkon)
-{
-    Zustand.set_bearb(Bearbeitungen);
-    Zustand.set_laenge(laenge());
-    Zustand.set_breite(breite());
-    Zustand.set_dicke(dicke());
-    Zustand.set_kante_vo(Kante_vo);
-    Zustand.set_kante_hi(Kante_hi);
-    Zustand.set_kante_li(Kante_li);
-    Zustand.set_kante_re(Kante_re);
-    Zustand.set_zugabe_gehrungen(Zugabe_gehrungen);
-    Zustand.set_formartierungen_aufbrechen(formartierungen_aufbrechen);
-    Zustand.set_name(name());
-    Zustand.set_zust_fkon(zust_fkon);
-    Zustand.anfordern(format, wkzmag, drehung);
-}
 void werkstueck::set_zustand(QString format, wkz_magazin* wkzmag, QString drehung, \
                              bool formartierungen_aufbrechen, QString zust_fkon)
 {
-    Zustand.set_bearb(Bearbeitungen);
+    Zustand.set_bearb(Bearb);
     Zustand.set_laenge(laenge());
     Zustand.set_breite(breite());
     Zustand.set_dicke(dicke());
@@ -145,17 +123,16 @@ void werkstueck::set_einstellung_ganx(einstellung_ganx e)
 QString werkstueck::cad_fehler(bool kurz)
 {
     QString msg;
-
     if(Name.contains("Tuer") || \
        Name.contains("Tur")      )
     {
         uint anz_asd = 0; //Anzahl Aufschlagdämpfer
 
-        for(uint i=1; i<=Bearbeitungen.zeilenanzahl() ;i++)
+        for(uint i=0; i<Bearb.count() ;i++)
         {
-            if(Bearbeitungen.zeile(i).contains(BEARBART_BOHR))
+            if(Bearb.at(i).contains(BEARBART_BOHR))
             {
-                bohrung bo(Bearbeitungen.zeile(i));
+                bohrung bo(Bearb.at(i));
                 if(bo.dm() == 6 && bo.tiefe() < dicke())
                 {
                     anz_asd++;
@@ -187,11 +164,11 @@ QString werkstueck::cad_fehler(bool kurz)
     {
         uint anz_asd = 0; //Anzahl Aufschlagdämpfer
 
-        for(uint i=1; i<=Bearbeitungen.zeilenanzahl() ;i++)
+        for(uint i=0; i<Bearb.count() ;i++)
         {
-            if(Bearbeitungen.zeile(i).contains(BEARBART_BOHR))
+            if(Bearb.at(i).contains(BEARBART_BOHR))
             {
-                bohrung bo(Bearbeitungen.zeile(i));
+                bohrung bo(Bearb.at(i));
                 if(bo.dm() == 6 && bo.tiefe() < dicke())
                 {
                     anz_asd++;
@@ -218,8 +195,6 @@ QString werkstueck::cad_fehler(bool kurz)
             }
         }
     }
-
-
     return msg;
 }
 double werkstueck::max_x(QString format)
@@ -361,12 +336,11 @@ geometrietext werkstueck::geo()
     //------------------------------
     //Bearbeitungen darstellen:
     QString farbe_unterseite = FARBE_ROSE;
-    for(uint i=1; i<=Bearbeitungen.zeilenanzahl() ;i++)
+    for(uint i=0; i<Bearb.count() ;i++)
     {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(Bearbeitungen.zeile(i));
-        if(zeile.zeile(1) == BEARBART_BOHR)
+        text_zw zeile;
+        zeile.set_text(Bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
         {
             bohrung bo(zeile.text());
             if(bo.bezug() == WST_BEZUG_OBSEI)
@@ -457,7 +431,7 @@ geometrietext werkstueck::geo()
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
             bohrraster bo(zeile.text());
             if(bo.bezug() == WST_BEZUG_OBSEI)
@@ -606,7 +580,7 @@ geometrietext werkstueck::geo()
                     gt.add_rechteck(tmp_r);
                 }
             }
-        }else if(zeile.zeile(1) == BEARBART_NUT)
+        }else if(zeile.at(0) == BEARBART_NUT)
         {
             nut nu(zeile.text());
             strecke s;
@@ -674,7 +648,7 @@ geometrietext werkstueck::geo()
                 //---
                 gt.add_rechteck(r);
             }
-        }else if(zeile.zeile(1) == BEARBART_RTA)
+        }else if(zeile.at(0) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());
             rechteck3d r;
@@ -739,7 +713,7 @@ geometrietext werkstueck::geo()
                 gt.add_rechteck(r);
             }
 
-        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             fraueseraufruf fa(zeile.text());
             punkt3d p(fa.x(), fa.y(), fa.z());
@@ -753,7 +727,7 @@ geometrietext werkstueck::geo()
                 p.set_farbe(farbe_unterseite);
             }
             gt.add_punkt(p);
-        }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+        }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg(zeile.text());
             strecke s;
@@ -768,7 +742,7 @@ geometrietext werkstueck::geo()
                 s.set_stil(STIL_GESTRICHELT);
             }
             gt.add_strecke(s);
-        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb(zeile.text());
             bogen b;

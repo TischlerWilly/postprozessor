@@ -14,7 +14,7 @@ void wstzustand::clear()
 {    
     Akt_zust = -1;
     Format.clear();
-    Wkzmag.clear();
+    Wkzm.clear();
     Drehung_bekommen.clear();
     Drehung.clear();
     Bewertung.clear();
@@ -269,7 +269,7 @@ QString wstzustand::kante_re()
 }
 
 //----------------------------------Manipulationen:
-void wstzustand::anfordern(QString format, werkzeugmagazin wkzmag, QString drehung)
+/*void wstzustand::anfordern(QString format, werkzeugmagazin wkzmag, QString drehung)
 {
     //Prüfen ob Zustand bereits existiert:
     bool existiert = false;
@@ -287,7 +287,7 @@ void wstzustand::anfordern(QString format, werkzeugmagazin wkzmag, QString drehu
         erzeugen(format, wkzmag, drehung);
         Akt_zust = Format.count()-1;
     }
-}
+}*/
 void wstzustand::anfordern(QString format, wkz_magazin wkzmag, QString drehung)
 {
     //Prüfen ob Zustand bereits existiert:
@@ -310,7 +310,7 @@ void wstzustand::anfordern(QString format, wkz_magazin wkzmag, QString drehung)
 //----------------------------------
 //Private:
 //----------------------------------
-void wstzustand::erzeugen(QString format, werkzeugmagazin wkzmag, QString drehung)
+/*void wstzustand::erzeugen(QString format, werkzeugmagazin wkzmag, QString drehung)
 {
     Format.append(format);
     //  ->Format
@@ -363,6 +363,7 @@ void wstzustand::erzeugen(QString format, werkzeugmagazin wkzmag, QString drehun
         //  ->Versatz_y
     }
 }
+*/
 void wstzustand::erzeugen(QString format, wkz_magazin wkzmag, QString drehung)
 {
     Format.append(format);
@@ -371,7 +372,7 @@ void wstzustand::erzeugen(QString format, wkz_magazin wkzmag, QString drehung)
     //  ->Wkzmag
     Drehung_bekommen.append(drehung);
     //  ->Drehung_bekommen
-    finde_drehwinkel_auto_(Format.count()-1);//hier stürtzt Programm ab
+    finde_drehwinkel_auto_(Format.count()-1);
     //  ->Drehung
     //  ->Bewertung
     //  ->Warnungen
@@ -398,11 +399,11 @@ void wstzustand::erzeugen(QString format, wkz_magazin wkzmag, QString drehung)
         //  ->Versatz_y
     }else if(format == "ggf")
     {
-        //ggf_dateitext(Format.count()-1);
+        ggf_dateitext(Format.count()-1);
         //  ->Exporttext
         //  ->Fehler_kein_wkz
         //  ->Export_moeglich
-        //geo(Format.count()-1);
+        geo(Format.count()-1);
         //  ->Geotext
         //  ->Versatz_y
     }else if(format == "eigen")
@@ -417,7 +418,7 @@ void wstzustand::erzeugen(QString format, wkz_magazin wkzmag, QString drehung)
     }
 }
 
-void wstzustand::finde_drehwinkel_auto(int index)
+/*void wstzustand::finde_drehwinkel_auto(int index)
 {
     //vor dem Aufruf dieser Funktion müssen folgende Parameter zwingend erzeugt sein:
     //Format
@@ -1737,6 +1738,7 @@ void wstzustand::finde_drehwinkel_auto(int index)
     Laenge.append(ret_laenge);
     Breite.append(ret_breite);
 }
+*/
 void wstzustand::finde_drehwinkel_auto_(int index)
 {
     //vor dem Aufruf dieser Funktion müssen folgende Parameter zwingend erzeugt sein:
@@ -3019,7 +3021,7 @@ void wstzustand::finde_drehwinkel_auto_(int index)
         ret_warnungen.clear();
         ret_bearb = bearb;
         ret_laenge = tmp_l;
-        ret_breite = tmp_b;
+        ret_breite = tmp_b;        
     }
 
     Drehung.append(ret_drehung);
@@ -4718,7 +4720,7 @@ void wstzustand::bearb_optimieren_ganx(text_zw& bearb)
     }
 }
 
-void wstzustand::dubosplitten(text_zeilenweise& bearb, werkzeugmagazin wkzmag)
+/*void wstzustand::dubosplitten(text_zeilenweise& bearb, werkzeugmagazin wkzmag)
 {
     //Diese Funktion soll Durchgangs-Bohrungen finden
     //Gibt es für eine Durchgangsbohrung keinen Duchgangsborer so soll das Loch von beiden Plattenseiten gebohrt werden
@@ -4773,6 +4775,7 @@ void wstzustand::dubosplitten(text_zeilenweise& bearb, werkzeugmagazin wkzmag)
     }
     bearb = bearb_neu;
 }
+*/
 void wstzustand::dubosplitten(text_zw& bearb, wkz_magazin& wkzmag)
 {
     //Diese Funktion soll Durchgangs-Bohrungen finden
@@ -4828,7 +4831,7 @@ void wstzustand::dubosplitten(text_zw& bearb, wkz_magazin& wkzmag)
     bearb = bearb_neu;
 }
 
-QString wstzustand::warnungen_fmc(text_zeilenweise bearb, werkzeugmagazin wkzmag, \
+/*QString wstzustand::warnungen_fmc(text_zeilenweise bearb, werkzeugmagazin wkzmag, \
                                   double tmp_l, double tmp_b)
 {
     dubosplitten(bearb, wkzmag);
@@ -4971,7 +4974,7 @@ QString wstzustand::warnungen_fmc(text_zeilenweise bearb, werkzeugmagazin wkzmag
     }
 
     return msg;
-}
+}*/
 QString wstzustand::warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b)
 {
     dubosplitten(bearb, wkzmag);
@@ -5115,7 +5118,7 @@ QString wstzustand::warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_
     return msg;
 }
 
-QString wstzustand::warnungen_ganx(text_zeilenweise bearb, werkzeugmagazin wkzmag, \
+/*QString wstzustand::warnungen_ganx(text_zeilenweise bearb, werkzeugmagazin wkzmag, \
                                   double tmp_l, double tmp_b)
 {
     dubosplitten(bearb, wkzmag);
@@ -5343,6 +5346,7 @@ QString wstzustand::warnungen_ganx(text_zeilenweise bearb, werkzeugmagazin wkzma
 
     return msg;
 }
+*/
 QString wstzustand::warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b)
 {
     dubosplitten(bearb, wkzmag);
@@ -5569,7 +5573,7 @@ QString wstzustand::warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp
 
     return msg;
 }
-void wstzustand::rasterbohrungen_finden_fmc(text_zeilenweise& bearb, werkzeugmagazin wkzmag,\
+/*void wstzustand::rasterbohrungen_finden_fmc(text_zeilenweise& bearb, werkzeugmagazin wkzmag,\
                                             double tmp_l, double tmp_b)
 {
     bohrraster bora;
@@ -5985,6 +5989,7 @@ void wstzustand::rasterbohrungen_finden_fmc(text_zeilenweise& bearb, werkzeugmag
     }
 
 }
+*/
 void wstzustand::rasterbohrungen_finden_fmc(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b)
 {
     bohrraster bora;
@@ -6400,7 +6405,7 @@ void wstzustand::rasterbohrungen_finden_fmc(text_zw& bearb, wkz_magazin wkzmag,d
 
 }
 
-void wstzustand::rasterbohrungen_finden_ganx(text_zeilenweise& bearb, werkzeugmagazin wkzmag,\
+/*void wstzustand::rasterbohrungen_finden_ganx(text_zeilenweise& bearb, werkzeugmagazin wkzmag,\
                                              double tmp_l, double tmp_b)
 {
     bohrraster bora;
@@ -6624,6 +6629,7 @@ void wstzustand::rasterbohrungen_finden_ganx(text_zeilenweise& bearb, werkzeugma
         }
     }
 }
+*/
 void wstzustand::rasterbohrungen_finden_ganx(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b)
 {
     bohrraster bora;
@@ -7206,7 +7212,7 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
     }
 }
 
-void wstzustand::kurze_an_ab_geraden(text_zeilenweise& bearb, werkzeugmagazin wkzmag)
+/*void wstzustand::kurze_an_ab_geraden(text_zeilenweise& bearb, werkzeugmagazin wkzmag)
 {
     //Geraden die Kürzer sind als der Fräser-Durchmesser und ungünstig liegen kann
     //die CNC-Maschine nicht korrekt verarbeiten
@@ -7308,6 +7314,7 @@ void wstzustand::kurze_an_ab_geraden(text_zeilenweise& bearb, werkzeugmagazin wk
         }
     }
 }
+*/
 void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
 {
     //Geraden die Kürzer sind als der Fräser-Durchmesser und ungünstig liegen kann
@@ -8168,11 +8175,11 @@ QString wstzustand::kante_re_ganx(QString drewi)
 
 void wstzustand::fmc_dateitext(int index)
 {
-    text_zeilenweise bearb = Bearbeitung.at(index);    
+    text_zw bearb = Bearbeitung.at(index);
     QString drewi = Drehung.at(index);
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
-    werkzeugmagazin wkzmag = Wkzmag.at(index);
+    wkz_magazin wkzmag = Wkzm.at(index);
     dubosplitten(bearb, wkzmag);
 
     text_zeilenweise bearb_kopie = bearb;

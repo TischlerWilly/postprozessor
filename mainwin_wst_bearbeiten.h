@@ -34,7 +34,7 @@ private:
     Ui::MainWin_wst_bearbeiten *ui;
     vorschau vorschaufenster;
     werkstueck *Wst;
-    undo_redo<text_zeilenweise> UnReDo;
+    undo_redo<text_zw> UnReDo;
     QString KopierterEintrag;
 
     void clear();

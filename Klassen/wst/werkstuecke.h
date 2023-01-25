@@ -6,7 +6,6 @@
 #include <QVector>
 
 #include "werkstueck.h"
-#include "Klassen/text_zeilenweise.h"
 #include "Defines/dateinamen.h"
 #include "Defines/def_fmc.h"
 #include "Defines/def_dxf.h"
@@ -42,7 +41,7 @@ public:
     }
     inline void set_name(uint zeilennummer,  QString neuer_name)
     {
-        Namen.zeile_ersaetzen(zeilennummer, neuer_name);
+        Namen.edit(zeilennummer, neuer_name);
     }
     //--------------------------------------------------get_xy:
     bool        ist_bekannt(QString Werkstueckname);
@@ -52,20 +51,20 @@ public:
 
     inline uint             anzahl()
     {
-        return Namen.zeilenanzahl();
+        return Namen.count();
     }
     inline QString          namen()
     {
         return Namen.text();
     }
-    inline text_zeilenweise namen_tz()
+    inline text_zw namen_tz()
     {
         return Namen;
     }
 
     //--------------------------------------------------Manipulationen:
     void clear();
-    QString stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu);
+    QString stdnamen(text_zw namen_alt, text_zw namen_neu);
     void sortieren();
     //void ersetzen(werkstueck w, uint index);
 
@@ -73,8 +72,8 @@ public:
 
 private:
     //Variabeln:
-    text_zeilenweise    Namen;        //namen der Wst
-    text_zeilenweise    Quellformate; //aus welchem Dateiformat wurde das Wst eingelesen
+    text_zw    Namen;        //namen der Wst
+    text_zw    Quellformate; //aus welchem Dateiformat wurde das Wst eingelesen
     QVector<werkstueck> Wste;         //hier werden alle Werkstücke gespeichert
     double              Min_fkon_gerade_laenge;  //minimale Geradenlänge. kürzere Geraden werden beim Import ignoriert
     bool                Kurze_geraden_import;

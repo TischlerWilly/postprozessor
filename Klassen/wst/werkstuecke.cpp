@@ -17,8 +17,8 @@ bool werkstuecke::neu(QString Werkstueckname, QString Quellformat)
         return true;//FEHLER, der Teil gibt es bereits!!!
     }else
     {
-        Namen.zeile_anhaengen(Werkstueckname);
-        Quellformate.zeile_anhaengen(Quellformat);
+        Namen.add_hi(Werkstueckname);
+        Quellformate.add_hi(Quellformat);
         werkstueck w(Werkstueckname);
         w.set_zugabe_gehrungen(Zugabe_gehrungen);
         Wste.append(w);
@@ -34,19 +34,19 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
         neu(Werkstueckname, FMC);
         Index = index(Werkstueckname);
     }
-    text_zeilenweise tz;
+    text_zw tz;
     tz.set_text(importtext);
 
     werkstueck w = Wste.at(Index-1);
 
-    for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+    for(uint i=0; i<tz.count() ;i++)
     {
-        QString zeile = tz.zeile(i);
+        QString zeile = tz.at(i);
         if(zeile.contains(FMC_PRGKOPF))
         {
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -78,7 +78,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
         }else if(zeile.contains(FMC_KOMMENTAR))
         {
             i++;
-            zeile = tz.zeile(i);
+            zeile = tz.at(i);
             QString schluessel = text_links(zeile, "=");
 
             if(schluessel == FMC_KOMMENTAR_TEXT)
@@ -111,9 +111,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             bohrung bo;
             bo.set_bezug(WST_BEZUG_OBSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -168,9 +168,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double y5 = 0;
             double y6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -430,9 +430,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double y5 = 0;
             double y6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -692,9 +692,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double x5 = 0;
             double x6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -954,9 +954,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double x5 = 0;
             double x6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -1215,9 +1215,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double y5 = 0;
             double y6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -1476,9 +1476,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double x5 = 0;
             double x6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -1728,9 +1728,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             bohrung bo;
             bo.set_bezug(WST_BEZUG_OBSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -1790,9 +1790,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             rechtecktasche rt;
             rt.set_bezug(WST_BEZUG_OBSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -1875,9 +1875,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             nut n;
             n.set_bezug(WST_BEZUG_OBSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -1962,9 +1962,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double y2 = 0;
             double raster = 32;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii;
@@ -2065,9 +2065,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double y2 = 0;
             double raster = 32;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -2167,9 +2167,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             fraueseraufruf fa;
             fa.set_bezug(WST_BEZUG_OBSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -2232,28 +2232,27 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             fg.set_bezug(WST_BEZUG_OBSEI);
 
             //Startpunkt aus der vorherigen Bearbeitung heraus einlesen:
-            text_zeilenweise bearb;
+            text_zw bearb;
             bearb = w.bearb();
-            text_zeilenweise letzte_bearb;
-            letzte_bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
-            if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
+            text_zw letzte_bearb;
+            letzte_bearb.set_text(bearb.at(bearb.count()-1), TRENNZ_BEARB_PARAM);
+            if(letzte_bearb.at(0) == BEARBART_FRAESERAUFRUF)
             {
                 fraueseraufruf tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.pos_vertikal());
-            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
+            }else if(letzte_bearb.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.ep());
-            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+            }else if(letzte_bearb.at(0) == BEARBART_FRAESERBOGEN)
             {
                 fraeserbogen tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.ep());
             }
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -2316,28 +2315,27 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             }
 
             //Startpunkt aus der vorherigen Bearbeitung heraus einlesen:
-            text_zeilenweise bearb;
+            text_zw bearb;
             bearb = w.bearb();
-            text_zeilenweise letzte_bearb;
-            letzte_bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
-            if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
+            text_zw letzte_bearb;
+            letzte_bearb.set_text(bearb.at(bearb.count()-1),TRENNZ_BEARB_PARAM);
+            if(letzte_bearb.at(0) == BEARBART_FRAESERAUFRUF)
             {
                 fraueseraufruf tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.pos_vertikal());
-            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
+            }else if(letzte_bearb.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.ep());
-            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+            }else if(letzte_bearb.at(0) == BEARBART_FRAESERBOGEN)
             {
                 fraeserbogen tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.ep());
             }
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -2395,9 +2393,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             fa.set_bezug(WST_BEZUG_OBSEI);
             fg.set_bezug(WST_BEZUG_OBSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -2490,9 +2488,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             bool kettenmass = false;
             double seite = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -2843,9 +2841,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double spy = 0;
             double epx = 0;
             double epy = 0;
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -2930,9 +2928,9 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
         }else if(zeile.contains(FMC_STULP))
         {
             rechtecktasche rt;
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -3032,23 +3030,23 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
         return 1;   //Die Bearbeitung soll nur auf die Unterseite importiert werden,
                     //wenn bereits die Bearbeitung auf der Oberseite importiert wurde
     }
-    text_zeilenweise tz;
+    text_zw tz;
     tz.set_text(importtext);
 
     werkstueck w = Wste.at(Index-1);
 
-    for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+    for(uint i=0; i<=tz.count() ;i++)
     {
-        QString zeile = tz.zeile(i);
+        QString zeile = tz.at(i);
 
         if(zeile.contains(FMC_BOHR_DM))
         {
             bohrung bo;
             bo.set_bezug(WST_BEZUG_UNSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -3105,9 +3103,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             double y5 = 0;
             double y6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -3367,9 +3365,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             double y5 = 0;
             double y6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -3629,9 +3627,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             double x5 = 0;
             double x6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -3892,9 +3890,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             double x5 = 0;
             double x6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -4154,9 +4152,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             double y5 = 0;
             double y6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -4419,9 +4417,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             double x5 = 0;
             double x6 = 0;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -4677,9 +4675,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             bohrung bo;
             bo.set_bezug(WST_BEZUG_UNSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -4740,9 +4738,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             rechtecktasche rt;
             rt.set_bezug(WST_BEZUG_UNSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -4839,9 +4837,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             nut n;
             n.set_bezug(WST_BEZUG_UNSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -4930,9 +4928,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             double y2 = 0;
             double raster = 32;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -5035,9 +5033,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             double y2 = 0;
             double raster = 32;
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -5140,9 +5138,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             fraueseraufruf fa;
             fa.set_bezug(WST_BEZUG_UNSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -5206,28 +5204,27 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             fg.set_bezug(WST_BEZUG_UNSEI);
 
             //Startpunkt aus der vorherigen Bearbeitung heraus einlesen:
-            text_zeilenweise bearb;
+            text_zw bearb;
             bearb = w.bearb();
-            text_zeilenweise letzte_bearb;
-            letzte_bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
-            if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
+            text_zw letzte_bearb;
+            letzte_bearb.set_text(bearb.at(bearb.count()-1),TRENNZ_BEARB_PARAM);
+            if(letzte_bearb.at(0) == BEARBART_FRAESERAUFRUF)
             {
                 fraueseraufruf tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.pos_vertikal());
-            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
+            }else if(letzte_bearb.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.ep());
-            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+            }else if(letzte_bearb.at(0) == BEARBART_FRAESERBOGEN)
             {
                 fraeserbogen tmp(letzte_bearb.text());
                 fg.set_startpunkt(tmp.ep());
             }
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -5289,28 +5286,27 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             }
 
             //Startpunkt aus der vorherigen Bearbeitung heraus einlesen:
-            text_zeilenweise bearb;
+            text_zw bearb;
             bearb = w.bearb();
-            text_zeilenweise letzte_bearb;
-            letzte_bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            letzte_bearb.set_text(bearb.zeile(bearb.zeilenanzahl()));
-            if(letzte_bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
+            text_zw letzte_bearb;
+            letzte_bearb.set_text(bearb.at(bearb.count()-1),TRENNZ_BEARB_PARAM);
+            if(letzte_bearb.at(0) == BEARBART_FRAESERAUFRUF)
             {
                 fraueseraufruf tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.pos_vertikal());
-            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERGERADE)
+            }else if(letzte_bearb.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.ep());
-            }else if(letzte_bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+            }else if(letzte_bearb.at(0) == BEARBART_FRAESERBOGEN)
             {
                 fraeserbogen tmp(letzte_bearb.text());
                 fb.set_startpunkt(tmp.ep());
             }
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -5370,9 +5366,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             fa.set_bezug(WST_BEZUG_UNSEI);
             fg.set_bezug(WST_BEZUG_UNSEI);
 
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -5458,9 +5454,9 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             double spy = 0;
             double epx = 0;
             double epy = 0;
-            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            for(uint ii=i+1; ii<tz.count() ;ii++)
             {
-                zeile = tz.zeile(ii);
+                zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
@@ -5558,16 +5554,16 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
 }
 QString werkstuecke::dxf_wert(QString namen, QString werte, QString gesucht)
 {
-    text_zeilenweise tz_name;
-    text_zeilenweise tz_wert;
+    text_zw tz_name;
+    text_zw tz_wert;
     tz_name.set_text(namen);
     tz_wert.set_text(werte);
     QString ret;
-    for(uint i=1; i<=tz_name.zeilenanzahl() ;i++)
+    for(uint i=0; i<tz_name.count() ;i++)
     {
-        if(tz_name.zeile(i) == gesucht)
+        if(tz_name.at(i) == gesucht)
         {
-            ret = tz_wert.zeile(i);
+            ret = tz_wert.at(i);
             break;
         }
     }
@@ -5646,32 +5642,32 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         neu(Werkstueckname, DXF);
         Index = index(Werkstueckname);
     }
-    text_zeilenweise tz, tz_name, tz_wert;
+    text_zw tz, tz_name, tz_wert;
     tz.set_text(importtext);
     werkstueck w = Wste.at(Index-1);
 
     //tz_name und tz_wert mit Daten füllen:
     bool schalter = true;
-    for(uint i=1; i<tz.zeilenanzahl() ;i++)
+    for(uint i=0; i<tz.count() ;i++)
     {
         if(schalter == true)
         {
-            tz_name.zeile_anhaengen(tz.zeile(i));
+            tz_name.add_hi(tz.at(i));
         }else
         {
-            tz_wert.zeile_anhaengen(tz.zeile(i));
+            tz_wert.add_hi(tz.at(i));
         }
         schalter = !schalter;
     }
 
     //DXF-Version prüfen:
     QString dxf_version;
-    for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+    for(uint i=0; i<tz.count() ;i++)
     {
-        QString zeile = tz.zeile(i);
+        QString zeile = tz.at(i);
         if(zeile.contains(DXF_VERSION))
         {
-            dxf_version = tz.zeile(i+2);
+            dxf_version = tz.at(i+2);
             break;//for
         }
     }
@@ -5682,18 +5678,18 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         uint i_start = 0;
         uint i_ende  = 0;
         //------------------------------Geometriebereich ermitteln (Start und Ende):
-        for(uint i=1; i<=tz_name.zeilenanzahl() ;i++)
+        for(uint i=0; i<tz_name.count() ;i++)
         {
-            if(tz_name.zeile(i).toInt() == 2)// A name Attribute tag, Block name, and so on. Also used to identify a DXF section or table name
+            if(tz_name.at(i).toInt() == 2)// A name Attribute tag, Block name, and so on. Also used to identify a DXF section or table name
             {
-                if(tz_wert.zeile(i) == "ENTITIES")
+                if(tz_wert.at(i) == "ENTITIES")
                 {
                     i_start = i;
                 }
             }
-            if(i_start > 0 && tz_name.zeile(i).toInt() == 0)
+            if(i_start > 0 && tz_name.at(i).toInt() == 0)
             {
-                if(tz_wert.zeile(i) == DXF_AC1009_EOF)
+                if(tz_wert.at(i) == DXF_AC1009_EOF)
                 {
                     i_ende = i;
                     break;//for i
@@ -5701,11 +5697,11 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             }
         }
         //------------------------------Unterblöcke ermitteln:
-        text_zeilenweise block;
+        text_zw block;
         //Ersten Block finden:
         for(uint i=i_start; i<=i_ende ;i++)
         {
-            if(tz_name.zeile(i) == DXF_AC1009_NULL)
+            if(tz_name.at(i) == DXF_AC1009_NULL)
             {
                 QString start = int_to_qstring(i_start);
                 QString ende = int_to_qstring(i);
@@ -5717,25 +5713,25 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         //restliche Blöcke finden:
         for(uint i=i_start; i<=i_ende ;i++)
         {
-            if(tz_name.zeile(i) == DXF_AC1009_NULL)
+            if(tz_name.at(i) == DXF_AC1009_NULL)
             {
                 QString tren = "|";
-                QString start = text_rechts(block.zeile(block.zeilenanzahl()),tren);
+                QString start = text_rechts(block.at(block.count()-1),tren);
                 QString ende = int_to_qstring(i);
-                block.zeile_anhaengen(start+tren+ende);
+                block.add_hi(start+tren+ende);
             }
         }
-        block.zeile_loeschen(block.zeilenanzahl());
-        block.zeile_loeschen(1);
-        block.zeile_loeschen(1);
+        block.entf(block.count()-1);
+        block.entf(0);
+        block.entf(0);
         //------------------------------Werkstück-Größe bestimmen:
-        for(uint i=1;i<=block.zeilenanzahl();i++)
+        for(uint i=0;i<block.count();i++)
         {
-            uint sta = text_links(block.zeile(i),"|").toUInt();
-            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint sta = text_links(block.at(i),"|").toUInt();
+            uint end = text_rechts(block.at(i),"|").toUInt();
             uint anz = end-sta;
             QString klasse;
-            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+            klasse = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                               DXF_AC1009_KLASSE);
             if(klasse.contains(Einstellung_dxf_klassen.wst()))
             {
@@ -5747,13 +5743,13 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                     dicke.replace(Einstellung_dxf.dezitren(),".");
                     w.set_dicke(dicke);
                 }
-                QString x = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                QString x = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                      DXF_AC1009_WST_X);
                 if(x.toDouble() > w.laenge())
                 {
                     w.set_laenge(x);
                 }
-                QString y = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                QString y = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                      DXF_AC1009_WST_Y);
                 if(y.toDouble() > w.breite())
                 {
@@ -5762,21 +5758,21 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             }
         }
         //------------------------------Bohrungen vertikal:
-        for(uint i=1;i<=block.zeilenanzahl();i++)
+        for(uint i=0;i<block.count();i++)
         {
-            uint sta = text_links(block.zeile(i),"|").toUInt();
-            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint sta = text_links(block.at(i),"|").toUInt();
+            uint end = text_rechts(block.at(i),"|").toUInt();
             uint anz = end-sta;
             QString klasse;
-            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+            klasse = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                               DXF_AC1009_KLASSE);
             if(klasse.contains(Einstellung_dxf_klassen.bohr_vert()))
             {
-                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                QString typ = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                        DXF_AC1009_NULL);
                 if(typ == DXF_AC1009_KREIS)
                 {
-                    kreis k = dxf_kreis(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    kreis k = dxf_kreis(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                     bohrung bo;
                     bo.set_afb("1");
                     QString ti;
@@ -5820,22 +5816,22 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         }
         //------------------------------Bohrungen horizontal:
         geometrietext geo;
-        for(uint i=1;i<=block.zeilenanzahl();i++)
+        for(uint i=0;i<block.count();i++)
         {
-            uint sta = text_links(block.zeile(i),"|").toUInt();
-            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint sta = text_links(block.at(i),"|").toUInt();
+            uint end = text_rechts(block.at(i),"|").toUInt();
             uint anz = end-sta;
             QString klasse;
-            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+            klasse = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                               DXF_AC1009_KLASSE);
             if(klasse.contains(Einstellung_dxf_klassen.bohr_hori()))
             {
-                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                QString typ = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                        DXF_AC1009_NULL);
                 //Bohrung wird durch 2 Strecken definiert:
                 if(typ == DXF_AC1009_STRECKE)
                 {
-                    strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                     if(geo.isempty())
                     {
                         geo.add_strecke(s);
@@ -5931,22 +5927,22 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         }
         geo.clear();
         //------------------------------Nut vertikal:
-        for(uint i=1;i<=block.zeilenanzahl();i++)
+        for(uint i=0;i<block.count();i++)
         {
-            uint sta = text_links(block.zeile(i),"|").toUInt();
-            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint sta = text_links(block.at(i),"|").toUInt();
+            uint end = text_rechts(block.at(i),"|").toUInt();
             uint anz = end-sta;
             QString klasse;
-            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+            klasse = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                               DXF_AC1009_KLASSE);
             if(klasse.contains(Einstellung_dxf_klassen.nut_vert()))
             {
-                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                QString typ = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                        DXF_AC1009_NULL);
                 //Nut wird durch 2 oder 4 Strecken definiert:
                 if(typ == DXF_AC1009_STRECKE)
                 {
-                    strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                     text_zeilenweise geotz = geo.text_zwei();
                     geotz.set_trennzeichen(';');
                     geo.add_strecke(s);
@@ -6045,21 +6041,21 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         }
         geo.clear();
         //------------------------------Kreistasche:
-        for(uint i=1;i<=block.zeilenanzahl();i++)
+        for(uint i=0;i<block.count();i++)
         {
-            uint sta = text_links(block.zeile(i),"|").toUInt();
-            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint sta = text_links(block.at(i),"|").toUInt();
+            uint end = text_rechts(block.at(i),"|").toUInt();
             uint anz = end-sta;
             QString klasse;
-            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+            klasse = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                               DXF_AC1009_KLASSE);
             if(klasse.contains(Einstellung_dxf_klassen.kta()))
             {
-                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                QString typ = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                        DXF_AC1009_NULL);
                 if(typ == DXF_AC1009_KREIS)
                 {
-                    kreis k = dxf_kreis(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    kreis k = dxf_kreis(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                     bohrung bo;
                     bo.set_afb("1");
                     QString ti;
@@ -6110,25 +6106,25 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         geo.clear();
         //------------------------------Rechtecktasche:
         geo_text geo_neu;
-        for(uint i=1;i<=block.zeilenanzahl();i++)
+        for(uint i=0;i<block.count();i++)
         {
-            uint sta = text_links(block.zeile(i),"|").toUInt();
-            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint sta = text_links(block.at(i),"|").toUInt();
+            uint end = text_rechts(block.at(i),"|").toUInt();
             uint anz = end-sta;
             QString klasse;
-            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+            klasse = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                               DXF_AC1009_KLASSE);
             if(klasse.contains(Einstellung_dxf_klassen.rta()))
             {
-                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                QString typ = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                        DXF_AC1009_NULL);
                 if(typ == DXF_AC1009_STRECKE)
                 {
-                    strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                     geo_neu.add_strecke(s);
                 }else if(typ == DXF_AC1009_BOGEN)
                 {
-                    bogen b = dxf_bogen(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    bogen b = dxf_bogen(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                     geo_neu.add_bogen(b);
                 }
                 //------------------------------
@@ -6372,14 +6368,14 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         //------------------------------Fräsung vertikal:
         punkt3d letztepos;
         bool konturanfang = true;
-        for(uint i=1;i<=block.zeilenanzahl();i++)
+        for(uint i=0;i<block.count();i++)
         {
             double tolleranz = 0.1;
-            uint sta = text_links(block.zeile(i),"|").toUInt();
-            uint end = text_rechts(block.zeile(i),"|").toUInt();
+            uint sta = text_links(block.at(i),"|").toUInt();
+            uint end = text_rechts(block.at(i),"|").toUInt();
             uint anz = end-sta;
             QString klasse;
-            klasse = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+            klasse = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                               DXF_AC1009_KLASSE);
             if(klasse.contains(Einstellung_dxf_klassen.fraes_vert()))
             {
@@ -6421,28 +6417,28 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 {
                     radkor = FRKOR_M;
                 }
-                QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                QString typ = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                        DXF_AC1009_NULL);
                 if(typ == DXF_AC1009_STRECKE)
                 {
                     //noch Z-Wert einarbeiten
                     //noch Fräser abfahren?
-                    strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
-                    if(konturanfang == true && i+1<=block.zeilenanzahl())
+                    strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
+                    if(konturanfang == true && i+1<block.count())
                     {
-                        uint sta = text_links(block.zeile(i),"|").toUInt();
-                        uint end = text_rechts(block.zeile(i),"|").toUInt();
+                        uint sta = text_links(block.at(i),"|").toUInt();
+                        uint end = text_rechts(block.at(i),"|").toUInt();
                         uint anz = end-sta;
                         QString klasse2;
-                        klasse2 = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                        klasse2 = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                           DXF_AC1009_KLASSE);
                         if(klasse == klasse2)
                         {
-                            QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                            QString typ = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                                    DXF_AC1009_NULL);
                             if(typ == DXF_AC1009_STRECKE)
                             {
-                                strecke s2 = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                                strecke s2 = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                                 if(  cagleich(s.stapu(), s2.stapu(),0.1)  ||\
                                      cagleich(s.stapu(), s2.endpu(),0.1))
                                 {
@@ -6450,7 +6446,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                                 }
                             }else if(typ == DXF_AC1009_BOGEN)
                             {
-                                bogenac b2 = dxf_bogenac(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                                bogenac b2 = dxf_bogenac(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                                 if(  cagleich(s.stapu(), b2.spu(),0.1)  ||\
                                      cagleich(s.stapu(), b2.epu(),0.1))
                                 {
@@ -6541,22 +6537,22 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 {
                     //noch Z-Wert einarbeiten
                     //noch Fräser abfahren?
-                    bogenac b = dxf_bogenac(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
-                    if(konturanfang == true && i+1<=block.zeilenanzahl())
+                    bogenac b = dxf_bogenac(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
+                    if(konturanfang == true && i+1<block.count())
                     {
-                        uint sta = text_links(block.zeile(i),"|").toUInt();
-                        uint end = text_rechts(block.zeile(i),"|").toUInt();
+                        uint sta = text_links(block.at(i),"|").toUInt();
+                        uint end = text_rechts(block.at(i),"|").toUInt();
                         uint anz = end-sta;
                         QString klasse2;
-                        klasse2 = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                        klasse2 = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                           DXF_AC1009_KLASSE);
                         if(klasse == klasse2)
                         {
-                            QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
+                            QString typ = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
                                                    DXF_AC1009_NULL);
                             if(typ == DXF_AC1009_STRECKE)
                             {
-                                strecke s2 = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                                strecke s2 = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                                 if(  cagleich(b.spu(), s2.stapu(),0.1)  ||\
                                      cagleich(b.spu(), s2.endpu(),0.1))
                                 {
@@ -6564,7 +6560,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                                 }
                             }else if(typ == DXF_AC1009_BOGEN)
                             {
-                                bogenac b2 = dxf_bogenac(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                                bogenac b2 = dxf_bogenac(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                                 if(  cagleich(b.spu(), b2.spu(),0.1)  ||\
                                      cagleich(b.spu(), b2.epu(),0.1))
                                 {
@@ -6680,9 +6676,9 @@ void werkstuecke::set_zugabe_gehrungen(double wert)
 //--------------------------------------------------get_xy:
 bool werkstuecke::ist_bekannt(QString Werkstueckname)
 {
-    for(uint i=1; i<=Namen.zeilenanzahl() ;i++)
+    for(uint i=0; i<Namen.count() ;i++)
     {
-        if(Werkstueckname == Namen.zeile(i))
+        if(Werkstueckname == Namen.at(i))
         {
             return true;
         }
@@ -6693,7 +6689,7 @@ werkstueck* werkstuecke::wst(uint index)
 {
     //übergibt eine Kopie des Wst
     //Änderungen an dieser Kopie werden nicht zurück in diese Instanz geschrieben.
-    if(index > 0 && index <= Namen.zeilenanzahl())
+    if(index > 0 && index < Namen.count())
     {
         return &Wste[index-1];
     }else
@@ -6704,9 +6700,9 @@ werkstueck* werkstuecke::wst(uint index)
 }
 QString werkstuecke::name(uint index)
 {
-    if(index > 0 && index <= Namen.zeilenanzahl())
+    if(index > 0 && index < Namen.count())
     {
-        return Namen.zeile(index);
+        return Namen.at(index);
     }else
     {
         return "";
@@ -6732,33 +6728,33 @@ void werkstuecke::clear()
     Quellformate.clear();
     Wste.clear();
 }
-QString werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen_neu)
+QString werkstuecke::stdnamen(text_zw namen_alt, text_zw namen_neu)
 {
     QString baugruppenname; //Rückgabewert der Funktion
     //erster Durchlauf: Namen tauschen
-    for(uint i = 1; i<=Namen.zeilenanzahl() ;i++)
+    for(uint i = 0; i<Namen.count() ;i++)
     {
-        QString tmp = Namen.zeile(i);
-        for(uint ii=1; ii<=namen_alt.zeilenanzahl();ii++)
+        QString tmp = Namen.at(i);
+        for(uint ii=0; ii<namen_alt.count();ii++)
         {
-            if(tmp.contains(namen_alt.zeile(ii)))
+            if(tmp.contains(namen_alt.at(ii)))
             {
-                tmp.replace(namen_alt.zeile(ii), namen_neu.zeile(ii));
-                Namen.zeile_ersaetzen(i, tmp);
+                tmp.replace(namen_alt.at(ii), namen_neu.at(ii));
+                Namen.edit(i, tmp);
                 break;
             }
         }
     }
     //zweiter Durchlauf: Schranknummer löschen wenn möglich
-    QString tmp = Namen.zeile(1);
+    QString tmp = Namen.at(0);
     bool schranknummer_wurde_entfernt = false;//wird gebraucht als Prüfung für den 3. Durchlauf
     if(tmp.contains("_"))
     {
         tmp = text_links(tmp, "_");
         bool identisch = true;
-        for(uint i = 2; i<=Namen.zeilenanzahl() ;i++)
+        for(uint i = 1; i<Namen.count() ;i++)
         {
-            if(  tmp != text_links(Namen.zeile(i), "_")  )
+            if(  tmp != text_links(Namen.at(i), "_")  )
             {
                 identisch = false;
                 break;
@@ -6781,29 +6777,29 @@ QString werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen
 
         if(identisch == true && istbaugruppenname == true)
         {
-            if(Namen.zeilenanzahl() > 0)
+            if(Namen.count() > 0)
             {
-                baugruppenname = text_links(Namen.zeile(1),"_");
+                baugruppenname = text_links(Namen.at(0),"_");
                 if(baugruppenname.at(0)=='#')
                 {
                     baugruppenname = text_rechts(baugruppenname, "#");
                 }
             }
-            for(uint i = 1; i<=Namen.zeilenanzahl() ;i++)
+            for(uint i = 0; i<Namen.count() ;i++)
             {
-                Namen.zeile_ersaetzen(  i, text_rechts(Namen.zeile(i),"_")  );
+                Namen.edit(  i, text_rechts(Namen.at(i),"_")  );
             }
             schranknummer_wurde_entfernt = true;
 
         }
     }
     //dritter Durchlauf: Nummer hinter Teilenamen löschen wenn möglich
-    text_zeilenweise bekannte_namen;
+    text_zw bekannte_namen;
     if(schranknummer_wurde_entfernt)
     {
-        for(uint i = 1; i<=Namen.zeilenanzahl() ;i++)//Name für Name durchgehen
+        for(uint i = 0; i<Namen.count() ;i++)//Name für Name durchgehen
         {
-            tmp = Namen.zeile(i);
+            tmp = Namen.at(i);
             QString name_bis_ziffer ="";
             //Namen und Ziffer trennen:
             for(int ii=0; ii<tmp.count() ;ii++)//Namen zeichenweise durchgehen
@@ -6818,9 +6814,9 @@ QString werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen
             }
             //Prüfen, ob es diesen Namen bereits gibt:
             bool bekannt = false;
-            for(uint iii=1; iii<=bekannte_namen.zeilenanzahl() ;iii++)//bekannte Namen nacheinander durchgehen
+            for(uint iii=0; iii<bekannte_namen.count() ;iii++)//bekannte Namen nacheinander durchgehen
             {
-                if(name_bis_ziffer.length() >0 && bekannte_namen.zeile(iii) == name_bis_ziffer)
+                if(name_bis_ziffer.length() >0 && bekannte_namen.at(iii) == name_bis_ziffer)
                 {
                     bekannt = true;
                     break;
@@ -6828,158 +6824,158 @@ QString werkstuecke::stdnamen(text_zeilenweise namen_alt, text_zeilenweise namen
             }
             if(name_bis_ziffer.length() >0 && bekannt == false)//Wenn der Name noch nicht vergeben war
             {
-                Namen.zeile_ersaetzen(i, name_bis_ziffer);
-                bekannte_namen.zeile_anhaengen(name_bis_ziffer);
+                Namen.edit(i, name_bis_ziffer);
+                bekannte_namen.add_hi(name_bis_ziffer);
             }
         }
     }
 
     //Nameninformatione in den einzenen werkstücken aktualisieren:
-    for(uint i=1; i<=Namen.zeilenanzahl() ;i++)
+    for(uint i=0; i<Namen.count() ;i++)
     {
         werkstueck w = Wste.at(i-1);
-        w.set_name(Namen.zeile(i));
+        w.set_name(Namen.at(i));
         Wste.replace(i-1, w);
     }
     return baugruppenname;
 }
 void werkstuecke::sortieren()
 {
-    text_zeilenweise    tmp_Namen;
-    text_zeilenweise    tmp_Quellformate;
+    text_zw    tmp_Namen;
+    text_zw    tmp_Quellformate;
     QVector<werkstueck> tmp_Wste;
-    text_zeilenweise rankingList;
-    rankingList.zeile_anhaengen("Seite_li");
-    rankingList.zeile_anhaengen("Seite_re");
-    rankingList.zeile_anhaengen("Seite");
-    rankingList.zeile_anhaengen("MS_li");
-    rankingList.zeile_anhaengen("MS_re");
-    rankingList.zeile_anhaengen("MS");
-    rankingList.zeile_anhaengen("OB_li");
-    rankingList.zeile_anhaengen("OB_mi");
-    rankingList.zeile_anhaengen("OB_re");
-    rankingList.zeile_anhaengen("OB");
-    rankingList.zeile_anhaengen("UB_li");
-    rankingList.zeile_anhaengen("UB_mi");
-    rankingList.zeile_anhaengen("UB_re");
-    rankingList.zeile_anhaengen("UB");
-    rankingList.zeile_anhaengen("KB_ob");
-    rankingList.zeile_anhaengen("KB_li");
-    rankingList.zeile_anhaengen("KB_mi");
-    rankingList.zeile_anhaengen("KB_un");
-    rankingList.zeile_anhaengen("KB_re");
-    rankingList.zeile_anhaengen("KB");
-    rankingList.zeile_anhaengen("Trav_ob");
-    rankingList.zeile_anhaengen("Trav_un");
-    rankingList.zeile_anhaengen("Trav_vo");
-    rankingList.zeile_anhaengen("Trav_hi");
-    rankingList.zeile_anhaengen("Trav");
-    rankingList.zeile_anhaengen("Traver_ob");
-    rankingList.zeile_anhaengen("Traver_un");
-    rankingList.zeile_anhaengen("Traver_vo");
-    rankingList.zeile_anhaengen("Traver_hi");
-    rankingList.zeile_anhaengen("Traver");
-    rankingList.zeile_anhaengen("EB_ob");
-    rankingList.zeile_anhaengen("EB_li");
-    rankingList.zeile_anhaengen("EB_mi");
-    rankingList.zeile_anhaengen("EB_un");
-    rankingList.zeile_anhaengen("EB_re");
-    rankingList.zeile_anhaengen("EB");
-    rankingList.zeile_anhaengen("RW_ob");
-    rankingList.zeile_anhaengen("RW_li");
-    rankingList.zeile_anhaengen("RW_mi");
-    rankingList.zeile_anhaengen("RW_un");
-    rankingList.zeile_anhaengen("RW_re");
-    rankingList.zeile_anhaengen("RW");
-    rankingList.zeile_anhaengen("Tuer_li");
-    rankingList.zeile_anhaengen("Tuer_");
-    rankingList.zeile_anhaengen("Tuer_A");
-    rankingList.zeile_anhaengen("Tuer_B");
-    rankingList.zeile_anhaengen("Tuer_C");
-    rankingList.zeile_anhaengen("Tuer_D");
-    rankingList.zeile_anhaengen("Tuer_E");
-    rankingList.zeile_anhaengen("Tuer");
-    rankingList.zeile_anhaengen("Front_li");
-    rankingList.zeile_anhaengen("Front_");
-    rankingList.zeile_anhaengen("Front_A");
-    rankingList.zeile_anhaengen("Front_B");
-    rankingList.zeile_anhaengen("Front_C");
-    rankingList.zeile_anhaengen("Front_D");
-    rankingList.zeile_anhaengen("Front_E");
-    rankingList.zeile_anhaengen("Front");
-    rankingList.zeile_anhaengen("SF_A");
-    rankingList.zeile_anhaengen("SF_B");
-    rankingList.zeile_anhaengen("SF_C");
-    rankingList.zeile_anhaengen("SF_D");
-    rankingList.zeile_anhaengen("SF_E");
-    rankingList.zeile_anhaengen("SF");
-    rankingList.zeile_anhaengen("SS_A");
-    rankingList.zeile_anhaengen("SS_B");
-    rankingList.zeile_anhaengen("SS_C");
-    rankingList.zeile_anhaengen("SS_D");
-    rankingList.zeile_anhaengen("SS_E");
-    rankingList.zeile_anhaengen("SS");
-    rankingList.zeile_anhaengen("SV_A");
-    rankingList.zeile_anhaengen("SV_B");
-    rankingList.zeile_anhaengen("SV_C");
-    rankingList.zeile_anhaengen("SV_D");
-    rankingList.zeile_anhaengen("SV_E");
-    rankingList.zeile_anhaengen("SV");
-    rankingList.zeile_anhaengen("SH_A");
-    rankingList.zeile_anhaengen("SH_B");
-    rankingList.zeile_anhaengen("SH_C");
-    rankingList.zeile_anhaengen("SH_D");
-    rankingList.zeile_anhaengen("SH_E");
-    rankingList.zeile_anhaengen("SH");
-    rankingList.zeile_anhaengen("SB_A");
-    rankingList.zeile_anhaengen("SB_B");
-    rankingList.zeile_anhaengen("SB_C");
-    rankingList.zeile_anhaengen("SB_D");
-    rankingList.zeile_anhaengen("SB_E");
-    rankingList.zeile_anhaengen("SB");
-    rankingList.zeile_anhaengen("Sockel_li");
-    rankingList.zeile_anhaengen("Sockel_mi");
-    rankingList.zeile_anhaengen("Sockel_re");
-    rankingList.zeile_anhaengen("Sockel");
-    text_zeilenweise kopiert;
-    for(uint ii = 1; ii<=Namen.zeilenanzahl() ;ii++)
+    text_zw rankingList;
+    rankingList.add_hi("Seite_li");
+    rankingList.add_hi("Seite_re");
+    rankingList.add_hi("Seite");
+    rankingList.add_hi("MS_li");
+    rankingList.add_hi("MS_re");
+    rankingList.add_hi("MS");
+    rankingList.add_hi("OB_li");
+    rankingList.add_hi("OB_mi");
+    rankingList.add_hi("OB_re");
+    rankingList.add_hi("OB");
+    rankingList.add_hi("UB_li");
+    rankingList.add_hi("UB_mi");
+    rankingList.add_hi("UB_re");
+    rankingList.add_hi("UB");
+    rankingList.add_hi("KB_ob");
+    rankingList.add_hi("KB_li");
+    rankingList.add_hi("KB_mi");
+    rankingList.add_hi("KB_un");
+    rankingList.add_hi("KB_re");
+    rankingList.add_hi("KB");
+    rankingList.add_hi("Trav_ob");
+    rankingList.add_hi("Trav_un");
+    rankingList.add_hi("Trav_vo");
+    rankingList.add_hi("Trav_hi");
+    rankingList.add_hi("Trav");
+    rankingList.add_hi("Traver_ob");
+    rankingList.add_hi("Traver_un");
+    rankingList.add_hi("Traver_vo");
+    rankingList.add_hi("Traver_hi");
+    rankingList.add_hi("Traver");
+    rankingList.add_hi("EB_ob");
+    rankingList.add_hi("EB_li");
+    rankingList.add_hi("EB_mi");
+    rankingList.add_hi("EB_un");
+    rankingList.add_hi("EB_re");
+    rankingList.add_hi("EB");
+    rankingList.add_hi("RW_ob");
+    rankingList.add_hi("RW_li");
+    rankingList.add_hi("RW_mi");
+    rankingList.add_hi("RW_un");
+    rankingList.add_hi("RW_re");
+    rankingList.add_hi("RW");
+    rankingList.add_hi("Tuer_li");
+    rankingList.add_hi("Tuer_");
+    rankingList.add_hi("Tuer_A");
+    rankingList.add_hi("Tuer_B");
+    rankingList.add_hi("Tuer_C");
+    rankingList.add_hi("Tuer_D");
+    rankingList.add_hi("Tuer_E");
+    rankingList.add_hi("Tuer");
+    rankingList.add_hi("Front_li");
+    rankingList.add_hi("Front_");
+    rankingList.add_hi("Front_A");
+    rankingList.add_hi("Front_B");
+    rankingList.add_hi("Front_C");
+    rankingList.add_hi("Front_D");
+    rankingList.add_hi("Front_E");
+    rankingList.add_hi("Front");
+    rankingList.add_hi("SF_A");
+    rankingList.add_hi("SF_B");
+    rankingList.add_hi("SF_C");
+    rankingList.add_hi("SF_D");
+    rankingList.add_hi("SF_E");
+    rankingList.add_hi("SF");
+    rankingList.add_hi("SS_A");
+    rankingList.add_hi("SS_B");
+    rankingList.add_hi("SS_C");
+    rankingList.add_hi("SS_D");
+    rankingList.add_hi("SS_E");
+    rankingList.add_hi("SS");
+    rankingList.add_hi("SV_A");
+    rankingList.add_hi("SV_B");
+    rankingList.add_hi("SV_C");
+    rankingList.add_hi("SV_D");
+    rankingList.add_hi("SV_E");
+    rankingList.add_hi("SV");
+    rankingList.add_hi("SH_A");
+    rankingList.add_hi("SH_B");
+    rankingList.add_hi("SH_C");
+    rankingList.add_hi("SH_D");
+    rankingList.add_hi("SH_E");
+    rankingList.add_hi("SH");
+    rankingList.add_hi("SB_A");
+    rankingList.add_hi("SB_B");
+    rankingList.add_hi("SB_C");
+    rankingList.add_hi("SB_D");
+    rankingList.add_hi("SB_E");
+    rankingList.add_hi("SB");
+    rankingList.add_hi("Sockel_li");
+    rankingList.add_hi("Sockel_mi");
+    rankingList.add_hi("Sockel_re");
+    rankingList.add_hi("Sockel");
+    text_zw kopiert;
+    for(uint ii = 0; ii<Namen.count() ;ii++)
     {
-        kopiert.zeile_anhaengen("nein");
+        kopiert.add_hi("nein");
     }
-    for(uint i = 1; i<=rankingList.zeilenanzahl() ;i++)
+    for(uint i = 0; i<rankingList.count() ;i++)
     {
-        QString akt_ranking_name =rankingList.zeile(i);
-        for(uint ii = 1; ii<=Namen.zeilenanzahl() ;ii++)
+        QString akt_ranking_name =rankingList.at(i);
+        for(uint ii = 0; ii<Namen.count() ;ii++)
         {
-            QString akt_wst_name = Namen.zeile(ii);
-            if(kopiert.zeile(ii) != "ja")
+            QString akt_wst_name = Namen.at(ii);
+            if(kopiert.at(ii) != "ja")
             {
                 if(akt_wst_name.contains(akt_ranking_name))
                 {
                     //kopieren:
-                    tmp_Namen.zeile_anhaengen(akt_wst_name);
-                    tmp_Quellformate.zeile_anhaengen(Quellformate.zeile(ii));
+                    tmp_Namen.add_hi(akt_wst_name);
+                    tmp_Quellformate.add_hi(Quellformate.at(ii));
                     werkstueck w = Wste.at(ii-1);
                     w.set_name(akt_wst_name);
                     tmp_Wste.append(w);
-                    kopiert.zeile_ersaetzen(ii, "ja");
+                    kopiert.edit(ii, "ja");
                 }
             }
         }        
     }
     //2. Durchlauf. Jetzt kommen alle wst die nicht sortierbar waren:
-    for(uint i = 1; i<=Namen.zeilenanzahl() ;i++)
+    for(uint i = 0; i<Namen.count() ;i++)
     {
-        QString akt_wst_name = Namen.zeile(i);
-        if(kopiert.zeile(i) != "ja")
+        QString akt_wst_name = Namen.at(i);
+        if(kopiert.at(i) != "ja")
         {
             //kopieren:
-            tmp_Namen.zeile_anhaengen(akt_wst_name);
-            tmp_Quellformate.zeile_anhaengen(Quellformate.zeile(i));
+            tmp_Namen.add_hi(akt_wst_name);
+            tmp_Quellformate.add_hi(Quellformate.at(i));
             werkstueck w = Wste.at(i-1);
             w.set_name(akt_wst_name);
             tmp_Wste.append(w);
-            kopiert.zeile_ersaetzen(i, "ja");
+            kopiert.edit(i, "ja");
         }
     }
     Namen = tmp_Namen;
@@ -7004,9 +7000,9 @@ void werkstuecke::ersetzen(werkstueck w, uint index)
 //--------------------------------------------------get_xy:
 uint werkstuecke::index(QString Werkstueckname)
 {
-    for(uint i=1; i<=Namen.zeilenanzahl() ;i++)
+    for(uint i=0; i<Namen.count() ;i++)
     {
-        if(Namen.zeile(i)==Werkstueckname)
+        if(Namen.at(i)==Werkstueckname)
         {
             return i;
         }

@@ -64,7 +64,6 @@ SOURCES += main.cpp\
     Klassen/wst/rechtecktasche.cpp \
     Klassen/wst/nut.cpp \
     Klassen/prgpfade.cpp \
-    Klassen/werkzeugmagazin.cpp \
     Dialoge/dialog_wkz.cpp \
     Dialoge/dialog_bohrer.cpp \
     Dialoge/dialog_fraeser.cpp \
@@ -142,7 +141,6 @@ HEADERS  += mainwindow.h \
     Klassen/wst/nut.h \
     Defines//def_ganx.h \
     Klassen/prgpfade.h \
-    Klassen/werkzeugmagazin.h \
     Dialoge/dialog_wkz.h \
     Dialoge/dialog_bohrer.h \
     Dialoge/dialog_fraeser.h \
