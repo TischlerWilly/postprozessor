@@ -9,7 +9,8 @@ B	T100	10	35	 	5	10	0	 	vert	 	 	 	 	1
 B	T150	15	35	 	8	15	0	 	vert	 	 	 	 	1
 B	T200	20	35	 	5	20	0	 	vert	 	 	 	 	1
 B	T350	35	35	 	5	35.3	0	 	vert	 	 	 	 	1
-S	S426	125	 	 	10	 	 	4.8	vert	 	 	 	 	1
+B	T350	35	35	 	5	35.6	0	 	vert	 	 	 	 	1
+S	S426	125	 	 	10	 	 	4.8	vert	 	 	 	 	1	0	1
 M	R602	18	46	7000	12	 	 	 	vert	IMA602	12	IMA601	nein	1
 M	R608	8	20	4500	5	 	 	 	vert	IMA608	0		nein	1
 M	R601	18	46	7000	12	 	 	 	vert	IMA601	12	IMA602	nein	1

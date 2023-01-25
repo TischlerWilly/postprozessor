@@ -3,6 +3,7 @@
 
 #include "Klassen/wst/rechtecktasche.h"
 #include "Klassen/formel.h"
+#include "Klassen/wst/werkstueck.h"
 #include <QDialog>
 
 namespace Ui {
@@ -16,7 +17,7 @@ class Dialog_bearb_rta : public QDialog
 public:
     explicit Dialog_bearb_rta(QWidget *parent = nullptr);
     ~Dialog_bearb_rta();
-    void set_data(QString d);
+    void set_data(QString d, werkstueck *w);
 
 private slots:
     void on_btn_abbrechen_clicked();
@@ -27,6 +28,8 @@ signals:
 
 private:
     Ui::Dialog_bearb_rta *ui;
+    werkstueck *Wst;
+    QString var_zu_wert(QString term);
 
 };
 

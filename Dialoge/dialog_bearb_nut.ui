@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>490</width>
-    <height>587</height>
+    <width>491</width>
+    <height>566</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,26 +19,22 @@
      <x>10</x>
      <y>10</y>
      <width>471</width>
-     <height>491</height>
+     <height>421</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_ys"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_ti"/>
+    </item>
     <item row="3" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>Start Y</string>
       </property>
      </widget>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="label_12">
-      <property name="text">
-       <string>Ausführbedingung</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_xs"/>
     </item>
     <item row="0" column="0">
      <widget class="QLabel" name="label_2">
@@ -47,49 +43,36 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_ys"/>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Ende Y</string>
+      </property>
+     </widget>
     </item>
-    <item row="5" column="1">
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_xs"/>
+    </item>
+    <item row="6" column="1">
      <widget class="QLineEdit" name="lineEdit_ye"/>
     </item>
-    <item row="4" column="0">
+    <item row="9" column="1">
+     <widget class="QLineEdit" name="lineEdit_afb"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_b"/>
+    </item>
+    <item row="5" column="0">
      <widget class="QLabel" name="label_6">
       <property name="text">
        <string>Ende X</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit_b"/>
-    </item>
-    <item row="7" column="1">
-     <widget class="QLineEdit" name="lineEdit_afb"/>
-    </item>
-    <item row="6" column="1">
-     <widget class="QComboBox" name="comboBox_bezug"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_3">
+    <item row="4" column="0">
+     <widget class="QLabel" name="label">
       <property name="text">
-       <string>Tiefe</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_11">
-      <property name="text">
-       <string>Bezug</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_ti"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_7">
-      <property name="text">
-       <string>Ende Y</string>
+       <string>Start Z</string>
       </property>
      </widget>
     </item>
@@ -100,17 +83,54 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="5" column="1">
      <widget class="QLineEdit" name="lineEdit_xe"/>
+    </item>
+    <item row="8" column="1">
+     <widget class="QComboBox" name="comboBox_bezug"/>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>Ausführbedingung</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>Bezug</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Tiefe</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Ende Z</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit_zs"/>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="lineEdit_ze"/>
     </item>
    </layout>
   </widget>
   <widget class="QWidget" name="layoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>540</y>
-     <width>231</width>
+     <x>230</x>
+     <y>530</y>
+     <width>251</width>
      <height>31</height>
     </rect>
    </property>
@@ -131,14 +151,70 @@
     </item>
    </layout>
   </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>440</y>
+     <width>161</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="3" column="2">
+     <widget class="QPushButton" name="pushButton_vo">
+      <property name="text">
+       <string>Vorne</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="pushButton_hi">
+      <property name="text">
+       <string>Hinten</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pushButton_li">
+      <property name="text">
+       <string>Links</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QPushButton" name="pushButton_re">
+      <property name="text">
+       <string>Rechts</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="pushButton_ob">
+      <property name="text">
+       <string>Oben</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" colspan="3">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Vorbelegung:</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <tabstops>
   <tabstop>lineEdit_b</tabstop>
   <tabstop>lineEdit_ti</tabstop>
   <tabstop>lineEdit_xs</tabstop>
   <tabstop>lineEdit_ys</tabstop>
+  <tabstop>lineEdit_zs</tabstop>
   <tabstop>lineEdit_xe</tabstop>
   <tabstop>lineEdit_ye</tabstop>
+  <tabstop>lineEdit_ze</tabstop>
   <tabstop>comboBox_bezug</tabstop>
   <tabstop>lineEdit_afb</tabstop>
   <tabstop>btn_ok</tabstop>

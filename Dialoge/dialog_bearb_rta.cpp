@@ -6,9 +6,14 @@ Dialog_bearb_rta::Dialog_bearb_rta(QWidget *parent) :
     ui(new Ui::Dialog_bearb_rta)
 {
     ui->setupUi(this);
+    Wst = nullptr;
     this->setWindowTitle("Rechtecktasche");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
+    ui->comboBox_bezug->addItem("Links");       //2
+    ui->comboBox_bezug->addItem("Rechts");      //3
+    ui->comboBox_bezug->addItem("Vorne");       //4
+    ui->comboBox_bezug->addItem("Hinten");      //5
 }
 
 Dialog_bearb_rta::~Dialog_bearb_rta()
@@ -16,8 +21,9 @@ Dialog_bearb_rta::~Dialog_bearb_rta()
     delete ui;
 }
 
-void Dialog_bearb_rta::set_data(QString d)
+void Dialog_bearb_rta::set_data(QString d, werkstueck *w)
 {
+    Wst = w;
     rechtecktasche rta;
     rta.set_text(d);
     ui->lineEdit_l->setText(rta.laenge_qstring());
@@ -27,6 +33,7 @@ void Dialog_bearb_rta::set_data(QString d)
     ui->lineEdit_y->setText(rta.y_qstring());
     ui->lineEdit_z->setText(rta.z_qstring());
     ui->lineEdit_wi->setText(rta.drewi_qstring());
+    ui->lineEdit_rad->setText(rta.rad_qstring());
     ui->lineEdit_zust->setText(rta.zustellmass_qstring());
     if(rta.ausraeumen() == true)
     {
@@ -66,17 +73,34 @@ void Dialog_bearb_rta::on_btn_abbrechen_clicked()
     this->close();
 }
 
+QString Dialog_bearb_rta::var_zu_wert(QString term)
+{
+    if(Wst != nullptr)
+    {
+        term = term.toUpper();
+        term.replace("L", Wst->laenge_qstring());
+        term.replace("B", Wst->breite_qstring());
+        term.replace("D", Wst->dicke_qstring());
+        term = berechnen(term);
+    }else
+    {
+        berechnen(term);
+    }
+    return term;
+}
+
 void Dialog_bearb_rta::on_btn_ok_clicked()
 {
     rechtecktasche rta;
-    rta.set_laenge(Formel(ui->lineEdit_l->text()).bekomme_Ergebnis_als_String());
-    rta.set_breite(Formel(ui->lineEdit_b->text()).bekomme_Ergebnis_als_String());
-    rta.set_tiefe(Formel(ui->lineEdit_ti->text()).bekomme_Ergebnis_als_String());
-    rta.set_x(Formel(ui->lineEdit_x->text()).bekomme_Ergebnis_als_String());
-    rta.set_y(Formel(ui->lineEdit_y->text()).bekomme_Ergebnis_als_String());
-    rta.set_z(Formel(ui->lineEdit_z->text()).bekomme_Ergebnis_als_String());
-    rta.set_drewi(Formel(ui->lineEdit_wi->text()).bekomme_Ergebnis_als_String());
-    rta.set_zustellmass(Formel(ui->lineEdit_zust->text()).bekomme_Ergebnis_als_String());
+    rta.set_laenge(var_zu_wert(ui->lineEdit_l->text()));
+    rta.set_breite(var_zu_wert(ui->lineEdit_b->text()));
+    rta.set_tiefe(var_zu_wert(ui->lineEdit_ti->text()));
+    rta.set_x(var_zu_wert(ui->lineEdit_x->text()));
+    rta.set_y(var_zu_wert(ui->lineEdit_y->text()));
+    rta.set_z(var_zu_wert(ui->lineEdit_z->text()));
+    rta.set_drewi(var_zu_wert(ui->lineEdit_wi->text()));
+    rta.set_rad(var_zu_wert(ui->lineEdit_rad->text()));
+    rta.set_zustellmass(var_zu_wert(ui->lineEdit_zust->text()));
     rta.set_ausraeumen(ui->checkBox_raeumen->isChecked());
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")
@@ -85,6 +109,18 @@ void Dialog_bearb_rta::on_btn_ok_clicked()
     }else if(bezug == "Unterseite")
     {
         rta.set_bezug(WST_BEZUG_UNSEI);
+    }else if(bezug == "Links")
+    {
+        rta.set_bezug(WST_BEZUG_LI);
+    }else if(bezug == "Rechts")
+    {
+        rta.set_bezug(WST_BEZUG_RE);
+    }else if(bezug == "Vorne")
+    {
+        rta.set_bezug(WST_BEZUG_VO);
+    }else if(bezug == "Hinten")
+    {
+        rta.set_bezug(WST_BEZUG_HI);
     }
     rta.set_afb(ui->lineEdit_afb->text());
     rta.set_wkznum(ui->lineEdit_wkz->text());

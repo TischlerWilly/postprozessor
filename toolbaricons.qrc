@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/new/toolbaricons">
+        <file>toolbaricons/down.png</file>
+        <file>toolbaricons/up.png</file>
+        <file>toolbaricons/trash.png</file>
+        <file>toolbaricons/drill.png</file>
+        <file>toolbaricons/saw.png</file>
+        <file>toolbaricons/Fraese 100x100.png</file>
+        <file>toolbaricons/kopieren.png</file>
+        <file>toolbaricons/redo.png</file>
+        <file>toolbaricons/undo.png</file>
+    </qresource>
+</RCC>

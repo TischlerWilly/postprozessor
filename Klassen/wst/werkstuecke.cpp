@@ -2927,6 +2927,94 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                     }
                 }
             }
+        }else if(zeile.contains(FMC_STULP))
+        {
+            rechtecktasche rt;
+            for(uint ii=i+1; ii<=tz.zeilenanzahl() ;ii++)
+            {
+                zeile = tz.zeile(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    //Bezugsfläche ermitteln:
+                    if(cagleich(rt.x(), 0, 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_LI);
+                    }else if(cagleich(rt.x(), w.laenge(), 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_RE);
+                    }else if(cagleich(rt.y(), 0, 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_VO);
+                    }else if(cagleich(rt.y(), w.breite(), 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_HI);
+                    }
+
+                    w.neue_bearbeitung(rt.text());
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_STULP_AFB)
+                    {
+                        rt.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_STULP_L)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_laenge(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_B)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_breite(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_TI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        rt.set_tiefe(tiefe);
+                    }else if(schluessel == FMC_STULP_X)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_x(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_Y)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_y(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_Z)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_z(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_ZUST)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_zustellmass(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_RAD)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_rad(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_WKZ)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        rt.set_wkznum(tmp);
+                    }
+                }
+            }
         }
 
     }
@@ -5753,7 +5841,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         geo.add_strecke(s);
                     }else
                     {
-                        strecke s2 = geo.text_zw().zeile(1);
+                        strecke s2 = geo.text_zwei().zeile(1);
                         geo.clear();
                         bohrung bo;
                         bo.set_afb("1");
@@ -5859,12 +5947,12 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 if(typ == DXF_AC1009_STRECKE)
                 {
                     strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
-                    text_zeilenweise geotz = geo.text_zw();
+                    text_zeilenweise geotz = geo.text_zwei();
                     geotz.set_trennzeichen(';');
                     geo.add_strecke(s);
                     if(geotz.zeilenanzahl() == 2)
                     {
-                        strecke s2 = geo.text_zw().zeile(1);
+                        strecke s2 = geo.text_zwei().zeile(1);
                         if(s.laenge2d() == s2.laenge2d())//Nut ist durch 2 Linien Definiert
                         {
                             geo.clear();
@@ -6021,6 +6109,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         }
         geo.clear();
         //------------------------------Rechtecktasche:
+        geo_text geo_neu;
         for(uint i=1;i<=block.zeilenanzahl();i++)
         {
             uint sta = text_links(block.zeile(i),"|").toUInt();
@@ -6033,107 +6122,252 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             {
                 QString typ = dxf_wert(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz),\
                                        DXF_AC1009_NULL);
-                //RTA wird durch 4 Strecken definiert:
                 if(typ == DXF_AC1009_STRECKE)
                 {
                     strecke s = dxf_strecke(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
-                    text_zeilenweise geotz = geo.text_zw();
-                    geotz.set_trennzeichen(';');
-                    if(geotz.zeilenanzahl() < 4)
+                    geo_neu.add_strecke(s);
+                }else if(typ == DXF_AC1009_BOGEN)
+                {
+                    bogen b = dxf_bogen(tz_name.zeilen(sta,anz), tz_wert.zeilen(sta,anz), "AC1009");
+                    geo_neu.add_bogen(b);
+                }
+                //------------------------------
+                text_zw geozw;
+                geozw = geo_neu.at();
+                //------------------------------
+                if(geozw.count() == 4)//RTA wird durch 4 Strecken definiert?
+                {
+                    strecke s1 = geozw.at(0);//von OL nach OR
+                    strecke s2 = geozw.at(1);//von OR nach UR
+                    strecke s3 = geozw.at(2);//von UR nach UL
+                    strecke s4 = geozw.at(3);//von UL nach OL
+                    bool gesund = true;
+                    if(!cagleich(s1.laenge2d(), s3.laenge2d(),0.1))
                     {
-                        geo.add_strecke(s);
-                    }else
+                        gesund = false;
+                    }
+                    if(!cagleich(s2.laenge2d(), s4.laenge2d(),0.1))
                     {
-                        strecke s1 = geotz.zeile(1);//von OL nach OR
-                        strecke s2 = geotz.zeile(2);//von OR nach UR
-                        strecke s3 = geotz.zeile(3);//von UR nach UL
-                        strecke s4 = s;             //von UL nach OL
-                        bool gesund = true;
-                        if(!cagleich(s1.laenge2d(), s3.laenge2d(),0.1))
+                        gesund = false;
+                    }
+                    strecke dg1;//Diagonale 1
+                    dg1.set_start(s1.stapu());
+                    dg1.set_ende(s3.stapu());
+                    strecke dg2;//Diagonale 2
+                    dg2.set_start(s1.endpu());
+                    dg2.set_ende(s3.endpu());
+                    //Wenn die Diagonalen gleich lang sind ist das 4Eck rechtwinkelig:
+                    if(!cagleich(dg1.laenge2d(), dg2.laenge2d(),0.1))
+                    {
+                        gesund = false;
+                    }
+                    //Wenn die Endpunkte aufeinander liegen:
+                    if(!cagleich(s1.endpu(), s2.stapu(),0.1))//OR
+                    {
+                        gesund = false;
+                    }
+                    if(!cagleich(s2.endpu(), s3.stapu(),0.1))//UR
+                    {
+                        gesund = false;
+                    }
+                    if(!cagleich(s3.endpu(), s4.stapu(),0.1))//UL
+                    {
+                        gesund = false;
+                    }
+                    if(!cagleich(s4.endpu(), s1.stapu(),0.1))//OL
+                    {
+                        gesund = false;
+                    }
+                    if(gesund == true)
+                    {
+                        rechtecktasche rt;
+                        rt.set_afb("1");
+                        QString ti;
+                        ti = text_rechts(klasse, Einstellung_dxf_klassen.rta());
+                        ti = text_rechts(ti, Einstellung_dxf.paramtren());
+                        if(ti.contains(Einstellung_dxf.kenWKZnr()))
                         {
-                            gesund = false;
+                            QString wkznr = text_rechts(ti, Einstellung_dxf.kenWKZnr());
+                            rt.set_wkznum(wkznr);
+                            ti = text_links(ti, Einstellung_dxf.kenWKZnr());
                         }
-                        if(!cagleich(s2.laenge2d(), s4.laenge2d(),0.1))
+                        ti.replace(Einstellung_dxf.dezitren(),".");
+                        double ti_double = ti.toDouble();
+                        if(ti_double == w.dicke())
                         {
-                            gesund = false;
+                            ti_double = ti_double + 2;
                         }
-                        strecke dg1;//Diagonale 1
-                        dg1.set_start(s1.stapu());
-                        dg1.set_ende(s3.stapu());
-                        strecke dg2;//Diagonale 2
-                        dg2.set_start(s1.endpu());
-                        dg2.set_ende(s3.endpu());
-                        //Wenn die Diagonalen gleich lang sind ist das 4Eck rechtwinkelig:
-                        if(!cagleich(dg1.laenge2d(), dg2.laenge2d(),0.1))
+                        if(ti_double < 0)
                         {
-                            gesund = false;
+                            ti_double = w.dicke() - ti_double;
                         }
-                        if(gesund == true)
+                        rt.set_tiefe(ti_double);
+                        rt.set_laenge(s1.laenge2d());
+                        rt.set_breite(s2.laenge2d());
+                        strecke tmp;
+                        tmp.set_start(s2.mitpu3d());
+                        tmp.set_ende(s4.mitpu3d());
+                        if(istOberseite)
                         {
-                            rechtecktasche rt;
-                            rt.set_afb("1");
-                            QString ti;
-                            ti = text_rechts(klasse, Einstellung_dxf_klassen.rta());
-                            ti = text_rechts(ti, Einstellung_dxf.paramtren());
-                            if(ti.contains(Einstellung_dxf.kenWKZnr()))
+                            rt.set_bezug(WST_BEZUG_OBSEI);
+                            rt.set_x(tmp.mitpu3d().x());
+                            rt.set_y(tmp.mitpu3d().y());
+                            rt.set_drewi(s1.wink());
+                        }else
+                        {
+                            rt.set_bezug(WST_BEZUG_UNSEI);
+                            if(Einstellung_dxf.drehtyp_L())
                             {
-                                QString wkznr = text_rechts(ti, Einstellung_dxf.kenWKZnr());
-                                rt.set_wkznum(wkznr);
-                                ti = text_links(ti, Einstellung_dxf.kenWKZnr());
-                            }
-                            ti.replace(Einstellung_dxf.dezitren(),".");
-                            double ti_double = ti.toDouble();
-                            if(ti_double == w.dicke())
-                            {
-                                ti_double = ti_double + 2;
-                            }
-                            if(ti_double < 0)
-                            {
-                                ti_double = w.dicke() - ti_double;
-                            }
-                            rt.set_tiefe(ti_double);
-                            rt.set_laenge(s1.laenge2d());
-                            rt.set_breite(s2.laenge2d());
-                            strecke tmp;
-                            tmp.set_start(s2.mitpu3d());
-                            tmp.set_ende(s4.mitpu3d());
-                            if(istOberseite)
-                            {
-                                rt.set_bezug(WST_BEZUG_OBSEI);
-                                rt.set_x(tmp.mitpu3d().x());
+                                rt.set_x(w.laenge()-tmp.mitpu3d().x());
                                 rt.set_y(tmp.mitpu3d().y());
-                                rt.set_drewi(s1.wink());
-                            }else
+                            }else //if(Einstellung_dxf.drehtyp_B())
                             {
-                                rt.set_bezug(WST_BEZUG_UNSEI);
-                                if(Einstellung_dxf.drehtyp_L())
-                                {
-                                    rt.set_x(w.laenge()-tmp.mitpu3d().x());
-                                    rt.set_y(tmp.mitpu3d().y());
-                                }else //if(Einstellung_dxf.drehtyp_B())
-                                {
-                                    rt.set_x(tmp.mitpu3d().x());
-                                    rt.set_y(w.breite()-tmp.mitpu3d().y());
-                                }
-                                //Der Winkel hau einen Werk zwischen 0 und 360°
-                                //1° entspricht 181° usw.
-                                //das heißt, der Winkel kann bei Bedarf gekürzt werden:
-                                double winkel = s1.wink();
-                                if(winkel > 180)
-                                {
-                                    winkel = winkel -180;
-                                }
-                                //Auf die Unterseite drehen, weil Drehen um L/2
-                                //Bei drehen um B/2 verhällt sich der winkel genauso:
-                                winkel = 180 - winkel;
-                                rt.set_drewi(winkel);
+                                rt.set_x(tmp.mitpu3d().x());
+                                rt.set_y(w.breite()-tmp.mitpu3d().y());
                             }
-                            w.neue_bearbeitung(rt.text());
+                            //Der Winkel hau einen Werk zwischen 0 und 360°
+                            //1° entspricht 181° usw.
+                            //das heißt, der Winkel kann bei Bedarf gekürzt werden:
+                            double winkel = s1.wink();
+                            if(winkel > 180)
+                            {
+                                winkel = winkel -180;
+                            }
+                            //Auf die Unterseite drehen, weil Drehen um L/2
+                            //Bei drehen um B/2 verhällt sich der winkel genauso:
+                            winkel = 180 - winkel;
+                            rt.set_drewi(winkel);
                         }
+                        w.neue_bearbeitung(rt.text());
+                        geo_neu.clear();
+                    }
+                }else if(geozw.count() == 8)//RTA wird durch 4 Strecken und 4 Bögen definiert?
+                {
+                    strecke s_ob = geozw.at(0);//von OR nach OL
+                    strecke s_li = geozw.at(2);//von OL nach UL
+                    strecke s_un = geozw.at(4);//von UL nach UR
+                    strecke s_re = geozw.at(6);//von UR nach OR
+                    bogen b_OL = geozw.at(1);
+                    bogen b_UL = geozw.at(3);
+                    bogen b_UR = geozw.at(5);
+                    bogen b_OR = geozw.at(7);
+                    bool gesund = true;
+                    if(!cagleich(s_ob.laenge2d(), s_un.laenge2d(),0.1))
+                    {
+                        gesund = false;
+                    }
+                    if(!cagleich(s_li.laenge2d(), s_re.laenge2d(),0.1))
+                    {
+                        gesund = false;
+                    }
+                    if(!cagleich(b_OL.rad(), b_UL.rad(),0.1))
+                    {
+                        gesund = false;
+                    }
+                    if(!cagleich(b_OL.rad(), b_UR.rad(),0.1))
+                    {
+                        gesund = false;
+                    }
+                    if(!cagleich(b_OL.rad(), b_OR.rad(),0.1))
+                    {
+                        gesund = false;
+                    }
+                    strecke dg1;//Diagonale 1
+                    dg1.set_start(s_ob.stapu());
+                    dg1.set_ende(s_un.stapu());
+                    strecke dg2;//Diagonale 2
+                    dg2.set_start(s_ob.endpu());
+                    dg2.set_ende(s_un.endpu());
+                    strecke dg3;//Diagonale 3
+                    dg3.set_start(s_li.stapu());
+                    dg3.set_ende(s_re.stapu());
+                    strecke dg4;//Diagonale 4
+                    dg4.set_start(s_li.endpu());
+                    dg4.set_ende(s_re.endpu());
+                    //Wenn die Diagonalen gleich lang sind ist das 4Eck rechtwinkelig:
+                    if(!cagleich(dg1.laenge2d(), dg2.laenge2d(),0.1))
+                    {
+                        gesund = false;
+                    }
+                    if(!cagleich(dg3.laenge2d(), dg4.laenge2d(),0.1))
+                    {
+                        gesund = false;
+                    }
+                    if(gesund == true)
+                    {
+                        rechtecktasche rt;
+                        rt.set_afb("1");
+                        QString ti;
+                        ti = text_rechts(klasse, Einstellung_dxf_klassen.rta());
+                        ti = text_rechts(ti, Einstellung_dxf.paramtren());
+                        if(ti.contains(Einstellung_dxf.kenWKZnr()))
+                        {
+                            QString wkznr = text_rechts(ti, Einstellung_dxf.kenWKZnr());
+                            rt.set_wkznum(wkznr);
+                            ti = text_links(ti, Einstellung_dxf.kenWKZnr());
+                        }
+                        ti.replace(Einstellung_dxf.dezitren(),".");
+                        double ti_double = ti.toDouble();
+                        if(ti_double == w.dicke())
+                        {
+                            ti_double = ti_double + 2;
+                        }
+                        if(ti_double < 0)
+                        {
+                            ti_double = w.dicke() - ti_double;
+                        }
+                        rt.set_tiefe(ti_double);
+                        strecke s_laenge;
+                        s_laenge.set_start(s_li.stapu());
+                        s_laenge.set_ende(s_re.endpu());
+                        rt.set_laenge(s_laenge.laenge2d());
+                        strecke s_breite;
+                        s_breite.set_start(s_ob.stapu());
+                        s_breite.set_ende(s_un.endpu());
+                        rt.set_breite(s_breite.laenge2d());
+                        strecke tmp;
+                        tmp.set_start(s_ob.mitpu3d());
+                        tmp.set_ende(s_un.mitpu3d());
+                        if(istOberseite)
+                        {
+                            rt.set_bezug(WST_BEZUG_OBSEI);
+                            rt.set_x(tmp.mitpu3d().x());
+                            rt.set_y(tmp.mitpu3d().y());
+                            rt.set_drewi(s_ob.wink());
+                        }else
+                        {
+                            rt.set_bezug(WST_BEZUG_UNSEI);
+                            if(Einstellung_dxf.drehtyp_L())
+                            {
+                                rt.set_x(w.laenge()-tmp.mitpu3d().x());
+                                rt.set_y(tmp.mitpu3d().y());
+                            }else //if(Einstellung_dxf.drehtyp_B())
+                            {
+                                rt.set_x(tmp.mitpu3d().x());
+                                rt.set_y(w.breite()-tmp.mitpu3d().y());
+                            }
+                            //Der Winkel hau einen Werk zwischen 0 und 360°
+                            //1° entspricht 181° usw.
+                            //das heißt, der Winkel kann bei Bedarf gekürzt werden:
+                            double winkel = s_ob.wink();
+                            if(winkel > 180)
+                            {
+                                winkel = winkel -180;
+                            }
+                            //Auf die Unterseite drehen, weil Drehen um L/2
+                            //Bei drehen um B/2 verhällt sich der winkel genauso:
+                            winkel = 180 - winkel;
+                            rt.set_drewi(winkel);
+                        }
+                        rt.set_rad(b_OL.rad());
+                        w.neue_bearbeitung(rt.text());
+                        geo_neu.clear();
                     }
                 }
+                //------------------------------
             }
         }
+        geo_neu.clear();
         geo.clear();
         //------------------------------Fräsung vertikal:
         punkt3d letztepos;

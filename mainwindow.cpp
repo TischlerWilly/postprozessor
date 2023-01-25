@@ -11,10 +11,17 @@ MainWindow::MainWindow(QWidget *parent) :
     setup();
     set_prginfo();
 
+    //alt:
     connect(this, SIGNAL(sendDialogDataWKZ(QString,text_zeilenweise)), \
             &dlg_wkz, SLOT(getDialogDataWKZ(QString,text_zeilenweise)) );
     connect(&dlg_wkz, SIGNAL(sendData_wkzmagazin(QString,text_zeilenweise)), \
             this, SLOT(getDialogDataWKZ(QString,text_zeilenweise))     );
+    //neu:
+    connect(this, SIGNAL(sendDialogDataWKZ(QString,wkz_magazin)), \
+            &dlg_wkzmag, SLOT(set_wkzmag(QString,wkz_magazin)) );
+    connect(&dlg_wkzmag, SIGNAL(wkzmag(QString,wkz_magazin)), \
+            this, SLOT(getDialogDataWKZ(QString,wkz_magazin))     );
+    //---
     connect(this, SIGNAL(sendStdNamen(text_zeilenweise, text_zeilenweise)),\
             &dlg_stdnamen, SLOT(slot_setup(text_zeilenweise,text_zeilenweise)));
     connect(&dlg_stdnamen, SIGNAL(signal_sendData(text_zeilenweise,text_zeilenweise)),\
@@ -150,6 +157,7 @@ void MainWindow::setup()
         }else
         {
             Einstellung.set_text(file.readAll());
+            ui->actionEntwicklermodus->setChecked(Einstellung.entwicklermodus());
             ui->checkBox_quelldat_erhalt->setChecked(Einstellung.quelldateien_erhalten());
             ui->checkBox_std_namen_zuweisen->setChecked(Einstellung.std_dateinamen_verwenden());
             QString drehung = Einstellung.drehung_wst();
@@ -351,7 +359,8 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            wkz_magazin_ganx.set_text(file.readAll());
+            wkz_magazin_ganx.set_text(file.readAll());//alt
+            //wkz_mag_ganx.set_text(file.readAll());//neu
         }
         file.close();
     }
@@ -385,7 +394,8 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            wkz_magazin_fmc.set_text(file.readAll());
+            wkz_magazin_fmc.set_text(file.readAll());//alt
+            //wkz_mag_fmc.set_text(file.readAll());//neu
         }
         file.close();
     }
@@ -402,9 +412,10 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            werkzeugmagazin wm;
-            file.write(wm.tabellenkopf().toUtf8());
-            wkz_magazin_ggf.set_text(wm.tabellenkopf());
+            //werkzeugmagazin wm;//alt
+            wkz_magazin wm;//neu
+            file.write(wm.text().toUtf8());
+            wkz_magazin_ggf.set_text(wm.text());
         }
         file.close();
     }else
@@ -419,7 +430,8 @@ void MainWindow::setup()
             QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
         }else
         {
-            wkz_magazin_ggf.set_text(file.readAll());
+            //wkz_magazin_ggf.set_text(file.readAll());//alt
+            wkz_mag_ggf.set_text(file.readAll());//neu
         }
         file.close();
     }
@@ -450,6 +462,13 @@ void MainWindow::schreibe_ini()
         file.write(Einstellung.text().toLatin1());
     }
     file.close();
+    if(Einstellung.entwicklermodus())
+    {
+        ui->actionTestfunktion->setVisible(true);
+    }else
+    {
+        ui->actionTestfunktion->setVisible(false);
+    }
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
@@ -577,6 +596,58 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeu
         }else
         {
             wkz_magazin_ggf = werkzeugmagazin;
+            file.write(werkzeugmagazin.text().toUtf8());
+        }
+        file.close();
+    }
+}
+void MainWindow::getDialogDataWKZ(QString fenstertitel, wkz_magazin werkzeugmagazin)
+{
+    if(fenstertitel.contains("GANX"))
+    {
+        QFile file(pf.path_wkz_ganx());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_wkz_ganx();
+            tmp += "\n";
+            tmp += "in der Funktion getDialogDataWKZ";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            wkz_mag_ganx = werkzeugmagazin;
+            file.write(werkzeugmagazin.text().toUtf8());
+        }
+        file.close();
+    }else if(fenstertitel.contains("FMC"))
+    {
+        QFile file(pf.path_wkz_fmc());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_wkz_fmc();
+            tmp += "\n";
+            tmp += "in der Funktion getDialogDataWKZ";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            wkz_mag_fmc = werkzeugmagazin;
+            file.write(werkzeugmagazin.text().toUtf8());
+        }
+        file.close();
+    }else if(fenstertitel.contains("GGF"))
+    {
+        QFile file(pf.path_wkz_ggf());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_wkz_ggf();
+            tmp += "\n";
+            tmp += "in der Funktion getDialogDataWKZ";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            wkz_mag_ggf = werkzeugmagazin;
             file.write(werkzeugmagazin.text().toUtf8());
         }
         file.close();
@@ -1211,6 +1282,32 @@ void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
 }
 
 //-----------------------------------------------------------------------Menüs:
+void MainWindow::on_actionTestfunktion_triggered()
+{
+
+    //Test für text_zw:
+    QString msg;
+    //msg += "Zeile 0\n";
+    //msg += "Zeile 1\n";
+    //msg += "Zeile 2\n";
+    //msg += "Zeile 3\n";
+    //msg += "Zeile 4";
+    //text_zw test(msg);
+    text_zw test;
+    QMessageBox mb;
+    //mb.setText(test.zeile(2));
+    //mb.setText(test.zeilen(2,2));
+    //test.add_vo("davor\n123");
+    //test.add_hi("");
+    //test.add_hi("danach\n123");
+    //test.add_mi(19 ,"danach\n123");
+    //test.edit(5, "getauscht");
+    //test.entf(2,3);
+    mb.setText(test.text());
+    mb.setWindowTitle(int_to_qstring(test.count()));
+    mb.exec();
+
+}
 void MainWindow::set_prginfo()
 {
     QString tmp;
@@ -1261,6 +1358,7 @@ void MainWindow::set_prginfo()
     tmp += "- Gerade Fräsbahn [G1]\n";
     tmp += "- Bogen fräsen im UZS [G2]\n";
     tmp += "- Bogen fräsen im GUZS [G3]\n";
+    tmp += "- Stulp [ZYSTUL40]";
     tmp += "\n";
     tmp += "\n";
     tmp += "Import von dxf:\n";
@@ -1289,6 +1387,11 @@ void MainWindow::set_prginfo()
     tmp += "- Werkstücke umbenennen\n";
     tmp += "- Exportübersicht\n";
     tmp += "- Werkstücke bearbeiten\n";
+    tmp += "  ->Werkstückgröße ändern\n";
+    tmp += "  ->Bearbeitungen einfügen\n";
+    tmp += "  ->Bearbeitungen ändern\n";
+    tmp += "  ->Bearbeitungen verschieben (mehrere gleichzeitig möglich)\n";
+    tmp += "  ->Verwenden der Platzhalter L B und D möglch\n";
     tmp += "- Kurze Geraden ignorieren mit Angabe des Schwellenwertes (fmc)\n";
     tmp += "- Formartierungen aufbrechen (fmc)\n";
     tmp += "- Werkstück vergrößern als Zugabe für Gehrungen (fmc)\n";
@@ -1302,17 +1405,22 @@ void MainWindow::on_actionInfo_triggered()
     ui->tabWidget_main->setCurrentIndex(0);
     set_prginfo();
 }
+void MainWindow::on_actionEntwicklermodus_triggered(bool checked)
+{
+    Einstellung.set_entwicklermodus(checked);
+    schreibe_ini();
+}
 void MainWindow::on_actionWerkzeug_ganx_anzeigen_triggered()
 {
-    emit sendDialogDataWKZ("Werkzeug GANX", wkz_magazin_ganx);
+    emit sendDialogDataWKZ("Werkzeug GANX", wkz_magazin_ganx);//alt
 }
 void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
 {
-    emit sendDialogDataWKZ("Werkzeug FMC", wkz_magazin_fmc);
+    emit sendDialogDataWKZ("Werkzeug FMC", wkz_magazin_fmc);//alt
 }
 void MainWindow::on_actionWerkzeug_ggf_anzeigen_triggered()
 {
-    emit sendDialogDataWKZ("Werkzeug GGF", wkz_magazin_ggf);
+    dlg_wkzmag.set_wkzmag("Werkzeugmagazin GGF", wkz_mag_ggf);//neu
 }
 void MainWindow::on_actionEinstellung_pfade_triggered()
 {
@@ -1723,8 +1831,8 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_fmc
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
-            wste.wst(wstindex)->set_zustand("ggf", wkz_magazin_ggf, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+            wste.wst(wstindex)->set_zustand("ggf", &wkz_mag_ggf, Einstellung.drehung_wst(), \
+                     Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), 0);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
@@ -2143,6 +2251,10 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
+
+
 
 
 

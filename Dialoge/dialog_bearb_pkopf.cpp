@@ -29,9 +29,9 @@ void Dialog_bearb_pkopf::set_data(werkstueck *w)
 
 void Dialog_bearb_pkopf::on_pushButton_ok_clicked()
 {
-    Wst->set_laenge(Formel(ui->lineEdit_l->text()).bekomme_Ergebnis_als_String());
-    Wst->set_breite(Formel(ui->lineEdit_b->text()).bekomme_Ergebnis_als_String());
-    Wst->set_dicke(Formel(ui->lineEdit_d->text()).bekomme_Ergebnis_als_String());
+    Wst->set_laenge(berechnen(ui->lineEdit_l->text()));
+    Wst->set_breite(berechnen(ui->lineEdit_b->text()));
+    Wst->set_dicke(berechnen(ui->lineEdit_d->text()));
     Wst->set_kante_vo(ui->lineEdit_kvo->text());
     Wst->set_kante_hi(ui->lineEdit_khi->text());
     Wst->set_kante_li(ui->lineEdit_kli->text());

@@ -6,6 +6,7 @@ Dialog_bearb_fbogen::Dialog_bearb_fbogen(QWidget *parent) :
     ui(new Ui::Dialog_bearb_fbogen)
 {
     ui->setupUi(this);
+    Wst = nullptr;
     this->setWindowTitle("Bogenfräsung");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
@@ -19,8 +20,9 @@ Dialog_bearb_fbogen::~Dialog_bearb_fbogen()
     delete ui;
 }
 
-void Dialog_bearb_fbogen::set_data(QString d)
+void Dialog_bearb_fbogen::set_data(QString d, werkstueck *w)
 {
+    Wst = w;
     fraeserbogen fb;
     fb.set_text(d);
     ui->lineEdit_xs->setText(fb.xs_qstring());
@@ -52,16 +54,32 @@ void Dialog_bearb_fbogen::set_data(QString d)
     ui->lineEdit_afb->setText(fb.afb());
 }
 
+QString Dialog_bearb_fbogen::var_zu_wert(QString term)
+{
+    if(Wst != nullptr)
+    {
+        term = term.toUpper();
+        term.replace("L", Wst->laenge_qstring());
+        term.replace("B", Wst->breite_qstring());
+        term.replace("D", Wst->dicke_qstring());
+        term = berechnen(term);
+    }else
+    {
+        berechnen(term);
+    }
+    return term;
+}
+
 void Dialog_bearb_fbogen::on_btn_ok_clicked()
 {
     fraeserbogen fb;
-    fb.set_xs(Formel(ui->lineEdit_xs->text()).bekomme_Ergebnis_als_String());
-    fb.set_ys(Formel(ui->lineEdit_ys->text()).bekomme_Ergebnis_als_String());
-    fb.set_zs(Formel(ui->lineEdit_zs->text()).bekomme_Ergebnis_als_String());
-    fb.set_xe(Formel(ui->lineEdit_xe->text()).bekomme_Ergebnis_als_String());
-    fb.set_ye(Formel(ui->lineEdit_ye->text()).bekomme_Ergebnis_als_String());
-    fb.set_ze(Formel(ui->lineEdit_ze->text()).bekomme_Ergebnis_als_String());
-    fb.set_rad(Formel(ui->lineEdit_rad->text()).bekomme_Ergebnis_als_String());
+    fb.set_xs(var_zu_wert(ui->lineEdit_xs->text()));
+    fb.set_ys(var_zu_wert(ui->lineEdit_ys->text()));
+    fb.set_zs(var_zu_wert(ui->lineEdit_zs->text()));
+    fb.set_xe(var_zu_wert(ui->lineEdit_xe->text()));
+    fb.set_ye(var_zu_wert(ui->lineEdit_ye->text()));
+    fb.set_ze(var_zu_wert(ui->lineEdit_ze->text()));
+    fb.set_rad(var_zu_wert(ui->lineEdit_rad->text()));
     QString uzs = ui->comboBox_uzs->currentText();
     if(uzs == "UZS")
     {

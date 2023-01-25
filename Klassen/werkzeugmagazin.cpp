@@ -68,7 +68,21 @@ QString werkzeugmagazin::wkznummer(QString wkz_typ, \
                 }
             }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_SAEGE)  )
             {
-                returntext = zeile.zeile(2);
+                if(bezugskante == WST_BEZUG_OBSEI || \
+                   bezugskante == WST_BEZUG_UNSEI)
+                {
+                    if(zeile.zeile(17) == "1")//vertikale Säge
+                    {
+                        returntext = zeile.zeile(2);
+                    }
+                }else
+                {
+                    if(zeile.zeile(16) == "1")//horizontale Säge
+                    {
+                        returntext = zeile.zeile(2);
+                    }
+                }
+
             }else if(  (zeile.zeile(1) == wkz_typ)  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
             {
                 double wkz_dm = zeile.zeile(3).toDouble();

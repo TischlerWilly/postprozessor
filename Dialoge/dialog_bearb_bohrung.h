@@ -3,6 +3,7 @@
 
 #include "Klassen/wst/bohrung.h"
 #include "Klassen/wenndannsonst.h"
+#include "Klassen/wst/werkstueck.h"
 #include <QDialog>
 
 namespace Ui {
@@ -16,7 +17,7 @@ class Dialog_bearb_bohrung : public QDialog
 public:
     explicit Dialog_bearb_bohrung(QWidget *parent = nullptr);
     ~Dialog_bearb_bohrung();
-    void set_data(QString d);
+    void set_data(QString d, werkstueck *w);
 
 private slots:
     void on_btn_ok_clicked();
@@ -27,6 +28,8 @@ signals:
 
 private:
     Ui::Dialog_bearb_bohrung *ui;
+    werkstueck *Wst;
+    QString var_zu_wert(QString term);
 };
 
 #endif // DIALOG_BEARB_BOHRUNG_H

@@ -16,8 +16,10 @@ void nut::setup()
     Breite = 0;
     Pos_xs = 0;
     Pos_ys = 0;
+    Pos_zs = 0;
     Pos_xe = 0;
     Pos_ye = 0;
+    Pos_ze = 0;
     Bezug = WST_BEZUG_OBSEI;
     Afb = "1";
 }
@@ -60,6 +62,14 @@ void nut::set_ys(QString y)
 {
     set_ys(y.toDouble());
 }
+void nut::set_zs(double z)
+{
+    Pos_zs = z;
+}
+void nut::set_zs(QString z)
+{
+    set_zs(z.toDouble());
+}
 void nut::set_xe(double x)
 {
     Pos_xe = x;
@@ -75,6 +85,14 @@ void nut::set_ye(double y)
 void nut::set_ye(QString y)
 {
     set_ye(y.toDouble());
+}
+void nut::set_ze(double z)
+{
+    Pos_ze = z;
+}
+void nut::set_ze(QString z)
+{
+    set_ze(z.toDouble());
 }
 void nut::set_bezug(QString bezugsflaeche)
 {
@@ -117,6 +135,14 @@ QString nut::ys_qstring()
 {
     return double_to_qstring(Pos_ys);
 }
+double nut::zs()
+{
+    return Pos_zs;
+}
+QString nut::zs_qstring()
+{
+    return double_to_qstring(Pos_zs);
+}
 double nut::xe()
 {
     return Pos_xe;
@@ -132,6 +158,14 @@ double nut::ye()
 QString nut::ye_qstring()
 {
     return double_to_qstring(Pos_ye);
+}
+double nut::ze()
+{
+    return Pos_ze;
+}
+QString nut::ze_qstring()
+{
+    return double_to_qstring(Pos_ze);
 }
 QString nut::bezug()
 {
@@ -158,15 +192,19 @@ QString nut::text()
     msg += TRENNZ_BEARB_PARAM_;
     msg += ys_qstring();       //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += xe_qstring();       //Zeile 5
+    msg += zs_qstring();       //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += ye_qstring();       //Zeile 6
+    msg += xe_qstring();       //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += tiefe_qstring();    //Zeile 7
+    msg += ye_qstring();       //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += breite_qstring();   //Zeile 8
+    msg += ze_qstring();       //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += afb();              //Zeile 9
+    msg += tiefe_qstring();    //Zeile 9
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += breite_qstring();   //Zeile 10
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += afb();              //Zeile 11
 
     return msg;
 }
@@ -180,11 +218,13 @@ void nut::set_text(QString text)
         set_bezug(tz.zeile(2));
         set_xs(tz.zeile(3));
         set_ys(tz.zeile(4));
-        set_xe(tz.zeile(5));
-        set_ye(tz.zeile(6));
-        set_tiefe(tz.zeile(7));
-        set_breite(tz.zeile(8));
-        set_afb(tz.zeile(9));
+        set_zs(tz.zeile(5));
+        set_xe(tz.zeile(6));
+        set_ye(tz.zeile(7));
+        set_ze(tz.zeile(8));
+        set_tiefe(tz.zeile(9));
+        set_breite(tz.zeile(10));
+        set_afb(tz.zeile(11));
     }
 }
 

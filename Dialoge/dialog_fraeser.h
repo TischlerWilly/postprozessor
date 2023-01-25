@@ -4,6 +4,9 @@
 #include <QDialog>
 
 #include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
+#include "Klassen/wkz/wkz_fraeser.h"
+#include "Klassen/wenndannsonst.h"
 #include "Defines/werkzeug.h"
 
 namespace Ui {
@@ -17,20 +20,20 @@ class Dialog_fraeser : public QDialog
 public:
     explicit Dialog_fraeser(QWidget *parent = 0);
     ~Dialog_fraeser();
+    void clear();
 
 private:
-    Ui::Dialog_fraeser *ui;
-    void clear();
-    void setup();
-    bool wkz_ist_neu;
+    Ui::Dialog_fraeser *ui;    
+    bool Wkz_ist_neu;
 
 public slots:
-    void getData(text_zeilenweise msg);
+    void set_Data(text_zeilenweise msg);
+    void set_Data(text_zw msg, bool ist_neues_wkz = false);
     void neuerFraeser();
 
 signals:
-    void sendData(text_zeilenweise wkz, bool ist_neues_wkz);
-
+    void Data(text_zeilenweise wkz, bool ist_neues_wkz);
+    void Data(text_zw wkz, bool ist_neues_wkz);
 
 private slots:
     void on_pushButton_abbrechen_clicked();

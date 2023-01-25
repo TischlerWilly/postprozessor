@@ -922,3 +922,10 @@ QString Formel::leerzeichen_entfernen(QString text)
     }
     return tmp;
 }
+
+//-----------------------------------------------------------
+QString berechnen(QString term)
+{
+    term.replace(",",".");
+    return Formel(term).bekomme_Ergebnis_als_String();
+}

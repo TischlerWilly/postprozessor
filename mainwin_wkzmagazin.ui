@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainwin_wkzmagazin</class>
+ <widget class="QMainWindow" name="mainwin_wkzmagazin">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>590</width>
+    <height>642</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>mainwin_wkzmagazin</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QListWidget" name="listWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>256</width>
+      <height>541</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_speichern">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>520</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Speichern</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_abbrechen">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>520</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Abbrechen</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget_info">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>320</y>
+      <width>301</width>
+      <height>192</height>
+     </rect>
+    </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>590</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuneues_Werkzeug">
+    <property name="title">
+     <string>neues Werkzeug</string>
+    </property>
+    <addaction name="actionFraeser_anlegen"/>
+    <addaction name="actionBohrer_anlegen"/>
+    <addaction name="actionSaege_anlegen"/>
+   </widget>
+   <widget class="QMenu" name="menuBearbeiten">
+    <property name="title">
+     <string>Bearbeiten</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionHoch"/>
+    <addaction name="actionRunter"/>
+    <addaction name="separator"/>
+    <addaction name="actionL_schen"/>
+    <addaction name="separator"/>
+    <addaction name="actionDuplizieren"/>
+   </widget>
+   <addaction name="menuneues_Werkzeug"/>
+   <addaction name="menuBearbeiten"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>35</width>
+     <height>35</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionHoch"/>
+   <addaction name="actionRunter"/>
+   <addaction name="separator"/>
+   <addaction name="actionDuplizieren"/>
+   <addaction name="separator"/>
+   <addaction name="actionL_schen"/>
+   <addaction name="separator"/>
+   <addaction name="actionFraeser_anlegen"/>
+   <addaction name="actionBohrer_anlegen"/>
+   <addaction name="actionSaege_anlegen"/>
+   <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+  </widget>
+  <action name="actionFraeser_anlegen">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/Fraese 100x100.png</normaloff>:/new/toolbaricons/toolbaricons/Fraese 100x100.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fräser anlegen</string>
+   </property>
+  </action>
+  <action name="actionBohrer_anlegen">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/drill.png</normaloff>:/new/toolbaricons/toolbaricons/drill.png</iconset>
+   </property>
+   <property name="text">
+    <string>Bohrer anlegen</string>
+   </property>
+  </action>
+  <action name="actionSaege_anlegen">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/saw.png</normaloff>:/new/toolbaricons/toolbaricons/saw.png</iconset>
+   </property>
+   <property name="text">
+    <string>Säge anlegen</string>
+   </property>
+  </action>
+  <action name="actionHoch">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/up.png</normaloff>:/new/toolbaricons/toolbaricons/up.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hoch</string>
+   </property>
+  </action>
+  <action name="actionRunter">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/down.png</normaloff>:/new/toolbaricons/toolbaricons/down.png</iconset>
+   </property>
+   <property name="text">
+    <string>Runter</string>
+   </property>
+  </action>
+  <action name="actionL_schen">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/trash.png</normaloff>:/new/toolbaricons/toolbaricons/trash.png</iconset>
+   </property>
+   <property name="text">
+    <string>Löschen</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/undo.png</normaloff>:/new/toolbaricons/toolbaricons/undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rückgängig</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/redo.png</normaloff>:/new/toolbaricons/toolbaricons/redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Wiederholen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionDuplizieren">
+   <property name="icon">
+    <iconset resource="toolbaricons.qrc">
+     <normaloff>:/new/toolbaricons/toolbaricons/kopieren.png</normaloff>:/new/toolbaricons/toolbaricons/kopieren.png</iconset>
+   </property>
+   <property name="text">
+    <string>Duplizieren</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="toolbaricons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

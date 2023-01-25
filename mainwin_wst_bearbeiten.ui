@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWin_wst_bearbeiten</class>
+ <widget class="QMainWindow" name="MainWin_wst_bearbeiten">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>789</width>
+    <height>518</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWin_wst_bearbeiten</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QListWidget" name="listWidget_prgtext">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>10</y>
+      <width>211</width>
+      <height>361</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::ExtendedSelection</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_xypos">
+    <property name="geometry">
+     <rect>
+      <x>566</x>
+      <y>450</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>789</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuHallo_Welt">
+    <property name="title">
+     <string>Einfügen</string>
+    </property>
+    <addaction name="actionMakeBohrung"/>
+    <addaction name="actionMakeRTA"/>
+    <addaction name="actionMakeNut"/>
+   </widget>
+   <widget class="QMenu" name="menuBearbeiten">
+    <property name="title">
+     <string>Bearbeiten</string>
+    </property>
+    <addaction name="actionBearbeiten"/>
+    <addaction name="separator"/>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionEntf"/>
+    <addaction name="actionKopieren"/>
+    <addaction name="actionEinfuegen"/>
+   </widget>
+   <widget class="QMenu" name="menuManipulation">
+    <property name="title">
+     <string>Manipulation</string>
+    </property>
+    <addaction name="actionVerschieben"/>
+   </widget>
+   <addaction name="menuHallo_Welt"/>
+   <addaction name="menuBearbeiten"/>
+   <addaction name="menuManipulation"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionMakeBohrung">
+   <property name="text">
+    <string>Bohrung</string>
+   </property>
+  </action>
+  <action name="actionMakeRTA">
+   <property name="text">
+    <string>Rechtecktasche</string>
+   </property>
+  </action>
+  <action name="actionMakeNut">
+   <property name="text">
+    <string>Nut</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Rückgängig</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Wiederholen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionEntf">
+   <property name="text">
+    <string>Entfernen</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionKopieren">
+   <property name="text">
+    <string>Kopieren</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionEinfuegen">
+   <property name="text">
+    <string>Einfügen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionVerschieben">
+   <property name="text">
+    <string>Verschieben</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionBearbeiten">
+   <property name="text">
+    <string>Bearbeiten</string>
+   </property>
+   <property name="shortcut">
+    <string>Return</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

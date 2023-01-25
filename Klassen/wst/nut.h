@@ -22,10 +22,14 @@ public:
     void set_xs(QString x);
     void set_ys(double y);
     void set_ys(QString y);
+    void set_zs(double z);
+    void set_zs(QString z);
     void set_xe(double x);
     void set_xe(QString x);
     void set_ye(double y);
     void set_ye(QString y);
+    void set_ze(double z);
+    void set_ze(QString z);
     void set_bezug(QString bezugsflaeche);
     void set_afb(QString ausfuehrbedingung);
 
@@ -37,10 +41,14 @@ public:
     QString xs_qstring();
     double  ys();
     QString ys_qstring();
+    double  zs();
+    QString zs_qstring();
     double  xe();
     QString xe_qstring();
     double  ye();
     QString ye_qstring();
+    double  ze();
+    QString ze_qstring();
     QString bezug();
     QString afb();
 
@@ -52,6 +60,7 @@ private:
     double Breite;
     double Pos_xs, Pos_xe;
     double Pos_ys, Pos_ye;
+    double Pos_zs, Pos_ze;
     QString Bezug;
     QString Afb;
 

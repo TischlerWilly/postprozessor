@@ -783,7 +783,7 @@ void vorschau::werkstueck_darstellung_berechnen()
 void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
-    Geotext = W.zustand().geo().text_zw();
+    Geotext = W.zustand().geo().text_zwei();
     Wst.set_laenge(w_neu.zustand().l());
     Wst.set_breite(w_neu.zustand().b());
     Aktuelle_zeilennummer = aktive_zeile;
@@ -794,7 +794,7 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 void vorschau::slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
-    Geotext = W.geo().text_zw();
+    Geotext = W.geo().text_zwei();
     Wst.set_laenge(w_neu.laenge());
     Wst.set_breite(w_neu.breite());
     Aktuelle_zeilennummer = aktive_zeile;

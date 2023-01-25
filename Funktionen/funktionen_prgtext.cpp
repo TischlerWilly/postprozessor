@@ -127,10 +127,14 @@ QString nut_zu_prgeile(QString text)
     msg += nu.xs_qstring();
     msg += "\tYS: ";
     msg += nu.ys_qstring();
+    msg += "\tZS: ";
+    msg += nu.zs_qstring();
     msg += "\tXE: ";
     msg += nu.xe_qstring();
     msg += "\tYE: ";
     msg += nu.ye_qstring();
+    msg += "\tZE: ";
+    msg += nu.ze_qstring();
     msg += "\tAFB: ";
     msg += nu.afb();
     return msg;

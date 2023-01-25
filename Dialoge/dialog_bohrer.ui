@@ -26,46 +26,57 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_dm_cad"/>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="lineEdit__zustmass"/>
-    </item>
-    <item row="5" column="1">
-     <widget class="QComboBox" name="comboBox_dubo"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_dubo">
-      <property name="text">
-       <string>Ist ein Durchgangsbohrer</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="1">
      <widget class="QLineEdit" name="lineEdit_nr"/>
     </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_nutzlaenge">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nutzlänge&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit__nutzlaenge"/>
-    </item>
-    <item row="1" column="0">
+    <item row="2" column="0">
      <widget class="QLabel" name="label_dm_real">
       <property name="text">
        <string>Durchmesser export</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="8" column="1">
+     <widget class="QCheckBox" name="checkBox_hori">
+      <property name="text">
+       <string>kann horizontal bohren</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
      <widget class="QLabel" name="label_dm_cad">
       <property name="text">
        <string>Durchmesser import</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_nutzlaenge">
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nutzlänge&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QCheckBox" name="checkBox_ist_aktiv">
+      <property name="text">
+       <string>ist aktiv</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEdit_zustmass"/>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit_nutzlaenge"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm_cad"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_zustmass">
+      <property name="text">
+       <string>Zustellmaß</string>
       </property>
      </widget>
     </item>
@@ -76,30 +87,20 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_zustmass">
-      <property name="text">
-       <string>Zustellmaß</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
+    <item row="2" column="1">
      <widget class="QLineEdit" name="lineEdit_dm_real"/>
     </item>
     <item row="6" column="1">
-     <widget class="QComboBox" name="comboBox_lage"/>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_lage">
+     <widget class="QCheckBox" name="checkBox_istdubo">
       <property name="text">
-       <string>Lage</string>
+       <string>ist Durchgangsbohrer</string>
       </property>
      </widget>
     </item>
     <item row="7" column="1">
-     <widget class="QCheckBox" name="checkBox_ist_aktiv">
+     <widget class="QCheckBox" name="checkBox_verti">
       <property name="text">
-       <string>ist aktiv</string>
+       <string>kann vertikal bohren</string>
       </property>
      </widget>
     </item>
@@ -133,13 +134,16 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>pushButton_ok</tabstop>
   <tabstop>lineEdit_nr</tabstop>
-  <tabstop>lineEdit_dm_real</tabstop>
   <tabstop>lineEdit_dm_cad</tabstop>
-  <tabstop>lineEdit__nutzlaenge</tabstop>
-  <tabstop>lineEdit__zustmass</tabstop>
-  <tabstop>comboBox_dubo</tabstop>
+  <tabstop>lineEdit_dm_real</tabstop>
+  <tabstop>lineEdit_nutzlaenge</tabstop>
+  <tabstop>lineEdit_zustmass</tabstop>
+  <tabstop>checkBox_istdubo</tabstop>
+  <tabstop>checkBox_verti</tabstop>
+  <tabstop>checkBox_hori</tabstop>
+  <tabstop>checkBox_ist_aktiv</tabstop>
+  <tabstop>pushButton_ok</tabstop>
   <tabstop>pushButton_abbrechen</tabstop>
  </tabstops>
  <resources/>
