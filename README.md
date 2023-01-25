@@ -70,4 +70,3 @@ Weiteren Funktionen:
 - Werkstücke ausblenden
 - Export in hierarchischen Projekt-Unterordnern
 
-
