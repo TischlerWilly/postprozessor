@@ -52,7 +52,6 @@ SOURCES += main.cpp\
     mainwin_wst_bearbeiten.cpp \
         mainwindow.cpp \
     Klassen/formel.cpp \
-    Klassen/text_zeilenweise.cpp \
     Klassen/wenndannsonst.cpp \
     Funktionen/myfunktion.cpp \
     Funktionen/runden.cpp \
@@ -114,7 +113,6 @@ HEADERS  += mainwindow.h \
     Klassen/geo/vorschau.h \
     Klassen/geo/wuerfel.h \
     Klassen/geo/zylinder.h \
-    Klassen/text_zeilenweise.h \
     Klassen/text_zw.h \
     Klassen/undo_redo.h \
     Klassen/wenndannsonst.h \

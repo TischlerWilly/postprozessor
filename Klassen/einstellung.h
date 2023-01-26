@@ -2,7 +2,7 @@
 #define EINSTELLUNG_H
 
 #include <QString>
-#include "text_zeilenweise.h"
+#include "text_zw.h"
 #include "Funktionen/umwandeln.h"
 
 class einstellung

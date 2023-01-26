@@ -2,7 +2,7 @@
 #define DIALOG_STDNAMEN_H
 
 #include <QDialog>
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Defines/dateinamen.h"
 #include "dialog_stdname.h"
 #include "Funktionen/text.h"

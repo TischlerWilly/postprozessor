@@ -160,24 +160,23 @@ QString gehrung::text()
 }
 void gehrung::set_text(QString text)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_GEHRUNG)
+    text_zw tz;
+    tz.set_text(text,TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_GEHRUNG)
     {
         punkt3d sp, ep;
-        set_bezug(tz.zeile(2));
-        sp.set_x(tz.zeile(3));
-        sp.set_y(tz.zeile(4));
-        ep.set_x(tz.zeile(5));
-        ep.set_y(tz.zeile(6));
+        set_bezug(tz.at(1));
+        sp.set_x(tz.at(2));
+        sp.set_y(tz.at(3));
+        ep.set_x(tz.at(4));
+        ep.set_y(tz.at(5));
         set_stapu(sp);
         set_endpu(ep);
-        set_winkel(tz.zeile(7));
-        set_afb(tz.zeile(8));
-        set_wkznum(tz.zeile(9));
-        set_riti(tz.zeile(10));
-        set_sti(tz.zeile(11));
+        set_winkel(tz.at(6));
+        set_afb(tz.at(7));
+        set_wkznum(tz.at(8));
+        set_riti(tz.at(9));
+        set_sti(tz.at(10));
     }
 }
 

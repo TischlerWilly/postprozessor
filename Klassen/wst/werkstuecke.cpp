@@ -35,7 +35,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
         Index = index(Werkstueckname);
     }
     text_zw tz;
-    tz.set_text(importtext);
+    tz.set_text(importtext,'\n');
 
     werkstueck w = Wste.at(Index-1);
 

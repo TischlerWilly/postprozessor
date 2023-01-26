@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QMessageBox>
 #include <QListWidgetItem>
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Defines/werkzeug.h"
 #include "dialog_bohrer.h"
 #include "dialog_fraeser.h"

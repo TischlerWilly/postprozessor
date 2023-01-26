@@ -3,7 +3,6 @@
 
 #include <QDialog>
 
-#include "Klassen/text_zeilenweise.h"
 #include "Klassen/text_zw.h"
 #include "Klassen/wkz/wkz_saege.h"
 #include "Klassen/wenndannsonst.h"

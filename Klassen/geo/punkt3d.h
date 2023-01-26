@@ -4,7 +4,7 @@
 #include <QString>
 #include "Funktionen/umwandeln.h"
 #include "darstellungsatribute.h"
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "defines_geometrie.h"
 
 class punkt3d : public darstellungsatribute

@@ -19,7 +19,6 @@ void wstzustand::clear()
     Drehung.clear();
     Bewertung.clear();
     Warnungen.clear();
-    Bearbeitung.clear();
     Bearb.clear();
     Laenge.clear();
     Breite.clear();
@@ -33,17 +32,6 @@ void wstzustand::clear()
 //----------------------------------
 //Public:
 //----------------------------------set_xy:
-void wstzustand::set_bearb(text_zeilenweise bearb)
-{
-    if(bearb.text() != Bearbeitung_bekommen.text())
-    {
-        if(!Format.isEmpty())
-        {
-            clear();
-        }
-        Bearbeitung_bekommen = bearb;        
-    }
-}
 void wstzustand::set_bearb(text_zw bearb)
 {
     if(bearb.text() != Bearb_bekommen.text())
@@ -269,25 +257,6 @@ QString wstzustand::kante_re()
 }
 
 //----------------------------------Manipulationen:
-/*void wstzustand::anfordern(QString format, werkzeugmagazin wkzmag, QString drehung)
-{
-    //Prüfen ob Zustand bereits existiert:
-    bool existiert = false;
-    for(int i = 0; i<Format.count();i++)
-    {
-        if(format == Format.at(i) && wkzmag == Wkzmag.at(i) && drehung == Drehung.at(i))
-        {
-            existiert = true;
-            Akt_zust = i;
-            break;
-        }
-    }
-    if(!existiert)
-    {
-        erzeugen(format, wkzmag, drehung);
-        Akt_zust = Format.count()-1;
-    }
-}*/
 void wstzustand::anfordern(QString format, wkz_magazin wkzmag, QString drehung)
 {
     //Prüfen ob Zustand bereits existiert:
@@ -310,60 +279,6 @@ void wstzustand::anfordern(QString format, wkz_magazin wkzmag, QString drehung)
 //----------------------------------
 //Private:
 //----------------------------------
-/*void wstzustand::erzeugen(QString format, werkzeugmagazin wkzmag, QString drehung)
-{
-    Format.append(format);
-    //  ->Format
-    Wkzmag.append(wkzmag);
-    //  ->Wkzmag
-    Drehung_bekommen.append(drehung);
-    //  ->Drehung_bekommen
-    finde_drehwinkel_auto(Format.count()-1);
-    //  ->Drehung
-    //  ->Bewertung
-    //  ->Warnungen
-    //  ->Bearbeitung
-    //  ->Laenge
-    //  ->Breite    
-    if(format == "fmc")
-    {
-        fmc_dateitext(Format.count()-1);
-        //  ->Exporttext
-        //  ->Fehler_kein_wkz
-        //  ->Export_moeglich        
-        geo(Format.count()-1);
-        //  ->Geotext
-        //  ->Versatz_y
-    }else if(format == "ganx")
-    {
-        ganx_dateitext(Format.count()-1);
-        //  ->Exporttext
-        //  ->Fehler_kein_wkz
-        //  ->Export_moeglich
-        geo(Format.count()-1);
-        //  ->Geotext
-        //  ->Versatz_y
-    }else if(format == "ggf")
-    {
-        ggf_dateitext(Format.count()-1);
-        //  ->Exporttext
-        //  ->Fehler_kein_wkz
-        //  ->Export_moeglich
-        geo(Format.count()-1);
-        //  ->Geotext
-        //  ->Versatz_y
-    }else if(format == "eigen")
-    {
-        eigen_dateitext(Format.count()-1);
-        //  ->Exporttext
-        //  ->Fehler_kein_wkz
-        //  ->Export_moeglich
-        geo(Format.count()-1);
-        //  ->Geotext
-        //  ->Versatz_y
-    }
-}
-*/
 void wstzustand::erzeugen(QString format, wkz_magazin wkzmag, QString drehung)
 {
     Format.append(format);
@@ -417,1328 +332,6 @@ void wstzustand::erzeugen(QString format, wkz_magazin wkzmag, QString drehung)
         //  ->Versatz_y
     }
 }
-
-/*void wstzustand::finde_drehwinkel_auto(int index)
-{
-    //vor dem Aufruf dieser Funktion müssen folgende Parameter zwingend erzeugt sein:
-    //Format
-    //Wkzmag
-    //Drehung_bekommen
-    //Bearbeitung_bekommen
-    //Laenge_bekommen
-    //Breite_bekommen
-
-    //Diese Funktion berechnet den besten Drehwinkel für der wst
-    //(indirekte) Rückgabewerte sind:
-    QString             ret_drehung;//isEmpty
-    int                 ret_bewertung = 0;
-    QString             ret_warnungen;//isEmpty
-    text_zeilenweise    ret_bearb;//isEmpty
-    double              ret_laenge = 0;
-    double              ret_breite = 0;
-
-    QString drehwinkel = Drehung_bekommen.at(index);
-    QString format = Format.at(index);
-    text_zeilenweise bearb = Bearbeitung_bekommen;
-    werkzeugmagazin wkzmag = Wkzmag.at(index);    
-
-    if(drehwinkel=="0" || drehwinkel=="90" || drehwinkel=="180" || drehwinkel=="270")
-    {
-        ret_drehung = drehwinkel;
-    }
-
-    if(format == "fmc")
-    {
-        const int ranking_abst_zwanzig = 5;
-        const int ranking_rw_nut = 30;
-        fraesergeraden_zusammenfassen(bearb);
-        hbemiduebeltiefe(bearb);
-        double tmp_l = Laenge_bekommen;
-        double tmp_b = Breite_bekommen;
-        gehr_3achs(bearb, tmp_l, tmp_b, format, "0");
-        //Die beste Drehrichtung herausfinden:
-        int bewertung_0    = 1;
-        int bewertung_90   = 1;
-        int bewertung_180  = 1;
-        int bewertung_270  = 1;
-        //Stufe 1:
-        //heraus bekommen, für welche Lage es Warnungen gibt:
-        text_zeilenweise bearb_kopie = bearb;
-        text_zeilenweise bearb_0;
-        text_zeilenweise bearb_90;
-        text_zeilenweise bearb_180;
-        text_zeilenweise bearb_270;
-        double l_0 = tmp_l;
-        double l_90 = tmp_l;
-        double l_180 = tmp_l;
-        double l_270 = tmp_l;
-        double b_0 = tmp_b;
-        double b_90 = tmp_b;
-        double b_180 = tmp_b;
-        double b_270 = tmp_b;
-        QString warnung_0;
-        QString warnung_90;
-        QString warnung_180;
-        QString warnung_270;
-
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
-        {
-            warnung_0 = warnungen_fmc(bearb_kopie, wkzmag, l_0, b_0);
-            if(warnung_0.isEmpty())
-            {
-                bewertung_0 = 100;
-            }else
-            {
-                bewertung_0 = 0;
-            }
-            bearb_0 = bearb_kopie;
-        }
-        if(drehwinkel == "90" || drehwinkel == "AUTO")
-        {
-            bearb_drehen_90(bearb_kopie, l_90, b_90);
-            warnung_90 = warnungen_fmc(bearb_kopie, wkzmag, l_90, b_90);
-            if(warnung_90.isEmpty())
-            {
-                bewertung_90 = 100;
-            }else
-            {
-                bewertung_90 = 0;
-            }
-            bearb_90 = bearb_kopie;
-        }
-        if(drehwinkel == "180" || drehwinkel == "AUTO")
-        {
-            if(drehwinkel == "180")
-            {
-                bearb_drehen_90(bearb_kopie, l_180, b_180);
-                bearb_drehen_90(bearb_kopie, l_180, b_180);
-            }else //AUTO
-            {
-                l_180 = l_90;//Drehung mitnehmen
-                b_180 = b_90;//Drehung mitnehmen
-                bearb_drehen_90(bearb_kopie, l_180, b_180);
-            }
-            warnung_180 = warnungen_fmc(bearb_kopie, wkzmag, l_180, b_180);
-            if(warnung_180.isEmpty())
-            {
-                bewertung_180 = 100;
-            }else
-            {
-                bewertung_180 = 0;
-            }
-            bearb_180 = bearb_kopie;
-        }
-        if(drehwinkel == "270" || drehwinkel == "AUTO")
-        {
-            if(drehwinkel == "270")
-            {
-                bearb_drehen_90(bearb_kopie, l_270, b_270);
-                bearb_drehen_90(bearb_kopie, l_270, b_270);
-                bearb_drehen_90(bearb_kopie, l_270, b_270);
-            }else //AUTO
-            {
-                l_270 = l_180;//Drehung mitnehmen
-                b_270 = b_180;//Drehung mitnehmen
-                bearb_drehen_90(bearb_kopie, l_270, b_270);
-            }
-            warnung_270 = warnungen_fmc(bearb_kopie, wkzmag, l_270, b_270);
-            if(warnung_270.isEmpty())
-            {
-                bewertung_270 = 100;
-            }else
-            {
-                bewertung_270 = 0;
-            }
-            bearb_270 = bearb_kopie;
-        }
-
-        //Stufe 2:
-        //heraus bekommen wo vorne ist anhand von Bearbeitungen:
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_0.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.dm() == 8 || \
-                       bo.dm() == 8.2)
-                    {
-                        if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_0 += ranking_abst_zwanzig;
-                        }
-                        if(bo.y() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_0 += ranking_abst_zwanzig;
-                        }
-                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
-                    {
-                        if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_0 += 5;
-                        }
-                        if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_0 += 5;
-                        }
-
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "90" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_90.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.dm() == 8 || \
-                       bo.dm() == 8.2)
-                    {
-                        if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_90 += ranking_abst_zwanzig;
-                        }
-                        if(bo.y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                        {
-                            bewertung_90 += ranking_abst_zwanzig;
-                        }
-                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
-                    {
-                        if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_90 += 5;
-                        }
-                        if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_90 += 5;
-                        }
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "180" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_180.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                   bohrung bo(zeile.text());
-                    if(bo.dm() == 8 || \
-                       bo.dm() == 8.2)
-                    {
-                        if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_180 += ranking_abst_zwanzig;
-                        }
-                        if(bo.y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                        {
-                            bewertung_180 += ranking_abst_zwanzig;
-                        }
-                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
-                    {
-                        if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_180 += 5;
-                        }
-                        if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_180 += 5;
-                        }
-
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "270" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_270.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.dm() == 8 || \
-                       bo.dm() == 8.2)
-                    {
-                        if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_270 += ranking_abst_zwanzig;
-                        }
-                        if(bo.y() == 20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                        {
-                            bewertung_270 += ranking_abst_zwanzig;
-                        }
-                    }else if(bo.dm() == 35.6)//Töpfe/Topfbänder am Anschlag anlegen
-                    {
-                        if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_270 += 5;
-                        }
-                        if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_270 += 5;
-                        }
-                    }
-                }
-            }
-        }
-
-        //Stufe 3:
-        //heraus bekommen wo vorne ist anhand von Kanteninfo:
-        if(!kante_vo("0").isEmpty() || !kante_li("0").isEmpty())
-        {
-            if(!kante_vo("0").isEmpty())
-            {
-                bewertung_0 += 15;
-            }
-            if(!kante_li("0").isEmpty())
-            {
-                bewertung_0 += 10;
-            }
-        }
-        if(!kante_vo("90").isEmpty() || !kante_li("90").isEmpty())
-        {
-            if(!kante_vo("90").isEmpty())
-            {
-                bewertung_90 += 15;
-            }
-            if(!kante_li("90").isEmpty())
-            {
-                bewertung_90 += 10;
-            }
-        }
-        if(!kante_vo("180").isEmpty() || !kante_li("180").isEmpty())
-        {
-            if(!kante_vo("180").isEmpty())
-            {
-                bewertung_180 += 15;
-            }
-            if(!kante_li("180").isEmpty())
-            {
-                bewertung_180 += 10;
-            }
-        }
-        if(!kante_vo("270").isEmpty() || !kante_li("270").isEmpty())
-        {
-            if(!kante_vo("270").isEmpty())
-            {
-                bewertung_270 += 15;
-            }
-            if(!kante_li("270").isEmpty())
-            {
-                bewertung_270 += 10;
-            }
-        }
-
-        //Stufe 4:
-        //Teile bevorzugen, bei bei denen gilt: L > B:
-        if(l_0 > b_0)
-        {
-            bewertung_0 += 20;
-        }
-        if(l_90 > b_90)
-        {
-            bewertung_90 += 20;
-        }
-        if(l_180 > b_180)
-        {
-            bewertung_180 += 20;
-        }
-        if(l_270 > b_270)
-        {
-           bewertung_270 += 20;
-        }
-
-        //Stufe 5:
-        //Bei schmalen Teilen bevorzugen, wenn HBE nicht aus richtung des Anschlages kommt:
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
-        {
-            if(b_0 <= Schwellenwert_ay)
-            {
-                bool bonus = true;
-                for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
-                {
-                    text_zeilenweise zeile;
-                    zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                    zeile.set_text(bearb_0.zeile(i));
-                    if(zeile.zeile(1) == BEARBART_BOHR)
-                    {
-                        bohrung bo(zeile.text());
-                        if(bo.bezug() == WST_BEZUG_VO)
-                        {
-                            bonus = false;
-                        }
-                    }
-                }
-                if(bonus == true)
-                {
-                    bewertung_0 += 20;
-                }else
-                {
-                    bewertung_0 -= 10;
-                }
-            }
-        }
-        if(drehwinkel == "90" || drehwinkel == "AUTO")
-        {
-            if(b_90 <= Schwellenwert_ay)
-            {
-                bool bonus = true;
-                for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
-                {
-                    text_zeilenweise zeile;
-                    zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                    zeile.set_text(bearb_90.zeile(i));
-                    if(zeile.zeile(1) == BEARBART_BOHR)
-                    {
-                        bohrung bo(zeile.text());
-                        if(bo.bezug() == WST_BEZUG_VO)
-                        {
-                            bonus = false;
-                        }
-                    }
-                }
-                if(bonus == true)
-                {
-                    bewertung_90 += 20;
-                }else
-                {
-                    bewertung_90 -= 10;
-                }
-            }
-        }
-        if(drehwinkel == "180" || drehwinkel == "AUTO")
-        {
-            if(b_180 <= Schwellenwert_ay)
-            {
-                bool bonus = true;
-                for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
-                {
-                    text_zeilenweise zeile;
-                    zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                    zeile.set_text(bearb_180.zeile(i));
-                    if(zeile.zeile(1) == BEARBART_BOHR)
-                    {
-                        bohrung bo(zeile.text());
-                        if(bo.bezug() == WST_BEZUG_VO)
-                        {
-                            bonus = false;
-                        }
-                    }
-                }
-                if(bonus == true)
-                {
-                    bewertung_180 += 20;
-                }else
-                {
-                    bewertung_180 -= 10;
-                }
-            }
-        }
-        if(drehwinkel == "270" || drehwinkel == "AUTO")
-        {
-            if(b_270 <= Schwellenwert_ay)
-            {
-                bool bonus = true;
-                for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
-                {
-                    text_zeilenweise zeile;
-                    zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                    zeile.set_text(bearb_270.zeile(i));
-                    if(zeile.zeile(1) == BEARBART_BOHR)
-                    {
-                        bohrung bo(zeile.text());
-                        if(bo.bezug() == WST_BEZUG_VO)
-                        {
-                            bonus = false;
-                        }
-                    }
-                }
-                if(bonus == true)
-                {
-                    bewertung_270 += 20;
-                }else
-                {
-                    bewertung_270 -= 10;
-                }
-            }
-        }
-
-        //Stufe 6:
-        //Flächenbohrungen mit geringem Kantenabstand bevorzugen
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_0.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.x() < 20 || bo.y() < 20)
-                    {
-                        bewertung_0 += 1;
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "90" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_90.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.x() < 20 || bo.y() < 20)
-                    {
-                        bewertung_90 += 1;
-                    }
-                }
-            }
-
-        }
-        if(drehwinkel == "180" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_180.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.x() < 20 || bo.y() < 20)
-                    {
-                        bewertung_180 += 1;
-                    }
-                }
-            }
-
-        }
-        if(drehwinkel == "270" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_270.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.x() < 20 || bo.y() < 20)
-                    {
-                        bewertung_270 += 1;
-                    }
-                }
-            }
-        }
-
-        //Stufe 7:
-        //RW-Nuten nicht am Anschlag bevorzugen
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_0.zeile(i));
-                if(zeile.zeile(1) == BEARBART_NUT)
-                {
-                    nut n(zeile.text());
-                    if(n.breite() == 8.5 && n.tiefe() == 6.5)
-                    {
-                        if(n.ys() == n.ye())
-                        {
-                            if(n.ys() == b_0 - 20 + 4.25)
-                            {
-                                bewertung_0 += ranking_rw_nut;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "90" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_90.zeile(i));
-                if(zeile.zeile(1) == BEARBART_NUT)
-                {
-                    nut n(zeile.text());
-                    if(n.breite() == 8.5 && n.tiefe() == 6.5)
-                    {
-                        if(n.ys() == n.ye())
-                        {
-                            if(n.ys() == b_0 - 20 + 4.25)
-                            {
-                                bewertung_90 += ranking_rw_nut;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "180" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_180.zeile(i));
-                if(zeile.zeile(1) == BEARBART_NUT)
-                {
-                    nut n(zeile.text());
-                    if(n.breite() == 8.5 && n.tiefe() == 6.5)
-                    {
-                        if(n.ys() == n.ye())
-                        {
-                            if(n.ys() == b_0 - 20 + 4.25)
-                            {
-                                bewertung_180 += ranking_rw_nut;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "270" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_270.zeile(i));
-                if(zeile.zeile(1) == BEARBART_NUT)
-                {
-                    nut n(zeile.text());
-                    if(n.breite() == 8.5 && n.tiefe() == 6.5)
-                    {
-                        if(n.ys() == n.ye())
-                        {
-                            if(n.ys() == b_0 - 20 + 4.25)
-                            {
-                                bewertung_270 += ranking_rw_nut;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        //Bewertungen auswerten:
-        if(drehwinkel == "0")
-        {
-            bewertung_0 = 9999;
-            bewertung_90 = 0;
-            bewertung_180 = 0;
-            bewertung_270 = 0;
-        }else if(drehwinkel == "90")
-        {
-            bewertung_90 = 9999;
-            bewertung_0 = 0;
-            bewertung_180 = 0;
-            bewertung_270 = 0;
-        }else if(drehwinkel == "180")
-        {
-            bewertung_180 = 9999;
-            bewertung_0 = 0;
-            bewertung_90 = 0;
-            bewertung_270 = 0;
-        }else if(drehwinkel == "270")
-        {
-            bewertung_270 = 9999;
-            bewertung_0 = 0;
-            bewertung_90 = 0;
-            bewertung_180 = 0;
-        }
-        if(bewertung_0 >= 100 && \
-           bewertung_0 >= bewertung_90 && \
-           bewertung_0 >= bewertung_180 && \
-           bewertung_0 >= bewertung_270 )
-        {
-            ret_bewertung = bewertung_0;
-            ret_drehung = "0";
-            ret_warnungen = warnung_0;
-            ret_bearb = bearb_0;
-            ret_laenge = l_0;
-            ret_breite = b_0;
-        }else if(bewertung_90 >= 100 && \
-                 bewertung_90 >= bewertung_0 && \
-                 bewertung_90 >= bewertung_180 && \
-                 bewertung_90 >= bewertung_270 )
-        {
-            ret_bewertung = bewertung_90;
-            ret_drehung = "90";
-            ret_warnungen = warnung_90;
-            ret_bearb = bearb_90;
-            ret_laenge = l_90;
-            ret_breite = b_90;
-        }else if(bewertung_180 >= 100 && \
-                 bewertung_180 >= bewertung_0 && \
-                 bewertung_180 >= bewertung_90 && \
-                 bewertung_180 >= bewertung_270 )
-        {
-            ret_bewertung = bewertung_180;
-            ret_drehung = "180";
-            ret_warnungen = warnung_180;
-            ret_bearb = bearb_180;
-            ret_laenge = l_180;
-            ret_breite = b_180;
-        }else if(bewertung_270 >= 100 && \
-                 bewertung_270 >= bewertung_0 && \
-                 bewertung_270 >= bewertung_90 && \
-                 bewertung_270 >= bewertung_180 )
-        {
-            ret_bewertung = bewertung_270;
-            ret_drehung = "270";
-            ret_warnungen = warnung_270;
-            ret_bearb = bearb_270;
-            ret_laenge = l_270;
-            ret_breite = b_270;
-        }else
-        {
-            //wir nehmen 0:
-            ret_bewertung = bewertung_0;
-            ret_drehung = "0";
-            ret_warnungen = warnung_0;
-            ret_bearb = bearb_0;
-            ret_laenge = l_0;
-            ret_breite = b_0;
-        }
-        rasterbohrungen_finden_fmc(ret_bearb, wkzmag, ret_laenge, ret_breite);
-        if(Formartierungen_aufbrechen == true)
-        {
-            formartierung_zu_einzelfkon(ret_bearb, ret_laenge, ret_breite);
-        }
-        kurze_an_ab_geraden(ret_bearb, wkzmag);
-    }else if(format == "ganx")
-    {
-        const int ranking_abst_zwanzig = 5;
-        hbemiduebeltiefe(bearb);
-        double tmp_l = Breite_bekommen;
-        double tmp_b = Laenge_bekommen;
-        bearb_optimieren_ganx(bearb);
-        gehr_3achs(bearb, tmp_l, tmp_b, "ganx", "0");
-        //Die beste Drehrichtung herausfinden:
-        int bewertung_0    = 1;
-        int bewertung_90   = 1;
-        int bewertung_180  = 1;
-        int bewertung_270  = 1;
-        //Stufe 1:
-        //heraus bekommen, für welche Lage es Warnungen gibt:
-        text_zeilenweise bearb_kopie = bearb;
-        text_zeilenweise bearb_0;
-        text_zeilenweise bearb_90;
-        text_zeilenweise bearb_180;
-        text_zeilenweise bearb_270;
-        double l_0 = tmp_l;
-        double l_90 = tmp_l;
-        double l_180 = tmp_l;
-        double l_270 = tmp_l;
-        double b_0 = tmp_b;
-        double b_90 = tmp_b;
-        double b_180 = tmp_b;
-        double b_270 = tmp_b;
-        QString warnung_0;
-        QString warnung_90;
-        QString warnung_180;
-        QString warnung_270;
-
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
-        {
-            warnung_0 = warnungen_ganx(bearb_kopie, wkzmag, l_0, b_0);
-            if(warnung_0.isEmpty())
-            {
-                bewertung_0 = 100;
-            }else
-            {
-                bewertung_0 = 0;
-            }
-            bearb_0 = bearb_kopie;
-        }
-        if(drehwinkel == "90" || drehwinkel == "AUTO")
-        {
-            bearb_drehen_90(bearb_kopie, l_90, b_90);
-            warnung_90 = warnungen_ganx(bearb_kopie, wkzmag, l_90, b_90);
-            if(warnung_90.isEmpty())
-            {
-                bewertung_90 = 100;
-            }else
-            {
-                bewertung_90 = 0;
-            }
-            bearb_90 = bearb_kopie;
-        }
-        if(drehwinkel == "180" || drehwinkel == "AUTO")
-        {
-            if(drehwinkel == "180")
-            {
-                bearb_drehen_90(bearb_kopie, l_180, b_180);
-                bearb_drehen_90(bearb_kopie, l_180, b_180);
-            }else //AUTO
-            {
-                l_180 = l_90;//Drehung mitnehmen
-                b_180 = b_90;//Drehung mitnehmen
-                bearb_drehen_90(bearb_kopie, l_180, b_180);
-            }
-            warnung_180 = warnungen_ganx(bearb_kopie, wkzmag, l_180, b_180);
-            if(warnung_180.isEmpty())
-            {
-                bewertung_180 = 100;
-            }else
-            {
-                bewertung_180 = 0;
-            }
-            bearb_180 = bearb_kopie;
-        }
-        if(drehwinkel == "270" || drehwinkel == "AUTO")
-        {
-            if(drehwinkel == "270")
-            {
-                bearb_drehen_90(bearb_kopie, l_270, b_270);
-                bearb_drehen_90(bearb_kopie, l_270, b_270);
-                bearb_drehen_90(bearb_kopie, l_270, b_270);
-            }else //AUTO
-            {
-                l_270 = l_180;//Drehung mitnehmen
-                b_270 = b_180;//Drehung mitnehmen
-                bearb_drehen_90(bearb_kopie, l_270, b_270);
-            }
-            warnung_270 = warnungen_ganx(bearb_kopie, wkzmag, l_270, b_270);
-            if(warnung_270.isEmpty())
-            {
-                bewertung_270 = 100;
-            }else
-            {
-                bewertung_270 = 0;
-            }
-            bearb_270 = bearb_kopie;
-        }
-
-        //Stufe 2:
-        //heraus bekommen wo vorne ist anhand von Bearbeitungen:
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_0.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.dm() == 8 || \
-                       bo.dm() == 8.2)
-                    {
-                        if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_0 += ranking_abst_zwanzig;
-                        }
-                        if(bo.y() == b_0-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                        {
-                            bewertung_0 += ranking_abst_zwanzig;
-                        }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
-                    {
-                        if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_0 += 5;
-                        }
-                        if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_0 += 5;
-                        }
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "90" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_90.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.dm() == 8 || \
-                       bo.dm() == 8.2)
-                    {
-                        if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_90 += ranking_abst_zwanzig;
-                        }
-                        if(bo.y() == b_90-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                        {
-                            bewertung_90 += ranking_abst_zwanzig;
-                        }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
-                    {
-                        if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_90 += 5;
-                        }
-                        if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_90 += 5;
-                        }
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "180" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_180.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.dm() == 8 || \
-                       bo.dm() == 8.2)
-                    {
-                        if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_180 += ranking_abst_zwanzig;
-                        }
-                        if(bo.y() == b_180-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                        {
-                            bewertung_180 += ranking_abst_zwanzig;
-                        }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
-                    {
-                        if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_180 += 5;
-                        }
-                        if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_180 += 5;
-                        }
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "270" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_270.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.dm() == 8 || \
-                       bo.dm() == 8.2)
-                    {
-                        if(bo.x() == 20)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_270 += ranking_abst_zwanzig;
-                        }
-                        if(bo.y() == b_270-20)//Gilt für HBE, Löcher mit diesem Abst. in der Fläche sind nicht zu erwarten
-                        {
-                            bewertung_270 += ranking_abst_zwanzig;
-                        }
-                    }else if(bo.dm() == 35.3)//Töpfe/Topfbänder am Anschlag anlegen
-                    {
-                        if(bo.y() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_270 += 5;
-                        }
-                        if(bo.x() < 30)//Gilt für alle Bohrungen ob HBE oder nicht ist hier egal
-                        {
-                            bewertung_270 += 5;
-                        }
-                    }
-                }
-            }
-        }
-
-        //Stufe 3:
-        //heraus bekommen wo vorne ist anhand von Kanteninfo:
-        if(!kante_hi_ganx("0").isEmpty())
-        {
-            bewertung_0 += 10;
-        }
-        if(!kante_li_ganx("0").isEmpty())
-        {
-            bewertung_0 += 15;
-        }
-
-        if(!kante_hi_ganx("90").isEmpty())
-        {
-            bewertung_90 += 10;
-        }
-        if(!kante_li_ganx("90").isEmpty())
-        {
-            bewertung_90 += 15;
-        }
-
-        if(!kante_hi_ganx("180").isEmpty())
-        {
-            bewertung_180 += 10;
-        }
-        if(!kante_li_ganx("180").isEmpty())
-        {
-            bewertung_180 += 15;
-        }
-
-        if(!kante_hi_ganx("270").isEmpty())
-        {
-            bewertung_270 += 10;
-        }
-        if(!kante_li_ganx("270").isEmpty())
-        {
-            bewertung_270 += 15;
-        }
-
-        //Stufe 4:
-        //Teile bevorzugen, bei bei denen gilt: B > L:
-        if(b_0 > l_0)
-        {
-            bewertung_0 += 20;
-        }
-        if(b_90 > l_90)
-        {
-            bewertung_90 += 20;
-        }
-        if(b_180 > l_180)
-        {
-            bewertung_180 += 20;
-        }
-        if(b_270 > l_270)
-        {
-            bewertung_270 += 20;
-        }
-
-        //Stufe 5:
-        //Bei schmalen Teilen bevorzugen, wenn HBE nicht aus richtung des Anschlages kommt:
-        if(b_0 <= Schwellenwert_ay)
-        {
-            bool bonus = true;
-            for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_0.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.bezug() == WST_BEZUG_VO)
-                    {
-                        bonus = false;
-                    }
-                }
-            }
-            if(bonus == true)
-            {
-                bewertung_0 += 20;
-            }else
-            {
-                bewertung_0 -= 10;
-            }
-        }
-        if(b_90 <= Schwellenwert_ay)
-        {
-            bool bonus = true;
-            for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_90.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.bezug() == WST_BEZUG_VO)
-                    {
-                        bonus = false;
-                    }
-                }
-            }
-            if(bonus == true)
-            {
-                bewertung_90 += 20;
-            }else
-            {
-                bewertung_90 -= 10;
-            }
-        }
-        if(b_180 <= Schwellenwert_ay)
-        {
-            bool bonus = true;
-            for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_180.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.bezug() == WST_BEZUG_VO)
-                    {
-                        bonus = false;
-                    }
-                }
-            }
-            if(bonus == true)
-            {
-                bewertung_180 += 20;
-            }else
-            {
-                bewertung_180 -= 10;
-            }
-        }
-        if(b_270 <= Schwellenwert_ay)
-        {
-            bool bonus = true;
-            for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_270.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.bezug() == WST_BEZUG_VO)
-                    {
-                        bonus = false;
-                    }
-                }
-            }
-            if(bonus == true)
-            {
-                bewertung_270 += 20;
-            }else
-            {
-                bewertung_270 -= 10;
-            }
-        }
-
-        //Stufe 6:
-        //Flächenbohrungen mit geringem Kantenabstand beforzugen
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_0.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_0.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.x() < 20 || bo.y() < 20)
-                    {
-                        bewertung_0 += 1;
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "90" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_90.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_90.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.x() < 20 || bo.y() < 20)
-                    {
-                        bewertung_90 += 1;
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "180" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_180.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_180.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.x() < 20 || bo.y() < 20)
-                    {
-                        bewertung_180 += 1;
-                    }
-                }
-            }
-        }
-        if(drehwinkel == "270" || drehwinkel == "AUTO")
-        {
-            for(uint i=1; i<=bearb_270.zeilenanzahl() ;i++)
-            {
-                text_zeilenweise zeile;
-                zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                zeile.set_text(bearb_270.zeile(i));
-                if(zeile.zeile(1) == BEARBART_BOHR)
-                {
-                    bohrung bo(zeile.text());
-                    if(bo.x() < 20 || bo.y() < 20)
-                    {
-                        bewertung_270 += 1;
-                    }
-                }
-            }
-        }
-
-        //Stufe 7:
-        //RW-Nuten nicht am Anschlag bevorzugen
-        //ist bei GANX nicht nötig weil physisch mit der Maschine nicht möglich
-
-        //Bewertungen auswerten:
-        if(drehwinkel == "0")
-        {
-            bewertung_0 = 9999;
-            bewertung_90 = 0;
-            bewertung_180 = 0;
-            bewertung_270 = 0;
-        }else if(drehwinkel == "90")
-        {
-            bewertung_90 = 9999;
-            bewertung_0 = 0;
-            bewertung_180 = 0;
-            bewertung_270 = 0;
-        }else if(drehwinkel == "180")
-        {
-            bewertung_180 = 9999;
-            bewertung_0 = 0;
-            bewertung_90 = 0;
-            bewertung_270 = 0;
-        }else if(drehwinkel == "270")
-        {
-            bewertung_270 = 9999;
-            bewertung_0 = 0;
-            bewertung_90 = 0;
-            bewertung_180 = 0;
-        }
-        if(bewertung_0 >= 100 && \
-           bewertung_0 >= bewertung_90 && \
-           bewertung_0 >= bewertung_180 && \
-           bewertung_0 >= bewertung_270 )
-        {
-            ret_bewertung = bewertung_0;
-            ret_drehung = "0";
-            ret_warnungen = warnung_0;
-            ret_bearb = bearb_0;
-            ret_laenge = l_0;
-            ret_breite = b_0;
-        }else if(bewertung_90 >= 100 && \
-                 bewertung_90 >= bewertung_0 && \
-                 bewertung_90 >= bewertung_180 && \
-                 bewertung_90 >= bewertung_270 )
-        {
-            ret_bewertung = bewertung_90;
-            ret_drehung = "90";
-            ret_warnungen = warnung_90;
-            ret_bearb = bearb_90;
-            ret_laenge = l_90;
-            ret_breite = b_90;
-        }else if(bewertung_180 >= 100 && \
-                 bewertung_180 >= bewertung_0 && \
-                 bewertung_180 >= bewertung_90 && \
-                 bewertung_180 >= bewertung_270 )
-        {
-            ret_bewertung = bewertung_180;
-            ret_drehung = "180";
-            ret_warnungen = warnung_180;
-            ret_bearb = bearb_180;
-            ret_laenge = l_180;
-            ret_breite = b_180;
-        }else if(bewertung_270 >= 100 && \
-                 bewertung_270 >= bewertung_0 && \
-                 bewertung_270 >= bewertung_90 && \
-                 bewertung_270 >= bewertung_180 )
-        {
-            ret_bewertung = bewertung_270;
-            ret_drehung = "270";
-            ret_warnungen = warnung_270;
-            ret_bearb = bearb_270;
-            ret_laenge = l_270;
-            ret_breite = b_270;
-        }else
-        {
-            //wir nehmen 0:
-            ret_bewertung = bewertung_0;
-            ret_drehung = "0";
-            ret_warnungen = warnung_0;
-            ret_bearb = bearb_0;
-            ret_laenge = l_0;
-            ret_breite = b_0;
-        }
-        rasterbohrungen_finden_ganx(ret_bearb, wkzmag, ret_laenge, ret_breite);
-    }else if(format == "ggf" || format == "eigen")
-    {
-        fraesergeraden_zusammenfassen(bearb);
-        hbemiduebeltiefe(bearb);
-        double tmp_l = Laenge_bekommen;
-        double tmp_b = Breite_bekommen;
-        gehr_3achs(bearb, tmp_l, tmp_b, format, "0");
-        if(drehwinkel == "0" || drehwinkel == "AUTO")
-        {
-            //tue nichts
-        }else if(drehwinkel == "90")
-        {
-            bearb_drehen_90(bearb, tmp_l, tmp_b);
-        }else if(drehwinkel == "180")
-        {
-            bearb_drehen_90(bearb, tmp_l, tmp_b);
-            bearb_drehen_90(bearb, tmp_l, tmp_b);
-        }else //if(drehwinkel == "270")
-        {
-            bearb_drehen_90(bearb, tmp_l, tmp_b);
-            bearb_drehen_90(bearb, tmp_l, tmp_b);
-            bearb_drehen_90(bearb, tmp_l, tmp_b);
-        }
-        if(Formartierungen_aufbrechen == true)
-        {
-            formartierung_zu_einzelfkon(ret_bearb, ret_laenge, ret_breite);
-        }
-        kurze_an_ab_geraden(ret_bearb, wkzmag);
-        ret_drehung     = "0";
-        ret_bewertung   =  0 ;
-        ret_warnungen.clear();
-        ret_bearb = bearb;
-        ret_laenge = tmp_l;
-        ret_breite = tmp_b;
-    }
-
-    Drehung.append(ret_drehung);
-    Bewertung.append(ret_bewertung);
-    Warnungen.append(ret_warnungen);
-    Bearbeitung.append(ret_bearb);
-    Laenge.append(ret_laenge);
-    Breite.append(ret_breite);
-}
-*/
 void wstzustand::finde_drehwinkel_auto_(int index)
 {
     //vor dem Aufruf dieser Funktion müssen folgende Parameter zwingend erzeugt sein:
@@ -3027,47 +1620,9 @@ void wstzustand::finde_drehwinkel_auto_(int index)
     Drehung.append(ret_drehung);
     Bewertung.append(ret_bewertung);
     Warnungen.append(ret_warnungen);
-    text_zeilenweise tmp;//alt
-    Bearbeitung.append(tmp);//alt
     Bearb.append(ret_bearb);
     Laenge.append(ret_laenge);
     Breite.append(ret_breite);
-}
-
-void wstzustand::fraesergeraden_zusammenfassen(text_zeilenweise& bearbeitung)
-{
-    for(uint i=1 ; i<bearbeitung.zeilenanzahl() ; i++)
-    {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearbeitung.zeile(i));
-        text_zeilenweise folgezeile;
-        folgezeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        folgezeile.set_text(bearbeitung.zeile(i+1));
-
-        if(zeile.zeile(1) == BEARBART_FRAESERGERADE &&\
-           folgezeile.zeile(1) == BEARBART_FRAESERGERADE)
-        {
-            strecke s1, s2;
-            fraesergerade fg1(zeile.text());
-            fraesergerade fg2(folgezeile.text());
-            s1=fg1.strecke_();
-            s2=fg2.strecke_();
-            strecke_bezugspunkt sb = strecke_bezugspunkt_start;
-            s1.set_laenge_2d(s1.laenge2d()+s2.laenge2d(), sb );
-            fg1.set_endpunkt(s1.endpu());
-            //Vergleich der Strings statt der double da sonst ungleiche Nachkommastellen alles zu genau machen:
-            if(fg1.xe_qstring() == fg2.xe_qstring() &&\
-               fg1.ye_qstring() == fg2.ye_qstring() &&\
-               fg1.ze_qstring() == fg2.ze_qstring()    )
-            {
-                bearbeitung.zeile_ersaetzen(i, fg1.text());
-                bearbeitung.zeile_loeschen(i+1);
-                i--;
-            }
-        }
-
-    }
 }
 void wstzustand::fraesergeraden_zusammenfassen(text_zw& bearbeitung)
 {
@@ -3100,60 +1655,6 @@ void wstzustand::fraesergeraden_zusammenfassen(text_zw& bearbeitung)
             }
         }
 
-    }
-}
-
-void wstzustand::hbemiduebeltiefe(text_zeilenweise& bearbeitung)
-{
-    //Diese Funktion stellt die Lochtiefe für die Dübel 8x30 bei den
-    //HBEs einheitlich auf 18mm ein, damit es nicht zu Problemen in
-    //der Fertigung kommt wenn die Löcher CNC-gebohrt werden und mit dem
-    //Dübelautomaten die Dübel eingetrieben werden
-
-    const double min = 16;//Maximale Dübellochtiefe
-    const double max = 18;//Minimale Dübellochtiefe
-    for(uint i=1 ; i<=bearbeitung.zeilenanzahl() ; i++)
-    {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearbeitung.zeile(i));
-        if(zeile.zeile(1) == BEARBART_BOHR)
-        {
-            bohrung bo(zeile.text());
-            QString bezug = bo.bezug();
-            if(bezug == WST_BEZUG_LI || bezug == WST_BEZUG_RE || \
-               bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
-            {
-                //Bohrung ist HBE
-                if(bo.dm() == 8.2)
-                {
-                    double boti = bo.tiefe();
-                    if(max >= boti && boti >= min)
-                    {
-                        bo.set_tiefe(max);
-                        bearbeitung.zeile_ersaetzen(i, bo.text());
-                    }
-                }
-            }
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
-        {
-            bohrraster bo(zeile.text());
-            QString bezug = bo.bezug();
-            if(bezug == WST_BEZUG_LI || bezug == WST_BEZUG_RE || \
-               bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
-            {
-                //Bohrung ist HBE
-                if(bo.dm() == 8.2)
-                {
-                    double boti = bo.tiefe();
-                    if(max >= boti && boti >= min)
-                    {
-                        bo.set_tiefe(max);
-                        bearbeitung.zeile_ersaetzen(i, bo.text());
-                    }
-                }
-            }
-        }
     }
 }
 void wstzustand::hbemiduebeltiefe(text_zw& bearbeitung)
@@ -3205,273 +1706,6 @@ void wstzustand::hbemiduebeltiefe(text_zw& bearbeitung)
                     }
                 }
             }
-        }
-    }
-}
-
-void wstzustand::gehr_3achs(text_zeilenweise& bearb, double &tmp_l, double &tmp_b, QString ausgabeformat, QString drehwi)
-{
-    //Diese Funktion löscht die Gehrungen aus den Bearbeitungen heraus
-    //Diese können mit einer 3-Achs-Maschine nicht ohne Spezial-WKZ hergestellt werden.
-    //und im Spezielle nicht mit beliebigem Winkel
-    //ausgabeformate: fmc, ganx, eigen
-
-    //Schritt 1:
-    //Heraus bekommen ob Gehrungen vorhanden sind und wo sie liegen
-    //Gehrungen löschen
-    bool li = false;
-    bool re = false;
-    bool ob = false;
-    bool un = false;
-
-    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearb.zeile(i));
-        //QString zeile_neu;
-        if(zeile.zeile(1) == BEARBART_GEHRUNG)
-        {
-            gehrung ge(zeile.text());
-            double spx = ge.stapu().x();
-            double spy = ge.stapu().y();
-            double epx = ge.endpu().x();
-            double epy = ge.endpu().y();
-            if(spx == epx)//senkrecht
-            {
-                if(spx == 0)
-                {
-                    li = true;
-                }else if(spx == tmp_l)
-                {
-                    re = true;
-                }
-            }else if(spy == epy)//waagerecht
-            {
-                if(spy == 0)
-                {
-                    un = true;
-                }else if(spy == tmp_b)
-                {
-                    ob = true;
-                }
-            }
-            bearb.zeile_loeschen(i);
-            i--;
-        }
-    }
-
-    //Wo eine Kante ist wo eine Gehrung ist keine Maßzugabe geben:
-    if(li == true)
-    {
-        QString kante;
-        if (ausgabeformat == "ganx")
-        {
-            kante = kante_li_ganx(drehwi);
-        }else
-        {
-            kante = kante_li(drehwi);
-        }
-        if(!kante.isEmpty())
-        {
-            li = false;
-        }
-    }
-    if(re == true)
-    {
-        QString kante;
-        if (ausgabeformat == "ganx")
-        {
-            kante = kante_re_ganx(drehwi);
-        }else
-        {
-            kante = kante_re(drehwi);
-        }
-        if(!kante.isEmpty())
-        {
-            re = false;
-        }
-    }
-    if(ob == true)
-    {
-        QString kante;
-        if (ausgabeformat == "ganx")
-        {
-            kante = kante_hi_ganx(drehwi);
-        }else
-        {
-            kante = kante_hi(drehwi);
-        }
-        if(!kante.isEmpty())
-        {
-            ob = false;
-        }
-    }
-    if(un == true)
-    {
-        QString kante;
-        if (ausgabeformat == "ganx")
-        {
-            kante = kante_vo_ganx(drehwi);
-        }else
-        {
-            kante = kante_vo(drehwi);
-        }
-        if(!kante.isEmpty())
-        {
-            un = false;
-        }
-    }
-
-    //Schritt 2:
-    //WST vergrößern
-    //andere Bearbeitungen gem vergrößerung verschieben
-    double zugabe = Zugabe_gehrungen;
-    if(li == true) //X-Werte verschieben
-    {
-        tmp_l += zugabe;
-        for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
-        {
-            text_zeilenweise zeile;
-            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            zeile.set_text(bearb.zeile(i));
-            QString zeile_neu;
-            if(zeile.zeile(1) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.text());
-                bo.set_x(bo.x() + zugabe);
-                zeile_neu = bo.text();
-            }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
-            {
-                bohrraster bora(zeile.text());
-                bora.set_x((bora.x() + zugabe));
-                zeile_neu = bora.text();
-            }else if(zeile.zeile(1) == BEARBART_RTA)
-            {
-                rechtecktasche rt(zeile.text());
-                rt.set_x(rt.x() + zugabe);
-                zeile_neu = rt.text();
-            }else if(zeile.zeile(1) == BEARBART_NUT)
-            {
-                nut nu(zeile.text());
-                nu.set_xs(nu.xs() + zugabe);
-                nu.set_xe(nu.xe() + zugabe);
-                zeile_neu = nu.text();
-            }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
-            {
-                fraueseraufruf tmp(zeile.text());
-                tmp.set_x(tmp.x() + zugabe);
-                zeile_neu = tmp.text();
-            }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
-            {
-                fraesergerade tmp(zeile.text());
-                tmp.set_xs(tmp.xs() + zugabe);
-                tmp.set_xe(tmp.xe() + zugabe);
-                zeile_neu = tmp.text();
-            }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
-            {
-                fraeserbogen tmp(zeile.text());
-                tmp.set_xs(tmp.xs() + zugabe);
-                tmp.set_xe(tmp.xe() + zugabe);
-                zeile_neu = tmp.text();
-            }
-
-            bearb.zeile_ersaetzen(i, zeile_neu);
-        }
-    }
-    if(re == true)
-    {
-        tmp_l += zugabe;
-    }
-    if(un == true) //Y-Werte verschieben
-    {
-        tmp_b += zugabe;
-        for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
-        {
-            text_zeilenweise zeile;
-            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            zeile.set_text(bearb.zeile(i));
-            QString zeile_neu;
-            if(zeile.zeile(1) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.text());
-                bo.set_y(bo.y() + zugabe);
-                zeile_neu = bo.text();
-            }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
-            {
-                bohrraster bora(zeile.text());
-                bora.set_y((bora.y() + zugabe));
-                zeile_neu = bora.text();
-            }else if(zeile.zeile(1) == BEARBART_RTA)
-            {
-                rechtecktasche rt(zeile.text());
-                rt.set_y(rt.y() + zugabe);
-                zeile_neu = rt.text();
-            }else if(zeile.zeile(1) == BEARBART_NUT)
-            {
-                nut nu(zeile.text());
-                nu.set_ys(nu.ys() + zugabe);
-                nu.set_ye(nu.ye() + zugabe);
-                zeile_neu = nu.text();
-            }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
-            {
-                fraueseraufruf tmp(zeile.text());
-                tmp.set_y(tmp.y() + zugabe);
-                zeile_neu = tmp.text();
-            }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
-            {
-                fraesergerade tmp(zeile.text());
-                tmp.set_ys(tmp.ys() + zugabe);
-                tmp.set_ye(tmp.ye() + zugabe);
-                zeile_neu = tmp.text();
-            }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
-            {
-                fraeserbogen tmp(zeile.text());
-                tmp.set_ys(tmp.ys() + zugabe);
-                tmp.set_ye(tmp.ye() + zugabe);
-                zeile_neu = tmp.text();
-            }
-
-            bearb.zeile_ersaetzen(i, zeile_neu);
-        }
-    }
-    if(ob == true)
-    {
-        tmp_b += zugabe;
-    }
-
-    //Schritt 3:
-    //Prüfen ob WST jetzt nur noch auf der Unterseite Bearbeitungen hat
-    bool unsei = false;
-    bool obsei = false;
-    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearb.zeile(i));
-        if(zeile.zeile(2) == WST_BEZUG_OBSEI)
-        {
-            obsei = true;
-        }else if(zeile.zeile(2) == WST_BEZUG_UNSEI)
-        {
-            unsei = true;
-        }
-        if(obsei == true && unsei == true)
-        {
-            break; //for
-        }
-    }
-    if(  (ausgabeformat == "fmc")  ||  (ausgabeformat == "eigen")  )
-    {
-        if(obsei == false && unsei == true)
-        {
-            drehen_um_b_halbe(bearb, tmp_b);
-        }
-    }else if(ausgabeformat == "ganx")
-    {
-        if(obsei == true && unsei == false)
-        {
-            drehen_um_b_halbe(bearb, tmp_b);
         }
     }
 }
@@ -3737,148 +1971,6 @@ void wstzustand::gehr_3achs(text_zw& bearb, double &tmp_l, double &tmp_b, QStrin
         }
     }
 }
-
-void wstzustand::drehen_um_b_halbe(text_zeilenweise& bearb, double &tmp_b)
-{
-    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearb.zeile(i));
-        QString zeile_neu;
-        if(zeile.zeile(1) == BEARBART_BOHR)
-        {
-            bohrung bo(zeile.text());
-            QString bezug = bo.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                bo.set_y(tmp_b - bo.y());
-                bo.set_bezug(WST_BEZUG_UNSEI);
-            }else if(bezug == WST_BEZUG_UNSEI)
-            {
-                bo.set_y(tmp_b - bo.y());
-                bo.set_bezug(WST_BEZUG_OBSEI);
-            }else if(bezug == WST_BEZUG_LI)
-            {
-                bo.set_y(tmp_b - bo.y());
-            }else if(bezug == WST_BEZUG_RE)
-            {
-                bo.set_y(tmp_b - bo.y());
-            }else if(bezug == WST_BEZUG_VO)
-            {
-                bo.set_y(tmp_b - bo.y());
-                bo.set_bezug(WST_BEZUG_HI);
-            }else if(bezug == WST_BEZUG_HI)
-            {
-                bo.set_y(tmp_b - bo.y());
-                bo.set_bezug(WST_BEZUG_VO);
-            }
-            zeile_neu = bo.text();
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
-        {
-            bohrraster bora(zeile.text());
-            QString bezug = bora.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                bora.set_y(tmp_b - bora.y());
-                bora.set_raster_y(-1 * bora.raster_y());
-                bora.set_bezug(WST_BEZUG_UNSEI);
-            }else if(bezug == WST_BEZUG_UNSEI)
-            {
-                bora.set_y(tmp_b - bora.y());
-                bora.set_raster_y(-1 * bora.raster_y());
-                bora.set_bezug(WST_BEZUG_OBSEI);
-            }else if(bezug == WST_BEZUG_LI)
-            {
-                bora.set_raster_y(-1 * bora.raster_y());
-                bora.set_y(tmp_b - bora.y());
-            }else if(bezug == WST_BEZUG_RE)
-            {
-                bora.set_raster_y(-1 * bora.raster_y());
-                bora.set_y(tmp_b - bora.y());
-            }else if(bezug == WST_BEZUG_VO)
-            {
-                bora.set_y(tmp_b - bora.y());
-                bora.set_bezug(WST_BEZUG_HI);
-            }else if(bezug == WST_BEZUG_HI)
-            {
-                bora.set_y(tmp_b - bora.y());
-                bora.set_bezug(WST_BEZUG_VO);
-            }
-            zeile_neu = bora.text();
-        }else if(zeile.zeile(1) == BEARBART_RTA)
-        {
-            rechtecktasche rt(zeile.text());
-            rt.set_y(tmp_b - rt.y());
-            QString bezug = rt.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                rt.set_bezug(WST_BEZUG_UNSEI);
-            }else
-            {
-                rt.set_bezug(WST_BEZUG_OBSEI);
-            }
-            zeile_neu = rt.text();
-        }else if(zeile.zeile(1) == BEARBART_NUT)
-        {
-            nut nu(zeile.text());
-            nu.set_ys(tmp_b - nu.ys());
-            nu.set_ye(tmp_b - nu.ye());
-            QString bezug = nu.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                nu.set_bezug(WST_BEZUG_UNSEI);
-            }else
-            {
-                nu.set_bezug(WST_BEZUG_OBSEI);
-            }
-            zeile_neu = nu.text();
-        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
-        {
-            fraueseraufruf tmp(zeile.text());
-            tmp.set_y(tmp_b - tmp.y());
-            QString bezug = tmp.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                tmp.set_bezug(WST_BEZUG_UNSEI);
-            }else
-            {
-                tmp.set_bezug(WST_BEZUG_OBSEI);
-            }
-            zeile_neu = tmp.text();
-        }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
-        {
-            fraesergerade tmp(zeile.text());
-            tmp.set_ys(tmp_b - tmp.ys());
-            tmp.set_ye(tmp_b - tmp.ye());
-            QString bezug = tmp.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                tmp.set_bezug(WST_BEZUG_UNSEI);
-            }else
-            {
-                tmp.set_bezug(WST_BEZUG_OBSEI);
-            }
-            zeile_neu = tmp.text();
-        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
-        {
-            fraeserbogen tmp(zeile.text());
-            tmp.set_ys(tmp_b - tmp.ys());
-            tmp.set_ye(tmp_b - tmp.ye());
-            QString bezug = tmp.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                tmp.set_bezug(WST_BEZUG_UNSEI);
-            }else
-            {
-                tmp.set_bezug(WST_BEZUG_OBSEI);
-            }
-            zeile_neu = tmp.text();
-        }
-
-        bearb.zeile_ersaetzen(i, zeile_neu);
-    }
-}
 void wstzustand::drehen_um_b_halbe(text_zw& bearb, double &tmp_b)
 {
     for(uint i=0; i<bearb.count() ;i++)
@@ -4018,165 +2110,6 @@ void wstzustand::drehen_um_b_halbe(text_zw& bearb, double &tmp_b)
 
         bearb.edit(i, zeile_neu);
     }
-}
-
-void wstzustand::bearb_drehen_90(text_zeilenweise& bearb, double& tmp_l, double& tmp_b)
-{
-    //diese Funktion dreht die Bearbeitungen um 90° im Uhrzeigersin
-
-    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearb.zeile(i));
-        QString zeile_neu;
-
-        if(zeile.zeile(1) == BEARBART_BOHR)
-        {
-            bohrung bo(zeile.text());
-            double x = bo.x();
-            double y = bo.y();
-            QString bezug = bo.bezug();
-            if(bezug == WST_BEZUG_OBSEI || bezug == WST_BEZUG_UNSEI)
-            {
-                bo.set_x(y);
-                bo.set_y(tmp_l - x);
-            }else if(bezug == WST_BEZUG_VO)
-            {
-                bo.set_bezug(WST_BEZUG_LI);
-                bo.set_x(y);
-                bo.set_y(tmp_l - x);
-            }else if(bezug == WST_BEZUG_HI)
-            {
-                bo.set_bezug(WST_BEZUG_RE);
-                bo.set_x(y);
-                bo.set_y(tmp_l - x);
-            }else if(bezug == WST_BEZUG_LI)
-            {
-                bo.set_bezug(WST_BEZUG_HI);
-                bo.set_x(y);
-                bo.set_y(tmp_l - x);
-            }else if(bezug == WST_BEZUG_RE)
-            {
-                bo.set_bezug(WST_BEZUG_VO);
-                bo.set_x(y);
-                bo.set_y(tmp_l - x);
-            }
-            zeile_neu = bo.text();
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
-        {
-            bohrraster bora(zeile.text());
-            double x = bora.x();
-            double y = bora.y();
-            QString bezug = bora.bezug();
-            if(bezug == WST_BEZUG_OBSEI || bezug == WST_BEZUG_UNSEI)
-            {
-                bora.set_x(y);
-                bora.set_y(tmp_l - x);
-                uint anz_x = bora.anz_x();
-                uint anz_y = bora.anz_y();
-                bora.set_anz_x(anz_y);
-                bora.set_anz_y(anz_x);
-                double raster_x = bora.raster_x();
-                double raster_y = bora.raster_y();
-                bora.set_raster_x(raster_y);
-                bora.set_raster_y(raster_x);
-            }
-            zeile_neu = bora.text();
-        }else if(zeile.zeile(1) == BEARBART_RTA)
-        {
-            rechtecktasche rt(zeile.text());
-            double x = rt.x();
-            double y = rt.y();
-            double tal = rt.laenge();
-            double tab = rt.breite();
-            QString bezug = rt.bezug();
-            if(bezug == WST_BEZUG_OBSEI || bezug == WST_BEZUG_UNSEI)
-            {
-                rt.set_x(y);
-                rt.set_y(tmp_l - x);
-                rt.set_laenge(tab);
-                rt.set_breite(tal);
-            }else if(bezug == WST_BEZUG_VO)
-            {
-                rt.set_bezug(WST_BEZUG_LI);
-                rt.set_x(y);
-                rt.set_y(tmp_l - x);
-            }else if(bezug == WST_BEZUG_HI)
-            {
-                rt.set_bezug(WST_BEZUG_RE);
-                rt.set_x(y);
-                rt.set_y(tmp_l - x);
-            }else if(bezug == WST_BEZUG_LI)
-            {
-                rt.set_bezug(WST_BEZUG_HI);
-                rt.set_x(y);
-                rt.set_y(tmp_l - x);
-            }else if(bezug == WST_BEZUG_RE)
-            {
-                rt.set_bezug(WST_BEZUG_VO);
-                rt.set_x(y);
-                rt.set_y(tmp_l - x);
-            }
-            zeile_neu = rt.text();
-        }else if(zeile.zeile(1) == BEARBART_NUT)
-        {
-            nut nu(zeile.text());
-            double xs = nu.xs();
-            double ys = nu.ys();
-            double xe = nu.xe();
-            double ye = nu.ye();
-
-            nu.set_xs(ys);
-            nu.set_ys(tmp_l - xs);
-            nu.set_xe(ye);
-            nu.set_ye(tmp_l - xe);
-
-            zeile_neu = nu.text();
-        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
-        {
-            fraueseraufruf tmp(zeile.text());
-            double x = tmp.x();
-            double y = tmp.y();
-
-            tmp.set_x(y);
-            tmp.set_y(tmp_l - x);
-            zeile_neu = tmp.text();
-        }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
-        {
-            fraesergerade tmp(zeile.text());
-            double xs = tmp.xs();
-            double xe = tmp.xe();
-            double ys = tmp.ys();
-            double ye = tmp.ye();
-
-            tmp.set_xs(ys);
-            tmp.set_xe(ye);
-            tmp.set_ys(tmp_l - xs);
-            tmp.set_ye(tmp_l - xe);
-            zeile_neu = tmp.text();
-        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
-        {
-            fraeserbogen tmp(zeile.text());
-            double xs = tmp.xs();
-            double xe = tmp.xe();
-            double ys = tmp.ys();
-            double ye = tmp.ye();
-
-            tmp.set_xs(ys);
-            tmp.set_xe(ye);
-            tmp.set_ys(tmp_l - xs);
-            tmp.set_ye(tmp_l - xe);
-            zeile_neu = tmp.text();
-        }
-
-        bearb.zeile_ersaetzen(i, zeile_neu);
-    }
-    //Länge und Breite tauschen:
-    double tmp;
-    tmp = tmp_l;
-    tmp_l = tmp_b;
-    tmp_b = tmp;
 }
 void wstzustand::bearb_drehen_90(text_zw& bearb, double& tmp_l, double& tmp_b)
 {
@@ -4334,199 +2267,6 @@ void wstzustand::bearb_drehen_90(text_zw& bearb, double& tmp_l, double& tmp_b)
     tmp = tmp_l;
     tmp_l = tmp_b;
     tmp_b = tmp;
-}
-
-void wstzustand::bearb_optimieren_ganx(text_zeilenweise& bearb)
-{
-    //X-Werte werden Y-Werte und umgehrt
-    //Bearbeitungen wechseln von der Ober- auf die Unterseite und umgehrt
-
-    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearb.zeile(i));
-        QString zeile_neu;
-
-        if(zeile.zeile(1) == BEARBART_BOHR)
-        {
-            bohrung bo(zeile.text());
-            double x = bo.x();
-            double y = bo.y();
-            double z = bo.z();
-            QString bezug = bo.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                bo.set_bezug(WST_BEZUG_UNSEI);
-                bo.set_x(y);
-                bo.set_y(x);
-            }else if(bezug == WST_BEZUG_UNSEI)
-            {
-                bo.set_bezug(WST_BEZUG_OBSEI);
-                bo.set_x(y);
-                bo.set_y(x);
-            }else if(bezug == WST_BEZUG_VO)
-            {
-                bo.set_bezug(WST_BEZUG_LI);
-                bo.set_x(y);
-                bo.set_y(x);
-                bo.set_z(Dicke-z);
-            }else if(bezug == WST_BEZUG_HI)
-            {
-                bo.set_bezug(WST_BEZUG_RE);
-                bo.set_x(y);
-                bo.set_y(x);
-                bo.set_z(Dicke-z);
-            }else if(bezug == WST_BEZUG_LI)
-            {
-                bo.set_bezug(WST_BEZUG_VO);
-                bo.set_x(y);
-                bo.set_y(x);
-                bo.set_z(Dicke-z);
-            }else if(bezug == WST_BEZUG_RE)
-            {
-                bo.set_bezug(WST_BEZUG_HI);
-                bo.set_x(y);
-                bo.set_y(x);
-                bo.set_z(Dicke-z);
-            }
-            zeile_neu = bo.text();
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
-        {
-            bohrraster bora(zeile.text());
-            double x = bora.x();
-            double y = bora.y();
-            //double z = bora.z();
-            QString bezug = bora.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                bora.set_bezug(WST_BEZUG_UNSEI);
-                bora.set_x(y);
-                bora.set_y(x);
-                uint anz_x = bora.anz_x();
-                uint anz_y = bora.anz_y();
-                bora.set_anz_x(anz_y);
-                bora.set_anz_y(anz_x);
-                double raster_x = bora.raster_x();
-                double raster_y = bora.raster_y();
-                bora.set_raster_x(raster_y);
-                bora.set_raster_y(raster_x);
-            }else if(bezug == WST_BEZUG_UNSEI)
-            {
-                bora.set_bezug(WST_BEZUG_OBSEI);
-                bora.set_x(y);
-                bora.set_y(x);
-                uint anz_x = bora.anz_x();
-                uint anz_y = bora.anz_y();
-                bora.set_anz_x(anz_y);
-                bora.set_anz_y(anz_x);
-                double raster_x = bora.raster_x();
-                double raster_y = bora.raster_y();
-                bora.set_raster_x(raster_y);
-                bora.set_raster_y(raster_x);
-            }
-            zeile_neu = bora.text();
-        }else if(zeile.zeile(1) == BEARBART_RTA)
-        {
-            rechtecktasche rt(zeile.text());
-            double x = rt.x();
-            double y = rt.y();
-            double z = rt.z();
-            double tal = rt.laenge();
-            double tab = rt.breite();
-            QString bezug = rt.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                rt.set_bezug(WST_BEZUG_UNSEI);
-                rt.set_x(y);
-                rt.set_y(x);
-                rt.set_laenge(tab);
-                rt.set_breite(tal);
-            }else if(bezug == WST_BEZUG_UNSEI)
-            {
-                rt.set_bezug(WST_BEZUG_OBSEI);
-                rt.set_x(y);
-                rt.set_y(x);
-                rt.set_laenge(tab);
-                rt.set_breite(tal);
-            }else if(bezug == WST_BEZUG_VO)
-            {
-                rt.set_bezug(WST_BEZUG_LI);
-                rt.set_x(y);
-                rt.set_y(x);
-                rt.set_z(Dicke-z);
-            }else if(bezug == WST_BEZUG_HI)
-            {
-                rt.set_bezug(WST_BEZUG_RE);
-                rt.set_x(y);
-                rt.set_y(x);
-                rt.set_z(Dicke-z);
-            }else if(bezug == WST_BEZUG_LI)
-            {
-                rt.set_bezug(WST_BEZUG_VO);
-                rt.set_x(y);
-                rt.set_y(x);
-                rt.set_z(Dicke-z);
-            }else if(bezug == WST_BEZUG_RE)
-            {
-                rt.set_bezug(WST_BEZUG_HI);
-                rt.set_x(y);
-                rt.set_y(x);
-                rt.set_z(Dicke-z);
-            }
-            zeile_neu = rt.text();
-        }else if(zeile.zeile(1) == BEARBART_NUT)
-        {
-            nut nu(zeile.text());
-            double xs = nu.xs();
-            double ys = nu.ys();
-            double xe = nu.xe();
-            double ye = nu.ye();
-            QString bezug = nu.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                nu.set_bezug(WST_BEZUG_UNSEI);
-                nu.set_xs(ys);
-                nu.set_ys(xs);
-                nu.set_xe(ye);
-                nu.set_ye(xe);
-            }else if(bezug == WST_BEZUG_UNSEI)
-            {
-                nu.set_bezug(WST_BEZUG_OBSEI);
-                nu.set_xs(ys);
-                nu.set_ys(xs);
-                nu.set_xe(ye);
-                nu.set_ye(xe);
-            }
-            zeile_neu = nu.text();
-        }else if(zeile.zeile(1) == BEARBART_GEHRUNG)
-        {
-            gehrung ge(zeile.text());   //nut nu(zeile.text());
-            double xs = ge.pfad().stapu().x(); //nu.xs();
-            double ys = ge.pfad().stapu().y(); //nu.ys();
-            double xe = ge.pfad().endpu().x(); //nu.xe();
-            double ye = ge.pfad().endpu().y(); //nu.ye();
-            QString bezug = ge.bezug();
-            if(bezug == WST_BEZUG_OBSEI)
-            {
-                ge.set_bezug(WST_BEZUG_UNSEI);
-            }else //if(bezug == WST_BEZUG_UNSEI)
-            {
-                ge.set_bezug(WST_BEZUG_OBSEI);
-            }
-            punkt3d sp, ep;
-            sp.set_x(ys);
-            sp.set_y(xs);
-            ep.set_x(ye);
-            ep.set_y(xe);
-            strecke s;
-            s.set_start(sp);
-            s.set_ende(ep);
-            ge.set_pfad(s);
-            zeile_neu = ge.text();
-        }
-        bearb.zeile_ersaetzen(i, zeile_neu);
-    }
 }
 void wstzustand::bearb_optimieren_ganx(text_zw& bearb)
 {
@@ -4719,63 +2459,6 @@ void wstzustand::bearb_optimieren_ganx(text_zw& bearb)
         bearb.edit(i, zeile_neu);
     }
 }
-
-/*void wstzustand::dubosplitten(text_zeilenweise& bearb, werkzeugmagazin wkzmag)
-{
-    //Diese Funktion soll Durchgangs-Bohrungen finden
-    //Gibt es für eine Durchgangsbohrung keinen Duchgangsborer so soll das Loch von beiden Plattenseiten gebohrt werden
-    //Gibt es einen Durchgangsbohrer, dieser ist jedoch zu kurz so soll das Loch von beiden Plattenseiten gebohrt werden
-    //Diese Funktion sollte vor der Funktion zum finden von Bohrrastern aufgerufen werden
-    //da Bohrraster hier nicht berücksichtigt werden
-    text_zeilenweise bearb_neu;
-
-    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
-    {
-        bool editiert = false;
-        text_zeilenweise param;
-        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        param.set_text(bearb.zeile(i));
-        if(param.zeile(1) == BEARBART_BOHR)
-        {
-            QString bezflaeche = param.zeile(2);
-            if(bezflaeche == WST_BEZUG_OBSEI  ||  bezflaeche == WST_BEZUG_UNSEI  )
-            {
-                bohrung bo(param.text());
-                if(bo.tiefe() >= Dicke)
-                {
-                    QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bo.bezug());
-                    if(tnummer.isEmpty())
-                    {
-                        bohrung boA = bo;
-                        double boti = Dicke/2 + 2;
-                        boA.set_tiefe(boti);
-                        tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), boti, Dicke, bo.bezug());
-                        if(!tnummer.isEmpty())
-                        {
-                            bohrung boB = boA;
-                            if(boB.bezug() == WST_BEZUG_OBSEI)
-                            {
-                                boB.set_bezug(WST_BEZUG_UNSEI);
-                            }else
-                            {
-                                boB.set_bezug(WST_BEZUG_OBSEI);
-                            }
-                            bearb_neu.zeile_anhaengen(boA.text());
-                            bearb_neu.zeile_anhaengen(boB.text());
-                            editiert = true;
-                        }
-                    }
-                }
-            }
-        }
-        if(editiert == false)
-        {
-            bearb_neu.zeile_anhaengen(bearb.zeile(i));
-        }
-    }
-    bearb = bearb_neu;
-}
-*/
 void wstzustand::dubosplitten(text_zw& bearb, wkz_magazin& wkzmag)
 {
     //Diese Funktion soll Durchgangs-Bohrungen finden
@@ -4830,151 +2513,6 @@ void wstzustand::dubosplitten(text_zw& bearb, wkz_magazin& wkzmag)
     }
     bearb = bearb_neu;
 }
-
-/*QString wstzustand::warnungen_fmc(text_zeilenweise bearb, werkzeugmagazin wkzmag, \
-                                  double tmp_l, double tmp_b)
-{
-    dubosplitten(bearb, wkzmag);
-    QString msg = "";
-
-    //Wst-Maße prüfen:
-    double tmp_d = Dicke;
-    if(tmp_l > 3000)
-    {
-        msg += "  !! Werkstueck-Laenge > 3000mm\n";
-    }
-    if(tmp_l < 120)
-    {
-        msg += "  !! Werkstueck-Laenge < 120mm\n";
-    }
-    if(tmp_b > 1100)
-    {
-        msg += "  !! Werkstueck-Breite > 1100mm\n";
-    }
-    if(tmp_b < 50)
-    {
-        msg += "  !! Werkstueck-Breite < 50mm\n";
-    }
-    if(tmp_d > 100)
-    {
-        msg += "  !! Werkstueck ist sehr dick\n";
-    }
-    if(tmp_d < 5)
-    {
-        msg += "  !! Werkstueck ist sehr duenn\n";
-    }
-
-    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearb.zeile(i));
-
-        QString art = zeile.zeile(1);
-        if(art == BEARBART_BOHR || art == BEARBART_BOHRRASTER)
-        {
-            //BOHRUNG ist eine Teilmenge von BOHRRASTER
-            bohrung bo(zeile.text());//die nicht benötigten Parameter werden beim einlesen ignoriert
-            QString bezug = bo.bezug();
-
-            QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bezug);
-            if(tnummer.isEmpty())//Bohren nicht möglich weil kein passendes Werkzeug
-            {
-                tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
-                if(tnummer.isEmpty())
-                {
-                    tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
-                }
-                if(!tnummer.isEmpty())//Kreistasche kann gefräst werden
-                {
-                    //Nutzlänge Fräser und Tati prüfen:
-                    if(bo.tiefe() > wkzmag.nutzlaenge(tnummer).toDouble())
-                    {
-                        msg += "  !! Nutzlaenge < Fraestiefe    bei Kreistasche!\n";
-                    }
-                    //Mindest-Zustellmaß des Fräsers Prüfen:
-                    if(bo.tiefe() < wkzmag.zustellmass_min(tnummer).toDouble())
-                    {
-                        msg += "  !! Fraestiefe < Mindest-Zustellmass    bei Kreistasche!\n";
-                    }
-
-                }else//Es ist auch kein passender Fräser da, die CNC-Bearbeitung kann nicht erfolgen
-                {
-                    msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
-                    msg += "    ->";
-                    msg += bearb.zeile(i).replace("\t", " | ");
-                    msg += "\n";
-                }
-            }
-
-        }else if(art == BEARBART_RTA)
-        {
-            rechtecktasche rt(zeile.text());
-
-            //Prüfen ob Nutzlänge ausreichend für Tati ist:
-            QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
-            if(tnummer.isEmpty())
-            {
-                QString bezug = rt.bezug();
-                double minmass = 0;
-                if(rt.laenge() < rt.breite())
-                {
-                    minmass = rt.laenge();
-                }else
-                {
-                    minmass = rt.breite();
-                }
-                tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, bezug);
-            }
-            if(!tnummer.isEmpty())
-            {
-                //Nutzlänge Fräser und Tati prüfen
-                if(rt.tiefe() > wkzmag.nutzlaenge(tnummer).toDouble())
-                {
-                    msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
-                }
-                //Mindest-Zustellmaß des Fräsers Prüfen:
-                if(rt.tiefe() < wkzmag.zustellmass_min(tnummer).toDouble())
-                {
-                    msg += "  !! Fraestiefe < Mindest-Zustellmass    bei Rechtecktasche!\n";
-                }
-            }
-        }else if(art == BEARBART_NUT)
-        {
-            nut nu(zeile.text());
-            QString bezug = nu.bezug();
-            QString tnummer = wkzmag.wkznummer(WKZ_TYP_SAEGE, 0, nu.tiefe(), Dicke, bezug);
-            double nutblattbreite = wkzmag.saegeblattbreite(tnummer).toDouble();
-            if(nu.breite() < nutblattbreite)
-            {
-                msg += "  !! Nutbreite ist kleiner als Blattbreite!\n";
-            }
-        }else if(art == BEARBART_FRAESERAUFRUF)
-        {
-            fraueseraufruf fa(zeile.text());
-            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
-            if(tnummer.isEmpty())
-            {
-                msg += "  !! Keine Werkzeugnummer vergeben bei Fraeseraufruf!\n";
-            }else
-            {
-                //Nutzlänge Fräser und Tati prüfen
-                if(fa.tiefe() > wkzmag.nutzlaenge(tnummer).toDouble())
-                {
-                    msg += "  !! Nutzlaenge < Fraestiefe    bei Fraeseraufruf!\n";
-                }
-                //Mindest-Zustellmaß des Fräsers Prüfen:
-                if(fa.tiefe() < wkzmag.zustellmass_min(tnummer).toDouble())
-                {
-                    msg += "  !! Fraestiefe < Mindest-Zustellmass    bei Fraeseraufruf!\n";
-                }
-            }
-
-        }
-    }
-
-    return msg;
-}*/
 QString wstzustand::warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b)
 {
     dubosplitten(bearb, wkzmag);
@@ -5117,236 +2655,6 @@ QString wstzustand::warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_
 
     return msg;
 }
-
-/*QString wstzustand::warnungen_ganx(text_zeilenweise bearb, werkzeugmagazin wkzmag, \
-                                  double tmp_l, double tmp_b)
-{
-    dubosplitten(bearb, wkzmag);
-    QString msg = "";
-    double wst_x = tmp_l;
-    double wst_y = tmp_b;
-
-    //Wst-Maße prüfen:
-    double tmp_d = Dicke;
-    if(wst_y > 4000)
-    {
-        msg += "  !! Werkstueck-Y-Mass > 4000mm\n";
-        msg += "     Y-Mass = " + double_to_qstring(wst_y) + "\n";
-    }
-    if(wst_y < 250)
-    {
-        msg += "  !! Werkstueck-Y-Mass < 250mm\n";
-        msg += "     Y-Mass = " + double_to_qstring(wst_y) + "\n";
-    }
-    if(wst_x > 1000)
-    {
-        msg += "  !! Werkstueck-X-Mass > 1000mm\n";
-        msg += "     X-Mass = " + double_to_qstring(wst_x) + "\n";
-    }
-    if(wst_x < 50)
-    {
-        msg += "  !! Werkstueck-X-Mass < 50mm\n";
-        msg += "     X-Mass = " + double_to_qstring(wst_x) + "\n";
-    }
-    if(tmp_d > 60)
-    {
-        msg += "  !! Werkstueck-Dicke > 60mm\n";
-        msg += "     Dicke = " + double_to_qstring(tmp_d) + "\n";
-    }
-    if(tmp_d < 6)
-    {
-        msg += "  !! Werkstueck-Dicke < 6mm\n";
-        msg += "     Dicke = " + double_to_qstring(tmp_d) + "\n";
-    }
-
-    for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearb.zeile(i));
-
-        QString art = zeile.zeile(1);
-        if(art == BEARBART_BOHR || art == BEARBART_BOHRRASTER)
-        {
-            //BOHRUNG ist eine Teilmenge von BOHRRASTER
-            bohrung bo(zeile.text());//die nicht benötigten Parameter werden beim einlesen ignoriert
-            QString bezug = bo.bezug();
-
-            //Warnung für HBEs:
-            if(bezug == WST_BEZUG_VO || bezug == WST_BEZUG_HI)
-            {
-                double x = bo.x();
-                if( x<18 )
-                {
-                    msg += "  !! HBE zu dicht am Rand!\n";
-                    msg += "     X-Mass muss >= 18mm sein\n";
-                    msg += "     X-Mass ist ";
-                    msg += double_to_qstring(x);
-                    msg += "mm\n";
-                }
-            }
-
-            //Warnung für Kreistaschen di zu dicht am Rand sind:
-            QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bezug);
-            if(tnummer.isEmpty())//Bohren nicht möglich weil kein passendes Werkzeug
-            {
-                tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
-                if(tnummer.isEmpty())
-                {
-                    tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
-                }
-                if(!tnummer.isEmpty())//Kreistasche kann gefräst werden
-                {
-                    double xmin = bo.x() - bo.dm()/2;
-                    if(xmin < 40)
-                    {
-                        msg += "  !! Kreistasche zu dicht am Rand!\n";
-                        msg += "     X-Abstand muss mind 40mm sein\n";
-                        msg += "     X-Abstand ist ";
-                        msg += double_to_qstring(xmin);
-                        msg += "mm\n";
-                    }
-
-                    //Nutzlänge Fräser und Tati prüfen:
-                    if(bo.tiefe() > wkzmag.nutzlaenge(tnummer).toDouble())
-                    {
-                        msg += "  !! Nutzlaenge < Fraestiefe    bei Kreistasche!\n";
-                    }
-                    //Mindest-Zustellmaß des Fräsers Prüfen:
-                    if(bo.tiefe() < wkzmag.zustellmass_min(tnummer).toDouble())
-                    {
-                        msg += "  !! Fraestiefe < Mindest-Zustellmass   bei Kreistasche!\n";
-                    }
-                }else//Es ist auch kein passender Fräser da, die CNC-Bearbeitung kann nicht erfolgen
-                {
-                    msg += "  !! Kein Werkzeug fuer Bohrung oder Kreistasche gefunden!\n";
-                    msg += "    ->";
-                    msg += bearb.zeile(i).replace("\t", " | ");
-                    msg += "\n";
-                }
-            }else
-            {
-
-                if(wkzmag.dm(tnummer) == "35")
-                {
-                    //Warnung für 35er Bohrer geben der in Kante Bohrt (Bohrerbruch durch Unwucht)
-                    //rein mechanisch ist das mind X-Maß beim 35er Bohrer 11,5mm == 35/2-6 == 17,5-6
-                    if(bo.x() < 17.5            ||\
-                       bo.x() > (tmp_l-17.5)    ||\
-                       bo.y() < 17.5            ||\
-                       bo.y() > (tmp_b-17.5)    )
-                    {
-                        msg += "  !! 35er Bohrung zu dicht am Rand fuer verwendeten Bohrer!\n";
-                    }
-                }else if(wkzmag.dm(tnummer) == "8")
-                {
-                    if(bo.x() < 0)
-                    {
-                        msg += "  !! X-Maß 8er Bohrung zu gering! Mind 0mm erforderlich.\n";
-                    }
-                }else if(wkzmag.dm(tnummer) == "10")
-                {
-                    if(bo.x() < 0)
-                    {
-                        msg += "  !! X-Maß 10er Bohrung zu gering! Mind 0mm erforderlich.\n";
-                    }
-                }else
-                {
-                    double wkzdm = wkzmag.dm(tnummer).toDouble();
-                    if(bo.x() < 1+wkzdm/2)
-                    {
-                        msg += "  !! X-Maß ";
-                        msg += double_to_qstring(wkzdm);
-                        msg += "er Bohrung zu gering! Mind ";
-                        msg += double_to_qstring(1+wkzdm/2);
-                        msg += "mm erforderlich.\n";
-                    }
-                }
-
-            }
-
-        }else if(art == BEARBART_RTA)
-        {
-            rechtecktasche rt(zeile.text());
-            //Prüfen ob Tasche zu dicht am WST-Rand ist:
-            double xmin = rt.x();
-            if(rt.drewi() == 0 || rt.drewi() == 180)
-            {
-                xmin = xmin - rt.laenge()/2;
-            }if(rt.drewi() == 90 || rt.drewi() == 270)
-            {
-                xmin = xmin - rt.breite()/2;
-            }else
-            {
-                xmin = xmin - sqrt(rt.laenge() * rt.breite())/2; //Näherungsweise
-            }
-
-            if(xmin < 40)
-            {
-                msg += "  !! Rechtecktasche zu dicht am Rand!\n";
-                msg += "     X-Abstand muss mind 40mm sein\n";
-                msg += "     X-Abstand ist ca ";
-                msg += double_to_qstring(xmin);
-                msg += "mm\n";
-            }
-
-            //-----------------------------------------------
-
-            //Prüfen ob Nutzlänge ausreichend für Tati ist:
-            QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
-            if(tnummer.isEmpty())
-            {
-                QString bezug = rt.bezug();
-                double minmass = 0;
-                if(rt.laenge() < rt.breite())
-                {
-                    minmass = rt.laenge();
-                }else
-                {
-                    minmass = rt.breite();
-                }
-                tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, bezug);
-            }
-            if(!tnummer.isEmpty())
-            {
-                //Nutzlänge Fräser und Tati prüfen
-                if(rt.tiefe() > wkzmag.nutzlaenge(tnummer).toDouble())
-                {
-                    msg += "  !! Nutzlaenge < Fraestiefe    bei Rechtecktasche!\n";
-                }
-                //Mindest-Zustellmaß des Fräsers Prüfen:
-                if(rt.tiefe() < wkzmag.zustellmass_min(tnummer).toDouble())
-                {
-                    msg += "  !! Fraestiefe < Mindest-Zustellmass    bei Rechtecktasche!\n";
-                }
-            }
-        }else if(art == BEARBART_NUT)
-        {
-            nut nu(zeile.text());
-            QString bezug = nu.bezug();
-            QString tnummer = wkzmag.wkznummer(WKZ_TYP_SAEGE, 0, nu.tiefe(), Dicke, bezug);
-            double nutblattbreite = wkzmag.saegeblattbreite(tnummer).toDouble();
-            if(nu.xs() != nu.xe())
-            {
-                msg += "  !! Nutrichutng auf der der Maschine nicht moeglich!\n";
-            }else if(nu.xs()-nu.breite() < 57.5)
-            {
-                msg += "  !! Nut zu dicht am Rand/zu dicht an Spannzange!\n";
-                msg += "     Randabstand in X muss mind 57,5mm sein\n";
-                msg += "     Randabstand X ist ca ";
-                msg += double_to_qstring(nu.xs()-nu.breite());
-                msg += "mm\n";
-            }
-            if(nu.breite() < nutblattbreite)
-            {
-                msg += "  !! Nutbreite ist kleiner als Blattbreite!\n";
-            }
-        }
-    }
-
-    return msg;
-}
-*/
 QString wstzustand::warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b)
 {
     dubosplitten(bearb, wkzmag);
@@ -5573,423 +2881,6 @@ QString wstzustand::warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp
 
     return msg;
 }
-/*void wstzustand::rasterbohrungen_finden_fmc(text_zeilenweise& bearb, werkzeugmagazin wkzmag,\
-                                            double tmp_l, double tmp_b)
-{
-    bohrraster bora;
-
-    text_zeilenweise wkzbodm; //Speichert die verschiedenen vorhandenen Bohrdurchmesser
-    int min_rasterbohrungen_anz = 3;
-
-    text_zeilenweise boti;
-    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise param;
-        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        param.set_text(bearb.zeile(i));
-        if(param.zeile(1) == BEARBART_BOHR)
-        {
-            bohrung b(param.text());
-            QString tiefe_neu = b.tiefe_qstring();
-            bool schon_da = false;
-            for(uint i=1; i<=boti.zeilenanzahl();i++)
-            {
-                if(tiefe_neu == boti.zeile(i))
-                {
-                    schon_da = true;
-                }
-            }
-            if(schon_da == false)
-            {
-                boti.zeile_anhaengen(tiefe_neu);
-            }
-        }
-    }
-
-    //Alle vertikalen Lochraster finden die zu Bohrern im Werkzeugmagazin passen:
-    wkzbodm = wkzmag.alle_bodm(WKZ_PARAMETER_LAGE_VERT);
-
-    for(uint i=1; i<=wkzbodm.zeilenanzahl() ;i++)
-    {
-        double dm = wkzbodm.zeile(i).toDouble();
-
-        for(uint i=1; i<=boti.zeilenanzahl() ; i++)
-        {
-            double tiefe = boti.zeile(i).toDouble();
-            bool raster_gefunden;
-
-            //-------------------------------------------------------------------------------
-            //Oberseite  0_bis_L:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-            //-------------------------------------------------------------------------------
-            //Oberseite  0_bis_B:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-            //-------------------------------------------------------------------------------
-            //Unterseite  0_bis_L:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-            //-------------------------------------------------------------------------------
-            //Unterseite  0_bis_B:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-        }
-    }
-
-    //HBEs im Raser finden die zu Bohrern im Werkzeugmagazin passen:
-    wkzbodm = wkzmag.alle_bodm(WKZ_PARAMETER_LAGE_HORI);
-
-    for(uint i=1; i<=wkzbodm.zeilenanzahl() ;i++)
-    {
-        double dm = wkzbodm.zeile(i).toDouble();
-
-        for(uint i=1; i<=boti.zeilenanzahl() ; i++)
-        {
-            double tiefe = boti.zeile(i).toDouble();
-            bool raster_gefunden;
-
-            //-------------------------------------------------------------------------------
-            //vorne 0_bis_L:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_VO, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_VO, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_VO, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-            //-------------------------------------------------------------------------------
-            //hinten 0_bis_L:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_HI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_HI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_HI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-            //-------------------------------------------------------------------------------
-            //links 0_bis_B:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_LI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_LI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_LI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-            //-------------------------------------------------------------------------------
-            //rechts 0_bis_B:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_RE, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_RE, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_RE, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        Dicke,\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-        }
-    }
-
-}
-*/
 void wstzustand::rasterbohrungen_finden_fmc(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b)
 {
     bohrraster bora;
@@ -6404,232 +3295,6 @@ void wstzustand::rasterbohrungen_finden_fmc(text_zw& bearb, wkz_magazin wkzmag,d
     }
 
 }
-
-/*void wstzustand::rasterbohrungen_finden_ganx(text_zeilenweise& bearb, werkzeugmagazin wkzmag,\
-                                             double tmp_l, double tmp_b)
-{
-    bohrraster bora;
-
-    text_zeilenweise wkzbodm; //Speichert die verschiedenen vorhandenen Bohrdurchmesser
-    int min_rasterbohrungen_anz = 2;
-
-    text_zeilenweise boti;
-    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise param;
-        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        param.set_text(bearb.zeile(i));
-        if(param.zeile(1) == BEARBART_BOHR)
-        {
-            bohrung b(param.text());
-            QString tiefe_neu = b.tiefe_qstring();
-            bool schon_da = false;
-            for(uint i=1; i<=boti.zeilenanzahl();i++)
-            {
-                if(tiefe_neu == boti.zeile(i))
-                {
-                    schon_da = true;
-                }
-            }
-            if(schon_da == false)
-            {
-                boti.zeile_anhaengen(tiefe_neu);
-            }
-        }
-    }
-
-    //Alle vertikalen Lochraster finden die zu Bohrern im Werkzeugmagazin passen:
-    wkzbodm = wkzmag.alle_bodm(WKZ_PARAMETER_LAGE_VERT);
-
-    for(uint i=1; i<=wkzbodm.zeilenanzahl() ;i++)
-    {
-        double dm = wkzbodm.zeile(i).toDouble();
-
-        for(uint i=1; i<=boti.zeilenanzahl() ; i++)
-        {
-            double tiefe = boti.zeile(i).toDouble();
-            bool raster_gefunden;
-
-            //-------------------------------------------------------------------------------
-            //Oberseite  0_bis_L:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-            //-------------------------------------------------------------------------------
-            //Oberseite  0_bis_B:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_OBSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-            //-------------------------------------------------------------------------------
-            //Unterseite  0_bis_L:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_L,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-            //-------------------------------------------------------------------------------
-            //Unterseite  0_bis_B:
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        32);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        64);
-            }
-            raster_gefunden = true;
-            while(raster_gefunden == true)
-            {
-                raster_gefunden = bora.finde_bohrraster(&bearb,\
-                                                        WST_BEZUG_UNSEI, \
-                                                        dm,\
-                                                        tiefe,\
-                                                        RASTERRICHTUNG_0_BIS_B,\
-                                                        tmp_l,\
-                                                        tmp_b,\
-                                                        dicke(),\
-                                                        min_rasterbohrungen_anz,\
-                                                        96);
-            }
-        }
-    }
-}
-*/
 void wstzustand::rasterbohrungen_finden_ganx(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b)
 {
     bohrraster bora;
@@ -6852,188 +3517,6 @@ void wstzustand::rasterbohrungen_finden_ganx(text_zw& bearb, wkz_magazin wkzmag,
         }
     }
 }
-
-void wstzustand::formartierung_zu_einzelfkon(text_zeilenweise& bearb, double tmp_l, double tmp_b)
-{
-    //Diese Funktion soll die vom VW ausgegebenen Poligonförmigen Formartierungen entdecken.
-    //Diese werden generiert, wenn die Grundfläche eines 3D-Bauteils kein Rechteck ist
-    //Die Bestandteile der Fräskontur, die deckungsgleich auf der Kante liegen werden nicht benötigt
-    //Und werden durch diese Funktion heraus genommen
-
-    //Prüfen ob wst eine umlaufende Formartierung enthällt:
-    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise param;
-        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        param.set_text(bearb.zeile(i));
-        if(param.zeile(1) == BEARBART_FRAESERAUFRUF)
-        {
-            uint zeibeg = i;
-            uint zeiend = i;
-            fraueseraufruf fa(param.text());
-            double xbeg = fa.x();
-            double ybeg = fa.y();
-            double zbeg = fa.tiefe();
-            double xend = xbeg;
-            double yend = ybeg;
-            double zend = zbeg;
-            double xmin = xbeg;
-            double xmax = xbeg;
-            double ymin = ybeg;
-            double ymax = ybeg;
-            if(i<= bearb.zeilenanzahl())
-            {
-                i++;
-                for(; i<= bearb.zeilenanzahl() ;i++)
-                {
-                    param.set_text(bearb.zeile(i));
-                    if(param.zeile(1) == BEARBART_FRAESERGERADE)
-                    {
-                        fraesergerade fg(param.text());
-                        xend = fg.xe();
-                        yend = fg.ye();
-                        zend = fg.ze();
-                        zeiend = i;
-                        if(xend > xmax)
-                        {
-                            xmax = xend;
-                        }
-                        if(xend < xmin)
-                        {
-                            xmin = xend;
-                        }
-                        if(yend > ymax)
-                        {
-                            ymax = yend;
-                        }
-                        if(yend < ymin)
-                        {
-                            ymin = yend;
-                        }
-                    }else if(param.zeile(1) == BEARBART_FRAESERBOGEN)
-                    {
-                        fraeserbogen fb(param.text());
-                        xend = fb.xe();
-                        yend = fb.ye();
-                        zend = fb.ze();
-                        zeiend = i;
-                        if(xend > xmax)
-                        {
-                            xmax = xend;
-                        }
-                        if(xend < xmin)
-                        {
-                            xmin = xend;
-                        }
-                        if(yend > ymax)
-                        {
-                            ymax = yend;
-                        }
-                        if(yend < ymin)
-                        {
-                            ymin = yend;
-                        }
-                    }else
-                    {
-                        break;
-                    }
-                }
-            }
-            if(zeibeg != zeiend)
-            {
-                //Prüfen ob Start- und Endpunkt gleich sind:
-                if(xbeg == xend && ybeg == yend && zbeg == zend)//evtl. ist hier cagleich nötig!!
-                {
-                    //Prüfen ob fkon Formartierung ist:
-                    if(xmin <= 0        &&\
-                       xmax >= tmp_l    &&\
-                       ymin <= 0        &&\
-                       ymax >= tmp_b)
-                    {
-                        //Die Teile aus der Bearbeitung löschen die Deckungsgleich auf der WST-Kante liegen
-                        text_zeilenweise bearb_neu;
-                        bearb_neu.set_text(fa.text());
-
-                        for(uint ii=zeibeg+1; ii<=zeiend ;ii++)
-                        {
-                            text_zeilenweise param;
-                            param.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                            param.set_text(bearb.zeile(ii));
-                            if(param.zeile(1) == BEARBART_FRAESERGERADE)
-                            {
-                                fraesergerade fg(param.text());
-                                bool loeschen = false;
-                                if((fg.xs() == fg.xe()) && (fg.ys() != fg.ye()))
-                                {
-                                    //Gerade ist senkrecht
-                                    if((fg.xs() == 0) || (fg.xs()== tmp_l))
-                                    {
-                                        //Gerade liegt auf der WST-Kante
-                                        loeschen = true;
-                                    }
-                                }else if((fg.xs() != fg.xe()) && (fg.ys() == fg.ye()))
-                                {
-                                    //Gerade ist wagerecht
-                                    if((fg.ys() == 0) || (fg.ys()== tmp_b))
-                                    {
-                                        //Gerade liegt auf der WST-Kante
-                                        loeschen = true;
-                                    }
-                                }
-                                if(loeschen == true)
-                                {
-                                    QString vorzeile = bearb_neu.zeile(bearb_neu.zeilenanzahl());
-                                    text_zeilenweise vorparam;
-                                    vorparam.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                                    vorparam.set_text(vorzeile);
-                                    if(vorparam.zeile(1) == BEARBART_FRAESERAUFRUF)
-                                    {
-                                        fraueseraufruf tmpfa(vorparam.text());
-                                        tmpfa.set_x(fg.xe());
-                                        tmpfa.set_y(fg.ye());
-                                        bearb_neu.zeile_ersaetzen(bearb_neu.zeilenanzahl(), tmpfa.text());
-                                    }else
-                                    {
-                                        fa.set_x(fg.xe());
-                                        fa.set_y(fg.ye());
-                                        bearb_neu.zeile_anhaengen(fa.text());
-                                    }
-                                }else
-                                {
-                                    bearb_neu.zeile_anhaengen(bearb.zeile(ii));
-                                }
-                            }else
-                            {
-                                bearb_neu.zeile_anhaengen(bearb.zeile(ii));
-                            }
-                        }
-                        //prüfen ob letzte Zeile von bearb_neu fa ist und ggf löschen:
-                        text_zeilenweise endparam;
-                        endparam.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                        endparam.set_text(bearb_neu.zeile(bearb_neu.zeilenanzahl()));
-                        if(endparam.zeile(1) == BEARBART_FRAESERAUFRUF)
-                        {
-                            bearb_neu.zeile_loeschen(bearb_neu.zeilenanzahl());
-                        }
-
-                        //bearb.zeile(zeibeg bis zeiend) gegen bearb_neu austauschen:
-                        if(zeiend < bearb.zeilenanzahl())
-                        {
-                            bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
-                            bearb.zeilen_einfuegen(zeibeg-1, bearb_neu.text());
-                            i = zeibeg-1+bearb_neu.zeilenanzahl();
-                        }else
-                        {
-                            bearb.zeilen_loeschen(zeibeg, zeiend-zeibeg+1);
-                            bearb.zeilen_anhaengen(bearb_neu.text());
-                            i = bearb.zeilenanzahl();
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double tmp_b)
 {
     //Diese Funktion soll die vom VW ausgegebenen Poligonförmigen Formartierungen entdecken.
@@ -7211,110 +3694,6 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
         }
     }
 }
-
-/*void wstzustand::kurze_an_ab_geraden(text_zeilenweise& bearb, werkzeugmagazin wkzmag)
-{
-    //Geraden die Kürzer sind als der Fräser-Durchmesser und ungünstig liegen kann
-    //die CNC-Maschine nicht korrekt verarbeiten
-    //in Folge fährt die CNC einen ungewollten Kringel
-    //Dies soll durch diese Funktion verringert werden
-    double wkzdm = 2;//Defaultwert
-    double afb = false; //Bei Fräserradiuskorrektur 0 soll die Funktion keine Änderungen vornehmen
-
-    for(uint i=1; i<= bearb.zeilenanzahl() ;i++)
-    {
-        text_zeilenweise param;
-        param.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        param.set_text(bearb.zeile(i));
-        if(param.zeile(1) == BEARBART_FRAESERAUFRUF)//zu Kurze Geraden am Anfang finden
-        {
-            fraueseraufruf fa(param.text());
-            if(  fa.radkor() == FRKOR_L  ||  fa.radkor() == FRKOR_R  )
-            {
-                afb = true;
-            }else
-            {
-                afb = false;
-                continue; //For-Schleife in die nächste Runde
-            }
-            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
-            if(!tnummer.isEmpty())
-            {
-                wkzdm = wkzmag.dm(tnummer).toDouble();
-            }else
-            {
-                wkzdm = 2;//Defaultwert
-            }
-
-            if(i+1 <= bearb.zeilenanzahl())
-            {
-                text_zeilenweise param2; //Folgezeile
-                param2.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                param2.set_text(bearb.zeile(i+1));
-                if(param2.zeile(1) == BEARBART_FRAESERGERADE)
-                {
-                    fraesergerade fg(param2.text());
-                    punkt3d sp,ep;
-                    sp.set_x(param2.zeile(3));
-                    sp.set_y(param2.zeile(4));
-                    ep.set_x(param2.zeile(6));
-                    ep.set_y(param2.zeile(7));
-                    strecke s;
-                    s.set_start(sp);
-                    s.set_ende(ep);
-
-                    if(wkzdm >= s.laenge2d())
-                    {
-                        s.set_laenge_2d(wkzdm+1, strecke_bezugspunkt_ende);
-                        fa.set_x(s.stapu().x());
-                        fa.set_y(s.stapu().y());
-                        fg.set_xs(s.stapu().x());
-                        fg.set_ys(s.stapu().y());
-                        bearb.zeile_ersaetzen(i, fa.text());
-                        bearb.zeile_ersaetzen(i+1, fg.text());
-                        i++;
-                    }
-                }
-            }
-        }else if(param.zeile(1) == BEARBART_FRAESERGERADE  &&  afb == true)//zu Kurze Geraden am Ende finden
-        {
-            bool ist_schlussgerade = false;
-            if(i+1 <= bearb.zeilenanzahl())
-            {
-                text_zeilenweise param2; //Folgezeile
-                param2.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                param2.set_text(bearb.zeile(i+1));
-                if(  param2.zeile(1) != BEARBART_FRAESERGERADE  &&  param2.zeile(1) != BEARBART_FRAESERBOGEN  )
-                {
-                    ist_schlussgerade = true;
-                }
-            }else
-            {
-                ist_schlussgerade = true;
-            }
-            if(ist_schlussgerade == true)
-            {
-                fraesergerade fg(param.text());
-                punkt3d sp,ep;
-                sp.set_x(param.zeile(3));
-                sp.set_y(param.zeile(4));
-                ep.set_x(param.zeile(6));
-                ep.set_y(param.zeile(7));
-                strecke s;
-                s.set_start(sp);
-                s.set_ende(ep);
-                if(wkzdm >= s.laenge2d())
-                {
-                    s.set_laenge_2d(wkzdm+1, strecke_bezugspunkt_start);
-                    fg.set_xe(s.endpu().x());
-                    fg.set_ye(s.endpu().y());
-                    bearb.zeile_ersaetzen(i, fg.text());
-                }
-            }
-        }
-    }
-}
-*/
 void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
 {
     //Geraden die Kürzer sind als der Fräser-Durchmesser und ungünstig liegen kann
@@ -7414,7 +3793,6 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
         }
     }
 }
-
 QString wstzustand::kommentar_fmc(QString kom)
 {
     QString text;
@@ -7461,18 +3839,17 @@ QString wstzustand::kommentar_ggf(QString kom)
     text += "\n";
     return text;
 }
-QString wstzustand::fmc_kommentar_gute_seite(text_zeilenweise& bearb)
+QString wstzustand::fmc_kommentar_gute_seite(text_zw& bearb)
 {
     QString retmsg;
     if(Name.contains("Seite"))
     {
         bool hat_5er_durchgangsbohrungen = false;
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+        text_zw zeile;
+        for(uint i=0; i<bearb.count() ;i++)
         {
-            zeile.set_text(bearb.zeile(i));
-            if(zeile.zeile(1) == BEARBART_BOHR)
+            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(zeile.at(0) == BEARBART_BOHR)
             {
                 bohrung bo(zeile.text());
                 if(bo.dm() == 5)
@@ -7501,12 +3878,11 @@ QString wstzustand::fmc_kommentar_gute_seite(text_zeilenweise& bearb)
     {
         int anz_obsei = 0;
         int anz_unsei = 0;
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+        text_zw zeile;
+        for(uint i=0; i<bearb.count() ;i++)
         {
-            zeile.set_text(bearb.zeile(i));
-            if(zeile.zeile(1) == BEARBART_BOHR)
+            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(zeile.at(0) == BEARBART_BOHR)
             {
                 bohrung bo(zeile.text());
                 if(bo.dm() == 15)
@@ -7539,12 +3915,11 @@ QString wstzustand::fmc_kommentar_gute_seite(text_zeilenweise& bearb)
         retmsg = "gut unten";//Wert wird ggf. weiter unten überschrieben
         bool hat_5er_durchgangsbohrungen = false;
         bool hat_8er_flaechenbohrungen_obsei = false;
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+        text_zw zeile;
+        for(uint i=0; i<bearb.count() ;i++)
         {
-            zeile.set_text(bearb.zeile(i));
-            if(zeile.zeile(1) == BEARBART_BOHR)
+            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(zeile.at(0) == BEARBART_BOHR)
             {
                 bohrung bo(zeile.text());
                 if(bo.dm() == 5)
@@ -7609,25 +3984,6 @@ bool wstzustand::punkt_auf_wst(double x, double y, double l, double b, double to
     }
     return returnwert;
 }
-
-QString wstzustand::fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbzeile)
-{
-    QString fehlermeldung;
-
-    fehlermeldung += "Fehler bei ";
-    fehlermeldung += exportformat;
-    fehlermeldung += "-Export!\n";
-
-    fehlermeldung += "Teilname: ";
-    fehlermeldung += Name;
-    fehlermeldung += "\n";
-
-    fehlermeldung += "Kein Werkzeug fuer ";
-
-    fehlermeldung += bearb_menschlich_lesbar(bearbzeile);
-
-    return fehlermeldung;
-}
 QString wstzustand::fehler_kein_WKZ(QString exportformat, text_zw bearbzeile)
 {
     QString fehlermeldung;
@@ -7645,205 +4001,6 @@ QString wstzustand::fehler_kein_WKZ(QString exportformat, text_zw bearbzeile)
     fehlermeldung += bearb_menschlich_lesbar(bearbzeile);
 
     return fehlermeldung;
-}
-QString wstzustand::bearb_menschlich_lesbar(text_zeilenweise bearbzeile)
-{
-    //Hier fehlen noch Bohrraster und Gehrung
-    QString daten;
-    if(bearbzeile.zeile(1) == BEARBART_BOHR)
-    {
-        daten += "Bohrung oder Kreistasche:\n";
-        daten += "Bezugsflaeche: ";
-        daten += bearbzeile.zeile(2);
-        daten += "\n";
-        daten += "Durchmesser: ";
-        daten += bearbzeile.zeile(3);
-        daten += "\n";
-        daten += "Tiefe: ";
-        daten += bearbzeile.zeile(4);
-        daten += "\n";
-        daten += "Pos X: ";
-        daten += bearbzeile.zeile(5);
-        daten += "\n";
-        daten += "Pos Y: ";
-        daten += bearbzeile.zeile(6);
-        daten += "\n";
-        daten += "Pos Z: ";
-        daten += bearbzeile.zeile(7);
-        daten += "\n";
-        daten += "AFB: ";
-        daten += bearbzeile.zeile(8);
-        daten += "\n";
-        daten += "Zustellmass: ";
-        daten += bearbzeile.zeile(9);
-        daten += "\n";
-        daten += "Werkzeug: ";
-        daten += bearbzeile.zeile(10);
-        daten += "\n";
-    }else if(bearbzeile.zeile(1) == BEARBART_RTA)
-    {
-        daten += "Rechtecktasche:\n";
-        daten += "Bezugsflaeche: ";
-        daten += bearbzeile.zeile(2);
-        daten += "\n";
-        daten += "Taschenleange: ";
-        daten += bearbzeile.zeile(3);
-        daten += "\n";
-        daten += "Taschenbreite: ";
-        daten += bearbzeile.zeile(4);
-        daten += "\n";
-        daten += "Taschentiefe: ";
-        daten += bearbzeile.zeile(5);
-        daten += "\n";
-        daten += "Pos X: ";
-        daten += bearbzeile.zeile(6);
-        daten += "\n";
-        daten += "Pos Y: ";
-        daten += bearbzeile.zeile(7);
-        daten += "\n";
-        daten += "Pos Z: ";
-        daten += bearbzeile.zeile(8);
-        daten += "\n";
-        daten += "Drehwinkel im UZS: ";
-        daten += bearbzeile.zeile(9);
-        daten += "\n";
-        daten += "Eckenradius: ";
-        daten += bearbzeile.zeile(10);
-        daten += "\n";
-        daten += "Ausraeumen: ";
-        daten += bearbzeile.zeile(11);
-        daten += "\n";
-        daten += "AFB: ";
-        daten += bearbzeile.zeile(12);
-        daten += "\n";
-        daten += "Zustellmass: ";
-        daten += bearbzeile.zeile(13);
-        daten += "\n";
-        daten += "Werkzeug: ";
-        daten += bearbzeile.zeile(14);
-        daten += "\n";
-    }else if(bearbzeile.zeile(1) == BEARBART_NUT)
-    {
-        daten += "Nut:\n";
-        daten += "Bezugsflaeche: ";
-        daten += bearbzeile.zeile(2);
-        daten += "\n";
-        daten += "Startpunkt in X: ";
-        daten += bearbzeile.zeile(3);
-        daten += "\n";
-        daten += "Startpunkt in Y: ";
-        daten += bearbzeile.zeile(4);
-        daten += "\n";
-        daten += "Endpunkt in X: ";
-        daten += bearbzeile.zeile(5);
-        daten += "\n";
-        daten += "Endpunkt in Y: ";
-        daten += bearbzeile.zeile(6);
-        daten += "\n";
-        daten += "Nuttiefe: ";
-        daten += bearbzeile.zeile(7);
-        daten += "\n";
-        daten += "Nutbreite: ";
-        daten += bearbzeile.zeile(8);
-        daten += "\n";
-        daten += "AFB: ";
-        daten += bearbzeile.zeile(9);
-        daten += "\n";
-    }else if(bearbzeile.zeile(1) == BEARBART_FRAESERAUFRUF)
-    {
-        daten += "Aufruf Fraeser:\n";
-        daten += "Bezugsflaeche: ";
-        daten += bearbzeile.zeile(2);
-        daten += "\n";
-        daten += "Startpunkt in X: ";
-        daten += bearbzeile.zeile(3);
-        daten += "\n";
-        daten += "Startpunkt in Y: ";
-        daten += bearbzeile.zeile(4);
-        daten += "\n";
-        daten += "Startpunkt in Z: ";
-        daten += bearbzeile.zeile(5);
-        daten += "\n";
-        daten += "Tiefe: ";
-        daten += bearbzeile.zeile(6);
-        daten += "\n";
-        daten += "Bahnkorrektur: ";
-        daten += bearbzeile.zeile(7);
-        daten += "\n";
-        daten += "Werkzeug: ";
-        daten += bearbzeile.zeile(8);
-        daten += "\n";
-        daten += "AFB: ";
-        daten += bearbzeile.zeile(9);
-        daten += "\n";
-    }else if(bearbzeile.zeile(1) == BEARBART_FRAESERGERADE)
-    {
-        daten += "gerade Fraesbahn:\n";
-        daten += "Bezugsflaeche: ";
-        daten += bearbzeile.zeile(2);
-        daten += "\n";
-        daten += "Startpunkt in X: ";
-        daten += bearbzeile.zeile(3);
-        daten += "\n";
-        daten += "Startpunkt in Y: ";
-        daten += bearbzeile.zeile(4);
-        daten += "\n";
-        daten += "Startpunkt Tiefe: ";
-        daten += bearbzeile.zeile(5);
-        daten += "\n";
-        daten += "Endpunkt in X: ";
-        daten += bearbzeile.zeile(6);
-        daten += "\n";
-        daten += "Endpunkt in Y: ";
-        daten += bearbzeile.zeile(7);
-        daten += "\n";
-        daten += "Endpunkt Tiefe: ";
-        daten += bearbzeile.zeile(8);
-        daten += "\n";
-        daten += "AFB: ";
-        daten += bearbzeile.zeile(9);
-        daten += "\n";
-    }else if(bearbzeile.zeile(1) == BEARBART_FRAESERBOGEN)
-    {
-        daten += "gebogene Fraesbahn:\n";
-        daten += "Bezugsflaeche: ";
-        daten += bearbzeile.zeile(2);
-        daten += "\n";
-        daten += "Startpunkt in X: ";
-        daten += bearbzeile.zeile(3);
-        daten += "\n";
-        daten += "Startpunkt in Y: ";
-        daten += bearbzeile.zeile(4);
-        daten += "\n";
-        daten += "Startpunkt Tiefe: ";
-        daten += bearbzeile.zeile(5);
-        daten += "\n";
-        daten += "Endpunkt in X: ";
-        daten += bearbzeile.zeile(6);
-        daten += "\n";
-        daten += "Endpunkt in Y: ";
-        daten += bearbzeile.zeile(7);
-        daten += "\n";
-        daten += "Endpunkt Tiefe: ";
-        daten += bearbzeile.zeile(8);
-        daten += "\n";
-        daten += "Radius: ";
-        daten += bearbzeile.zeile(9);
-        daten += "\n";
-        daten += "Bogenrichtung: ";
-        if(bearbzeile.zeile(8) == "1")
-        {
-            daten += "Uhrzeigersinn";
-        }else
-        {
-            daten += "Gegen-Uhrzeigersinn";
-        }
-        daten += "\n";
-        daten += "AFB: ";
-        daten += bearbzeile.zeile(11);
-        daten += "\n";
-    }
-    return daten;
 }
 QString wstzustand::bearb_menschlich_lesbar(text_zw bearbzeile)
 {
@@ -8172,21 +4329,20 @@ QString wstzustand::kante_re_ganx(QString drewi)
         return Kante_hi;
     }
 }
-
 void wstzustand::fmc_dateitext(int index)
 {
-    text_zw bearb = Bearbeitung.at(index);
+    text_zw bearb = Bearb.at(index);
     QString drewi = Drehung.at(index);
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     wkz_magazin wkzmag = Wkzm.at(index);
     dubosplitten(bearb, wkzmag);
 
-    text_zeilenweise bearb_kopie = bearb;
+    text_zw bearb_kopie = bearb;
 
     QString msg;
-    text_zeilenweise zeile;
-    zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+    text_zw zeile;
+    //Trennzeichen: TRENNZ_BEARB_PARAM
     QString kavo = kante_vo(drewi);//Kante vorne == Kante an X
     QString kali = kante_li(drewi);//Kante links == Kante an Y
     QString kahi = kante_hi(drewi);//Kante hinten == Kante nicht an X
@@ -8283,13 +4439,12 @@ void wstzustand::fmc_dateitext(int index)
         msg += kommentar_fmc("--------------------");
 
         bool kreuzkopf_von_vorne = false;
-        for(uint i=1; i<=bearb.zeilenanzahl() ;i++)
+        for(uint i=0; i<bearb.count() ;i++)
         {
-            text_zeilenweise zeile;
-            zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            zeile.set_text(bearb.zeile(i));
+            text_zw zeile;
+            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
 
-            QString art = zeile.zeile(1);
+            QString art = zeile.at(0);
             if(art == BEARBART_BOHR)
             {
                 bohrung bo(zeile.text());
@@ -8320,10 +4475,10 @@ void wstzustand::fmc_dateitext(int index)
     //---------------------------------------Bearbeitungen Oberseite und Hirnseiten:
     //Prüfen ob es Horizontale Nuten gibt:
     bool hat_horizontale_nut = false;
-    for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+    for(uint i=0 ; i<bearb.count() ; i++)
     {
-        zeile.set_text(bearb.zeile(i));
-        if(zeile.zeile(1) == BEARBART_NUT)
+        zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_NUT)
         {
             nut nu(zeile.text());
             if(nu.bezug() == WST_BEZUG_LI  ||  nu.bezug() == WST_BEZUG_RE  ||  \
@@ -8344,10 +4499,10 @@ void wstzustand::fmc_dateitext(int index)
         msg += kommentar_fmc("----------------------------");
     }
     //---
-    for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+    for(uint i=0 ; i<bearb.count() ; i++)
     {
-        zeile.set_text(bearb.zeile(i));
-        if(zeile.zeile(1) == BEARBART_BOHR)
+        zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
         {
             bohrung bo(zeile.text());
             QString bezug = bo.bezug();
@@ -8699,7 +4854,7 @@ void wstzustand::fmc_dateitext(int index)
                     return;
                 }
             }
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
             bohrraster bora(zeile.text());
             QString bezug = bora.bezug();
@@ -9541,7 +5696,7 @@ void wstzustand::fmc_dateitext(int index)
             {
                 //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
             }
-        }else if(zeile.zeile(1) == BEARBART_NUT)
+        }else if(zeile.at(0) == BEARBART_NUT)
         {
             nut nu(zeile.text());
             QString bezug = nu.bezug();
@@ -10276,7 +6431,7 @@ void wstzustand::fmc_dateitext(int index)
                 //---
                 msg += kommentar_fmc("----------------------------");
             }
-        }else if(zeile.zeile(1) == BEARBART_RTA)
+        }else if(zeile.at(0) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());
 
@@ -10476,7 +6631,7 @@ void wstzustand::fmc_dateitext(int index)
                 Export_moeglich.append(false);
                 return;
             }
-        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             fraueseraufruf fa(zeile.text());
             QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
@@ -10557,13 +6712,12 @@ void wstzustand::fmc_dateitext(int index)
                         punkt3d pfa;//Punkt Fräseraufruf
                         pfa.set_x(fa.x());
                         pfa.set_y(fa.y());
-                        text_zeilenweise folzei;//Folgezeile
-                        folzei.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                        folzei.set_text(bearb.zeile(i+1));
+                        text_zw folzei;//Folgezeile
+                        folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
                         punkt3d pein;//Eintauchpunkt
                         int anweg = 50;
 
-                        if(folzei.zeile(1) == BEARBART_FRAESERGERADE)
+                        if(folzei.at(0) == BEARBART_FRAESERGERADE)
                         {
                             fraesergerade fg(folzei.text());
                             strecke s;
@@ -10580,7 +6734,7 @@ void wstzustand::fmc_dateitext(int index)
                             //msg += " / Y = ";
                             //msg += s.stapu().y_QString();
                             //msg += "\n";
-                        }else if(folzei.zeile(1) == BEARBART_FRAESERBOGEN)
+                        }else if(folzei.at(0) == BEARBART_FRAESERBOGEN)
                         {
                             fraeserbogen fb(folzei.text());
                             bogen b;
@@ -10653,14 +6807,14 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         //--------------------------------------------
                         //Fräsbahnen:
-                        while(i+1<=bearb.zeilenanzahl())
+                        while(i+1<bearb.count())
                         {
-                            zeile.set_text(bearb.zeile(i+1));
+                            zeile.set_text(bearb.count()i+1));
 
-                            if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+                            if(zeile.at(0) == BEARBART_FRAESERGERADE)
                             {
                                 i++;
-                                zeile.set_text(bearb.zeile(i));
+                                zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
                                 //Gerade fräsen:
                                 fraesergerade fg(zeile.text());
                                 QString tiefe_fg = "0";
@@ -10692,10 +6846,10 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += tiefe_fg;
                                 msg += "\n";
                                 msg += "\n";
-                            }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+                            }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                             {
                                 i++;
-                                zeile.set_text(bearb.zeile(i));
+                                zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
                                 //Bogen fräsen:
                                 fraeserbogen fb(zeile.text());
                                 QString tiefe_fb = "0";
@@ -10790,10 +6944,10 @@ void wstzustand::fmc_dateitext(int index)
     }
     //---------------------------------------Bearbeitungen Unterseite:
     bool unterseite_hat_bearb = false;
-    for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+    for(uint i=0 ; i<bearb.count() ; i++)
     {
-        zeile.set_text(bearb.zeile(i));
-        if(zeile.zeile(2) == WST_BEZUG_UNSEI)
+        zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(1) == WST_BEZUG_UNSEI)
         {
             unterseite_hat_bearb = true;
             break;
@@ -10814,10 +6968,10 @@ void wstzustand::fmc_dateitext(int index)
         msg += kommentar_fmc("-----------------------------------------");
         msg += kommentar_fmc("--------------------");
 
-        for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+        for(uint i=0 ; i<bearb.count() ; i++)
         {
-            zeile.set_text(bearb.zeile(i));
-            if(zeile.zeile(1) == BEARBART_BOHR)
+            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(zeile.at(0) == BEARBART_BOHR)
             {
                 bohrung bo(zeile.text());
                 QString bezug = bo.bezug();
@@ -11001,7 +7155,7 @@ void wstzustand::fmc_dateitext(int index)
                         return;
                     }
                 }
-            }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+            }else if(zeile.at(0) == BEARBART_BOHRRASTER)
             {
                 bohrraster bora(zeile.text());
                 QString bezug = bora.bezug();
@@ -11474,7 +7628,7 @@ void wstzustand::fmc_dateitext(int index)
                 {
                     //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
                 }
-            }else if(zeile.zeile(1) == BEARBART_NUT)
+            }else if(zeile.at(0) == BEARBART_NUT)
             {
                 nut nu(zeile.text());
                 QString bezug = nu.bezug();
@@ -11628,7 +7782,7 @@ void wstzustand::fmc_dateitext(int index)
                         return;
                     }
                 }
-            }else if(zeile.zeile(1) == BEARBART_RTA)
+            }else if(zeile.at(0) == BEARBART_RTA)
             {
                 rechtecktasche rt(zeile.text());
                 QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
@@ -11745,7 +7899,7 @@ void wstzustand::fmc_dateitext(int index)
                     Export_moeglich.append(false);
                     return;
                 }
-            }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+            }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
             {
                 fraueseraufruf fa(zeile.text());
                 QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
@@ -11829,13 +7983,12 @@ void wstzustand::fmc_dateitext(int index)
                             punkt3d pfa;//Punkt Fräseraufruf
                             pfa.set_x(fa.x());
                             pfa.set_y(fa.y());
-                            text_zeilenweise folzei;//Folgezeile
-                            folzei.set_trennzeichen(TRENNZ_BEARB_PARAM);
-                            folzei.set_text(bearb.zeile(i+1));
+                            text_zw folzei;//Folgezeile
+                            folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
                             punkt3d pein;//Eintauchpunkt
                             int anweg = 50;
 
-                            if(folzei.zeile(1) == BEARBART_FRAESERGERADE)
+                            if(folzei.at(0) == BEARBART_FRAESERGERADE)
                             {
                                 fraesergerade fg(folzei.text());
                                 //Beareitung auf die Oberseite drehen:
@@ -11851,7 +8004,7 @@ void wstzustand::fmc_dateitext(int index)
                                 sb = strecke_bezugspunkt_ende;
                                 s.set_laenge_2d(s.laenge2d()+anweg, sb);
                                 pein = s.stapu();
-                            }else if(folzei.zeile(1) == BEARBART_FRAESERBOGEN)
+                            }else if(folzei.at(0) == BEARBART_FRAESERBOGEN)
                             {
                                 fraeserbogen fb(folzei.text());
                                 //Beareitung auf die Oberseite drehen:
@@ -11928,14 +8081,14 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             //--------------------------------------------
                             //Fräsbahnen:
-                            while(i+1<=bearb.zeilenanzahl())
+                            while(i+1<bearb.count())
                             {
-                                zeile.set_text(bearb.zeile(i+1));
+                                zeile.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
 
-                                if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+                                if(zeile.at(0) == BEARBART_FRAESERGERADE)
                                 {
                                     i++;
-                                    zeile.set_text(bearb.zeile(i));
+                                    zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
                                     //Gerade fräsen:
                                     fraesergerade fg(zeile.text());
                                     QString tiefe_fg = 0;
@@ -11971,10 +8124,10 @@ void wstzustand::fmc_dateitext(int index)
                                     msg += tiefe_fg;
                                     msg += "\n";
                                     msg += "\n";
-                                }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+                                }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                                 {
                                     i++;
-                                    zeile.set_text(bearb.zeile(i));
+                                    zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
                                     //Bogen fräsen:
                                     fraeserbogen fb(zeile.text());
                                     QString tiefe_fb = 0;
@@ -12086,11 +8239,11 @@ void wstzustand::fmc_dateitext(int index)
 }
 void wstzustand::eigen_dateitext(int index)
 {
-    text_zeilenweise bearb = Bearbeitung.at(index);
+    text_zw bearb = Bearb.at(index);
     QString drewi = Drehung.at(index);
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
-    werkzeugmagazin wkzmag = Wkzmag.at(index);
+    wkz_magazin wkzmag = Wkzm.at(index);
     dubosplitten(bearb, wkzmag);
 
     QString msg;
@@ -12136,18 +8289,18 @@ void wstzustand::ganx_dateitext(int index)
     //Physischer-Maschinen-Nullpunkt ist oben links
     //Maschinen-Nullunkt in der Software ist unten links
     //Programm-Nullpunkt in bearb ist unten links
-    text_zeilenweise bearb = Bearbeitung.at(index);
+    text_zw bearb = Bearb.at(index);
     QString drewi = Drehung.at(index);
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
-    werkzeugmagazin wkzmag = Wkzmag.at(index);
+    wkz_magazin wkzmag = Wkzm.at(index);
     dubosplitten(bearb, wkzmag);
 
-    text_zeilenweise bearb_kopie = bearb;
+    text_zw bearb_kopie = bearb;
 
     QString msg;
-    text_zeilenweise zeile;
-    zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
+    text_zw zeile;
+    //Trennzeichen: TRENNZ_BEARB_PARAM
     QString kavo = kante_vo_ganx(drewi);//Kante vorne == Kante an X
     QString kali = kante_li_ganx(drewi);//Kante links == Kante an Y
     QString kahi = kante_hi_ganx(drewi);//Kante hinten == Kante nicht an X
@@ -12160,64 +8313,64 @@ void wstzustand::ganx_dateitext(int index)
 
     //-------------------------1.Vorspann:
     {
-    msg  = "<?xml version=\"1.0\" standalone=\"yes\"?>";
-    msg += "\n";
-    msg += "<Programm xmlns=\"http://tempuri.org/Programm.xsd\">";
-    msg += "\n";
+        msg  = "<?xml version=\"1.0\" standalone=\"yes\"?>";
+        msg += "\n";
+        msg += "<Programm xmlns=\"http://tempuri.org/Programm.xsd\">";
+        msg += "\n";
     }
     //-------------------------Programmkopf:
     {
-    msg += "  <PrgrSet>";
-    msg += "\n";
-    msg += "    <PrgrName>";
-    msg += Name;
-    msg += "</PrgrName>";
-    msg += "\n";
-    msg += "    <Description>";
-    msg += "";                       //Kommentar
-    msg += "</Description>";
-    msg += "\n";
-    msg += "    <wsX>";
-    msg += double_to_qstring(tmp_l);
-    msg += "</wsX>";
-    msg += "\n";
-    msg += "    <wsY>";
-    msg += double_to_qstring(tmp_b);
-    msg += "</wsY>";
-    msg += "\n";
-    msg += "    <wsZ>";
-    msg += dicke_qstring();
-    msg += "</wsZ>";
-    msg += "\n";
-    msg += "    <DoMF>";
-    msg += "False";          //Maxifix
-    msg += "</DoMF>";
-    msg += "\n";
-    msg += "    <MFPos>";
-    msg += "0";              //Position Maxitix
-    msg += "</MFPos>";
-    msg += "\n";
-    msg += "    <MFTool>";
-    msg += "TO";             //Werkzeug für Maxifix
-    msg += "</MFTool>";
-    msg += "\n";
-    msg += "  </PrgrSet>";
-    msg += "\n";
+        msg += "  <PrgrSet>";
+        msg += "\n";
+        msg += "    <PrgrName>";
+        msg += Name;
+        msg += "</PrgrName>";
+        msg += "\n";
+        msg += "    <Description>";
+        msg += "";                       //Kommentar
+        msg += "</Description>";
+        msg += "\n";
+        msg += "    <wsX>";
+        msg += double_to_qstring(tmp_l);
+        msg += "</wsX>";
+        msg += "\n";
+        msg += "    <wsY>";
+        msg += double_to_qstring(tmp_b);
+        msg += "</wsY>";
+        msg += "\n";
+        msg += "    <wsZ>";
+        msg += dicke_qstring();
+        msg += "</wsZ>";
+        msg += "\n";
+        msg += "    <DoMF>";
+        msg += "False";          //Maxifix
+        msg += "</DoMF>";
+        msg += "\n";
+        msg += "    <MFPos>";
+        msg += "0";              //Position Maxitix
+        msg += "</MFPos>";
+        msg += "\n";
+        msg += "    <MFTool>";
+        msg += "TO";             //Werkzeug für Maxifix
+        msg += "</MFTool>";
+        msg += "\n";
+        msg += "  </PrgrSet>";
+        msg += "\n";
     }
     //-------------------------2. Vorspann:
     {
-    msg += "  <Root>";
-    msg += "\n";
-    msg += "    <Version>1.1.0.26</Version>";
-    msg += "\n";
-    msg += "    <CreationDate>2017-06-02T09:26:14.9442359+02:00</CreationDate>";
-    msg += "\n";
-    msg += "    <CreationApp>ASCII Import - 1.1.0.26</CreationApp>";
-    msg += "\n";
-    msg += "    <ModificationApp />";
-    msg += "\n";
-    msg += "  </Root>";
-    msg += "\n";
+        msg += "  <Root>";
+        msg += "\n";
+        msg += "    <Version>1.1.0.26</Version>";
+        msg += "\n";
+        msg += "    <CreationDate>2017-06-02T09:26:14.9442359+02:00</CreationDate>";
+        msg += "\n";
+        msg += "    <CreationApp>ASCII Import - 1.1.0.26</CreationApp>";
+        msg += "\n";
+        msg += "    <ModificationApp />";
+        msg += "\n";
+        msg += "  </Root>";
+        msg += "\n";
     }
     //-------------------------Bearbeitungen <PrgrFileWork>:
     //Dies ist der Teil, den die Maschinen-Steuerung liest
@@ -12227,10 +8380,10 @@ void wstzustand::ganx_dateitext(int index)
     uint ideditor = 1;//id die im Editor angezeigt wird
     ganx_Gruppen gruppen_PrgrFileWork;
 
-    for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+    for(uint i=0 ; i<bearb.count() ; i++)
     {
-        zeile.set_text(bearb.zeile(i));
-        if(zeile.zeile(1) == BEARBART_BOHR)
+        zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
         {
             bohrung bo(zeile.text());
 
@@ -12945,7 +9098,7 @@ void wstzustand::ganx_dateitext(int index)
                     return;
                 }
             }
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
             bohrraster bora(zeile.text());
             double x = bora.x();
@@ -13115,7 +9268,7 @@ void wstzustand::ganx_dateitext(int index)
             {
                 //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
             }
-        }else if(zeile.zeile(1)==BEARBART_NUT)
+        }else if(zeile.at(0)==BEARBART_NUT)
         {
             nut nu(zeile.text());
             if(nu.bezug() == WST_BEZUG_OBSEI  ||  nu.bezug() == WST_BEZUG_UNSEI)
@@ -13431,7 +9584,7 @@ void wstzustand::ganx_dateitext(int index)
                 }
 
             }
-        }else if(zeile.zeile(1)==BEARBART_RTA)
+        }else if(zeile.at(0)==BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());
             if(  (rt.bezug() == WST_BEZUG_OBSEI) ||  (rt.bezug() == WST_BEZUG_UNSEI)  )
@@ -13738,10 +9891,10 @@ void wstzustand::ganx_dateitext(int index)
     id = 1;//id die im Editor angezeigt wird
     ganx_Gruppen gruppen_PrgrFile;
 
-    for(uint i=1 ; i<=bearb.zeilenanzahl() ; i++)
+    for(uint i=0 ; i<bearb.count() ; i++)
     {
-        zeile.set_text(bearb.zeile(i));
-        if(zeile.zeile(1) == BEARBART_BOHR)
+        zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
         {
             bohrung bo(zeile.text());
 
@@ -14543,7 +10696,7 @@ void wstzustand::ganx_dateitext(int index)
                     return;
                 }
             }
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
             bohrraster bora(zeile.text());
 
@@ -14732,7 +10885,7 @@ void wstzustand::ganx_dateitext(int index)
             {
                 //Sollte nicht vorkommen können, da bohrraster anhand des vorhandenen Werkzeuges ermittelt werden
             }
-        }else if(zeile.zeile(1) == BEARBART_NUT)
+        }else if(zeile.at(0) == BEARBART_NUT)
         {
 
             nut nu(zeile.text());
@@ -15036,7 +11189,7 @@ void wstzustand::ganx_dateitext(int index)
                     }
                 }
             }
-        }else if(zeile.zeile(1) == BEARBART_RTA)
+        }else if(zeile.at(0) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());
             if(  (rt.bezug() == WST_BEZUG_OBSEI) ||  (rt.bezug() == WST_BEZUG_UNSEI)  )
@@ -15817,7 +11970,7 @@ void wstzustand::ggf_dateitext(int index)
                        if(zeile.at(0) == BEARBART_FRAESERGERADE)
                        {
                            i++;
-                           zeile.set_text(bearb.at(i));
+                           zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
                            //Gerade fräsen:
                            fraesergerade fg(zeile.text());
                            QString tiefe_fg = "0";
@@ -15856,7 +12009,7 @@ void wstzustand::ggf_dateitext(int index)
                        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                        {
                            i++;
-                           zeile.set_text(bearb.at(i));
+                           zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
                            //Bogen fräsen:
                            fraeserbogen fb(zeile.text());
                            QString tiefe_fb = "0";
@@ -15971,14 +12124,13 @@ void wstzustand::ggf_dateitext(int index)
     Exporttext.append(msg);
     Export_moeglich.append(true);
 }
-
 void wstzustand::geo(int index)
 {
     QString format = Format.at(index);
     QString drehwinkel = Drehung.at(index);
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
-    text_zeilenweise tmp_bearb = Bearbeitung.at(index);
+    text_zw tmp_bearb = Bearb.at(index);
     double versatz_x = 0;
     double versatz_y = 0;
     QString kante_v;
@@ -16070,12 +12222,11 @@ void wstzustand::geo(int index)
     //------------------------------
     //Bearbeitungen darstellen:
     QString farbe_unterseite = FARBE_ROSE;
-    for(uint i=1; i<=tmp_bearb.zeilenanzahl() ;i++)
+    for(uint i=0; i<tmp_bearb.count() ;i++)
     {
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(tmp_bearb.zeile(i));
-        if(zeile.zeile(1) == BEARBART_BOHR)
+        text_zw zeile;
+        zeile.set_text(tmp_bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
         {
             bohrung bo(zeile.text());
             if(bo.bezug() == WST_BEZUG_OBSEI)
@@ -16166,7 +12317,7 @@ void wstzustand::geo(int index)
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
             bohrraster bo(zeile.text());
             if(bo.bezug() == WST_BEZUG_OBSEI)
@@ -16315,7 +12466,7 @@ void wstzustand::geo(int index)
                     gt.add_rechteck(tmp_r);
                 }
             }
-        }else if(zeile.zeile(1) == BEARBART_NUT)
+        }else if(zeile.at(0) == BEARBART_NUT)
         {
             nut nu(zeile.text());
             strecke s;
@@ -16383,7 +12534,7 @@ void wstzustand::geo(int index)
                 //---                
                 gt.add_rechteck(r);
             }
-        }else if(zeile.zeile(1) == BEARBART_RTA)
+        }else if(zeile.at(0) == BEARBART_RTA)
         {
             rechtecktasche rt(zeile.text());
             rechteck3d r;
@@ -16448,7 +12599,7 @@ void wstzustand::geo(int index)
                 gt.add_rechteck(r);
             }
 
-        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             fraueseraufruf fa(zeile.text());
             punkt3d p(fa.x(), fa.y(), fa.z());
@@ -16462,7 +12613,7 @@ void wstzustand::geo(int index)
                 p.set_farbe(farbe_unterseite);
             }
             gt.add_punkt(p);
-        }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+        }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg(zeile.text());
             strecke s;
@@ -16477,7 +12628,7 @@ void wstzustand::geo(int index)
                 s.set_stil(STIL_GESTRICHELT);
             }
             gt.add_strecke(s);
-        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb(zeile.text());
             bogen b;

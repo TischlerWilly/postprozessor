@@ -184,20 +184,19 @@ QString bohrung::text()
 }
 void bohrung::set_text(QString text)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_BOHR)
+    text_zw tz;
+    tz.set_text(text,TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_BOHR)
     {
-        set_bezug(tz.zeile(2));
-        set_dm(tz.zeile(3));
-        set_tiefe(tz.zeile(4));
-        set_x(tz.zeile(5));
-        set_y(tz.zeile(6));
-        set_z(tz.zeile(7));
-        set_afb(tz.zeile(8));
-        set_zustellmass(tz.zeile(9));
-        set_wkznum(tz.zeile(10));
+        set_bezug(tz.at(1));
+        set_dm(tz.at(2));
+        set_tiefe(tz.at(3));
+        set_x(tz.at(4));
+        set_y(tz.at(5));
+        set_z(tz.at(6));
+        set_afb(tz.at(7));
+        set_zustellmass(tz.at(8));
+        set_wkznum(tz.at(9));
     }
 }
 

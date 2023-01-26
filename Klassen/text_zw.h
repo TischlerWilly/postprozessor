@@ -10,7 +10,7 @@ public:
     text_zw(QString text, char trennzeichen = '\n');
 
     //---------------------------------------------set_xy:
-    void    set_text(QString text, char trennzeichen = '\n');
+    void    set_text(QString text, char trennzeichen);
     void    set_trenz(char trennzeichen);
 
     //---------------------------------------------get_xy:

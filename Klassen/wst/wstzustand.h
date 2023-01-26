@@ -28,8 +28,7 @@ class wstzustand
 public:
     wstzustand();
     //----------------------------------set_xy:
-    void set_bearb(text_zeilenweise bearb); //alt
-    void set_bearb(text_zw bearb);          //neu
+    void set_bearb(text_zw bearb);
     void set_laenge(double l);
     void set_breite(double b);
     void set_dicke(double d);
@@ -132,14 +131,14 @@ public:
             return "";
         }
     }
-    inline text_zeilenweise bearb()     //alt wird noch neu
+    inline text_zw bearb()
     {
-        if(Akt_zust != -1 && Akt_zust<Bearbeitung.count())
+        if(Akt_zust != -1 && Akt_zust<Bearb.count())
         {
-            return Bearbeitung.at(Akt_zust);
+            return Bearb.at(Akt_zust);
         }else
         {
-            text_zeilenweise tz;
+            text_zw tz;
             return tz;
         }
     }
@@ -169,40 +168,29 @@ public:
 
 private:
     void clear();
-    void erzeugen(QString format, wkz_magazin wkzmag, QString drehung);//neu
-    //void finde_drehwinkel_auto(int index);//alt
-    void finde_drehwinkel_auto_(int index);//neu
-    void fraesergeraden_zusammenfassen(text_zeilenweise& bearbeitung);//alt
-    void fraesergeraden_zusammenfassen(text_zw& bearbeitung);//neu
-    void hbemiduebeltiefe(text_zeilenweise& bearbeitung);//alt
-    void hbemiduebeltiefe(text_zw& bearbeitung);//neu
-    void gehr_3achs(text_zeilenweise& bearb, double& tmp_l, double& tmp_b, \
-                    QString ausgabeformat, QString drehwi); //alt
+    void erzeugen(QString format, wkz_magazin wkzmag, QString drehung);
+    void finde_drehwinkel_auto_(int index);
+    void fraesergeraden_zusammenfassen(text_zw& bearbeitung);
+    void hbemiduebeltiefe(text_zw& bearbeitung);
     void gehr_3achs(text_zw& bearb, double& tmp_l, double& tmp_b, \
-                    QString ausgabeformat, QString drehwi); //neu
-    void drehen_um_b_halbe(text_zeilenweise& bearb, double &tmp_b);//alt
-    void drehen_um_b_halbe(text_zw& bearb, double &tmp_b);//neu
-    void bearb_drehen_90(text_zeilenweise& bearb, double& tmp_l, double& tmp_b);//alt
-    void bearb_drehen_90(text_zw& bearb, double& tmp_l, double& tmp_b);//neu
-    void bearb_optimieren_ganx(text_zeilenweise& bearb);//alt
-    void bearb_optimieren_ganx(text_zw& bearb);//neu
+                    QString ausgabeformat, QString drehwi);
+    void drehen_um_b_halbe(text_zw& bearb, double &tmp_b);
+    void bearb_drehen_90(text_zw& bearb, double& tmp_l, double& tmp_b);
+    void bearb_optimieren_ganx(text_zw& bearb);
     void dubosplitten(text_zw& bearb, wkz_magazin& wkzmag);
-    QString warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b);//neu
-    QString warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b);//alt
-    void rasterbohrungen_finden_fmc(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b);//neu
-    void rasterbohrungen_finden_ganx(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b);//neu
-    void formartierung_zu_einzelfkon(text_zeilenweise& bearb,double tmp_l, double tmp_b);//alt
-    void formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double tmp_b);//neu
-    void kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag);//neu
+    QString warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b);
+    QString warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b);
+    void rasterbohrungen_finden_fmc(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b);
+    void rasterbohrungen_finden_ganx(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b);
+    void formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double tmp_b);
+    void kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag);
     QString kommentar_fmc(QString kom);
     QString variable_fmc(QString bez, QString wert);
     QString kommentar_ggf(QString kom);
-    QString fmc_kommentar_gute_seite(text_zeilenweise& bearb);
+    QString fmc_kommentar_gute_seite(text_zw& bearb);
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
-    QString fehler_kein_WKZ(QString exportformat, text_zeilenweise bearbzeile);//alt
-    QString fehler_kein_WKZ(QString exportformat, text_zw bearbzeile);//neu
-    QString bearb_menschlich_lesbar(text_zeilenweise bearbzeile);//alt
-    QString bearb_menschlich_lesbar(text_zw bearbzeile);//neu
+    QString fehler_kein_WKZ(QString exportformat, text_zw bearbzeile);
+    QString bearb_menschlich_lesbar(text_zw bearbzeile);
     void fmc_dateitext(int index);
     void eigen_dateitext(int index);
     void ganx_dateitext(int index);
@@ -218,13 +206,12 @@ private:
     QString kante_re_ganx(QString drewi);
 
     QVector<QString>            Format;
-    QVector<wkz_magazin>        Wkzm;       //neu
+    QVector<wkz_magazin>        Wkzm;
     QVector<QString>            Drehung_bekommen;    
     QVector<QString>            Drehung;
     QVector<int>                Bewertung;
     QVector<QString>            Warnungen;
-    QVector<text_zeilenweise>   Bearbeitung;    //alt
-    QVector<text_zw>            Bearb;          //neu
+    QVector<text_zw>            Bearb;
     QVector<double>             Laenge;
     QVector<double>             Breite;
     QVector<QString>            Exporttext;
@@ -233,8 +220,7 @@ private:
     QVector<geometrietext> Geotext;
     QVector<double> Versatz_y;
 
-    text_zeilenweise    Bearbeitung_bekommen;   //alt
-    text_zw             Bearb_bekommen;         //neu
+    text_zw             Bearb_bekommen;
     double              Laenge_bekommen;
     double              Breite_bekommen;
     double              Zugabe_gehrungen;

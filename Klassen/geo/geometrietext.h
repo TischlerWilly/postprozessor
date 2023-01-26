@@ -3,7 +3,6 @@
 
 #include <QString>
 #include <QMessageBox>
-#include "Klassen/text_zeilenweise.h"
 #include "Klassen/text_zw.h"
 #include "Struncts/punkt.h"
 #include "Funktionen/umwandeln.h"
@@ -46,7 +45,7 @@ public:
     {
         return Text.text();
     }
-    inline text_zeilenweise text_zwei()
+    inline text_zw text_zwei()
     {
         return Text;
     }
@@ -56,8 +55,8 @@ public:
     }
 
 private:
-    uint                Aktuelle_zeile;
-    text_zeilenweise    Text;
+    uint       Aktuelle_zeile;
+    text_zw    Text;
 
 };
 

@@ -8,20 +8,19 @@ einstellung_ganx::einstellung_ganx()
 
 void einstellung_ganx::set_text(QString t)
 {
-    text_zeilenweise tz;
-    tz.set_text(t);
-    for(uint i=1;i<=tz.zeilenanzahl();i++)
+    text_zw tz;
+    tz.set_text(t,'\n');
+    for(uint i=0;i<tz.count();i++)
     {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen('\t');
-        spalten.set_text(tz.zeile(i));
-        if(spalten.zeile(1) == "Bezugsmass_in_use:")
+        text_zw spalten;
+        spalten.set_text(tz.at(i),'\t');
+        if(spalten.at(0) == "Bezugsmass_in_use:")
         {
-            use_bezugsmass(spalten.zeile(2));
+            use_bezugsmass(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Bezugskantenmass:")
+        if(spalten.at(0) == "Bezugskantenmass:")
         {
-            set_bezugskantenmass(spalten.zeile(2).toDouble());
+            set_bezugskantenmass(spalten.at(1).toDouble());
         }
     }
 }

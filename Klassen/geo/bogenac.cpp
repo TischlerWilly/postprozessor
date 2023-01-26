@@ -8,20 +8,19 @@ bogenac::bogenac()
 //---------------------------------set:
 void bogenac::set_text(QString geotext)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRZ_PA_);
-    tz.set_text(geotext);
+    text_zw tz;
+    tz.set_text(geotext,TRZ_PA_);
     punkt3d p;
-    p.set_x(tz.zeile(2).toDouble());
-    p.set_y(tz.zeile(3).toDouble());
-    p.set_z(tz.zeile(4).toDouble());
+    p.set_x(tz.at(1).toDouble());
+    p.set_y(tz.at(2).toDouble());
+    p.set_z(tz.at(3).toDouble());
     set_mipu(p);
-    set_rad(tz.zeile(5).toDouble());
-    set_swi(tz.zeile(6).toDouble());
-    set_ewi(tz.zeile(7).toDouble());
-    set_farbe(tz.zeile(8));
-    set_linienbreite(tz.zeile(9).toInt());
-    set_stil(tz.zeile(10));
+    set_rad(tz.at(4).toDouble());
+    set_swi(tz.at(5).toDouble());
+    set_ewi(tz.at(6).toDouble());
+    set_farbe(tz.at(7));
+    set_linienbreite(tz.at(8).toInt());
+    set_stil(tz.at(9));
 }
 void bogenac::set_mipu(punkt3d p)
 {

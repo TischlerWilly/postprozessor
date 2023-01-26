@@ -3,7 +3,7 @@
 
 #include <QString>
 
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Klassen/geo/punkt3d.h"
 #include "Funktionen/umwandeln.h"
 #include "Defines/def_bearbeitungen.h"

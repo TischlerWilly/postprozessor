@@ -25,7 +25,7 @@ void Dialog_ExportUebersicht::resizeEvent(QResizeEvent *event)
     ui->tableWidget_exporte->setFixedHeight(this->height()-10);
 }
 
-void Dialog_ExportUebersicht::slot_wstnamen(text_zeilenweise namen)
+void Dialog_ExportUebersicht::slot_wstnamen(text_zw namen)
 {
     int anz_spalten = 5;
     spalte_namen    = 0;
@@ -34,7 +34,7 @@ void Dialog_ExportUebersicht::slot_wstnamen(text_zeilenweise namen)
     spalte_ggf      = 3;
     spalte_eigen    = 4;
     ui->tableWidget_exporte->clear();
-    ui->tableWidget_exporte->setRowCount(namen.zeilenanzahl());
+    ui->tableWidget_exporte->setRowCount(namen.count());
     ui->tableWidget_exporte->setColumnCount(anz_spalten);
     QStringList tabkopf;
     tabkopf << "Name" << "fmc" << "ganx" << "ggf" << "eigen";
@@ -44,13 +44,13 @@ void Dialog_ExportUebersicht::slot_wstnamen(text_zeilenweise namen)
     ui->tableWidget_exporte->setColumnWidth(2,40);
     ui->tableWidget_exporte->setColumnWidth(3,40);
     ui->tableWidget_exporte->setColumnWidth(4,40);
-    for(uint i=1; i<=namen.zeilenanzahl() ;i++)
+    for(uint i=0; i<namen.count() ;i++)
     {
         for(int ii=0; ii<anz_spalten;ii++)
         {
             if(ii==0)
             {
-                ui->tableWidget_exporte->setItem(i-1,ii, new QTableWidgetItem(namen.zeile(i)));
+                ui->tableWidget_exporte->setItem(i-1,ii, new QTableWidgetItem(namen.at(i)));
             }else
             {
                 ui->tableWidget_exporte->setItem(i-1,ii, new QTableWidgetItem("-"));

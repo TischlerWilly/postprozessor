@@ -11,7 +11,7 @@ wkz_magazin::wkz_magazin(text_zw neues_magazin)
 //----------------------------------set:
 void wkz_magazin::set_text(QString werkzeuge)
 {
-    Magazin.set_text(werkzeuge);
+    Magazin.set_text(werkzeuge,'\n');
 }
 void wkz_magazin::set_text(text_zw werkzeuge)
 {

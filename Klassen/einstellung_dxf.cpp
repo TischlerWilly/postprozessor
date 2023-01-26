@@ -15,52 +15,51 @@ einstellung_dxf::einstellung_dxf()
 }
 void einstellung_dxf::set_text(QString t)
 {
-    text_zeilenweise tz;
-    tz.set_text(t);
-    for(uint i=1;i<=tz.zeilenanzahl();i++)
+    text_zw tz;
+    tz.set_text(t,'\n');
+    for(uint i=0;i<tz.count();i++)
     {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen('\t');
-        spalten.set_text(tz.zeile(i));
-        if(spalten.zeile(1) == "Parametertrenner:")
+        text_zw spalten;
+        spalten.set_text(tz.at(i),'\t');
+        if(spalten.at(0) == "Parametertrenner:")
         {
-            set_paramtren(spalten.zeile(2));
+            set_paramtren(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Dezimaltrenner:")
+        if(spalten.at(0) == "Dezimaltrenner:")
         {
-            set_dezitren(spalten.zeile(2));
+            set_dezitren(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Kennung Oberseite:")
+        if(spalten.at(0) == "Kennung Oberseite:")
         {
-            set_kenObsei(spalten.zeile(2));
+            set_kenObsei(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Kennung Unterseite:")
+        if(spalten.at(0) == "Kennung Unterseite:")
         {
-            set_kenUnsei(spalten.zeile(2));
+            set_kenUnsei(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Drehtyp Unterseite:")
+        if(spalten.at(0) == "Drehtyp Unterseite:")
         {
-            set_dretypUnsei(spalten.zeile(2));
+            set_dretypUnsei(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Kennung Werkzeugnummer:")
+        if(spalten.at(0) == "Kennung Werkzeugnummer:")
         {
-            set_kenWKZnr(spalten.zeile(2));
+            set_kenWKZnr(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Kennung Radiuskorrektur li:")
+        if(spalten.at(0) == "Kennung Radiuskorrektur li:")
         {
-            set_kenRadKorLi(spalten.zeile(2));
+            set_kenRadKorLi(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Kennung Radiuskorrektur mi:")
+        if(spalten.at(0) == "Kennung Radiuskorrektur mi:")
         {
-            set_kenRadKorMi(spalten.zeile(2));
+            set_kenRadKorMi(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Kennung Radiuskorrektur re:")
+        if(spalten.at(0) == "Kennung Radiuskorrektur re:")
         {
-            set_kenRadKorRe(spalten.zeile(2));
+            set_kenRadKorRe(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Tiefenangabe Fraeskontur:")
+        if(spalten.at(0) == "Tiefenangabe Fraeskontur:")
         {
-            set_bezugTiFkon(spalten.zeile(2));
+            set_bezugTiFkon(spalten.at(1));
         }
     }
 }

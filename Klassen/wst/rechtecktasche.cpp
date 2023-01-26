@@ -278,24 +278,23 @@ QString rechtecktasche::text()
 }
 void rechtecktasche::set_text(QString text)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_RTA)
+    text_zw tz;
+    tz.set_text(text,TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_RTA)
     {
-        set_bezug(tz.zeile(2));
-        set_laenge(tz.zeile(3));
-        set_breite(tz.zeile(4));
-        set_tiefe(tz.zeile(5));
-        set_x(tz.zeile(6));
-        set_y(tz.zeile(7));
-        set_z(tz.zeile(8));
-        set_drewi(tz.zeile(9));
-        set_rad(tz.zeile(10));
-        set_ausraeumen(tz.zeile(11));
-        set_afb(tz.zeile(12));
-        set_zustellmass(tz.zeile(13));
-        set_wkznum(tz.zeile(14));
+        set_bezug(tz.at(1));
+        set_laenge(tz.at(2));
+        set_breite(tz.at(3));
+        set_tiefe(tz.at(4));
+        set_x(tz.at(5));
+        set_y(tz.at(6));
+        set_z(tz.at(7));
+        set_drewi(tz.at(8));
+        set_rad(tz.at(9));
+        set_ausraeumen(tz.at(10));
+        set_afb(tz.at(11));
+        set_zustellmass(tz.at(12));
+        set_wkznum(tz.at(13));
     }
 }
 

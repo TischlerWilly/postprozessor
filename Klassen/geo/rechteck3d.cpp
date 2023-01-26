@@ -17,23 +17,22 @@ rechteck3d::rechteck3d(QString geotext)
 //--------------------------------------------------set_xy:
 void rechteck3d::set_text(QString geotext)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRZ_PA_);
-    tz.set_text(geotext);
-    set_bezugspunkt(tz.zeile(2).toInt());
+    text_zw tz;
+    tz.set_text(geotext,TRZ_PA_);
+    set_bezugspunkt(tz.at(1).toInt());
     punkt3d p;
-    p.set_x(tz.zeile(3).toDouble());
-    p.set_y(tz.zeile(4).toDouble());
-    p.set_z(tz.zeile(5).toDouble());
+    p.set_x(tz.at(2).toDouble());
+    p.set_y(tz.at(3).toDouble());
+    p.set_z(tz.at(4).toDouble());
     set_einfuegepunkt(p);
-    set_laenge(tz.zeile(6).toDouble());
-    set_breite(tz.zeile(7).toDouble());
-    set_rad(tz.zeile(8).toDouble());
-    set_drewi(tz.zeile(9).toDouble());
-    set_farbe(tz.zeile(10));
-    set_farbe_fuellung(tz.zeile(11));
-    set_linienbreite(tz.zeile(12).toInt());
-    set_stil(tz.zeile(13));
+    set_laenge(tz.at(5).toDouble());
+    set_breite(tz.at(6).toDouble());
+    set_rad(tz.at(7).toDouble());
+    set_drewi(tz.at(8).toDouble());
+    set_farbe(tz.at(9));
+    set_farbe_fuellung(tz.at(10));
+    set_linienbreite(tz.at(11).toInt());
+    set_stil(tz.at(12));
 }
 void rechteck3d::set_mipu(double x, double y, double z=0)
 {

@@ -13,19 +13,18 @@ kreis::kreis(QString geotext)
 
 void kreis::set_text(QString geotext)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRZ_PA_);
-    tz.set_text(geotext);
+    text_zw tz;
+    tz.set_text(geotext,TRZ_PA_);
     punkt3d p;
-    p.set_x(tz.zeile(2).toDouble());
-    p.set_y(tz.zeile(3).toDouble());
-    p.set_z(tz.zeile(4).toDouble());
+    p.set_x(tz.at(1).toDouble());
+    p.set_y(tz.at(2).toDouble());
+    p.set_z(tz.at(3).toDouble());
     set_mittelpunkt(p);
-    set_radius(tz.zeile(5).toDouble());
-    set_farbe(tz.zeile(6));
-    set_farbe_fuellung(tz.zeile(7));
-    set_linienbreite(tz.zeile(8).toInt());
-    set_stil(tz.zeile(9));
+    set_radius(tz.at(4).toDouble());
+    set_farbe(tz.at(5));
+    set_farbe_fuellung(tz.at(6));
+    set_linienbreite(tz.at(7).toInt());
+    set_stil(tz.at(8));
 }
 
 void kreis::verschieben_um(double xversatz, double yversatz)

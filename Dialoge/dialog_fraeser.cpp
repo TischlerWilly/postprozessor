@@ -13,35 +13,6 @@ Dialog_fraeser::~Dialog_fraeser()
     delete ui;
 }
 
-void Dialog_fraeser::set_Data(text_zeilenweise msg)
-{
-    clear();
-    Wkz_ist_neu = false;
-    ui->lineEdit_nr->setText(msg.zeile(2));
-    ui->lineEdit_dm->setText(msg.zeile(3));
-    ui->lineEdit_nutzl->setText(msg.zeile(4));
-    ui->lineEdit_zustm->setText(msg.zeile(6));
-    ui->lineEdit_voers->setText(msg.zeile(5));
-    ui->lineEdit_alias->setText(msg.zeile(11));
-    ui->lineEdit_zust_min->setText(msg.zeile(12));
-    ui->lineEdit_spiegel->setText(msg.zeile(13));
-    QString tmp = msg.zeile(14);
-    if(tmp == "ja")
-    {
-        ui->checkBox_nur_direkt_zuweisbar->setChecked(true);
-    }else
-    {
-        ui->checkBox_nur_direkt_zuweisbar->setChecked(false);
-    }
-    if(msg.zeile(15) == "1")
-    {
-        ui->checkBox_ist_aktiv->setChecked(true);
-    }else
-    {
-        ui->checkBox_ist_aktiv->setChecked(false);
-    }
-    this->show();
-}
 void Dialog_fraeser::set_Data(text_zw msg, bool ist_neues_wkz)
 {
     clear();
@@ -91,46 +62,6 @@ void Dialog_fraeser::on_pushButton_abbrechen_clicked()
 void Dialog_fraeser::on_pushButton_ok_clicked()
 {
     this->hide();
-    //-------------------------------------------------------------alt:
-    text_zeilenweise wkz;
-    wkz.set_trennzeichen('\t');
-
-    wkz.zeile_anhaengen(WKZ_TYP_FRAESER);                       //1 : Werkzeigtyp
-    wkz.zeile_anhaengen(ui->lineEdit_nr->text());               //2 : Nummer
-    wkz.zeile_anhaengen(ui->lineEdit_dm->text());               //3 : Durchmesser des realen Werkzeuges
-    wkz.zeile_anhaengen(ui->lineEdit_nutzl->text());            //4 : Nutzlänge
-    wkz.zeile_anhaengen(ui->lineEdit_voers->text());            //5 : Vorschub
-    wkz.zeile_anhaengen(ui->lineEdit_zustm->text());            //6 : Zustellmaß
-    wkz.zeile_anhaengen(" ");                                   //7 : Durchmesser aus Import
-    wkz.zeile_anhaengen(" ");                                   //8 : ist Durchgangsbohrer
-    wkz.zeile_anhaengen(" ");                                   //9 : Sägeblattbreite
-    wkz.zeile_anhaengen(WKZ_PARAMETER_LAGE_VERT);               //10: Lage
-    wkz.zeile_anhaengen(ui->lineEdit_alias->text().toUpper());  //11: Alias-Name
-                          //Beim Einlesen der FMC-Datei werden alle kleinen Buchstaben durch große ersetzt
-    wkz.zeile_anhaengen(ui->lineEdit_zust_min->text());         //12: Mindest-Zustellmaß
-    wkz.zeile_anhaengen(ui->lineEdit_spiegel->text());          //13: Spiegelwerkzeug
-    if(ui->checkBox_nur_direkt_zuweisbar->isChecked())
-    {
-        wkz.zeile_anhaengen("ja");                              //14: nur_direkt_zuweisbar
-    }else
-    {
-        wkz.zeile_anhaengen("nein");                            //14: nur_direkt_zuweisbar
-    }
-    if(ui->checkBox_ist_aktiv->isChecked())
-    {
-        wkz.zeile_anhaengen("1");                           //15: ist aktiv
-    }else
-    {
-        wkz.zeile_anhaengen("0");                           //15: ist nicht aktiv
-    }
-
-    //deutsche Zahlen in englische Zahlen umwandeln:
-    for(uint i=3; i<=wkz.zeilenanzahl() ;i++)
-    {
-        wkz.zeile_ersaetzen(i, wkz.zeile(i).replace(",","."));
-    }
-    emit Data(wkz, Wkz_ist_neu);
-    //-------------------------------------------------------------neu:
     wkz_fraeser fraeser;
     fraeser.set_wkznr(ui->lineEdit_nr->text());
     fraeser.set_dm(berechnen(ui->lineEdit_dm->text()).toDouble());

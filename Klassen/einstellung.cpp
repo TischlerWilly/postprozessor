@@ -27,73 +27,72 @@ einstellung::einstellung()
 //----------------------------------------set:
 void einstellung::set_text(QString t)
 {
-    text_zeilenweise tz;
-    tz.set_text(t);
-    for(uint i=1; i<=tz.zeilenanzahl() ;i++)
+    text_zw tz;
+    tz.set_text(t,'\t');
+    for(uint i=0; i<tz.count() ;i++)
     {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen('\t');
-        spalten.set_text(tz.zeile(i));
-        if(spalten.zeile(1) == "Entwicklermodus:")
+        text_zw spalten;
+        spalten.set_text(tz.at(i),'\t');
+        if(spalten.at(0) == "Entwicklermodus:")
         {
-            set_entwicklermodus(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "verzeichnis_quelle:")
+            set_entwicklermodus(spalten.at(1));
+        }else if(spalten.at(0) == "verzeichnis_quelle:")
         {
-            set_verzeichnis_quelle(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "verzeichnis_ziel_server:")
+            set_verzeichnis_quelle(spalten.at(1));
+        }else if(spalten.at(0) == "verzeichnis_ziel_server:")
         {
-            set_verzeichnis_ziel_server(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "verzeichnis_ziel_lokal:")
+            set_verzeichnis_ziel_server(spalten.at(1));
+        }else if(spalten.at(0) == "verzeichnis_ziel_lokal:")
         {
-            set_verzeichnis_ziel_lokal(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "verzeichnis_root_ganx:")
+            set_verzeichnis_ziel_lokal(spalten.at(1));
+        }else if(spalten.at(0) == "verzeichnis_root_ganx:")
         {
-            set_verzeichnis_root_ganx(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "verzeichnis_root_fmc:")
+            set_verzeichnis_root_ganx(spalten.at(1));
+        }else if(spalten.at(0) == "verzeichnis_root_fmc:")
         {
-            set_verzeichnis_root_fmc(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "verzeichnis_zielABC:")
+            set_verzeichnis_root_fmc(spalten.at(1));
+        }else if(spalten.at(0) == "verzeichnis_zielABC:")
         {
-            set_verzeichnis_ziel_auswahl(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "quelldateien_erhalten:")
+            set_verzeichnis_ziel_auswahl(spalten.at(1));
+        }else if(spalten.at(0) == "quelldateien_erhalten:")
         {
-            set_quelldateien_erhalten(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "stdandard_dateinamen:")
+            set_quelldateien_erhalten(spalten.at(1));
+        }else if(spalten.at(0) == "stdandard_dateinamen:")
         {
-            set_std_dateinamen_verwenden(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "drehung_des_bauteils:")
+            set_std_dateinamen_verwenden(spalten.at(1));
+        }else if(spalten.at(0) == "drehung_des_bauteils:")
         {
-            set_drehung_wst(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "tiefenzustellung_fkon:")
+            set_drehung_wst(spalten.at(1));
+        }else if(spalten.at(0) == "tiefenzustellung_fkon:")
         {
-            set_tiefeneinstellung_fkon(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "kurze_geraden_import:")
+            set_tiefeneinstellung_fkon(spalten.at(1));
+        }else if(spalten.at(0) == "kurze_geraden_import:")
         {
-            set_kurze_geraden_importieren(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "geraden_schwellenwert:")
+            set_kurze_geraden_importieren(spalten.at(1));
+        }else if(spalten.at(0) == "geraden_schwellenwert:")
         {
-            set_geraden_schwellwert(spalten.zeile(2).toDouble());
-        }else if(spalten.zeile(1) == "formartierungen_aufbr:")
+            set_geraden_schwellwert(spalten.at(1).toDouble());
+        }else if(spalten.at(0) == "formartierungen_aufbr:")
         {
-            set_formartierungen_aufbrechen(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "fkon_kantenschonend:")
+            set_formartierungen_aufbrechen(spalten.at(1));
+        }else if(spalten.at(0) == "fkon_kantenschonend:")
         {
-            set_fkon_kantenschonend(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "zugabemass_gehrungen:")
+            set_fkon_kantenschonend(spalten.at(1));
+        }else if(spalten.at(0) == "zugabemass_gehrungen:")
         {
-            set_gehrungen_zugabe(spalten.zeile(2).toDouble());
-        }else if(spalten.zeile(1) == "export_ganx:")
+            set_gehrungen_zugabe(spalten.at(1).toDouble());
+        }else if(spalten.at(0) == "export_ganx:")
         {
-            set_export_ganx(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "export_fmc:")
+            set_export_ganx(spalten.at(1));
+        }else if(spalten.at(0) == "export_fmc:")
         {
-            set_export_fmc(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "export_ggf:")
+            set_export_fmc(spalten.at(1));
+        }else if(spalten.at(0) == "export_ggf:")
         {
-            set_export_ggf(spalten.zeile(2));
-        }else if(spalten.zeile(1) == "export_eigen:")
+            set_export_ggf(spalten.at(1));
+        }else if(spalten.at(0) == "export_eigen:")
         {
-            set_export_eigen(spalten.zeile(2));
+            set_export_eigen(spalten.at(1));
         }
     }
 }

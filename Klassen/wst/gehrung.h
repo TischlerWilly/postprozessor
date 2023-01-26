@@ -1,7 +1,7 @@
 #ifndef GEHRUNG_H
 #define GEHRUNG_H
 
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Defines/def_bearbeitungen.h"
 #include "Funktionen/umwandeln.h"
 #include "Klassen/geo/strecke.h"

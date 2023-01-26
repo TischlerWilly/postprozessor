@@ -2,7 +2,7 @@
 #define UNDO_REDO_TZ_H
 
 #include <vector>
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 
 
 template<typename T>

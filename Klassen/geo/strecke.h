@@ -8,7 +8,7 @@
 #include "punkt2d.h"
 #include "darstellungsatribute.h"
 #include "geofunktionen.h"
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "defines_geometrie.h"
 
 enum strecke_bezugspunkt{strecke_bezugspunkt_start, \

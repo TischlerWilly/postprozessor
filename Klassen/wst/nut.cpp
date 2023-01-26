@@ -210,21 +210,20 @@ QString nut::text()
 }
 void nut::set_text(QString text)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_NUT)
+    text_zw tz;
+    tz.set_text(text,TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_NUT)
     {
-        set_bezug(tz.zeile(2));
-        set_xs(tz.zeile(3));
-        set_ys(tz.zeile(4));
-        set_zs(tz.zeile(5));
-        set_xe(tz.zeile(6));
-        set_ye(tz.zeile(7));
-        set_ze(tz.zeile(8));
-        set_tiefe(tz.zeile(9));
-        set_breite(tz.zeile(10));
-        set_afb(tz.zeile(11));
+        set_bezug(tz.at(1));
+        set_xs(tz.at(2));
+        set_ys(tz.at(3));
+        set_zs(tz.at(4));
+        set_xe(tz.at(5));
+        set_ye(tz.at(6));
+        set_ze(tz.at(7));
+        set_tiefe(tz.at(8));
+        set_breite(tz.at(9));
+        set_afb(tz.at(10));
     }
 }
 

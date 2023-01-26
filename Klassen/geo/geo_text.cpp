@@ -209,7 +209,7 @@ text_zw geo_text::at(uint index)
         ret = Daten.at(index);
     }else
     {
-        ret.set_text("Fehler in Funktion geo_text::at(...)! Zeilennummer zu hoch.");
+        ret.set_text("Fehler in Funktion geo_text::at(...)! Zeilennummer zu hoch.",'\n');
     }
     return ret;
 }
