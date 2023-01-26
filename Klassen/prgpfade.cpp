@@ -74,7 +74,7 @@ QString prgpfade::path_user()
     QString tmp;
     tmp = QDir::homePath();
     tmp += QDir::separator();
-    tmp += ".postprozessor";
+    tmp += ".postprozessor_V4";
     return tmp;
 }
 QString prgpfade::path_inifile()
