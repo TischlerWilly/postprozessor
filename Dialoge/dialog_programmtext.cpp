@@ -29,63 +29,62 @@ void Dialog_programmtext::slot_wst(werkstueck* w)
     fenstertitel += w->name();
     this->setWindowTitle(fenstertitel);
     //Programmkopf als erste Zeile einfügen:
-    text_zeilenweise pkopf;
-    pkopf.set_trennzeichen(TRENNZ_BEARB_PARAM);
+    text_zw pkopf;
+    pkopf.set_trenz(TRENNZ_BEARB_PARAM);
     QString param;
     param  = "L=";
     param += double_to_qstring(w->zustand().l());
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param  = "B=";
     param += double_to_qstring(w->zustand().b());
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param  = "D=";
     param += w->dicke_qstring();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param  = "Drehung ";
     param += w->zustand().drehung();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param = w->zustand().format();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param = "KaVo=";
     param += w->zustand().kante_vo();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param = "KaHi=";
     param += w->zustand().kante_hi();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param = "KaLi=";
     param += w->zustand().kante_li();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param = "KaRe=";
     param += w->zustand().kante_re();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     ui->listWidget_prgtext->addItem(pkopf.text());
     //Bearbeitungen ab 2. Zeile einfügen:
-    text_zeilenweise tmp_bearb = w->zustand().bearb();
-    for(uint i=1; i<=tmp_bearb.zeilenanzahl() ;i++)
+    text_zw tmp_bearb = w->zustand().bearb();
+    for(uint i=0; i<tmp_bearb.count() ;i++)
     {
-        QString bearb = tmp_bearb.zeile(i);
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearb);
-        if(zeile.zeile(1) == BEARBART_BOHR)
+        QString bearb = tmp_bearb.at(i);
+        text_zw zeile;
+        zeile.set_text(bearb,TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
         {
             bearb = bohr_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+        }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
             bearb = bohrRaster_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_NUT)
+        }else if(zeile.at(0) == BEARBART_NUT)
         {
             bearb = nut_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_RTA)
+        }else if(zeile.at(0) == BEARBART_RTA)
         {
             bearb = rta_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             bearb = fauf_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+        }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             bearb = fgerade_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             bearb = fbogen_zu_prgeile(zeile.text());
         }

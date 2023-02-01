@@ -202,47 +202,46 @@ QString fraeserbogen::afb()
 
 QString fraeserbogen::text()
 {
-    QString msg = BEARBART_FRAESERBOGEN;     //Zeile 1
+    QString msg = BEARBART_FRAESERBOGEN;     //Zeile 0
     msg += TRENNZ_BEARB_PARAM_;
-    msg += bezug();                      //Zeile 2
+    msg += bezug();                      //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += xs_qstring();                 //Zeile 3
+    msg += xs_qstring();                 //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += ys_qstring();                 //Zeile 4
+    msg += ys_qstring();                 //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += zs_qstring();                 //Zeile 5
+    msg += zs_qstring();                 //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += xe_qstring();                 //Zeile 6
+    msg += xe_qstring();                 //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += ye_qstring();                 //Zeile 7
+    msg += ye_qstring();                 //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += ze_qstring();                 //Zeile 8
+    msg += ze_qstring();                 //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += rad_qstring();                //Zeile 9
+    msg += rad_qstring();                //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += uzs_qstring();                //Zeile 10
+    msg += uzs_qstring();                //Zeile 9
     msg += TRENNZ_BEARB_PARAM_;
-    msg += afb();                        //Zeile 11
+    msg += afb();                        //Zeile 10
 
     return msg;
 }
 void fraeserbogen::set_text(QString text)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_FRAESERBOGEN)
+    text_zw tz;
+    tz.set_text(text,TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_FRAESERBOGEN)
     {
-        set_bezug(tz.zeile(2));
-        set_xs(tz.zeile(3));
-        set_ys(tz.zeile(4));
-        set_zs(tz.zeile(5));
-        set_xe(tz.zeile(6));
-        set_ye(tz.zeile(7));
-        set_ze(tz.zeile(8));
-        set_rad(tz.zeile(9));
-        set_uzs(tz.zeile(10));
-        set_afb(tz.zeile(11));
+        set_bezug(tz.at(1));
+        set_xs(tz.at(2));
+        set_ys(tz.at(3));
+        set_zs(tz.at(4));
+        set_xe(tz.at(5));
+        set_ye(tz.at(6));
+        set_ze(tz.at(7));
+        set_rad(tz.at(8));
+        set_uzs(tz.at(9));
+        set_afb(tz.at(10));
     }
 }
 

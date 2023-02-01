@@ -139,8 +139,7 @@ private:
     double Laenge;  //X-Wert
     double Breite;  //Y-Wert
     double Dicke;   //Z-Wert
-    //text_zeilenweise Bearbeitungen; //alt
-    text_zw Bearb;                  //neu
+    text_zw Bearb;
     QString Name;
     QString Kante_vo; //Kante an X
     QString Kante_hi;

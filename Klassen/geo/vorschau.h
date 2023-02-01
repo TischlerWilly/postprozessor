@@ -58,7 +58,7 @@ private:
     float       Zf;   //Zoomfaktor
     werkstueck  W;
     uint        Aktuelle_zeilennummer;
-    text_zeilenweise Geotext;
+    text_zw     Geotext;
     int         Maus_pos_alt_x;
     int         Maus_pos_alt_y;
     uint        Zeile_von_maus_pos;//Zum Zwischenspeichern damit Ergebnis nicht verfälscht wird wenn Maus sich bewegt

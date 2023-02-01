@@ -2,6 +2,7 @@
 #define TEXT_TZ_H
 
 #include <QString>
+#include <vector>
 
 class text_zw
 {

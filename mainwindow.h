@@ -11,7 +11,6 @@
 
 #include "Klassen/prgpfade.h"
 #include "Defines/dateinamen.h"
-#include "Dialoge/dialog_wkz.h"
 #include "mainwin_wkzmagazin.h"
 #include "Dialoge/dialog_stdnamen.h"
 #include "Dialoge/dialog_einstellung_pfade.h"

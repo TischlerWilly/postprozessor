@@ -28,8 +28,8 @@ void Dialog_stdnamen::on_pushButton_neu_clicked()
     zeile  = vor;
     zeile += NAMEN_STD_INI_TZ_;
     zeile += nach;
-    vor_tz.zeile_anhaengen(vor);
-    nach_tz.zeile_anhaengen(nach);
+    vor_tz.add_hi(vor);
+    nach_tz.add_hi(nach);
     update_listwidget();
     ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
     emit signalEditNane(vor, nach);
@@ -39,8 +39,8 @@ void Dialog_stdnamen::on_pushButton_edit_clicked()
 {
     if(ui->listWidget->count() > 0)
     {
-        QString vor = vor_tz.zeile(ui->listWidget->currentRow()+2);
-        QString nach = nach_tz.zeile(ui->listWidget->currentRow()+2);
+        QString vor = vor_tz.at(ui->listWidget->currentRow()+1);
+        QString nach = nach_tz.at(ui->listWidget->currentRow()+1);
         emit signalEditNane(vor, nach);
     }
 }
@@ -49,8 +49,8 @@ void Dialog_stdnamen::on_pushButton_entf_clicked()
 {
     if(ui->listWidget->count() > 0)
     {
-        vor_tz.zeile_loeschen(ui->listWidget->currentRow()+2);
-        nach_tz.zeile_loeschen(ui->listWidget->currentRow()+2);
+        vor_tz.entf(ui->listWidget->currentRow()+1);
+        nach_tz.entf(ui->listWidget->currentRow()+1);
         update_listwidget();
     }
 }
@@ -68,7 +68,7 @@ void Dialog_stdnamen::on_pushButton_abbrechen_clicked()
 
 //--------------------------------------------------------------
 
-void Dialog_stdnamen::slot_setup(text_zeilenweise namen_vor, text_zeilenweise namen_nach)
+void Dialog_stdnamen::slot_setup(text_zw namen_vor, text_zw namen_nach)
 {
     vor_tz = namen_vor;
     nach_tz = namen_nach;
@@ -95,8 +95,8 @@ void Dialog_stdnamen::slot_getName(QString vor, QString nach)
     }else
     {
         int row = ui->listWidget->currentRow();
-        vor_tz.zeile_ersaetzen(row+2, vor);
-        nach_tz.zeile_ersaetzen(row+2, nach);
+        vor_tz.edit(row+1, vor);
+        nach_tz.edit(row+1, nach);
         update_listwidget();
         ui->listWidget->setCurrentRow(row);
     }
@@ -106,12 +106,12 @@ void Dialog_stdnamen::slot_getName(QString vor, QString nach)
 void Dialog_stdnamen::update_listwidget()
 {
     ui->listWidget->clear();
-    for(uint i=2; i<=vor_tz.zeilenanzahl() ;i++)//Ab zeile 2 weil zeile 1 der Tabellenkopf aus der Datei ist
+    for(uint i=1; i<vor_tz.count() ;i++)//Ab zeile 2 weil zeile 1 der Tabellenkopf aus der Datei ist
     {
         QString zeile;
-        zeile  = vor_tz.zeile(i);
+        zeile  = vor_tz.at(i);
         zeile += NAMEN_STD_INI_TZ_;
-        zeile += nach_tz.zeile(i);
+        zeile += nach_tz.at(i);
         ui->listWidget->addItem(zeile);
     }
     if(ui->listWidget->count() > 0)

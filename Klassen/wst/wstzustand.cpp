@@ -3615,7 +3615,7 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
                     {
                         //Die Teile aus der Bearbeitung löschen die Deckungsgleich auf der WST-Kante liegen
                         text_zw bearb_neu;
-                        bearb_neu.set_text(fa.text());
+                        bearb_neu.set_text(fa.text(), TRENNZ_BEARB_PARAM);
 
                         for(uint ii=zeibeg+1; ii<=zeiend ;ii++)
                         {
@@ -6809,7 +6809,7 @@ void wstzustand::fmc_dateitext(int index)
                         //Fräsbahnen:
                         while(i+1<bearb.count())
                         {
-                            zeile.set_text(bearb.count()i+1));
+                            zeile.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
 
                             if(zeile.at(0) == BEARBART_FRAESERGERADE)
                             {

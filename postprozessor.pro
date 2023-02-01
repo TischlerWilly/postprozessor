@@ -63,7 +63,6 @@ SOURCES += main.cpp\
     Klassen/wst/rechtecktasche.cpp \
     Klassen/wst/nut.cpp \
     Klassen/prgpfade.cpp \
-    Dialoge/dialog_wkz.cpp \
     Dialoge/dialog_bohrer.cpp \
     Dialoge/dialog_fraeser.cpp \
     Dialoge/dialog_saege.cpp \
@@ -139,7 +138,6 @@ HEADERS  += mainwindow.h \
     Klassen/wst/nut.h \
     Defines//def_ganx.h \
     Klassen/prgpfade.h \
-    Dialoge/dialog_wkz.h \
     Dialoge/dialog_bohrer.h \
     Dialoge/dialog_fraeser.h \
     Dialoge/dialog_saege.h \
@@ -175,7 +173,6 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_einstellung_pfade.ui \
     Dialoge/dialog_exportuebersicht.ui \
     Dialoge/dialog_programmtext.ui \
-    Dialoge/dialog_wkz.ui \
     Dialoge/dialog_bohrer.ui \
     Dialoge/dialog_fraeser.ui \
     Dialoge/dialog_saege.ui \

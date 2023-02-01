@@ -184,7 +184,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         {
             if(i==1)
             {
-                bearb_neu.set_text(verschiebe_einen(bearb_alt.at(i), 0, 0, 0));
+                bearb_neu.set_text(verschiebe_einen(bearb_alt.at(i), 0, 0, 0), TRENNZ_BEARB_PARAM);
                 //0,0,0 verschiebt die bearb auf die Wst-kanten
             }else
             {

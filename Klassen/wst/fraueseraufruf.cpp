@@ -137,41 +137,40 @@ punkt3d fraueseraufruf::pos_vertikal()
 
 QString fraueseraufruf::text()
 {
-    QString msg = BEARBART_FRAESERAUFRUF;    //Zeile 1
+    QString msg = BEARBART_FRAESERAUFRUF;    //Zeile 0
     msg += TRENNZ_BEARB_PARAM_;
-    msg += bezug();                      //Zeile 2
+    msg += bezug();                      //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += x_qstring();                  //Zeile 3
+    msg += x_qstring();                  //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += y_qstring();                  //Zeile 4
+    msg += y_qstring();                  //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += z_qstring();                  //Zeile 5
+    msg += z_qstring();                  //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += tiefe_qstring();              //Zeile 6
+    msg += tiefe_qstring();              //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += radkor();                     //Zeile 7
+    msg += radkor();                     //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += wkznum();                     //Zeile 8
+    msg += wkznum();                     //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += afb();                        //Zeile 9
+    msg += afb();                        //Zeile 8
 
     return msg;
 }
 void fraueseraufruf::set_text(QString text)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_FRAESERAUFRUF)
+    text_zw tz;
+    tz.set_text(text, TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_FRAESERAUFRUF)
     {
-        set_bezug(tz.zeile(2));
-        set_x(tz.zeile(3));
-        set_y(tz.zeile(4));
-        set_z(tz.zeile(5));
-        set_tiefe(tz.zeile(6));
-        set_radkor(tz.zeile(7));
-        set_wkznum(tz.zeile(8));
-        set_afb(tz.zeile(9));
+        set_bezug(tz.at(1));
+        set_x(tz.at(2));
+        set_y(tz.at(3));
+        set_z(tz.at(4));
+        set_tiefe(tz.at(5));
+        set_radkor(tz.at(6));
+        set_wkznum(tz.at(7));
+        set_afb(tz.at(8));
     }
 }
 

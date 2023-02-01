@@ -21,7 +21,7 @@ public:
     ~Dialog_stdnamen();
 
 public slots:
-    void slot_setup(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
+    void slot_setup(text_zw namen_vor, text_zw namen_nach);
     void slot_getName(QString vor, QString nach);
 
 private slots:
@@ -33,12 +33,12 @@ private slots:
 
 signals:
     void signalEditNane(QString vor, QString nach);
-    void signal_sendData(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
+    void signal_sendData(text_zw namen_vor, text_zw namen_nach);
 
 private:
     Ui::Dialog_stdnamen *ui;
-    text_zeilenweise vor_tz;
-    text_zeilenweise nach_tz;
+    text_zw vor_tz;
+    text_zw nach_tz;
 
     Dialog_stdname dlg_name;
 

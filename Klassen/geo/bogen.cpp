@@ -65,20 +65,19 @@ bogen::bogen(punkt3d mipu, double rad, double startwinkel, double endwinkel)
 
 void bogen::set_text(QString geotext)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRZ_PA_);
-    tz.set_text(geotext);
+    text_zw tz;
+    tz.set_text(geotext,TRZ_PA_);
     punkt3d start;
-    start.set_x(tz.zeile(2).toDouble());
-    start.set_y(tz.zeile(3).toDouble());
-    start.set_z(tz.zeile(4).toDouble());
+    start.set_x(tz.at(1).toDouble());
+    start.set_y(tz.at(2).toDouble());
+    start.set_z(tz.at(3).toDouble());
     punkt3d ende;
-    ende.set_x(tz.zeile(5).toDouble());
-    ende.set_y(tz.zeile(6).toDouble());
-    ende.set_z(tz.zeile(7).toDouble());
-    float rad =tz.zeile(8).toFloat();
+    ende.set_x(tz.at(4).toDouble());
+    ende.set_y(tz.at(5).toDouble());
+    ende.set_z(tz.at(6).toDouble());
+    float rad =tz.at(7).toFloat();
     bool uzs;
-    if(tz.zeile(9).contains("ja"))
+    if(tz.at(8).contains("ja"))
     {
         uzs = true;
     }else
@@ -88,9 +87,9 @@ void bogen::set_text(QString geotext)
     set_startpunkt(start);
     set_endpunkt(ende);
     set_radius(rad, uzs);
-    set_farbe(tz.zeile(12));
-    set_linienbreite(tz.zeile(13).toInt());
-    set_stil(tz.zeile(14));
+    set_farbe(tz.at(11));
+    set_linienbreite(tz.at(12).toInt());
+    set_stil(tz.at(13));
 }
 
 void bogen::set_startpunkt(punkt3d startpunkt)

@@ -26,12 +26,10 @@ private:
     bool Wkz_ist_neu;
 
 public slots:
-    void set_Data(text_zeilenweise msg);
     void set_Data(text_zw msg, bool ist_neues_wkz = false);
     void neueSaege();
 
 signals:
-    void Data(text_zeilenweise wkz, bool ist_neues_wkz);
     void Data(text_zw wkz, bool ist_neues_wkz);
 
 private slots:

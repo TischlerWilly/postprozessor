@@ -3031,7 +3031,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                     //wenn bereits die Bearbeitung auf der Oberseite importiert wurde
     }
     text_zw tz;
-    tz.set_text(importtext);
+    tz.set_text(importtext,'\n');
 
     werkstueck w = Wste.at(Index-1);
 
@@ -5556,8 +5556,8 @@ QString werkstuecke::dxf_wert(QString namen, QString werte, QString gesucht)
 {
     text_zw tz_name;
     text_zw tz_wert;
-    tz_name.set_text(namen);
-    tz_wert.set_text(werte);
+    tz_name.set_text(namen,'\n');
+    tz_wert.set_text(werte,'\n');
     QString ret;
     for(uint i=0; i<tz_name.count() ;i++)
     {
@@ -5643,7 +5643,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         Index = index(Werkstueckname);
     }
     text_zw tz, tz_name, tz_wert;
-    tz.set_text(importtext);
+    tz.set_text(importtext,'\n');
     werkstueck w = Wste.at(Index-1);
 
     //tz_name und tz_wert mit Daten füllen:
@@ -5706,7 +5706,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 QString start = int_to_qstring(i_start);
                 QString ende = int_to_qstring(i);
                 QString tren = "|";
-                block.set_text(start+tren+ende);
+                block.set_text(start+tren+ende,'\n');
                 break;
             }
         }
@@ -5837,7 +5837,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         geo.add_strecke(s);
                     }else
                     {
-                        strecke s2 = geo.text_zwei().zeile(1);
+                        strecke s2 = geo.text_zwei().at(0);
                         geo.clear();
                         bohrung bo;
                         bo.set_afb("1");
@@ -5943,12 +5943,12 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 if(typ == DXF_AC1009_STRECKE)
                 {
                     strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
-                    text_zeilenweise geotz = geo.text_zwei();
-                    geotz.set_trennzeichen(';');
+                    text_zw geotz = geo.text_zwei();
+                    //Trennzeichen = ';'
                     geo.add_strecke(s);
-                    if(geotz.zeilenanzahl() == 2)
+                    if(geotz.count() == 2)
                     {
-                        strecke s2 = geo.text_zwei().zeile(1);
+                        strecke s2 = geo.text_zwei().at(0);
                         if(s.laenge2d() == s2.laenge2d())//Nut ist durch 2 Linien Definiert
                         {
                             geo.clear();
@@ -5993,11 +5993,11 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             w.neue_bearbeitung(nu.text());
                             geo.clear();//Wichtig das es auch an dieser Stelle steht
                         }
-                    }else if(geotz.zeilenanzahl() == 4)
+                    }else if(geotz.count() == 4)
                     {
-                        strecke s1 = geotz.zeile(1);//von UL nach UR
-                        strecke s2 = geotz.zeile(2);//von UR nach OR
-                        strecke s3 = geotz.zeile(3);//von OR nach OL
+                        strecke s1 = geotz.at(0);//von UL nach UR
+                        strecke s2 = geotz.at(1);//von UR nach OR
+                        strecke s3 = geotz.at(2);//von OR nach OL
                         strecke s4 = s;//von OL nach UL
                         nut nu;
                         nu.set_afb("1");

@@ -29,7 +29,7 @@ QString ganx_Gruppen::gruppen()
 
     for(uint i=0; i<Gruppen.count() ;i++)
     {
-        Gruppenzeile.set_text(Gruppen.at(i));
+        Gruppenzeile.set_text(Gruppen.at(i),'\t');
 
         msg += "  <CycleGroups>";
         msg += "\n";

@@ -1350,17 +1350,15 @@ void MainWindow::on_actionEntwicklermodus_triggered(bool checked)
 }
 void MainWindow::on_actionWerkzeug_ganx_anzeigen_triggered()
 {
-    //emit sendDialogDataWKZ("Werkzeug GANX", wkz_magazin_ganx);//alt
-    dlg_wkzmag.set_wkzmag("Werkzeug GANX", wkz_mag_ganx);//neu
+    dlg_wkzmag.set_wkzmag("Werkzeug GANX", wkz_mag_ganx);
 }
 void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
 {
-    //emit sendDialogDataWKZ("Werkzeug FMC", wkz_magazin_fmc);//alt
-    dlg_wkzmag.set_wkzmag("Werkzeug FMC", wkz_mag_fmc);//neu
+    dlg_wkzmag.set_wkzmag("Werkzeug FMC", wkz_mag_fmc);
 }
 void MainWindow::on_actionWerkzeug_ggf_anzeigen_triggered()
 {
-    dlg_wkzmag.set_wkzmag("Werkzeug GGF", wkz_mag_ggf);//neu
+    dlg_wkzmag.set_wkzmag("Werkzeug GGF", wkz_mag_ggf);
 }
 void MainWindow::on_actionEinstellung_pfade_triggered()
 {

@@ -13,14 +13,13 @@ punkt3d::punkt3d(QString geotext)
 
 void punkt3d::set_text(QString geotext)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRZ_PA_);
-    tz.set_text(geotext);
-    set_x(tz.zeile(2).toDouble());
-    set_y(tz.zeile(3).toDouble());
-    set_z(tz.zeile(4).toDouble());
-    set_farbe(tz.zeile(5));
-    set_linienbreite(tz.zeile(6).toInt());
+    text_zw tz;
+    tz.set_text(geotext,TRZ_PA_);
+    set_x(tz.at(1).toDouble());
+    set_y(tz.at(2).toDouble());
+    set_z(tz.at(3).toDouble());
+    set_farbe(tz.at(4));
+    set_linienbreite(tz.at(5).toInt());
 }
 
 void punkt3d::verschieben_um(double xversatz, double yversatz)
