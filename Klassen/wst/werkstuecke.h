@@ -26,6 +26,7 @@ public:
     bool neu(QString Werkstueckname, QString Quellformat);
     bool import_fmc_oberseite(QString Werkstueckname, QString importtext);
     bool import_fmc_unterseite(QString Werkstueckname, QString importtext);
+    bool import_fmc(QString Werkstueckname, QString importtext, bool istOberseite);
     bool import_dxf(QString Werkstueckname, QString importtext, bool istOberseite);
     void set_fkon_gerade_laenge(double wert);
     void set_kurze_geraden_importieren(bool wert);
@@ -85,7 +86,7 @@ private:
     //--------------------------------------------------set_xy:
 
     //--------------------------------------------------get_xy:
-    uint    index(QString Werkstueckname);
+    int    index(QString Werkstueckname);
     QString wert_nach_istgleich(QString text);
     bool    ist_ziffer(const QChar zeichen);
     QString dxf_wert(QString namen, QString werte, QString gesucht);

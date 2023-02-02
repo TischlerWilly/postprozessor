@@ -6,6 +6,7 @@ prgpfade::prgpfade()
     StdNamen            = "namen_std.ini";
     ini_ganx            = "ganx.ini";
     ini_dxf             = "dxf.ini";
+    ini_fmc             = "fmc.ini";
     ini_dxf_klassen     = "dxf_klassen.ini";
     Wkz_fmc             = "wkz_magazin_fmc.csv";
     Wkz_ganx            = "wkz_magazin_ganx.csv";
@@ -38,6 +39,10 @@ QString prgpfade::name_stdNamen()
 QString prgpfade::name_ini_ganx()
 {
     return ini_ganx;
+}
+QString prgpfade::name_ini_fmc()
+{
+    return ini_fmc;
 }
 QString prgpfade::name_ini_dxf()
 {
@@ -99,6 +104,14 @@ QString prgpfade::path_ini_ganx()
     tmp = path_user();
     tmp += QDir::separator();
     tmp += ini_ganx;
+    return tmp;
+}
+QString prgpfade::path_ini_fmc()
+{
+    QString tmp;
+    tmp = path_user();
+    tmp += QDir::separator();
+    tmp += ini_fmc;
     return tmp;
 }
 QString prgpfade::path_ini_dxf()

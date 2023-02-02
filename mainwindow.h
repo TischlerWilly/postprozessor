@@ -15,6 +15,7 @@
 #include "Dialoge/dialog_stdnamen.h"
 #include "Dialoge/dialog_einstellung_pfade.h"
 #include "Dialoge/dialog_einstellung_ganx.h"
+#include "Dialoge/dialog_einstellung_fmc.h"
 #include "Dialoge/dialog_einstellung_dxf.h"
 #include "Dialoge/dialog_einstellung_dxf_klassen.h"
 #include "Dialoge/dialog_programmtext.h"
@@ -89,6 +90,7 @@ private slots:
     void on_listWidget_wste_itemClicked(QListWidgetItem *item);
     void on_actionEntwicklermodus_triggered(bool checked);
     void on_actionTestfunktion_triggered();
+    void on_actionEinstellung_fmc_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -106,6 +108,7 @@ private:
     einstellung Einstellung;
     einstellung_ganx Einstellung_ganx;
     einstellung_dxf Einstellung_dxf;
+    einstellung_fmc Einstellung_fmc;
     einstellung_dxf_klassen Einstellung_dxf_klassen;
     vorschau vorschaufenster;
     QString Projektposition;
@@ -131,6 +134,7 @@ private:
     Dialog_stdnamen dlg_stdnamen;
     Dialog_Einstellung_pfade dlg_Einstellung_pfade;
     Dialog_einstellung_ganx dlg_einstellung_ganx;
+    Dialog_einstellung_fmc dlg_einstellung_fmc;
     Dialog_einstellung_dxf dlg_einstellung_dxf;
     Dialog_einstellung_dxf_klassen dlg_einstellung_dxf_klassen;
     Dialog_programmtext dlg_prgtext;
@@ -142,6 +146,7 @@ signals:
     void sendStdNamen(text_zw namen_vor, text_zw namen_nach);
     void sendEinstellungPfade(einstellung e);
     void sendEinstellungGANX(einstellung_ganx e);
+    void sendEinstellungFMC(einstellung_fmc e);
     void sendEinstellungDxf(einstellung_dxf e);
     void sendEinstellungDxfKlassen(einstellung_dxf eg, einstellung_dxf_klassen ek);
     void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
@@ -155,6 +160,7 @@ public slots:
     void getDialogDataWKZ(QString fenstertitel, wkz_magazin werkzeugmagazin);
     void getStdNamen(text_zw namen_vor, text_zw namen_nach);
     void getEinstellungGANX(einstellung_ganx e);
+    void getEinstellungFMC(einstellung_fmc e);
     void getEinstellungDxf(einstellung_dxf e);
     void getEinstellungDxfKlassen(einstellung_dxf_klassen e);
     void getEinstellung(einstellung e);

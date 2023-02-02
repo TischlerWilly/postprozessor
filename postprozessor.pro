@@ -23,6 +23,7 @@ SOURCES += main.cpp\
     Dialoge/dialog_bearb_verschieben.cpp \
     Dialoge/dialog_einstellung_dxf.cpp \
     Dialoge/dialog_einstellung_dxf_klassen.cpp \
+    Dialoge/dialog_einstellung_fmc.cpp \
     Dialoge/dialog_einstellung_ganx.cpp \
     Dialoge/dialog_einstellung_pfade.cpp \
     Dialoge/dialog_exportuebersicht.cpp \
@@ -46,6 +47,7 @@ SOURCES += main.cpp\
     Klassen/wkz/wkz_fraeser.cpp \
     Klassen/wkz/wkz_magazin.cpp \
     Klassen/wkz/wkz_saege.cpp \
+    Klassen/einstellung_fmc.cpp \
     Klassen/wst/gehrung.cpp \
     Klassen/wst/wstzustand.cpp \
     mainwin_wkzmagazin.cpp \
@@ -92,6 +94,7 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_bearb_verschieben.h \
     Dialoge/dialog_einstellung_dxf.h \
     Dialoge/dialog_einstellung_dxf_klassen.h \
+    Dialoge/dialog_einstellung_fmc.h \
     Dialoge/dialog_einstellung_ganx.h \
     Dialoge/dialog_einstellung_pfade.h \
     Dialoge/dialog_exportuebersicht.h \
@@ -123,6 +126,7 @@ HEADERS  += mainwindow.h \
     Klassen/wkz/wkz_fraeser.h \
     Klassen/wkz/wkz_magazin.h \
     Klassen/wkz/wkz_saege.h \
+    Klassen/einstellung_fmc.h \
     Klassen/wst/gehrung.h \
     Klassen/wst/wstzustand.h \
     Struncts/punkt.h \
@@ -169,6 +173,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_bearb_verschieben.ui \
     Dialoge/dialog_einstellung_dxf.ui \
     Dialoge/dialog_einstellung_dxf_klassen.ui \
+    Dialoge/dialog_einstellung_fmc.ui \
     Dialoge/dialog_einstellung_ganx.ui \
     Dialoge/dialog_einstellung_pfade.ui \
     Dialoge/dialog_exportuebersicht.ui \

@@ -27,7 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(sendEinstellungGANX(einstellung_ganx)),\
             &dlg_einstellung_ganx, SLOT(slot_einstellung(einstellung_ganx)));
     connect(&dlg_einstellung_ganx, SIGNAL(send_einstellung(einstellung_ganx)),\
-            this, SLOT(getEinstellungGANX(einstellung_ganx )));
+            this, SLOT(getEinstellungGANX(einstellung_ganx )));    
+    connect(this, SIGNAL(sendEinstellungFMC(einstellung_fmc)),\
+            &dlg_einstellung_fmc, SLOT(slot_einstellung(einstellung_fmc)));
+    connect(&dlg_einstellung_fmc, SIGNAL(send_einstellung(einstellung_fmc)),\
+            this, SLOT(getEinstellungFMC(einstellung_fmc )));
     connect(this, SIGNAL(sendEinstellungDxf(einstellung_dxf)),\
             &dlg_einstellung_dxf, SLOT(slot_einstellung(einstellung_dxf)));
     connect(&dlg_einstellung_dxf, SIGNAL(send_einstellung(einstellung_dxf)),\
@@ -80,6 +84,7 @@ void MainWindow::setup()
     bool wkz_ggf_gefunden           = false;    //user-Ordner
     bool namen_std_gefunden         = false;    //user-Ordner
     bool ini_ganx_gefunden          = false;    //user-Ordner
+    bool ini_fmc_gefunden           = false;    //user-Ordner
     bool ini_dxf_gefunden           = false;    //user-Ordner
     bool ini_dxf_klassen_gefunden   = false;    //user-Ordner
     QDir user_ordner(pf.path_user());
@@ -111,6 +116,10 @@ void MainWindow::setup()
         if(name.contains(pf.name_ini_ganx()))
         {
             ini_ganx_gefunden = true;
+        }
+        if(name.contains(pf.name_ini_fmc()))
+        {
+            ini_fmc_gefunden = true;
         }
         if(name.contains(pf.name_ini_dxf()))
         {
@@ -256,6 +265,38 @@ void MainWindow::setup()
         }else
         {
             Einstellung_ganx.set_text(file.readAll());
+        }
+        file.close();
+    }
+
+    if(ini_fmc_gefunden == false)
+    {
+        QFile file(pf.path_ini_fmc());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_ini_fmc();
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            file.write(Einstellung_fmc.text().toLatin1());
+        }
+        file.close();
+    }else
+    {
+        QFile file(pf.path_ini_fmc());
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_ini_fmc();
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            Einstellung_fmc.set_text(file.readAll());
         }
         file.close();
     }
@@ -639,6 +680,24 @@ void MainWindow::getEinstellungGANX(einstellung_ganx e)
     }else
     {
         file.write(Einstellung_ganx.text().toLatin1());
+    }
+    file.close();
+}
+void MainWindow::getEinstellungFMC(einstellung_fmc e)
+{
+    Einstellung_fmc = e;
+
+    QFile file(pf.path_ini_fmc());
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QString tmp = "Fehler beim Dateizugriff!\n";
+        tmp += pf.path_ini_fmc();
+        tmp += "\n";
+        tmp += "in der Funktion getEinstellungDxf";
+        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+    }else
+    {
+        file.write(Einstellung_fmc.text().toLatin1());
     }
     file.close();
 }
@@ -1372,6 +1431,10 @@ void MainWindow::on_actionEinstellung_ganx_triggered()
 {
     emit sendEinstellungGANX(Einstellung_ganx);
 }
+void MainWindow::on_actionEinstellung_fmc_triggered()
+{
+    emit sendEinstellungFMC(Einstellung_fmc);
+}
 void MainWindow::on_actionEinstellung_dxf_triggered()
 {
     emit sendEinstellungDxf(Einstellung_dxf);
@@ -1445,12 +1508,13 @@ void MainWindow::on_pushButton_import_clicked()
 {
     import();
     werkstueck w;//leeres wst
-    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken
+    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken    
     ui->listWidget_wste->clear();
-    for(uint i=1; i<=wste.anzahl() ;i++)
+
+    for(uint i=0; i<wste.anzahl() ;i++)
     {
         ui->listWidget_wste->addItem(wste.wst(i)->name());
-    }
+    }    
     signal_exporte(wste.namen_tz());
 }
 void MainWindow::on_pushButton_einzelexport_clicked()
@@ -1725,10 +1789,10 @@ void MainWindow::on_pushButton_umbenennen_clicked()
 }
 //-----------------------------------------------------------------------ListeWidgets:
 void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
-{
+{    
     if(ui->listWidget_wste->selectedItems().count())
     {
-        const int wstindex = currentRow+1;
+        const int wstindex = currentRow;
         if(ui->radioButton_vorschau_eigen->isChecked())
         {            
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -1834,158 +1898,45 @@ void MainWindow::import()
 
         if(dateien_alle.at(i).right(fmc.length()) == FMC  || \
            dateien_alle.at(i).right(fmc.length()) == FMC_     )
-        {
+        {            
             QString nam_ohn_end = dateien_alle.at(i).left(dateien_alle.at(i).length()-fmc.length());
+            QString kenOb = Einstellung_fmc.kenObsei();
+            QString kenUn = Einstellung_fmc.kenUnsei();
+            QString nam_ohn_pref;
+            bool ist_oberseite = true;
+            if(nam_ohn_end.right(kenOb.length()) == kenOb)
+            {
+                nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-kenOb.length());
+                ist_oberseite = true;
+            }else if(nam_ohn_end.right(kenUn.length()) == kenUn)
+            {
+                nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-kenUn.length());
+                ist_oberseite = false;
+            }else
+            {
+                nam_ohn_pref = nam_ohn_end;
+                ist_oberseite = true;
+            }
+            wste.neu(nam_ohn_pref, FMC);;//Wst wird nur angelegt wenn es nicht schon existiert
 
-            if(nam_ohn_end.right(fmcA.length()) == FMC_PRGA)
+            QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.at(i);
+            QFile datei(pfad);
+            if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
             {
-                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcA.length());
-                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
-                {
-                    //Bearbeitungen auf der Wst-Unterseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.at(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
-                {
-                    //Bearbeitungen auf der Wst-Obererseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.at(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }
-            }else if(nam_ohn_end.right(fmcB.length()) == FMC_PRGB)
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_start_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+            }else
             {
-                QString nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-fmcB.length());
-                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
+                QString inhalt = datei.readAll();
+                wste.import_fmc(nam_ohn_pref, inhalt, ist_oberseite);
+                datei.close();
+                if(Einstellung.quelldateien_erhalten() == false)
                 {
-                    //Bearbeitungen auf der Wst-Unterseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.at(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }else//Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
-                {
-                    //Bearbeitungen auf der Wst-Obererseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.at(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }
-            }else //Ober und Unterseite sind bereits in einem Programm zusammengeführt
-            {
-                //Import von händisch geschriebenen Programmen:
-                QString nam_ohn_pref = nam_ohn_end;
-                if(wste.neu(nam_ohn_pref, FMC))//Wenn es das Wst bereits gibt
-                {
-                    //Bearbeitungen auf der Wst-Unterseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.at(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_unterseite(nam_ohn_pref, inhalt);
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
-                }else //Das Wst gab es noch nicht, es ist jetzt jungfräulich angelegt
-                {
-                    //Bearbeitungen auf der Wst-Obererseite importieren
-                    QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.at(i);
-                    QFile datei(pfad);
-                    if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
-                    {
-                        QString tmp = "Fehler beim Dateizugriff!\n";
-                        tmp += pfad;
-                        tmp += "\n";
-                        tmp += "in der Funktion on_pushButton_start_clicked";
-                        QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
-                    }else
-                    {
-                        QString inhalt = datei.readAll();
-                        wste.import_fmc_oberseite(nam_ohn_pref, inhalt);
-                        datei.close();
-                        if(Einstellung.quelldateien_erhalten() == false)
-                        {
-                            QFile originaldatei(pfad);
-                            originaldatei.remove();
-                        }
-                    }
+                    QFile originaldatei(pfad);
+                    originaldatei.remove();
                 }
             }
         }else if(dateien_alle.at(i).right(fmc.length()) == DXF  || \
@@ -2033,12 +1984,14 @@ void MainWindow::import()
             }
         }
     }
+
     //Std-Wst-Namen:
     if(Einstellung.std_dateinamen_verwenden())
-    {
-        QString baugruppe = wste.stdnamen(namen_std_vor, namen_std_nach);
+    {        
+        QString baugruppe = wste.stdnamen(namen_std_vor, namen_std_nach);        
         ui->lineEdit_baugruppe->setText(baugruppe);
     }
+
     //wst-Sortieren:
     wste.sortieren();
 
@@ -2189,6 +2142,8 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
 
 
 

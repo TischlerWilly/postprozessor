@@ -63,8 +63,6 @@ void einstellung_dxf::set_text(QString t)
         }
     }
 }
-
-//-------------------------------------------set:
 QString einstellung_dxf::text()
 {
     QString text;
@@ -121,6 +119,7 @@ QString einstellung_dxf::text()
 
     return text;
 }
+//-------------------------------------------set:
 void einstellung_dxf::set_paramtren(QString parametertrennzeichen)
 {
     Paramtren = parametertrennzeichen;

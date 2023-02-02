@@ -15,7 +15,7 @@ class Dialog_einstellung_dxf : public QDialog
 public:
     explicit Dialog_einstellung_dxf(QWidget *parent = nullptr);
     ~Dialog_einstellung_dxf();
-        einstellung_dxf einstellung();
+    einstellung_dxf einstellung();
 
 signals:
     void send_einstellung(einstellung_dxf e);
@@ -29,7 +29,7 @@ private slots:
 
 private:
     Ui::Dialog_einstellung_dxf *ui;
-        einstellung_dxf Einstellung;
+    einstellung_dxf Einstellung;
 };
 
 #endif // DIALOG_EINSTELLUNG_DXF_H

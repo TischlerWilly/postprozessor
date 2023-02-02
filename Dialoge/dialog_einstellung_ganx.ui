@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Einstellungen ganx</string>
+   <string>Grundeinstellungen ganx</string>
   </property>
   <property name="modal">
    <bool>true</bool>

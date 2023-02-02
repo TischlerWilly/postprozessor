@@ -50,11 +50,11 @@ void Dialog_ExportUebersicht::slot_wstnamen(text_zw namen)
         {
             if(ii==0)
             {
-                ui->tableWidget_exporte->setItem(i-1,ii, new QTableWidgetItem(namen.at(i)));
+                ui->tableWidget_exporte->setItem(i,ii, new QTableWidgetItem(namen.at(i)));
             }else
             {
-                ui->tableWidget_exporte->setItem(i-1,ii, new QTableWidgetItem("-"));
-                ui->tableWidget_exporte->item(i-1,ii)->setTextAlignment(Qt::AlignCenter);
+                ui->tableWidget_exporte->setItem(i,ii, new QTableWidgetItem("-"));
+                ui->tableWidget_exporte->item(i,ii)->setTextAlignment(Qt::AlignCenter);
             }
         }
     }

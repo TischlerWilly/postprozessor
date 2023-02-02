@@ -5552,6 +5552,23 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
 
     return 0;
 }
+bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool istOberseite)
+{
+
+    int Index = index(Werkstueckname);
+    if(Index == -1)
+    {
+        neu(Werkstueckname, FMC);
+        Index = index(Werkstueckname);
+    }
+    werkstueck w = Wste.at(Index);
+
+    //...
+
+    Wste.replace(Index, w);
+    return 0;
+}
+
 QString werkstuecke::dxf_wert(QString namen, QString werte, QString gesucht)
 {
     text_zw tz_name;
@@ -5636,15 +5653,15 @@ bogenac werkstuecke::dxf_bogenac(QString namen, QString werte, QString dxf_versi
 }
 bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool istOberseite)
 {
-    uint Index = index(Werkstueckname);
-    if(Index == 0)
+    int Index = index(Werkstueckname);
+    if(Index == -1)
     {
         neu(Werkstueckname, DXF);
         Index = index(Werkstueckname);
     }
     text_zw tz, tz_name, tz_wert;
     tz.set_text(importtext,'\n');
-    werkstueck w = Wste.at(Index-1);
+    werkstueck w = Wste.at(Index);
 
     //tz_name und tz_wert mit Daten füllen:
     bool schalter = true;
@@ -6656,7 +6673,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         }
         geo.clear();
     }
-    Wste.replace(Index-1, w);
+    Wste.replace(Index, w);
     return 0;
 }
 
@@ -6689,9 +6706,9 @@ werkstueck* werkstuecke::wst(uint index)
 {
     //übergibt eine Kopie des Wst
     //Änderungen an dieser Kopie werden nicht zurück in diese Instanz geschrieben.
-    if(index > 0 && index < Namen.count())
+    if(index >= 0 && index < Namen.count())
     {
-        return &Wste[index-1];
+        return &Wste[index];
     }else
     {
         //werkstueck w;   //leeres Wst
@@ -6745,6 +6762,7 @@ QString werkstuecke::stdnamen(text_zw namen_alt, text_zw namen_neu)
             }
         }
     }
+
     //zweiter Durchlauf: Schranknummer löschen wenn möglich
     QString tmp = Namen.at(0);
     bool schranknummer_wurde_entfernt = false;//wird gebraucht als Prüfung für den 3. Durchlauf
@@ -6793,6 +6811,7 @@ QString werkstuecke::stdnamen(text_zw namen_alt, text_zw namen_neu)
 
         }
     }
+
     //dritter Durchlauf: Nummer hinter Teilenamen löschen wenn möglich
     text_zw bekannte_namen;
     if(schranknummer_wurde_entfernt)
@@ -6833,9 +6852,9 @@ QString werkstuecke::stdnamen(text_zw namen_alt, text_zw namen_neu)
     //Nameninformatione in den einzenen werkstücken aktualisieren:
     for(uint i=0; i<Namen.count() ;i++)
     {
-        werkstueck w = Wste.at(i-1);
+        werkstueck w = Wste.at(i);
         w.set_name(Namen.at(i));
-        Wste.replace(i-1, w);
+        Wste.replace(i, w);
     }
     return baugruppenname;
 }
@@ -6955,7 +6974,7 @@ void werkstuecke::sortieren()
                     //kopieren:
                     tmp_Namen.add_hi(akt_wst_name);
                     tmp_Quellformate.add_hi(Quellformate.at(ii));
-                    werkstueck w = Wste.at(ii-1);
+                    werkstueck w = Wste.at(ii);
                     w.set_name(akt_wst_name);
                     tmp_Wste.append(w);
                     kopiert.edit(ii, "ja");
@@ -6963,6 +6982,7 @@ void werkstuecke::sortieren()
             }
         }        
     }
+
     //2. Durchlauf. Jetzt kommen alle wst die nicht sortierbar waren:
     for(uint i = 0; i<Namen.count() ;i++)
     {
@@ -6972,7 +6992,7 @@ void werkstuecke::sortieren()
             //kopieren:
             tmp_Namen.add_hi(akt_wst_name);
             tmp_Quellformate.add_hi(Quellformate.at(i));
-            werkstueck w = Wste.at(i-1);
+            werkstueck w = Wste.at(i);
             w.set_name(akt_wst_name);
             tmp_Wste.append(w);
             kopiert.edit(i, "ja");
@@ -6982,15 +7002,7 @@ void werkstuecke::sortieren()
     Quellformate = tmp_Quellformate;
     Wste = tmp_Wste;
 }
-/*
-void werkstuecke::ersetzen(werkstueck w, uint index)
-{
-    if(index > 0 && index <= Namen.zeilenanzahl())
-    {
-        Wste.replace(index-1, w);
-    }
-}
-*/
+
 //--------------------------------------------------
 //#######################################################################
 //Private:
@@ -6998,7 +7010,7 @@ void werkstuecke::ersetzen(werkstueck w, uint index)
 //--------------------------------------------------set_xy:
 
 //--------------------------------------------------get_xy:
-uint werkstuecke::index(QString Werkstueckname)
+int werkstuecke::index(QString Werkstueckname)
 {
     for(uint i=0; i<Namen.count() ;i++)
     {
@@ -7007,7 +7019,7 @@ uint werkstuecke::index(QString Werkstueckname)
             return i;
         }
     }
-    return 0; //Wenn der Name nicht gefunden wurde
+    return -1; //Wenn der Name nicht gefunden wurde
 }
 QString werkstuecke::wert_nach_istgleich(QString text)
 {

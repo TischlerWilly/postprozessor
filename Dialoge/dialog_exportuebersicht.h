@@ -2,6 +2,7 @@
 #define DIALOG_EXPORTUEBERSICHT_H
 
 #include <QDialog>
+#include <QMessageBox>
 #include "Klassen/text_zw.h"
 #include "Funktionen/text.h"
 

@@ -741,6 +741,7 @@
     <addaction name="actionEntwicklermodus"/>
     <addaction name="actionEinstellung_pfade"/>
     <addaction name="actionStandard_Namen_anzeigen"/>
+    <addaction name="actionEinstellung_fmc"/>
     <addaction name="actionEinstellung_ganx"/>
     <addaction name="actionEinstellung_dxf"/>
     <addaction name="actionEinstellung_dxf_klassen"/>
@@ -776,7 +777,7 @@
   </action>
   <action name="actionEinstellung_ganx">
    <property name="text">
-    <string>ganx</string>
+    <string>GANX-Grundeinstellung</string>
    </property>
   </action>
   <action name="actionEinstellung_pfade">
@@ -829,6 +830,11 @@
   <action name="actionTestfunktion">
    <property name="text">
     <string>Testfunktion</string>
+   </property>
+  </action>
+  <action name="actionEinstellung_fmc">
+   <property name="text">
+    <string>FMC-Grundeinstellung</string>
    </property>
   </action>
  </widget>

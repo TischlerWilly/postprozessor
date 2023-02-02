@@ -28,7 +28,7 @@ einstellung::einstellung()
 void einstellung::set_text(QString t)
 {
     text_zw tz;
-    tz.set_text(t,'\t');
+    tz.set_text(t,'\n');
     for(uint i=0; i<tz.count() ;i++)
     {
         text_zw spalten;
