@@ -14,13 +14,13 @@
 
 
 QString bezug(QString b);
-QString rta_zu_prgeile(QString text);
-QString bohr_zu_prgeile(QString text);
-QString bohrRaster_zu_prgeile(QString text);
-QString nut_zu_prgeile(QString text);
-QString fauf_zu_prgeile(QString text);
-QString fgerade_zu_prgeile(QString text);
-QString fbogen_zu_prgeile(QString text);
+QString rta_zu_prgzei(QString text);
+QString bohr_zu_prgzei(QString text);
+QString bohrRaster_zu_prgzei(QString text);
+QString nut_zu_prgzei(QString text);
+QString fauf_zu_prgzei(QString text);
+QString fgerade_zu_prgzei(QString text);
+QString fbogen_zu_prgzei(QString text);
 
 #endif // FUNKTIONEN_PRGTEXT_H
 

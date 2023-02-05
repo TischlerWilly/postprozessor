@@ -1481,7 +1481,7 @@ void MainWindow::on_actionWST_bearbeiten_triggered()
 {
     if(ui->listWidget_wste->selectedItems().count())
     {
-        const int wstindex = ui->listWidget_wste->currentRow()+1;
+        const int wstindex = ui->listWidget_wste->currentRow();
         werkstueck *w = wste.wst(wstindex);
         dlg_wst_bearbeiten.setWindowTitle(w->name());
         dlg_wst_bearbeiten.set_wst(w);
@@ -1860,7 +1860,7 @@ void MainWindow::on_listWidget_wste_itemSelectionChanged()
 }
 void MainWindow::on_listWidget_wste_itemDoubleClicked()
 {
-    emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()+1));
+    emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()));
 }
 void MainWindow::on_listWidget_wste_itemClicked(QListWidgetItem *item)
 {
@@ -1884,6 +1884,7 @@ void MainWindow::import()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     wste.clear();
+    wste.set_einstellung_fmc(Einstellung_fmc);
     wste.set_einstellung_dxf(Einstellung_dxf);
     wste.set_einstellung_dxf_klassen(Einstellung_dxf_klassen);
     dateien_erfassen();

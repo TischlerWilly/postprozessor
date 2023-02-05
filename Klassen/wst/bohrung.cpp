@@ -160,25 +160,25 @@ QString bohrung::wkznum()
 
 QString bohrung::text()
 {
-    QString msg = BEARBART_BOHR;    //Zeile 1
+    QString msg = BEARBART_BOHR;    //Zeile 0
     msg += TRENNZ_BEARB_PARAM_;
-    msg += bezug();             //Zeile 2
+    msg += bezug();             //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += dm_qstring();        //Zeile 3
+    msg += dm_qstring();        //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += tiefe_qstring();     //Zeile 4
+    msg += tiefe_qstring();     //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += x_qstring();         //Zeile 5
+    msg += x_qstring();         //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += y_qstring();         //Zeile 6
+    msg += y_qstring();         //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += z_qstring();         //Zeile 7
+    msg += z_qstring();         //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += afb();               //Zeile 8
+    msg += afb();               //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += zustellmass_qstring();               //Zeile 9
+    msg += zustellmass_qstring();               //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += wkznum();            //Zeile 10
+    msg += wkznum();            //Zeile 9
 
     return msg;
 }

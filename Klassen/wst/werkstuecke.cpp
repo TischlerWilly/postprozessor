@@ -167,7 +167,6 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             double y4 = 0;
             double y5 = 0;
             double y6 = 0;
-
             for(uint ii=i+1; ii<tz.count() ;ii++)
             {
                 zeile = tz.at(ii);
@@ -3017,7 +3016,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
 
     }
 
-    Wste.replace(Index-1, w);
+    Wste.replace(Index, w);
 
     return 0;
 }
@@ -5548,7 +5547,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
 
     }
 
-    Wste.replace(Index-1, w);
+    Wste.replace(Index, w);
 
     return 0;
 }
@@ -5562,9 +5561,520 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
         Index = index(Werkstueckname);
     }
     werkstueck w = Wste.at(Index);
+    text_zw tz;
+    tz.set_text(importtext,'\n');
+    //globale Variablen:
+    bool schalter_halt = false;
+    bool drehtyp_L = Einstellung_fmc.drehtyp_L();//muss lokale Variable sein für Import FMC mit Halt
+    bool drehtyp_B = Einstellung_fmc.drehtyp_B();//muss lokale Variable sein für Import FMC mit Halt
+    //---
+    for(uint i=0; i<tz.count() ;i++)
+    {
+        QString zeile = tz.at(i);
+        if(zeile.contains(FMC_PRGKOPF))
+        {
+            for(uint ii=i+1; ii<tz.count() ;ii++)
+            {
+                zeile = tz.at(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_PRGKOPF_LAENGE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        w.set_laenge(tmp);
+                    }else if(schluessel == FMC_PRGKOPF_BREITE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        w.set_breite(tmp);
+                    }else if(schluessel == FMC_PRGKOPF_DICKE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        w.set_dicke(tmp);
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_HALT))
+        {
+            schalter_halt = true;
+            //Drehtyp wird über Auswertung vom Kommentar ermitteln
+            //Erst dann wird der Halt wirksam
+        }else if(zeile.contains(FMC_KOMMENTAR))
+        {
+            i++;
+            zeile = tz.at(i);
+            QString schluessel = text_links(zeile, "=");
+            if(schluessel == FMC_KOMMENTAR_TEXT)
+            {
+                QString vo = VW_KANTE_VO;
+                vo = vo.toUpper();
+                QString hi = VW_KANTE_HI;
+                hi = hi.toUpper();
+                QString li = VW_KANTE_LI;
+                li = li.toUpper();
+                QString re = VW_KANTE_RE;
+                re = re.toUpper();
+                QString kom = text_rechts(zeile, "=");
+                if(kom.contains(vo))
+                {
+                    w.set_kante_vo(text_rechts(kom, vo));
+                }else if(kom.contains(hi))
+                {
+                    w.set_kante_hi(text_rechts(kom, hi));
+                }else if(kom.contains(li))
+                {
+                    w.set_kante_li(text_rechts(kom, li));
+                }else if(kom.contains(re))
+                {
+                    w.set_kante_re(text_rechts(kom, re));
+                }
+                if(schalter_halt == true)
+                {
+                    schalter_halt = false;
+                    istOberseite = !istOberseite;
+                    if(kom.contains("l/2") || kom.contains("L/2"))
+                    {
+                        drehtyp_L = true;
+                        drehtyp_B = false;
+                    }else if(kom.contains("b/2") || kom.contains("B/2"))
+                    {
+                        drehtyp_L = false;
+                        drehtyp_B = true;
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_BOHR_DM))
+        {
+            bohrung bo;
+            if(istOberseite)
+            {
+                bo.set_bezug(WST_BEZUG_OBSEI);
+            }else
+            {
+                bo.set_bezug(WST_BEZUG_UNSEI);
+            }
+            for(uint ii=i+1; ii<tz.count() ;ii++)
+            {
+                zeile = tz.at(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    w.neue_bearbeitung(bo.text());
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_BOHR_DM_AFB)
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_BOHR_DM_DM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_BOHR_DM_TIEFE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
+                    }else if(schluessel == FMC_BOHR_DM_X)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double x = ausdruck_auswerten(tmp).toDouble();
+                        if(istOberseite)
+                        {
+                            bo.set_x(x);
+                        }else
+                        {
+                            if(drehtyp_L)
+                            {
+                                bo.set_x(w.laenge()-x);
+                            }else //if(drehtyp_B)
+                            {
+                                bo.set_x(x);
+                            }
+                        }
+                    }else if(schluessel == FMC_BOHR_DM_Y)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double y = ausdruck_auswerten(tmp).toDouble();
+                        if(istOberseite)
+                        {
+                            bo.set_y(y);
+                        }else
+                        {
+                            if(drehtyp_L)
+                            {
+                                bo.set_y(y);
+                            }else //if(drehtyp_B)
+                            {
+                                bo.set_y(w.breite()-y);
+                            }
+                        }
+                    }
+                }
+            }
+        }else if(zeile.contains(FMC_HBEXP))
+        {
+            bohrung bo;
+            double bohrtiefe_import = 0;
+            double x1 = 0;
+            double x2 = -1;
+            bool kettenmass = false;
+            double y1 = 0;
+            double y2 = 0;
+            double y3 = 0;
+            double y4 = 0;
+            double y5 = 0;
+            double y6 = 0;
+            double z = 0;
+            for(uint ii=i+1; ii<tz.count() ;ii++)
+            {
+                zeile = tz.at(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    double bohrtiefe_x1 = 0;
+                    double bohrtiefe_x2 = 0;
+                    //istOberseite und Kettenmaß ausweten:
+                    if(istOberseite)
+                    {
+                        bo.set_bezug(WST_BEZUG_LI);
+                        bohrtiefe_x1 = bohrtiefe_import;
+                        bohrtiefe_x2 = w.laenge() - x2 + bohrtiefe_import;
+                        if(kettenmass == true)
+                        {
+                            double alt_y1 = y1;
+                            double alt_y2 = y2;
+                            double alt_y3 = y3;
+                            double alt_y4 = y4;
+                            double alt_y5 = y5;
+                            double alt_y6 = y6;
+                            if(y2)
+                            {
+                                y2 = alt_y1 + alt_y2;
+                            }
+                            if(y3)
+                            {
+                                y3 = alt_y1 + alt_y2 + alt_y3;
+                            }
+                            if(y4)
+                            {
+                                y4 = alt_y1 + alt_y2 + alt_y3 + alt_y4;
+                            }
+                            if(y5)
+                            {
+                                y5 = alt_y1 + alt_y2 + alt_y3 + alt_y4 + alt_y5;
+                            }
+                            if(y6)
+                            {
+                                y6 = alt_y1 + alt_y2 + alt_y3 + alt_y4 + alt_y5 + alt_y6;
+                            }
+                        }
+                    }else
+                    {
+                        z = w.dicke() - z;
+                        if(drehtyp_L)
+                        {
+                            bo.set_bezug(WST_BEZUG_RE);
+                            x1 = w.laenge() - x1;
+                            bohrtiefe_x1 = w.laenge() - x1 + bohrtiefe_import;
+                            if(x2 > 0)
+                            {
+                                x2 = w.laenge() - x2;
+                                bohrtiefe_x2 = bohrtiefe_import;
+                            }
+                            if(kettenmass == true)
+                            {
+                                double alt_y1 = y1;
+                                double alt_y2 = y2;
+                                double alt_y3 = y3;
+                                double alt_y4 = y4;
+                                double alt_y5 = y5;
+                                double alt_y6 = y6;
+                                if(y2)
+                                {
+                                    y2 = alt_y1 + alt_y2;
+                                }
+                                if(y3)
+                                {
+                                    y3 = alt_y1 + alt_y2 + alt_y3;
+                                }
+                                if(y4)
+                                {
+                                    y4 = alt_y1 + alt_y2 + alt_y3 + alt_y4;
+                                }
+                                if(y5)
+                                {
+                                    y5 = alt_y1 + alt_y2 + alt_y3 + alt_y4 + alt_y5;
+                                }
+                                if(y6)
+                                {
+                                    y6 = alt_y1 + alt_y2 + alt_y3 + alt_y4 + alt_y5 + alt_y6;
+                                }
+                            }
+                        }else //if(drehtyp_B)
+                        {
+                            bo.set_bezug(WST_BEZUG_LI);
+                            bohrtiefe_x1 = bohrtiefe_import;
+                            bohrtiefe_x2 = w.laenge() - x2 + bohrtiefe_import;
+                            if(kettenmass == true)
+                            {
+                                double alt_y1 = y1;
+                                double alt_y2 = y2;
+                                double alt_y3 = y3;
+                                double alt_y4 = y4;
+                                double alt_y5 = y5;
+                                double alt_y6 = y6;
+                                if(y1)
+                                {
+                                    y1 = w.breite() - alt_y1;
+                                }
+                                if(y2)
+                                {
+                                    y2 = w.breite() - (alt_y1 + alt_y2);
+                                }
+                                if(y3)
+                                {
+                                    y3 = w.breite() - (alt_y1 + alt_y2 + alt_y3);
+                                }
+                                if(y4)
+                                {
+                                    y4 = w.breite() - (alt_y1 + alt_y2 + alt_y3 + alt_y4);
+                                }
+                                if(y5)
+                                {
+                                    y5 = w.breite() - (alt_y1 + alt_y2 + alt_y3 + alt_y4 + alt_y5);
+                                }
+                                if(y6)
+                                {
+                                    y6 = w.breite() - (alt_y1 + alt_y2 + alt_y3 + alt_y4 + alt_y5 + alt_y6);
+                                }
+                            }else
+                            {
+                                if(y1)
+                                {
+                                    y1 = w.breite() - y1;
+                                }
+                                if(y2)
+                                {
+                                    y2 = w.breite() - y2;
+                                }
+                                if(y3)
+                                {
+                                    y3 = w.breite() - y3;
+                                }
+                                if(y4)
+                                {
+                                    y4 = w.breite() - y4;
+                                }
+                                if(y5)
+                                {
+                                    y5 = w.breite() - 5;
+                                }
+                                if(y6)
+                                {
+                                    y6 = w.breite() - y6;
+                                }
+                            }
+                        }
+                    }
+                    //---
+                    bo.set_tiefe(bohrtiefe_x1);
+                    bo.set_z(z);
+                    bo.set_x(x1);
+                    if(y1)
+                    {
+                        bo.set_y(y1);
+                        w.neue_bearbeitung(bo.text());
+                    }
+                    if(y2)
+                    {
+                        bo.set_y(y2);
+                        w.neue_bearbeitung(bo.text());
+                    }
+                    if(y3)
+                    {
+                        bo.set_y(y3);
+                        w.neue_bearbeitung(bo.text());
+                    }
+                    if(y4)
+                    {
+                        bo.set_y(y4);
+                        w.neue_bearbeitung(bo.text());
+                    }
+                    if(y5)
+                    {
+                        bo.set_y(y5);
+                        w.neue_bearbeitung(bo.text());
+                    }
+                    if(y6)
+                    {
+                        bo.set_y(y6);
+                        w.neue_bearbeitung(bo.text());
+                    }
 
-    //...
-
+                    if(x2 > 0)
+                    {
+                        if(bo.bezug() == WST_BEZUG_LI)
+                        {
+                            bo.set_bezug(WST_BEZUG_RE);
+                            bo.set_tiefe(bohrtiefe_x2);
+                        }else
+                        {
+                            bo.set_bezug(WST_BEZUG_LI);
+                        }
+                        bo.set_x(x2);
+                        if(y1)
+                        {
+                            bo.set_y(y1);
+                            w.neue_bearbeitung(bo.text());
+                        }
+                        if(y2)
+                        {
+                            bo.set_y(y2);
+                            w.neue_bearbeitung(bo.text());
+                        }
+                        if(y3)
+                        {
+                            bo.set_y(y3);
+                            w.neue_bearbeitung(bo.text());
+                        }
+                        if(y4)
+                        {
+                            bo.set_y(y4);
+                            w.neue_bearbeitung(bo.text());
+                        }
+                        if(y5)
+                        {
+                            bo.set_y(y5);
+                            w.neue_bearbeitung(bo.text());
+                        }
+                        if(y6)
+                        {
+                            bo.set_y(y6);
+                            w.neue_bearbeitung(bo.text());
+                        }
+                    }
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_HBEXP_AFB)
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_HBEXP_DM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_HBEXP_TI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bohrtiefe_import = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_HBEXP_Z)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        z = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_HBEXP_X1)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        x1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_HBEXP_X2)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        x2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_HBEXP_KM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        kettenmass = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_HBEXP_Y1)
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            y1 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(schluessel == FMC_HBEXP_Y2)
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            y2 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(schluessel == FMC_HBEXP_Y3)
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            y3 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(schluessel == FMC_HBEXP_Y4)
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            y4 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(schluessel == FMC_HBEXP_Y5)
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            y5 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }else if(schluessel == FMC_HBEXP_Y6)
+                    {
+                        QString tmp = (wert_nach_istgleich(zeile));
+                        if(tmp != "0" && \
+                           tmp != "(NULL)" && \
+                           !tmp.isEmpty())
+                        {
+                            tmp = var_einsetzen(w, tmp);
+                            y6 = ausdruck_auswerten(tmp).toDouble();
+                        }
+                    }
+                }
+            }
+        }
+    }
     Wste.replace(Index, w);
     return 0;
 }

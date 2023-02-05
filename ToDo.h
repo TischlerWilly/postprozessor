@@ -7,8 +7,9 @@
 /*
 
 - bool werkstuecke::import_fmc(...)
-bug: das Einlesen von fmc-Dateien mit Halt liest Bohrungen nicht ein die von
-     der Unterseite und von der Oberseite gleich sind
+
+- dlg_prgtext zeigt wkz für Bohrungen nicht an (Indexfehler)
+- mainwin_wst_bearbeiten zeigt wkz für Bohrungen nicht an (Indexfehler)
 
 - dlg std-namen überarbeiten
   ->listwidget tauschen gegen Tabelle

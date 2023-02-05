@@ -68,25 +68,25 @@ void Dialog_programmtext::slot_wst(werkstueck* w)
         zeile.set_text(bearb,TRENNZ_BEARB_PARAM);
         if(zeile.at(0) == BEARBART_BOHR)
         {
-            bearb = bohr_zu_prgeile(zeile.text());
+            bearb = bohr_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
-            bearb = bohrRaster_zu_prgeile(zeile.text());
+            bearb = bohrRaster_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_NUT)
         {
-            bearb = nut_zu_prgeile(zeile.text());
+            bearb = nut_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_RTA)
         {
-            bearb = rta_zu_prgeile(zeile.text());
+            bearb = rta_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
-            bearb = fauf_zu_prgeile(zeile.text());
+            bearb = fauf_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
-            bearb = fgerade_zu_prgeile(zeile.text());
+            bearb = fgerade_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
-            bearb = fbogen_zu_prgeile(zeile.text());
+            bearb = fbogen_zu_prgzei(zeile.text());
         }
         ui->listWidget_prgtext->addItem(bearb);
     }
@@ -98,12 +98,12 @@ void Dialog_programmtext::slot_zeilennummer(uint nr, bool bearbeiten)
 {
     if((int)nr < ui->listWidget_prgtext->count())
     {
-        ui->listWidget_prgtext->item(nr-1)->setSelected(true);
+        ui->listWidget_prgtext->item(nr+1)->setSelected(true);
     }
 }
 
 void Dialog_programmtext::on_listWidget_prgtext_currentRowChanged(int currentRow)
 {
-    emit signalIndexChange(currentRow+1);
+    emit signalIndexChange(currentRow);
 }
 

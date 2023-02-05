@@ -121,25 +121,25 @@ void MainWin_wst_bearbeiten::update_listwidget()
         zeile.set_text(bearb,TRENNZ_BEARB_PARAM);
         if(zeile.at(0) == BEARBART_BOHR)
         {
-            bearb = bohr_zu_prgeile(zeile.text());
+            bearb = bohr_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
-            bearb = bohrRaster_zu_prgeile(zeile.text());
+            bearb = bohrRaster_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_NUT)
         {
-            bearb = nut_zu_prgeile(zeile.text());
+            bearb = nut_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_RTA)
         {
-            bearb = rta_zu_prgeile(zeile.text());
+            bearb = rta_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
-            bearb = fauf_zu_prgeile(zeile.text());
+            bearb = fauf_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
-            bearb = fgerade_zu_prgeile(zeile.text());
+            bearb = fgerade_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
-            bearb = fbogen_zu_prgeile(zeile.text());
+            bearb = fbogen_zu_prgzei(zeile.text());
         }
         ui->listWidget_prgtext->addItem(bearb);
     }
@@ -260,42 +260,42 @@ void MainWin_wst_bearbeiten::slot_rta(rechtecktasche rta)
 {
     int index = ui->listWidget_prgtext->currentRow();
     QString bearb = rta.text();
-    ui->listWidget_prgtext->item(index)->setText(rta_zu_prgeile(bearb));
+    ui->listWidget_prgtext->item(index)->setText(rta_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_bo(bohrung bo)
 {
     int index = ui->listWidget_prgtext->currentRow();
     QString bearb = bo.text();
-    ui->listWidget_prgtext->item(index)->setText(bohr_zu_prgeile(bearb));
+    ui->listWidget_prgtext->item(index)->setText(bohr_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_nut(nut nu)
 {
     int index = ui->listWidget_prgtext->currentRow();
     QString bearb = nu.text();
-    ui->listWidget_prgtext->item(index)->setText(nut_zu_prgeile(bearb));
+    ui->listWidget_prgtext->item(index)->setText(nut_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
 {
     int index = ui->listWidget_prgtext->currentRow();
     QString bearb = fa.text();
-    ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgeile(bearb));
+    ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
 {
     int index = ui->listWidget_prgtext->currentRow();
     QString bearb = fg.text();
-    ui->listWidget_prgtext->item(index)->setText(fgerade_zu_prgeile(bearb));
+    ui->listWidget_prgtext->item(index)->setText(fgerade_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
 {
     int index = ui->listWidget_prgtext->currentRow();
     QString bearb = fb.text();
-    ui->listWidget_prgtext->item(index)->setText(fbogen_zu_prgeile(bearb));
+    ui->listWidget_prgtext->item(index)->setText(fbogen_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 
