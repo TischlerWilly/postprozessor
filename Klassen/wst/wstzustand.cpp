@@ -12283,7 +12283,7 @@ void wstzustand::geo(int index)
                 r.set_laenge(bo.tiefe());
                 r.set_breite(bo.dm());
                 r.set_bezugspunkt(LINKS);
-                r.set_einfuegepunkt(0, bo.y(), 0);
+                r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }else if(bo.bezug() == WST_BEZUG_RE)
@@ -12293,7 +12293,7 @@ void wstzustand::geo(int index)
                 r.set_laenge(bo.tiefe());
                 r.set_breite(bo.dm());
                 r.set_bezugspunkt(RECHTS);
-                r.set_einfuegepunkt(tmp_l, bo.y(), 0);
+                r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }else if(bo.bezug() == WST_BEZUG_VO)
@@ -12303,7 +12303,7 @@ void wstzustand::geo(int index)
                 r.set_laenge(bo.dm());
                 r.set_breite(bo.tiefe());
                 r.set_bezugspunkt(UNTEN);
-                r.set_einfuegepunkt(bo.x(), 0, 0);
+                r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }else if(bo.bezug() == WST_BEZUG_HI)
@@ -12313,7 +12313,7 @@ void wstzustand::geo(int index)
                 r.set_laenge(bo.dm());
                 r.set_breite(bo.tiefe());
                 r.set_bezugspunkt(OBEN);
-                r.set_einfuegepunkt(bo.x(), tmp_b, 0);
+                r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }

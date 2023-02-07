@@ -20,6 +20,7 @@ void bohrung::setup()
     Bezug = WST_BEZUG_OBSEI;
     Afb = "1";
     Zustellmass = 0;
+    Werkzeugnummer = "void";
 }
 
 void bohrung::set_dm(double dm)

@@ -81,6 +81,9 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
     UnReDo.clear();
     UnReDo.neu(Wst->bearb());
     sendVorschauAktualisieren(*Wst, 0);
+    letzte_wst_l = Wst->laenge();
+    letzte_wst_b = Wst->breite();
+    letzte_wst_d = Wst->dicke();
 }
 
 void MainWin_wst_bearbeiten::update_listwidget()
@@ -174,6 +177,9 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
 {
     if(zeile == 0)
     {
+        letzte_wst_l = Wst->laenge();
+        letzte_wst_b = Wst->breite();
+        letzte_wst_d = Wst->dicke();
         Dialog_bearb_pkopf dlg;
         dlg.setModal(true);
         dlg.set_data(Wst);
@@ -182,9 +188,9 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         text_zw bearb_neu;
         for (uint i = 0; i<bearb_alt.count() ; i++)
         {
-            if(i==1)
+            if(i==0)
             {
-                bearb_neu.set_text(verschiebe_einen(bearb_alt.at(i), 0, 0, 0), TRENNZ_BEARB_PARAM);
+                bearb_neu.set_text(verschiebe_einen(bearb_alt.at(i), 0, 0, 0), bearb_alt.trennz());
                 //0,0,0 verschiebt die bearb auf die Wst-kanten
             }else
             {
@@ -193,7 +199,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
             }
         }
         Wst->set_bearb(bearb_neu);
-        update_listwidget();
+        update_listwidget();        
         emit sendVorschauAktualisieren(*Wst, 0);
         return;
     }
@@ -627,23 +633,41 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
             bo.set_y(bo.y()+ay);
         }else if(bo.bezug() == WST_BEZUG_LI)
         {
-            bo.set_x(0);
+            if(bo.x() != 0)
+            {
+                bo.set_x(bo.x()+ax);
+            }
             bo.set_y(bo.y()+ay);
             bo.set_z(bo.z()+az);
         }else if(bo.bezug() == WST_BEZUG_RE)
         {
-            bo.set_x(Wst->laenge());
+            if(bo.x() == letzte_wst_l)
+            {
+                bo.set_x(Wst->laenge());
+            }else
+            {
+                bo.set_x(bo.x()+ax);
+            }
             bo.set_y(bo.y()+ay);
             bo.set_z(bo.z()+az);
         }else if(bo.bezug() == WST_BEZUG_VO)
         {
             bo.set_x(bo.x()+ax);
-            bo.set_y(0);
+            if(bo.y() != 0)
+            {
+                bo.set_y(bo.y()+ay);
+            }
             bo.set_z(bo.z()+az);
         }else if(bo.bezug() == WST_BEZUG_HI)
         {
             bo.set_x(bo.x()+ax);
-            bo.set_y(Wst->breite());
+            if(bo.y() == letzte_wst_b)
+            {
+                bo.set_y(Wst->breite());
+            }else
+            {
+                bo.set_y(bo.y()+ay);
+            }
             bo.set_z(bo.z()+az);
         }
         bearb = bo.text();

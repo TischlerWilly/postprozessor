@@ -397,7 +397,7 @@ geometrietext werkstueck::geo()
                 r.set_laenge(bo.tiefe());
                 r.set_breite(bo.dm());
                 r.set_bezugspunkt(LINKS);
-                r.set_einfuegepunkt(0, bo.y(), 0);
+                r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }else if(bo.bezug() == WST_BEZUG_RE)
@@ -407,7 +407,7 @@ geometrietext werkstueck::geo()
                 r.set_laenge(bo.tiefe());
                 r.set_breite(bo.dm());
                 r.set_bezugspunkt(RECHTS);
-                r.set_einfuegepunkt(laenge(), bo.y(), 0);
+                r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }else if(bo.bezug() == WST_BEZUG_VO)
@@ -417,7 +417,7 @@ geometrietext werkstueck::geo()
                 r.set_laenge(bo.dm());
                 r.set_breite(bo.tiefe());
                 r.set_bezugspunkt(UNTEN);
-                r.set_einfuegepunkt(bo.x(), 0, 0);
+                r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }else if(bo.bezug() == WST_BEZUG_HI)
@@ -427,7 +427,7 @@ geometrietext werkstueck::geo()
                 r.set_laenge(bo.dm());
                 r.set_breite(bo.tiefe());
                 r.set_bezugspunkt(OBEN);
-                r.set_einfuegepunkt(bo.x(), breite(), 0);
+                r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
             }

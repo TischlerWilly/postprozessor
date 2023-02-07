@@ -36,6 +36,9 @@ private:
     werkstueck *Wst;
     undo_redo<text_zw> UnReDo;
     QString KopierterEintrag;
+    double letzte_wst_l;
+    double letzte_wst_b;
+    double letzte_wst_d;
 
     void clear();
     void update_listwidget();

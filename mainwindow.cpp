@@ -1336,6 +1336,10 @@ void MainWindow::set_prginfo()
     tmp += "Import von fmc:\n";
     tmp += "- Werkstückgröße [PGKOPF40]\n";
     tmp += "- Kanteninformation (über Kommentare)\n";
+    tmp += "- Programmhalt [SNHALT40]\n";
+    tmp += "  erwartet nach Halt-Import einen Kommentar mit\n";
+    tmp += "  Drehanweisung (l/2 oder b/2). Nachfolgende\n";
+    tmp += "  Bearbeitungen werden beim Import entsprechend gedreht.\n";
     tmp += "- Gehrung [ZYSCHN40]\n";
     tmp += "- Einzelbohrung vertikal [VBDMES40]\n";
     tmp += "- HBE x+ [HBXPLU40]\n";
