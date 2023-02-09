@@ -232,7 +232,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
     {
         Dialog_bearb_faufruf dlg;
         dlg.setModal(true);
-        connect(&dlg, SIGNAL(signal_faufruf(fraueseraufruf)), this, SLOT(slot_faufruf(fraueseraufruf)));
+        connect(&dlg, SIGNAL(signal_faufruf(fraeseraufruf)), this, SLOT(slot_faufruf(fraeseraufruf)));
         dlg.set_data(bearb.text(), Wst);
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_FRAESERGERADE)
@@ -283,7 +283,7 @@ void MainWin_wst_bearbeiten::slot_nut(nut nu)
     ui->listWidget_prgtext->item(index)->setText(nut_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
-void MainWin_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
+void MainWin_wst_bearbeiten::slot_faufruf(fraeseraufruf fa)
 {
     int index = ui->listWidget_prgtext->currentRow();
     QString bearb = fa.text();
@@ -747,7 +747,7 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
         bearb = nu.text();
     }if(tz.at(0) == BEARBART_FRAESERAUFRUF)
     {
-        fraueseraufruf fa;
+        fraeseraufruf fa;
         fa.set_text(bearb);
         fa.set_x(fa.x()+ax);
         fa.set_y(fa.y()+ay);

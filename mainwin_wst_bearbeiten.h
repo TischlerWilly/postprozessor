@@ -75,7 +75,7 @@ public slots:
     void slot_rta(rechtecktasche rta);
     void slot_bo(bohrung bo);    
     void slot_nut(nut nu);
-    void slot_faufruf(fraueseraufruf fa);
+    void slot_faufruf(fraeseraufruf fa);
     void slot_fgerade(fraesergerade fg);
     void slot_fbogen(fraeserbogen fb);
     //Erstellen/Make:

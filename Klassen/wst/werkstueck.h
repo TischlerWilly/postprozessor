@@ -18,7 +18,7 @@
 #include "bohrung.h"
 #include "rechtecktasche.h"
 #include "nut.h"
-#include "fraueseraufruf.h"
+#include "fraeseraufruf.h"
 #include "fraesergerade.h"
 #include "fraeserbogen.h"
 #include "bohrraster.h"

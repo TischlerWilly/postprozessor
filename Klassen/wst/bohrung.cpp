@@ -14,9 +14,6 @@ void bohrung::setup()
 {
     Durchmesser = 0;
     Tiefe = 0;
-    Pos_x = 0;
-    Pos_y = 0;
-    Pos_z = 0;
     Bezug = WST_BEZUG_OBSEI;
     Afb = "1";
     Zustellmass = 0;
@@ -47,27 +44,31 @@ void bohrung::set_tiefe(QString ti)
 }
 void bohrung::set_x(double x)
 {
-    Pos_x = x;
+    Mipu.set_x(x);
 }
 void bohrung::set_x(QString x)
 {
-    set_x(x.toDouble());
+    Mipu.set_x(x);
 }
 void bohrung::set_y(double y)
 {
-    Pos_y = y;
+    Mipu.set_y(y);
 }
 void bohrung::set_y(QString y)
 {
-    set_y(y.toDouble());
+    Mipu.set_y(y);
 }
 void bohrung::set_z(double z)
 {
-    Pos_z = z;
+    Mipu.set_z(z);
 }
 void bohrung::set_z(QString z)
 {
-    set_z(z.toDouble());
+    Mipu.set_z(z);
+}
+void bohrung::set_mipu(punkt3d p)
+{
+    Mipu = p;
 }
 void bohrung::set_zustellmass(double mass)
 {
@@ -111,32 +112,31 @@ QString bohrung::tiefe_qstring()
 }
 double bohrung::x()
 {
-    return Pos_x;
+    return Mipu.x();
 }
 QString bohrung::x_qstring()
 {
-    return double_to_qstring(Pos_x);
+    return Mipu.x_QString();
 }
 double bohrung::y()
 {
-    return Pos_y;
+    return Mipu.y();
 }
 QString bohrung::y_qstring()
 {
-    return double_to_qstring(Pos_y);
+    return Mipu.y_QString();
 }
 double bohrung::z()
 {
-    return Pos_z;
+    return Mipu.z();
 }
 QString bohrung::z_qstring()
 {
-    return double_to_qstring(Pos_z);
+    return Mipu.z_QString();
 }
 punkt3d bohrung::mipu()
 {
-    punkt3d p(x(),y(),z());
-    return p;
+    return Mipu;
 }
 double bohrung::zustellmass()
 {

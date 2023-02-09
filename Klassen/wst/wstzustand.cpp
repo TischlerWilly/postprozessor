@@ -1857,7 +1857,7 @@ void wstzustand::gehr_3achs(text_zw& bearb, double &tmp_l, double &tmp_b, QStrin
                 zeile_neu = nu.text();
             }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(zeile.text());
+                fraeseraufruf tmp(zeile.text());
                 tmp.set_x(tmp.x() + zugabe);
                 zeile_neu = tmp.text();
             }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
@@ -1912,7 +1912,7 @@ void wstzustand::gehr_3achs(text_zw& bearb, double &tmp_l, double &tmp_b, QStrin
                 zeile_neu = nu.text();
             }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(zeile.text());
+                fraeseraufruf tmp(zeile.text());
                 tmp.set_y(tmp.y() + zugabe);
                 zeile_neu = tmp.text();
             }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
@@ -2067,7 +2067,7 @@ void wstzustand::drehen_um_b_halbe(text_zw& bearb, double &tmp_b)
             zeile_neu = nu.text();
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf tmp(zeile.text());
+            fraeseraufruf tmp(zeile.text());
             tmp.set_y(tmp_b - tmp.y());
             QString bezug = tmp.bezug();
             if(bezug == WST_BEZUG_OBSEI)
@@ -2225,7 +2225,7 @@ void wstzustand::bearb_drehen_90(text_zw& bearb, double& tmp_l, double& tmp_b)
             zeile_neu = nu.text();
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf tmp(zeile.text());
+            fraeseraufruf tmp(zeile.text());
             double x = tmp.x();
             double y = tmp.y();
 
@@ -2451,8 +2451,8 @@ void wstzustand::bearb_optimieren_ganx(text_zw& bearb)
             ep.set_x(ye);
             ep.set_y(xe);
             strecke s;
-            s.set_start(sp);
-            s.set_ende(ep);
+            s.set_stapu(sp);
+            s.set_endpu(ep);
             ge.set_pfad(s);
             zeile_neu = ge.text();
         }
@@ -2631,7 +2631,7 @@ QString wstzustand::warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_
             }
         }else if(art == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf fa(zeile.text());
+            fraeseraufruf fa(zeile.text());
             QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
             if(tnummer.isEmpty())
             {
@@ -3533,7 +3533,7 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
         {
             uint zeibeg = i;
             uint zeiend = i;
-            fraueseraufruf fa(param.text());
+            fraeseraufruf fa(param.text());
             double xbeg = fa.x();
             double ybeg = fa.y();
             double zbeg = fa.tiefe();
@@ -3649,7 +3649,7 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
                                     vorparam.set_text(vorzeile, TRENNZ_BEARB_PARAM);
                                     if(vorparam.at(0) == BEARBART_FRAESERAUFRUF)
                                     {
-                                        fraueseraufruf tmpfa(vorparam.text());
+                                        fraeseraufruf tmpfa(vorparam.text());
                                         tmpfa.set_x(fg.xe());
                                         tmpfa.set_y(fg.ye());
                                         bearb_neu.edit(bearb_neu.count()-1, tmpfa.text());
@@ -3709,7 +3709,7 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
         param.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
         if(param.at(0) == BEARBART_FRAESERAUFRUF)//zu Kurze Geraden am Anfang finden
         {
-            fraueseraufruf fa(param.text());
+            fraeseraufruf fa(param.text());
             if(  fa.radkor() == FRKOR_L  ||  fa.radkor() == FRKOR_R  )
             {
                 afb = true;
@@ -3740,8 +3740,8 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
                     ep.set_x(param2.at(6));
                     ep.set_y(param2.at(7));
                     strecke s;
-                    s.set_start(sp);
-                    s.set_ende(ep);
+                    s.set_stapu(sp);
+                    s.set_endpu(ep);
 
                     if(wkzdm >= s.laenge2d())
                     {
@@ -3780,8 +3780,8 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
                 ep.set_x(param.at(5));
                 ep.set_y(param.at(6));
                 strecke s;
-                s.set_start(sp);
-                s.set_ende(ep);
+                s.set_stapu(sp);
+                s.set_endpu(ep);
                 if(wkzdm >= s.laenge2d())
                 {
                     s.set_laenge_2d(wkzdm+1, strecke_bezugspunkt_start);
@@ -6633,7 +6633,7 @@ void wstzustand::fmc_dateitext(int index)
             }
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf fa(zeile.text());
+            fraeseraufruf fa(zeile.text());
             QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
             if(!tnummer.isEmpty())
             {
@@ -6721,10 +6721,10 @@ void wstzustand::fmc_dateitext(int index)
                         {
                             fraesergerade fg(folzei.text());
                             strecke s;
-                            s.set_start(pfa);
+                            s.set_stapu(pfa);
                             punkt3d ep = fg.ep();
                             ep.set_z(0);
-                            s.set_ende(ep);
+                            s.set_endpu(ep);
                             strecke_bezugspunkt sb;
                             sb = strecke_bezugspunkt_ende;
                             s.set_laenge_2d(s.laenge2d()+anweg, sb);
@@ -6741,12 +6741,12 @@ void wstzustand::fmc_dateitext(int index)
                             b.set_startpunkt(pfa);
                             b.set_endpunkt(fb.ep());
                             strecke s;
-                            s.set_start(pfa);
+                            s.set_stapu(pfa);
                             punkt3d pmibo;
                             pmibo.set_x(b.mitte().x());
                             pmibo.set_y(b.mitte().y());
-                            s.set_ende(pmibo);
-                            s.drenen_um_startpunkt_2d(90, b.im_uzs());
+                            s.set_endpu(pmibo);
+                            s.drenen_um_stapu_2d(90, b.im_uzs());
                             strecke_bezugspunkt sb;
                             sb = strecke_bezugspunkt_start;
                             s.set_laenge_2d(anweg, sb);
@@ -7901,7 +7901,7 @@ void wstzustand::fmc_dateitext(int index)
                 }
             }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf fa(zeile.text());
+                fraeseraufruf fa(zeile.text());
                 QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
                 if(!tnummer.isEmpty())
                 {
@@ -7996,10 +7996,10 @@ void wstzustand::fmc_dateitext(int index)
                                 fg.set_ye(  tmp_b - fg.ye()  );
                                 //-------
                                 strecke s;
-                                s.set_start(pfa);
+                                s.set_stapu(pfa);
                                 punkt3d ep = fg.ep();
                                 ep.set_z(0);
-                                s.set_ende(ep);
+                                s.set_endpu(ep);
                                 strecke_bezugspunkt sb;
                                 sb = strecke_bezugspunkt_ende;
                                 s.set_laenge_2d(s.laenge2d()+anweg, sb);
@@ -8015,12 +8015,12 @@ void wstzustand::fmc_dateitext(int index)
                                 b.set_startpunkt(pfa);
                                 b.set_endpunkt(fb.ep());
                                 strecke s;
-                                s.set_start(pfa);
+                                s.set_stapu(pfa);
                                 punkt3d pmibo;
                                 pmibo.set_x(b.mitte().x());
                                 pmibo.set_y(b.mitte().y());
-                                s.set_ende(pmibo);
-                                s.drenen_um_startpunkt_2d(90, b.im_uzs());
+                                s.set_endpu(pmibo);
+                                s.drenen_um_stapu_2d(90, b.im_uzs());
                                 strecke_bezugspunkt sb;
                                 sb = strecke_bezugspunkt_start;
                                 s.set_laenge_2d(anweg, sb);
@@ -11896,7 +11896,7 @@ void wstzustand::ggf_dateitext(int index)
            }
        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
        {
-           fraueseraufruf fa(zeile.text());
+           fraeseraufruf fa(zeile.text());
            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
            if(!tnummer.isEmpty())
            {
@@ -12185,8 +12185,8 @@ void wstzustand::geo(int index)
     {
         punkt3d sp(0,0,0);
         punkt3d ep(tmp_l,0,0);
-        skante.set_start(sp);
-        skante.set_ende(ep);
+        skante.set_stapu(sp);
+        skante.set_endpu(ep);
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
@@ -12194,8 +12194,8 @@ void wstzustand::geo(int index)
     {
         punkt3d sp(0,tmp_b,0);
         punkt3d ep(tmp_l,tmp_b,0);
-        skante.set_start(sp);
-        skante.set_ende(ep);
+        skante.set_stapu(sp);
+        skante.set_endpu(ep);
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
@@ -12203,8 +12203,8 @@ void wstzustand::geo(int index)
     {
         punkt3d sp(0,0,0);
         punkt3d ep(0,tmp_b,0);
-        skante.set_start(sp);
-        skante.set_ende(ep);
+        skante.set_stapu(sp);
+        skante.set_endpu(ep);
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
@@ -12212,8 +12212,8 @@ void wstzustand::geo(int index)
     {
         punkt3d sp(tmp_l,0,0);
         punkt3d ep(tmp_l,tmp_b,0);
-        skante.set_start(sp);
-        skante.set_ende(ep);
+        skante.set_stapu(sp);
+        skante.set_endpu(ep);
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
@@ -12246,11 +12246,11 @@ void wstzustand::geo(int index)
                 gt.add_kreis(k);
                 strecke s;
                 s.set_farbe(k.farbe());
-                s.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
-                s.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s.set_stapu(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s.set_endpu(bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
                 s.verschieben_um(versatz_x, versatz_y);
                 gt.add_strecke(s);
-                s.drenen_um_mittelpunkt_2d(90, true);
+                s.drenen_um_mipu_2d(90, true);
                 gt.add_strecke(s);
             }else if(bo.bezug() == WST_BEZUG_UNSEI)
             {
@@ -12269,12 +12269,12 @@ void wstzustand::geo(int index)
                 gt.add_kreis(k);
                 strecke s;
                 s.set_farbe(k.farbe());
-                s.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
-                s.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
-                s.drenen_um_mittelpunkt_2d(45, true);
+                s.set_stapu(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s.set_endpu(bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s.drenen_um_mipu_2d(45, true);
                 s.verschieben_um(versatz_x, versatz_y);
                 gt.add_strecke(s);
-                s.drenen_um_mittelpunkt_2d(90, true);
+                s.drenen_um_mipu_2d(90, true);
                 gt.add_strecke(s);
             }else if(bo.bezug() == WST_BEZUG_LI)
             {
@@ -12336,11 +12336,11 @@ void wstzustand::geo(int index)
                 }
                 strecke s1;
                 s1.set_farbe(k.farbe());
-                s1.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
-                s1.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s1.set_stapu(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s1.set_endpu(bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
                 s1.verschieben_um(versatz_x, versatz_y);
                 strecke s2 = s1;
-                s2.drenen_um_mittelpunkt_2d(90, true);
+                s2.drenen_um_mipu_2d(90, true);
                 for(uint i=0; i<bo.anz_x() ;i++)
                 {
                     kreis tmp_k = k;
@@ -12378,12 +12378,12 @@ void wstzustand::geo(int index)
                 }
                 strecke s1;
                 s1.set_farbe(k.farbe());
-                s1.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
-                s1.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
-                s1.drenen_um_mittelpunkt_2d(45, true);
+                s1.set_stapu(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s1.set_endpu(bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s1.drenen_um_mipu_2d(45, true);
                 s1.verschieben_um(versatz_x, versatz_y);
                 strecke s2 = s1;
-                s2.drenen_um_mittelpunkt_2d(90, true);
+                s2.drenen_um_mipu_2d(90, true);
                 for(uint i=0; i<bo.anz_x() ;i++)
                 {
                     kreis tmp_k = k;
@@ -12470,8 +12470,8 @@ void wstzustand::geo(int index)
         {
             nut nu(zeile.text());
             strecke s;
-            s.set_start(nu.xs(), nu.ys(), 0);
-            s.set_ende(nu.xe(), nu.ye(), 0);
+            s.set_stapu(nu.xs(), nu.ys(), 0);
+            s.set_endpu(nu.xe(), nu.ye(), 0);
             rechteck3d r;
             if(  (nu.bezug() == WST_BEZUG_OBSEI) ||  (nu.bezug() == WST_BEZUG_UNSEI)  )
             {
@@ -12486,7 +12486,7 @@ void wstzustand::geo(int index)
                 r.set_laenge(s.laenge2d());
                 r.set_breite(nu.breite());
                 r.set_bezugspunkt(MITTE);
-                r.set_einfuegepunkt(s.mitpu3d());
+                r.set_einfuegepunkt(s.mipu());
                 r.set_drewi(s.wink());
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
@@ -12510,20 +12510,20 @@ void wstzustand::geo(int index)
                     r.set_breite(nu.tiefe());
                 }
                 r.set_farbe_fuellung(FARBE_GELB);
-                punkt3d mipu = s.mitpu3d();
+                punkt3d mipu = s.mipu();
                 r.set_bezugspunkt(MITTE);
                 strecke s_mipu;
-                s_mipu.set_start(mipu);
-                s_mipu.set_ende(s.endpu());
+                s_mipu.set_stapu(mipu);
+                s_mipu.set_endpu(s.endpu());
                 s_mipu.set_laenge_2d(nu.tiefe()/2, strecke_bezugspunkt_start);
-                s_mipu.drenen_um_startpunkt_2d(90, false);
+                s_mipu.drenen_um_stapu_2d(90, false);
                 mipu = s_mipu.endpu();
                 r.set_drewi(drehwinkel);
                 r.set_einfuegepunkt(mipu);
                 r.verschieben_um(versatz_x, versatz_y);
                 //Start anzeigen:
                 strecke stmp = s;
-                stmp.drenen_um_startpunkt_2d(90, true);
+                stmp.drenen_um_stapu_2d(90, true);
                 stmp.set_laenge_2d(stmp.laenge2d()+nu.tiefe(), strecke_bezugspunkt_ende);
                 stmp.set_laenge_2d(30, strecke_bezugspunkt_start);
                 kreis k;
@@ -12601,7 +12601,7 @@ void wstzustand::geo(int index)
 
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf fa(zeile.text());
+            fraeseraufruf fa(zeile.text());
             punkt3d p(fa.x(), fa.y(), fa.z());
             p.set_linienbreite(10);
             p.verschieben_um(versatz_x, versatz_y);

@@ -2,12 +2,7 @@
 
 strecke::strecke()
 {
-    punkt3d p;
-    p.set_x(0);
-    p.set_y(0);
-    p.set_z(0);
-    set_start(p);
-    set_ende(p);
+
 }
 
 strecke::strecke(QString geotext)
@@ -24,27 +19,27 @@ void strecke::set_text(QString geotext)
     p.set_x(tz.at(1).toDouble());
     p.set_y(tz.at(2).toDouble());
     p.set_z(tz.at(3).toDouble());
-    set_start(p);
+    set_stapu(p);
     p.set_x(tz.at(4).toDouble());
     p.set_y(tz.at(5).toDouble());
     p.set_z(tz.at(6).toDouble());
-    set_ende(p);
+    set_endpu(p);
     set_farbe(tz.at(7));
     set_linienbreite(tz.at(8).toInt());
     set_stil(tz.at(9));
 }
-void strecke::set_start(punkt3d startpunkt)
+void strecke::set_stapu(punkt3d startpunkt)
 {
     Stapu = startpunkt;
 }
-void strecke::set_start(punkt2d startpunkt)
+void strecke::set_stapu(punkt2d startpunkt)
 {
     punkt3d p;
     p.set_x(startpunkt.x());
     p.set_y(startpunkt.y());
     Stapu = p;
 }
-void strecke::set_start(double x, double y, double z)
+void strecke::set_stapu(double x, double y, double z)
 {
     punkt3d p;
     p.set_x(x);
@@ -52,18 +47,18 @@ void strecke::set_start(double x, double y, double z)
     p.set_z(z);
     Stapu = p;
 }
-void strecke::set_ende(punkt3d endpunkt)
+void strecke::set_endpu(punkt3d endpunkt)
 {
     Endpu = endpunkt;
 }
-void strecke::set_ende(punkt2d endpunkt)
+void strecke::set_endpu(punkt2d endpunkt)
 {
     punkt3d p;
     p.set_x(endpunkt.x());
     p.set_y(endpunkt.y());
     Endpu = p;
 }
-void strecke::set_ende(double x, double y, double z)
+void strecke::set_endpu(double x, double y, double z)
 {
     punkt3d p;
     p.set_x(x);
@@ -72,11 +67,11 @@ void strecke::set_ende(double x, double y, double z)
     Endpu = p;
 }
 //-----------------------------------------get_xy:
-punkt3d strecke::mitpu3d()
+punkt3d strecke::mipu()
 {
     return Stapu + ((Endpu-Stapu)/2);
 }
-punkt2d strecke::mitpu2d()
+punkt2d strecke::mipu2d()
 {
     punkt2d sta(Stapu);
     punkt2d end(Endpu);
@@ -302,7 +297,7 @@ void strecke::richtung_unkehren()
     Stapu = Endpu;
     Endpu = tmp;
 }
-void strecke::drenen_um_startpunkt_2d(double drehwi, bool drehri_im_uzs)
+void strecke::drenen_um_stapu_2d(double drehwi, bool drehri_im_uzs)
 {
     punkt2d sp(Stapu);
     punkt2d ep(Endpu);
@@ -311,9 +306,9 @@ void strecke::drenen_um_startpunkt_2d(double drehwi, bool drehri_im_uzs)
     tmp.set_x(ep.x());
     tmp.set_y(ep.y());
     tmp.set_z(Endpu.z());
-    set_ende(tmp);
+    set_endpu(tmp);
 }
-void strecke::drenen_um_endpunkt_2d(double drehwi, bool drehri_im_uzs)
+void strecke::drenen_um_endpu_2d(double drehwi, bool drehri_im_uzs)
 {
     punkt2d sp(Stapu);
     punkt2d ep(Endpu);
@@ -322,24 +317,24 @@ void strecke::drenen_um_endpunkt_2d(double drehwi, bool drehri_im_uzs)
     tmp.set_x(sp.x());
     tmp.set_y(sp.y());
     tmp.set_z(Stapu.z());
-    set_start(tmp);
+    set_stapu(tmp);
 }
-void strecke::drenen_um_mittelpunkt_2d(double drehwi, bool drehri_im_uzs)
+void strecke::drenen_um_mipu_2d(double drehwi, bool drehri_im_uzs)
 {
     punkt2d sp(Stapu);
     punkt2d ep(Endpu);
-    punkt2d mp = mitpu2d();
+    punkt2d mp = mipu2d();
     sp = drehen(mp, sp, drehwi, drehri_im_uzs);
     ep = drehen(mp, ep, drehwi, drehri_im_uzs);
     punkt3d tmp;
     tmp.set_x(sp.x());
     tmp.set_y(sp.y());
     tmp.set_z(Stapu.z());
-    set_start(tmp);
+    set_stapu(tmp);
     tmp.set_x(ep.x());
     tmp.set_y(ep.y());
     tmp.set_z(Endpu.z());
-    set_ende(tmp);
+    set_endpu(tmp);
 }
 void strecke::set_laenge_2d(double neue_laenge, strecke_bezugspunkt bezugspunkt)
 {
@@ -359,12 +354,12 @@ void strecke::set_laenge_2d(double neue_laenge, strecke_bezugspunkt bezugspunkt)
         p3.set_x(ep.x());
         p3.set_y(ep.y());
         p3.set_z(Endpu.z());
-        set_ende(p3);
+        set_endpu(p3);
     }
         break;
     case strecke_bezugspunkt_mitte:
     {
-        punkt2d mp = mitpu2d();
+        punkt2d mp = mipu2d();
         punkt2d sp(Stapu);
         punkt2d ep(Endpu);
 
@@ -376,7 +371,7 @@ void strecke::set_laenge_2d(double neue_laenge, strecke_bezugspunkt bezugspunkt)
         p3e.set_x(ep.x());
         p3e.set_y(ep.y());
         p3e.set_z(Endpu.z());
-        set_ende(p3e);
+        set_endpu(p3e);
 
         punkt2d p2s; //Startpunkt
         punkt3d p3s; //Startpunkt
@@ -386,7 +381,7 @@ void strecke::set_laenge_2d(double neue_laenge, strecke_bezugspunkt bezugspunkt)
         p3s.set_x(sp.x());
         p3s.set_y(sp.y());
         p3s.set_z(Stapu.z());
-        set_start(p3s);
+        set_stapu(p3s);
     }
         break;
     case strecke_bezugspunkt_ende:
@@ -401,7 +396,7 @@ void strecke::set_laenge_2d(double neue_laenge, strecke_bezugspunkt bezugspunkt)
         p3.set_x(sp.x());
         p3.set_y(sp.y());
         p3.set_z(Stapu.z());
-        set_start(p3);
+        set_stapu(p3);
     }
         break;
     }

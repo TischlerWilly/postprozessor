@@ -11,7 +11,7 @@
 #include "Klassen/wst/bohrung.h"
 #include "Klassen/wst/bohrraster.h"
 #include "Klassen/wst/gehrung.h"
-#include "Klassen/wst/fraueseraufruf.h"
+#include "Klassen/wst/fraeseraufruf.h"
 #include "Klassen/wst/fraesergerade.h"
 #include "Klassen/wst/fraeserbogen.h"
 #include "Klassen/wst/nut.h"

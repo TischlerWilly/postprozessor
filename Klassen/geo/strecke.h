@@ -23,12 +23,12 @@ public:
 
     //-----------------------------------------set_xy:
     void    set_text(QString geotext);
-    void    set_start(punkt3d startpunkt);
-    void    set_start(punkt2d startpunkt);
-    void    set_start(double x, double y, double z);
-    void    set_ende(punkt3d endpunkt);
-    void    set_ende(punkt2d endpunkt);
-    void    set_ende(double x, double y, double z);
+    void    set_stapu(punkt3d startpunkt);
+    void    set_stapu(punkt2d startpunkt);
+    void    set_stapu(double x, double y, double z);
+    void    set_endpu(punkt3d endpunkt);
+    void    set_endpu(punkt2d endpunkt);
+    void    set_endpu(double x, double y, double z);
 
     //-----------------------------------------get_xy:
     inline punkt3d stapu()
@@ -39,8 +39,8 @@ public:
     {
         return Endpu;
     }
-    punkt3d mitpu3d();
-    punkt2d mitpu2d();
+    punkt3d mipu();
+    punkt2d mipu2d();
     punkt3d schnittp_zur_senkr_an_p(punkt3d p);
 
     inline double laenge3d()
@@ -70,9 +70,9 @@ public:
 
     //-----------------------------------------manipulationen:
     void    richtung_unkehren();
-    void    drenen_um_startpunkt_2d(double drehwi, bool drehri_im_uzs);
-    void    drenen_um_endpunkt_2d(double drehwi, bool drehri_im_uzs);
-    void    drenen_um_mittelpunkt_2d(double drehwi, bool drehri_im_uzs);
+    void    drenen_um_stapu_2d(double drehwi, bool drehri_im_uzs);
+    void    drenen_um_endpu_2d(double drehwi, bool drehri_im_uzs);
+    void    drenen_um_mipu_2d(double drehwi, bool drehri_im_uzs);
     void    set_laenge_2d(double neue_laenge, \
                strecke_bezugspunkt bezugspunkt = strecke_bezugspunkt_mitte);
     void    verschieben_um(double xversatz, double yversatz);

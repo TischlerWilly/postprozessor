@@ -16,9 +16,6 @@ void rechtecktasche::setup()
     Laenge = 0;
     Breite = 0;
     Tiefe = 0;
-    Pos_x = 0;
-    Pos_y = 0;
-    Pos_z = 0;
     Drewinkel = 0;
     Eckenradius = 0;
     Zustellmass = 0;
@@ -62,27 +59,31 @@ void rechtecktasche::set_tiefe(QString t)
 }
 void rechtecktasche::set_x(double x)
 {
-    Pos_x = x;
+    Mipu.set_x(x);
 }
 void rechtecktasche::set_x(QString x)
 {
-    set_x(x.toDouble());
+    Mipu.set_x(x);
 }
 void rechtecktasche::set_y(double y)
 {
-    Pos_y = y;
+    Mipu.set_y(y);
 }
 void rechtecktasche::set_y(QString y)
 {
-    set_y(y.toDouble());
+    Mipu.set_y(y);
 }
 void rechtecktasche::set_z(double z)
 {
-    Pos_z = z;
+    Mipu.set_z(z);
 }
 void rechtecktasche::set_z(QString z)
 {
-    set_z(z.toDouble());
+    Mipu.set_z(z);
+}
+void rechtecktasche::set_mipu(punkt3d p)
+{
+    Mipu = p;
 }
 void rechtecktasche::set_drewi(double wi)
 {
@@ -171,27 +172,31 @@ QString rechtecktasche::tiefe_qstring()
 }
 double rechtecktasche::x()
 {
-    return Pos_x;
+    return Mipu.x();
 }
 QString rechtecktasche::x_qstring()
 {
-    return double_to_qstring(Pos_x);
+    return Mipu.x_QString();
 }
 double rechtecktasche::y()
 {
-    return Pos_y;
+    return Mipu.y();
 }
 QString rechtecktasche::y_qstring()
 {
-    return double_to_qstring(Pos_y);
+    return Mipu.y_QString();
 }
 double rechtecktasche::z()
 {
-    return Pos_z;
+    return Mipu.z();
 }
 QString rechtecktasche::z_qstring()
 {
-    return double_to_qstring(Pos_z);
+    return Mipu.z_QString();
+}
+punkt3d rechtecktasche::mipu()
+{
+    return  Mipu;
 }
 double rechtecktasche::drewi()
 {

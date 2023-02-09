@@ -25,11 +25,11 @@ void gehrung::set_pfad(strecke s)
 }
 void gehrung::set_stapu(punkt3d sp)
 {
-    Pfad.set_start(sp);
+    Pfad.set_stapu(sp);
 }
 void gehrung::set_endpu(punkt3d ep)
 {
-    Pfad.set_ende(ep);
+    Pfad.set_endpu(ep);
 }
 void gehrung::set_winkel(double w)
 {

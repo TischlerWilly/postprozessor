@@ -131,8 +131,8 @@ punkt3d fraesergerade::ep()
 double fraesergerade::laenge_2d()
 {
     strecke s;
-    s.set_start(Startpunkt);
-    s.set_ende(Endpunkt);
+    s.set_stapu(Startpunkt);
+    s.set_endpu(Endpunkt);
 
     return s.laenge2d();
 }
@@ -197,8 +197,8 @@ void fraesergerade::set_text(QString text)
 strecke fraesergerade::strecke_()
 {
     strecke s;
-    s.set_start(Startpunkt);
-    s.set_ende(Endpunkt);
+    s.set_stapu(Startpunkt);
+    s.set_endpu(Endpunkt);
     return s;
 }
 

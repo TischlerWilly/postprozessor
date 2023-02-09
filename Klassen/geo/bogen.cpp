@@ -31,12 +31,12 @@ bogen::bogen(punkt2d mipu, double rad, double startwinkel, double endwinkel)
     p.set_x(mipu.x());
     p.set_y(mipu.y());
     strecke ssp;
-    ssp.set_start(p);
+    ssp.set_stapu(p);
     p.set_x(mipu.x()+rad);
-    ssp.set_ende(p);
+    ssp.set_endpu(p);
     strecke sep = ssp;
-    ssp.drenen_um_startpunkt_2d(startwinkel, false);
-    sep.drenen_um_startpunkt_2d(endwinkel, false);
+    ssp.drenen_um_stapu_2d(startwinkel, false);
+    sep.drenen_um_stapu_2d(endwinkel, false);
     Stapu = ssp.endpu();
     Endpu = sep.endpu();
     Bogen_im_uzs = false;
@@ -51,12 +51,12 @@ bogen::bogen(punkt3d mipu, double rad, double startwinkel, double endwinkel)
     p.set_y(mipu.y());
     p.set_z(mipu.z());
     strecke ssp;
-    ssp.set_start(p);
+    ssp.set_stapu(p);
     p.set_x(mipu.x()+rad);
-    ssp.set_ende(p);
+    ssp.set_endpu(p);
     strecke sep = ssp;
-    ssp.drenen_um_startpunkt_2d(startwinkel, false);
-    sep.drenen_um_startpunkt_2d(endwinkel, false);
+    ssp.drenen_um_stapu_2d(startwinkel, false);
+    sep.drenen_um_stapu_2d(endwinkel, false);
     Stapu = ssp.endpu();
     Endpu = sep.endpu();
     Bogen_im_uzs = false;
@@ -213,8 +213,8 @@ punkt2d bogen::mitte()
     punkt2d pstart(Stapu); //Z-Werte sollen hier ignoriert werden
     punkt2d pende(Endpu);    //Z-Werte sollen hier ignoriert werden
     strecke stre_spep;
-    stre_spep.set_start(Stapu);
-    stre_spep.set_ende(Endpu);
+    stre_spep.set_stapu(Stapu);
+    stre_spep.set_endpu(Endpu);
     double laenge = stre_spep.laenge2d();
     Fehler = false;
     if(  start() == ende()  )
@@ -231,7 +231,7 @@ punkt2d bogen::mitte()
         Fehlertext = "Fehler! Radius zu klein für Punktabstand Start-Ende";
     }else if( rad() == laenge/2)
     {
-        mittelp = stre_spep.mitpu2d();
+        mittelp = stre_spep.mipu2d();
     }else
     {
         double a = stre_spep.laenge2d()/2; //Hälfte des Abstandes von
@@ -240,7 +240,7 @@ punkt2d bogen::mitte()
         double x = sqrt(r*r - a*a)*2; //Länge der Mittelsenkrechtenn zu stre_spep
 
         strecke stre_tmp = stre_spep;
-        stre_tmp.drenen_um_mittelpunkt_2d(90,true);
+        stre_tmp.drenen_um_mipu_2d(90,true);
         stre_tmp.set_laenge_2d(x, strecke_bezugspunkt_mitte);
 
         if(im_uzs() == false)
@@ -276,28 +276,28 @@ void bogen::set_bogenwinkel(double wi, bogen_bezugspunkt bezug)
         if(bezug == bogen_bezugspunkt_start)
         {
             strecke s;
-            s.set_start(mitte());
-            s.set_ende(start());
-            s.drenen_um_startpunkt_2d(wi, im_uzs());
+            s.set_stapu(mitte());
+            s.set_endpu(start());
+            s.drenen_um_stapu_2d(wi, im_uzs());
             set_endpunkt(s.endpu());
         }else if(bezug == bogen_bezugspunkt_ende)
         {
             strecke s;
-            s.set_start(mitte());
-            s.set_ende(ende());
-            s.drenen_um_startpunkt_2d(wi, !im_uzs());
+            s.set_stapu(mitte());
+            s.set_endpu(ende());
+            s.drenen_um_stapu_2d(wi, !im_uzs());
             set_startpunkt(s.endpu());
         }else
         {
             strecke s;
-            s.set_start(start());
-            s.set_ende(ende());
-            s.set_ende(s.mitpu3d());
-            s.set_start(mitte());
+            s.set_stapu(start());
+            s.set_endpu(ende());
+            s.set_endpu(s.mipu());
+            s.set_stapu(mitte());
             s.set_laenge_2d(rad(), strecke_bezugspunkt_start);
-            s.drenen_um_startpunkt_2d(wi/2, im_uzs());
+            s.drenen_um_stapu_2d(wi/2, im_uzs());
             set_endpunkt(s.endpu());
-            s.drenen_um_startpunkt_2d(wi, !im_uzs());
+            s.drenen_um_stapu_2d(wi, !im_uzs());
             set_startpunkt(s.endpu());
         }
     }

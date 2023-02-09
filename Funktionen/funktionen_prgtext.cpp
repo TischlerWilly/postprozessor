@@ -142,7 +142,7 @@ QString nut_zu_prgzei(QString text)
 QString fauf_zu_prgzei(QString text)
 {
     QString msg = "Fräser von ";
-    fraueseraufruf fa(text);
+    fraeseraufruf fa(text);
     msg += bezug(fa.bezug());
     msg += "\tX: ";
     msg += fa.x_qstring();

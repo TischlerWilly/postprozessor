@@ -2,14 +2,13 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "4.2023.02.07"
+#define PROGRAMMVERSION "4.2023.02.09"
 #endif //PROGRAMMVERSION
 /*
 
 - bool werkstuecke::import_fmc(...)
 
-- dlg_prgtext zeigt wkz für Bohrungen nicht an (Indexfehler)
-- mainwin_wst_bearbeiten zeigt wkz für Bohrungen nicht an (Indexfehler)
+- geo(..) klassenunabhängig machen
 
 - dlg std-namen überarbeiten
   ->listwidget tauschen gegen Tabelle

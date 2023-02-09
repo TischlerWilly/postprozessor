@@ -1,69 +1,69 @@
-#include "fraueseraufruf.h"
+#include "fraeseraufruf.h"
 
-fraueseraufruf::fraueseraufruf()
+fraeseraufruf::fraeseraufruf()
 {
     setup();
 }
-fraueseraufruf::fraueseraufruf(QString text)
+fraeseraufruf::fraeseraufruf(QString text)
 {
     setup();
     set_text(text);
 }
 
-void fraueseraufruf::setup()
+void fraeseraufruf::setup()
 {
-    Pos_x = 0;
-    Pos_y = 0;
-    Pos_z = 0;
     Tiefe = 0;
     Bezug = WST_BEZUG_OBSEI;
     Afb = "1";
     Korrektur = "M";
-    Werkzeugnummer = "123456789";
-
+    Werkzeugnummer = "void";
 }
 
-void fraueseraufruf::set_x(double x)
+void fraeseraufruf::set_x(double x)
 {
-    Pos_x = x;
+    Pos.set_x(x);
 }
-void fraueseraufruf::set_x(QString x)
+void fraeseraufruf::set_x(QString x)
 {
-    set_x(x.toDouble());
+    Pos.set_x(x);
 }
-void fraueseraufruf::set_y(double y)
+void fraeseraufruf::set_y(double y)
 {
-    Pos_y = y;
+    Pos.set_y(y);
 }
-void fraueseraufruf::set_y(QString y)
+void fraeseraufruf::set_y(QString y)
 {
-    set_y(y.toDouble());
+    Pos.set_y(y);
 }
-void fraueseraufruf::set_z(double z)
+void fraeseraufruf::set_z(double z)
 {
-    Pos_z = z;
+    Pos.set_z(z);
 }
-void fraueseraufruf::set_z(QString z)
+void fraeseraufruf::set_z(QString z)
 {
-    set_z(z.toDouble());
+    Pos.set_z(z);
 }
-void fraueseraufruf::set_tiefe(double ti)
+void fraeseraufruf::set_pos(punkt3d p)
+{
+    Pos = p;
+}
+void fraeseraufruf::set_tiefe(double ti)
 {
     Tiefe = ti;
 }
-void fraueseraufruf::set_tiefe(QString ti)
+void fraeseraufruf::set_tiefe(QString ti)
 {
     set_tiefe(ti.toDouble());
 }
-void fraueseraufruf::set_bezug(QString bezugsflaeche)
+void fraeseraufruf::set_bezug(QString bezugsflaeche)
 {
     Bezug = bezugsflaeche;
 }
-void fraueseraufruf::set_afb(QString ausfuehrbedingung)
+void fraeseraufruf::set_afb(QString ausfuehrbedingung)
 {
     Afb = ausfuehrbedingung;
 }
-void fraueseraufruf::set_radkor(QString kor)
+void fraeseraufruf::set_radkor(QString kor)
 {
     if(kor == FRKOR_L || \
        kor == FRKOR_M || \
@@ -72,70 +72,66 @@ void fraueseraufruf::set_radkor(QString kor)
         Korrektur = kor;
     }
 }
-void fraueseraufruf::set_wkznum(QString nummer)
+void fraeseraufruf::set_wkznum(QString nummer)
 {
     Werkzeugnummer = nummer;
 }
 
 //------------------------------------------------------------
-double fraueseraufruf::x()
+double fraeseraufruf::x()
 {
-    return Pos_x;
+    return Pos.x();
 }
-QString fraueseraufruf::x_qstring()
+QString fraeseraufruf::x_qstring()
 {
-    return double_to_qstring(Pos_x);
+    return Pos.x_QString();
 }
-double fraueseraufruf::y()
+double fraeseraufruf::y()
 {
-    return Pos_y;
+    return Pos.y();
 }
-QString fraueseraufruf::y_qstring()
+QString fraeseraufruf::y_qstring()
 {
-    return double_to_qstring(Pos_y);
+    return Pos.y_QString();
 }
-double fraueseraufruf::z()
+double fraeseraufruf::z()
 {
-    return Pos_z;
+    return Pos.z();
 }
-QString fraueseraufruf::z_qstring()
+QString fraeseraufruf::z_qstring()
 {
-    return double_to_qstring(Pos_z);
+    return Pos.z_QString();
 }
-double fraueseraufruf::tiefe()
+double fraeseraufruf::tiefe()
 {
     return Tiefe;
 }
-QString fraueseraufruf::tiefe_qstring()
+QString fraeseraufruf::tiefe_qstring()
 {
     return double_to_qstring(Tiefe);
 }
-QString fraueseraufruf::bezug()
+QString fraeseraufruf::bezug()
 {
     return Bezug;
 }
-QString fraueseraufruf::afb()
+QString fraeseraufruf::afb()
 {
     return Afb;
 }
-QString fraueseraufruf::radkor()
+QString fraeseraufruf::radkor()
 {
     return Korrektur;
 }
-QString fraueseraufruf::wkznum()
+QString fraeseraufruf::wkznum()
 {
     return Werkzeugnummer;
 }
-punkt3d fraueseraufruf::pos_vertikal()
+punkt3d fraeseraufruf::pos()
 {
-    punkt3d p;
-    p.set_x(Pos_x);
-    p.set_y(Pos_y);
-    p.set_z(Tiefe);
-    return p;
+    return Pos;
 }
 
-QString fraueseraufruf::text()
+QString fraeseraufruf::text()
 {
     QString msg = BEARBART_FRAESERAUFRUF;    //Zeile 0
     msg += TRENNZ_BEARB_PARAM_;
@@ -157,7 +153,7 @@ QString fraueseraufruf::text()
 
     return msg;
 }
-void fraueseraufruf::set_text(QString text)
+void fraeseraufruf::set_text(QString text)
 {
     text_zw tz;
     tz.set_text(text, TRENNZ_BEARB_PARAM);

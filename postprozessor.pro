@@ -48,6 +48,7 @@ SOURCES += main.cpp\
     Klassen/wkz/wkz_magazin.cpp \
     Klassen/wkz/wkz_saege.cpp \
     Klassen/einstellung_fmc.cpp \
+    Klassen/wst/fraeseraufruf.cpp \
     Klassen/wst/gehrung.cpp \
     Klassen/wst/wstzustand.cpp \
     mainwin_wkzmagazin.cpp \
@@ -68,7 +69,6 @@ SOURCES += main.cpp\
     Dialoge/dialog_bohrer.cpp \
     Dialoge/dialog_fraeser.cpp \
     Dialoge/dialog_saege.cpp \
-    Klassen/wst/fraueseraufruf.cpp \
     Klassen/geo/bogen.cpp \
     Klassen/geo/punkt3d.cpp \
     Klassen/geo/strecke.cpp \
@@ -127,6 +127,7 @@ HEADERS  += mainwindow.h \
     Klassen/wkz/wkz_magazin.h \
     Klassen/wkz/wkz_saege.h \
     Klassen/einstellung_fmc.h \
+    Klassen/wst/fraeseraufruf.h \
     Klassen/wst/gehrung.h \
     Klassen/wst/wstzustand.h \
     Struncts/punkt.h \
@@ -145,7 +146,6 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_bohrer.h \
     Dialoge/dialog_fraeser.h \
     Dialoge/dialog_saege.h \
-    Klassen/wst/fraueseraufruf.h \
     Klassen/geo/bogen.h \
     Klassen/geo/punkt3d.h \
     Klassen/geo/strecke.h \

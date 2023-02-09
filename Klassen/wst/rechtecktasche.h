@@ -6,6 +6,7 @@
 #include "Klassen/text_zw.h"
 #include "Defines/def_bearbeitungen.h"
 #include "Funktionen/umwandeln.h"
+#include "Klassen/geo/punkt3d.h"
 
 
 class rechtecktasche
@@ -26,6 +27,7 @@ public:
     void set_y(QString y);
     void set_z(double z);
     void set_z(QString z);
+    void set_mipu(punkt3d p);
     void set_drewi(double wi);
     void set_drewi(QString wi);
     void set_rad(double r);
@@ -50,6 +52,7 @@ public:
     QString y_qstring();
     double  z();
     QString z_qstring();
+    punkt3d mipu();
     double  drewi();
     QString drewi_qstring();
     double  rad();
@@ -69,9 +72,7 @@ private:
     double Laenge;
     double Breite;
     double Tiefe;
-    double Pos_x;
-    double Pos_y;
-    double Pos_z;
+    punkt3d Mipu;
     double Drewinkel;
     double Eckenradius;
     double Zustellmass;

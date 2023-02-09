@@ -17,9 +17,6 @@ void bohrraster::setup()
     Bezug = WST_BEZUG_OBSEI;
     Afb = "1";
     Zustellmass = 0;
-    Pos_x = 0;
-    Pos_y = 0;
-    Pos_z = 0;
     Anz_x = 1;
     Anz_y = 1;
     Anz_z = 1;

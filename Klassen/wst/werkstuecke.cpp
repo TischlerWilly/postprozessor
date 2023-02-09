@@ -1931,16 +1931,16 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
                             ep.set_x(n.xe());
                             ep.set_y(n.ye());
                             strecke s;
-                            s.set_start(sp);
-                            s.set_ende(ep);
+                            s.set_stapu(sp);
+                            s.set_endpu(ep);
                             strecke stmp = s;
                             stmp.set_laenge_2d(n.breite()/2, strecke_bezugspunkt_start);
                             if(kor.toInt() == 1)//Korrektur nach links
                             {
-                                stmp.drenen_um_endpunkt_2d(90, true);
+                                stmp.drenen_um_endpu_2d(90, true);
                             }else //if(kor.toInt() == 2)//Korrektur nach rechts
                             {
-                                stmp.drenen_um_endpunkt_2d(90, false);
+                                stmp.drenen_um_endpu_2d(90, false);
                             }
                             s.verschieben_um(stmp.stapu().x()-s.stapu().x(), stmp.stapu().y()-s.stapu().y());
                             n.set_xs(s.stapu().x());
@@ -2163,7 +2163,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             }
         }else if(zeile.contains(FMC_FKON))
         {
-            fraueseraufruf fa;
+            fraeseraufruf fa;
             fa.set_bezug(WST_BEZUG_OBSEI);
 
             for(uint ii=i+1; ii<tz.count() ;ii++)
@@ -2237,8 +2237,8 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             letzte_bearb.set_text(bearb.at(bearb.count()-1), TRENNZ_BEARB_PARAM);
             if(letzte_bearb.at(0) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(letzte_bearb.text());
-                fg.set_startpunkt(tmp.pos_vertikal());
+                fraeseraufruf tmp(letzte_bearb.text());
+                fg.set_startpunkt(tmp.pos());
             }else if(letzte_bearb.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade tmp(letzte_bearb.text());
@@ -2320,8 +2320,8 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             letzte_bearb.set_text(bearb.at(bearb.count()-1),TRENNZ_BEARB_PARAM);
             if(letzte_bearb.at(0) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(letzte_bearb.text());
-                fb.set_startpunkt(tmp.pos_vertikal());
+                fraeseraufruf tmp(letzte_bearb.text());
+                fb.set_startpunkt(tmp.pos());
             }else if(letzte_bearb.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade tmp(letzte_bearb.text());
@@ -2387,7 +2387,7 @@ bool werkstuecke::import_fmc_oberseite(QString Werkstueckname, QString importtex
             }
         }else if(zeile.contains(FMC_FALZ))
         {
-            fraueseraufruf fa;
+            fraeseraufruf fa;
             fraesergerade fg;
             fa.set_bezug(WST_BEZUG_OBSEI);
             fg.set_bezug(WST_BEZUG_OBSEI);
@@ -4897,16 +4897,16 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
                             ep.set_x(n.xe());
                             ep.set_y(n.ye());
                             strecke s;
-                            s.set_start(sp);
-                            s.set_ende(ep);
+                            s.set_stapu(sp);
+                            s.set_endpu(ep);
                             strecke stmp = s;
                             stmp.set_laenge_2d(n.breite()/2, strecke_bezugspunkt_start);
                             if(kor.toInt() == 1)//Korrektur nach links
                             {
-                                stmp.drenen_um_endpunkt_2d(90, true);
+                                stmp.drenen_um_endpu_2d(90, true);
                             }else //if(kor.toInt() == 2)//Korrektur nach rechts
                             {
-                                stmp.drenen_um_endpunkt_2d(90, false);
+                                stmp.drenen_um_endpu_2d(90, false);
                             }
                             s.verschieben_um(stmp.stapu().x()-s.stapu().x(), stmp.stapu().y()-s.stapu().y());
                             n.set_xs(s.stapu().x());
@@ -5134,7 +5134,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             }
         }else if(zeile.contains(FMC_FKON))
         {
-            fraueseraufruf fa;
+            fraeseraufruf fa;
             fa.set_bezug(WST_BEZUG_UNSEI);
 
             for(uint ii=i+1; ii<tz.count() ;ii++)
@@ -5209,8 +5209,8 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             letzte_bearb.set_text(bearb.at(bearb.count()-1),TRENNZ_BEARB_PARAM);
             if(letzte_bearb.at(0) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(letzte_bearb.text());
-                fg.set_startpunkt(tmp.pos_vertikal());
+                fraeseraufruf tmp(letzte_bearb.text());
+                fg.set_startpunkt(tmp.pos());
             }else if(letzte_bearb.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade tmp(letzte_bearb.text());
@@ -5291,8 +5291,8 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             letzte_bearb.set_text(bearb.at(bearb.count()-1),TRENNZ_BEARB_PARAM);
             if(letzte_bearb.at(0) == BEARBART_FRAESERAUFRUF)
             {
-                fraueseraufruf tmp(letzte_bearb.text());
-                fb.set_startpunkt(tmp.pos_vertikal());
+                fraeseraufruf tmp(letzte_bearb.text());
+                fb.set_startpunkt(tmp.pos());
             }else if(letzte_bearb.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade tmp(letzte_bearb.text());
@@ -5360,7 +5360,7 @@ bool werkstuecke::import_fmc_unterseite(QString Werkstueckname, QString importte
             }
         }else if(zeile.contains(FMC_FALZ))
         {
-            fraueseraufruf fa;
+            fraeseraufruf fa;
             fraesergerade fg;
             fa.set_bezug(WST_BEZUG_UNSEI);
             fg.set_bezug(WST_BEZUG_UNSEI);
@@ -5669,6 +5669,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         bo.set_bezug(WST_BEZUG_OBSEI);
                         bo.set_x(x);
                         bo.set_y(y);
+                        bo.set_z(w.dicke());
                     }else
                     {
                         bo.set_bezug(WST_BEZUG_UNSEI);
@@ -5681,6 +5682,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             bo.set_x(x);
                             bo.set_y(w.breite()-y);
                         }
+                        bo.set_z(0);
                     }
                     w.neue_bearbeitung(bo.text());
                     break;
@@ -7055,7 +7057,6 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
         }else if(zeile.contains(FMC_BOBIY))
         {
             bohrung bo;
-            bo.set_bezug(WST_BEZUG_OBSEI);
             double x1 = 0;
             double x2 = -1;
             bool kettenmass = false;
@@ -7378,7 +7379,6 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
         }else if(zeile.contains(FMC_BOBIX))
         {
             bohrung bo;
-            bo.set_bezug(WST_BEZUG_OBSEI);
             double y1 = 0;
             double y2 = -1;
             bool kettenmass = false;
@@ -7719,6 +7719,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         bo.set_bezug(WST_BEZUG_OBSEI);
                         bo.set_x(x);
                         bo.set_y(y);
+                        bo.set_z(w.dicke());
                     }else
                     {
                         bo.set_bezug(WST_BEZUG_UNSEI);
@@ -7731,6 +7732,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             bo.set_x(x);
                             bo.set_y(w.breite()-y);
                         }
+                        bo.set_z(0);
                     }
                     w.neue_bearbeitung(bo.text());
                     break;
@@ -7785,16 +7787,461 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
             }
         }else if(zeile.contains(FMC_RTA))
         {
-
+            rechtecktasche rt;
+            double x = 0;
+            double y = 0;
+            for(uint ii=i+1; ii<tz.count() ;ii++)
+            {
+                zeile = tz.at(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    if(istOberseite)
+                    {
+                        rt.set_bezug(WST_BEZUG_OBSEI);
+                        rt.set_x(x);
+                        rt.set_y(y);
+                        rt.set_z(w.dicke());
+                    }else
+                    {
+                        rt.set_bezug(WST_BEZUG_UNSEI);
+                        if(drehtyp_L)
+                        {
+                            rt.set_x(w.laenge()-x);
+                            rt.set_y(y);
+                        }else //if(drehtyp_B)
+                        {
+                            rt.set_x(x);
+                            rt.set_y(w.breite()-y);
+                        }
+                        rt.set_z(0);
+                    }
+                    w.neue_bearbeitung(rt.text());
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_RTA_AFB)
+                    {
+                        rt.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_RTA_L)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_laenge(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_RTA_B)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_breite(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_RTA_TI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.dicke() - tiefe;
+                        }
+                        rt.set_tiefe(tiefe);
+                    }else if(schluessel == FMC_RTA_X)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        x = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_RTA_Y)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        y = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_RTA_ZUST)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_zustellmass(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_RTA_WI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_drewi(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_RTA_RAD)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_rad(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_RTA_RAEUM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_ausraeumen(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_RTA_WKZ)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        rt.set_wkznum(tmp);
+                    }
+                }
+            }
         }else if(zeile.contains(FMC_NUT))
         {
-
+            nut n;
+            punkt3d stapu, endpu;
+            for(uint ii=i+1; ii<tz.count() ;ii++)
+            {
+                zeile = tz.at(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    if(istOberseite)
+                    {
+                        n.set_bezug(WST_BEZUG_OBSEI);
+                        stapu.set_z(w.dicke());
+                        endpu.set_z(w.dicke());
+                        n.set_stapu(stapu);
+                        n.set_endpu(endpu);
+                    }else
+                    {
+                        n.set_bezug(WST_BEZUG_UNSEI);
+                        stapu.set_z(0);
+                        endpu.set_z(0);
+                        if(drehtyp_L)
+                        {
+                            stapu.set_x(w.laenge()-stapu.x());
+                            endpu.set_x(w.laenge()-endpu.x());
+                        }else //if(drehtyp_B)
+                        {
+                            stapu.set_y(w.breite()-stapu.y());
+                            endpu.set_y(w.breite()-endpu.y());
+                        }
+                        n.set_stapu(stapu);
+                        n.set_endpu(endpu);
+                    }
+                    w.neue_bearbeitung(n.text());
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_NUT_AFB)
+                    {
+                        n.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_NUT_TI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_tiefe(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_NUT_BR)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        n.set_breite(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_NUT_XS)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        stapu.set_x(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_NUT_YS)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        stapu.set_y(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_NUT_XE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        endpu.set_x(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_NUT_YE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        endpu.set_y(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_NUT_KOR)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        QString kor = ausdruck_auswerten(tmp);
+                        if(kor.toInt() != 0)//Korrektur nach links
+                        {
+                            strecke s;
+                            s.set_stapu(stapu);
+                            s.set_endpu(endpu);
+                            strecke stmp = s;
+                            stmp.set_laenge_2d(n.breite()/2, strecke_bezugspunkt_start);
+                            if(kor.toInt() == 1)//Korrektur nach links
+                            {
+                                stmp.drenen_um_endpu_2d(90, true);
+                            }else //if(kor.toInt() == 2)//Korrektur nach rechts
+                            {
+                                stmp.drenen_um_endpu_2d(90, false);
+                            }
+                            s.verschieben_um(stmp.stapu().x()-s.stapu().x(), stmp.stapu().y()-s.stapu().y());
+                            stapu.x();
+                            stapu.y();
+                            endpu.x();
+                            endpu.y();
+                        }
+                    }
+                }
+            }
         }else if(zeile.contains(FMC_LORAE))
         {
-
+            bohrung bo;
+            double xs = 0;
+            double xe = 0;
+            double y1 = 0;
+            double y2 = 0;
+            double raster = 32;
+            for(uint ii=i+1; ii<tz.count() ;ii++)
+            {
+                zeile = tz.at(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii;
+                    if(istOberseite)
+                    {
+                        bo.set_bezug(WST_BEZUG_OBSEI);
+                        bo.set_z(w.dicke());
+                    }else
+                    {
+                        bo.set_bezug(WST_BEZUG_UNSEI);
+                        if(drehtyp_L)
+                        {
+                            xs = w.laenge()-xs;
+                            xe = w.laenge()-xe;
+                        }else //if(drehtyp_B)
+                        {
+                            if(y1 != 0)
+                            {
+                                y1 = w.breite()-y1;
+                            }
+                            if(y2 != 0)
+                            {
+                                y2 = w.breite()-y2;
+                            }
+                        }
+                        bo.set_z(0);
+                    }
+                    if(xe < xs)
+                    {
+                        double tmp;
+                        tmp = xe;
+                        xe = xs;
+                        xs = tmp;
+                    }
+                    if(y1 != 0)
+                    {
+                        bo.set_y(y1);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+                    if(y2 != 0)
+                    {
+                        bo.set_y(y2);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_LORAE_AFB)
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_LORAE_DM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_LORAE_DM_)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_LORAE_TI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
+                    }else if(schluessel == FMC_LORAE_XS)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xs = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_LORAE_XE)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp.replace("SX", double_to_qstring(xs));
+                        xe = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_LORAE_Y1)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_LORAE_Y2)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp.replace("Y1", double_to_qstring(y1));
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_LORAE_RASTER)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        raster = ausdruck_auswerten(tmp).toDouble();
+                    }
+                }
+            }
         }else if(zeile.contains(FMC_LORAM))
         {
+            bohrung bo;
+            double xs = 0;
+            double xm = 0;
+            double y1 = 0;
+            double y2 = 0;
+            double raster = 32;
+            for(uint ii=i+1; ii<tz.count() ;ii++)
+            {
+                zeile = tz.at(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    double diff = xm - xs;
+                    double xe = xm + diff;
+                    if(istOberseite)
+                    {
+                        bo.set_bezug(WST_BEZUG_OBSEI);
+                        bo.set_z(w.dicke());
+                    }else
+                    {
+                        bo.set_bezug(WST_BEZUG_UNSEI);
+                        if(drehtyp_L)
+                        {
+                            xs = w.laenge()-xs;
+                            xe = w.laenge()-xe;
+                        }else //if(drehtyp_B)
+                        {
+                            if(y1 != 0)
+                            {
+                                y1 = w.breite()-y1;
+                            }
+                            if(y2 != 0)
+                            {
+                                y2 = w.breite()-y2;
+                            }
+                        }
+                        bo.set_z(0);
+                    }
+                    if(xe < xs)
+                    {
+                        double tmp;
+                        tmp = xe;
+                        xe = xs;
+                        xs = tmp;
+                    }
+                    if(y1 != 0)
+                    {
+                        bo.set_y(y1);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
+                    if(y2 != 0)
+                    {
+                        bo.set_y(y2);
+                        double tmp_x = xs;
+                        while(tmp_x <= xe)
+                        {
+                            bo.set_x(tmp_x);
+                            w.neue_bearbeitung(bo.text());
+                            tmp_x = tmp_x + raster;
+                        }
+                    }
 
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_LORAM_AFB)
+                    {
+                        bo.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_LORAM_DM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_LORAM_DM_)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        bo.set_dm(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_LORAM_TI   || \
+                             schluessel == FMC_LORAM_TI_     )
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        if(tiefe < 0)
+                        {
+                            tiefe = w.dicke() - tiefe;
+                        }
+                        bo.set_tiefe(tiefe);
+                    }else if(schluessel == FMC_LORAM_XS)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xs = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_LORAM_XM)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        xm = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_LORAM_Y1)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        y1 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_LORAM_Y2)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp.replace("Y1", double_to_qstring(y1));
+                        y2 = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_LORAM_RASTER  || \
+                             schluessel == FMC_LORAM_RASTER_)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        raster = ausdruck_auswerten(tmp).toDouble();
+                    }
+                }
+            }
         }else if(zeile.contains(FMC_FKON))
         {
 
@@ -7848,10 +8295,10 @@ strecke werkstuecke::dxf_strecke(QString namen, QString werte, QString dxf_versi
         punkt3d p;
         p.set_x(dxf_wert(namen, werte, DXF_AC1009_STRECKE_SX));
         p.set_y(dxf_wert(namen, werte, DXF_AC1009_STRECKE_SY));
-        s.set_start(p);
+        s.set_stapu(p);
         p.set_x(dxf_wert(namen, werte, DXF_AC1009_STRECKE_EX));
         p.set_y(dxf_wert(namen, werte, DXF_AC1009_STRECKE_EY));
-        s.set_ende(p);
+        s.set_endpu(p);
     }
     return s;
 }
@@ -8123,22 +8570,22 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             {
                                 if(s.stapu().x() > s.endpu().x())
                                 {
-                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                    s.drenen_um_mipu_2d(180,true);
                                 }
                                 if(s2.stapu().x() > s2.endpu().x())
                                 {
-                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                    s.drenen_um_mipu_2d(180,true);
                                 }
                                 bo.set_bezug(WST_BEZUG_LI);
                             }else//HBE von rechts
                             {
                                 if(s.stapu().x() < s.endpu().x())
                                 {
-                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                    s.drenen_um_mipu_2d(180,true);
                                 }
                                 if(s2.stapu().x() < s2.endpu().x())
                                 {
-                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                    s.drenen_um_mipu_2d(180,true);
                                 }
                                 bo.set_bezug(WST_BEZUG_RE);
                             }
@@ -8148,47 +8595,47 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             {
                                 if(s.stapu().y() > s.endpu().y())
                                 {
-                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                    s.drenen_um_mipu_2d(180,true);
                                 }
                                 if(s2.stapu().y() > s2.endpu().y())
                                 {
-                                    s2.drenen_um_mittelpunkt_2d(180,true);
+                                    s2.drenen_um_mipu_2d(180,true);
                                 }
                                 bo.set_bezug(WST_BEZUG_VO);
                             }else//HBE von hinten (Norden)
                             {
                                 if(s.stapu().y() < s.endpu().y())
                                 {
-                                    s.drenen_um_mittelpunkt_2d(180,true);
+                                    s.drenen_um_mipu_2d(180,true);
                                 }
                                 if(s2.stapu().y() < s2.endpu().y())
                                 {
-                                    s2.drenen_um_mittelpunkt_2d(180,true);
+                                    s2.drenen_um_mipu_2d(180,true);
                                 }
                                 bo.set_bezug(WST_BEZUG_HI);
                             }                            
                         }
                         strecke grundlinie;
-                        grundlinie.set_start(s.stapu());
-                        grundlinie.set_ende(s2.stapu());
+                        grundlinie.set_stapu(s.stapu());
+                        grundlinie.set_endpu(s2.stapu());
                         double dm = grundlinie.laenge2d();
                         dm = runden(dm, 1);
                         bo.set_dm(dm);
                         bo.set_tiefe(s.laenge2d());
                         if(istOberseite)
                         {
-                            bo.set_x(grundlinie.mitpu2d().x());
-                            bo.set_y(grundlinie.mitpu2d().y());
+                            bo.set_x(grundlinie.mipu().x());
+                            bo.set_y(grundlinie.mipu().y());
                         }else
                         {
                             if(Einstellung_dxf.drehtyp_L())
                             {
-                                bo.set_x(w.laenge()-grundlinie.mitpu2d().x());
-                                bo.set_y(grundlinie.mitpu2d().y());
+                                bo.set_x(w.laenge()-grundlinie.mipu().x());
+                                bo.set_y(grundlinie.mipu().y());
                             }else //if(Einstellung_dxf.drehtyp_B())
                             {
-                                bo.set_x(grundlinie.mitpu2d().x());
-                                bo.set_y(w.breite()-grundlinie.mitpu2d().y());
+                                bo.set_x(grundlinie.mipu().x());
+                                bo.set_y(w.breite()-grundlinie.mipu().y());
                             }
                         }
                         w.neue_bearbeitung(bo.text());
@@ -8231,34 +8678,34 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             ti.replace(Einstellung_dxf.dezitren(),".");
                             nu.set_tiefe(ti);
                             strecke grundlinie_start;
-                            grundlinie_start.set_start(s.stapu());
-                            grundlinie_start.set_ende(s2.stapu());
+                            grundlinie_start.set_stapu(s.stapu());
+                            grundlinie_start.set_endpu(s2.stapu());
                             strecke grundlinie_ende;
-                            grundlinie_ende.set_start(s.endpu());
-                            grundlinie_ende.set_ende(s2.endpu());
+                            grundlinie_ende.set_stapu(s.endpu());
+                            grundlinie_ende.set_endpu(s2.endpu());
                             nu.set_breite(grundlinie_start.laenge2d());
                             if(istOberseite)
                             {
                                 nu.set_bezug(WST_BEZUG_OBSEI);
-                                nu.set_xs(grundlinie_start.mitpu3d().x());
-                                nu.set_ys(grundlinie_start.mitpu3d().y());
-                                nu.set_xe(grundlinie_ende.mitpu3d().x());
-                                nu.set_ye(grundlinie_ende.mitpu3d().y());
+                                nu.set_xs(grundlinie_start.mipu().x());
+                                nu.set_ys(grundlinie_start.mipu().y());
+                                nu.set_xe(grundlinie_ende.mipu().x());
+                                nu.set_ye(grundlinie_ende.mipu().y());
                             }else
                             {
                                 nu.set_bezug(WST_BEZUG_UNSEI);
                                 if(Einstellung_dxf.drehtyp_L())
                                 {
-                                    nu.set_xs(w.laenge()-grundlinie_start.mitpu3d().x());
-                                    nu.set_ys(grundlinie_start.mitpu3d().y());
-                                    nu.set_xe(w.laenge()-grundlinie_ende.mitpu3d().x());
-                                    nu.set_ye(grundlinie_ende.mitpu3d().y());
+                                    nu.set_xs(w.laenge()-grundlinie_start.mipu().x());
+                                    nu.set_ys(grundlinie_start.mipu().y());
+                                    nu.set_xe(w.laenge()-grundlinie_ende.mipu().x());
+                                    nu.set_ye(grundlinie_ende.mipu().y());
                                 }else //if(Einstellung_dxf.drehtyp_B())
                                 {
-                                    nu.set_xs(grundlinie_start.mitpu3d().x());
-                                    nu.set_ys(w.breite()-grundlinie_start.mitpu3d().y());
-                                    nu.set_xe(grundlinie_ende.mitpu3d().x());
-                                    nu.set_ye(w.breite()-grundlinie_ende.mitpu3d().y());
+                                    nu.set_xs(grundlinie_start.mipu().x());
+                                    nu.set_ys(w.breite()-grundlinie_start.mipu().y());
+                                    nu.set_xe(grundlinie_ende.mipu().x());
+                                    nu.set_ye(w.breite()-grundlinie_ende.mipu().y());
                                 }
                             }
                             w.neue_bearbeitung(nu.text());
@@ -8279,8 +8726,8 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         nu.set_tiefe(ti);
                         nu.set_breite(s2.laenge2d());
                         strecke tmp;
-                        tmp.set_start(s2.mitpu3d());
-                        tmp.set_ende(s4.mitpu3d());
+                        tmp.set_stapu(s2.mipu());
+                        tmp.set_endpu(s4.mipu());
                         if(istOberseite)
                         {
                             nu.set_bezug(WST_BEZUG_OBSEI);
@@ -8418,11 +8865,11 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         gesund = false;
                     }
                     strecke dg1;//Diagonale 1
-                    dg1.set_start(s1.stapu());
-                    dg1.set_ende(s3.stapu());
+                    dg1.set_stapu(s1.stapu());
+                    dg1.set_endpu(s3.stapu());
                     strecke dg2;//Diagonale 2
-                    dg2.set_start(s1.endpu());
-                    dg2.set_ende(s3.endpu());
+                    dg2.set_stapu(s1.endpu());
+                    dg2.set_endpu(s3.endpu());
                     //Wenn die Diagonalen gleich lang sind ist das 4Eck rechtwinkelig:
                     if(!cagleich(dg1.laenge2d(), dg2.laenge2d(),0.1))
                     {
@@ -8472,25 +8919,25 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         rt.set_laenge(s1.laenge2d());
                         rt.set_breite(s2.laenge2d());
                         strecke tmp;
-                        tmp.set_start(s2.mitpu3d());
-                        tmp.set_ende(s4.mitpu3d());
+                        tmp.set_stapu(s2.mipu());
+                        tmp.set_endpu(s4.mipu());
                         if(istOberseite)
                         {
                             rt.set_bezug(WST_BEZUG_OBSEI);
-                            rt.set_x(tmp.mitpu3d().x());
-                            rt.set_y(tmp.mitpu3d().y());
+                            rt.set_x(tmp.mipu().x());
+                            rt.set_y(tmp.mipu().y());
                             rt.set_drewi(s1.wink());
                         }else
                         {
                             rt.set_bezug(WST_BEZUG_UNSEI);
                             if(Einstellung_dxf.drehtyp_L())
                             {
-                                rt.set_x(w.laenge()-tmp.mitpu3d().x());
-                                rt.set_y(tmp.mitpu3d().y());
+                                rt.set_x(w.laenge()-tmp.mipu().x());
+                                rt.set_y(tmp.mipu().y());
                             }else //if(Einstellung_dxf.drehtyp_B())
                             {
-                                rt.set_x(tmp.mitpu3d().x());
-                                rt.set_y(w.breite()-tmp.mitpu3d().y());
+                                rt.set_x(tmp.mipu().x());
+                                rt.set_y(w.breite()-tmp.mipu().y());
                             }
                             //Der Winkel hau einen Werk zwischen 0 und 360°
                             //1° entspricht 181° usw.
@@ -8540,17 +8987,17 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         gesund = false;
                     }
                     strecke dg1;//Diagonale 1
-                    dg1.set_start(s_ob.stapu());
-                    dg1.set_ende(s_un.stapu());
+                    dg1.set_stapu(s_ob.stapu());
+                    dg1.set_endpu(s_un.stapu());
                     strecke dg2;//Diagonale 2
-                    dg2.set_start(s_ob.endpu());
-                    dg2.set_ende(s_un.endpu());
+                    dg2.set_stapu(s_ob.endpu());
+                    dg2.set_endpu(s_un.endpu());
                     strecke dg3;//Diagonale 3
-                    dg3.set_start(s_li.stapu());
-                    dg3.set_ende(s_re.stapu());
+                    dg3.set_stapu(s_li.stapu());
+                    dg3.set_endpu(s_re.stapu());
                     strecke dg4;//Diagonale 4
-                    dg4.set_start(s_li.endpu());
-                    dg4.set_ende(s_re.endpu());
+                    dg4.set_stapu(s_li.endpu());
+                    dg4.set_endpu(s_re.endpu());
                     //Wenn die Diagonalen gleich lang sind ist das 4Eck rechtwinkelig:
                     if(!cagleich(dg1.laenge2d(), dg2.laenge2d(),0.1))
                     {
@@ -8585,33 +9032,33 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         }
                         rt.set_tiefe(ti_double);
                         strecke s_laenge;
-                        s_laenge.set_start(s_li.stapu());
-                        s_laenge.set_ende(s_re.endpu());
+                        s_laenge.set_stapu(s_li.stapu());
+                        s_laenge.set_endpu(s_re.endpu());
                         rt.set_laenge(s_laenge.laenge2d());
                         strecke s_breite;
-                        s_breite.set_start(s_ob.stapu());
-                        s_breite.set_ende(s_un.endpu());
+                        s_breite.set_stapu(s_ob.stapu());
+                        s_breite.set_endpu(s_un.endpu());
                         rt.set_breite(s_breite.laenge2d());
                         strecke tmp;
-                        tmp.set_start(s_ob.mitpu3d());
-                        tmp.set_ende(s_un.mitpu3d());
+                        tmp.set_stapu(s_ob.mipu());
+                        tmp.set_endpu(s_un.mipu());
                         if(istOberseite)
                         {
                             rt.set_bezug(WST_BEZUG_OBSEI);
-                            rt.set_x(tmp.mitpu3d().x());
-                            rt.set_y(tmp.mitpu3d().y());
+                            rt.set_x(tmp.mipu().x());
+                            rt.set_y(tmp.mipu().y());
                             rt.set_drewi(s_ob.wink());
                         }else
                         {
                             rt.set_bezug(WST_BEZUG_UNSEI);
                             if(Einstellung_dxf.drehtyp_L())
                             {
-                                rt.set_x(w.laenge()-tmp.mitpu3d().x());
-                                rt.set_y(tmp.mitpu3d().y());
+                                rt.set_x(w.laenge()-tmp.mipu().x());
+                                rt.set_y(tmp.mipu().y());
                             }else //if(Einstellung_dxf.drehtyp_B())
                             {
-                                rt.set_x(tmp.mitpu3d().x());
-                                rt.set_y(w.breite()-tmp.mitpu3d().y());
+                                rt.set_x(tmp.mipu().x());
+                                rt.set_y(w.breite()-tmp.mipu().y());
                             }
                             //Der Winkel hau einen Werk zwischen 0 und 360°
                             //1° entspricht 181° usw.
@@ -8738,7 +9185,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             konturanfang = false;
                         }else
                         {
-                            fraueseraufruf fa;
+                            fraeseraufruf fa;
                             fa.set_wkznum(werkznr);
                             fa.set_tiefe(fti);
                             fa.set_radkor(radkor);
@@ -8766,7 +9213,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             konturanfang = false;
                         }else
                         {
-                            fraueseraufruf fa;
+                            fraeseraufruf fa;
                             fa.set_wkznum(werkznr);
                             fa.set_tiefe(fti);
                             fa.set_radkor(radkor);
@@ -8852,7 +9299,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             konturanfang = false;
                         }else
                         {
-                            fraueseraufruf fa;
+                            fraeseraufruf fa;
                             fa.set_wkznum(werkznr);
                             fa.set_tiefe(fti);
                             fa.set_radkor(radkor);
@@ -8882,7 +9329,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             konturanfang = false;
                         }else
                         {
-                            fraueseraufruf fa;
+                            fraeseraufruf fa;
                             fa.set_wkznum(werkznr);
                             fa.set_tiefe(fti);
                             fa.set_radkor(radkor);

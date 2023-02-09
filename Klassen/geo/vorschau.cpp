@@ -819,7 +819,7 @@ uint vorschau::zeile_von_Mauspos()
     uint zeile = 0;
     double abst = 9999999999;
     strecke s; //nehmen wir für Längenberechnung/Abstandsberechnung
-    s.set_start(mauspos_npanschlag());
+    s.set_stapu(mauspos_npanschlag());
     text_zw geotext = Geotext;
 
     for(uint i=0;i<geotext.count();i++)
@@ -836,7 +836,7 @@ uint vorschau::zeile_von_Mauspos()
             {
                 punkt3d ep;
                 ep.set_text(element.text());
-                s.set_ende(ep);
+                s.set_endpu(ep);
                 double l = s.laenge2d();
                 if(l < abst)
                 {
@@ -863,12 +863,12 @@ uint vorschau::zeile_von_Mauspos()
                 mipu.set_x(b.mitte().x());
                 mipu.set_y(b.mitte().y());
                 strecke s1, s2, s3;
-                s1.set_start(mipu);
-                s2.set_start(mipu);
-                s3.set_start(mipu);
-                s1.set_ende(sp);
-                s2.set_ende(ep);
-                s3.set_ende(mauspos_npanschlag());
+                s1.set_stapu(mipu);
+                s2.set_stapu(mipu);
+                s3.set_stapu(mipu);
+                s1.set_endpu(sp);
+                s2.set_endpu(ep);
+                s3.set_endpu(mauspos_npanschlag());
                 double w1, w2, w3;
                 w1 = s1.wink();
                 w2 = s2.wink();
@@ -883,7 +883,7 @@ uint vorschau::zeile_von_Mauspos()
                 if(  (w1 <= w3)  &&  (w3 <= w2)  )
                 {
                     //Abstandsberechnung ähnlich wie beim Kreis:
-                    s.set_ende(mipu);
+                    s.set_endpu(mipu);
                     double l = s.laenge2d();
                     double rad = b.rad();
                     if(l > rad)
@@ -903,10 +903,10 @@ uint vorschau::zeile_von_Mauspos()
                 }else
                 {
                     strecke s1, s2;
-                    s1.set_start(sp);
-                    s2.set_start(ep);
-                    s1.set_ende(mauspos_npanschlag());
-                    s2.set_ende(mauspos_npanschlag());
+                    s1.set_stapu(sp);
+                    s2.set_stapu(ep);
+                    s1.set_endpu(mauspos_npanschlag());
+                    s2.set_endpu(mauspos_npanschlag());
                     double abst_sp, abst_ep, l;
                     abst_sp = s1.laenge2d();
                     abst_ep = s2.laenge2d();
@@ -928,7 +928,7 @@ uint vorschau::zeile_von_Mauspos()
                 punkt2d ep;
                 ep.set_x(element.at(1).toDouble());
                 ep.set_y(element.at(2).toDouble());
-                s.set_ende(ep);
+                s.set_endpu(ep);
                 double l = s.laenge2d();
                 double rad = element.at(4).toDouble();
                 if(l > rad)
@@ -974,14 +974,14 @@ uint vorschau::zeile_von_Mauspos()
                     pur = w.unr();
                 }
                 strecke sli, sre, sob, sun;
-                sli.set_start(pul);
-                sli.set_ende(pol);
-                sre.set_start(pur);
-                sre.set_ende(por);
-                sob.set_start(pol);
-                sob.set_ende(por);
-                sun.set_start(pul);
-                sun.set_ende(pur);
+                sli.set_stapu(pul);
+                sli.set_endpu(pol);
+                sre.set_stapu(pur);
+                sre.set_endpu(por);
+                sob.set_stapu(pol);
+                sob.set_endpu(por);
+                sun.set_stapu(pul);
+                sun.set_endpu(pur);
                 double abst_li, abst_re, abst_ob, abst_un;
                 abst_li = sli.abst(mauspos_npanschlag());
                 abst_re = sre.abst(mauspos_npanschlag());

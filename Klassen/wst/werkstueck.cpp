@@ -299,8 +299,8 @@ geometrietext werkstueck::geo()
     {
         punkt3d sp(0,0,0);
         punkt3d ep(laenge(),0,0);
-        skante.set_start(sp);
-        skante.set_ende(ep);
+        skante.set_stapu(sp);
+        skante.set_endpu(ep);
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
@@ -308,8 +308,8 @@ geometrietext werkstueck::geo()
     {
         punkt3d sp(0,breite(),0);
         punkt3d ep(laenge(),breite(),0);
-        skante.set_start(sp);
-        skante.set_ende(ep);
+        skante.set_stapu(sp);
+        skante.set_endpu(ep);
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
@@ -317,8 +317,8 @@ geometrietext werkstueck::geo()
     {
         punkt3d sp(0,0,0);
         punkt3d ep(0,breite(),0);
-        skante.set_start(sp);
-        skante.set_ende(ep);
+        skante.set_stapu(sp);
+        skante.set_endpu(ep);
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
@@ -326,8 +326,8 @@ geometrietext werkstueck::geo()
     {
         punkt3d sp(laenge(),0,0);
         punkt3d ep(laenge(),breite(),0);
-        skante.set_start(sp);
-        skante.set_ende(ep);
+        skante.set_stapu(sp);
+        skante.set_endpu(ep);
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
@@ -360,11 +360,11 @@ geometrietext werkstueck::geo()
                 gt.add_kreis(k);
                 strecke s;
                 s.set_farbe(k.farbe());
-                s.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
-                s.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s.set_stapu(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s.set_endpu( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
                 s.verschieben_um(versatz_x, versatz_y);
                 gt.add_strecke(s);
-                s.drenen_um_mittelpunkt_2d(90, true);
+                s.drenen_um_mipu_2d(90, true);
                 gt.add_strecke(s);
             }else if(bo.bezug() == WST_BEZUG_UNSEI)
             {
@@ -383,12 +383,12 @@ geometrietext werkstueck::geo()
                 gt.add_kreis(k);
                 strecke s;
                 s.set_farbe(k.farbe());
-                s.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
-                s.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
-                s.drenen_um_mittelpunkt_2d(45, true);
+                s.set_stapu(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s.set_endpu( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s.drenen_um_mipu_2d(45, true);
                 s.verschieben_um(versatz_x, versatz_y);
                 gt.add_strecke(s);
-                s.drenen_um_mittelpunkt_2d(90, true);
+                s.drenen_um_mipu_2d(90, true);
                 gt.add_strecke(s);
             }else if(bo.bezug() == WST_BEZUG_LI)
             {
@@ -450,11 +450,11 @@ geometrietext werkstueck::geo()
                 }
                 strecke s1;
                 s1.set_farbe(k.farbe());
-                s1.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
-                s1.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s1.set_stapu(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s1.set_endpu( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
                 s1.verschieben_um(versatz_x, versatz_y);
                 strecke s2 = s1;
-                s2.drenen_um_mittelpunkt_2d(90, true);
+                s2.drenen_um_mipu_2d(90, true);
                 for(uint i=0; i<bo.anz_x() ;i++)
                 {
                     kreis tmp_k = k;
@@ -492,12 +492,12 @@ geometrietext werkstueck::geo()
                 }
                 strecke s1;
                 s1.set_farbe(k.farbe());
-                s1.set_start(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
-                s1.set_ende( bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
-                s1.drenen_um_mittelpunkt_2d(45, true);
+                s1.set_stapu(bo.x() - bo.dm()/2 - 2, bo.y(), bo.z());
+                s1.set_endpu(bo.x() + bo.dm()/2 + 2, bo.y(), bo.z());
+                s1.drenen_um_mipu_2d(45, true);
                 s1.verschieben_um(versatz_x, versatz_y);
                 strecke s2 = s1;
-                s2.drenen_um_mittelpunkt_2d(90, true);
+                s2.drenen_um_mipu_2d(90, true);
                 for(uint i=0; i<bo.anz_x() ;i++)
                 {
                     kreis tmp_k = k;
@@ -584,8 +584,8 @@ geometrietext werkstueck::geo()
         {
             nut nu(zeile.text());
             strecke s;
-            s.set_start(nu.xs(), nu.ys(), 0);
-            s.set_ende(nu.xe(), nu.ye(), 0);
+            s.set_stapu(nu.xs(), nu.ys(), 0);
+            s.set_endpu(nu.xe(), nu.ye(), 0);
             rechteck3d r;
             if(  (nu.bezug() == WST_BEZUG_OBSEI) ||  (nu.bezug() == WST_BEZUG_UNSEI)  )
             {
@@ -600,7 +600,7 @@ geometrietext werkstueck::geo()
                 r.set_laenge(s.laenge2d());
                 r.set_breite(nu.breite());
                 r.set_bezugspunkt(MITTE);
-                r.set_einfuegepunkt(s.mitpu3d());
+                r.set_einfuegepunkt(s.mipu());
                 r.set_drewi(s.wink());
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
@@ -624,20 +624,20 @@ geometrietext werkstueck::geo()
                     r.set_breite(nu.tiefe());
                 }
                 r.set_farbe_fuellung(FARBE_GELB);
-                punkt3d mipu = s.mitpu3d();
+                punkt3d mipu = s.mipu();
                 r.set_bezugspunkt(MITTE);
                 strecke s_mipu;
-                s_mipu.set_start(mipu);
-                s_mipu.set_ende(s.endpu());
+                s_mipu.set_stapu(mipu);
+                s_mipu.set_endpu(s.endpu());
                 s_mipu.set_laenge_2d(nu.tiefe()/2, strecke_bezugspunkt_start);
-                s_mipu.drenen_um_startpunkt_2d(90, false);
+                s_mipu.drenen_um_stapu_2d(90, false);
                 mipu = s_mipu.endpu();
                 //r.set_drewi(drehwinkel);
                 r.set_einfuegepunkt(mipu);
                 r.verschieben_um(versatz_x, versatz_y);
                 //Start anzeigen:
                 strecke stmp = s;
-                stmp.drenen_um_startpunkt_2d(90, true);
+                stmp.drenen_um_stapu_2d(90, true);
                 stmp.set_laenge_2d(stmp.laenge2d()+nu.tiefe(), strecke_bezugspunkt_ende);
                 stmp.set_laenge_2d(30, strecke_bezugspunkt_start);
                 kreis k;
@@ -715,7 +715,7 @@ geometrietext werkstueck::geo()
 
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
-            fraueseraufruf fa(zeile.text());
+            fraeseraufruf fa(zeile.text());
             punkt3d p(fa.x(), fa.y(), fa.z());
             p.set_linienbreite(10);
             p.verschieben_um(versatz_x, versatz_y);
