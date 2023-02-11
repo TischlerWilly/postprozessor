@@ -87,6 +87,9 @@ void Dialog_programmtext::slot_wst(werkstueck* w)
         }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             bearb = fbogen_zu_prgzei(zeile.text());
+        }else if(zeile.at(0) == BEARBART_GEHRUNG)
+        {
+            bearb = gehr_zu_prgzei(zeile.text());
         }
         ui->listWidget_prgtext->addItem(bearb);
     }

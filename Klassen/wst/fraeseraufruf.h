@@ -46,7 +46,7 @@ public:
     void set_text(QString text);
 
 private:
-    punkt3d Pos;
+    punkt3d Pos; //Der Z-Wert wird benutzt für horizontale Fräsungen
     double Tiefe;   //ist die Eintauchtiefe = Oberfläche-Wst bis gesamte Bahntiefe
     QString Bezug;
     QString Afb;

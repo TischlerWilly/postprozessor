@@ -206,6 +206,39 @@ QString fbogen_zu_prgzei(QString text)
     msg += fb.afb();
     return msg;
 }
+QString gehr_zu_prgzei(QString text)
+{
+    QString msg = "Gehrung ";
+    gehrung ge(text);
+    msg += "\tSpitze :";
+    if(ge.bezug() == WST_BEZUG_OBSEI)
+    {
+        msg += "unten";
+    }else
+    {
+        msg += "oben";
+    }
+    msg += "\tWinkel: ";
+    msg += ge.winkel_qstring();
+    msg += "\tRitztiefe: ";
+    msg += ge.riti_qstring();
+    msg += "\tSchnittiefe: ";
+    msg += ge.sti_qstring();
+    msg += "\tXS: ";
+    msg += ge.stapu().x_QString();
+    msg += "\tYS: ";
+    msg += ge.stapu().y_QString();
+    msg += "\tXE: ";
+    msg += ge.endpu().x_QString();
+    msg += "\tYE: ";
+    msg += ge.endpu().y_QString();
+    msg += "\tY: ";
+    msg += "\tAFB: ";
+    msg += ge.afb();
+    msg += "\tWKZ: ";
+    msg += ge.wkznum();
+    return msg;
+}
 
 
 

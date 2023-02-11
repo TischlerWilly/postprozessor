@@ -35,6 +35,7 @@ void fraeseraufruf::set_y(QString y)
 {
     Pos.set_y(y);
 }
+
 void fraeseraufruf::set_z(double z)
 {
     Pos.set_z(z);
@@ -43,6 +44,7 @@ void fraeseraufruf::set_z(QString z)
 {
     Pos.set_z(z);
 }
+
 void fraeseraufruf::set_pos(punkt3d p)
 {
     Pos = p;
@@ -94,6 +96,7 @@ QString fraeseraufruf::y_qstring()
 {
     return Pos.y_QString();
 }
+
 double fraeseraufruf::z()
 {
     return Pos.z();
@@ -102,6 +105,7 @@ QString fraeseraufruf::z_qstring()
 {
     return Pos.z_QString();
 }
+
 double fraeseraufruf::tiefe()
 {
     return Tiefe;

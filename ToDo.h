@@ -7,6 +7,8 @@
 /*
 
 - bool werkstuecke::import_fmc(...)
+  >import Falz
+    -->xyz-Pos wird nicht übernommen in wstzustand
 
 - geo(..) klassenunabhängig machen
 

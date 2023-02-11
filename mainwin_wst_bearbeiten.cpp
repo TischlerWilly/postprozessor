@@ -143,6 +143,9 @@ void MainWin_wst_bearbeiten::update_listwidget()
         }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             bearb = fbogen_zu_prgzei(zeile.text());
+        }else if(zeile.at(0) == BEARBART_GEHRUNG)
+        {
+            bearb = gehr_zu_prgzei(zeile.text());
         }
         ui->listWidget_prgtext->addItem(bearb);
     }
@@ -161,7 +164,7 @@ void MainWin_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
 }
 void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int currentRow)
 {
-    emit signalIndexChange(currentRow+1);
+    emit signalIndexChange(currentRow);
 }
 void MainWin_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
 {
@@ -205,7 +208,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
     }
     //Zeile Auslesen:
     text_zw bearb;
-    bearb.set_text(Wst->bearb_ptr()->at(zeile),TRENNZ_BEARB_PARAM);
+    bearb.set_text(Wst->bearb_ptr()->at(zeile-1),TRENNZ_BEARB_PARAM);
     //Dialogfenster aufrufen:
     if(bearb.at(0) == BEARBART_RTA)
     {
