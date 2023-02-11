@@ -7790,6 +7790,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
             rechtecktasche rt;
             double x = 0;
             double y = 0;
+            double wi = 0;
             for(uint ii=i+1; ii<tz.count() ;ii++)
             {
                 zeile = tz.at(ii);
@@ -7812,10 +7813,16 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         }else //if(drehtyp_B)
                         {
                             rt.set_x(x);
-                            rt.set_y(w.breite()-y);
+                            rt.set_y(w.breite()-y);                            
                         }
+                        if(wi > 180)
+                        {
+                            wi = wi -180;
+                        }
+                        wi = 180 - wi;
                         rt.set_z(0);
                     }
+                    rt.set_drewi(wi);
                     w.neue_bearbeitung(rt.text());
                     break;
                 }else
@@ -7870,7 +7877,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp.replace(",",".");
                         tmp = var_einsetzen(w, tmp);
-                        rt.set_drewi(ausdruck_auswerten(tmp));
+                        wi = ausdruck_auswerten(tmp).toDouble();
                     }else if(schluessel == FMC_RTA_RAD)
                     {
                         QString tmp = wert_nach_istgleich(zeile);
@@ -8263,7 +8270,108 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
 
         }else if(zeile.contains(FMC_STULP))
         {
-
+            rechtecktasche rt;
+            double x = 0;
+            double y = 0;
+            double z = 0;
+            for(uint ii=i+1; ii<tz.count() ;ii++)
+            {
+                zeile = tz.at(ii);
+                if(!zeile.contains("=")) //Ende des Abschnittes
+                {
+                    i=ii-1;
+                    if(!istOberseite)
+                    {
+                        if(drehtyp_L)
+                        {
+                            x = w.laenge()-x;
+                        }else //if(drehtyp_B)
+                        {
+                            y = w.breite()-y;
+                        }
+                        z = w.dicke()-z;
+                    }
+                    //Bezugsfläche ermitteln:
+                    if(cagleich(x, 0, 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_LI);
+                    }else if(cagleich(x, w.laenge(), 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_RE);
+                    }else if(cagleich(y, 0, 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_VO);
+                    }else if(cagleich(y, w.breite(), 0.1))
+                    {
+                        rt.set_bezug(WST_BEZUG_HI);
+                    }
+                    rt.set_x(x);
+                    rt.set_y(y);
+                    rt.set_z(z);
+                    w.neue_bearbeitung(rt.text());
+                    break;
+                }else
+                {
+                    QString schluessel = text_links(zeile, "=");
+                    if(schluessel == FMC_STULP_AFB)
+                    {
+                        rt.set_afb(wert_nach_istgleich(zeile));
+                    }else if(schluessel == FMC_STULP_L)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_laenge(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_B)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_breite(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_TI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        double tiefe = ausdruck_auswerten(tmp).toDouble();
+                        rt.set_tiefe(tiefe);
+                    }else if(schluessel == FMC_STULP_X)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        x = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_STULP_Y)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        y = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_STULP_Z)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        z = ausdruck_auswerten(tmp).toDouble();
+                    }else if(schluessel == FMC_STULP_ZUST)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_zustellmass(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_RAD)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp.replace(",",".");
+                        tmp = var_einsetzen(w, tmp);
+                        rt.set_rad(ausdruck_auswerten(tmp));
+                    }else if(schluessel == FMC_STULP_WKZ)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        rt.set_wkznum(tmp);
+                    }
+                }
+            }
         }
     }
     Wste.replace(Index, w);
