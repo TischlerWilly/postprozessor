@@ -2115,7 +2115,7 @@ void wstzustand::bearb_drehen_90(text_zw& bearb, double& tmp_l, double& tmp_b)
 {
     //diese Funktion dreht die Bearbeitungen um 90° im Uhrzeigersin
 
-    for(uint i=0; i<=bearb.count() ;i++)
+    for(uint i=0; i<bearb.count() ;i++)
     {
         text_zw zeile;
         zeile.set_text(bearb.at(i), TRENNZ_BEARB_PARAM);
@@ -3718,15 +3718,14 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
                 afb = false;
                 continue; //For-Schleife in die nächste Runde
             }
-            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
+            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());            
             if(!tnummer.isEmpty())
             {
-                wkzdm = wkzmag.dm(tnummer).toDouble();
+                wkzdm = wkzmag.dm(tnummer).toDouble();                
             }else
             {
                 wkzdm = 2;//Defaultwert
             }
-
             if(i+1 < bearb.count())
             {
                 text_zw param2; //Folgezeile
@@ -3734,15 +3733,9 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
                 if(param2.at(0) == BEARBART_FRAESERGERADE)
                 {
                     fraesergerade fg(param2.text());
-                    punkt3d sp,ep;
-                    sp.set_x(param2.at(3));
-                    sp.set_y(param2.at(4));
-                    ep.set_x(param2.at(6));
-                    ep.set_y(param2.at(7));
                     strecke s;
-                    s.set_stapu(sp);
-                    s.set_endpu(ep);
-
+                    s.set_stapu(fg.sp());
+                    s.set_endpu(fg.ep());
                     if(wkzdm >= s.laenge2d())
                     {
                         s.set_laenge_2d(wkzdm+1, strecke_bezugspunkt_ende);
@@ -3754,8 +3747,8 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
                         bearb.edit(i+1, fg.text());
                         i++;
                     }
-                }
-            }
+                }                
+            }            
         }else if(param.at(0) == BEARBART_FRAESERGERADE  &&  afb == true)//zu Kurze Geraden am Ende finden
         {
             bool ist_schlussgerade = false;
@@ -3774,14 +3767,9 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
             if(ist_schlussgerade == true)
             {
                 fraesergerade fg(param.text());
-                punkt3d sp,ep;
-                sp.set_x(param.at(2));
-                sp.set_y(param.at(3));
-                ep.set_x(param.at(5));
-                ep.set_y(param.at(6));
                 strecke s;
-                s.set_stapu(sp);
-                s.set_endpu(ep);
+                s.set_stapu(fg.sp());
+                s.set_endpu(fg.ep());
                 if(wkzdm >= s.laenge2d())
                 {
                     s.set_laenge_2d(wkzdm+1, strecke_bezugspunkt_start);
@@ -3789,6 +3777,7 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
                     fg.set_ye(s.endpu().y());
                     bearb.edit(i, fg.text());
                 }
+                return;
             }
         }
     }

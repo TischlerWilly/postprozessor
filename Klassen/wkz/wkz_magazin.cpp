@@ -40,7 +40,8 @@ QString wkz_magazin::wkznummer(QString wkz_typ, \
     double wkz_dm_tmp = 0;
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(istaktiv(zeile))
         {
             if(typ(zeile) == wkz_typ  &&  (wkz_typ == WKZ_TYP_BOHRER))
@@ -124,7 +125,8 @@ QString wkz_magazin::wkznummer(QString wkz_typ, \
     wkz_dm_tmp = 0;
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(istaktiv(zeile))
         {
             if(typ(zeile) == wkz_typ  &&  (wkz_typ == WKZ_TYP_BOHRER))
@@ -154,7 +156,8 @@ QString wkz_magazin::wkznummer(QString wkz_typ, \
     wkz_dm_tmp = 0;
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(istaktiv(zeile))
         {
             if(  typ(zeile) == wkz_typ  &&  (wkz_typ == WKZ_TYP_FRAESER)  )
@@ -180,13 +183,15 @@ QString wkz_magazin::wkznummer(QString wkz_typ, \
 }
 QString wkz_magazin::wkznummer_von_alias(QString alias)
 {
+    alias.replace("void", "");
     if(alias.isEmpty())
     {
         return "";
     }
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(istaktiv(zeile))
         {
             if(  typ(zeile) == WKZ_TYP_FRAESER  )
@@ -206,7 +211,8 @@ QString wkz_magazin::dm(QString wkz_nr)
 {
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(wkznr(zeile) == wkz_nr)
         {
             if(typ(zeile) == WKZ_TYP_FRAESER)
@@ -231,7 +237,8 @@ bool wkz_magazin::ist_dubo(QString wkz_nr)
 {
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(wkznr(zeile) == wkz_nr)
         {
             if(typ(zeile) == WKZ_TYP_BOHRER)
@@ -248,7 +255,8 @@ QString wkz_magazin::vorschub(QString wkz_nr)
 {
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(wkznr(zeile) == wkz_nr)
         {
             if(typ(zeile) == WKZ_TYP_FRAESER)
@@ -275,7 +283,8 @@ QString wkz_magazin::zustellmass(QString wkz_nr)
 {
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(wkznr(zeile) == wkz_nr)
         {
             if(typ(zeile) == WKZ_TYP_FRAESER)
@@ -300,7 +309,8 @@ QString wkz_magazin::zustellmass_min(QString wkz_nr)
 {
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(wkznr(zeile) == wkz_nr)
         {
             if(typ(zeile) == WKZ_TYP_FRAESER)
@@ -327,7 +337,8 @@ QString wkz_magazin::saegeblattbreite(QString wkz_nr)
 {
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(wkznr(zeile) == wkz_nr)
         {
             if(typ(zeile) == WKZ_TYP_SAEGE)
@@ -344,7 +355,8 @@ QString wkz_magazin::nutzlaenge(QString wkz_nr)
 {
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(wkznr(zeile) == wkz_nr)
         {
             if(typ(zeile) == WKZ_TYP_FRAESER)
@@ -372,7 +384,8 @@ text_zw wkz_magazin::alle_bodm_hori()
     tz.set_trenz(WKZ_TRENNZ);
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(istaktiv(zeile))
         {
             if(typ(zeile) == WKZ_TYP_BOHRER)
@@ -393,7 +406,8 @@ text_zw wkz_magazin::alle_bodm_verti()
     tz.set_trenz(WKZ_TRENNZ);
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(istaktiv(zeile))
         {
             if(typ(zeile) == WKZ_TYP_BOHRER)
@@ -412,7 +426,8 @@ QString wkz_magazin::spiegelwkz(QString wkz_nr)
 {
     for(uint i=0; i<Magazin.count();i++)
     {
-        QString zeile = Magazin.at(i);
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
         if(wkznr(zeile) == wkz_nr)
         {
             if(typ(zeile) == WKZ_TYP_FRAESER)
@@ -455,17 +470,15 @@ void wkz_magazin::entf(uint index)
     Magazin.entf(index);
 }
 //----------------------------------private get:
-QString wkz_magazin::typ(QString wkz)
+QString wkz_magazin::typ(text_zw wkz)
 {
     //0: WKZ-Typ
-    text_zw wkz_tz(wkz, WKZ_TRENNZ);
-    return wkz_tz.at(0);
+    return wkz.at(0);
 }
-bool wkz_magazin::istaktiv(QString wkz)
+bool wkz_magazin::istaktiv(text_zw wkz)
 {
     //2: Ist Aktiv
-    text_zw wkz_tz(wkz, WKZ_TRENNZ);
-    if(wkz_tz.at(1) == "2")
+    if(wkz.at(2) == "1")
     {
         return true;
     }else
@@ -473,11 +486,10 @@ bool wkz_magazin::istaktiv(QString wkz)
         return false;
     }
 }
-QString wkz_magazin::wkznr(QString wkz)
+QString wkz_magazin::wkznr(text_zw wkz)
 {
     //1: Werkzeugnummer
-    text_zw wkz_tz(wkz, WKZ_TRENNZ);
-    return wkz_tz.at(1);
+    return wkz.at(1);
 }
 //----------------------------------
 

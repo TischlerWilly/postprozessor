@@ -6,6 +6,8 @@
 #include "Klassen/wkz/wkz_saege.h"
 #include "Defines/def_bearbeitungen.h"
 
+#include <QMessageBox>
+
 
 class wkz_magazin
 {
@@ -42,9 +44,9 @@ public:
     void entf(uint index);
 
 private:
-    QString typ(QString wkz);
-    bool istaktiv(QString wkz);
-    QString wkznr(QString wkz);
+    QString typ(text_zw wkz);
+    bool istaktiv(text_zw wkz);
+    QString wkznr(text_zw wkz);
 
     text_zw Magazin;
 };

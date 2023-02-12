@@ -50,7 +50,6 @@ wkz_fraeser::wkz_fraeser(text_zw wkz)
     {
         IstVerti = false;
     }
-
 }
 //----------------------------------set:
 void wkz_fraeser::set_wkznr(QString nr)

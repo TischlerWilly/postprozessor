@@ -2,13 +2,12 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "4.2023.02.09"
+#define PROGRAMMVERSION "4.2023.02.12"
 #endif //PROGRAMMVERSION
 /*
 
 - bool werkstuecke::import_fmc(...)
-  >import Falz
-    -->xyz-Pos wird nicht übernommen in wstzustand
+
 
 - geo(..) klassenunabhängig machen
 
