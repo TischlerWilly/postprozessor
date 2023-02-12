@@ -25,8 +25,6 @@ public:
 
     //--------------------------------------------------set_xy:
     bool neu(QString Werkstueckname, QString Quellformat);
-    bool import_fmc_oberseite(QString Werkstueckname, QString importtext);
-    bool import_fmc_unterseite(QString Werkstueckname, QString importtext);
     bool import_fmc(QString Werkstueckname, QString importtext, bool istOberseite);
     bool import_dxf(QString Werkstueckname, QString importtext, bool istOberseite);
     void set_fkon_gerade_laenge(double wert);
