@@ -1621,7 +1621,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         }
         if(ui->radioButton_vorschau_fmc->isChecked())
         {
-            int i = ui->listWidget_wste->currentRow()+1;
+            int i = ui->listWidget_wste->currentRow();
             if(wste.wst(i)->zustand().export_moeglich())
             {
                 if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -1650,7 +1650,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
             }
         }else if(ui->radioButton_vorschau_ganx->isChecked())
         {
-            int i = ui->listWidget_wste->currentRow()+1;
+            int i = ui->listWidget_wste->currentRow();
             if(wste.wst(i)->zustand().export_moeglich())
             {
                 if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -1677,7 +1677,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
             }
         }else if(ui->radioButton_vorschau_ggf->isChecked())
         {
-            int i = ui->listWidget_wste->currentRow()+1;
+            int i = ui->listWidget_wste->currentRow();
             if(wste.wst(i)->zustand().export_moeglich())
             {
                 if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -1705,7 +1705,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
             }
         }else //eigen
         {
-            int i = ui->listWidget_wste->currentRow()+1;
+            int i = ui->listWidget_wste->currentRow();
             if(wste.wst(i)->zustand().export_moeglich())
             {
                 if(!f.open(QIODevice::WriteOnly | QIODevice::Text))

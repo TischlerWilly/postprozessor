@@ -4487,7 +4487,7 @@ void wstzustand::fmc_dateitext(int index)
         msg += kommentar_fmc("aus Maschienendaten sein !!!");
         msg += kommentar_fmc("----------------------------");
     }
-    //---
+    //---    
     for(uint i=0 ; i<bearb.count() ; i++)
     {
         zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
@@ -4495,7 +4495,7 @@ void wstzustand::fmc_dateitext(int index)
         {
             bohrung bo(zeile.text());
             QString bezug = bo.bezug();
-            QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bezug);
+            QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bezug);            
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
@@ -4745,7 +4745,7 @@ void wstzustand::fmc_dateitext(int index)
                 if(tnummer.isEmpty())
                 {
                     tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
-                }
+                }                
                 if(!tnummer.isEmpty())
                 {
                     double zustellmas = bo.zustellmass();
