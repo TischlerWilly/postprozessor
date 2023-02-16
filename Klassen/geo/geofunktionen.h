@@ -8,10 +8,6 @@
 #include "Klassen/geo/strecke.h"
 #include "Klassen/geo/bogen.h"
 #include "Klassen/geo/bogenac.h"
-//#include "Klassen/geo/geometrietext.h"
-//#include "Defines/def_bearbeitungen.h"
-
-
 
 punkt drehen(punkt drehzentrum, punkt alter_punkt, \
              float drehwinkel, bool drehrichtung_im_uhrzeigersinn);
@@ -42,9 +38,5 @@ void trimmen(QString *geo1, QString *geo2);
 bool cagleich(punkt3d p1, punkt3d p2, double tolleranz);
 bool cagleich(punkt2d p1, punkt2d p2, double tolleranz);
 bool cagleich(double p1, double p2, double tolleranz);
-/*
-void geo(text_zw bearb, double wst_l, double wst_b, \
-         QString kante_v, QString kante_h, QString kante_l, QString kante_r, \
-         double versatz_x, double versatz_y);
-*/
+
 #endif // GEOMETRIE_H

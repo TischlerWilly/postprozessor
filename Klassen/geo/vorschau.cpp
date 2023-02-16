@@ -32,12 +32,9 @@ void vorschau::update_cad()
     painter.drawRect(0, 0, width(), height());
 
     //Bearbeitungen darstellen:
-    text_zw geotext = Geotext;
-    for(uint i=0;i<geotext.count();i++)
+    for(uint i=0;i<Geotext.count();i++)
     {
-        text_zw spalten;
-        spalten.set_text(geotext.at(i),TRZ_EL_);
-
+        text_zw spalten = Geotext.at(i);
         for(uint ii=0;ii<spalten.count();ii++)
         {
             zeichneGeotext(spalten.at(ii), i);
@@ -51,7 +48,7 @@ void vorschau::paintEvent(QPaintEvent *)
     update_cad();
 }
 
-void vorschau::zeichneGeotext(QString geometrieElement, uint i)
+void vorschau::zeichneGeotext(QString geometrieElement, int i)
 {
     QPainter painter(this);
     painter.setBrush( Qt::white);
@@ -548,7 +545,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
 
 }
 
-void vorschau::zeichneFkon(QString geometrieElement, uint i)
+void vorschau::zeichneFkon(QString geometrieElement, int i)
 {
     QPainter painter(this);
     painter.setBrush( Qt::white);
@@ -703,7 +700,7 @@ void vorschau::werkstueck_darstellung_berechnen()
 void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
-    Geotext = W.zustand().geo().text_zwei();
+    Geotext = W.zustand().geo();
     Wst.set_laenge(w_neu.zustand().l());
     Wst.set_breite(w_neu.zustand().b());
     Aktuelle_zeilennummer = aktive_zeile;
@@ -714,7 +711,7 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 void vorschau::slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
-    Geotext = W.geo().text_zwei();
+    Geotext = W.geo();
     Wst.set_laenge(w_neu.laenge());
     Wst.set_breite(w_neu.breite());
     Aktuelle_zeilennummer = aktive_zeile;
@@ -820,13 +817,11 @@ uint vorschau::zeile_von_Mauspos()
     double abst = 9999999999;
     strecke s; //nehmen wir für Längenberechnung/Abstandsberechnung
     s.set_stapu(mauspos_npanschlag());
-    text_zw geotext = Geotext;
+    geo_text geotext = Geotext;
 
     for(uint i=0;i<geotext.count();i++)
     {
-        text_zw spalten;
-        spalten.set_text(geotext.at(i),TRZ_EL_);
-
+        text_zw spalten = geotext.at(i);
         for(uint ii=0;ii<spalten.count();ii++)
         {
             text_zw element;

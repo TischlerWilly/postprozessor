@@ -15,6 +15,14 @@
 #include "wuerfel.h"
 #include "defines_geometrie.h"
 #include "geofunktionen.h"
+#include "Defines/def_bearbeitungen.h"
+#include "Klassen/wst/bohrung.h"
+#include "Klassen/wst/bohrraster.h"
+#include "Klassen/wst/nut.h"
+#include "Klassen/wst/rechtecktasche.h"
+#include "Klassen/wst/fraeseraufruf.h"
+#include "Klassen/wst/fraesergerade.h"
+#include "Klassen/wst/fraeserbogen.h"
 
 class geo_text
 {
@@ -53,3 +61,9 @@ private:
 };
 
 #endif // GEO_TEXT_H
+
+//Funktionen außerhalb der Klasse:
+
+geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, \
+                       QString kante_v, QString kante_h, QString kante_l, QString kante_r, \
+                       double versatz_x, double versatz_y);

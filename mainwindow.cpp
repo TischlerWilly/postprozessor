@@ -1805,7 +1805,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("eigen", &wkz_mag_fmc, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
-            sendVorschauAktualisieren(*wste.wst(wstindex), 0);
+            sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
             //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
@@ -1817,7 +1817,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ganx", &wkz_mag_ganx, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
-            sendVorschauAktualisieren(*wste.wst(wstindex), 0);
+            sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
         }else if(ui->radioButton_vorschau_fmc->isChecked())
@@ -1828,7 +1828,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("fmc", &wkz_mag_fmc, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
-            sendVorschauAktualisieren(*wste.wst(wstindex), 0);
+            sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
         }else if(ui->radioButton_vorschau_ggf->isChecked())
@@ -1839,7 +1839,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ggf", &wkz_mag_ggf, Einstellung.drehung_wst(), \
                      Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
-            sendVorschauAktualisieren(*wste.wst(wstindex), 0);
+            sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
         }

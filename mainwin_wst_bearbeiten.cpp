@@ -80,7 +80,7 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
     UnReDo.clear();
     UnReDo.neu(Wst->bearb());
-    sendVorschauAktualisieren(*Wst, 0);
+    sendVorschauAktualisieren(*Wst, -1);
     letzte_wst_l = Wst->laenge();
     letzte_wst_b = Wst->breite();
     letzte_wst_d = Wst->dicke();

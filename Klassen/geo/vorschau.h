@@ -27,8 +27,8 @@ protected:
     void paintEvent(QPaintEvent *);
 
 private:
-    void zeichneGeotext(QString geometrieElement, uint i);
-    void zeichneFkon(QString geometrieElement, uint i);
+    void zeichneGeotext(QString geometrieElement, int i);
+    void zeichneFkon(QString geometrieElement, int i);
     void update_cad();
     float sf();
     void set_sf(float neuer_faktor);
@@ -57,8 +57,8 @@ private:
     float       Sf;   //Skalierungsfaktor
     float       Zf;   //Zoomfaktor
     werkstueck  W;
-    uint        Aktuelle_zeilennummer;
-    text_zw     Geotext;
+    int         Aktuelle_zeilennummer;
+    geo_text    Geotext;
     int         Maus_pos_alt_x;
     int         Maus_pos_alt_y;
     uint        Zeile_von_maus_pos;//Zum Zwischenspeichern damit Ergebnis nicht verfälscht wird wenn Maus sich bewegt

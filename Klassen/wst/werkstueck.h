@@ -6,7 +6,6 @@
 
 #include "Defines/werkzeug.h"
 #include "Klassen/einstellung_ganx.h"
-#include "Klassen/geo/geometrietext.h"
 #include "Klassen/wst/wstzustand.h"
 #include "Funktionen/umwandeln.h"
 #include "Funktionen/runden.h"
@@ -25,6 +24,7 @@
 #include "Defines/dateinamen.h"
 #include "ganx_gruppen.h"
 #include "gehrung.h"
+#include "Klassen/geo/geo_text.h"
 
 
 class werkstueck
@@ -70,7 +70,7 @@ public:
     double min_x();
     double max_y();
     double min_y();
-    geometrietext geo();
+    geo_text geo();
     inline double   laenge() const
     {
         return Laenge;

@@ -2,11 +2,11 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "4.2023.02.12"
+#define PROGRAMMVERSION "4.2023.02.16"
 #endif //PROGRAMMVERSION
 /*
-- geo(..) klassenunabhängig machen
-  ->geofunktionen.cpp -->kann dort nicht bleiben weil Header-Konflikte
+- import dxf testen
+
 
 - dlg std-namen überarbeiten
   ->listwidget tauschen gegen Tabelle

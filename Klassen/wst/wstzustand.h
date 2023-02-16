@@ -6,7 +6,7 @@
 
 #include "Klassen/text_zw.h"
 #include "Klassen/wkz/wkz_magazin.h"
-#include "Klassen/geo/geometrietext.h"
+#include "Klassen/geo/geo_text.h"
 #include "Klassen/wst/fraesergerade.h"
 #include "Klassen/wst/bohrung.h"
 #include "Klassen/wst/bohrraster.h"
@@ -52,14 +52,14 @@ public:
     {
         return Format.count();
     }
-    inline geometrietext geo()
+    inline geo_text geo()
     {
         if(Akt_zust != -1 && Akt_zust<Geotext.count())
         {
             return Geotext.at(Akt_zust);
         }else
         {
-            geometrietext tmp;
+            geo_text tmp;
             return tmp;
         }
     }
@@ -217,7 +217,7 @@ private:
     QVector<QString>            Exporttext;
     QVector<QString>            Fehler_kein_wkz;
     QVector<bool>               Export_moeglich;
-    QVector<geometrietext> Geotext;
+    QVector<geo_text> Geotext;
     QVector<double> Versatz_y;
 
     text_zw             Bearb_bekommen;

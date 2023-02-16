@@ -4242,7 +4242,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             }
         }
         //------------------------------Bohrungen horizontal:
-        geometrietext geo;
+        geo_text geo;
         for(uint i=0;i<block.count();i++)
         {
             uint sta = text_links(block.at(i),"|").toUInt();
@@ -4259,12 +4259,12 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 if(typ == DXF_AC1009_STRECKE)
                 {
                     strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
-                    if(geo.isempty())
+                    if(geo.count() == 0)
                     {
                         geo.add_strecke(s);
                     }else
                     {
-                        strecke s2 = geo.text_zwei().at(0);
+                        strecke s2 = geo.at(0).text();
                         geo.clear();
                         bohrung bo;
                         bo.set_afb("1");
@@ -4370,12 +4370,11 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 if(typ == DXF_AC1009_STRECKE)
                 {
                     strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
-                    text_zw geotz = geo.text_zwei();
                     //Trennzeichen = ';'
                     geo.add_strecke(s);
-                    if(geotz.count() == 2)
+                    if(geo.count() == 2)
                     {
-                        strecke s2 = geo.text_zwei().at(0);
+                        strecke s2 = geo.at(0).text();
                         if(s.laenge2d() == s2.laenge2d())//Nut ist durch 2 Linien Definiert
                         {
                             geo.clear();
@@ -4420,11 +4419,11 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             w.neue_bearbeitung(nu.text());
                             geo.clear();//Wichtig das es auch an dieser Stelle steht
                         }
-                    }else if(geotz.count() == 4)
+                    }else if(geo.count() == 4)
                     {
-                        strecke s1 = geotz.at(0);//von UL nach UR
-                        strecke s2 = geotz.at(1);//von UR nach OR
-                        strecke s3 = geotz.at(2);//von OR nach OL
+                        strecke s1 = geo.at(0).text();//von UL nach UR
+                        strecke s2 = geo.at(1).text();//von UR nach OR
+                        strecke s3 = geo.at(2).text();//von OR nach OL
                         strecke s4 = s;//von OL nach UL
                         nut nu;
                         nu.set_afb("1");
@@ -4532,7 +4531,6 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
         }
         geo.clear();
         //------------------------------Rechtecktasche:
-        geo_text geo_neu;
         for(uint i=0;i<block.count();i++)
         {
             uint sta = text_links(block.at(i),"|").toUInt();
@@ -4548,15 +4546,14 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                 if(typ == DXF_AC1009_STRECKE)
                 {
                     strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
-                    geo_neu.add_strecke(s);
+                    geo.add_strecke(s);
                 }else if(typ == DXF_AC1009_BOGEN)
                 {
                     bogen b = dxf_bogen(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
-                    geo_neu.add_bogen(b);
+                    geo.add_bogen(b);
                 }
                 //------------------------------
                 text_zw geozw;
-                geozw = geo_neu.at();
                 //------------------------------
                 if(geozw.count() == 4)//RTA wird durch 4 Strecken definiert?
                 {
@@ -4662,7 +4659,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                             rt.set_drewi(winkel);
                         }
                         w.neue_bearbeitung(rt.text());
-                        geo_neu.clear();
+                        geo.clear();
                     }
                 }else if(geozw.count() == 8)//RTA wird durch 4 Strecken und 4 Bögen definiert?
                 {
@@ -4784,13 +4781,12 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         }
                         rt.set_rad(b_OL.rad());
                         w.neue_bearbeitung(rt.text());
-                        geo_neu.clear();
+                        geo.clear();
                     }
                 }
                 //------------------------------
             }
         }
-        geo_neu.clear();
         geo.clear();
         //------------------------------Fräsung vertikal:
         punkt3d letztepos;
