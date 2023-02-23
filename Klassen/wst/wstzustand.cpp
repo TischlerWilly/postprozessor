@@ -8283,7 +8283,7 @@ void wstzustand::ganx_dateitext(int index)
     double tmp_l = Laenge.at(index);
     double tmp_b = Breite.at(index);
     wkz_magazin wkzmag = Wkzm.at(index);
-    dubosplitten(bearb, wkzmag);
+    dubosplitten(bearb, wkzmag);    
 
     text_zw bearb_kopie = bearb;
 
@@ -8416,7 +8416,7 @@ void wstzustand::ganx_dateitext(int index)
                 double zustmass = bo.zustellmass();
                 if(zustmass <= 0)
                 {
-                    zustmass = wkzmag.zustellmass(tnummer).toDouble();
+                    zustmass = wkzmag.zustellmass(tnummer).toDouble();                    
                 }
                 int zustellungen = aufrunden(boti / zustmass);
                 if(zustellungen <= 0)

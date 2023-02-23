@@ -4372,6 +4372,7 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                     strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                     //Trennzeichen = ';'
                     geo.add_strecke(s);
+                    geo.zeilenvorschub();
                     if(geo.count() == 2)
                     {
                         strecke s2 = geo.at(0).text();
@@ -4538,29 +4539,28 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
             uint anz = end-sta;
             QString klasse;
             klasse = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
-                              DXF_AC1009_KLASSE);
+                              DXF_AC1009_KLASSE);            
             if(klasse.contains(Einstellung_dxf_klassen.rta()))
             {
                 QString typ = dxf_wert(tz_name.at(sta,anz), tz_wert.at(sta,anz),\
-                                       DXF_AC1009_NULL);
+                                       DXF_AC1009_NULL);                
                 if(typ == DXF_AC1009_STRECKE)
                 {
                     strecke s = dxf_strecke(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                     geo.add_strecke(s);
+                    geo.zeilenvorschub();
                 }else if(typ == DXF_AC1009_BOGEN)
                 {
                     bogen b = dxf_bogen(tz_name.at(sta,anz), tz_wert.at(sta,anz), "AC1009");
                     geo.add_bogen(b);
+                    geo.zeilenvorschub();
                 }
-                //------------------------------
-                text_zw geozw;
-                //------------------------------
-                if(geozw.count() == 4)//RTA wird durch 4 Strecken definiert?
+                if(geo.count() == 4)//RTA wird durch 4 Strecken definiert?
                 {
-                    strecke s1 = geozw.at(0);//von OL nach OR
-                    strecke s2 = geozw.at(1);//von OR nach UR
-                    strecke s3 = geozw.at(2);//von UR nach UL
-                    strecke s4 = geozw.at(3);//von UL nach OL
+                    strecke s1 = geo.at(0).text();//von OL nach OR
+                    strecke s2 = geo.at(1).text();//von OR nach UR
+                    strecke s3 = geo.at(2).text();//von UR nach UL
+                    strecke s4 = geo.at(3).text();//von UL nach OL
                     bool gesund = true;
                     if(!cagleich(s1.laenge2d(), s3.laenge2d(),0.1))
                     {
@@ -4661,16 +4661,16 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         w.neue_bearbeitung(rt.text());
                         geo.clear();
                     }
-                }else if(geozw.count() == 8)//RTA wird durch 4 Strecken und 4 Bögen definiert?
+                }else if(geo.count() == 8)//RTA wird durch 4 Strecken und 4 Bögen definiert?
                 {
-                    strecke s_ob = geozw.at(0);//von OR nach OL
-                    strecke s_li = geozw.at(2);//von OL nach UL
-                    strecke s_un = geozw.at(4);//von UL nach UR
-                    strecke s_re = geozw.at(6);//von UR nach OR
-                    bogen b_OL = geozw.at(1);
-                    bogen b_UL = geozw.at(3);
-                    bogen b_UR = geozw.at(5);
-                    bogen b_OR = geozw.at(7);
+                    strecke s_ob = geo.at(0).text();//von OR nach OL
+                    strecke s_li = geo.at(2).text();//von OL nach UL
+                    strecke s_un = geo.at(4).text();//von UL nach UR
+                    strecke s_re = geo.at(6).text();//von UR nach OR
+                    bogen b_OL = geo.at(1).text();
+                    bogen b_UL = geo.at(3).text();
+                    bogen b_UR = geo.at(5).text();
+                    bogen b_OR = geo.at(7).text();
                     bool gesund = true;
                     if(!cagleich(s_ob.laenge2d(), s_un.laenge2d(),0.1))
                     {

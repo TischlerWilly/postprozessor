@@ -18,10 +18,6 @@ einstellung::einstellung()
     Formartierungen_aufbrechen  = false;
     Fkon_kantenschonend         = false;
     Gehrungen_zugabe            = 20;
-    Export_ganx                 = false;
-    Export_fmc                  = false;
-    Export_ggf                  = false;
-    Export_eigen                = false;
 }
 
 //----------------------------------------set:
@@ -81,18 +77,6 @@ void einstellung::set_text(QString t)
         }else if(spalten.at(0) == "zugabemass_gehrungen:")
         {
             set_gehrungen_zugabe(spalten.at(1).toDouble());
-        }else if(spalten.at(0) == "export_ganx:")
-        {
-            set_export_ganx(spalten.at(1));
-        }else if(spalten.at(0) == "export_fmc:")
-        {
-            set_export_fmc(spalten.at(1));
-        }else if(spalten.at(0) == "export_ggf:")
-        {
-            set_export_ggf(spalten.at(1));
-        }else if(spalten.at(0) == "export_eigen:")
-        {
-            set_export_eigen(spalten.at(1));
         }
     }
 }
@@ -248,62 +232,6 @@ bool einstellung::set_gehrungen_zugabe(double zug)
         return false;//Fehlschlag
     }
 }
-void einstellung::set_export_ganx(bool jn)
-{
-    Export_ganx = jn;
-}
-void einstellung::set_export_ganx(QString jn)
-{
-    if(jn == "ja")
-    {
-        set_export_ganx(true);
-    }else
-    {
-        set_export_ganx(false);
-    }
-}
-void einstellung::set_export_fmc(bool jn)
-{
-    Export_fmc = jn;
-}
-void einstellung::set_export_fmc(QString jn)
-{
-    if(jn == "ja")
-    {
-        set_export_fmc(true);
-    }else
-    {
-        set_export_fmc(false);
-    }
-}
-void einstellung::set_export_ggf(bool jn)
-{
-    Export_ggf = jn;
-}
-void einstellung::set_export_ggf(QString jn)
-{
-    if(jn == "ja")
-    {
-        set_export_ggf(true);
-    }else
-    {
-        set_export_ggf(false);
-    }
-}
-void einstellung::set_export_eigen(bool jn)
-{
-    Export_eigen = jn;
-}
-void einstellung::set_export_eigen(QString jn)
-{
-    if(jn == "ja")
-    {
-        set_export_eigen(true);
-    }else
-    {
-        set_export_eigen(false);
-    }
-}
 //----------------------------------------get:
 QString einstellung::text()
 {
@@ -425,50 +353,6 @@ QString einstellung::text()
     text += double_to_qstring(gehrungen_zugabe());
     text += "\n";
 
-    text += "export_ganx:";
-    text += "\t";
-    if(export_ganx() == true)
-    {
-        text += "ja";
-    }else
-    {
-        text += "nein";
-    }
-    text += "\n";
-
-    text += "export_fmc:";
-    text += "\t";
-    if(export_fmc() == true)
-    {
-        text += "ja";
-    }else
-    {
-        text += "nein";
-    }
-    text += "\n";
-
-    text += "export_ggf:";
-    text += "\t";
-    if(export_ggf() == true)
-    {
-        text += "ja";
-    }else
-    {
-        text += "nein";
-    }
-    text += "\n";
-
-    text += "export_eigen:";
-    text += "\t";
-    if(export_eigen() == true)
-    {
-        text += "ja";
-    }else
-    {
-        text += "nein";
-    }
-    text += "\n";
-
     return text;
 }
 bool einstellung::entwicklermodus()
@@ -534,22 +418,6 @@ bool einstellung::fkon_kantenschonend()
 double einstellung::gehrungen_zugabe()
 {
     return Gehrungen_zugabe;
-}
-bool einstellung::export_ganx()
-{
-    return Export_ganx;
-}
-bool einstellung::export_fmc()
-{
-    return Export_fmc;
-}
-bool einstellung::export_ggf()
-{
-    return Export_ggf;
-}
-bool einstellung::export_eigen()
-{
-    return Export_eigen;
 }
 
 

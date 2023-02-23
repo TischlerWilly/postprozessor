@@ -1766,8 +1766,8 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                 {
                     int row = ui->listWidget_wste->currentRow();
                     ui->listWidget_wste->item(row)->setText(neuer_name);
-                    wste.set_name(row+1, neuer_name);//Namensliste in wste
-                    wste.wst(row+1)->set_name(neuer_name);//name des konkreten wst
+                    wste.set_name(row, neuer_name);//Namensliste in wste
+                    wste.wst(row)->set_name(neuer_name);//name des konkreten wst
                     signal_wst_umbenennen(name, neuer_name);//gui
                     on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
                 }

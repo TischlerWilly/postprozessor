@@ -34,15 +34,6 @@ public:
     void set_fkon_kantenschonend(bool ks);
     void set_fkon_kantenschonend(QString ks);
     bool set_gehrungen_zugabe(double zug);
-    void set_export_ganx(bool jn);
-    void set_export_ganx(QString jn);
-    void set_export_fmc(bool jn);
-    void set_export_fmc(QString jn);
-    void set_export_ggf(bool jn);
-    void set_export_ggf(QString jn);
-    void set_export_eigen(bool jn);
-    void set_export_eigen(QString jn);
-
 
     //get:    
     QString text();
@@ -62,10 +53,6 @@ public:
     bool formartierungen_aufbrechen();
     bool fkon_kantenschonend();
     double gehrungen_zugabe();
-    bool export_ganx();
-    bool export_fmc();
-    bool export_ggf();
-    bool export_eigen();
 
 private:
     bool Entwicklermodus;
@@ -84,10 +71,6 @@ private:
     bool Formartierungen_aufbrechen;
     bool Fkon_kantenschonend;
     double Gehrungen_zugabe;
-    bool Export_ganx;
-    bool Export_fmc;
-    bool Export_ggf;
-    bool Export_eigen;
 
 };
 

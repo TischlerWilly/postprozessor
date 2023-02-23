@@ -55,7 +55,7 @@ QString wkz_magazin::wkznummer(QString wkz_typ, \
                         if(borer.nutzl() > bearbeitungstiefe)
                         {
                             if(bearbeitungstiefe >= werkstueckdicke || ((bearbeitungstiefe == 2)&&(dm == 5)))//Tiefe 2mm == Ankörnungen
-                            {
+                            {                                
                                 if(borer.istdubo() == true)
                                 {
                                     if(borer.istverti())
@@ -222,7 +222,7 @@ QString wkz_magazin::dm(QString wkz_nr)
             }else if(typ(zeile) == WKZ_TYP_BOHRER)
             {
                 wkz_bohrer bohrer(zeile);
-                return double_to_qstring(bohrer.dmimport());
+                return double_to_qstring(bohrer.dmexport());
             }else if(typ(zeile) == WKZ_TYP_SAEGE)
             {
                 wkz_saege saege(zeile);

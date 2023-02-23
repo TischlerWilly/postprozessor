@@ -2,10 +2,9 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "4.2023.02.16"
+#define PROGRAMMVERSION "4.2023.02.23"
 #endif //PROGRAMMVERSION
 /*
-- import dxf testen
 
 
 - dlg std-namen überarbeiten
