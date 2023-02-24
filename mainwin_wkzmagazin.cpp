@@ -87,8 +87,10 @@ void mainwin_wkzmagazin::info_aktualisieren(uint index)
         rumpf.add_hi(double_to_qstring(f.dm()));
         kopf.add_hi("Nutzlänge");
         rumpf.add_hi(double_to_qstring(f.nutzl()));
-        kopf.add_hi("Zustellmaß");
-        rumpf.add_hi(double_to_qstring(f.zustma()));
+        kopf.add_hi("Zustellmaß vert.");
+        rumpf.add_hi(double_to_qstring(f.zustmavert()));
+        kopf.add_hi("Zustellmaß hor.");
+        rumpf.add_hi(double_to_qstring(f.zustmahori()));
         kopf.add_hi("Mindestzustellung");
         rumpf.add_hi(double_to_qstring(f.minzust()));
         kopf.add_hi("Vorschub");
@@ -138,8 +140,10 @@ void mainwin_wkzmagazin::info_aktualisieren(uint index)
         rumpf.add_hi(double_to_qstring(b.dmexport()));
         kopf.add_hi("Nutzlänge");
         rumpf.add_hi(double_to_qstring(b.nutzl()));
-        kopf.add_hi("Zustellmaß");
-        rumpf.add_hi(double_to_qstring(b.zustma()));
+        kopf.add_hi("Zustellmaß vert");
+        rumpf.add_hi(double_to_qstring(b.zustmavert()));
+        kopf.add_hi("Zustellmaß hori");
+        rumpf.add_hi(double_to_qstring(b.zustmahori()));
         kopf.add_hi("Ist Durchgangsbohrer");
         if(b.istdubo())
         {

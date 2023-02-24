@@ -21,7 +21,8 @@ void Dialog_fraeser::set_Data(text_zw msg, bool ist_neues_wkz)
     ui->lineEdit_nr->setText(wkz.wkznr());
     ui->lineEdit_dm->setText(double_to_qstring(wkz.dm()));
     ui->lineEdit_nutzl->setText(double_to_qstring(wkz.nutzl()));
-    ui->lineEdit_zustm->setText(double_to_qstring(wkz.zustma()));
+    ui->lineEdit_zustmassvert->setText(double_to_qstring(wkz.zustmavert()));
+    ui->lineEdit_zustmasshori->setText(double_to_qstring(wkz.zustmahori()));
     ui->lineEdit_voers->setText(double_to_qstring(wkz.vorschub()));
     ui->lineEdit_alias->setText(wkz.alias());
     ui->lineEdit_zust_min->setText(double_to_qstring(wkz.minzust()));
@@ -46,7 +47,8 @@ void Dialog_fraeser::clear()
     ui->lineEdit_nr->clear();
     ui->lineEdit_nutzl->clear();
     ui->lineEdit_voers->clear();
-    ui->lineEdit_zustm->clear();
+    ui->lineEdit_zustmassvert->clear();
+    ui->lineEdit_zustmasshori->clear();
     ui->lineEdit_alias->clear();
     ui->lineEdit_zust_min->clear();
     ui->lineEdit_spiegel->clear();
@@ -67,9 +69,10 @@ void Dialog_fraeser::on_pushButton_ok_clicked()
     fraeser.set_dm(berechnen(ui->lineEdit_dm->text()).toDouble());
     fraeser.set_nutzl(berechnen(ui->lineEdit_nutzl->text()).toDouble());
     fraeser.set_vorschub(berechnen(ui->lineEdit_voers->text()).toDouble());
-    fraeser.set_zustma(berechnen(ui->lineEdit_zustm->text()).toDouble());
-    fraeser.set_isthori(ui->checkBox_ist_hori->isChecked());
+    fraeser.set_zustmavert(berechnen(ui->lineEdit_zustmassvert->text()).toDouble());
+    fraeser.set_zustmahori(berechnen(ui->lineEdit_zustmasshori->text()).toDouble());
     fraeser.set_istverti(ui->checkBox_ist_veti->isChecked());
+    fraeser.set_isthori(ui->checkBox_ist_hori->isChecked());
     fraeser.set_alias(ui->lineEdit_alias->text().toUpper());
         //Beim Einlesen der FMC-Datei werden alle kleinen Buchstaben durch große ersetzt
     fraeser.set_minzust(berechnen(ui->lineEdit_zust_min->text()).toDouble());

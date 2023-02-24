@@ -31,7 +31,8 @@ public:
     QString dm(QString wkz_nr);
     bool ist_dubo(QString wkz_nr);
     QString vorschub(QString wkz_nr);
-    QString zustellmass(QString wkz_nr);
+    QString zustmasvert(QString wkz_nr);
+    QString zustmashori(QString wkz_nr);
     QString zustellmass_min(QString wkz_nr);
     QString saegeblattbreite(QString wkz_nr);
     QString nutzlaenge(QString wkz_nr);

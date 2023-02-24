@@ -6,7 +6,8 @@ wkz_bohrer::wkz_bohrer()
     DMimport        = 0;
     DMexport        = 0;
     Nutzlaenge      = 0;
-    Zustellmass     = 0;
+    ZustMasVert     = 0;
+    ZustMasHori     = 0;
     IstDuBo         = false;    
     IstHori         = false;
     IstVerti        = false;
@@ -24,7 +25,7 @@ wkz_bohrer::wkz_bohrer(text_zw wkz)
     DMimport    = wkz.at(3).toDouble();
     DMexport    = wkz.at(4).toDouble();
     Nutzlaenge  = wkz.at(5).toDouble();
-    Zustellmass = wkz.at(6).toDouble();
+    ZustMasVert = wkz.at(6).toDouble();
     if(wkz.at(7) == "1")
     {
         IstDuBo = true;
@@ -46,7 +47,7 @@ wkz_bohrer::wkz_bohrer(text_zw wkz)
     {
         IstVerti = false;
     }
-
+    ZustMasHori = wkz.at(10).toDouble();
 }
 //----------------------------------set:
 void wkz_bohrer::set_wkznr(QString nr)
@@ -78,11 +79,18 @@ void wkz_bohrer::set_nutzl(double n)
         Nutzlaenge = n;
     }
 }
-void wkz_bohrer::set_zustma(double zm)
+void wkz_bohrer::set_zustmavert(double zm)
 {
     if(zm >= 0)
     {
-        Zustellmass = zm;
+        ZustMasVert = zm;
+    }
+}
+void wkz_bohrer::set_zustmahori(double zm)
+{
+    if(zm >= 0)
+    {
+        ZustMasHori = zm;
     }
 }
 void wkz_bohrer::set_istdubo(bool ja)
@@ -114,7 +122,7 @@ text_zw wkz_bohrer::daten()
     wkz.add_hi(double_to_qstring(DMimport));    //3: DM für den Import in den pp
     wkz.add_hi(double_to_qstring(DMexport));    //4: DM für den Export aus dem pp
     wkz.add_hi(double_to_qstring(Nutzlaenge));  //5: Nutzlänge
-    wkz.add_hi(double_to_qstring(Zustellmass)); //6: Zustellmaß
+    wkz.add_hi(double_to_qstring(ZustMasVert)); //6: Zustellmaß vertikal
     if(IstDuBo == true)                         //7: Ist Durchgangsbohrer
     {
         wkz.add_hi("1");
@@ -136,6 +144,7 @@ text_zw wkz_bohrer::daten()
     {
         wkz.add_hi("0");
     }
+    wkz.add_hi(double_to_qstring(ZustMasHori)); //10: Zustellmaß horizontal
     return wkz;
 }
 QString wkz_bohrer::wkznr()
@@ -158,9 +167,13 @@ double wkz_bohrer::nutzl()
 {
     return Nutzlaenge;
 }
-double wkz_bohrer::zustma()
+double wkz_bohrer::zustmavert()
 {
-    return Zustellmass;
+    return ZustMasVert;
+}
+double wkz_bohrer::zustmahori()
+{
+    return ZustMasHori;
 }
 bool wkz_bohrer::istdubo()
 {

@@ -2,13 +2,17 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "4.2023.02.23"
+#define PROGRAMMVERSION "4.2023.02.24"
 #endif //PROGRAMMVERSION
 /*
 
+- Radiuskorrektur darstellen bei fkon
 
 - dlg std-namen überarbeiten
   ->listwidget tauschen gegen Tabelle
+
+- wst bearbeiten
+  ->Funktion zum erstellen von DT
 
 text_zeilenweise werkstueck::fkon_kantengut(...)
 

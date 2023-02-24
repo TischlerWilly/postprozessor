@@ -279,7 +279,7 @@ QString wkz_magazin::vorschub(QString wkz_nr)
     //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
     return "0";
 }
-QString wkz_magazin::zustellmass(QString wkz_nr)
+QString wkz_magazin::zustmasvert(QString wkz_nr)
 {
     for(uint i=0; i<Magazin.count();i++)
     {
@@ -290,11 +290,37 @@ QString wkz_magazin::zustellmass(QString wkz_nr)
             if(typ(zeile) == WKZ_TYP_FRAESER)
             {
                 wkz_fraeser fraeser(zeile);
-                return double_to_qstring(fraeser.zustma());
+                return double_to_qstring(fraeser.zustmavert());
             }else if(typ(zeile) == WKZ_TYP_BOHRER)
             {
                 wkz_bohrer bohrer(zeile);
-                return double_to_qstring(bohrer.zustma());
+                return double_to_qstring(bohrer.zustmavert());
+            }else if(typ(zeile) == WKZ_TYP_SAEGE)
+            {
+                wkz_saege saege(zeile);
+                return double_to_qstring(saege.zustma());
+            }
+        }
+    }
+    //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
+    return "0";
+}
+QString wkz_magazin::zustmashori(QString wkz_nr)
+{
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
+        if(wkznr(zeile) == wkz_nr)
+        {
+            if(typ(zeile) == WKZ_TYP_FRAESER)
+            {
+                wkz_fraeser fraeser(zeile);
+                return double_to_qstring(fraeser.zustmahori());
+            }else if(typ(zeile) == WKZ_TYP_BOHRER)
+            {
+                wkz_bohrer bohrer(zeile);
+                return double_to_qstring(bohrer.zustmahori());
             }else if(typ(zeile) == WKZ_TYP_SAEGE)
             {
                 wkz_saege saege(zeile);

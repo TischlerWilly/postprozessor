@@ -4545,7 +4545,7 @@ void wstzustand::fmc_dateitext(int index)
                     //Bohrvorschub gem. Voreinstellung IMAWOP
 
                     msg += "ZSM=";                  //Zustellmaß
-                    msg += wkzmag.zustellmass(tnummer);
+                    msg += wkzmag.zustmasvert(tnummer);
                     msg += "\n";
 
                     //Drehzahl gem. Voreinstellung IMAWOP
@@ -4751,7 +4751,7 @@ void wstzustand::fmc_dateitext(int index)
                     double zustellmas = bo.zustellmass();
                     if(zustellmas <= 0)
                     {
-                        zustellmas = wkzmag.zustellmass(tnummer).toDouble();
+                        zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
                     }
 
                     double tiefe = 0;
@@ -4982,7 +4982,7 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "ZSM";           //Zustellmaß
                             msg += "=";
                             //msg += bora.zustellmass_qstring();
-                            msg += wkzmag.zustellmass(tnummer);
+                            msg += wkzmag.zustmasvert(tnummer);
                             msg += "\n";
                             //---------------------------------
                             msg += "\n";
@@ -5138,7 +5138,7 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "ZSM";           //Zustellmaß
                                 msg += "=";
                                 //msg += bora.zustellmass_qstring();
-                                msg += wkzmag.zustellmass(tnummer);
+                                msg += wkzmag.zustmasvert(tnummer);
                                 msg += "\n";
                                 //------------------------------
                                 msg += "\n";
@@ -5296,7 +5296,7 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "ZSM";           //Zustellmaß
                             msg += "=";
                             //msg += bora.zustellmass_qstring();
-                            msg += wkzmag.zustellmass(tnummer);
+                            msg += wkzmag.zustmasvert(tnummer);
                             msg += "\n";
                             //------------------------------
                             msg += "\n";
@@ -6443,7 +6443,7 @@ void wstzustand::fmc_dateitext(int index)
                 double zustellmas = rt.zustellmass();
                 if(zustellmas <= 0)
                 {
-                    zustellmas = wkzmag.zustellmass(tnummer).toDouble();
+                    zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
                 }
                 double radius = rt.rad();
 
@@ -6627,7 +6627,7 @@ void wstzustand::fmc_dateitext(int index)
             if(!tnummer.isEmpty())
             {
                 double gesamttiefe = fa.tiefe();
-                double zustellmass = wkzmag.zustellmass(tnummer).toDouble();
+                double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
                 double zustelltiefe;
                 if(Zust_fkon == "wkz")
                 {
@@ -7018,7 +7018,7 @@ void wstzustand::fmc_dateitext(int index)
                         //Bohrvorschub gem. Voreinstellung IMAWOP
 
                         msg += "ZSM=";                  //Zustellmaß
-                        msg += wkzmag.zustellmass(tnummer);
+                        msg += wkzmag.zustmasvert(tnummer);
                         msg += "\n";
 
                         //Drehzahl gem. Voreinstellung IMAWOP
@@ -7052,7 +7052,7 @@ void wstzustand::fmc_dateitext(int index)
                         double zustellmas = bo.zustellmass();
                         if(zustellmas <= 0)
                         {
-                            zustellmas = wkzmag.zustellmass(tnummer).toDouble();
+                            zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
                         }
 
                         double tiefe = 0;
@@ -7288,7 +7288,7 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "ZSM";           //Zustellmaß
                                 msg += "=";
                                 //msg += bora.zustellmass_qstring();
-                                msg += wkzmag.zustellmass(tnummer);
+                                msg += wkzmag.zustmasvert(tnummer);
                                 msg += "\n";
                                 //---------------------------------
                                 msg += "\n";
@@ -7444,7 +7444,7 @@ void wstzustand::fmc_dateitext(int index)
                                     msg += "ZSM";           //Zustellmaß
                                     msg += "=";
                                     //msg += bora.zustellmass_qstring();
-                                    msg += wkzmag.zustellmass(tnummer);
+                                    msg += wkzmag.zustmasvert(tnummer);
                                     msg += "\n";
                                     //------------------------------
                                     msg += "\n";
@@ -7602,7 +7602,7 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "ZSM";           //Zustellmaß
                                 msg += "=";
                                 //msg += bora.zustellmass_qstring();
-                                msg += wkzmag.zustellmass(tnummer);
+                                msg += wkzmag.zustmasvert(tnummer);
                                 msg += "\n";
                                 //------------------------------
                                 msg += "\n";
@@ -7797,7 +7797,7 @@ void wstzustand::fmc_dateitext(int index)
                     double zustellmas = rt.zustellmass();
                     if(zustellmas <= 0)
                     {
-                        zustellmas = wkzmag.zustellmass(tnummer).toDouble();
+                        zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
                     }
 
                     double tiefe = 0;
@@ -7898,7 +7898,7 @@ void wstzustand::fmc_dateitext(int index)
                     fa.set_y(  tmp_b - fa.y()  );
 
                     double gesamttiefe = fa.tiefe();
-                    double zustellmass = wkzmag.zustellmass(tnummer).toDouble();
+                    double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
                     double zustelltiefe;
                     if(Zust_fkon == "wkz")
                     {
@@ -8416,7 +8416,13 @@ void wstzustand::ganx_dateitext(int index)
                 double zustmass = bo.zustellmass();
                 if(zustmass <= 0)
                 {
-                    zustmass = wkzmag.zustellmass(tnummer).toDouble();                    
+                    if(bo.bezug() == WST_BEZUG_OBSEI  || bo.bezug() == GANX_WST_BEZUG_UNSEI)
+                    {
+                        zustmass = wkzmag.zustmasvert(tnummer).toDouble();
+                    }else
+                    {
+                        zustmass = wkzmag.zustmashori(tnummer).toDouble();
+                    }
                 }
                 int zustellungen = aufrunden(boti / zustmass);
                 if(zustellungen <= 0)
@@ -8962,7 +8968,7 @@ void wstzustand::ganx_dateitext(int index)
                     double zustmass = bo.zustellmass();
                     if(zustmass <= 0)
                     {
-                        zustmass = wkzmag.zustellmass(tnummer).toDouble();
+                        zustmass = wkzmag.zustmasvert(tnummer).toDouble();
                     }
                     int zustellungen = aufrunden(bo.tiefe() / zustmass);
 
@@ -9109,7 +9115,7 @@ void wstzustand::ganx_dateitext(int index)
                 double zustmass = bora.zustellmass();
                 if(zustmass <= 0)
                 {
-                    zustmass = wkzmag.zustellmass(tnummer).toDouble();
+                    zustmass = wkzmag.zustmasvert(tnummer).toDouble();
                 }
                 int zustellungen = aufrunden(bora.tiefe() / zustmass);
                 if(zustellungen <= 0)
@@ -9679,7 +9685,7 @@ void wstzustand::ganx_dateitext(int index)
                 double zustmass = rt.zustellmass();
                 if(zustmass <= 0)
                 {
-                    zustmass = wkzmag.zustellmass(tnummer).toDouble();
+                    zustmass = wkzmag.zustmasvert(tnummer).toDouble();
                 }
                 int zustellungen = aufrunden(rt.tiefe() / zustmass);
 
@@ -9923,7 +9929,13 @@ void wstzustand::ganx_dateitext(int index)
                 double zustmass = bo.zustellmass();
                 if(zustmass <= 0)
                 {
-                    zustmass = wkzmag.zustellmass(tnummer).toDouble();
+                    if(bo.bezug() == WST_BEZUG_OBSEI  ||  bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        zustmass = wkzmag.zustmasvert(tnummer).toDouble();
+                    }else
+                    {
+                        zustmass = wkzmag.zustmashori(tnummer).toDouble();
+                    }
                 }
                 int zustellungen = aufrunden(boti / zustmass);
                 if(zustellungen <= 0)
@@ -10546,7 +10558,13 @@ void wstzustand::ganx_dateitext(int index)
                     double zustmass = bo.zustellmass();
                     if(zustmass <= 0)
                     {
-                        zustmass = wkzmag.zustellmass(tnummer).toDouble();
+                        if(bo.bezug() == WST_BEZUG_OBSEI  || bo.bezug() == GANX_WST_BEZUG_UNSEI)
+                        {
+                            zustmass = wkzmag.zustmasvert(tnummer).toDouble();
+                        }else
+                        {
+                            zustmass = wkzmag.zustmashori(tnummer).toDouble();
+                        }
                     }
                     int zustellungen = aufrunden(bo.tiefe() / zustmass);
 
@@ -10707,7 +10725,7 @@ void wstzustand::ganx_dateitext(int index)
                 double zustmass = bora.zustellmass();
                 if(zustmass <= 0)
                 {
-                    zustmass = wkzmag.zustellmass(tnummer).toDouble();
+                    zustmass = wkzmag.zustmasvert(tnummer).toDouble();
                 }
                 int zustellungen = aufrunden(bora.tiefe() / zustmass);
                 if(zustellungen <= 0)
@@ -11280,7 +11298,7 @@ void wstzustand::ganx_dateitext(int index)
                 double zustmass = rt.zustellmass();
                 if(zustmass <= 0)
                 {
-                    zustmass = wkzmag.zustellmass(tnummer).toDouble();
+                    zustmass = wkzmag.zustmasvert(tnummer).toDouble();
                 }
                 int zustellungen = aufrunden(rt.tiefe() / zustmass);
                 if(zustellungen <= 0)
@@ -11662,7 +11680,7 @@ void wstzustand::ggf_dateitext(int index)
                    double zustellmas = bo.zustellmass();
                    if(zustellmas <= 0)
                    {
-                       zustellmas = wkzmag.zustellmass(tnummer).toDouble();
+                       zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
                    }
 
                    double tiefe = 0;
@@ -11784,7 +11802,7 @@ void wstzustand::ggf_dateitext(int index)
                double zustellmas = rt.zustellmass();
                if(zustellmas <= 0)
                {
-                   zustellmas = wkzmag.zustellmass(tnummer).toDouble();
+                   zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
                }
 
                double tiefe = 0;
