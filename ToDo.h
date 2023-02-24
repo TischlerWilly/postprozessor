@@ -7,6 +7,8 @@
 /*
 
 - Radiuskorrektur darstellen bei fkon
+  ->iwop/programmtext.cpp-->aktualisiere_geo()
+  ->geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
 
 - dlg std-namen überarbeiten
   ->listwidget tauschen gegen Tabelle

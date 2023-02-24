@@ -40,6 +40,15 @@ void vorschau::update_cad()
             zeichneGeotext(spalten.at(ii), i);
         }
     }
+    //Fräser darstellen:
+    for(uint i=0;i<GeoFkon.count();i++)
+    {
+        text_zw spalten = GeoFkon.at(i);
+        for(uint ii=0;ii<spalten.count();ii++)
+        {
+            zeichneFkon(spalten.at(ii), i);
+        }
+    }
     this->update();
 }
 
@@ -701,6 +710,7 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
     Geotext = W.zustand().geo();
+    GeoFkon = W.zustand().geofkon();
     Wst.set_laenge(w_neu.zustand().l());
     Wst.set_breite(w_neu.zustand().b());
     Aktuelle_zeilennummer = aktive_zeile;
@@ -712,6 +722,7 @@ void vorschau::slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
     Geotext = W.geo();
+    GeoFkon = W.geofkon();
     Wst.set_laenge(w_neu.laenge());
     Wst.set_breite(w_neu.breite());
     Aktuelle_zeilennummer = aktive_zeile;

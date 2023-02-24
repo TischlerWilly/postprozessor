@@ -280,5 +280,12 @@ geo_text werkstueck::geo()
                          kante_v, kante_h, kante_l, kante_r,\
                          versatz_x, versatz_y);
 }
+geo_text werkstueck::geofkon()
+{
+    double versatz_x = 0;
+    double versatz_y = 0;
+    //-------------------------------------------
+    return geofkon_ermitteln(Bearb, versatz_x, versatz_y);
+}
 
 

@@ -63,6 +63,17 @@ public:
             return tmp;
         }
     }
+    inline geo_text geofkon()
+    {
+        if(Akt_zust != -1 && Akt_zust<GeoFkon.count())
+        {
+            return GeoFkon.at(Akt_zust);
+        }else
+        {
+            geo_text tmp;
+            return tmp;
+        }
+    }
     inline QString exporttext()
     {
         if(Akt_zust != -1 && Akt_zust<Exporttext.count())
@@ -218,6 +229,7 @@ private:
     QVector<QString>            Fehler_kein_wkz;
     QVector<bool>               Export_moeglich;
     QVector<geo_text> Geotext;
+    QVector<geo_text> GeoFkon;
     QVector<double> Versatz_y;
 
     text_zw             Bearb_bekommen;

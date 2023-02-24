@@ -712,11 +712,75 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
         gt.zeilenvorschub();
     }
 
+    return gt;
+}
+geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
+{
+    //ist erst einmal nur eine Kopie der Funktion darüber
+    //muss noch abgeändert werden
 
+    //-------------------------------------------
+    geo_text gt;
+    //------------------------------
+    //Bearbeitungen darstellen:
+    QString farbe_unterseite = FARBE_ROSE;
+    for(uint i=0; i<bearb.count() ;i++)
+    {
+        text_zw zeile;
+        zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
+        {
+            fraeseraufruf fa(zeile.text());
+            punkt3d p(fa.x(), fa.y(), fa.z());
+            p.set_linienbreite(10);
+            p.verschieben_um(versatz_x, versatz_y);
+            if(fa.bezug() == WST_BEZUG_OBSEI)
+            {
+                p.set_farbe(FARBE_DUNKELGRAU);
+            }else
+            {
+                p.set_farbe(farbe_unterseite);
+            }
+            gt.add_punkt(p);
+        }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg(zeile.text());
+            strecke s;
+            s = fg.strecke_();
+            s.verschieben_um(versatz_x, versatz_y);
+            if(fg.bezug() == WST_BEZUG_OBSEI)
+            {
+                s.set_farbe(FARBE_DUNKELGRAU);
+            }else
+            {
+                s.set_farbe(farbe_unterseite);
+                s.set_stil(STIL_GESTRICHELT);
+            }
+            gt.add_strecke(s);
+        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb(zeile.text());
+            bogen b;
+            b.set_startpunkt(fb.stapu());
+            b.set_endpunkt(fb.endpu());
+            if(fb.bezug() == WST_BEZUG_OBSEI)
+            {
+                b.set_radius(fb.rad(), fb.uzs());
+                b.set_farbe(FARBE_DUNKELGRAU);
+            }else
+            {
+                b.set_radius(fb.rad(), !fb.uzs());
+                b.set_farbe(farbe_unterseite);
+                b.set_stil(STIL_GESTRICHELT);
+            }
+            b.verschieben_um(versatz_x, versatz_y);
+            gt.add_bogen(b);
+        }
+        gt.zeilenvorschub();
+    }
 
     return gt;
 }
-
 
 
 

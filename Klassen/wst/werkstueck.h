@@ -71,6 +71,7 @@ public:
     double max_y();
     double min_y();
     geo_text geo();
+    geo_text geofkon();
     inline double   laenge() const
     {
         return Laenge;
