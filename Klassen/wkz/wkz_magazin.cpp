@@ -181,7 +181,7 @@ QString wkz_magazin::wkznummer(QString wkz_typ, \
     //Hier kommen wir nur an wenn kein passendes Werkzeug gefunden wurde:
     return "";
 }
-QString wkz_magazin::wkznummer_von_alias(QString alias)
+QString wkz_magazin::wkznummer_von_alias(QString alias, QString lage)
 {
     alias.replace("void", "");
     if(alias.isEmpty())
@@ -199,7 +199,13 @@ QString wkz_magazin::wkznummer_von_alias(QString alias)
                 wkz_fraeser fraeser(zeile);
                 if(fraeser.alias() == alias)
                 {
-                    return fraeser.wkznr();
+                    if(lage == WKZ_VERT && fraeser.istverti())
+                    {
+                        return fraeser.wkznr();
+                    }else if(lage == WKZ_HORI && fraeser.isthori())
+                    {
+                        return fraeser.wkznr();
+                    }
                 }
             }
         }

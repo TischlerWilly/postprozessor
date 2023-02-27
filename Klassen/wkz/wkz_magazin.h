@@ -27,7 +27,7 @@ public:
                           double bearbeitungstiefe = 0, \
                           double werkstueckdicke = 0, \
                           QString bezugskante = WST_BEZUG_OBSEI);
-    QString wkznummer_von_alias(QString alias);
+    QString wkznummer_von_alias(QString alias, QString lage);
     QString dm(QString wkz_nr);
     bool ist_dubo(QString wkz_nr);
     QString vorschub(QString wkz_nr);

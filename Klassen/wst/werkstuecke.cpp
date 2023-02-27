@@ -2370,7 +2370,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         rt.set_ausraeumen(ausdruck_auswerten(tmp));
                     }else if(schluessel == FMC_RTA_WKZ)
                     {
-                        QString tmp = wert_nach_istgleich(zeile);
+                        QString tmp = wert_nach_istgleich(zeile);                        
                         rt.set_wkznum(tmp);
                     }
                 }
@@ -3881,6 +3881,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
+                    bool gesund = true;
                     if(!istOberseite)
                     {
                         if(drehtyp_L)
@@ -3905,11 +3906,17 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                     }else if(cagleich(y, w.breite(), 0.1))
                     {
                         rt.set_bezug(WST_BEZUG_HI);
+                    }else
+                    {
+                        gesund = false;
                     }
                     rt.set_x(x);
                     rt.set_y(y);
                     rt.set_z(z);
-                    w.neue_bearbeitung(rt.text());
+                    if(gesund == true)
+                    {
+                        w.neue_bearbeitung(rt.text());
+                    }
                     break;
                 }else
                 {

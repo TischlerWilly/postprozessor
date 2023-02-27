@@ -16,9 +16,9 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>180</x>
      <y>540</y>
-     <width>231</width>
+     <width>301</width>
      <height>31</height>
     </rect>
    </property>
@@ -140,6 +140,19 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QPushButton" name="pushButton_invert">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>510</y>
+     <width>91</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>HBE invertieren</string>
+   </property>
   </widget>
  </widget>
  <tabstops>

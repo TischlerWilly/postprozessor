@@ -155,10 +155,10 @@ void MainWin_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
 {
     if((int)nr < ui->listWidget_prgtext->count())
     {
-        ui->listWidget_prgtext->setCurrentRow(nr-1);
+        ui->listWidget_prgtext->setCurrentRow(nr);
         if(bearbeiten == true)
         {
-            zeile_bearbeiten(nr-1);
+            zeile_bearbeiten(nr);
         }
     }
 }
@@ -257,7 +257,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
 
 void MainWin_wst_bearbeiten::zeile_aendern(int index, QString bearb)
 {
-    //index ist der indes des list-widgets
+    //index ist der indes der Bearbeitung
     //bearb ist eine Zeile der Bearbeitugen
     text_zw bearbeitungen = Wst->bearb();
     bearbeitungen.edit(index, bearb);
@@ -267,42 +267,42 @@ void MainWin_wst_bearbeiten::zeile_aendern(int index, QString bearb)
 }
 void MainWin_wst_bearbeiten::slot_rta(rechtecktasche rta)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = rta.text();
     ui->listWidget_prgtext->item(index)->setText(rta_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_bo(bohrung bo)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = bo.text();
     ui->listWidget_prgtext->item(index)->setText(bohr_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_nut(nut nu)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = nu.text();
     ui->listWidget_prgtext->item(index)->setText(nut_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_faufruf(fraeseraufruf fa)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = fa.text();
     ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = fg.text();
     ui->listWidget_prgtext->item(index)->setText(fgerade_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
 }
 void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = fb.text();
     ui->listWidget_prgtext->item(index)->setText(fbogen_zu_prgzei(bearb));
     zeile_aendern(index, bearb);
@@ -395,7 +395,7 @@ void MainWin_wst_bearbeiten::on_actionEntf_triggered()
         {
             if(ui->listWidget_prgtext->item(i)->isSelected())
             {
-                row_erstes = i;
+                row_erstes = i-1;//i-1 weil 1. Zeile WST-Maße sind
                 break;
             }
         }
@@ -403,10 +403,10 @@ void MainWin_wst_bearbeiten::on_actionEntf_triggered()
         {
             if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
             {
-                Wst->bearb_ptr()->entf(index);
+                Wst->bearb_ptr()->entf(index-1);//Index-1 weil 1. Zeile WST-Maße sind
                 update_listwidget();
                 UnReDo.neu(Wst->bearb());
-                ui->listWidget_prgtext->setCurrentRow(index-1);
+                ui->listWidget_prgtext->setCurrentRow(index);
                 emit sendVorschauAktualisieren(*Wst, index);
             }
         }else
@@ -447,7 +447,7 @@ void MainWin_wst_bearbeiten::on_actionKopieren_triggered()
         {
             if(ui->listWidget_prgtext->item(i)->isSelected())
             {
-                row_erstes = i;
+                row_erstes = i-1;//i-1 weil 1. Zeile WST-Maße sind
                 break;
             }
         }
@@ -455,7 +455,7 @@ void MainWin_wst_bearbeiten::on_actionKopieren_triggered()
         {
             if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
             {
-                KopierterEintrag = Wst->bearb_ptr()->at(index);
+                KopierterEintrag = Wst->bearb_ptr()->at(index-1);//Index-1 weil 1. Zeile WST-Maße sind
             }
         }else
         {
@@ -488,17 +488,20 @@ void MainWin_wst_bearbeiten::on_actionEinfuegen_triggered()
         {
             index = 1;
         }
-        if(index == ui->listWidget_prgtext->count()-1)
+        if(index == 1)
+        {
+            Wst->bearb_ptr()->add_vo(KopierterEintrag);
+        }else if(index == ui->listWidget_prgtext->count()-1)
         {
             Wst->bearb_ptr()->add_hi(KopierterEintrag);
         }else
         {
-            Wst->bearb_ptr()->add_mi(index-1, KopierterEintrag);
+            Wst->bearb_ptr()->add_mi(index-2, KopierterEintrag);
         }
         update_listwidget();
         UnReDo.neu(Wst->bearb());
         ui->listWidget_prgtext->setCurrentRow(index);
-        emit sendVorschauAktualisieren(*Wst, index+1);
+        emit sendVorschauAktualisieren(*Wst, index);
     }
 }
 //----------------------------------Manipulation:

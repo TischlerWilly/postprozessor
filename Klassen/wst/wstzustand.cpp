@@ -2561,7 +2561,14 @@ QString wstzustand::warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_
             QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bezug);
             if(tnummer.isEmpty())//Bohren nicht möglich weil kein passendes Werkzeug
             {
-                tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
+                //Ist direkt ei WKZ definiert?
+                if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_VERT);
+                }else
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_HORI);
+                }
                 if(tnummer.isEmpty())
                 {
                     tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
@@ -2593,7 +2600,15 @@ QString wstzustand::warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_
             rechtecktasche rt(zeile.text());
 
             //Prüfen ob Nutzlänge ausreichend für Tati ist:
-            QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
+            //Ist direkt ei WKZ definiert?
+            QString tnummer;
+            if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == GANX_WST_BEZUG_UNSEI)
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_VERT);
+            }else
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_HORI);
+            }
             if(tnummer.isEmpty())
             {
                 QString bezug = rt.bezug();
@@ -2633,7 +2648,7 @@ QString wstzustand::warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_
         }else if(art == BEARBART_FRAESERAUFRUF)
         {
             fraeseraufruf fa(zeile.text());
-            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
+            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum(), WKZ_VERT);
             if(tnummer.isEmpty())
             {
                 msg += "  !! Keine Werkzeugnummer vergeben bei Fraeseraufruf!\n";
@@ -2726,7 +2741,14 @@ QString wstzustand::warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp
             QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bezug);
             if(tnummer.isEmpty())//Bohren nicht möglich weil kein passendes Werkzeug
             {
-                tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
+                //Ist direkt ei WKZ definiert?
+                if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_VERT);
+                }else
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_HORI);
+                }
                 if(tnummer.isEmpty())
                 {
                     tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
@@ -2829,7 +2851,15 @@ QString wstzustand::warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp
             //-----------------------------------------------
 
             //Prüfen ob Nutzlänge ausreichend für Tati ist:
-            QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
+            //Ist direkt ei WKZ definiert?
+            QString tnummer;
+            if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_VERT);
+            }else
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_HORI);
+            }
             if(tnummer.isEmpty())
             {
                 QString bezug = rt.bezug();
@@ -3719,7 +3749,7 @@ void wstzustand::kurze_an_ab_geraden(text_zw& bearb, wkz_magazin wkzmag)
                 afb = false;
                 continue; //For-Schleife in die nächste Runde
             }
-            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());            
+            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum(), WKZ_VERT);
             if(!tnummer.isEmpty())
             {
                 wkzdm = wkzmag.dm(tnummer).toDouble();                
@@ -4742,7 +4772,14 @@ void wstzustand::fmc_dateitext(int index)
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ein WKZ definiert?
+                //Ist direkt ein WKZ definiert?
+                if(bo.bezug() == WST_BEZUG_OBSEI  ||  bo.bezug() == WST_BEZUG_UNSEI)
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_VERT);
+                }else
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_HORI);
+                }
                 if(tnummer.isEmpty())
                 {
                     tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
@@ -6425,7 +6462,15 @@ void wstzustand::fmc_dateitext(int index)
         {
             rechtecktasche rt(zeile.text());
 
-            QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
+            QString tnummer;
+            //Ist direkt ei WKZ definiert?
+            if(rt.bezug() == WST_BEZUG_OBSEI  ||  rt.bezug() == WST_BEZUG_UNSEI)
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_VERT);
+            }else
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_HORI);
+            }
             if(tnummer.isEmpty())
             {
                 QString bezug = rt.bezug();
@@ -6624,7 +6669,7 @@ void wstzustand::fmc_dateitext(int index)
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             fraeseraufruf fa(zeile.text());
-            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
+            QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum(), WKZ_VERT);
             if(!tnummer.isEmpty())
             {
                 double gesamttiefe = fa.tiefe();
@@ -7043,7 +7088,14 @@ void wstzustand::fmc_dateitext(int index)
                 {
                     //Kein Werkzeug wurde gefunden.
                     //Kann Bohrung als Kreistasche gefräst werden?:
-                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
+                    //Ist direkt ei WKZ definiert?
+                    if(bo.bezug() == WST_BEZUG_OBSEI  ||  bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_VERT);
+                    }else
+                    {
+                        tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_HORI);
+                    }
                     if(tnummer.isEmpty())
                     {
                         tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
@@ -7775,7 +7827,15 @@ void wstzustand::fmc_dateitext(int index)
             }else if(zeile.at(0) == BEARBART_RTA)
             {
                 rechtecktasche rt(zeile.text());
-                QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
+                QString tnummer;
+                //Ist direkt ei WKZ definiert?
+                if(rt.bezug() == WST_BEZUG_OBSEI  ||  rt.bezug() == WST_BEZUG_UNSEI)
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_VERT);
+                }else
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_HORI);
+                }
                 if(tnummer.isEmpty())
                 {
                     QString bezug = rt.bezug();
@@ -7892,7 +7952,7 @@ void wstzustand::fmc_dateitext(int index)
             }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
             {
                 fraeseraufruf fa(zeile.text());
-                QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
+                QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum(), WKZ_VERT);
                 if(!tnummer.isEmpty())
                 {
                     //Beareitung auf die Oberseite drehen:
@@ -8944,7 +9004,14 @@ void wstzustand::ganx_dateitext(int index)
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
+                //Ist direkt ei WKZ definiert?
+                if(bo.bezug() == WST_BEZUG_OBSEI  ||  bo.bezug() == WST_BEZUG_UNSEI)
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_VERT);
+                }else
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_HORI);
+                }
                 if(tnummer.isEmpty())
                 {
                     tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, dm, bo.tiefe(), Dicke, bezug);
@@ -9660,7 +9727,15 @@ void wstzustand::ganx_dateitext(int index)
                     minmass = by;
                 }
 
-                QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
+                QString tnummer;
+                //Ist direkt ei WKZ definiert?
+                if(rt.bezug() == WST_BEZUG_OBSEI  ||  rt.bezug() == WST_BEZUG_UNSEI)
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_VERT);
+                }else
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_HORI);
+                }
                 if(tnummer.isEmpty())
                 {
                      tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, rt.bezug());
@@ -10536,7 +10611,14 @@ void wstzustand::ganx_dateitext(int index)
             {
                 //Kein Werkzeug wurde gefunden.
                 //Kann Bohrung als Kreistasche gefräst werden?:
-                tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
+                //Ist direkt ei WKZ definiert?
+                if(bo.bezug() == WST_BEZUG_OBSEI  ||  bo.bezug() == WST_BEZUG_UNSEI)
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_VERT);
+                }else
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_HORI);
+                }
                 if(tnummer.isEmpty())
                 {
                     tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, dm, bo.tiefe(), Dicke, bezug);
@@ -11270,7 +11352,15 @@ void wstzustand::ganx_dateitext(int index)
                     minmass = by;
                 }
 
-                QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
+                QString tnummer;
+                //Ist direkt ei WKZ definiert?
+                if(rt.bezug() == WST_BEZUG_OBSEI  ||  rt.bezug() == WST_BEZUG_UNSEI)
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_VERT);
+                }else
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_HORI);
+                }
                 if(tnummer.isEmpty())
                 {
                      tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, rt.bezug());
@@ -11670,8 +11760,14 @@ void wstzustand::ggf_dateitext(int index)
            {
                //Kein Werkzeug wurde gefunden.
                //Kann Bohrung als Kreistasche gefräst werden?:
-
-               tnummer = wkzmag.wkznummer_von_alias(bo.wkznum());//Ist direkt ei WKZ definiert?
+               //Ist direkt ei WKZ definiert?
+               if(bo.bezug() == WST_BEZUG_OBSEI  ||  bo.bezug() == WST_BEZUG_UNSEI)
+               {
+                   tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_VERT);
+               }else
+               {
+                   tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_HORI);
+               }
                if(tnummer.isEmpty())
                {
                    tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
@@ -11784,7 +11880,7 @@ void wstzustand::ggf_dateitext(int index)
        }else if(zeile.at(0) == BEARBART_RTA)
        {
            rechtecktasche rt(zeile.text());
-           QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum());//Ist direkt ei WKZ definiert?
+           QString tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_VERT);//Ist direkt ei WKZ definiert?
            if(tnummer.isEmpty())
            {
                QString bezug = rt.bezug();
@@ -11905,7 +12001,7 @@ void wstzustand::ggf_dateitext(int index)
        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
        {
            fraeseraufruf fa(zeile.text());
-           QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum());
+           QString tnummer = wkzmag.wkznummer_von_alias(fa.wkznum(), WKZ_VERT);
            if(!tnummer.isEmpty())
            {
                QString radkor = fa.radkor();

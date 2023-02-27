@@ -43,6 +43,12 @@ void geo_text::add(text_zw geometrie, uint index)
         }
     }
 }
+void geo_text::add_leerzeile()
+{
+    text_zw geo;
+    geo.set_text("leerzeile", TRZ_PA_);
+    add(geo, akt_index());
+}
 void geo_text::add_punkt(punkt3d p)
 {
     add_punkt(p, AktIndex);
@@ -669,7 +675,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
             p.verschieben_um(versatz_x, versatz_y);
             if(fa.bezug() == WST_BEZUG_OBSEI)
             {
-                p.set_farbe(FARBE_DUNKELGRAU);
+                p.set_farbe(FARBE_BLAU);
             }else
             {
                 p.set_farbe(farbe_unterseite);
@@ -683,7 +689,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
             s.verschieben_um(versatz_x, versatz_y);
             if(fg.bezug() == WST_BEZUG_OBSEI)
             {
-                s.set_farbe(FARBE_DUNKELGRAU);
+                s.set_farbe(FARBE_BLAU);
             }else
             {
                 s.set_farbe(farbe_unterseite);
@@ -699,7 +705,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
             if(fb.bezug() == WST_BEZUG_OBSEI)
             {
                 b.set_radius(fb.rad(), fb.uzs());
-                b.set_farbe(FARBE_DUNKELGRAU);
+                b.set_farbe(FARBE_BLAU);
             }else
             {
                 b.set_radius(fb.rad(), !fb.uzs());
@@ -716,13 +722,14 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
 }
 geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
 {
-    //ist erst einmal nur eine Kopie der Funktion darüber
-    //muss noch abgeändert werden
-
     //-------------------------------------------
     geo_text gt;
+    gt.add_leerzeile();//Werkstück
+    gt.zeilenvorschub();
     //------------------------------
-    //Bearbeitungen darstellen:
+    //fkon darstellen:
+    QString radkor;
+    double fraeserdm = 10;
     QString farbe_unterseite = FARBE_ROSE;
     for(uint i=0; i<bearb.count() ;i++)
     {
@@ -731,54 +738,100 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
         if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             fraeseraufruf fa(zeile.text());
-            punkt3d p(fa.x(), fa.y(), fa.z());
-            p.set_linienbreite(10);
-            p.verschieben_um(versatz_x, versatz_y);
-            if(fa.bezug() == WST_BEZUG_OBSEI)
-            {
-                p.set_farbe(FARBE_DUNKELGRAU);
-            }else
-            {
-                p.set_farbe(farbe_unterseite);
-            }
-            gt.add_punkt(p);
+            radkor = fa.radkor();
+            gt.add_leerzeile();
         }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg(zeile.text());
             strecke s;
             s = fg.strecke_();
             s.verschieben_um(versatz_x, versatz_y);
+            kreis k;
             if(fg.bezug() == WST_BEZUG_OBSEI)
             {
-                s.set_farbe(FARBE_DUNKELGRAU);
+                k.set_farbe(FARBE_BLAU);
             }else
             {
-                s.set_farbe(farbe_unterseite);
-                s.set_stil(STIL_GESTRICHELT);
+                k.set_farbe(farbe_unterseite);
+                k.set_stil(STIL_GESTRICHELT);
             }
-            gt.add_strecke(s);
+            k.set_radius(fraeserdm/2);
+            if(radkor == FRKOR_M)
+            {
+                k.set_mittelpunkt(s.mipu());
+            }else
+            {
+                strecke stmp = s;
+                stmp.drenen_um_mipu_2d(90, true);
+                stmp.set_laenge_2d(fraeserdm, strecke_bezugspunkt_mitte);
+                if(radkor == FRKOR_L)
+                {
+                    k.set_mittelpunkt(stmp.stapu());
+                }else //if(radkor == FRKOR_R)
+                {
+                    k.set_mittelpunkt(stmp.endpu());
+                }
+            }
+            gt.add_kreis(k);
         }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb(zeile.text());
             bogen b;
             b.set_startpunkt(fb.stapu());
             b.set_endpunkt(fb.endpu());
+            b.verschieben_um(versatz_x, versatz_y);
+            kreis k;
+            k.set_radius(fraeserdm/2);
             if(fb.bezug() == WST_BEZUG_OBSEI)
             {
                 b.set_radius(fb.rad(), fb.uzs());
-                b.set_farbe(FARBE_DUNKELGRAU);
+                k.set_farbe(FARBE_BLAU);
             }else
             {
                 b.set_radius(fb.rad(), !fb.uzs());
-                b.set_farbe(farbe_unterseite);
-                b.set_stil(STIL_GESTRICHELT);
+                k.set_farbe(farbe_unterseite);
+                k.set_stil(STIL_GESTRICHELT);
             }
-            b.verschieben_um(versatz_x, versatz_y);
-            gt.add_bogen(b);
+            strecke sehne;
+            sehne.set_stapu(b.start());
+            sehne.set_endpu(b.ende());
+            strecke s;
+            s.set_stapu(b.mitte());
+            s.set_endpu(sehne.mipu2d());
+            if(radkor == FRKOR_M)
+            {
+                s.set_laenge_2d(b.rad(), strecke_bezugspunkt_start);
+                k.set_mittelpunkt(s.endpu());
+            }else
+            {
+                if(radkor == FRKOR_L)
+                {
+                    if(b.im_uzs())
+                    {
+                        s.set_laenge_2d(b.rad()+fraeserdm/2, strecke_bezugspunkt_start);
+                    }else
+                    {
+                        s.set_laenge_2d(b.rad()-fraeserdm/2, strecke_bezugspunkt_start);
+                    }
+                }else //if(radkor == FRKOR_R)
+                {
+                    if(b.im_uzs())
+                    {
+                        s.set_laenge_2d(b.rad()-fraeserdm/2, strecke_bezugspunkt_start);
+                    }else
+                    {
+                        s.set_laenge_2d(b.rad()+fraeserdm/2, strecke_bezugspunkt_start);
+                    }
+                }
+                k.set_mittelpunkt(s.endpu());
+            }
+            gt.add_kreis(k);
+        }else
+        {
+            gt.add_leerzeile();
         }
         gt.zeilenvorschub();
     }
-
     return gt;
 }
 

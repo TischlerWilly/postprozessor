@@ -46,7 +46,7 @@ void vorschau::update_cad()
         text_zw spalten = GeoFkon.at(i);
         for(uint ii=0;ii<spalten.count();ii++)
         {
-            zeichneFkon(spalten.at(ii), i);
+            zeichneGeotext(spalten.at(ii), i);
         }
     }
     this->update();

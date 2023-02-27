@@ -31,6 +31,7 @@ public:
     void clear();
     void zeilenvorschub();
     //--------------------------------------set:
+    void add_leerzeile();
     void add_punkt(punkt3d p);
     void add_punkt(punkt3d p, uint index);
     void add_strecke(strecke s);
@@ -52,7 +53,7 @@ public:
     text_zw at(uint index);
 
 private:
-    void add(text_zw geometrie, uint index);
+    void add(text_zw geometrie, uint index);    
 
     std::vector<text_zw>    Daten;
     uint                    AktIndex;
