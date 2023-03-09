@@ -1935,7 +1935,7 @@ void MainWindow::import()
                 QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
             }else
             {
-                QString inhalt = datei.readAll();
+                QString inhalt = datei.readAll().toUpper();
                 wste.import_fmc(nam_ohn_pref, inhalt, ist_oberseite);
                 datei.close();
                 if(Einstellung.quelldateien_erhalten() == false)

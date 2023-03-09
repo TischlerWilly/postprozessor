@@ -103,9 +103,10 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                 QString re = VW_KANTE_RE;
                 re = re.toUpper();
                 QString kom = text_rechts(zeile, "=");
+
                 if(kom.contains(vo))
                 {
-                    w.set_kante_vo(text_rechts(kom, vo));
+                    w.set_kante_vo(text_rechts(kom, vo));                    
                 }else if(kom.contains(hi))
                 {
                     w.set_kante_hi(text_rechts(kom, hi));

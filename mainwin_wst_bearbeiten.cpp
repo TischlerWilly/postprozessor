@@ -88,6 +88,7 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
 
 void MainWin_wst_bearbeiten::update_listwidget()
 {
+    int currentRow = ui->listWidget_prgtext->currentRow();
     ui->listWidget_prgtext->clear();
     //Programmkopf als erste Zeile einfügen:
     text_zw pkopf;
@@ -150,6 +151,10 @@ void MainWin_wst_bearbeiten::update_listwidget()
         ui->listWidget_prgtext->addItem(bearb);
     }
     ui->listWidget_prgtext->addItem("...");
+    if(currentRow < ui->listWidget_prgtext->count())
+    {
+        ui->listWidget_prgtext->setCurrentRow(currentRow);
+    }
 }
 void MainWin_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
 {
@@ -262,6 +267,7 @@ void MainWin_wst_bearbeiten::zeile_aendern(int index, QString bearb)
     text_zw bearbeitungen = Wst->bearb();
     bearbeitungen.edit(index, bearb);
     Wst->bearb_ptr()->edit(index, bearbeitungen.at(index));
+    UnReDo.neu(Wst->bearb());
     update_listwidget();
     emit sendVorschauAktualisieren(*Wst, index+1);
 }
@@ -373,7 +379,7 @@ void MainWin_wst_bearbeiten::on_actionUndo_triggered()
     Wst->set_bearb(UnReDo.undo());
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
-    sendVorschauAktualisieren(*Wst, 0);
+    sendVorschauAktualisieren(*Wst, ui->listWidget_prgtext->count()-1);
 }
 void MainWin_wst_bearbeiten::on_actionRedo_triggered()
 {
@@ -384,48 +390,50 @@ void MainWin_wst_bearbeiten::on_actionRedo_triggered()
 }
 void MainWin_wst_bearbeiten::on_actionEntf_triggered()
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index_liwid = ui->listWidget_prgtext->currentRow();
+    int index_bearb = index_liwid-1;
     if((ui->listWidget_prgtext->currentIndex().isValid())  &&  \
        (ui->listWidget_prgtext->currentItem()->isSelected())    )
-    {
+    {        
         QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
         int items_menge = items.count();
-        int row_erstes = 0;//Nummer des ersten Elementes
+        int row_erstes_liwid = 0;//Nummer des ersten Elementes
         for(int i=0; i<ui->listWidget_prgtext->count() ;i++)
         {
             if(ui->listWidget_prgtext->item(i)->isSelected())
             {
-                row_erstes = i-1;//i-1 weil 1. Zeile WST-Maße sind
+                row_erstes_liwid = i;
                 break;
             }
         }
+        int row_erstes_bearb = row_erstes_liwid-1;
         if(items_menge==1)
         {
-            if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
+            if(index_liwid > 0  &&  index_liwid+1 < ui->listWidget_prgtext->count())
             {
-                Wst->bearb_ptr()->entf(index-1);//Index-1 weil 1. Zeile WST-Maße sind
+                Wst->bearb_ptr()->entf(index_bearb);
                 update_listwidget();
                 UnReDo.neu(Wst->bearb());
-                ui->listWidget_prgtext->setCurrentRow(index);
-                emit sendVorschauAktualisieren(*Wst, index);
+                ui->listWidget_prgtext->setCurrentRow(index_liwid);
+                emit sendVorschauAktualisieren(*Wst, index_liwid);
             }
         }else
         {
-            index = row_erstes;
-            if(index == 0)
+            if(row_erstes_liwid == 0)//Programmkopf
             {
-                index = 1;
+                row_erstes_liwid = 1;
+                row_erstes_bearb = row_erstes_liwid-1;
                 items_menge = items_menge-1;
             }
-            if(index+items_menge >= ui->listWidget_prgtext->count())
+            if(row_erstes_liwid+items_menge >= ui->listWidget_prgtext->count())
             {
-                items_menge = ui->listWidget_prgtext->count()-index-1;
+                items_menge = ui->listWidget_prgtext->count()-row_erstes_liwid-1;
             }
-            Wst->bearb_ptr()->entf(index, items_menge);
+            Wst->bearb_ptr()->entf(row_erstes_bearb, items_menge);
             update_listwidget();
             UnReDo.neu(Wst->bearb());
-            ui->listWidget_prgtext->setCurrentRow(index-1);
-            emit sendVorschauAktualisieren(*Wst, index);
+            ui->listWidget_prgtext->setCurrentRow(row_erstes_liwid);
+            emit sendVorschauAktualisieren(*Wst, row_erstes_liwid);
         }
     } else
     {
@@ -436,40 +444,42 @@ void MainWin_wst_bearbeiten::on_actionEntf_triggered()
 }
 void MainWin_wst_bearbeiten::on_actionKopieren_triggered()
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index_liwid = ui->listWidget_prgtext->currentRow();
+    int index_bearb = index_liwid-1;
     if((ui->listWidget_prgtext->currentIndex().isValid())  &&  \
        (ui->listWidget_prgtext->currentItem()->isSelected())    )
     {
         QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
         int items_menge = items.count();
-        int row_erstes = 0;//Nummer des ersten Elementes
+        int row_erstes_liwid = 0;//Nummer des ersten Elementes
         for(int i=0; i<ui->listWidget_prgtext->count() ;i++)
         {
             if(ui->listWidget_prgtext->item(i)->isSelected())
             {
-                row_erstes = i-1;//i-1 weil 1. Zeile WST-Maße sind
+                row_erstes_liwid = i;
                 break;
             }
         }
+        int row_erstes_bearb = row_erstes_liwid-1;
         if(items_menge==1)
         {
-            if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
+            if(index_liwid > 0  &&  index_liwid+1 < ui->listWidget_prgtext->count())
             {
-                KopierterEintrag = Wst->bearb_ptr()->at(index-1);//Index-1 weil 1. Zeile WST-Maße sind
+                KopierterEintrag = Wst->bearb_ptr()->at(index_bearb);
             }
         }else
         {
-            index = row_erstes;
-            if(index == 0)
+            if(row_erstes_liwid == 0)//Programmkopf
             {
-                index = 1;
+                row_erstes_liwid = 1;
+                row_erstes_bearb = row_erstes_liwid-1;
                 items_menge = items_menge-1;
             }
-            if(index+items_menge >= ui->listWidget_prgtext->count())
+            if(row_erstes_liwid+items_menge >= ui->listWidget_prgtext->count())
             {
-                items_menge = ui->listWidget_prgtext->count()-index-1;
+                items_menge = ui->listWidget_prgtext->count()-row_erstes_liwid-1;
             }
-            QString tmp = Wst->bearb_ptr()->at(index, items_menge);
+            QString tmp = Wst->bearb_ptr()->at(row_erstes_bearb, items_menge);
             KopierterEintrag = tmp;
         }
     }else
@@ -483,25 +493,25 @@ void MainWin_wst_bearbeiten::on_actionEinfuegen_triggered()
 {
     if(!KopierterEintrag.isEmpty())
     {
-        int index = ui->listWidget_prgtext->currentRow();
-        if(index == 0)
+        int index_liwid = ui->listWidget_prgtext->currentRow();
+        if(index_liwid == 0)//Programmkopf
         {
-            index = 1;
+            index_liwid = 1;
         }
-        if(index == 1)
+        if(index_liwid == 1)
         {
             Wst->bearb_ptr()->add_vo(KopierterEintrag);
-        }else if(index == ui->listWidget_prgtext->count()-1)
+        }else if(index_liwid == ui->listWidget_prgtext->count()-1)
         {
             Wst->bearb_ptr()->add_hi(KopierterEintrag);
         }else
         {
-            Wst->bearb_ptr()->add_mi(index-2, KopierterEintrag);
+            Wst->bearb_ptr()->add_mi(index_liwid-2, KopierterEintrag);
         }
         update_listwidget();
         UnReDo.neu(Wst->bearb());
-        ui->listWidget_prgtext->setCurrentRow(index);
-        emit sendVorschauAktualisieren(*Wst, index);
+        ui->listWidget_prgtext->setCurrentRow(index_liwid);
+        emit sendVorschauAktualisieren(*Wst, index_liwid);
     }
 }
 //----------------------------------Manipulation:
