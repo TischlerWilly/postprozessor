@@ -3646,12 +3646,13 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
                     {
                         //Die Teile aus der Bearbeitung löschen die Deckungsgleich auf der WST-Kante liegen
                         text_zw bearb_neu;
-                        bearb_neu.set_text(fa.text(), TRENNZ_BEARB_PARAM);
+                        bearb_neu.set_text(fa.text(), '\n');
 
                         for(uint ii=zeibeg+1; ii<=zeiend ;ii++)
                         {
                             text_zw param;
-                            param.set_text(bearb.at(ii), TRENNZ_BEARB_PARAM);
+                            param.set_text(bearb.at(ii), TRENNZ_BEARB_PARAM);                            
+
                             if(param.at(0) == BEARBART_FRAESERGERADE)
                             {
                                 fraesergerade fg(param.text());
@@ -3706,18 +3707,17 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
                         {
                             bearb_neu.entf(bearb_neu.count()-1);
                         }
-
                         //bearb.zeile(zeibeg bis zeiend) gegen bearb_neu austauschen:
                         if(zeiend+1 < bearb.count())
                         {
                             bearb.entf(zeibeg, zeiend-zeibeg+1);
                             bearb.add_mi(zeibeg, bearb_neu.text());
-                            i = zeibeg+bearb_neu.count();
+                            i = zeibeg+bearb_neu.count()-1;
                         }else
                         {
-                            bearb.entf(zeibeg-1, zeiend-zeibeg);
+                            bearb.entf(zeibeg, zeiend-zeibeg+1);
                             bearb.add_hi(bearb_neu.text());
-                            i = bearb.count();
+                            i = bearb.count()-1;
                         }
                     }
                 }
