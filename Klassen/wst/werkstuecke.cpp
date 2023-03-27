@@ -2995,12 +2995,43 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
             double spy = 0;
             double epx = 0;
             double epy = 0;
+            double kadi = 0;
             for(uint ii=i+1; ii<tz.count() ;ii++)
             {
                 zeile = tz.at(ii);
                 if(!zeile.contains("=")) //Ende des Abschnittes
                 {
                     i=ii-1;
+                    if(kadi != 0 && fa.radkor() != FRKOR_M)
+                    {
+                        bool uzs = true;
+                        if(fa.radkor() == FRKOR_L)
+                        {
+                            uzs = true;
+                        }else
+                        {
+                            uzs = false;
+                        }
+                        if(kadi < 0)
+                        {
+                            uzs = !uzs;
+                            kadi = kadi * -1;
+                        }
+                        strecke kontur;
+                        kontur.set_stapu(spx, spy, 0);
+                        kontur.set_endpu(epx, epy, 0);
+                        strecke versatz = kontur;
+                        versatz.set_laenge_2d(kadi, strecke_bezugspunkt_start);
+                        versatz.drenen_um_stapu_2d(90, uzs);
+                        punkt3d versatzpunkt;
+                        versatzpunkt.set_x(versatz.endpu().x()-versatz.stapu().x());
+                        versatzpunkt.set_y(versatz.endpu().y()-versatz.stapu().y());
+                        kontur.verschieben_um(versatzpunkt.x(), versatzpunkt.y());
+                        spx = kontur.stapu().x();
+                        spy = kontur.stapu().y();
+                        epx = kontur.endpu().x();
+                        epy = kontur.endpu().y();
+                    }
                     if(istOberseite)
                     {
                         fa.set_bezug(WST_BEZUG_OBSEI);
@@ -3087,6 +3118,12 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             fa.set_radkor(FRKOR_R);
                         }
 
+                    }else if(schluessel == FMC_FALZ_KADI)
+                    {
+                        QString tmp = wert_nach_istgleich(zeile);
+                        tmp = var_einsetzen(w, tmp);
+                        tmp = ausdruck_auswerten(tmp);
+                        kadi = tmp.toDouble();
                     }else if(schluessel == FMC_FKON_WKZ)
                     {
                         QString tmp = wert_nach_istgleich(zeile);

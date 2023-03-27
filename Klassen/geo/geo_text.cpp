@@ -766,10 +766,22 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
                 stmp.set_laenge_2d(fraeserdm, strecke_bezugspunkt_mitte);
                 if(radkor == FRKOR_L)
                 {
-                    k.set_mittelpunkt(stmp.stapu());
+                    if(fg.bezug() == WST_BEZUG_OBSEI)
+                    {
+                        k.set_mittelpunkt(stmp.stapu());
+                    }else
+                    {
+                        k.set_mittelpunkt(stmp.endpu());
+                    }
                 }else //if(radkor == FRKOR_R)
                 {
-                    k.set_mittelpunkt(stmp.endpu());
+                    if(fg.bezug() == WST_BEZUG_OBSEI)
+                    {
+                        k.set_mittelpunkt(stmp.endpu());
+                    }else
+                    {
+                        k.set_mittelpunkt(stmp.stapu());
+                    }
                 }
             }
             gt.add_kreis(k);
