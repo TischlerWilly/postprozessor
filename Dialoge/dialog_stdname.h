@@ -16,17 +16,18 @@ public:
     ~Dialog_stdname();
 
 public slots:
-    void slot_getData(QString vor, QString nach);
+    void slot_getData(QString vor, QString nach, int zeile);
 
 private slots:
     void on_pushButton_ok_clicked();
     void on_pushButton_abbrechen_clicked();
 
 signals:
-    void signal_sendData(QString vor, QString nach);
+    void signal_sendData(QString vor, QString nach, int zeile);
 
 private:
     Ui::Dialog_stdname *ui;
+    int Zeile;
 };
 
 #endif // DIALOG_STDNAME_H
