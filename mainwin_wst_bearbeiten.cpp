@@ -207,6 +207,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
             }
         }
         Wst->set_bearb(bearb_neu);
+        UnReDo.neu(Wst->bearb());
         update_listwidget();        
         emit sendVorschauAktualisieren(*Wst, 0);
         return;
@@ -600,13 +601,13 @@ void MainWin_wst_bearbeiten::on_actionVerschieben_triggered()
 //----------------------------------Slot_Manipulation:
 void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//index der Bearbeitung, nicht vom listwidget
     //Die index-Prüfung erfolgt bereits in der Funktion on_actionVerschieben_triggered()
-    int row_erstes = auswahl_erster();
+    int row_erstes = auswahl_erster()-1;//-1 weil index der Bearbeitung, nicht vom listwidget
     int items_menge = auswahl_menge();
     if(items_menge==1)
     {
-        if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
+        if(index >= 0  &&  index+1 < ui->listWidget_prgtext->count())
         {
             QString bearb = Wst->bearb_ptr()->at(index);
             bearb = verschiebe_einen(bearb, p.x(), p.y(), p.z());
@@ -615,9 +616,9 @@ void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
     }else
     {
         index = row_erstes;
-        if(index == 0)
+        if(index < 0)
         {
-            index = 1;
+            index = 0;
             items_menge = items_menge-1;
         }
         if(index+items_menge >= ui->listWidget_prgtext->count())

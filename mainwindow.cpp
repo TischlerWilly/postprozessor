@@ -1898,6 +1898,7 @@ void MainWindow::import()
     QString dxf = DXF;
 
     //Dateien einlesen:
+    text_zw nam_mit_obsei;//Liste mit allen grundnamen die Oberseite sind
     for(uint i=0; i<dateien_alle.count() ;i++)
     {
 
@@ -1912,6 +1913,7 @@ void MainWindow::import()
             if(nam_ohn_end.right(kenOb.length()) == kenOb)
             {
                 nam_ohn_pref = nam_ohn_end.left(nam_ohn_end.length()-kenOb.length());
+                nam_mit_obsei.add_hi(nam_ohn_pref);
                 ist_oberseite = true;
             }else if(nam_ohn_end.right(kenUn.length()) == kenUn)
             {
@@ -1936,7 +1938,28 @@ void MainWindow::import()
             }else
             {
                 QString inhalt = datei.readAll().toUpper();
-                wste.import_fmc(nam_ohn_pref, inhalt, ist_oberseite);
+                if(ist_oberseite == true)
+                {
+                    wste.import_fmc(nam_ohn_pref, inhalt, ist_oberseite);
+                }else
+                {
+                    bool hat_obsei = false;
+                    for(uint i=0;i<nam_mit_obsei.count();i++)
+                    {
+                        if(nam_mit_obsei.at(i) == nam_ohn_pref)
+                        {
+                            hat_obsei = true;
+                            break;
+                        }
+                    }
+                    if(hat_obsei == true)
+                    {
+                        wste.import_fmc(nam_ohn_pref, inhalt, ist_oberseite);
+                    }else
+                    {
+                        wste.import_fmc(nam_ohn_pref, inhalt, true);
+                    }
+                }
                 datei.close();
                 if(Einstellung.quelldateien_erhalten() == false)
                 {
