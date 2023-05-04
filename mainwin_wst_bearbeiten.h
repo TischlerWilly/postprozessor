@@ -35,6 +35,9 @@ private:
     vorschau vorschaufenster;
     werkstueck *Wst;
     undo_redo<text_zw> UnReDo;
+    undo_redo<double> UnReDo_L;
+    undo_redo<double> UnReDo_B;
+    undo_redo<double> UnReDo_D;
     QString KopierterEintrag;
     double letzte_wst_l;
     double letzte_wst_b;
@@ -47,6 +50,8 @@ private:
     int auswahl_erster();
     int auswahl_letzter();
     int auswahl_menge();
+    void unredo_neu();
+    void unredo_clear();
 
 signals:
     void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
@@ -71,7 +76,7 @@ private slots:
 
 public slots:
     //Bearbeiten
-    void zeile_aendern(int index, QString bearb);
+    void zeile_aendern(int index, QString bearb, bool unredor_verwenden);
     void slot_rta(rechtecktasche rta);
     void slot_bo(bohrung bo);    
     void slot_nut(nut nu);
