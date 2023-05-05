@@ -2,16 +2,14 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "4.2023.05.04"
+#define PROGRAMMVERSION "4.2023.05.05"
 #endif //PROGRAMMVERSION
 /*
 
 
-- dlg std-namen überarbeiten
-  ->listwidget tauschen gegen Tabelle
 
 - wst bearbeiten
-  ->Funktion zum erstellen von DT
+  ->Funktion zum Erstellen von DT
 
 text_zeilenweise werkstueck::fkon_kantengut(...)
 

@@ -561,12 +561,12 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 {
                     r.set_laenge(nu.tiefe());
                     r.set_breite(s.laenge2d());
-                    r.set_drewi(90);
+                    r.set_drewi(0);
                 }else if(nu.bezug() == WST_BEZUG_RE)
                 {
                     r.set_laenge(nu.tiefe());
                     r.set_breite(s.laenge2d());
-                    r.set_drewi(90);
+                    r.set_drewi(0);
                 }else if(nu.bezug() == WST_BEZUG_VO)
                 {
                     r.set_laenge(s.laenge2d());
