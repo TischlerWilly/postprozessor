@@ -6485,16 +6485,15 @@ void wstzustand::fmc_dateitext(int index)
                 tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, bezug);
             }
             if(!tnummer.isEmpty())
-            {
-                double zustellmas = rt.zustellmass();
-                if(zustellmas <= 0)
-                {
-                    zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
-                }
+            {                
                 double radius = rt.rad();
-
                 if(rt.bezug() == WST_BEZUG_OBSEI)
                 {
+                    double zustellmas = rt.zustellmass();
+                    if(zustellmas <= 0)
+                    {
+                        zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
+                    }
                     double tiefe = 0;
                     QString tiefe_qstring;
                     if(rt.tiefe() > dicke())
@@ -6570,6 +6569,11 @@ void wstzustand::fmc_dateitext(int index)
                     msg += "\n";
                 }else if(rt.bezug() != WST_BEZUG_UNSEI)
                 {
+                    double zustellmas = rt.zustellmass();
+                    if(zustellmas <= 0)
+                    {
+                        zustellmas = wkzmag.zustmashori(tnummer).toDouble();
+                    }
                     msg += FMC_STULP;
                     msg += "\n";
                     msg += FMC_STULP_WKZ;
