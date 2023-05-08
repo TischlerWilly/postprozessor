@@ -2924,7 +2924,7 @@ void wstzustand::rasterbohrungen_finden_fmc(text_zw& bearb, wkz_magazin wkzmag,d
     {
         text_zw param;
         param.set_text(bearb.at(i), TRENNZ_BEARB_PARAM);
-        if(param.at(1) == BEARBART_BOHR)
+        if(param.at(0) == BEARBART_BOHR)
         {
             bohrung b(param.text());
             QString tiefe_neu = b.tiefe_qstring();
