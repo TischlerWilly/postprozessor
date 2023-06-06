@@ -572,9 +572,9 @@ void MainWin_wst_bearbeiten::on_actionVerschieben_triggered()
         //Prüfen ob Fräsbahnen durch das Verschieben geteilt werden:
         bool gesund = true;
         //--Prüfen ob eine Fräsbahn nach der Auswahl weiter geht:
-        if(auswahl_letzter() < ui->listWidget_prgtext->count()-2)
+        if(auswahl_letzter() < ui->listWidget_prgtext->count())
         {
-            int zeile_dannach = auswahl_letzter()+1;//index von QListwidget
+            int zeile_dannach = auswahl_letzter();//index von QListwidget
             text_zw bearb;
             bearb.set_text(Wst->bearb_ptr()->at(zeile_dannach),TRENNZ_BEARB_PARAM);
             if(bearb.at(0) == BEARBART_FRAESERGERADE  || \
@@ -590,7 +590,7 @@ void MainWin_wst_bearbeiten::on_actionVerschieben_triggered()
             text_zw bearb;
             bearb.set_text(Wst->bearb_ptr()->at(zeile_davor),TRENNZ_BEARB_PARAM);
             text_zw bearb_erster;
-            bearb_erster.set_text(Wst->bearb_ptr()->at(auswahl_erster()),TRENNZ_BEARB_PARAM);
+            bearb_erster.set_text(Wst->bearb_ptr()->at(auswahl_erster()-1),TRENNZ_BEARB_PARAM);
             if(bearb_erster.at(0) != BEARBART_FRAESERAUFRUF)
             {
                 if(bearb.at(0) == BEARBART_FRAESERAUFRUF  || \
