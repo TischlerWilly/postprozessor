@@ -23,6 +23,7 @@
 #include "Klassen/wst/fraeseraufruf.h"
 #include "Klassen/wst/fraesergerade.h"
 #include "Klassen/wst/fraeserbogen.h"
+#include "Klassen/wst/gehrung.h"
 
 class geo_text
 {

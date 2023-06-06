@@ -714,6 +714,15 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
             }
             b.verschieben_um(versatz_x, versatz_y);
             gt.add_bogen(b);
+        }else if(zeile.at(0) == BEARBART_GEHRUNG)
+        {
+            gehrung ge(zeile.text());
+            strecke s;
+            s.set_stapu(ge.stapu());
+            s.set_endpu(ge.endpu());
+            s.verschieben_um(versatz_x, versatz_y);
+            s.set_stil(STIL_GEPUNKTET);
+            gt.add_strecke(s);
         }
         gt.zeilenvorschub();
     }
