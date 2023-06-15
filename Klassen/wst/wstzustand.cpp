@@ -6678,6 +6678,7 @@ void wstzustand::fmc_dateitext(int index)
             {
                 double gesamttiefe = fa.tiefe();
                 double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
+                double wkzdm = wkzmag.dm(tnummer).toDouble();
                 double zustelltiefe;
                 if(Zust_fkon == "wkz")
                 {
@@ -6710,6 +6711,57 @@ void wstzustand::fmc_dateitext(int index)
                     msg += kommentar_fmc("--------------------");
 
                     double backup_i = i;
+
+                    //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
+                    punkt3d pfa;//Punkt Fräseraufruf
+                    pfa.set_x(fa.x());
+                    pfa.set_y(fa.y());
+                    text_zw folzei;//Folgezeile
+                    folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
+                    punkt3d pein;//Eintauchpunkt
+                    int anweg = 50;
+                    if(folzei.at(0) == BEARBART_FRAESERGERADE)
+                    {
+                        fraesergerade fg(folzei.text());
+                        strecke s;
+                        s.set_stapu(pfa);
+                        punkt3d ep = fg.ep();
+                        ep.set_z(0);
+                        s.set_endpu(ep);
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_ende;
+                        s.set_laenge_2d(s.laenge2d()+anweg, sb);
+                        pein = s.stapu();
+                    }else if(folzei.at(0) == BEARBART_FRAESERBOGEN)
+                    {
+                        fraeserbogen fb(folzei.text());
+                        bogen b;
+                        b.set_startpunkt(pfa);
+                        b.set_endpunkt(fb.ep());
+                        b.set_radius(fb.rad(), fb.uzs());
+                        strecke s;
+                        s.set_stapu(pfa);
+                        punkt3d pmibo;
+                        pmibo.set_x(b.mitte().x());
+                        pmibo.set_y(b.mitte().y());
+                        s.set_endpu(pmibo);
+                        s.drenen_um_stapu_2d(90, b.im_uzs());
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_start;
+                        s.set_laenge_2d(anweg, sb);
+                        pein = s.endpu();
+                    }
+                    bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
+                    QString fkoneintyp;
+                    if(aufwst == true)
+                    {
+                        fkoneintyp = "1";
+                    }else
+                    {
+                        fkoneintyp = "-1";
+                    }
+                    msg += variable_fmc("FKONEINTYP", fkoneintyp);
+
                     while(1)//abbruch durch breake
                     {
                         i = backup_i;
@@ -6747,52 +6799,6 @@ void wstzustand::fmc_dateitext(int index)
                         msg += radkor;
                         msg += "\n";
 
-                        //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
-                        punkt3d pfa;//Punkt Fräseraufruf
-                        pfa.set_x(fa.x());
-                        pfa.set_y(fa.y());
-                        text_zw folzei;//Folgezeile
-                        folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
-                        punkt3d pein;//Eintauchpunkt
-                        int anweg = 50;
-
-                        if(folzei.at(0) == BEARBART_FRAESERGERADE)
-                        {
-                            fraesergerade fg(folzei.text());
-                            strecke s;
-                            s.set_stapu(pfa);
-                            punkt3d ep = fg.ep();
-                            ep.set_z(0);
-                            s.set_endpu(ep);
-                            strecke_bezugspunkt sb;
-                            sb = strecke_bezugspunkt_ende;
-                            s.set_laenge_2d(s.laenge2d()+anweg, sb);
-                            pein = s.stapu();
-                            //msg += "anfahrpunkt X = ";
-                            //msg += s.stapu().x_QString();
-                            //msg += " / Y = ";
-                            //msg += s.stapu().y_QString();
-                            //msg += "\n";
-                        }else if(folzei.at(0) == BEARBART_FRAESERBOGEN)
-                        {
-                            fraeserbogen fb(folzei.text());
-                            bogen b;
-                            b.set_startpunkt(pfa);
-                            b.set_endpunkt(fb.ep());
-                            strecke s;
-                            s.set_stapu(pfa);
-                            punkt3d pmibo;
-                            pmibo.set_x(b.mitte().x());
-                            pmibo.set_y(b.mitte().y());
-                            s.set_endpu(pmibo);
-                            s.drenen_um_stapu_2d(90, b.im_uzs());
-                            strecke_bezugspunkt sb;
-                            sb = strecke_bezugspunkt_start;
-                            s.set_laenge_2d(anweg, sb);
-                            pein = s.endpu();
-                        }
-
-                        bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
                         if(aufwst == true)
                         {
                             if(radkor == "0")
@@ -6808,33 +6814,46 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += FMC_FKON_ABTYP;    //Abfahrtyp
                                 msg += "=1\n";
                             }
-                            msg += "TYPEIN=1\n";    //Eintauchtp
+                            msg += FMC_FKON_EINTYP;   //Eintauchtp
+                            msg += "=FKONEINTYP";
+                            msg += "\n";
+                            //msg += "=1\n";
                             if(pos_z > 0)
                             {
                                 //Anfahranweisung für nicht durchgefräste Innen-Bahnen:
-                                msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                                msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                                msg += FMC_FKON_ANWEG;    //Anfahrwert
+                                msg += "=2*WKZR\n";
+                                msg += FMC_FKON_ABWEG;    //Abfahrwert
+                                msg += "LGEAB=2*WKZR\n";
                             }else
                             {
                                 //Anfahranweisung für durchgefräste Innen-Bahnen:
-                                msg += "LGEAN=50\n";    //Anfahrwert
-                                msg += "LGEAB=50\n";    //Abfahrwert
+                                msg += FMC_FKON_ANWEG;    //Anfahrwert
+                                msg += "=50\n";
+                                msg += FMC_FKON_ABWEG;    //Abfahrwert
+                                msg += "=50\n";
                             }
-                        }else
+                        }else //Anfahrweg beginnt nicht auf WST
                         {
                             //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
                             msg += FMC_FKON_ANTYP;    //Anfahrtyp
                             msg += "=0\n";
                             msg += FMC_FKON_ABTYP;    //Abfahrtyp
                             msg += "=0\n";
-                            msg += "TYPEIN=1\n";   //Eintauchtp
-                            msg += "LGEAN=2*WKZR+";    //Anfahrwert
+                            msg += FMC_FKON_EINTYP;   //Eintauchtp
+                            msg += "=FKONEINTYP";
+                            msg += "\n";
+                            //msg += "=-1\n";
+                            msg += FMC_FKON_ANWEG;    //Anfahrwert
+                            msg += "=2*WKZR+";
                             msg += double_to_qstring(anweg);
                             msg += "\n";
-                            msg += "LGEAB=2*WKZR+";    //Abfahrwert
+                            msg += FMC_FKON_ABWEG;   //Abfahrwert
+                            msg += "=2*WKZR+";
                             msg += double_to_qstring(anweg);
                             msg += "\n";
                         }
+
                         msg += "FAN=AUTO\n";    //Anfahrvorschub
                         msg += "F=AUTO\n";      //Vorschub
                         //msg += "N=AUTO\n";      //Drehzahl
@@ -7964,6 +7983,7 @@ void wstzustand::fmc_dateitext(int index)
 
                     double gesamttiefe = fa.tiefe();
                     double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
+                    double wkzdm = wkzmag.dm(tnummer).toDouble();
                     double zustelltiefe;
                     if(Zust_fkon == "wkz")
                     {
@@ -7996,6 +8016,66 @@ void wstzustand::fmc_dateitext(int index)
                         msg += kommentar_fmc("--------------------");
 
                         double backup_i = i;
+
+                        //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
+                        punkt3d pfa;//Punkt Fräseraufruf
+                        pfa.set_x(fa.x());
+                        pfa.set_y(fa.y());
+                        text_zw folzei;//Folgezeile
+                        folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
+                        punkt3d pein;//Eintauchpunkt
+                        int anweg = 50;
+
+                        if(folzei.at(0) == BEARBART_FRAESERGERADE)
+                        {
+                            fraesergerade fg(folzei.text());
+                            //Beareitung auf die Oberseite drehen:
+                            fg.set_ys(  tmp_b - fg.ys()  );
+                            fg.set_ye(  tmp_b - fg.ye()  );
+                            //-------
+                            strecke s;
+                            s.set_stapu(pfa);
+                            punkt3d ep = fg.ep();
+                            ep.set_z(0);
+                            s.set_endpu(ep);
+                            strecke_bezugspunkt sb;
+                            sb = strecke_bezugspunkt_ende;
+                            s.set_laenge_2d(s.laenge2d()+anweg, sb);
+                            pein = s.stapu();
+                        }else if(folzei.at(0) == BEARBART_FRAESERBOGEN)
+                        {
+                            fraeserbogen fb(folzei.text());
+                            //Beareitung auf die Oberseite drehen:
+                            fb.set_ys(  tmp_b - fb.ys()  );
+                            fb.set_ye(  tmp_b - fb.ye()  );
+                            //---------
+                            bogen b;
+                            b.set_startpunkt(pfa);
+                            b.set_endpunkt(fb.ep());
+                            b.set_radius(fb.rad(), fb.uzs());
+                            strecke s;
+                            s.set_stapu(pfa);
+                            punkt3d pmibo;
+                            pmibo.set_x(b.mitte().x());
+                            pmibo.set_y(b.mitte().y());
+                            s.set_endpu(pmibo);
+                            s.drenen_um_stapu_2d(90, b.im_uzs());
+                            strecke_bezugspunkt sb;
+                            sb = strecke_bezugspunkt_start;
+                            s.set_laenge_2d(anweg, sb);
+                            pein = s.endpu();
+                        }
+                        bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
+                        QString fkoneintyp;
+                        if(aufwst == true)
+                        {
+                            fkoneintyp = "1";
+                        }else
+                        {
+                            fkoneintyp = "-1";
+                        }
+                        msg += variable_fmc("FKONEINTYP", fkoneintyp);
+
                         while(1)//abbruch durch breake
                         {
                             i = backup_i;
@@ -8031,57 +8111,8 @@ void wstzustand::fmc_dateitext(int index)
                             msg += FMC_FKON_KOR;    //Fräsbaohnkorrektur
                             msg += "=";
                             msg += radkor;
-                            msg += "\n";
+                            msg += "\n";                            
 
-                            //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
-                            punkt3d pfa;//Punkt Fräseraufruf
-                            pfa.set_x(fa.x());
-                            pfa.set_y(fa.y());
-                            text_zw folzei;//Folgezeile
-                            folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
-                            punkt3d pein;//Eintauchpunkt
-                            int anweg = 50;
-
-                            if(folzei.at(0) == BEARBART_FRAESERGERADE)
-                            {
-                                fraesergerade fg(folzei.text());
-                                //Beareitung auf die Oberseite drehen:
-                                fg.set_ys(  tmp_b - fg.ys()  );
-                                fg.set_ye(  tmp_b - fg.ye()  );
-                                //-------
-                                strecke s;
-                                s.set_stapu(pfa);
-                                punkt3d ep = fg.ep();
-                                ep.set_z(0);
-                                s.set_endpu(ep);
-                                strecke_bezugspunkt sb;
-                                sb = strecke_bezugspunkt_ende;
-                                s.set_laenge_2d(s.laenge2d()+anweg, sb);
-                                pein = s.stapu();
-                            }else if(folzei.at(0) == BEARBART_FRAESERBOGEN)
-                            {
-                                fraeserbogen fb(folzei.text());
-                                //Beareitung auf die Oberseite drehen:
-                                fb.set_ys(  tmp_b - fb.ys()  );
-                                fb.set_ye(  tmp_b - fb.ye()  );
-                                //---------
-                                bogen b;
-                                b.set_startpunkt(pfa);
-                                b.set_endpunkt(fb.ep());
-                                strecke s;
-                                s.set_stapu(pfa);
-                                punkt3d pmibo;
-                                pmibo.set_x(b.mitte().x());
-                                pmibo.set_y(b.mitte().y());
-                                s.set_endpu(pmibo);
-                                s.drenen_um_stapu_2d(90, b.im_uzs());
-                                strecke_bezugspunkt sb;
-                                sb = strecke_bezugspunkt_start;
-                                s.set_laenge_2d(anweg, sb);
-                                pein = s.endpu();
-                            }
-
-                            bool aufwst = punkt_auf_wst(pein.x(), pein.y(), tmp_l, tmp_b, 1);
                             if(aufwst == true)
                             {
                                 if(radkor == "0")
@@ -8097,17 +8128,24 @@ void wstzustand::fmc_dateitext(int index)
                                     msg += FMC_FKON_ABTYP;    //Abfahrtyp
                                     msg += "=1\n";
                                 }
-                                msg += "TYPEIN=1\n";    //Eintauchtp
+                                msg += FMC_FKON_EINTYP;   //Eintauchtp
+                                msg += "=FKONEINTYP";
+                                msg += "\n";
+                                //msg += "=1\n";
                                 if(pos_z > 0)
                                 {
                                     //Anfahranweisung für nicht durchgefräste Innen-Bahnen:
-                                    msg += "LGEAN=2*WKZR\n";    //Anfahrwert
-                                    msg += "LGEAB=2*WKZR\n";    //Abfahrwert
+                                    msg += FMC_FKON_ANWEG;    //Anfahrwert
+                                    msg += "=2*WKZR\n";
+                                    msg += FMC_FKON_ABWEG;    //Abfahrwert
+                                    msg += "LGEAB=2*WKZR\n";
                                 }else
                                 {
                                     //Anfahranweisung für durchgefräste Innen-Bahnen:
-                                    msg += "LGEAN=50\n";    //Anfahrwert
-                                    msg += "LGEAB=50\n";    //Abfahrwert
+                                    msg += FMC_FKON_ANWEG;    //Anfahrwert
+                                    msg += "=50\n";
+                                    msg += FMC_FKON_ABWEG;    //Abfahrwert
+                                    msg += "=50\n";
                                 }
                             }else
                             {
@@ -8116,14 +8154,20 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "=0\n";
                                 msg += FMC_FKON_ABTYP;    //Abfahrtyp
                                 msg += "=0\n";
-                                msg += "TYPEIN=1\n";   //Eintauchtp
-                                msg += "LGEAN=2*WKZR+";    //Anfahrwert
+                                msg += FMC_FKON_EINTYP;   //Eintauchtp
+                                msg += "=FKONEINTYP";
+                                msg += "\n";
+                                //msg += "=-1\n";
+                                msg += FMC_FKON_ANWEG;    //Anfahrwert
+                                msg += "=2*WKZR+";
                                 msg += double_to_qstring(anweg);
                                 msg += "\n";
-                                msg += "LGEAB=2*WKZR+";    //Abfahrwert
+                                msg += FMC_FKON_ABWEG;   //Abfahrwert
+                                msg += "=2*WKZR+";
                                 msg += double_to_qstring(anweg);
                                 msg += "\n";
                             }
+
                             msg += "FAN=AUTO\n";    //Anfahrvorschub
                             msg += "F=AUTO\n";      //Vorschub
                             //msg += "N=AUTO\n";      //Drehzahl
