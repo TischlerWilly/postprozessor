@@ -4351,6 +4351,7 @@ QString wstzustand::kante_re_ganx(QString drewi)
 }
 void wstzustand::fmc_dateitext(int index)
 {
+    const double hbe_max_abst_obsei = 25;
     text_zw bearb = Bearb.at(index);
     QString drewi = Drehung.at(index);
     double tmp_l = Laenge.at(index);
@@ -4519,6 +4520,7 @@ void wstzustand::fmc_dateitext(int index)
         msg += kommentar_fmc("----------------------------");
     }
     //---    
+    text_zw hbe_nach_drehen;
     for(uint i=0 ; i<bearb.count() ; i++)
     {
         zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
@@ -4595,178 +4597,196 @@ void wstzustand::fmc_dateitext(int index)
                     msg += bo.afb();
                     msg += "\n";
                     msg += "\n";
-                }else if(bezug == WST_BEZUG_LI)
+                }else if(bezug != WST_BEZUG_UNSEI)
                 {
-                    msg += FMC_HBEXP;
-                    msg += "\n";
-                    msg += "Y1=";
-                    msg += bo.y_qstring();
-                    msg += "\n";
-                    msg += "Y2=(NULL)\n";
-                    msg += "Y3=(NULL)\n";
-                    msg += "Y4=(NULL)\n";
-                    msg += "Y5=(NULL)\n";
-                    msg += "Y6=(NULL)\n";
-                    msg += "TI=";
-                    msg += bo.tiefe_qstring();
-                    msg += "\n";
-                    msg += "Z=";
-                    msg += bo.z_qstring();
-                    msg += "\n";
-                    msg += "DM=";
-                    //msg += bo.dm_qstring();
-                    msg += wkzmag.dm(tnummer);
-                    msg += "\n";
-                    msg += "KETTE=0\n";
-                    msg += "GRP=1\n";           //Bohrgruppe
-                    msg += "X2=-1\n";
-                    msg += "X1=0\n";
+                    double abst_obsei = dicke() - bo.z();
+                    if(abst_obsei > hbe_max_abst_obsei)
+                    {
+                        hbe_nach_drehen.add_hi(bo.text());
+                    }else
+                    {
+                        if(bezug == WST_BEZUG_LI)
+                        {
+                            msg += FMC_HBEXP;
+                            msg += "\n";
+                            msg += "Y1=";
+                            msg += bo.y_qstring();
+                            msg += "\n";
+                            msg += "Y2=(NULL)\n";
+                            msg += "Y3=(NULL)\n";
+                            msg += "Y4=(NULL)\n";
+                            msg += "Y5=(NULL)\n";
+                            msg += "Y6=(NULL)\n";
+                            msg += "TI=";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "Z=";
+                            msg += bo.z_qstring();
+                            msg += "\n";
+                            msg += "DM=";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += "\n";
+                            msg += "KETTE=0\n";
+                            msg += "GRP=";           //Bohrgruppe
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            msg += "X2=-1\n";
+                            msg += "X1=0\n";
 
-                    //Anbohrtiefe gem. Voreinstellung IMAWOP
-                    //Anbohrvorschub gem. Voreinstellung IMAWOP
-                    //Bohrvorschub gem. Voreinstellung IMAWOP
-                    //Drehzahl gem. Voreinstellung IMAWOP
+                            //Anbohrtiefe gem. Voreinstellung IMAWOP
+                            //Anbohrvorschub gem. Voreinstellung IMAWOP
+                            //Bohrvorschub gem. Voreinstellung IMAWOP
+                            //Drehzahl gem. Voreinstellung IMAWOP
 
-                    msg += "BEZB=";
-                    msg += "HBE X+ DM";
-                    //msg += bo.dm_qstring();
-                    msg += wkzmag.dm(tnummer);
-                    msg += " T";
-                    msg += bo.tiefe_qstring();
-                    msg += "\n";
-                    msg += "AFB=";
-                    msg += bo.afb();
-                    msg += "\n";
-                    msg += "\n";
-                }else if(bezug == WST_BEZUG_RE)
-                {
-                    msg += FMC_HBEXM;
-                    msg += "\n";
-                    msg += "Y1=";
-                    msg += bo.y_qstring();
-                    msg += "\n";
-                    msg += "Y2=(NULL)\n";
-                    msg += "Y3=(NULL)\n";
-                    msg += "Y4=(NULL)\n";
-                    msg += "Y5=(NULL)\n";
-                    msg += "Y6=(NULL)\n";
-                    msg += "TI=";
-                    msg += bo.tiefe_qstring();
-                    msg += "\n";
-                    msg += "Z=";
-                    msg += bo.z_qstring();
-                    msg += "\n";
-                    msg += "DM=";
-                    //msg += bo.dm_qstring();
-                    msg += wkzmag.dm(tnummer);
-                    msg += "\n";
-                    msg += "KETTE=0\n";
-                    msg += "GRP=1\n";           //Bohrgruppe
-                    msg += "X2=-1\n";
-                    msg += "X1=L\n";
+                            msg += "BEZB=";
+                            msg += "HBE X+ DM";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += " T";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "AFB=";
+                            msg += bo.afb();
+                            msg += "\n";
+                            msg += "\n";
+                        }else if(bezug == WST_BEZUG_RE)
+                        {
+                            msg += FMC_HBEXM;
+                            msg += "\n";
+                            msg += "Y1=";
+                            msg += bo.y_qstring();
+                            msg += "\n";
+                            msg += "Y2=(NULL)\n";
+                            msg += "Y3=(NULL)\n";
+                            msg += "Y4=(NULL)\n";
+                            msg += "Y5=(NULL)\n";
+                            msg += "Y6=(NULL)\n";
+                            msg += "TI=";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "Z=";
+                            msg += bo.z_qstring();
+                            msg += "\n";
+                            msg += "DM=";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += "\n";
+                            msg += "KETTE=0\n";
+                            msg += "GRP=";           //Bohrgruppe
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            msg += "X2=-1\n";
+                            msg += "X1=L\n";
 
-                    //Anbohrtiefe gem. Voreinstellung IMAWOP
-                    //Anbohrvorschub gem. Voreinstellung IMAWOP
-                    //Bohrvorschub gem. Voreinstellung IMAWOP
-                    //Drehzahl gem. Voreinstellung IMAWOP
+                            //Anbohrtiefe gem. Voreinstellung IMAWOP
+                            //Anbohrvorschub gem. Voreinstellung IMAWOP
+                            //Bohrvorschub gem. Voreinstellung IMAWOP
+                            //Drehzahl gem. Voreinstellung IMAWOP
 
-                    msg += "BEZB=";
-                    msg += "HBE X- DM";
-                    //msg += bo.dm_qstring();
-                    msg += wkzmag.dm(tnummer);
-                    msg += " T";
-                    msg += bo.tiefe_qstring();
-                    msg += "\n";
-                    msg += "AFB=";
-                    msg += bo.afb();
-                    msg += "\n";
-                    msg += "\n";
-                }else if(bezug == WST_BEZUG_VO)
-                {
-                    msg += FMC_HBEYP;
-                    msg += "\n";
-                    msg += "X1=";
-                    msg += bo.x_qstring();
-                    msg += "\n";
-                    msg += "X2=(NULL)\n";
-                    msg += "X3=(NULL)\n";
-                    msg += "X4=(NULL)\n";
-                    msg += "X5=(NULL)\n";
-                    msg += "X6=(NULL)\n";
-                    msg += "TI=";
-                    msg += bo.tiefe_qstring();
-                    msg += "\n";
-                    msg += "Z=";
-                    msg += bo.z_qstring();
-                    msg += "\n";
-                    msg += "DM=";
-                    //msg += bo.dm_qstring();
-                    msg += wkzmag.dm(tnummer);
-                    msg += "\n";
-                    msg += "KETTE=0\n";
-                    msg += "GRP=1\n";           //Bohrgruppe
-                    msg += "Y2=-1\n";
-                    msg += "Y1=0\n";
+                            msg += "BEZB=";
+                            msg += "HBE X- DM";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += " T";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "AFB=";
+                            msg += bo.afb();
+                            msg += "\n";
+                            msg += "\n";
+                        }else if(bezug == WST_BEZUG_VO)
+                        {
+                            msg += FMC_HBEYP;
+                            msg += "\n";
+                            msg += "X1=";
+                            msg += bo.x_qstring();
+                            msg += "\n";
+                            msg += "X2=(NULL)\n";
+                            msg += "X3=(NULL)\n";
+                            msg += "X4=(NULL)\n";
+                            msg += "X5=(NULL)\n";
+                            msg += "X6=(NULL)\n";
+                            msg += "TI=";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "Z=";
+                            msg += bo.z_qstring();
+                            msg += "\n";
+                            msg += "DM=";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += "\n";
+                            msg += "KETTE=0\n";
+                            msg += "GRP=";           //Bohrgruppe
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            msg += "Y2=-1\n";
+                            msg += "Y1=0\n";
 
-                    //Anbohrtiefe gem. Voreinstellung IMAWOP
-                    //Anbohrvorschub gem. Voreinstellung IMAWOP
-                    //Bohrvorschub gem. Voreinstellung IMAWOP
-                    //Drehzahl gem. Voreinstellung IMAWOP
+                            //Anbohrtiefe gem. Voreinstellung IMAWOP
+                            //Anbohrvorschub gem. Voreinstellung IMAWOP
+                            //Bohrvorschub gem. Voreinstellung IMAWOP
+                            //Drehzahl gem. Voreinstellung IMAWOP
 
-                    msg += "BEZB=";
-                    msg += "HBE Y+ DM";
-                    //msg += bo.dm_qstring();
-                    msg += wkzmag.dm(tnummer);
-                    msg += " T";
-                    msg += bo.tiefe_qstring();
-                    msg += "\n";
-                    msg += "AFB=";
-                    msg += bo.afb();
-                    msg += "\n";
-                    msg += "\n";
-                }else if(bezug == WST_BEZUG_HI)
-                {
-                    msg += FMC_HBEYM;
-                    msg += "\n";
-                    msg += "X1=";
-                    msg += bo.x_qstring();
-                    msg += "\n";
-                    msg += "X2=(NULL)\n";
-                    msg += "X3=(NULL)\n";
-                    msg += "X4=(NULL)\n";
-                    msg += "X5=(NULL)\n";
-                    msg += "X6=(NULL)\n";
-                    msg += "TI=";
-                    msg += bo.tiefe_qstring();
-                    msg += "\n";
-                    msg += "Z=";
-                    msg += bo.z_qstring();
-                    msg += "\n";
-                    msg += "DM=";
-                    //msg += bo.dm_qstring();
-                    msg += wkzmag.dm(tnummer);
-                    msg += "\n";
-                    msg += "KETTE=0\n";
-                    msg += "GRP=1\n";           //Bohrgruppe
-                    msg += "Y2=-1\n";
-                    msg += "Y1=B\n";
+                            msg += "BEZB=";
+                            msg += "HBE Y+ DM";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += " T";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "AFB=";
+                            msg += bo.afb();
+                            msg += "\n";
+                            msg += "\n";
+                        }else if(bezug == WST_BEZUG_HI)
+                        {
+                            msg += FMC_HBEYM;
+                            msg += "\n";
+                            msg += "X1=";
+                            msg += bo.x_qstring();
+                            msg += "\n";
+                            msg += "X2=(NULL)\n";
+                            msg += "X3=(NULL)\n";
+                            msg += "X4=(NULL)\n";
+                            msg += "X5=(NULL)\n";
+                            msg += "X6=(NULL)\n";
+                            msg += "TI=";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "Z=";
+                            msg += bo.z_qstring();
+                            msg += "\n";
+                            msg += "DM=";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += "\n";
+                            msg += "KETTE=0\n";
+                            msg += "GRP=";           //Bohrgruppe
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            msg += "Y2=-1\n";
+                            msg += "Y1=B\n";
 
-                    //Anbohrtiefe gem. Voreinstellung IMAWOP
-                    //Anbohrvorschub gem. Voreinstellung IMAWOP
-                    //Bohrvorschub gem. Voreinstellung IMAWOP
-                    //Drehzahl gem. Voreinstellung IMAWOP
+                            //Anbohrtiefe gem. Voreinstellung IMAWOP
+                            //Anbohrvorschub gem. Voreinstellung IMAWOP
+                            //Bohrvorschub gem. Voreinstellung IMAWOP
+                            //Drehzahl gem. Voreinstellung IMAWOP
 
-                    msg += "BEZB=";
-                    msg += "HBE Y- DM";
-                    //msg += bo.dm_qstring();
-                    msg += wkzmag.dm(tnummer);
-                    msg += " T";
-                    msg += bo.tiefe_qstring();
-                    msg += "\n";
-                    msg += "AFB=";
-                    msg += bo.afb();
-                    msg += "\n";
-                    msg += "\n";
+                            msg += "BEZB=";
+                            msg += "HBE Y- DM";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += " T";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "AFB=";
+                            msg += bo.afb();
+                            msg += "\n";
+                            msg += "\n";
+                        }
+                    }
                 }
             }else
             {
@@ -5344,379 +5364,398 @@ void wstzustand::fmc_dateitext(int index)
                         //Bislang noch keine Lochrasttererkennung in X und Y gleichzeitig vorhanden
                         //desshalb Ausgabe an dieser Stellen nicht nötig
                     }
-                }else if(bezug == WST_BEZUG_LI)
+                }else if(bezug != WST_BEZUG_UNSEI)
                 {
-                    //HBE Xplus:
-                    for(uint i=0 ; i<bora.anz_y() ; i=i+6)
+                    double abst_obsei = dicke() - bora.z();
+                    if(abst_obsei > hbe_max_abst_obsei)
                     {
-                        msg += FMC_HBEXP;
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y1=";
-                        msg += double_to_qstring(  bora.y() + (i*bora.raster_y())  );
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y2=";
-                        if(bora.anz_y() >= i+2)
-                        {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y3=";
-                        if(bora.anz_y() >= i+3)
-                        {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y4=";
-                        if(bora.anz_y() >= i+4)
-                        {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y5=";
-                        if(bora.anz_y() >= i+5)
-                        {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y6=";
-                        if(bora.anz_y() >= i+6)
-                        {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "TI=";
-                        msg += bora.tiefe_qstring();
-                        msg += "\n";
-                        msg += "Z=";
-                        msg += bora.z_qstring();
-                        msg += "\n";
-                        msg += "DM=";
-                        //msg += bora.dm_qstring();
-                        msg += wkzmag.dm(tnummer);
-                        msg += "\n";
-                        msg += "KETTE=1\n";
-                        msg += "GRP=1\n";           //Bohrgruppe
-                        msg += "X2=-1\n";
-                        msg += "X1=0\n";
-
-                        //Anbohrtiefe gem. Voreinstellung IMAWOP
-                        //Anbohrvorschub gem. Voreinstellung IMAWOP
-                        //Bohrvorschub gem. Voreinstellung IMAWOP
-                        //Drehzahl gem. Voreinstellung IMAWOP
-
-                        msg += "BEZB=";
-                        msg += "HBE X+ DM";
-                        //msg += bora.dm_qstring();
-                        msg += wkzmag.dm(tnummer);
-                        msg += " T";
-                        msg += bora.tiefe_qstring();
-                        msg += "\n";
-                        msg += "AFB=";
-                        msg += bora.afb();
-                        msg += "\n";
-                        msg += "\n";
-                    }
-                }else if(bezug == WST_BEZUG_RE)
-                {
-                    //HBE Xminus:
-                    for(uint i=0 ; i<bora.anz_y() ; i=i+6)
+                        hbe_nach_drehen.add_hi(bora.text());
+                    }else
                     {
-                        msg += FMC_HBEXM;
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y1=";
-                        msg += double_to_qstring(  bora.y() + (i*bora.raster_y())  );
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y2=";
-                        if(bora.anz_y() >= i+2)
+                        if(bezug == WST_BEZUG_LI)
                         {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y3=";
-                        if(bora.anz_y() >= i+3)
-                        {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y4=";
-                        if(bora.anz_y() >= i+4)
-                        {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y5=";
-                        if(bora.anz_y() >= i+5)
-                        {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "Y6=";
-                        if(bora.anz_y() >= i+6)
-                        {
-                            msg += bora.raster_y_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "TI=";
-                        msg += bora.tiefe_qstring();
-                        msg += "\n";
-                        msg += "Z=";
-                        msg += bora.z_qstring();
-                        msg += "\n";
-                        msg += "DM=";
-                        //msg += bora.dm_qstring();
-                        msg += wkzmag.dm(tnummer);
-                        msg += "\n";
-                        msg += "KETTE=1\n";
-                        msg += "GRP=1\n";           //Bohrgruppe
-                        msg += "X2=-1\n";
-                        msg += "X1=L\n";
+                            //HBE Xplus:
+                            for(uint i=0 ; i<bora.anz_y() ; i=i+6)
+                            {
+                                msg += FMC_HBEXP;
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y1=";
+                                msg += double_to_qstring(  bora.y() + (i*bora.raster_y())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y2=";
+                                if(bora.anz_y() >= i+2)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y3=";
+                                if(bora.anz_y() >= i+3)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y4=";
+                                if(bora.anz_y() >= i+4)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y5=";
+                                if(bora.anz_y() >= i+5)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y6=";
+                                if(bora.anz_y() >= i+6)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TI=";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "Z=";
+                                msg += bora.z_qstring();
+                                msg += "\n";
+                                msg += "DM=";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += "\n";
+                                msg += "KETTE=1\n";
+                                msg += "GRP=";           //Bohrgruppe
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                msg += "X2=-1\n";
+                                msg += "X1=0\n";
 
-                        //Anbohrtiefe gem. Voreinstellung IMAWOP
-                        //Anbohrvorschub gem. Voreinstellung IMAWOP
-                        //Bohrvorschub gem. Voreinstellung IMAWOP
-                        //Drehzahl gem. Voreinstellung IMAWOP
+                                //Anbohrtiefe gem. Voreinstellung IMAWOP
+                                //Anbohrvorschub gem. Voreinstellung IMAWOP
+                                //Bohrvorschub gem. Voreinstellung IMAWOP
+                                //Drehzahl gem. Voreinstellung IMAWOP
 
-                        msg += "BEZB=";
-                        msg += "HBE X- DM";
-                        //msg += bora.dm_qstring();
-                        msg += wkzmag.dm(tnummer);
-                        msg += " T";
-                        msg += bora.tiefe_qstring();
-                        msg += "\n";
-                        msg += "AFB=";
-                        msg += bora.afb();
-                        msg += "\n";
-                        msg += "\n";
-                    }
-                }else if(bezug == WST_BEZUG_VO)
-                {
-                    //HBE Yplus:
-                    for(uint i=0 ; i<bora.anz_x() ; i=i+6)
-                    {
-                        msg += FMC_HBEYP;
-                        msg += "\n";
-                        msg += "X1=";
-                        msg += double_to_qstring(  bora.x() + (i*bora.raster_x())  );
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X2=";
-                        if(bora.anz_x() >= i+2)
-                        {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
+                                msg += "BEZB=";
+                                msg += "HBE X+ DM";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += " T";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "AFB=";
+                                msg += bora.afb();
+                                msg += "\n";
+                                msg += "\n";
+                            }
                         }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X3=";
-                        if(bora.anz_x() >= i+3)
+                        else if(bezug == WST_BEZUG_RE)
                         {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X4=";
-                        if(bora.anz_x() >= i+4)
-                        {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X5=";
-                        if(bora.anz_x() >= i+5)
-                        {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X6=";
-                        if(bora.anz_x() >= i+6)
-                        {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "TI=";
-                        msg += bora.tiefe_qstring();
-                        msg += "\n";
-                        msg += "Z=";
-                        msg += bora.z_qstring();
-                        msg += "\n";
-                        msg += "DM=";
-                        //msg += bora.dm_qstring();
-                        msg += wkzmag.dm(tnummer);
-                        msg += "\n";
-                        msg += "KETTE=1\n";
-                        msg += "GRP=1\n";           //Bohrgruppe
-                        msg += "Y2=-1\n";
-                        msg += "Y1=0\n";
+                            //HBE Xminus:
+                            for(uint i=0 ; i<bora.anz_y() ; i=i+6)
+                            {
+                                msg += FMC_HBEXM;
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y1=";
+                                msg += double_to_qstring(  bora.y() + (i*bora.raster_y())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y2=";
+                                if(bora.anz_y() >= i+2)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y3=";
+                                if(bora.anz_y() >= i+3)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y4=";
+                                if(bora.anz_y() >= i+4)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y5=";
+                                if(bora.anz_y() >= i+5)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y6=";
+                                if(bora.anz_y() >= i+6)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TI=";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "Z=";
+                                msg += bora.z_qstring();
+                                msg += "\n";
+                                msg += "DM=";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += "\n";
+                                msg += "KETTE=1\n";
+                                msg += "GRP=";           //Bohrgruppe
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                msg += "X2=-1\n";
+                                msg += "X1=L\n";
 
-                        //Anbohrtiefe gem. Voreinstellung IMAWOP
-                        //Anbohrvorschub gem. Voreinstellung IMAWOP
-                        //Bohrvorschub gem. Voreinstellung IMAWOP
-                        //Drehzahl gem. Voreinstellung IMAWOP
+                                //Anbohrtiefe gem. Voreinstellung IMAWOP
+                                //Anbohrvorschub gem. Voreinstellung IMAWOP
+                                //Bohrvorschub gem. Voreinstellung IMAWOP
+                                //Drehzahl gem. Voreinstellung IMAWOP
 
-                        msg += "BEZB=";
-                        msg += "HBE Y+ DM";
-                        //msg += bora.dm_qstring();
-                        msg += wkzmag.dm(tnummer);
-                        msg += " T";
-                        msg += bora.tiefe_qstring();
-                        msg += "\n";
-                        msg += "AFB=";
-                        msg += bora.afb();
-                        msg += "\n";
-                        msg += "\n";
-                    }
-                }else if(bezug == WST_BEZUG_HI)
-                {
-                    //HBE Yminus:
-                    for(uint i=0 ; i<bora.anz_x() ; i=i+6)
-                    {
-                        msg += FMC_HBEYM;
-                        msg += "\n";
-                        msg += "X1=";
-                        msg += double_to_qstring(  bora.x() + (i*bora.raster_x())  );
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X2=";
-                        if(bora.anz_x() >= i+2)
+                                msg += "BEZB=";
+                                msg += "HBE X- DM";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += " T";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "AFB=";
+                                msg += bora.afb();
+                                msg += "\n";
+                                msg += "\n";
+                            }
+                        }else if(bezug == WST_BEZUG_VO)
                         {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X3=";
-                        if(bora.anz_x() >= i+3)
-                        {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X4=";
-                        if(bora.anz_x() >= i+4)
-                        {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X5=";
-                        if(bora.anz_x() >= i+5)
-                        {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "X6=";
-                        if(bora.anz_x() >= i+6)
-                        {
-                            msg += bora.raster_x_qstring();
-                        }else
-                        {
-                            msg += "(NULL)";
-                        }
-                        msg += "\n";
-                        //------------------------------
-                        msg += "TI=";
-                        msg += bora.tiefe_qstring();
-                        msg += "\n";
-                        msg += "Z=";
-                        msg += bora.z_qstring();
-                        msg += "\n";
-                        msg += "DM=";
-                        //msg += bora.dm_qstring();
-                        msg += wkzmag.dm(tnummer);
-                        msg += "\n";
-                        msg += "KETTE=1\n";
-                        msg += "GRP=1\n";           //Bohrgruppe
-                        msg += "Y2=-1\n";
-                        msg += "Y1=B\n";
+                            //HBE Yplus:
+                            for(uint i=0 ; i<bora.anz_x() ; i=i+6)
+                            {
+                                msg += FMC_HBEYP;
+                                msg += "\n";
+                                msg += "X1=";
+                                msg += double_to_qstring(  bora.x() + (i*bora.raster_x())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X2=";
+                                if(bora.anz_x() >= i+2)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X3=";
+                                if(bora.anz_x() >= i+3)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X4=";
+                                if(bora.anz_x() >= i+4)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X5=";
+                                if(bora.anz_x() >= i+5)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X6=";
+                                if(bora.anz_x() >= i+6)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TI=";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "Z=";
+                                msg += bora.z_qstring();
+                                msg += "\n";
+                                msg += "DM=";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += "\n";
+                                msg += "KETTE=1\n";
+                                msg += "GRP=";           //Bohrgruppe
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                msg += "Y2=-1\n";
+                                msg += "Y1=0\n";
 
-                        //Anbohrtiefe gem. Voreinstellung IMAWOP
-                        //Anbohrvorschub gem. Voreinstellung IMAWOP
-                        //Bohrvorschub gem. Voreinstellung IMAWOP
-                        //Drehzahl gem. Voreinstellung IMAWOP
+                                //Anbohrtiefe gem. Voreinstellung IMAWOP
+                                //Anbohrvorschub gem. Voreinstellung IMAWOP
+                                //Bohrvorschub gem. Voreinstellung IMAWOP
+                                //Drehzahl gem. Voreinstellung IMAWOP
 
-                        msg += "BEZB=";
-                        msg += "HBE Y- DM";
-                        //msg += bora.dm_qstring();
-                        msg += wkzmag.dm(tnummer);
-                        msg += " T";
-                        msg += bora.tiefe_qstring();
-                        msg += "\n";
-                        msg += "AFB=";
-                        msg += bora.afb();
-                        msg += "\n";
-                        msg += "\n";
+                                msg += "BEZB=";
+                                msg += "HBE Y+ DM";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += " T";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "AFB=";
+                                msg += bora.afb();
+                                msg += "\n";
+                                msg += "\n";
+                            }
+                        }else if(bezug == WST_BEZUG_HI)
+                        {
+                            //HBE Yminus:
+                            for(uint i=0 ; i<bora.anz_x() ; i=i+6)
+                            {
+                                msg += FMC_HBEYM;
+                                msg += "\n";
+                                msg += "X1=";
+                                msg += double_to_qstring(  bora.x() + (i*bora.raster_x())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X2=";
+                                if(bora.anz_x() >= i+2)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X3=";
+                                if(bora.anz_x() >= i+3)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X4=";
+                                if(bora.anz_x() >= i+4)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X5=";
+                                if(bora.anz_x() >= i+5)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X6=";
+                                if(bora.anz_x() >= i+6)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TI=";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "Z=";
+                                msg += bora.z_qstring();
+                                msg += "\n";
+                                msg += "DM=";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += "\n";
+                                msg += "KETTE=1\n";
+                                msg += "GRP=";           //Bohrgruppe
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                msg += "Y2=-1\n";
+                                msg += "Y1=B\n";
+
+                                //Anbohrtiefe gem. Voreinstellung IMAWOP
+                                //Anbohrvorschub gem. Voreinstellung IMAWOP
+                                //Bohrvorschub gem. Voreinstellung IMAWOP
+                                //Drehzahl gem. Voreinstellung IMAWOP
+
+                                msg += "BEZB=";
+                                msg += "HBE Y- DM";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += " T";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "AFB=";
+                                msg += bora.afb();
+                                msg += "\n";
+                                msg += "\n";
+                            }
+                        }
                     }
                 }
             }else
@@ -7010,6 +7049,10 @@ void wstzustand::fmc_dateitext(int index)
             unterseite_hat_bearb = true;
             break;
         }
+    }
+    if(hbe_nach_drehen.count() > 0)
+    {
+        unterseite_hat_bearb = true;
     }
     if(unterseite_hat_bearb == true)
     {
@@ -8322,8 +8365,662 @@ void wstzustand::fmc_dateitext(int index)
                 }
             }
         }
-    }
+        for(uint i=0 ; i<hbe_nach_drehen.count() ; i++)
+        {
+            zeile.set_text(hbe_nach_drehen.at(i),TRENNZ_BEARB_PARAM);
+            if(zeile.at(0) == BEARBART_BOHR)
+            {
+                bohrung bo(hbe_nach_drehen.at(i));
+                if(bo.z() < hbe_max_abst_obsei)
+                {
+                    QString bezug = bo.bezug();
+                    //Bohrung um b/2 drehen:
+                    bo.set_z(dicke()-bo.z());
+                    if(bezug == WST_BEZUG_LI)
+                    {
+                        bo.set_y(tmp_b-bo.y());
+                    }else if(bezug == WST_BEZUG_RE)
+                    {
+                        bo.set_y(tmp_b-bo.y());
+                    }else if(bezug == WST_BEZUG_VO)
+                    {
+                        bo.set_bezug(WST_BEZUG_HI);
+                    }else if(bezug == WST_BEZUG_HI)
+                    {
+                        bo.set_bezug(WST_BEZUG_VO);
+                    }
+                    //Bohrung in fmc-Datei schreibe:
+                    bezug = bo.bezug();
+                    QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bezug);
+                    if(!tnummer.isEmpty())
+                    {
+                        //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                        QString bohrgruppe = "2";
+                        if(bezug == WST_BEZUG_LI)
+                        {
+                            msg += FMC_HBEXP;
+                            msg += "\n";
+                            msg += "Y1=";
+                            msg += bo.y_qstring();
+                            msg += "\n";
+                            msg += "Y2=(NULL)\n";
+                            msg += "Y3=(NULL)\n";
+                            msg += "Y4=(NULL)\n";
+                            msg += "Y5=(NULL)\n";
+                            msg += "Y6=(NULL)\n";
+                            msg += "TI=";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "Z=";
+                            msg += bo.z_qstring();
+                            msg += "\n";
+                            msg += "DM=";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += "\n";
+                            msg += "KETTE=0\n";
+                            msg += "GRP=";           //Bohrgruppe
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            msg += "X2=-1\n";
+                            msg += "X1=0\n";
 
+                            //Anbohrtiefe gem. Voreinstellung IMAWOP
+                            //Anbohrvorschub gem. Voreinstellung IMAWOP
+                            //Bohrvorschub gem. Voreinstellung IMAWOP
+                            //Drehzahl gem. Voreinstellung IMAWOP
+
+                            msg += "BEZB=";
+                            msg += "HBE X+ DM";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += " T";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "AFB=";
+                            msg += bo.afb();
+                            msg += "\n";
+                            msg += "\n";
+                        }else if(bezug == WST_BEZUG_RE)
+                        {
+                            msg += FMC_HBEXM;
+                            msg += "\n";
+                            msg += "Y1=";
+                            msg += bo.y_qstring();
+                            msg += "\n";
+                            msg += "Y2=(NULL)\n";
+                            msg += "Y3=(NULL)\n";
+                            msg += "Y4=(NULL)\n";
+                            msg += "Y5=(NULL)\n";
+                            msg += "Y6=(NULL)\n";
+                            msg += "TI=";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "Z=";
+                            msg += bo.z_qstring();
+                            msg += "\n";
+                            msg += "DM=";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += "\n";
+                            msg += "KETTE=0\n";
+                            msg += "GRP=";           //Bohrgruppe
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            msg += "X2=-1\n";
+                            msg += "X1=L\n";
+
+                            //Anbohrtiefe gem. Voreinstellung IMAWOP
+                            //Anbohrvorschub gem. Voreinstellung IMAWOP
+                            //Bohrvorschub gem. Voreinstellung IMAWOP
+                            //Drehzahl gem. Voreinstellung IMAWOP
+
+                            msg += "BEZB=";
+                            msg += "HBE X- DM";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += " T";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "AFB=";
+                            msg += bo.afb();
+                            msg += "\n";
+                            msg += "\n";
+                        }else if(bezug == WST_BEZUG_VO)
+                        {
+                            msg += FMC_HBEYP;
+                            msg += "\n";
+                            msg += "X1=";
+                            msg += bo.x_qstring();
+                            msg += "\n";
+                            msg += "X2=(NULL)\n";
+                            msg += "X3=(NULL)\n";
+                            msg += "X4=(NULL)\n";
+                            msg += "X5=(NULL)\n";
+                            msg += "X6=(NULL)\n";
+                            msg += "TI=";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "Z=";
+                            msg += bo.z_qstring();
+                            msg += "\n";
+                            msg += "DM=";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += "\n";
+                            msg += "KETTE=0\n";
+                            msg += "GRP=";           //Bohrgruppe
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            msg += "Y2=-1\n";
+                            msg += "Y1=0\n";
+
+                            //Anbohrtiefe gem. Voreinstellung IMAWOP
+                            //Anbohrvorschub gem. Voreinstellung IMAWOP
+                            //Bohrvorschub gem. Voreinstellung IMAWOP
+                            //Drehzahl gem. Voreinstellung IMAWOP
+
+                            msg += "BEZB=";
+                            msg += "HBE Y+ DM";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += " T";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "AFB=";
+                            msg += bo.afb();
+                            msg += "\n";
+                            msg += "\n";
+                        }else if(bezug == WST_BEZUG_HI)
+                        {
+                            msg += FMC_HBEYM;
+                            msg += "\n";
+                            msg += "X1=";
+                            msg += bo.x_qstring();
+                            msg += "\n";
+                            msg += "X2=(NULL)\n";
+                            msg += "X3=(NULL)\n";
+                            msg += "X4=(NULL)\n";
+                            msg += "X5=(NULL)\n";
+                            msg += "X6=(NULL)\n";
+                            msg += "TI=";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "Z=";
+                            msg += bo.z_qstring();
+                            msg += "\n";
+                            msg += "DM=";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += "\n";
+                            msg += "KETTE=0\n";
+                            msg += "GRP=";           //Bohrgruppe
+                            msg += bohrgruppe;
+                            msg += "\n";
+                            msg += "Y2=-1\n";
+                            msg += "Y1=B\n";
+
+                            //Anbohrtiefe gem. Voreinstellung IMAWOP
+                            //Anbohrvorschub gem. Voreinstellung IMAWOP
+                            //Bohrvorschub gem. Voreinstellung IMAWOP
+                            //Drehzahl gem. Voreinstellung IMAWOP
+
+                            msg += "BEZB=";
+                            msg += "HBE Y- DM";
+                            //msg += bo.dm_qstring();
+                            msg += wkzmag.dm(tnummer);
+                            msg += " T";
+                            msg += bo.tiefe_qstring();
+                            msg += "\n";
+                            msg += "AFB=";
+                            msg += bo.afb();
+                            msg += "\n";
+                            msg += "\n";
+                        }
+                    }else //kann theoretisch nie erreicht werden, da hbe_nach_drehen erst gefüllt wird
+                    {     //nachdem ein wkz gefunden wurde
+                          //zur Sicherheit aber trotzdem hier noch einmal:
+                        //Mit Fehlermeldung abbrechen:
+                        QString msg = fehler_kein_WKZ("fmc", zeile);
+                        Fehler_kein_wkz.append(msg);
+                        Exporttext.append(msg);
+                        Export_moeglich.append(false);
+                        return;
+                    }
+                }else
+                {
+                    msg += kommentar_fmc("--------------------");
+                    msg += kommentar_fmc("HBE-Export nicht möglich");
+                    msg += kommentar_fmc("Z-Pos im Kollisionsbereich");
+                    msg += kommentar_fmc(bo.text());
+                    msg += kommentar_fmc("--------------------");
+                }
+            }else if(zeile.at(0) == BEARBART_BOHRRASTER)
+            {
+                bohrraster bora(hbe_nach_drehen.at(i));
+                if(bora.z() < hbe_max_abst_obsei)
+                {
+                    QString bezug = bora.bezug();
+                    //Bohrungen um b/2 drehen:
+                    bora.set_z(dicke()-bora.z());
+                    if(bezug == WST_BEZUG_LI)
+                    {
+                        bora.set_y(tmp_b-bora.y());
+                        bora.set_raster_y(bora.raster_y() * -1);
+                    }else if(bezug == WST_BEZUG_RE)
+                    {
+                        bora.set_y(tmp_b-bora.y());
+                        bora.set_raster_y(bora.raster_y() * -1);
+                    }else if(bezug == WST_BEZUG_VO)
+                    {
+                        bora.set_bezug(WST_BEZUG_HI);
+                    }else if(bezug == WST_BEZUG_HI)
+                    {
+                        bora.set_bezug(WST_BEZUG_VO);
+                    }
+                    //Bohrung in fmc-Datei schreibe:
+                    bezug = bora.bezug();
+                    QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bora.dm(), bora.tiefe(), Dicke, bezug);
+                    if(!tnummer.isEmpty())
+                    {
+                        //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                        QString bohrgruppe = "2";
+                        if(bezug == WST_BEZUG_LI)
+                        {
+                            //HBE Xplus:
+                            for(uint i=0 ; i<bora.anz_y() ; i=i+6)
+                            {
+                                msg += FMC_HBEXP;
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y1=";
+                                msg += double_to_qstring(  bora.y() + (i*bora.raster_y())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y2=";
+                                if(bora.anz_y() >= i+2)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y3=";
+                                if(bora.anz_y() >= i+3)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y4=";
+                                if(bora.anz_y() >= i+4)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y5=";
+                                if(bora.anz_y() >= i+5)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y6=";
+                                if(bora.anz_y() >= i+6)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TI=";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "Z=";
+                                msg += bora.z_qstring();
+                                msg += "\n";
+                                msg += "DM=";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += "\n";
+                                msg += "KETTE=1\n";
+                                msg += "GRP=";           //Bohrgruppe
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                msg += "X2=-1\n";
+                                msg += "X1=0\n";
+
+                                //Anbohrtiefe gem. Voreinstellung IMAWOP
+                                //Anbohrvorschub gem. Voreinstellung IMAWOP
+                                //Bohrvorschub gem. Voreinstellung IMAWOP
+                                //Drehzahl gem. Voreinstellung IMAWOP
+
+                                msg += "BEZB=";
+                                msg += "HBE X+ DM";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += " T";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "AFB=";
+                                msg += bora.afb();
+                                msg += "\n";
+                                msg += "\n";
+                            }
+                        }
+                        else if(bezug == WST_BEZUG_RE)
+                        {
+                            //HBE Xminus:
+                            for(uint i=0 ; i<bora.anz_y() ; i=i+6)
+                            {
+                                msg += FMC_HBEXM;
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y1=";
+                                msg += double_to_qstring(  bora.y() + (i*bora.raster_y())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y2=";
+                                if(bora.anz_y() >= i+2)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y3=";
+                                if(bora.anz_y() >= i+3)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y4=";
+                                if(bora.anz_y() >= i+4)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y5=";
+                                if(bora.anz_y() >= i+5)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "Y6=";
+                                if(bora.anz_y() >= i+6)
+                                {
+                                    msg += bora.raster_y_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TI=";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "Z=";
+                                msg += bora.z_qstring();
+                                msg += "\n";
+                                msg += "DM=";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += "\n";
+                                msg += "KETTE=1\n";
+                                msg += "GRP=";           //Bohrgruppe
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                msg += "X2=-1\n";
+                                msg += "X1=L\n";
+
+                                //Anbohrtiefe gem. Voreinstellung IMAWOP
+                                //Anbohrvorschub gem. Voreinstellung IMAWOP
+                                //Bohrvorschub gem. Voreinstellung IMAWOP
+                                //Drehzahl gem. Voreinstellung IMAWOP
+
+                                msg += "BEZB=";
+                                msg += "HBE X- DM";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += " T";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "AFB=";
+                                msg += bora.afb();
+                                msg += "\n";
+                                msg += "\n";
+                            }
+                        }else if(bezug == WST_BEZUG_VO)
+                        {
+                            //HBE Yplus:
+                            for(uint i=0 ; i<bora.anz_x() ; i=i+6)
+                            {
+                                msg += FMC_HBEYP;
+                                msg += "\n";
+                                msg += "X1=";
+                                msg += double_to_qstring(  bora.x() + (i*bora.raster_x())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X2=";
+                                if(bora.anz_x() >= i+2)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X3=";
+                                if(bora.anz_x() >= i+3)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X4=";
+                                if(bora.anz_x() >= i+4)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X5=";
+                                if(bora.anz_x() >= i+5)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X6=";
+                                if(bora.anz_x() >= i+6)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TI=";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "Z=";
+                                msg += bora.z_qstring();
+                                msg += "\n";
+                                msg += "DM=";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += "\n";
+                                msg += "KETTE=1\n";
+                                msg += "GRP=";           //Bohrgruppe
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                msg += "Y2=-1\n";
+                                msg += "Y1=0\n";
+
+                                //Anbohrtiefe gem. Voreinstellung IMAWOP
+                                //Anbohrvorschub gem. Voreinstellung IMAWOP
+                                //Bohrvorschub gem. Voreinstellung IMAWOP
+                                //Drehzahl gem. Voreinstellung IMAWOP
+
+                                msg += "BEZB=";
+                                msg += "HBE Y+ DM";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += " T";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "AFB=";
+                                msg += bora.afb();
+                                msg += "\n";
+                                msg += "\n";
+                            }
+                        }else if(bezug == WST_BEZUG_HI)
+                        {
+                            //HBE Yminus:
+                            for(uint i=0 ; i<bora.anz_x() ; i=i+6)
+                            {
+                                msg += FMC_HBEYM;
+                                msg += "\n";
+                                msg += "X1=";
+                                msg += double_to_qstring(  bora.x() + (i*bora.raster_x())  );
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X2=";
+                                if(bora.anz_x() >= i+2)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X3=";
+                                if(bora.anz_x() >= i+3)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X4=";
+                                if(bora.anz_x() >= i+4)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X5=";
+                                if(bora.anz_x() >= i+5)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "X6=";
+                                if(bora.anz_x() >= i+6)
+                                {
+                                    msg += bora.raster_x_qstring();
+                                }else
+                                {
+                                    msg += "(NULL)";
+                                }
+                                msg += "\n";
+                                //------------------------------
+                                msg += "TI=";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "Z=";
+                                msg += bora.z_qstring();
+                                msg += "\n";
+                                msg += "DM=";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += "\n";
+                                msg += "KETTE=1\n";
+                                msg += "GRP=";           //Bohrgruppe
+                                msg += bohrgruppe;
+                                msg += "\n";
+                                msg += "Y2=-1\n";
+                                msg += "Y1=B\n";
+
+                                //Anbohrtiefe gem. Voreinstellung IMAWOP
+                                //Anbohrvorschub gem. Voreinstellung IMAWOP
+                                //Bohrvorschub gem. Voreinstellung IMAWOP
+                                //Drehzahl gem. Voreinstellung IMAWOP
+
+                                msg += "BEZB=";
+                                msg += "HBE Y- DM";
+                                //msg += bora.dm_qstring();
+                                msg += wkzmag.dm(tnummer);
+                                msg += " T";
+                                msg += bora.tiefe_qstring();
+                                msg += "\n";
+                                msg += "AFB=";
+                                msg += bora.afb();
+                                msg += "\n";
+                                msg += "\n";
+                            }
+                        }
+                    }
+                }else
+                {
+                    msg += kommentar_fmc("--------------------");
+                    msg += kommentar_fmc("HBE-Export nicht möglich");
+                    msg += kommentar_fmc("Z-Pos im Kollisionsbereich");
+                    msg += kommentar_fmc(bora.text());
+                    msg += kommentar_fmc("--------------------");
+                }
+            }
+        }
+    }
     //---------------------------------------Programmende:
     msg += FMC_ENDE;
     msg += "\n";

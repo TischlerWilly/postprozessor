@@ -2,11 +2,11 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "4.2023.06.15"
+#define PROGRAMMVERSION "4.2023.06.22"
 #endif //PROGRAMMVERSION
 /*
-
-
+hbe_max_abst_obsei benutzen für warnungen des pp an AVer wenn drehen des wst nicht ausreicht
+siehe void wstzustand::fmc_dateitext(int index)
 
 - wst bearbeiten
   ->Funktion zum Erstellen von DT
