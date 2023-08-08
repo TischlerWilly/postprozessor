@@ -331,6 +331,15 @@ void wstzustand::erzeugen(QString format, wkz_magazin wkzmag, QString drehung)
         geo(Format.count()-1);
         //  ->Geotext
         //  ->Versatz_y
+    }else if(format == "cix")
+    {
+        cix_dateitext(Format.count()-1);
+        //  ->Exporttext
+        //  ->Fehler_kein_wkz
+        //  ->Export_moeglich
+        geo(Format.count()-1);
+        //  ->Geotext
+        //  ->Versatz_y
     }
 }
 void wstzustand::finde_drehwinkel_auto_(int index)
@@ -1616,6 +1625,205 @@ void wstzustand::finde_drehwinkel_auto_(int index)
         ret_bearb = bearb;
         ret_laenge = tmp_l;
         ret_breite = tmp_b;        
+    }else if(format == "cix")
+    {
+        fraesergeraden_zusammenfassen(bearb);
+        hbemiduebeltiefe(bearb);
+        double tmp_l = Laenge_bekommen;
+        double tmp_b = Breite_bekommen;
+        gehr_3achs(bearb, tmp_l, tmp_b, format, "0");
+        //Die beste Drehrichtung herausfinden:
+        int bewertung_0    = 1;
+        int bewertung_90   = 1;
+        int bewertung_180  = 1;
+        int bewertung_270  = 1;
+        //Stufe 1:
+        //heraus bekommen, für welche Lage es Warnungen gibt:
+        text_zw bearb_kopie = bearb;
+        text_zw bearb_0;
+        text_zw bearb_90;
+        text_zw bearb_180;
+        text_zw bearb_270;
+        double l_0 = tmp_l;
+        double l_90 = tmp_l;
+        double l_180 = tmp_l;
+        double l_270 = tmp_l;
+        double b_0 = tmp_b;
+        double b_90 = tmp_b;
+        double b_180 = tmp_b;
+        double b_270 = tmp_b;
+        QString warnung_0;
+        QString warnung_90;
+        QString warnung_180;
+        QString warnung_270;
+        if(drehwinkel == "0" || drehwinkel == "AUTO")
+        {
+            warnung_0 = warnungen_cix(bearb_kopie, wkzmag, l_0, b_0);
+            if(warnung_0.isEmpty())
+            {
+                bewertung_0 = 100;
+            }else
+            {
+                bewertung_0 = 0;
+            }
+            bearb_0 = bearb_kopie;
+        }
+        if(drehwinkel == "90" || drehwinkel == "AUTO")
+        {
+            bearb_drehen_90(bearb_kopie, l_90, b_90);
+            warnung_90 = warnungen_cix(bearb_kopie, wkzmag, l_90, b_90);
+            if(warnung_90.isEmpty())
+            {
+                bewertung_90 = 100;
+            }else
+            {
+                bewertung_90 = 0;
+            }
+            bearb_90 = bearb_kopie;
+        }
+        if(drehwinkel == "180" || drehwinkel == "AUTO")
+        {
+            if(drehwinkel == "180")
+            {
+                bearb_drehen_90(bearb_kopie, l_180, b_180);
+                bearb_drehen_90(bearb_kopie, l_180, b_180);
+            }else //AUTO
+            {
+                l_180 = l_90;//Drehung mitnehmen
+                b_180 = b_90;//Drehung mitnehmen
+                bearb_drehen_90(bearb_kopie, l_180, b_180);
+            }
+            warnung_180 = warnungen_cix(bearb_kopie, wkzmag, l_180, b_180);
+            if(warnung_180.isEmpty())
+            {
+                bewertung_180 = 100;
+            }else
+            {
+                bewertung_180 = 0;
+            }
+            bearb_180 = bearb_kopie;
+        }
+        if(drehwinkel == "270" || drehwinkel == "AUTO")
+        {
+            if(drehwinkel == "270")
+            {
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
+            }else //AUTO
+            {
+                l_270 = l_180;//Drehung mitnehmen
+                b_270 = b_180;//Drehung mitnehmen
+                bearb_drehen_90(bearb_kopie, l_270, b_270);
+            }
+            warnung_270 = warnungen_cix(bearb_kopie, wkzmag, l_270, b_270);
+            if(warnung_270.isEmpty())
+            {
+                bewertung_270 = 100;
+            }else
+            {
+                bewertung_270 = 0;
+            }
+            bearb_270 = bearb_kopie;
+        }
+        //Stufe 2:
+        //heraus bekommen wo vorne ist anhand von Bearbeitungen:
+        //...
+
+        //Stufe 3:
+        //heraus bekommen wo vorne ist anhand von Kanteninfo:
+        //...
+
+        //Stufe 4:
+        //Teile bevorzugen, bei bei denen gilt: L > B:
+        //...
+
+        //Bewertungen auswerten:
+        if(drehwinkel == "0")
+        {
+            bewertung_0 = 9999;
+            bewertung_90 = 0;
+            bewertung_180 = 0;
+            bewertung_270 = 0;
+        }else if(drehwinkel == "90")
+        {
+            bewertung_90 = 9999;
+            bewertung_0 = 0;
+            bewertung_180 = 0;
+            bewertung_270 = 0;
+        }else if(drehwinkel == "180")
+        {
+            bewertung_180 = 9999;
+            bewertung_0 = 0;
+            bewertung_90 = 0;
+            bewertung_270 = 0;
+        }else if(drehwinkel == "270")
+        {
+            bewertung_270 = 9999;
+            bewertung_0 = 0;
+            bewertung_90 = 0;
+            bewertung_180 = 0;
+        }
+        if(bewertung_0 >= 100 && \
+           bewertung_0 >= bewertung_90 && \
+           bewertung_0 >= bewertung_180 && \
+           bewertung_0 >= bewertung_270 )
+        {
+            ret_bewertung = bewertung_0;
+            ret_drehung = "0";
+            ret_warnungen = warnung_0;
+            ret_bearb = bearb_0;
+            ret_laenge = l_0;
+            ret_breite = b_0;
+        }else if(bewertung_90 >= 100 && \
+                 bewertung_90 >= bewertung_0 && \
+                 bewertung_90 >= bewertung_180 && \
+                 bewertung_90 >= bewertung_270 )
+        {
+            ret_bewertung = bewertung_90;
+            ret_drehung = "90";
+            ret_warnungen = warnung_90;
+            ret_bearb = bearb_90;
+            ret_laenge = l_90;
+            ret_breite = b_90;
+        }else if(bewertung_180 >= 100 && \
+                 bewertung_180 >= bewertung_0 && \
+                 bewertung_180 >= bewertung_90 && \
+                 bewertung_180 >= bewertung_270 )
+        {
+            ret_bewertung = bewertung_180;
+            ret_drehung = "180";
+            ret_warnungen = warnung_180;
+            ret_bearb = bearb_180;
+            ret_laenge = l_180;
+            ret_breite = b_180;
+        }else if(bewertung_270 >= 100 && \
+                 bewertung_270 >= bewertung_0 && \
+                 bewertung_270 >= bewertung_90 && \
+                 bewertung_270 >= bewertung_180 )
+        {
+            ret_bewertung = bewertung_270;
+            ret_drehung = "270";
+            ret_warnungen = warnung_270;
+            ret_bearb = bearb_270;
+            ret_laenge = l_270;
+            ret_breite = b_270;
+        }else
+        {
+            //wir nehmen 0:
+            ret_bewertung = bewertung_0;
+            ret_drehung = "0";
+            ret_warnungen = warnung_0;
+            ret_bearb = bearb_0;
+            ret_laenge = l_0;
+            ret_breite = b_0;
+        }
+        rasterbohrungen_finden_fmc(ret_bearb, wkzmag, ret_laenge, ret_breite);
+        if(Formartierungen_aufbrechen == true)
+        {
+            formartierung_zu_einzelfkon(ret_bearb, ret_laenge, ret_breite);
+        }
+        kurze_an_ab_geraden(ret_bearb, wkzmag);
     }
 
     Drehung.append(ret_drehung);
@@ -2909,6 +3117,15 @@ QString wstzustand::warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp
             }
         }
     }
+
+    return msg;
+}
+QString wstzustand::warnungen_cix(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b)
+{
+    dubosplitten(bearb, wkzmag);
+    QString msg = "";
+
+    //...
 
     return msg;
 }
@@ -9079,6 +9296,123 @@ void wstzustand::eigen_dateitext(int index)
     Exporttext.append(msg);
     Export_moeglich.append(true);
 }
+void wstzustand::cix_dateitext(int index)
+{
+    text_zw bearb = Bearb.at(index);
+    QString drewi = Drehung.at(index);
+    double tmp_l = Laenge.at(index);
+    double tmp_b = Breite.at(index);
+    wkz_magazin wkzmag = Wkzm.at(index);
+    dubosplitten(bearb, wkzmag);
+
+    QString msg;
+
+    //Version:
+    msg += "BEGIN ID CID3";
+    msg += "\n\t";
+    msg += "REL= 5.0";
+    msg += "\n";
+    msg += "END ID";
+    msg += "\n";
+    msg += "\n";
+
+    //Programmkopf:
+    msg += "BEGIN MAINDATA";
+    msg += "\n\t";
+    msg += "LPX = ";                //WST-Länge
+    msg += double_to_qstring(tmp_l);
+    msg += "\n\t";
+    msg += "LPY = ";                //WST-Breite
+    msg += double_to_qstring(tmp_b);
+    msg += "\n\t";
+    msg += "LPZ = ";                //WST-Dicke
+    msg += dicke_qstring();
+    msg += "\n\t";
+    msg += "ORLST = ";              //???
+    msg += "\"1\"";
+    msg += "\n\t";
+    msg += "SIMMETRY = ";           //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "TLCHK = ";              //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "TOOLING = ";            //???
+    msg += "\"\"";
+    msg += "\n\t";
+    msg += "CUSTSTR =";             //???
+    msg += "$B$KBsExportToNcRoverNET.XncExtraPanelData$V\"\"";
+    msg += "\n\t";
+    msg += "FCN = ";                //???
+    msg += "1.000000";
+    msg += "\n\t";
+    msg += "XCUT = ";               //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "YCUT = ";               //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "JIGTH = ";              //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "CKOP = ";               //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "UNIQUE = ";             //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "MATERIAL = ";           //Material
+    msg += "\"Testmaterial\"";
+    msg += "\n\t";
+    msg += "PUTLST = ";             //???
+    msg += "\"\"";
+    msg += "\n\t";
+    msg += "OPPWKRS = ";            //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "UNICLAMP = ";           //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "CHKCOLL = ";            //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "WTPIANI = ";            //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "COLLTOOL = ";           //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "CALCEDTH = ";           //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "ENABLELABEL = ";        //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "LOCKWASTE = ";          //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "LOADEDGEOPT = ";        //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "ITLTYPE = ";            //???
+    msg += "0";
+    msg += "\n\t";
+    msg += "RUNPAV = ";             //???
+    msg += "1";
+    msg += "\n\t";
+    msg += "FLIPEND = ";            //???
+    msg += "0";
+    msg += "\n";
+    msg += "END MAINDATA";
+
+    //Bearbeitungen:
+    //...
+    //...
+
+    Fehler_kein_wkz.append("");
+    Exporttext.append(msg);
+    Export_moeglich.append(true);
+}
 void wstzustand::ganx_dateitext(int index)
 {
     //Physischer-Maschinen-Nullpunkt ist oben links
@@ -13005,6 +13339,12 @@ void wstzustand::geo(int index)
         kante_l = kante_li_ganx(drehwinkel);
         kante_r = kante_re_ganx(drehwinkel);
     }else if(format == "ggf" || format == "eigen")
+    {
+        kante_v = kante_vo(drehwinkel);
+        kante_h = kante_hi(drehwinkel);
+        kante_l = kante_li(drehwinkel);
+        kante_r = kante_re(drehwinkel);
+    }else if(format == "cix")
     {
         kante_v = kante_vo(drehwinkel);
         kante_h = kante_hi(drehwinkel);

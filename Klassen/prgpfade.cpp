@@ -11,6 +11,7 @@ prgpfade::prgpfade()
     Wkz_fmc             = "wkz_magazin_fmc.csv";
     Wkz_ganx            = "wkz_magazin_ganx.csv";
     Wkz_ggf             = "wkz_magazin_ggf.csv";
+    Wkz_cix             = "wkz_magazin_cix.csv";
 }
 
 void prgpfade::ordner_erstellen()
@@ -55,6 +56,10 @@ QString prgpfade::name_ini_dxf_klassen()
 QString prgpfade::name_wkz_fmc()
 {
     return Wkz_fmc;
+}
+QString prgpfade::name_wkz_cix()
+{
+    return Wkz_cix;
 }
 QString prgpfade::name_wkz_ganx()
 {
@@ -136,6 +141,14 @@ QString prgpfade::path_wkz_fmc()
     tmp = path_user();
     tmp += QDir::separator();
     tmp += Wkz_fmc;
+    return tmp;
+}
+QString prgpfade::path_wkz_cix()
+{
+    QString tmp;
+    tmp = path_user();
+    tmp += QDir::separator();
+    tmp += Wkz_cix;
     return tmp;
 }
 QString prgpfade::path_wkz_ganx()

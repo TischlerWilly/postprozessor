@@ -81,6 +81,7 @@ void MainWindow::setup()
     bool inifile_gefunden           = false;    //user-Ordner
     bool wkz_ganx_gefunden          = false;    //user-Ordner
     bool wkz_fmc_gefunden           = false;    //user-Ordner
+    bool wkz_cix_gefunden           = false;    //user-Ordner
     bool wkz_ggf_gefunden           = false;    //user-Ordner
     bool namen_std_gefunden         = false;    //user-Ordner
     bool ini_ganx_gefunden          = false;    //user-Ordner
@@ -104,6 +105,10 @@ void MainWindow::setup()
         if(name.contains(pf.name_wkz_fmc()))
         {
             wkz_fmc_gefunden = true;
+        }
+        if(name.contains(pf.name_wkz_cix()))
+        {
+            wkz_cix_gefunden = true;
         }
         if(name.contains(pf.name_wkz_ggf()))
         {
@@ -399,6 +404,40 @@ void MainWindow::setup()
         file.close();
     }
 
+    if(wkz_cix_gefunden == false)
+    {
+        QFile file(pf.path_wkz_cix());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_wkz_cix();
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            wkz_magazin wm;
+            file.write(wm.text().toUtf8());
+            wkz_mag_cix.set_text(wm.text());
+        }
+        file.close();
+    }else
+    {
+        QFile file(pf.path_wkz_cix());
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_wkz_cix();
+            tmp += "\n";
+            tmp += "in der Funktion setup";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            wkz_mag_cix.set_text(file.readAll());//neu
+        }
+        file.close();
+    }
+
     if(wkz_fmc_gefunden == false)
     {
         QFile file(pf.path_wkz_fmc());
@@ -555,7 +594,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     ui->listWidget_wste->move(ui->pushButton_import->x(),\
                               ui->pushButton_import->y()+ui->pushButton_import->height()+5);
     ui->listWidget_wste->setFixedWidth(180);
-    ui->listWidget_wste->setFixedHeight(this->height()-320);
+    ui->listWidget_wste->setFixedHeight(this->height()-350);
     ui->groupBox_vorschauformat->move(ui->pushButton_import->x(),\
                                       ui->listWidget_wste->y()+ui->listWidget_wste->height()+5);
     ui->groupBox_vorschauformat->setFixedWidth(180);
@@ -611,6 +650,22 @@ void MainWindow::getDialogDataWKZ(QString fenstertitel, wkz_magazin werkzeugmaga
         }else
         {
             wkz_mag_fmc = werkzeugmagazin;
+            file.write(werkzeugmagazin.text().toUtf8());
+        }
+        file.close();
+    }else if(fenstertitel.contains("CIX"))
+    {
+        QFile file(pf.path_wkz_cix());
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += pf.path_wkz_cix();
+            tmp += "\n";
+            tmp += "in der Funktion getDialogDataWKZ";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            wkz_mag_cix = werkzeugmagazin;
             file.write(werkzeugmagazin.text().toUtf8());
         }
         file.close();
@@ -902,6 +957,11 @@ void MainWindow::set_projektpfad()
             pfad_lokal += QDir::separator();
             format = "ggf";
             pfad_lokal += format;
+        }else if(ui->radioButton_vorschau_cix->isChecked())
+        {
+            pfad_lokal += QDir::separator();
+            format = "cix";
+            pfad_lokal += format;
         }else //eigen
         {
             pfad_lokal += QDir::separator();
@@ -927,6 +987,18 @@ void MainWindow::set_projektpfad()
             if(d.exists())
             {
                 pfad = Einstellung.verzeichnis_root_ganx();
+                pfad += QDir::separator();
+            }else
+            {
+                pfad = pfad_lokal;
+                pfad += QDir::separator();
+            }
+        }else if(ui->radioButton_vorschau_cix->isChecked())
+        {
+            QDir d(Einstellung.verzeichnis_root_cix());
+            if(d.exists())
+            {
+                pfad = Einstellung.verzeichnis_root_cix();
                 pfad += QDir::separator();
             }else
             {
@@ -1012,6 +1084,9 @@ void MainWindow::set_projektpfad()
                         }else if(ui->radioButton_vorschau_ggf->isChecked())
                         {
                             dateiname += ".ggf";
+                        }else if(ui->radioButton_vorschau_cix->isChecked())
+                        {
+                            dateiname += ".cix";
                         }else //eigen == ".ppf"
                         {
                             dateiname += ".ppf";
@@ -1266,6 +1341,17 @@ void MainWindow::on_radioButton_vorschau_fmc_clicked(bool checked)
         }        
     }
 }
+void MainWindow::on_radioButton_vorschau_cix_clicked(bool checked)
+{
+    if(checked == true)
+    {
+        if(ui->listWidget_wste->selectedItems().count())
+        {
+            on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+            set_projektpfad();
+        }
+    }
+}
 void MainWindow::on_radioButton_vorschau_ggf_clicked(bool checked)
 {
     if(checked == true)
@@ -1419,6 +1505,10 @@ void MainWindow::on_actionWerkzeug_fmc_anzeigen_triggered()
 {
     dlg_wkzmag.set_wkzmag("Werkzeug FMC", wkz_mag_fmc);
 }
+void MainWindow::on_actionWerkzeug_cix_anzeigen_triggered()
+{
+    dlg_wkzmag.set_wkzmag("Werkzeug CIX", wkz_mag_cix);
+}
 void MainWindow::on_actionWerkzeug_ggf_anzeigen_triggered()
 {
     dlg_wkzmag.set_wkzmag("Werkzeug GGF", wkz_mag_ggf);
@@ -1541,6 +1631,9 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                 }else if(ui->radioButton_vorschau_ggf->isChecked())
                 {
                     dateiname += ".ggf";
+                }else if(ui->radioButton_vorschau_cix->isChecked())
+                {
+                    dateiname += ".cix";
                 }else //eigen
                 {
                     dateiname += ".ppf";
@@ -1703,6 +1796,33 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                 mb.setText(msg);
                 mb.exec();
             }
+        }else if(ui->radioButton_vorschau_cix->isChecked())
+        {
+            int i = ui->listWidget_wste->currentRow();
+            if(wste.wst(i)->zustand().export_moeglich())
+            {
+                if(!f.open(QIODevice::WriteOnly | QIODevice::Text))
+                {
+                    QString tmp = "Fehler beim Dateizugriff!\n";
+                    tmp += pfad;
+                    tmp += "\n";
+                    tmp += "in der Funktion on_pushButton_einzelexport_clicked";
+                    QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+                }else
+                {
+                    f.write(wste.wst(i)->zustand().exporttext().toUtf8());
+                }
+                f.close();
+            }else
+            {
+                QString msg;
+                msg = "Export nicht möglich!";
+                msg += "\n";
+                msg += wste.wst(i)->zustand().exporttext();
+                QMessageBox mb;
+                mb.setText(msg);
+                mb.exec();
+            }
         }else //eigen
         {
             int i = ui->listWidget_wste->currentRow();
@@ -1827,6 +1947,17 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("fmc", &wkz_mag_fmc, Einstellung.drehung_wst(), \
+                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+            sendVorschauAktualisieren(*wste.wst(wstindex), -1);
+            getCADFehler(wste.wst(wstindex)->cad_fehler(true));
+            getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+        }else if(ui->radioButton_vorschau_cix->isChecked())
+        {
+            wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
+            //->set_einstellung_fmc
+            //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
+            wste.wst(wstindex)->set_zustand("cix", &wkz_mag_cix, Einstellung.drehung_wst(), \
                                                Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
@@ -2170,6 +2301,10 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
+
+
 
 
 

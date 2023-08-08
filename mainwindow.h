@@ -57,6 +57,7 @@ private slots:
     void on_actionInfo_triggered();
     void on_pushButton_dateien_auflisten_clicked();
     void on_actionWerkzeug_fmc_anzeigen_triggered();
+    void on_actionWerkzeug_cix_anzeigen_triggered();
     void on_actionStandard_Namen_anzeigen_triggered();
     void zielordner_leeren();
     void on_radioButton_fkon_ti_quell_toggled(bool checked);
@@ -73,6 +74,7 @@ private slots:
     void on_listWidget_wste_currentRowChanged(int currentRow);
     void on_radioButton_vorschau_eigen_clicked(bool checked);
     void on_radioButton_vorschau_ganx_clicked(bool checked);
+    void on_radioButton_vorschau_cix_clicked(bool checked);
     void on_radioButton_vorschau_fmc_clicked(bool checked);
     void on_radioButton_vorschau_ggf_clicked(bool checked);
     void on_listWidget_wste_itemDoubleClicked();
@@ -96,6 +98,7 @@ private:
     Ui::MainWindow *ui;
     wkz_magazin wkz_mag_ganx;
     wkz_magazin wkz_mag_fmc;
+    wkz_magazin wkz_mag_cix;
     wkz_magazin wkz_mag_ggf;
     prgpfade pf;
 

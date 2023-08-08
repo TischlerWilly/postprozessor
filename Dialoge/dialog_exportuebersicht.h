@@ -29,6 +29,7 @@ private:
     int spalte_namen;
     int spalte_fmc;
     int spalte_ganx;
+    int spalte_cix;
     int spalte_ggf;
     int spalte_eigen;
 

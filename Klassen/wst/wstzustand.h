@@ -191,6 +191,7 @@ private:
     void dubosplitten(text_zw& bearb, wkz_magazin& wkzmag);
     QString warnungen_fmc(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b);
     QString warnungen_ganx(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b);
+    QString warnungen_cix(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b);
     void rasterbohrungen_finden_fmc(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b);
     void rasterbohrungen_finden_ganx(text_zw& bearb, wkz_magazin wkzmag,double tmp_l, double tmp_b);
     void formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double tmp_b);
@@ -206,6 +207,7 @@ private:
     void eigen_dateitext(int index);
     void ganx_dateitext(int index);
     void ggf_dateitext(int index);
+    void cix_dateitext(int index);
     void geo(int index);
     QString kante_vo(QString drewi);
     QString kante_hi(QString drewi);

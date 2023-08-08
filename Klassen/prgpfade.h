@@ -18,6 +18,7 @@ public:
     QString path_ini_dxf();
     QString path_ini_dxf_klassen();
     QString path_wkz_fmc();
+    QString path_wkz_cix();
     QString path_wkz_ganx();
     QString path_wkz_ggf();
 
@@ -29,6 +30,7 @@ public:
     QString name_ini_dxf_klassen();
     QString name_wkz_fmc();
     QString name_wkz_ganx();
+    QString name_wkz_cix();
     QString name_wkz_ggf();
 
 private:
@@ -45,6 +47,7 @@ private:
     //WKZ-Dateien:
     QString Wkz_fmc;
     QString Wkz_ganx;
+    QString Wkz_cix;
     QString Wkz_ggf;
 
 };

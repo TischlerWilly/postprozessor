@@ -8,6 +8,7 @@ einstellung::einstellung()
     Verzeichnis_ziel_lokal      = "./";
     Verzeichnis_root_ganx       = "P:\\CNC Ganner\\Programme";
     Verzeichnis_root_fmc        = "P:\\CNC";
+    Verzeichnis_root_cix        = "P:\\CNC Biesse\\Programme";
     Verzeichnis_ziel_auswahl    = "server"; // | "lokal" | "AUTO"
     Quelldateien_erhalten       = true;
     Std_dateinamen_verwenden    = false;
@@ -47,6 +48,9 @@ void einstellung::set_text(QString t)
         }else if(spalten.at(0) == "verzeichnis_root_fmc:")
         {
             set_verzeichnis_root_fmc(spalten.at(1));
+        }else if(spalten.at(0) == "verzeichnis_root_cix:")
+        {
+            set_verzeichnis_root_cix(spalten.at(1));
         }else if(spalten.at(0) == "verzeichnis_zielABC:")
         {
             set_verzeichnis_ziel_auswahl(spalten.at(1));
@@ -113,6 +117,10 @@ void einstellung::set_verzeichnis_root_ganx(QString v)
 void einstellung::set_verzeichnis_root_fmc(QString v)
 {
     Verzeichnis_root_fmc = v;
+}
+void einstellung::set_verzeichnis_root_cix(QString v)
+{
+    Verzeichnis_root_cix = v;
 }
 void einstellung::set_verzeichnis_ziel_auswahl(QString abc)
 {
@@ -378,6 +386,10 @@ QString einstellung::verzeichnis_root_ganx()
 QString einstellung::verzeichnis_root_fmc()
 {
     return Verzeichnis_root_fmc;
+}
+QString einstellung::verzeichnis_root_cix()
+{
+    return Verzeichnis_root_cix;
 }
 QString einstellung::verzeichnis_ziel_auswahl()
 {

@@ -9,6 +9,7 @@ Dialog_ExportUebersicht::Dialog_ExportUebersicht(QWidget *parent) :
     spalte_namen    = -1;
     spalte_fmc      = -1;
     spalte_ganx     = -1;
+    spalte_cix      = -1;
     spalte_ggf      = -1;
     spalte_eigen    = -1;
 }
@@ -27,23 +28,25 @@ void Dialog_ExportUebersicht::resizeEvent(QResizeEvent *event)
 
 void Dialog_ExportUebersicht::slot_wstnamen(text_zw namen)
 {
-    int anz_spalten = 5;
+    int anz_spalten = 6;
     spalte_namen    = 0;
     spalte_fmc      = 1;
     spalte_ganx     = 2;
     spalte_ggf      = 3;
     spalte_eigen    = 4;
+    spalte_cix      = 5;
     ui->tableWidget_exporte->clear();
     ui->tableWidget_exporte->setRowCount(namen.count());
     ui->tableWidget_exporte->setColumnCount(anz_spalten);
     QStringList tabkopf;
-    tabkopf << "Name" << "fmc" << "ganx" << "ggf" << "eigen";
+    tabkopf << "Name" << "fmc" << "ganx" << "ggf" << "eigen" << "cix";
     ui->tableWidget_exporte->setHorizontalHeaderLabels(tabkopf);
     ui->tableWidget_exporte->setColumnWidth(0,150);
     ui->tableWidget_exporte->setColumnWidth(1,40);
     ui->tableWidget_exporte->setColumnWidth(2,40);
     ui->tableWidget_exporte->setColumnWidth(3,40);
     ui->tableWidget_exporte->setColumnWidth(4,40);
+    ui->tableWidget_exporte->setColumnWidth(5,40);
     for(uint i=0; i<namen.count() ;i++)
     {
         for(int ii=0; ii<anz_spalten;ii++)
@@ -68,6 +71,9 @@ void Dialog_ExportUebersicht::slot_wstexport(QString name, QString format, bool 
     }else if(name.contains(".ganx"))
     {
         name = text_links(name, ".ganx");
+    }if(name.contains(".cix"))
+    {
+        name = text_links(name, ".cix");
     }else if(name.contains(".ggf"))
     {
         name = text_links(name, ".ggf");
@@ -96,6 +102,9 @@ void Dialog_ExportUebersicht::slot_wstexport(QString name, QString format, bool 
         }else if(format == "ganx")
         {
             spalte = spalte_ganx;
+        }else if(format == "cix")
+        {
+            spalte = spalte_cix;
         }else if(format == "ggf")
         {
             spalte = spalte_ggf;
@@ -141,6 +150,9 @@ void Dialog_ExportUebersicht::slot_wst_ausblenden(QString name, bool ausblenden)
     }else if(name.contains(".ganx"))
     {
         name = text_links(name, ".ganx");
+    }else if(name.contains(".cix"))
+    {
+        name = text_links(name, ".cix");
     }else if(name.contains(".ggf"))
     {
         name = text_links(name, ".ggf");
@@ -175,6 +187,7 @@ void Dialog_ExportUebersicht::slot_wst_ausblenden(QString name, bool ausblenden)
         ui->tableWidget_exporte->item(zeile, spalte_ganx)->setTextColor(farbe);
         ui->tableWidget_exporte->item(zeile, spalte_ggf)->setTextColor(farbe);
         ui->tableWidget_exporte->item(zeile, spalte_eigen)->setTextColor(farbe);
+        ui->tableWidget_exporte->item(zeile, spalte_cix)->setTextColor(farbe);
     }
 }
 

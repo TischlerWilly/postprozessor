@@ -19,6 +19,7 @@ public:
     void set_verzeichnis_ziel_lokal(QString v);
     void set_verzeichnis_root_ganx(QString v);
     void set_verzeichnis_root_fmc(QString v);
+    void set_verzeichnis_root_cix(QString v);
     void set_verzeichnis_ziel_auswahl(QString abc);
     void set_quelldateien_erhalten(bool erhalten);
     void set_quelldateien_erhalten(QString erhalten);
@@ -43,6 +44,7 @@ public:
     QString verzeichnis_ziel_lokal();
     QString verzeichnis_root_ganx();
     QString verzeichnis_root_fmc();
+    QString verzeichnis_root_cix();
     QString verzeichnis_ziel_auswahl();
     bool quelldateien_erhalten();
     bool std_dateinamen_verwenden();
@@ -61,6 +63,7 @@ private:
     QString Verzeichnis_ziel_lokal;
     QString Verzeichnis_root_ganx;
     QString Verzeichnis_root_fmc;
+    QString Verzeichnis_root_cix;
     QString Verzeichnis_ziel_auswahl;
     bool Quelldateien_erhalten;
     bool Std_dateinamen_verwenden;
