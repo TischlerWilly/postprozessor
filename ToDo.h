@@ -2,12 +2,15 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "4.2023.08.08"
+#define PROGRAMMVERSION "4.2023.08.09"
 #endif //PROGRAMMVERSION
 /*
 
 QString wstzustand::warnungen_cix(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b)
 void wstzustand::finde_drehwinkel_auto_(int index)
+
+QString wstzustand::cix_bohrung_hori(bohrung bo, QString id)
+-->double pos = bo.y(); --> Maßbezug stimt noch nicht!!!
 
 
 

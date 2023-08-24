@@ -1732,11 +1732,138 @@ void wstzustand::finde_drehwinkel_auto_(int index)
 
         //Stufe 3:
         //heraus bekommen wo vorne ist anhand von Kanteninfo:
-        //...
+        if(!kante_vo("0").isEmpty() || !kante_li("0").isEmpty())
+        {
+            if(!kante_vo("0").isEmpty())
+            {
+                bewertung_0 += 15;
+            }
+            if(!kante_li("0").isEmpty())
+            {
+                bewertung_0 += 10;
+            }
+        }
+        if(!kante_vo("90").isEmpty() || !kante_li("90").isEmpty())
+        {
+            if(!kante_vo("90").isEmpty())
+            {
+                bewertung_90 += 15;
+            }
+            if(!kante_li("90").isEmpty())
+            {
+                bewertung_90 += 10;
+            }
+        }
+        if(!kante_vo("180").isEmpty() || !kante_li("180").isEmpty())
+        {
+            if(!kante_vo("180").isEmpty())
+            {
+                bewertung_180 += 15;
+            }
+            if(!kante_li("180").isEmpty())
+            {
+                bewertung_180 += 10;
+            }
+        }
+        if(!kante_vo("270").isEmpty() || !kante_li("270").isEmpty())
+        {
+            if(!kante_vo("270").isEmpty())
+            {
+                bewertung_270 += 15;
+            }
+            if(!kante_li("270").isEmpty())
+            {
+                bewertung_270 += 10;
+            }
+        }
 
         //Stufe 4:
         //Teile bevorzugen, bei bei denen gilt: L > B:
-        //...
+        if(l_0 > b_0)
+        {
+            bewertung_0 += 20;
+        }
+        if(l_90 > b_90)
+        {
+            bewertung_90 += 20;
+        }
+        if(l_180 > b_180)
+        {
+            bewertung_180 += 20;
+        }
+        if(l_270 > b_270)
+        {
+           bewertung_270 += 20;
+        }
+
+        //Stufe 6:
+        //Flächenbohrungen mit geringem Kantenabstand bevorzugen
+        if(drehwinkel == "0" || drehwinkel == "AUTO")
+        {
+            for(uint i=0; i<bearb_0.count() ;i++)
+            {
+                text_zw zeile;
+                zeile.set_text(bearb_0.at(i), TRENNZ_BEARB_PARAM);
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.x() < 20 || bo.y() < 20)
+                    {
+                        bewertung_0 += 1;
+                    }
+                }
+            }
+        }
+        if(drehwinkel == "90" || drehwinkel == "AUTO")
+        {
+            for(uint i=0; i<bearb_90.count() ;i++)
+            {
+                text_zw zeile;
+                zeile.set_text(bearb_90.at(i),TRENNZ_BEARB_PARAM);
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.x() < 20 || bo.y() < 20)
+                    {
+                        bewertung_90 += 1;
+                    }
+                }
+            }
+
+        }
+        if(drehwinkel == "180" || drehwinkel == "AUTO")
+        {
+            for(uint i=0; i<bearb_180.count() ;i++)
+            {
+                text_zw zeile;
+                zeile.set_text(bearb_180.at(i),TRENNZ_BEARB_PARAM);
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.x() < 20 || bo.y() < 20)
+                    {
+                        bewertung_180 += 1;
+                    }
+                }
+            }
+
+        }
+        if(drehwinkel == "270" || drehwinkel == "AUTO")
+        {
+            for(uint i=0; i<bearb_270.count() ;i++)
+            {
+                text_zw zeile;
+                zeile.set_text(bearb_270.at(i),TRENNZ_BEARB_PARAM);
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.x() < 20 || bo.y() < 20)
+                    {
+                        bewertung_270 += 1;
+                    }
+                }
+            }
+        }
 
         //Bewertungen auswerten:
         if(drehwinkel == "0")
@@ -9412,6 +9539,194 @@ void wstzustand::cix_dateitext(int index)
     Fehler_kein_wkz.append("");
     Exporttext.append(msg);
     Export_moeglich.append(true);
+}
+QString wstzustand::cix_makroparam(QString name, QString wert, bool als_text)
+{
+    QString ret;
+    ret  = "\t";
+    ret += "PARAM,NAME=";
+    ret += name;
+    ret += ",VALUE=";
+    if(als_text)
+    {
+        ret += "\"";
+    }
+    ret += wert;
+    if(!als_text)
+    {
+        ret += "\"";
+    }
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
+{
+    if(bo.bezug() != WST_BEZUG_OBSEI)
+    {
+        return "";
+    }
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "NAME=BV";
+    ret += "\n";
+    ret += cix_makroparam("SIDE","0",false);            //Seite
+    ret += cix_makroparam("CRN","1",true);              //Bezugskante
+                            //"1"= ???
+                            //"2"= ???
+    ret += cix_makroparam("X",bo.x_qstring(),false);    //X-Position
+    ret += cix_makroparam("Y",bo.y_qstring(),false);    //Y-Position
+    ret += cix_makroparam("Z","0",false);               //Z-Position
+    ret += cix_makroparam("DP",bo.tiefe_qstring(),false);//Bohrtiefe
+    ret += cix_makroparam("DIA",bo.dm_qstring(),false); //Durchmesser
+    ret += cix_makroparam("THR","NO",false);            //Aktiviert die Durchgangsbohrung
+                            //1 = Durchgangsbearbeitung aktiviert.
+                            //0 = Durchgangsbearbeitung deaktiviert.
+    ret += cix_makroparam("RTY","rpNO",false);          //Wiederholungstyp
+                            //-1 = “rpNO” = Wiederholungen deaktiviert
+                            // 0 = “rpX”
+                            // 1 = “rpY”
+                            // 2 = “rpXY”
+                            // 3 = “rpCIR”
+                            // 5 = “rpAL”
+    ret += cix_makroparam("DX","32",false);             //Wert des Achsenabstands in Richtung der Achse X
+    ret += cix_makroparam("DY","32",false);             //Wert des Achsenabstands in Richtung der Achse Y
+    ret += cix_makroparam("R","32",false);              //Radius, um den die Wiederholungen ausgeführt werden
+    ret += cix_makroparam("A","0",false);               //Anfangswinkel der Wiederholungen
+    ret += cix_makroparam("DA","45",false);             //Winkelschritt zwischen den einzelnen Wiederholungen
+    ret += cix_makroparam("NRP","0",false);             //Anzahl der Wiederholungen
+    ret += cix_makroparam("ISO","",true);               //ISO-Anweisung / Werkstückabtastung
+    ret += cix_makroparam("OPT","YES",false);           //???
+                            // 0 = “NO”
+                            // 1 = “YES”
+    ret += cix_makroparam("AZ","0",false);              //???
+    ret += cix_makroparam("AR","0",false);              //???
+    ret += cix_makroparam("AP","NO",false);             //???
+                            // 0 = NO; linear
+                            // 1 = YES; kreisförmig
+    ret += cix_makroparam("CKA","azrNO",false);         //aktiviert den Neigungstyp AR/AZ
+                            // 0 = “azrNO”
+                            // 1 = “azrABS
+                            // 2 = “azrINC”
+    ret += cix_makroparam("XRC","0",false);             //Quote in X des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
+    ret += cix_makroparam("YRC","0",false);             //Quote in Y des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
+    ret += cix_makroparam("ARP","0",false);             //Abwinkelung der Geraden, entlang der die Wiederholungen durchgeführt werden
+    ret += cix_makroparam("LRP","0",false);             //Längenschritt/Abstand der Wiederholungen
+    ret += cix_makroparam("ER","YES",false);            //gibt die erste Bohrung ER als Anfangsbohrung der Wiederholung frei
+    ret += cix_makroparam("MD","NO",false);             //aktiviert die Erstellung der Bohrung auf halber Werkstückstärke
+                            // 0 = “NO”
+                            // 1 = “YES”
+    ret += cix_makroparam("COW","NO",false);            //nur für die Maschine “Skipper”
+    ret += cix_makroparam("A21","0",false);             //Winkel Aggr21
+    ret += cix_makroparam("TOS","NO",false);            //???
+    ret += cix_makroparam("VTR","0",false);             //Anzahl der Durchgänge, die sich auf die Tiefe der programmierten Bearbeitung auswirken
+    ret += cix_makroparam("S21","-1",false);            //Winkel Aggr21
+    ret += cix_makroparam("ID",id,true);                //ID der Bearbeitung
+    ret += cix_makroparam("AZS","0",false);             //???
+    ret += cix_makroparam("MAC","",true);               //???
+    ret += cix_makroparam("TNM","",true);               //???
+    ret += cix_makroparam("TTP","0",false);             //???
+    ret += cix_makroparam("TCL","0",false);             //???
+    ret += cix_makroparam("RSP","0",false);             //???
+    ret += cix_makroparam("IOS","0",false);             //???
+    ret += cix_makroparam("WSP","0",false);             //???
+    ret += cix_makroparam("SPI","",true);               //???
+    ret += cix_makroparam("DDS","0",false);             //???
+    ret += cix_makroparam("DSP","0",false);             //???
+    ret += cix_makroparam("BFC","NO",false);            //???
+    ret += cix_makroparam("SHP","0",false);             //???
+    ret += cix_makroparam("EA21","NO",false);           //???
+    ret += cix_makroparam("CEN","",true);               //???
+    ret += cix_makroparam("AGG","",true);               //???
+    ret += cix_makroparam("LAY","BV",true);             //Beschriftung?
+    ret += cix_makroparam("PRS","NO",false);            //???
+    ret += "END MACRO";
+    return ret;
+}
+QString wstzustand::cix_bohrung_hori(bohrung bo, QString id)
+{
+    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+    {
+        return "";
+    }
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "NAME=BH";
+    ret += "\n";
+    ret += cix_makroparam("SIDE","0",false);            //Seite
+    ret += cix_makroparam("CRN","1",true);              //???
+    if(bo.bezug() == WST_BEZUG_LI)
+    {
+        ret += cix_makroparam("SIDE","1",false);            //Seite
+        ret += cix_makroparam("CRN","2",true);              //???
+        double pos = bo.y();
+        ret += cix_makroparam("X",double_to_qstring(pos),false);    //X-Position
+    }else if(bo.bezug() == WST_BEZUG_RE)
+    {
+        ret += cix_makroparam("SIDE","3",false);            //Seite
+        ret += cix_makroparam("CRN","3",true);              //???
+        double pos = bo.y();
+        ret += cix_makroparam("X",double_to_qstring(pos),false);    //X-Position
+    }  else if(bo.bezug() == WST_BEZUG_VO)
+    {
+        ret += cix_makroparam("SIDE","2",false);            //Seite
+        ret += cix_makroparam("CRN","2",true);              //???
+        ret += cix_makroparam("X",bo.x_qstring(),false);    //X-Position
+    }else if(bo.bezug() == WST_BEZUG_HI)
+    {
+        ret += cix_makroparam("SIDE","4",false);            //Seite
+        ret += cix_makroparam("CRN","3",true);              //???
+        ret += cix_makroparam("X",bo.x_qstring(),false);    //X-Position
+    }
+    ret += cix_makroparam("Y",bo.z_qstring(),false);    //Y-Position
+    ret += cix_makroparam("Z","0",false);               //Z-Position
+    ret += cix_makroparam("DP",bo.tiefe_qstring(),false);//Bohrtiefe
+    ret += cix_makroparam("DIA",bo.dm_qstring(),false); //Durchmesser
+    ret += cix_makroparam("THR","NO",false);            //???
+    ret += cix_makroparam("RTY","rpNO",false);          //???
+    ret += cix_makroparam("DX","32",false);             //???
+    ret += cix_makroparam("DY","32",false);             //???
+    ret += cix_makroparam("R","32",false);              //???
+    ret += cix_makroparam("A","0",false);               //???
+    ret += cix_makroparam("DA","45",false);             //???
+    ret += cix_makroparam("NRP","0",false);             //???
+    ret += cix_makroparam("ISO","",true);               //???
+    ret += cix_makroparam("OPT","YES",false);           //???
+    ret += cix_makroparam("AZ","0",false);              //???
+    ret += cix_makroparam("AR","0",false);              //???
+    ret += cix_makroparam("AP","NO",false);             //???
+    ret += cix_makroparam("CKA","azrNO",false);         //???
+    ret += cix_makroparam("XRC","0",false);             //???
+    ret += cix_makroparam("YRC","0",false);             //???
+    ret += cix_makroparam("ARP","0",false);             //???
+    ret += cix_makroparam("LRP","0",false);             //???
+    ret += cix_makroparam("ER","YES",false);            //???
+    ret += cix_makroparam("MD","NO",false);             //???
+    ret += cix_makroparam("COW","NO",false);            //???
+    ret += cix_makroparam("A21","0",false);             //???
+    ret += cix_makroparam("TOS","NO",false);            //???
+    ret += cix_makroparam("VTR","0",false);             //???
+    ret += cix_makroparam("S21","-1",false);            //???
+    ret += cix_makroparam("ID",id,true);                //ID der Bearbeitung
+    ret += cix_makroparam("AZS","0",false);             //???
+    ret += cix_makroparam("MAC","",true);               //???
+    ret += cix_makroparam("TNM","",true);               //???
+    ret += cix_makroparam("TTP","0",false);             //???
+    ret += cix_makroparam("TCL","0",false);             //???
+    ret += cix_makroparam("RSP","0",false);             //???
+    ret += cix_makroparam("IOS","0",false);             //???
+    ret += cix_makroparam("WSP","0",false);             //???
+    ret += cix_makroparam("SPI","",true);               //???
+    ret += cix_makroparam("DDS","0",false);             //???
+    ret += cix_makroparam("DSP","0",false);             //???
+    ret += cix_makroparam("BFC","NO",false);            //???
+    ret += cix_makroparam("SHP","0",false);             //???
+    ret += cix_makroparam("EA21","NO",false);           //???
+    ret += cix_makroparam("CEN","",true);               //???
+    ret += cix_makroparam("AGG","",true);               //???
+    ret += cix_makroparam("LAY","BH",true);             //Beschriftung?
+    ret += cix_makroparam("PRS","NO",false);            //???
+    ret += "END MACRO";
+    return ret;
 }
 void wstzustand::ganx_dateitext(int index)
 {
