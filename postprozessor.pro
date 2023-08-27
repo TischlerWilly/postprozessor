@@ -82,6 +82,7 @@ SOURCES += main.cpp\
     Dialoge/dialog_stdname.cpp
 
 HEADERS  += mainwindow.h \
+    Defines/def_cix.h \
     Defines/def_dxf.h \
     Dialoge/dialog_bearb_bohrung.h \
     Dialoge/dialog_bearb_faufruf.h \

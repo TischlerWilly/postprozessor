@@ -18,6 +18,7 @@
 #include "Klassen/wst/rechtecktasche.h"
 #include "Defines/def_fmc.h"
 #include "Defines/def_ganx.h"
+#include "Defines/def_cix.h"
 #include "Funktionen/umwandeln.h"
 #include "Klassen/wst/ganx_gruppen.h"
 #include "Funktionen/runden.h"
