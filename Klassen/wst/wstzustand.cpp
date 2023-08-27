@@ -9460,7 +9460,7 @@ void wstzustand::cix_dateitext(int index)
     msg += "\n\t";
     msg += CIX_WST_NULLPUNKTLISTE;
     msg += " = ";
-    msg += "\"1\"";
+    msg += "\"1\""; //nur 1 Nullpunkt
     msg += "\n\t";
     msg += CIX_WST_SPIEGELBAR;
     msg += " = ";
@@ -9468,34 +9468,43 @@ void wstzustand::cix_dateitext(int index)
     msg += "\n\t";
     msg += CIX_WST_WKZ_OPTI;
     msg += " = ";
-    msg += "0";
+    msg += "0";     //aktiviert
     msg += "\n\t";
-    msg += "TOOLING = ";            //???
+    msg += CIX_WST_WKZ_BESTUECKUNG;
+    msg += " = ";
     msg += "\"\"";
     msg += "\n\t";
-    msg += "CUSTSTR =";             //???
+    msg += CIX_WST_BENUTZERDATEN;
+    msg += " =";
     msg += "$B$KBsExportToNcRoverNET.XncExtraPanelData$V\"\"";
     msg += "\n\t";
-    msg += "FCN = ";                //???
-    msg += "1.000000";
+    msg += CIX_WST_MASSEINHEIT;
+    msg += " = ";
+    msg += "1.000000";  //mm
     msg += "\n\t";
-    msg += "XCUT = ";               //???
+    msg += CIX_WST_BEARB_REFKANTENABST_X;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
-    msg += "YCUT = ";               //???
+    msg += CIX_WST_BEARB_REFKANTENABST_Y;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
-    msg += "JIGTH = ";              //???
+    msg += CIX_WST_SCHABLONENHOEHE;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
-    msg += "CKOP = ";               //???
+    msg += CIX_WST_FREIGABE_AX_AY;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
-    msg += "UNIQUE = ";             //???
+    msg += CIX_WST_EINZIGER_NULLPUNKT;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
-    msg += "MATERIAL = ";           //Material
-    msg += "\"Testmaterial\"";
+    msg += CIX_WST_MATERIAL;
+    msg += " = ";
+    msg += "\"Spanplatte\"";
     msg += "\n\t";
     msg += "PUTLST = ";             //???
     msg += "\"\"";
