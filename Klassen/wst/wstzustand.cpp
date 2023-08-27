@@ -9509,28 +9509,35 @@ void wstzustand::cix_dateitext(int index)
     msg += "PUTLST = ";             //???
     msg += "\"\"";
     msg += "\n\t";
-    msg += "OPPWKRS = ";            //???
+    msg += CIX_WST_BEARB_ENTGEGENGESETZT,
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
-    msg += "UNICLAMP = ";           //???
+    msg += CIX_WST_SPANNER_UNNICLAMP;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
-    msg += "CHKCOLL = ";            //???
+    msg += CIX_WST_KOLLISIONSKONTROLLE_TISCH;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
-    msg += "WTPIANI = ";            //???
+    msg += CIX_WST_AUFSPANNZONE;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
-    msg += "COLLTOOL = ";           //???
+    msg += CIX_WST_WKZ_DM_QUELLE;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
     msg += "CALCEDTH = ";           //???
     msg += "0";
     msg += "\n\t";
-    msg += "ENABLELABEL = ";        //???
-    msg += "0";
+    msg += CIX_WST_ETTIKETTENDRUCKER;
+    msg += " = ";
+    msg += "0";//nein
     msg += "\n\t";
-    msg += "LOCKWASTE = ";          //???
+    msg += CIX_WST_AUSWURFSPERRE;
+    msg += " = ";
     msg += "0";
     msg += "\n\t";
     msg += "LOADEDGEOPT = ";        //???
@@ -9539,7 +9546,8 @@ void wstzustand::cix_dateitext(int index)
     msg += "ITLTYPE = ";            //???
     msg += "0";
     msg += "\n\t";
-    msg += "RUNPAV = ";             //???
+    msg += CIX_WST_SAUGER_OPTIMIEREN;
+    msg += " = ";
     msg += "1";
     msg += "\n\t";
     msg += "FLIPEND = ";            //???
@@ -9584,10 +9592,8 @@ QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
     ret  = "BEGIN MACRO";
     ret += "NAME=BV";
     ret += "\n";
-    ret += cix_makroparam("SIDE","0",false);            //Seite
-    ret += cix_makroparam("CRN","1",true);              //Bezugskante
-                            //"1"= ???
-                            //"2"= ???
+    ret += cix_makroparam(CIX_SEITE,CIX_SEITE_OBSEI,false);
+    ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OL,true);
     ret += cix_makroparam("X",bo.x_qstring(),false);    //X-Position
     ret += cix_makroparam("Y",bo.y_qstring(),false);    //Y-Position
     ret += cix_makroparam("Z","0",false);               //Z-Position
