@@ -107,6 +107,87 @@
     #define CIX_BEZUG_UL  "2" //unten links
     #define CIX_BEZUG_OR  "3" //unte rechts
     #define CIX_BEZUG_UR  "4" //oben rechts
+#define CIX_BEARB_ID    "ID"    //ID der Bearbeitung
+#define CIX_BEARB_WKZ  "TNM"   //Werkzeugcode
+#define CIX_BEARB_WKZART "TTP" //Werkzeugart
+//Zulässige Werte bei Werkzeugklasse C_DRILLING:
+    #define CIX_BEARB_WKZART_BO_STD "0" // 0 = NORMALE
+    // 1 = LANCIA
+    // 2 = SVASATA
+    // 3 = NORMALEG
+//Zulässige Werte bei Werkzeugklasse C_ROUTING
+    // 100 = CANDELA
+    // 101 = SAGOMATA
+    // 102 = ROUT0
+    // 103 = ROUT1
+
+//-----------------------------------------------------Bohrungen:
+#define CIX_BO_X    "X"     //X-Position
+#define CIX_BO_Y    "Y"     //Y-Position
+#define CIX_BO_Z    "Z"     //Z-Position
+#define CIX_BO_BOTI "DP"    //Bohrtiefe
+#define CIX_BO_DM   "DIA"   //Bohrdurchmesser
+#define CIX_BO_IST_DUBO "THR"   //ist Durchgangsbohrung
+    //1 = Durchgangsbearbeitung aktiviert.
+    //0 = Durchgangsbearbeitung deaktiviert.
+#define CIX_BO_WDH_TYP "RTY"    //Wiederholungstyp
+    #define CIX_BO_WDH_TYP_KEIN "rpNO "   //-1 = Wiederholungen deaktiviert
+    // 0 = “rpX”
+    // 1 = “rpY”
+    // 2 = “rpXY”
+    // 3 = “rpCIR”
+    // 5 = “rpAL”
+#define CIX_BO_WDH_ABST_X   "DX"    //Wert des Achsenabstands in Richtung der Achse X
+#define CIX_BO_WDH_ABST_Y   "DY"    //Wert des Achsenabstands in Richtung der Achse Y
+#define CIX_BO_WDH_RAD      "R"     //Radius, um den die Wiederholungen ausgeführt werden
+#define CIX_BO_WDH_STARTWINKEL    "A" //Anfangswinkel der Wiederholungen
+#define CIX_BO_WDH_WINKEL   "DA"    //Winkelschritt zwischen den einzelnen Wiederholungen
+#define CIX_BO_WDH_DREHZENTRUM_X    "XRC"   //X-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
+#define CIX_BO_WDH_DREHZENTRUM_Y    "YRC"   //Y-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
+#define CIX_BO_WDH_GERADENWINKEL    "ARP"   //Abwinkelung der Geraden, entlang der die Wiederholungen durchgeführt werden
+#define CIX_BO_WDH_ABST     "LRP"   //Längenschritt/Abstand der Wiederholungen
+
+#define CIX_BO_WDH_ANZAHL   "NRP"   //Anzahl der Wiederholungen
+
+#define CIX_BO_OPTIMIEREN   "OPT"   //Optimierung der Bearbeitung
+    // 0 = “NO”
+    // 1 = “YES”
+#define CIX_BO_WKZ_NEIGUNG  "AZ"    //Neigungswinkel des Werkzeugs
+    //Neigungswinkel der Drehachse der Spindel im Vergleich zur Ebene X, Y
+#define CIX_BO_WKZ_DREHWI   "AR"    //Drehwinkel des Werkzeugs
+    //Drehwinkel der Spindelachse an der Ebene X, Y
+#define CIX_BO_WKZ_DREHTYP  "CKA"   //aktiviert den Neigungstyp AR/AZ
+    #define CIX_BO_WKZ_DREHTYP_KEIN "azrNO" // 0 = nicht gedreht/geneigt
+    // 1 = “azrABS
+    // 2 = “azrINC”
+#define CIX_BO_BEZUG_SIABST "TOS"   //Beeiflusst den Sicherheitsabstand
+    #define CIX_BO_BEZUG_SIABST_BEARBGRUND    "NO"  // 0 = bezieht sich auf den Grund der Bearbeitung
+    #define CIX_BO_BEZUG_SIABST_WSTOBSEI "YES" // 1 = bezieht sich auf WST-Oberseite
+#define CIX_BO_DREHZAHL "RSP"   //Drehzahl U/Min
+#define CIX_BO_SPEED_ANAB   "IOS"   //An- und Abfahr-Geschwindigkeit
+#define CIX_BO_SPEED        "WSP"   //Arbeitsgeschwindigkeit [mm/min]
+    //Geschwindigkeit, mit der das Werkzeug die Bohrung durchführt
+#define CIX_BO_REBOMA   "DDS"   //Restbohrmaß ab dem der Bohrer mit dem Abbremsen beginnen muss
+    // 0 = Bohrer verlangsamt seine Geschwindigkeit nicht
+#define CIX_BO_REBODREHZ    "DSP"   //Drehzahl der Spitze während des Durchschlagens des Werkstücks
+    //wird wirksam wenn "DDS != 0"
+    //Bleibt das Feld leer wird der Parameter aus dem wkz genommen
+#define CIX_BO_ABBLASEN "BFC"   //Gebläse für Reinigung von den Sägespänen
+    // 0 = “NO”
+    // 1 = “YES”
+#define CIX_BO_HAUBENPOS    "SHP"   //Haubenposition
+    // Zulässige Werte von 0 bis 6
+    #define CIX_BO_HAUBENPOS_AUTO "0"//automatisch
+    // 1 = ganz oben
+    // 6 = ganz unten
+#define CIX_BO_LAYER    "LAY"   //Kennstring des der Geometrie zugeordneten Layers.
+    //Dieser String wird nicht unter den Programmierungszeilen angezeigt, sondern im
+    //Dialogfenster Layer-Verwaltung
+#define CIX_BO_PRESSVORRICHTUNG_AKTV    "PRS"   //aktiviert oder deaktiviert die Anwendung der Pressvorrichtung
+    // 0 = “NO”
+    // 1 = “YES”
+
+
 
 
 

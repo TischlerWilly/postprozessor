@@ -9594,97 +9594,60 @@ QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
     ret += "\n";
     ret += cix_makroparam(CIX_SEITE,CIX_SEITE_OBSEI,false);
     ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OL,true);
-    ret += cix_makroparam("X",bo.x_qstring(),false);    //X-Position
-    ret += cix_makroparam("Y",bo.y_qstring(),false);    //Y-Position
-    ret += cix_makroparam("Z","0",false);               //Z-Position
-    ret += cix_makroparam("DP",bo.tiefe_qstring(),false);//Bohrtiefe
-    ret += cix_makroparam("DIA",bo.dm_qstring(),false); //Durchmesser
-    ret += cix_makroparam("THR","NO",false);            //Aktiviert die Durchgangsbohrung
-                            //1 = Durchgangsbearbeitung aktiviert.
-                            //0 = Durchgangsbearbeitung deaktiviert.
-    ret += cix_makroparam("RTY","rpNO",false);          //Wiederholungstyp
-                            //-1 = “rpNO” = Wiederholungen deaktiviert
-                            // 0 = “rpX”
-                            // 1 = “rpY”
-                            // 2 = “rpXY”
-                            // 3 = “rpCIR”
-                            // 5 = “rpAL”
-    ret += cix_makroparam("DX","32",false);             //Wert des Achsenabstands in Richtung der Achse X
-    ret += cix_makroparam("DY","32",false);             //Wert des Achsenabstands in Richtung der Achse Y
-    ret += cix_makroparam("R","32",false);              //Radius, um den die Wiederholungen ausgeführt werden
-    ret += cix_makroparam("A","0",false);               //Anfangswinkel der Wiederholungen
-    ret += cix_makroparam("DA","45",false);             //Winkelschritt zwischen den einzelnen Wiederholungen
-    ret += cix_makroparam("NRP","0",false);             //Anzahl der Wiederholungen
+    ret += cix_makroparam(CIX_BO_X,bo.x_qstring(),false);
+    ret += cix_makroparam(CIX_BO_Y,bo.y_qstring(),false);
+    ret += cix_makroparam(CIX_BO_Z,"0",false);
+    ret += cix_makroparam(CIX_BO_BOTI,bo.tiefe_qstring(),false);
+    ret += cix_makroparam(CIX_BO_DM,bo.dm_qstring(),false);
+    ret += cix_makroparam(CIX_BO_IST_DUBO,"NO",false);
+    ret += cix_makroparam(CIX_BO_WDH_TYP,CIX_BO_WDH_TYP_KEIN,false);
+    ret += cix_makroparam(CIX_BO_WDH_ABST_X,"32",false);
+    ret += cix_makroparam(CIX_BO_WDH_ABST_Y,"32",false);
+    ret += cix_makroparam(CIX_BO_WDH_RAD,"32",false);
+    ret += cix_makroparam(CIX_BO_WDH_STARTWINKEL,"0",false);
+    ret += cix_makroparam(CIX_BO_WDH_WINKEL,"45",false);
+    ret += cix_makroparam(CIX_BO_WDH_ANZAHL,"0",false);
     ret += cix_makroparam("ISO","",true);               //ISO-Anweisung / Werkstückabtastung
-    ret += cix_makroparam("OPT","YES",false);           //Optimierung der Bearbeitung.
-                            // 0 = “NO”
-                            // 1 = “YES”
-    ret += cix_makroparam("AZ","0",false);              //Neigungswinkel des Werkzeugs
-                            //Neigungswinkel der Drehachse der Spindel im Vergleich zur Ebene X, Y
-    ret += cix_makroparam("AR","0",false);              //Drehwinkel des Werkzeugs
-                            //Drehwinkel der Spindelachse an der Ebene X, Y
-    ret += cix_makroparam("AP","NO",false);             //hängt mit einer Dialogeinstallung für HBEs zusammen
+    ret += cix_makroparam(CIX_BO_OPTIMIEREN,"YES",false);
+    ret += cix_makroparam(CIX_BO_WKZ_NEIGUNG,"0",false);
+    ret += cix_makroparam(CIX_BO_WKZ_DREHWI,"0",false);
+    ret += cix_makroparam("AP","NO",false);             //hängt mit einer Dialogeinstellung für HBEs zusammen
                             // 0 = NO; linear
                             // 1 = YES; kreisförmig
-    ret += cix_makroparam("CKA","azrNO",false);         //aktiviert den Neigungstyp AR/AZ
-                            // 0 = “azrNO”
-                            // 1 = “azrABS
-                            // 2 = “azrINC”
-    ret += cix_makroparam("XRC","0",false);             //Quote in X des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
-    ret += cix_makroparam("YRC","0",false);             //Quote in Y des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
-    ret += cix_makroparam("ARP","0",false);             //Abwinkelung der Geraden, entlang der die Wiederholungen durchgeführt werden
-    ret += cix_makroparam("LRP","0",false);             //Längenschritt/Abstand der Wiederholungen
+    ret += cix_makroparam(CIX_BO_WKZ_DREHTYP,CIX_BO_WKZ_DREHTYP_KEIN,false);
+    ret += cix_makroparam(CIX_BO_WDH_DREHZENTRUM_X,"0",false);
+    ret += cix_makroparam(CIX_BO_WDH_DREHZENTRUM_Y,"0",false);
+    ret += cix_makroparam(CIX_BO_WDH_GERADENWINKEL,"0",false);
+    ret += cix_makroparam(CIX_BO_WDH_ABST,"0",false);
     ret += cix_makroparam("ER","YES",false);            //gibt die erste Bohrung ER als Anfangsbohrung der Wiederholung frei
     ret += cix_makroparam("MD","NO",false);             //aktiviert die Erstellung der Bohrung auf halber Werkstückstärke
                             // 0 = “NO”
                             // 1 = “YES”
     ret += cix_makroparam("COW","NO",false);            //nur für die Maschine “Skipper”
     ret += cix_makroparam("A21","0",false);             //Winkel Aggr21
-    ret += cix_makroparam("TOS","NO",false);            //Beeiflusst den Sicherheitsabstand
-                            // 0 = Sicherheitsabstand bezieht sich z.B. auf den Grund einer Nut oder Fräsung
-                            // 1 = Sicherheitsabstand bezieht sich auf WST-Oberseite
+    ret += cix_makroparam(CIX_BO_BEZUG_SIABST,CIX_BO_BEZUG_SIABST_BEARBGRUND,false);
     ret += cix_makroparam("VTR","0",false);             //Anzahl der Durchgänge, die sich auf die Tiefe der programmierten Bearbeitung auswirken
     ret += cix_makroparam("S21","-1",false);            //Winkel Aggr21
-    ret += cix_makroparam("ID",id,true);                //ID der Bearbeitung
+    ret += cix_makroparam(CIX_BEARB_ID,id,true);
     ret += cix_makroparam("AZS","0",false);             //Sicherheitswert entlang der Z-Achse, der dann zum Tragen kommt, wenn schräge
                             //Bearbeitungen z.B. mit Hilfe der Tilting Achse durchgeführt werden. Lässt man
                             //den Wert auf 0, verwendet das System die im Feld Sicherheit in der Karte Bearbeitungen des
                             //Setups  angegebene Angabe.
     ret += cix_makroparam("MAC","",true);               //? evtl Maschinenzuweisung bei mehreren Maschinen
-    ret += cix_makroparam("TNM","",true);               //Werkzeugcode
-    ret += cix_makroparam("TTP","0",false);             //Werkzeugart
-                        //Zulässige Werte bei Werkzeugklasse C_DRILLING:
-                            // 0 = NORMALE
-                            // 1 = LANCIA
-                            // 2 = SVASATA
-                            // 3 = NORMALEG
-                        //Zulässige Werte bei Werkzeugklasse C_ROUTING
-                            // 100 = CANDELA
-                            // 101 = SAGOMATA
-                            // 102 = ROUT0
-                            // 103 = ROUT1
+    ret += cix_makroparam(CIX_BEARB_WKZ,"",true);
+    ret += cix_makroparam(CIX_BEARB_WKZART,CIX_BEARB_WKZART_BO_STD,false);
     ret += cix_makroparam("TCL","0",false);             //Liste der Klassen des Werkzeugs
                             // 1 = C_ROUTING ->um die Spindeln der Bohrgruppe zu verwenden
                             // 2 = C_CUTTING ->um die Elektrospindel zu verwenden
-    ret += cix_makroparam("RSP","0",false);             //Drehzahl U/Min
-    ret += cix_makroparam("IOS","0",false);             //An- und Abfahr-Geschwindigkeit
-    ret += cix_makroparam("WSP","0",false);             //Arbeitsgeschwindigkeit [mm/min]
-                            //Geschwindigkeit, mit der das Werkzeug die Bohrung durchführt
+    ret += cix_makroparam(CIX_BO_DREHZAHL,"0",false);
+    ret += cix_makroparam(CIX_BO_SPEED_ANAB,"0",false);
+    ret += cix_makroparam(CIX_BO_SPEED,"0",false);
     ret += cix_makroparam("SPI","",true);               //Angabe der Spindel der Bohrgruppe oder der Elektrospindel, mit der die Bearbeitung auszuführen ist
                             //Das leere Datenfeld autorisiert das CAM-System, die Wahl der Elektrospindel vorzunehmen
-    ret += cix_makroparam("DDS","0",false);             //Restbohrmaß ab dem der Bohrer mit dem Abbremsen beginnen muss
-                            // 0 = Bohrer verlangsamt seine Geschwindigkeit nicht
-    ret += cix_makroparam("DSP","0",false);             //Drehzahl der Spitze während des Durchschlagens des Werkstücks
-                            //wird wirksam wenn "DDS != 0"
-                            //Bleibt das Feld leer wird der Parameter aus dem wkz genommen
-    ret += cix_makroparam("BFC","NO",false);            //Gebläse für Reinigung von den Sägespänen
-                            // 0 = “NO”
-                            // 1 = “YES”
-    ret += cix_makroparam("SHP","0",false);             //Haubenposition
-                            // Zulässige Werte von 0 bis 6
-                            // 0 = automatisch
-                            // 1 = ganz oben
-                            // 6 = ganz unten
+    ret += cix_makroparam(CIX_BO_REBOMA,"0",false);
+    ret += cix_makroparam(CIX_BO_REBODREHZ,"0",false);
+    ret += cix_makroparam(CIX_BO_ABBLASEN,"NO",false);
+    ret += cix_makroparam(CIX_BO_HAUBENPOS,CIX_BO_HAUBENPOS_AUTO,false);
     ret += cix_makroparam("EA21","NO",false);           //aktiviert die Verwendung der Parameter A21 und S21
                             // 0 = “NO”
                             // 1 = “YES”
@@ -9692,12 +9655,9 @@ QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
                             //Die Zahl zwischen Anführungszeichen setzen
                             //Beisp. “3” zur Kennung des Arbeitszentrums Nr. 3
     ret += cix_makroparam("AGG","",true);               //Kenncode des Aggregats
-    ret += cix_makroparam("LAY","BV",true);             //Kennstring des der Geometrie zugeordneten Layers.
-                            //Dieser String wird nicht unter den Programmierungszeilen angezeigt, sondern im
-                            //Dialogfenster Layer-Verwaltung
-    ret += cix_makroparam("PRS","NO",false);            //aktiviert oder deaktiviert die Anwendung der Pressvorrichtung
-                            // 0 = “NO”
-                            // 1 = “YES”
+    ret += cix_makroparam(CIX_BO_LAYER,"BV",true);
+    ret += cix_makroparam(CIX_BO_PRESSVORRICHTUNG_AKTV,"NO",false);
+
     ret += "END MACRO";
     return ret;
 }
