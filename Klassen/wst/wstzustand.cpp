@@ -9554,10 +9554,32 @@ void wstzustand::cix_dateitext(int index)
     msg += "0";
     msg += "\n";
     msg += "END MAINDATA";
+    msg += "\n";
+    msg += "\n";
 
     //Bearbeitungen:
-    //...
-    //...
+    for(uint i=0 ; i<bearb.count() ; i++)
+    {
+        text_zw zeile;
+        zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            QString bezug = bo.bezug();
+            QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
+                if(bezug == WST_BEZUG_OBSEI)
+                {
+                    msg += cix_bohrung_vert(bo, cix_id(i));
+                }else if(bezug != WST_BEZUG_UNSEI)
+                {
+                    //...
+                }
+            }
+        }
+    }
 
     Fehler_kein_wkz.append("");
     Exporttext.append(msg);
@@ -9575,11 +9597,21 @@ QString wstzustand::cix_makroparam(QString name, QString wert, bool als_text)
         ret += "\"";
     }
     ret += wert;
-    if(!als_text)
+    if(als_text)
     {
         ret += "\"";
     }
     ret += "\n";
+    return ret;
+}
+QString wstzustand::cix_id(uint i)
+{
+    //an diese Funktion soll das i aus der For-Schleife übergeben werden
+    //welche die Bearbeitungen des WST durchlaufen lässt
+    //Die erste ID im Programm hat die Nummer "P1001"
+    uint id = 1001 + i;
+    QString ret = "P";
+    ret += int_to_qstring(id);
     return ret;
 }
 QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
@@ -9590,10 +9622,12 @@ QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
     }
     QString ret;
     ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
     ret += "NAME=BV";
     ret += "\n";
     ret += cix_makroparam(CIX_SEITE,CIX_SEITE_OBSEI,false);
-    ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OL,true);
+    ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
     ret += cix_makroparam(CIX_BO_X,bo.x_qstring(),false);
     ret += cix_makroparam(CIX_BO_Y,bo.y_qstring(),false);
     ret += cix_makroparam(CIX_BO_Z,"0",false);
@@ -9659,6 +9693,8 @@ QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
     ret += cix_makroparam(CIX_BO_PRESSVORRICHTUNG_AKTV,"NO",false);
 
     ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
     return ret;
 }
 QString wstzustand::cix_bohrung_hori(bohrung bo, QString id)
