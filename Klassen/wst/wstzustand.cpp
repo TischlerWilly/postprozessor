@@ -9423,6 +9423,7 @@ void wstzustand::eigen_dateitext(int index)
     Exporttext.append(msg);
     Export_moeglich.append(true);
 }
+
 void wstzustand::cix_dateitext(int index)
 {
     text_zw bearb = Bearb.at(index);
@@ -9567,16 +9568,11 @@ void wstzustand::cix_dateitext(int index)
             bohrung bo(zeile.text());
             QString bezug = bo.bezug();
             QString tnummer = wkzmag.wkznummer(WKZ_TYP_BOHRER, bo.dm(), bo.tiefe(), Dicke, bezug);
+            QString bohrerdm = wkzmag.dm(tnummer);
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
-                if(bezug == WST_BEZUG_OBSEI)
-                {
-                    msg += cix_bohrung_vert(bo, cix_id(i));
-                }else if(bezug != WST_BEZUG_UNSEI)
-                {
-                    //...
-                }
+                msg += cix_bohrung(bo, cix_id(i), bohrerdm);
             }
         }
     }
@@ -9614,25 +9610,74 @@ QString wstzustand::cix_id(uint i)
     ret += int_to_qstring(id);
     return ret;
 }
-QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
+QString wstzustand::cix_bohrung(bohrung bo, QString id, QString bohrerdm)
 {
-    if(bo.bezug() != WST_BEZUG_OBSEI)
+    //if(bo.bezug() != WST_BEZUG_OBSEI && bo.bezug() != WST_BEZUG_UNSEI)
     {
-        return "";
+        //return "";
     }
     QString ret;
     ret  = "BEGIN MACRO";
     ret += "\n";
-    ret += "\t";
-    ret += "NAME=BV";
-    ret += "\n";
-    ret += cix_makroparam(CIX_SEITE,CIX_SEITE_OBSEI,false);
-    ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
-    ret += cix_makroparam(CIX_BO_X,bo.x_qstring(),false);
-    ret += cix_makroparam(CIX_BO_Y,bo.y_qstring(),false);
+    ret += "\t";    
+    if(bo.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += "NAME=BV";
+        ret += "\n";
+        ret += cix_makroparam(CIX_BO_LAYER,"BV",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_OBSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+        ret += cix_makroparam(CIX_BO_X,bo.x_qstring(),false);
+        ret += cix_makroparam(CIX_BO_Y,bo.y_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_UNSEI)
+    {
+        ret += "NAME=BV";
+        ret += "\n";
+        ret += cix_makroparam(CIX_BO_LAYER,"BV",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_UNSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+        ret += cix_makroparam(CIX_BO_X,bo.x_qstring(),false);
+        ret += cix_makroparam(CIX_BO_Y,bo.y_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_LI)
+    {
+        ret += "NAME=BH";
+        ret += "\n";
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_LI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+        ret += cix_makroparam(CIX_BO_X,bo.y_qstring(),false);
+        ret += cix_makroparam(CIX_BO_Y,bo.z_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_RE)
+    {
+        ret += "NAME=BH";
+        ret += "\n";
+        ret += cix_makroparam(CIX_BO_LAYER,"BH",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_RE,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+        ret += cix_makroparam(CIX_BO_X,bo.y_qstring(),false);
+        ret += cix_makroparam(CIX_BO_Y,bo.z_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_VO)
+    {
+        ret += "NAME=BH";
+        ret += "\n";
+        ret += cix_makroparam(CIX_BO_LAYER,"BH",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_VO,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+        ret += cix_makroparam(CIX_BO_X,bo.x_qstring(),false);
+        ret += cix_makroparam(CIX_BO_Y,bo.z_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_HI)
+    {
+        ret += "NAME=BH";
+        ret += "\n";
+        ret += cix_makroparam(CIX_BO_LAYER,"BH",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_HI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+        ret += cix_makroparam(CIX_BO_X,bo.x_qstring(),false);
+        ret += cix_makroparam(CIX_BO_Y,bo.z_qstring(),false);
+    }
+
     ret += cix_makroparam(CIX_BO_Z,"0",false);
     ret += cix_makroparam(CIX_BO_BOTI,bo.tiefe_qstring(),false);
-    ret += cix_makroparam(CIX_BO_DM,bo.dm_qstring(),false);
+    ret += cix_makroparam(CIX_BO_DM,bohrerdm,false);//Export-DM des Bohrers, nicht DM der Bohrung!!
     ret += cix_makroparam(CIX_BO_IST_DUBO,"NO",false);
     ret += cix_makroparam(CIX_BO_WDH_TYP,CIX_BO_WDH_TYP_KEIN,false);
     ret += cix_makroparam(CIX_BO_WDH_ABST_X,"32",false);
@@ -9688,8 +9733,7 @@ QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
     ret += cix_makroparam("CEN","",true);               //Kenncode des Arbeitszentrums der Maschine, das für die Bearbeitung verwendet werden soll
                             //Die Zahl zwischen Anführungszeichen setzen
                             //Beisp. “3” zur Kennung des Arbeitszentrums Nr. 3
-    ret += cix_makroparam("AGG","",true);               //Kenncode des Aggregats
-    ret += cix_makroparam(CIX_BO_LAYER,"BV",true);
+    ret += cix_makroparam("AGG","",true);               //Kenncode des Aggregats    
     ret += cix_makroparam(CIX_BO_PRESSVORRICHTUNG_AKTV,"NO",false);
 
     ret += "END MACRO";
@@ -9697,92 +9741,7 @@ QString wstzustand::cix_bohrung_vert(bohrung bo, QString id)
     ret += "\n";
     return ret;
 }
-QString wstzustand::cix_bohrung_hori(bohrung bo, QString id)
-{
-    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
-    {
-        return "";
-    }
-    QString ret;
-    ret  = "BEGIN MACRO";
-    ret += "NAME=BH";
-    ret += "\n";
-    ret += cix_makroparam("SIDE","0",false);            //Seite
-    ret += cix_makroparam("CRN","1",true);              //???
-    if(bo.bezug() == WST_BEZUG_LI)
-    {
-        ret += cix_makroparam("SIDE","1",false);            //Seite
-        ret += cix_makroparam("CRN","2",true);              //???
-        double pos = bo.y();
-        ret += cix_makroparam("X",double_to_qstring(pos),false);    //X-Position
-    }else if(bo.bezug() == WST_BEZUG_RE)
-    {
-        ret += cix_makroparam("SIDE","3",false);            //Seite
-        ret += cix_makroparam("CRN","3",true);              //???
-        double pos = bo.y();
-        ret += cix_makroparam("X",double_to_qstring(pos),false);    //X-Position
-    }  else if(bo.bezug() == WST_BEZUG_VO)
-    {
-        ret += cix_makroparam("SIDE","2",false);            //Seite
-        ret += cix_makroparam("CRN","2",true);              //???
-        ret += cix_makroparam("X",bo.x_qstring(),false);    //X-Position
-    }else if(bo.bezug() == WST_BEZUG_HI)
-    {
-        ret += cix_makroparam("SIDE","4",false);            //Seite
-        ret += cix_makroparam("CRN","3",true);              //???
-        ret += cix_makroparam("X",bo.x_qstring(),false);    //X-Position
-    }
-    ret += cix_makroparam("Y",bo.z_qstring(),false);    //Y-Position
-    ret += cix_makroparam("Z","0",false);               //Z-Position
-    ret += cix_makroparam("DP",bo.tiefe_qstring(),false);//Bohrtiefe
-    ret += cix_makroparam("DIA",bo.dm_qstring(),false); //Durchmesser
-    ret += cix_makroparam("THR","NO",false);            //???
-    ret += cix_makroparam("RTY","rpNO",false);          //???
-    ret += cix_makroparam("DX","32",false);             //???
-    ret += cix_makroparam("DY","32",false);             //???
-    ret += cix_makroparam("R","32",false);              //???
-    ret += cix_makroparam("A","0",false);               //???
-    ret += cix_makroparam("DA","45",false);             //???
-    ret += cix_makroparam("NRP","0",false);             //???
-    ret += cix_makroparam("ISO","",true);               //???
-    ret += cix_makroparam("OPT","YES",false);           //???
-    ret += cix_makroparam("AZ","0",false);              //???
-    ret += cix_makroparam("AR","0",false);              //???
-    ret += cix_makroparam("AP","NO",false);             //???
-    ret += cix_makroparam("CKA","azrNO",false);         //???
-    ret += cix_makroparam("XRC","0",false);             //???
-    ret += cix_makroparam("YRC","0",false);             //???
-    ret += cix_makroparam("ARP","0",false);             //???
-    ret += cix_makroparam("LRP","0",false);             //???
-    ret += cix_makroparam("ER","YES",false);            //???
-    ret += cix_makroparam("MD","NO",false);             //???
-    ret += cix_makroparam("COW","NO",false);            //???
-    ret += cix_makroparam("A21","0",false);             //???
-    ret += cix_makroparam("TOS","NO",false);            //???
-    ret += cix_makroparam("VTR","0",false);             //???
-    ret += cix_makroparam("S21","-1",false);            //???
-    ret += cix_makroparam("ID",id,true);                //ID der Bearbeitung
-    ret += cix_makroparam("AZS","0",false);             //???
-    ret += cix_makroparam("MAC","",true);               //???
-    ret += cix_makroparam("TNM","",true);               //???
-    ret += cix_makroparam("TTP","0",false);             //???
-    ret += cix_makroparam("TCL","0",false);             //???
-    ret += cix_makroparam("RSP","0",false);             //???
-    ret += cix_makroparam("IOS","0",false);             //???
-    ret += cix_makroparam("WSP","0",false);             //???
-    ret += cix_makroparam("SPI","",true);               //???
-    ret += cix_makroparam("DDS","0",false);             //???
-    ret += cix_makroparam("DSP","0",false);             //???
-    ret += cix_makroparam("BFC","NO",false);            //???
-    ret += cix_makroparam("SHP","0",false);             //???
-    ret += cix_makroparam("EA21","NO",false);           //???
-    ret += cix_makroparam("CEN","",true);               //???
-    ret += cix_makroparam("AGG","",true);               //???
-    ret += cix_makroparam("LAY","BH",true);             //Beschriftung?
-    ret += cix_makroparam("PRS","NO",false);            //???
-    ret += "END MACRO";
-    return ret;
-}
+
 void wstzustand::ganx_dateitext(int index)
 {
     //Physischer-Maschinen-Nullpunkt ist oben links

@@ -211,8 +211,7 @@ private:
     void cix_dateitext(int index);
     QString cix_makroparam(QString name, QString wert, bool als_text);
     QString cix_id(uint id);
-    QString cix_bohrung_vert(bohrung bo, QString id);
-    QString cix_bohrung_hori(bohrung bo, QString id);
+    QString cix_bohrung(bohrung bo, QString id, QString bohrerdm);
     void geo(int index);
     QString kante_vo(QString drewi);
     QString kante_hi(QString drewi);
