@@ -120,38 +120,46 @@
     // 101 = SAGOMATA
     // 102 = ROUT0
     // 103 = ROUT1
+//Zulässige Werte bei Werkzeugklasse für Säge
+    #define CIX_BEARB_WKZART_SAEGE_STD "200" // 200 = Säge
+#define CIX_BEARB_WDH_TYP "RTY"    //Wiederholungstyp
+    #define CIX_BEARB_WDH_TYP_KEIN "rpNO "   //-1 = Wiederholungen deaktiviert
+    // 0 = “rpX”
+    // 1 = “rpY”
+    // 2 = “rpXY”
+    // 3 = “rpCIR”
+    // 5 = “rpAL”
+#define CIX_BEARB_WDH_ABST_X   "DX"    //Wert des Achsenabstands in Richtung der Achse X
+#define CIX_BEARB_WDH_ABST_Y   "DY"    //Wert des Achsenabstands in Richtung der Achse Y
+#define CIX_BEARB_WDH_RAD      "R"     //Radius, um den die Wiederholungen ausgeführt werden
+#define CIX_BEARB_WDH_STARTWINKEL    "A" //Anfangswinkel der Wiederholungen
+#define CIX_BEARB_WDH_WINKEL   "DA"    //Winkelschritt zwischen den einzelnen Wiederholungen
+#define CIX_BEARB_WDH_DREHZENTRUM_X    "XRC"   //X-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
+#define CIX_BEARB_WDH_DREHZENTRUM_Y    "YRC"   //Y-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
+#define CIX_BEARB_WDH_GERADENWINKEL    "ARP"   //Abwinkelung der Geraden, entlang der die Wiederholungen durchgeführt werden
+#define CIX_BEARB_WDH_ABST     "LRP"   //Längenschritt/Abstand der Wiederholungen
+#define CIX_BEARB_WDH_RADIAL    "RDL"  //gibt die radiale Wiederholung frei
 
+#define CIX_BEARB_WDH_ANZAHL   "NRP"   //Anzahl der Wiederholungen
+
+#define CIX_BEARB_OPTIMIEREN   "OPT"   //Optimierung der Bearbeitung
+    // 0 = “NO”
+    // 1 = “YES”
+#define CIX_BEARB_DURCHGEHEND "THR"   //ist Durchgehende Bearbeitung
+    //Durch Aktivierung dieser Option ändert sich der Maßbezug auf Unterseite WST (bei Bohrungen von oben)
+    //1 = Durchgangsbearbeitung aktiviert.
+    //0 = Durchgangsbearbeitung deaktiviert.
+#define CIX_BEARB_BEZUG_SIABST "TOS"   //Beeiflusst den Sicherheitsabstand
+    #define CIX_BEARB_BEZUG_SIABST_BEARBGRUND    "NO"  // 0 = bezieht sich auf den Grund der Bearbeitung
+    #define CIX_BEARB_BEZUG_SIABST_WSTOBSEI "YES" // 1 = bezieht sich auf WST-Oberseite
 //-----------------------------------------------------Bohrungen:
 #define CIX_BO_X    "X"     //X-Position
 #define CIX_BO_Y    "Y"     //Y-Position
 #define CIX_BO_Z    "Z"     //Z-Position
 #define CIX_BO_BOTI "DP"    //Bohrtiefe
 #define CIX_BO_DM   "DIA"   //Bohrdurchmesser
-#define CIX_BO_IST_DUBO "THR"   //ist Durchgangsbohrung
-    //1 = Durchgangsbearbeitung aktiviert.
-    //0 = Durchgangsbearbeitung deaktiviert.
-#define CIX_BO_WDH_TYP "RTY"    //Wiederholungstyp
-    #define CIX_BO_WDH_TYP_KEIN "rpNO "   //-1 = Wiederholungen deaktiviert
-    // 0 = “rpX”
-    // 1 = “rpY”
-    // 2 = “rpXY”
-    // 3 = “rpCIR”
-    // 5 = “rpAL”
-#define CIX_BO_WDH_ABST_X   "DX"    //Wert des Achsenabstands in Richtung der Achse X
-#define CIX_BO_WDH_ABST_Y   "DY"    //Wert des Achsenabstands in Richtung der Achse Y
-#define CIX_BO_WDH_RAD      "R"     //Radius, um den die Wiederholungen ausgeführt werden
-#define CIX_BO_WDH_STARTWINKEL    "A" //Anfangswinkel der Wiederholungen
-#define CIX_BO_WDH_WINKEL   "DA"    //Winkelschritt zwischen den einzelnen Wiederholungen
-#define CIX_BO_WDH_DREHZENTRUM_X    "XRC"   //X-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
-#define CIX_BO_WDH_DREHZENTRUM_Y    "YRC"   //Y-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
-#define CIX_BO_WDH_GERADENWINKEL    "ARP"   //Abwinkelung der Geraden, entlang der die Wiederholungen durchgeführt werden
-#define CIX_BO_WDH_ABST     "LRP"   //Längenschritt/Abstand der Wiederholungen
 
-#define CIX_BO_WDH_ANZAHL   "NRP"   //Anzahl der Wiederholungen
 
-#define CIX_BO_OPTIMIEREN   "OPT"   //Optimierung der Bearbeitung
-    // 0 = “NO”
-    // 1 = “YES”
 #define CIX_BO_WKZ_NEIGUNG  "AZ"    //Neigungswinkel des Werkzeugs
     //Neigungswinkel der Drehachse der Spindel im Vergleich zur Ebene X, Y
 #define CIX_BO_WKZ_DREHWI   "AR"    //Drehwinkel des Werkzeugs
@@ -160,9 +168,6 @@
     #define CIX_BO_WKZ_DREHTYP_KEIN "azrNO" // 0 = nicht gedreht/geneigt
     // 1 = “azrABS
     // 2 = “azrINC”
-#define CIX_BO_BEZUG_SIABST "TOS"   //Beeiflusst den Sicherheitsabstand
-    #define CIX_BO_BEZUG_SIABST_BEARBGRUND    "NO"  // 0 = bezieht sich auf den Grund der Bearbeitung
-    #define CIX_BO_BEZUG_SIABST_WSTOBSEI "YES" // 1 = bezieht sich auf WST-Oberseite
 #define CIX_BO_DREHZAHL "RSP"   //Drehzahl U/Min
 #define CIX_BO_SPEED_ANAB   "IOS"   //An- und Abfahr-Geschwindigkeit
 #define CIX_BO_SPEED        "WSP"   //Arbeitsgeschwindigkeit [mm/min]
@@ -187,15 +192,51 @@
     // 0 = “NO”
     // 1 = “YES”
 
-
-
-
-
-
-
-
-
-
-
+//-----------------------------------------------------Nuten:
+#define CIX_NUT_LAYER    "LAY"   //Kennstring des der Geometrie zugeordneten Layers.
+    //Dieser String wird nicht unter den Programmierungszeilen angezeigt, sondern im
+    //Dialogfenster Layer-Verwaltung
+#define CIX_NUT_XS  "X"
+#define CIX_NUT_YS  "Y"
+#define CIX_NUT_ZS  "Z"
+#define CIX_NUT_XE  "XE"
+#define CIX_NUT_YE  "YE"
+#define CIX_NUT_ZE  "ZE"
+#define CIX_NUT_TI  "DP"    //Nuttiefe
+#define CIX_NUT_BREITE "TTK"//Nutbreite
+#define CIX_NUT_BREITENZUGABE   "OVM"
+    //Wert der Materialzugabe, die bei der Bearbeitung des Profils belassen werden
+    //soll. Der in diesem Feld eingegeben Wert ist an die Art der Korrektur gebunden
+    //- Mit linker oder rechter Korrektur nimmt das Werkzeug bei Einstellung eines negativen Werts
+    //  mehr Material weg, bei Einstellung eines positiven Werts, nimmt es weniger Material weg.
+    //- Bei mittlerer Korrektur wird die Bearbeitung bei Eingabe eines negativen Werts rechterhand,
+    //  bei Eingabe eines positiven Werts linkerhand der programmierten Bahn verschoben.
+#define CIX_NUT_TYP "TYP"   //Nuttyp
+    #define CIX_NUT_TYP_SP_EP    "cutXY"    //Startpunkt, Endpunkt
+    #define CIX_NUT_TYP_SP_L_WI  "cutLA"    //Startpunkt, Länge, Winkel
+    #define CIX_NUT_TYP_SP_XE_WI "cutXA"    //Startpunkt, X-Endepunkt, Winkel
+    #define CIX_NUT_TYP_SP_YE_WI "cutYA"    //Startpunkt, Y-Endepunkt, Winkel
+#define CIX_NUT_WI  "ANG"   //Nut-Winkel
+#define CIX_NUT_ISO "ISO"   //ISO-Anweisung
+#define CIX_NUT_REVERS  "RV" //kehrt die Richtung des programmierten geometrischen Profils um;
+    //der Startpunkt der Geometrie wird somit zum Endpunkt
+#define CIX_NUT_ANZ_TIZUST  "VTR"   //Anzahl der Tiefen-Zustellungen
+    //Anzahl der Durchgänge, die sich auf die Tiefe der programmierten
+    //Bearbeitung auswirken. Durch Eingabe der Zahl 2 wird die Bearbeitung
+    //in 2 Teile aufgeteilt, bis die im Feld Tiefe angegebene Tiefe erreicht ist
+#define CIX_NUT_TIEFENMASSBEZUG_ANGEPASST   "GIP"
+    //"NO" == Tiefe bezieht sich auf Bezugsfläche (WST_Oberseite)
+    //siehe Handbuch cix Seite 418
+    //ermöglicht die Angabe bei welcher Tiefe das System das Profil P (GEO) berücksichtigen
+    //muss, um die Bearbeitung zu nutzen. Das aktivierte Kästchen gibt an, dass der Ausgangspunkt
+    //(Bez. A) des Profils auf der Oberfläche des Werkstücks ist (Bez. B); in diesem Fall zeigt die Quote
+    //an, dass der Eingangspunkt des Werkzeugs in das entsprechende Werkstück mit dem
+    //Ausgangspunkt des Profils A übereinstimmt.
+    //Das deaktivierte Kästchen gibt an, dass der Ausgangspunkt des Profils (Bez. A) entlang der Z-
+    //Achse (Bez. C) verschoben wurde, und dass man es daher nicht nur aus den X/Z Koordinaten
+    //entnimmt, sondern aus den X/Z/Y Koordinaten, wobei die Angabe, die zu Z gehört, die Angabe für
+    //die Tiefe der Bearbeitung ist (Bez. C). Wenn man bei diesem zweiten Fall die Bearbeitung mit dem
+    //schräggestellten Werkzeug programmiert, stimmt die Quote, die die Eintrittsstelle (Bez. D) des
+    //Werkzeugs in das Werkstück angibt, nicht mit dem Ausgangspunkt des Profils (Bez. A) überein.
 
 #endif // DEF_CIX_H
