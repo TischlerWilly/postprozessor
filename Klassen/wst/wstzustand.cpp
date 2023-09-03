@@ -9774,6 +9774,19 @@ QString wstzustand::cix_nut(nut nu, QString id, QString wkz)
         ret += cix_makroparam(CIX_NUT_XE, nu.xe_qstring(), false);
         ret += cix_makroparam(CIX_NUT_YE, nu.ye_qstring(), false);
         ret += cix_makroparam(CIX_NUT_ZE, "0", false);
+    }else if(nu.bezug() == WST_BEZUG_UNSEI)
+    {
+        ret += "NAME=CUT_G";
+        ret += "\n";
+        ret += cix_makroparam(CIX_NUT_LAYER,"CUT_G",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_UNSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+        ret += cix_makroparam(CIX_NUT_XS, nu.xs_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YS, nu.ys_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZS, "0", false);
+        ret += cix_makroparam(CIX_NUT_XE, nu.xe_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YE, nu.ye_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZE, "0", false);
     }
     ret += cix_makroparam(CIX_NUT_TYP, CIX_NUT_TYP_SP_EP, false);
     ret += cix_makroparam(CIX_NUT_TI, nu.tiefe_qstring(), false);
