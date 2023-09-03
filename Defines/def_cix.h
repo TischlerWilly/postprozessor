@@ -108,10 +108,15 @@
     #define CIX_BEZUG_OR  "3" //unte rechts
     #define CIX_BEZUG_UR  "4" //oben rechts
 #define CIX_BEARB_ID    "ID"    //ID der Bearbeitung
-#define CIX_BEARB_WKZ  "TNM"   //Werkzeugcode
-#define CIX_BEARB_WKZART "TTP" //Werkzeugart
+//---------------------------------------------Werkzeug:
+#define CIX_WKZ  "TNM"   //Werkzeugcode
+#define CIX_WKZGRUPPE "TCL"   //Werkzeuggruppe/Werkzeugklasse
+    #define CIX_WKZGRUPPE_BOHRER  "0"  //C_DRILLING
+    #define CIX_WKZGRUPPE_FRAESER "1"  //C_ROUTING
+    #define CIX_WKZGRUPPE_SAEGER  "2"  //C_Cutting
+#define CIX_WKZART "TTP" //Werkzeugart
 //Zulässige Werte bei Werkzeugklasse C_DRILLING:
-    #define CIX_BEARB_WKZART_BO_STD "0" // 0 = NORMALE
+    #define CIX_WKZART_BO_STD "0" // 0 = NORMALE
     // 1 = LANCIA
     // 2 = SVASATA
     // 3 = NORMALEG
@@ -120,27 +125,56 @@
     // 101 = SAGOMATA
     // 102 = ROUT0
     // 103 = ROUT1
-//Zulässige Werte bei Werkzeugklasse für Säge
-    #define CIX_BEARB_WKZART_SAEGE_STD "200" // 200 = Säge
-#define CIX_BEARB_WDH_TYP "RTY"    //Wiederholungstyp
-    #define CIX_BEARB_WDH_TYP_KEIN "rpNO "   //-1 = Wiederholungen deaktiviert
+//Zulässige Werte bei Werkzeugklasse C_Cutting
+    #define CIX_WKZART_SAEGE_STD "200" // 200 = Säge
+#define CIX_WKZSPINDEL "SPI"  //Angabe der Elektrospindel, mit der die Bearbeitung auszuführen ist
+    //Dieses Feld kann dann nützlich sein, wenn die Notwendigkeit besteht, eine Bearbeitung mit einem
+    //Aggregat/Werkzeug durchzuführen, das nur von einer spezifischen Elektrospindel aufgenommen
+    //werden kann. Unbedingt sicherstellen, dass die gewählte Elektrospindel an der Maschine
+    //vorhanden ist oder dass die mit dem Magazin kompatibel ist, in dem sich das zu montierende
+    //Werkzeug befindet, andernfalls hat die Optimierung keinen Erfolg. Das leere Datenfeld autorisiert
+    //das CAM-System, die Wahl der Elektrospindel vorzunehmen.
+    #define CIX_WKZSPINDEL_AUTO   ""
+#define CIX_DREHZAHL "RSP"   //Drehzahl U/Min
+#define CIX_SPEED_ANAB   "IOS"   //An- und Abfahr-Geschwindigkeit
+#define CIX_SPEED        "WSP"   //Arbeitsgeschwindigkeit [mm/min]
+    //Geschwindigkeit, mit der das Werkzeug die Bohrung/Fräsung durchführt
+#define CIX_DREHZ_LETZTE_ZUST    "DSP"   //Drehzahl der Spitze während des Durchschlagens des Werkstücks
+    //wird wirksam wenn "Restbohrmaß != 0"
+    //Bleibt das Feld leer wird der Parameter aus dem wkz genommen
+#define CIX_ABBLASEN "BFC"   //Gebläse für Reinigung von den Sägespänen
+    // 0 = “NO”
+    // 1 = “YES”
+#define CIX_HAUBENPOS    "SHP"   //Haubenposition
+    // Zulässige Werte von 0 bis 6
+    #define CIX_HAUBENPOS_AUTO "0"//automatisch
+    // 1 = ganz oben
+    // 6 = ganz unten
+#define CIX_KENNCODE_ARBEITSZENTRUM_MASCHINE    "CEN"
+    //Kenncode des Arbeitszentrums der Maschine, das für die Bearbeitung verwendet werden soll
+    //Die Zahl zwischen Anführungszeichen setzen
+    //Beisp. “3” zur Kennung des Arbeitszentrums Nr. 3
+#define CIX_KENNCODE_AGGREGAT   "AGG"   //Kenncode des Aggregats
+//---------------------------------------------
+#define CIX_WDH_TYP "RTY"    //Wiederholungstyp
+    #define CIX_WDH_TYP_KEIN "rpNO"   //-1 = Wiederholungen deaktiviert
     // 0 = “rpX”
     // 1 = “rpY”
     // 2 = “rpXY”
     // 3 = “rpCIR”
     // 5 = “rpAL”
-#define CIX_BEARB_WDH_ABST_X   "DX"    //Wert des Achsenabstands in Richtung der Achse X
-#define CIX_BEARB_WDH_ABST_Y   "DY"    //Wert des Achsenabstands in Richtung der Achse Y
-#define CIX_BEARB_WDH_RAD      "R"     //Radius, um den die Wiederholungen ausgeführt werden
-#define CIX_BEARB_WDH_STARTWINKEL    "A" //Anfangswinkel der Wiederholungen
-#define CIX_BEARB_WDH_WINKEL   "DA"    //Winkelschritt zwischen den einzelnen Wiederholungen
-#define CIX_BEARB_WDH_DREHZENTRUM_X    "XRC"   //X-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
-#define CIX_BEARB_WDH_DREHZENTRUM_Y    "YRC"   //Y-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
-#define CIX_BEARB_WDH_GERADENWINKEL    "ARP"   //Abwinkelung der Geraden, entlang der die Wiederholungen durchgeführt werden
-#define CIX_BEARB_WDH_ABST     "LRP"   //Längenschritt/Abstand der Wiederholungen
-#define CIX_BEARB_WDH_RADIAL    "RDL"  //gibt die radiale Wiederholung frei
+#define CIX_WDH_ABST_X   "DX"    //Wert des Achsenabstands in Richtung der Achse X
+#define CIX_WDH_ABST_Y   "DY"    //Wert des Achsenabstands in Richtung der Achse Y
+#define CIX_WDH_RAD      "R"     //Radius, um den die Wiederholungen ausgeführt werden
+#define CIX_WDH_STARTWINKEL    "A" //Anfangswinkel der Wiederholungen
+#define CIX_WDH_WINKEL   "DA"    //Winkelschritt zwischen den einzelnen Wiederholungen
+#define CIX_WDH_DREHZENTRUM_X    "XRC"   //X-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
+#define CIX_WDH_DREHZENTRUM_Y    "YRC"   //Y-Position des Drehzentrums der Kreislinie, um das die Wiederholung ausgeführt wird
+#define CIX_WDH_GERADENWINKEL    "ARP"   //Abwinkelung der Geraden, entlang der die Wiederholungen durchgeführt werden
+#define CIX_WDH_ABST     "LRP"   //Längenschritt/Abstand der Wiederholungen
+#define CIX_WDH_RADIAL    "RDL"  //gibt die radiale Wiederholung frei
 
-#define CIX_BEARB_WDH_ANZAHL   "NRP"   //Anzahl der Wiederholungen
+#define CIX_WDH_ANZAHL   "NRP"   //Anzahl der Wiederholungen
 
 #define CIX_BEARB_OPTIMIEREN   "OPT"   //Optimierung der Bearbeitung
     // 0 = “NO”
@@ -149,9 +183,19 @@
     //Durch Aktivierung dieser Option ändert sich der Maßbezug auf Unterseite WST (bei Bohrungen von oben)
     //1 = Durchgangsbearbeitung aktiviert.
     //0 = Durchgangsbearbeitung deaktiviert.
-#define CIX_BEARB_BEZUG_SIABST "TOS"   //Beeiflusst den Sicherheitsabstand
-    #define CIX_BEARB_BEZUG_SIABST_BEARBGRUND    "NO"  // 0 = bezieht sich auf den Grund der Bearbeitung
-    #define CIX_BEARB_BEZUG_SIABST_WSTOBSEI "YES" // 1 = bezieht sich auf WST-Oberseite
+#define CIX_BEZUG_SIABST "TOS"   //Beeiflusst den Sicherheitsabstand
+    #define CIX_BEZUG_SIABST_BEARBGRUND    "NO"  // 0 = bezieht sich auf den Grund der Bearbeitung
+    #define CIX_BEZUG_SIABST_WSTOBSEI "YES" // 1 = bezieht sich auf WST-Oberseite
+#define CIX_RADKOR  "CRC"   //Radiuskorrektur
+    #define CIX_RADKOR_KEIN "0"
+    #define CIX_RADKOR_RE   "1"
+    #define CIX_RADKOR_LI   "2"
+    #define CIX_RADKOR_INTERN   "5" //innerhalb des geschlossenen Profils
+    #define CIX_RADKOR_EXTERN   "6" //außerhalb des geschlossenen Profils
+    #define CIX_RADKOR_GEO      "7"
+#define CIX_RESTBEARBTIEFE  "DVR"
+    //Tiefe, die das Werkzeug bei Mehrfachdurchgängen während des letzten
+    //Durchgangs erzielen muß
 //-----------------------------------------------------Bohrungen:
 #define CIX_BO_X    "X"     //X-Position
 #define CIX_BO_Y    "Y"     //Y-Position
@@ -168,23 +212,9 @@
     #define CIX_BO_WKZ_DREHTYP_KEIN "azrNO" // 0 = nicht gedreht/geneigt
     // 1 = “azrABS
     // 2 = “azrINC”
-#define CIX_BO_DREHZAHL "RSP"   //Drehzahl U/Min
-#define CIX_BO_SPEED_ANAB   "IOS"   //An- und Abfahr-Geschwindigkeit
-#define CIX_BO_SPEED        "WSP"   //Arbeitsgeschwindigkeit [mm/min]
-    //Geschwindigkeit, mit der das Werkzeug die Bohrung durchführt
 #define CIX_BO_REBOMA   "DDS"   //Restbohrmaß ab dem der Bohrer mit dem Abbremsen beginnen muss
     // 0 = Bohrer verlangsamt seine Geschwindigkeit nicht
-#define CIX_BO_REBODREHZ    "DSP"   //Drehzahl der Spitze während des Durchschlagens des Werkstücks
-    //wird wirksam wenn "DDS != 0"
-    //Bleibt das Feld leer wird der Parameter aus dem wkz genommen
-#define CIX_BO_ABBLASEN "BFC"   //Gebläse für Reinigung von den Sägespänen
-    // 0 = “NO”
-    // 1 = “YES”
-#define CIX_BO_HAUBENPOS    "SHP"   //Haubenposition
-    // Zulässige Werte von 0 bis 6
-    #define CIX_BO_HAUBENPOS_AUTO "0"//automatisch
-    // 1 = ganz oben
-    // 6 = ganz unten
+
 #define CIX_BO_LAYER    "LAY"   //Kennstring des der Geometrie zugeordneten Layers.
     //Dieser String wird nicht unter den Programmierungszeilen angezeigt, sondern im
     //Dialogfenster Layer-Verwaltung
@@ -238,5 +268,23 @@
     //die Tiefe der Bearbeitung ist (Bez. C). Wenn man bei diesem zweiten Fall die Bearbeitung mit dem
     //schräggestellten Werkzeug programmiert, stimmt die Quote, die die Eintrittsstelle (Bez. D) des
     //Werkzeugs in das Werkstück angibt, nicht mit dem Ausgangspunkt des Profils (Bez. A) überein.
-
+#define CIX_NUT_AUSLAUF "BRC"
+    //0 == kein Auslauf == Nutende bezieht sich auf Mitte Sägeblatt
+    //1 == mit Auslauf == Nutende bezeiht WKZ-Radius mit ein = Bezug Schneidenspitzen
+#define CIX_NUT_BIDIREKTIONAL "BDR"
+    //autorisiert das Werkzeug zur Durchführung der folgenden
+    //Durchgänge bei wechselnder Richtung. Das Werkzeug ändert seine Richtung bei jedem neuen
+    //Durchgang. Zum Aktivieren dieser Funktion das Kästchen anklicken.
+#define CIX_NUT_SCHNITTUMKEHR_VERHINDERN "PRV"
+    //gibt den Wechsel der Vorschubrichtung des Sägeblatts frei. Wenn
+    //die Richtung des programmierten Schnitts von rechts nach links verläuft,
+    //die Default-Richtung des Sägeblatts aber von links nach rechts ist, sorgt
+    //der CAM für die Umkehrung des Startpunkts des Sägeblatts, so daß es
+    //genau unter Verfolgung seiner korrekten Vorschubrichtung schneidet. Es
+    //empfiehlt sich dieses Feld zu aktivieren, um Fehler während der Optimierung des Programms zu
+    //vermeiden, weil nicht immer die Richtung der programmierten Zeichnung mit der Defaul-Richtung
+    //des Sägeblatts übereinstimmt
+#define CIX_NUT_SCHNITTRICHTUNG_UMKEHREN "NRV"
+#define CIX_NUT_VERLAENGERN_START "DIN" //Maßangabe zum Verlängern der Nut an Start
+#define CIX_NUT_VERLAENGERN_ENDE "DOU" //Maßangabe zum Verlängern der Nut an Ende
 #endif // DEF_CIX_H

@@ -9573,6 +9573,28 @@ void wstzustand::cix_dateitext(int index)
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
                 msg += cix_bohrung(bo, cix_id(i), bohrerdm);
+            }else
+            {
+                //BuBoSplitten etc.
+                //Bohrung als KTA möglich?
+                //...
+            }
+        }else if(zeile.at(0) == BEARBART_NUT)
+        {
+            nut nu(zeile.text());
+            QString bezug = nu.bezug();
+            QString tnummer = wkzmag.wkznummer(WKZ_TYP_SAEGE, 0, nu.tiefe(), Dicke, bezug);
+            if(!tnummer.isEmpty())
+            {
+                msg += cix_nut(nu, cix_id(i), tnummer);
+            }else
+            {
+                //Mit Fehlermeldung abbrechen:
+                QString msg = fehler_kein_WKZ("cix", zeile);
+                Fehler_kein_wkz.append(msg);
+                Exporttext.append(msg);
+                Export_moeglich.append(false);
+                return;
             }
         }
     }
@@ -9675,62 +9697,58 @@ QString wstzustand::cix_bohrung(bohrung bo, QString id, QString bohrerdm)
     ret += cix_makroparam(CIX_BO_BOTI,bo.tiefe_qstring(),false);
     ret += cix_makroparam(CIX_BO_DM,bohrerdm,false);//Export-DM des Bohrers, nicht DM der Bohrung!!
     ret += cix_makroparam(CIX_BEARB_DURCHGEHEND,"NO",false);
-    ret += cix_makroparam(CIX_BEARB_WDH_TYP,CIX_BEARB_WDH_TYP_KEIN,false);
-    ret += cix_makroparam(CIX_BEARB_WDH_ABST_X,"32",false);
-    ret += cix_makroparam(CIX_BEARB_WDH_ABST_Y,"32",false);
-    ret += cix_makroparam(CIX_BEARB_WDH_RAD,"32",false);
-    ret += cix_makroparam(CIX_BEARB_WDH_STARTWINKEL,"0",false);
-    ret += cix_makroparam(CIX_BEARB_WDH_WINKEL,"45",false);
-    ret += cix_makroparam(CIX_BEARB_WDH_ANZAHL,"0",false);
-    ret += cix_makroparam("ISO","",true);               //ISO-Anweisung / Werkstückabtastung
+    ret += cix_makroparam(CIX_WDH_TYP,CIX_WDH_TYP_KEIN,false);
+    ret += cix_makroparam(CIX_WDH_ABST_X,"32",false);
+    ret += cix_makroparam(CIX_WDH_ABST_Y,"32",false);
+    ret += cix_makroparam(CIX_WDH_RAD,"32",false);
+    ret += cix_makroparam(CIX_WDH_STARTWINKEL,"0",false);
+    ret += cix_makroparam(CIX_WDH_WINKEL,"45",false);
+    ret += cix_makroparam(CIX_WDH_ANZAHL,"0",false);
     ret += cix_makroparam(CIX_BEARB_OPTIMIEREN,"YES",false);
     ret += cix_makroparam(CIX_BO_WKZ_NEIGUNG,"0",false);
-    ret += cix_makroparam(CIX_BO_WKZ_DREHWI,"0",false);
+    ret += cix_makroparam(CIX_BO_WKZ_DREHWI,"0",false);    
+    ret += cix_makroparam(CIX_BO_WKZ_DREHTYP,CIX_BO_WKZ_DREHTYP_KEIN,false);
+    ret += cix_makroparam(CIX_WDH_DREHZENTRUM_X,"0",false);
+    ret += cix_makroparam(CIX_WDH_DREHZENTRUM_Y,"0",false);
+    ret += cix_makroparam(CIX_WDH_GERADENWINKEL,"0",false);
+    ret += cix_makroparam(CIX_WDH_ABST,"0",false);
+    ret += cix_makroparam(CIX_BEZUG_SIABST,CIX_BEZUG_SIABST_BEARBGRUND,false);
+    ret += cix_makroparam(CIX_BEARB_ID,id,true);
+    ret += cix_makroparam(CIX_WKZ,"",true);
+    ret += cix_makroparam(CIX_WKZART,CIX_WKZART_BO_STD,false);
+    ret += cix_makroparam(CIX_WKZGRUPPE, CIX_WKZGRUPPE_BOHRER,false);
+    ret += cix_makroparam(CIX_DREHZAHL,"0",false);
+    ret += cix_makroparam(CIX_SPEED_ANAB,"0",false);
+    ret += cix_makroparam(CIX_SPEED,"0",false);
+    ret += cix_makroparam(CIX_WKZSPINDEL, CIX_WKZSPINDEL_AUTO,true);
+    ret += cix_makroparam(CIX_BO_REBOMA,"0",false);
+    ret += cix_makroparam(CIX_DREHZ_LETZTE_ZUST,"0",false);
+    ret += cix_makroparam(CIX_ABBLASEN,"NO",false);
+    ret += cix_makroparam(CIX_HAUBENPOS,CIX_HAUBENPOS_AUTO,false);
+    ret += cix_makroparam(CIX_KENNCODE_ARBEITSZENTRUM_MASCHINE, "",true);
+    ret += cix_makroparam(CIX_KENNCODE_AGGREGAT, "",true);
+    ret += cix_makroparam(CIX_BO_PRESSVORRICHTUNG_AKTV,"NO",false);
+
+    ret += cix_makroparam("ISO","",true);               //ISO-Anweisung / Werkstückabtastung
     ret += cix_makroparam("AP","NO",false);             //hängt mit einer Dialogeinstellung für HBEs zusammen
                             // 0 = NO; linear
                             // 1 = YES; kreisförmig
-    ret += cix_makroparam(CIX_BO_WKZ_DREHTYP,CIX_BO_WKZ_DREHTYP_KEIN,false);
-    ret += cix_makroparam(CIX_BEARB_WDH_DREHZENTRUM_X,"0",false);
-    ret += cix_makroparam(CIX_BEARB_WDH_DREHZENTRUM_Y,"0",false);
-    ret += cix_makroparam(CIX_BEARB_WDH_GERADENWINKEL,"0",false);
-    ret += cix_makroparam(CIX_BEARB_WDH_ABST,"0",false);
     ret += cix_makroparam("ER","YES",false);            //gibt die erste Bohrung ER als Anfangsbohrung der Wiederholung frei
     ret += cix_makroparam("MD","NO",false);             //aktiviert die Erstellung der Bohrung auf halber Werkstückstärke
                             // 0 = “NO”
                             // 1 = “YES”
     ret += cix_makroparam("COW","NO",false);            //nur für die Maschine “Skipper”
     ret += cix_makroparam("A21","0",false);             //Winkel Aggr21
-    ret += cix_makroparam(CIX_BEARB_BEZUG_SIABST,CIX_BEARB_BEZUG_SIABST_BEARBGRUND,false);
     ret += cix_makroparam("VTR","0",false);             //Anzahl der Durchgänge, die sich auf die Tiefe der programmierten Bearbeitung auswirken
     ret += cix_makroparam("S21","-1",false);            //Winkel Aggr21
-    ret += cix_makroparam(CIX_BEARB_ID,id,true);
+    ret += cix_makroparam("MAC","",true);               //? evtl Maschinenzuweisung bei mehreren Maschinen
     ret += cix_makroparam("AZS","0",false);             //Sicherheitswert entlang der Z-Achse, der dann zum Tragen kommt, wenn schräge
                             //Bearbeitungen z.B. mit Hilfe der Tilting Achse durchgeführt werden. Lässt man
                             //den Wert auf 0, verwendet das System die im Feld Sicherheit in der Karte Bearbeitungen des
                             //Setups  angegebene Angabe.
-    ret += cix_makroparam("MAC","",true);               //? evtl Maschinenzuweisung bei mehreren Maschinen
-    ret += cix_makroparam(CIX_BEARB_WKZ,"",true);
-    ret += cix_makroparam(CIX_BEARB_WKZART,CIX_BEARB_WKZART_BO_STD,false);
-    ret += cix_makroparam("TCL","0",false);             //Liste der Klassen des Werkzeugs
-                            // 1 = C_ROUTING ->um die Spindeln der Bohrgruppe zu verwenden
-                            // 2 = C_CUTTING ->um die Elektrospindel zu verwenden
-    ret += cix_makroparam(CIX_BO_DREHZAHL,"0",false);
-    ret += cix_makroparam(CIX_BO_SPEED_ANAB,"0",false);
-    ret += cix_makroparam(CIX_BO_SPEED,"0",false);
-    ret += cix_makroparam("SPI","",true);               //Angabe der Spindel der Bohrgruppe oder der Elektrospindel, mit der die Bearbeitung auszuführen ist
-                            //Das leere Datenfeld autorisiert das CAM-System, die Wahl der Elektrospindel vorzunehmen
-    ret += cix_makroparam(CIX_BO_REBOMA,"0",false);
-    ret += cix_makroparam(CIX_BO_REBODREHZ,"0",false);
-    ret += cix_makroparam(CIX_BO_ABBLASEN,"NO",false);
-    ret += cix_makroparam(CIX_BO_HAUBENPOS,CIX_BO_HAUBENPOS_AUTO,false);
     ret += cix_makroparam("EA21","NO",false);           //aktiviert die Verwendung der Parameter A21 und S21
                             // 0 = “NO”
                             // 1 = “YES”
-    ret += cix_makroparam("CEN","",true);               //Kenncode des Arbeitszentrums der Maschine, das für die Bearbeitung verwendet werden soll
-                            //Die Zahl zwischen Anführungszeichen setzen
-                            //Beisp. “3” zur Kennung des Arbeitszentrums Nr. 3
-    ret += cix_makroparam("AGG","",true);               //Kenncode des Aggregats    
-    ret += cix_makroparam(CIX_BO_PRESSVORRICHTUNG_AKTV,"NO",false);
 
     ret += "END MACRO";
     ret += "\n";
@@ -9757,64 +9775,58 @@ QString wstzustand::cix_nut(nut nu, QString id, QString wkz)
         ret += cix_makroparam(CIX_NUT_YE, nu.ye_qstring(), false);
         ret += cix_makroparam(CIX_NUT_ZE, "0", false);
     }
-    ret += cix_makroparam(CIX_NUT_TYP, CIX_NUT_TYP_SP_EP, true);
+    ret += cix_makroparam(CIX_NUT_TYP, CIX_NUT_TYP_SP_EP, false);
     ret += cix_makroparam(CIX_NUT_TI, nu.tiefe_qstring(), false);
     ret += cix_makroparam(CIX_NUT_BREITE, nu.breite_qstring(), false);
-    ret += cix_makroparam(CIX_NUT_BREITENZUGABE, 0, false);
-    //strecke s;
-    //s.set_stapu(nu.stapu());
-    //s.set_endpu(nu.endpu());
-    //double nutwinkel = s.wink();
-    //ret += cix_makroparam(CIX_NUT_WI, double_to_qstring(nutwinkel), false);
+    ret += cix_makroparam(CIX_NUT_BREITENZUGABE, "0", false);
     ret += cix_makroparam(CIX_NUT_ISO, "", true);
-    ret += cix_makroparam(CIX_BEARB_OPTIMIEREN, "YES", true);
-    ret += cix_makroparam("TH", 0, false);                                      //???
-    ret += cix_makroparam(CIX_BEARB_WDH_TYP, CIX_BEARB_WDH_TYP_KEIN, true);
-    ret += cix_makroparam(CIX_BEARB_WDH_ABST_X, 0, false);
-    ret += cix_makroparam(CIX_BEARB_WDH_ABST_Y, 0, false);
-    ret += cix_makroparam(CIX_BEARB_WDH_RAD, 0, false);
-    ret += cix_makroparam(CIX_BEARB_WDH_STARTWINKEL, 0, false);
-    ret += cix_makroparam(CIX_BEARB_WDH_WINKEL, 0, false);
-    ret += cix_makroparam(CIX_BEARB_WDH_RADIAL, "NO", false);
-    ret += cix_makroparam(CIX_BEARB_WDH_ANZAHL, 0, false);
+    ret += cix_makroparam(CIX_BEARB_OPTIMIEREN, "YES", false);
+    ret += cix_makroparam(CIX_WDH_TYP, CIX_WDH_TYP_KEIN, false);
+    ret += cix_makroparam(CIX_WDH_ABST_X, "0", false);
+    ret += cix_makroparam(CIX_WDH_ABST_Y, "0", false);
+    ret += cix_makroparam(CIX_WDH_RAD, "0", false);
+    ret += cix_makroparam(CIX_WDH_STARTWINKEL, "0", false);
+    ret += cix_makroparam(CIX_WDH_WINKEL, "0", false);
+    ret += cix_makroparam(CIX_WDH_RADIAL, "NO", false);
+    ret += cix_makroparam(CIX_WDH_ANZAHL, "0", false);
     ret += cix_makroparam(CIX_BO_WKZ_DREHTYP, CIX_BO_WKZ_DREHTYP_KEIN, false);
     ret += cix_makroparam(CIX_BEARB_DURCHGEHEND,"NO",false);
     ret += cix_makroparam(CIX_NUT_REVERS, "NO", false);
-    ret += cix_makroparam(CIX_BEARB_WDH_DREHZENTRUM_X, 0, false);
-    ret += cix_makroparam(CIX_BEARB_WDH_DREHZENTRUM_Y, 0, false);
-    ret += cix_makroparam(CIX_BEARB_WDH_GERADENWINKEL, 0, false);
-    ret += cix_makroparam(CIX_BEARB_WDH_ABST, 0, false);
-    ret += cix_makroparam("ER","YES",false);            //gibt die erste Bohrung ER als Anfangsbohrung der Wiederholung frei
-    ret += cix_makroparam("COW", "NO", false);//nur für die Maschine “Skipper”
-    ret += cix_makroparam(CIX_BEARB_BEZUG_SIABST,CIX_BEARB_BEZUG_SIABST_BEARBGRUND,false);
-    ret += cix_makroparam(CIX_NUT_ANZ_TIZUST,0, false);
+    ret += cix_makroparam(CIX_WDH_DREHZENTRUM_X, "0", false);
+    ret += cix_makroparam(CIX_WDH_DREHZENTRUM_Y, "0", false);
+    ret += cix_makroparam(CIX_WDH_GERADENWINKEL, "0", false);
+    ret += cix_makroparam(CIX_WDH_ABST, "0", false);
+    ret += cix_makroparam(CIX_BEZUG_SIABST,CIX_BEZUG_SIABST_BEARBGRUND,false);
+    ret += cix_makroparam(CIX_NUT_ANZ_TIZUST,"0", false);
     ret += cix_makroparam(CIX_NUT_TIEFENMASSBEZUG_ANGEPASST, "NO", false);
-    ret += cix_makroparam(CIX_BEARB_WKZ, wkz, true);
-    ret += cix_makroparam(CIX_BEARB_WKZART, CIX_BEARB_WKZART_SAEGE_STD, false);
-    //ret += cix_makroparam(,,);
-    /*
-    PARAM,NAME=TCL,VALUE=2
-    PARAM,NAME=RSP,VALUE=0
-    PARAM,NAME=IOS,VALUE=0
-    PARAM,NAME=WSP,VALUE=0
-    PARAM,NAME=SPI,VALUE=""
-    PARAM,NAME=BFC,VALUE=NO
-    PARAM,NAME=SHP,VALUE=0
-    PARAM,NAME=BRC,VALUE=NO
-    PARAM,NAME=BDR,VALUE=YES
-    PARAM,NAME=PRV,VALUE=YES
-    PARAM,NAME=NRV,VALUE=NO
-    PARAM,NAME=DIN,VALUE=100
-    PARAM,NAME=DOU,VALUE=100
-    PARAM,NAME=CRC,VALUE=0
-    PARAM,NAME=DSP,VALUE=0
-    PARAM,NAME=CEN,VALUE=""
-    PARAM,NAME=AGG,VALUE=""
-    PARAM,NAME=DVR,VALUE=0
-    PARAM,NAME=ETB,VALUE=NO
-    PARAM,NAME=KDT,VALUE=NO
-    PARAM,NAME=IMS,VALUE=0
-    */
+    ret += cix_makroparam(CIX_WKZ, wkz, true);
+    ret += cix_makroparam(CIX_WKZART, CIX_WKZART_SAEGE_STD, false);
+    ret += cix_makroparam(CIX_WKZGRUPPE, CIX_WKZGRUPPE_SAEGER, false);
+    ret += cix_makroparam(CIX_DREHZAHL, "0", false);
+    ret += cix_makroparam(CIX_SPEED_ANAB, "0", false);
+    ret += cix_makroparam(CIX_SPEED, "0" ,false);
+    ret += cix_makroparam(CIX_WKZSPINDEL, CIX_WKZSPINDEL_AUTO,true);
+    ret += cix_makroparam(CIX_ABBLASEN, "NO", false);
+    ret += cix_makroparam(CIX_HAUBENPOS, CIX_HAUBENPOS_AUTO, false);
+    ret += cix_makroparam(CIX_NUT_AUSLAUF, "YES", false);
+    ret += cix_makroparam(CIX_NUT_VERLAENGERN_START, "0", false);
+    ret += cix_makroparam(CIX_NUT_VERLAENGERN_ENDE, "0", false);
+    ret += cix_makroparam(CIX_NUT_BIDIREKTIONAL, "YES", false);
+    ret += cix_makroparam(CIX_NUT_SCHNITTUMKEHR_VERHINDERN, "YES", false);
+    ret += cix_makroparam(CIX_NUT_SCHNITTRICHTUNG_UMKEHREN, "NO", false);
+    ret += cix_makroparam(CIX_RADKOR, CIX_RADKOR_KEIN, false);
+    ret += cix_makroparam(CIX_DREHZ_LETZTE_ZUST, "0", false);
+    ret += cix_makroparam(CIX_KENNCODE_ARBEITSZENTRUM_MASCHINE, "",true);
+    ret += cix_makroparam(CIX_KENNCODE_AGGREGAT, "",true);
+    ret += cix_makroparam(CIX_RESTBEARBTIEFE, "0", false);
+
+    ret += cix_makroparam("ER","YES",false);   //gibt die erste Bohrung ER als Anfangsbohrung der Wiederholung frei
+    ret += cix_makroparam("COW", "NO", false); //nur für die Maschine “Skipper”
+    ret += cix_makroparam("TH", "0", false);   //???
+    ret += cix_makroparam("ETB", "NO", false); //???
+    ret += cix_makroparam("KDT", "NO", false); //???
+    ret += cix_makroparam("IMS", "0", false);  //???
+
     ret += "END MACRO";
     ret += "\n";
     ret += "\n";
