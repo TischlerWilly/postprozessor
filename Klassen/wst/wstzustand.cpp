@@ -9774,6 +9774,9 @@ QString wstzustand::cix_nut(nut nu, QString id, QString wkz)
         ret += cix_makroparam(CIX_NUT_XE, nu.xe_qstring(), false);
         ret += cix_makroparam(CIX_NUT_YE, nu.ye_qstring(), false);
         ret += cix_makroparam(CIX_NUT_ZE, "0", false);
+        ret += cix_makroparam(CIX_NUT_AUSLAUF, "YES", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_START, "0", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_ENDE, "0", false);
     }else if(nu.bezug() == WST_BEZUG_UNSEI)
     {
         ret += "NAME=CUT_G";
@@ -9787,7 +9790,75 @@ QString wstzustand::cix_nut(nut nu, QString id, QString wkz)
         ret += cix_makroparam(CIX_NUT_XE, nu.xe_qstring(), false);
         ret += cix_makroparam(CIX_NUT_YE, nu.ye_qstring(), false);
         ret += cix_makroparam(CIX_NUT_ZE, "0", false);
+        ret += cix_makroparam(CIX_NUT_AUSLAUF, "YES", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_START, "0", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_ENDE, "0", false);
+    }else if(nu.bezug() == WST_BEZUG_LI)
+    {
+        ret += "NAME=CUT_G";
+        ret += "\n";
+        ret += cix_makroparam(CIX_NUT_LAYER,"CUT_G",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_LI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+        ret += cix_makroparam(CIX_NUT_XS, nu.ys_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YS, nu.zs_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZS, "0", false);
+        ret += cix_makroparam(CIX_NUT_XE, nu.ye_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YE, nu.ze_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZE, "0", false);
+        ret += cix_makroparam(CIX_NUT_AUSLAUF, "NO", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_START, "0", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_ENDE, "0", false);
+    }else if(nu.bezug() == WST_BEZUG_RE)
+    {
+        ret += "NAME=CUT_G";
+        ret += "\n";
+        ret += cix_makroparam(CIX_NUT_LAYER,"CUT_G",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_RE,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+        ret += cix_makroparam(CIX_NUT_XS, nu.ys_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YS, nu.zs_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZS, "0", false);
+        ret += cix_makroparam(CIX_NUT_XE, nu.ye_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YE, nu.ze_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZE, "0", false);
+        ret += cix_makroparam(CIX_NUT_AUSLAUF, "NO", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_START, "0", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_ENDE, "0", false);
+    }else if(nu.bezug() == WST_BEZUG_VO)
+    {
+        ret += "NAME=CUT_G";
+        ret += "\n";
+        ret += cix_makroparam(CIX_NUT_LAYER,"CUT_G",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_VO,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+        ret += cix_makroparam(CIX_NUT_XS, nu.xs_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YS, nu.zs_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZS, "0", false);
+        ret += cix_makroparam(CIX_NUT_XE, nu.xe_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YE, nu.ze_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZE, "0", false);
+        ret += cix_makroparam(CIX_NUT_AUSLAUF, "NO", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_START, "0", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_ENDE, "0", false);
+    }else if(nu.bezug() == WST_BEZUG_HI)
+    {
+        ret += "NAME=CUT_G";
+        ret += "\n";
+        ret += cix_makroparam(CIX_NUT_LAYER,"CUT_G",true);
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_HI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+        ret += cix_makroparam(CIX_NUT_XS, nu.xs_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YS, nu.zs_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZS, "0", false);
+        ret += cix_makroparam(CIX_NUT_XE, nu.xe_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_YE, nu.ze_qstring(), false);
+        ret += cix_makroparam(CIX_NUT_ZE, "0", false);
+        ret += cix_makroparam(CIX_NUT_AUSLAUF, "NO", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_START, "0", false);
+        ret += cix_makroparam(CIX_NUT_VERLAENGERN_ENDE, "0", false);
     }
+    ret += cix_makroparam(CIX_BEARB_ID,id,true);
     ret += cix_makroparam(CIX_NUT_TYP, CIX_NUT_TYP_SP_EP, false);
     ret += cix_makroparam(CIX_NUT_TI, nu.tiefe_qstring(), false);
     ret += cix_makroparam(CIX_NUT_BREITE, nu.breite_qstring(), false);
@@ -9821,9 +9892,6 @@ QString wstzustand::cix_nut(nut nu, QString id, QString wkz)
     ret += cix_makroparam(CIX_WKZSPINDEL, CIX_WKZSPINDEL_AUTO,true);
     ret += cix_makroparam(CIX_ABBLASEN, "NO", false);
     ret += cix_makroparam(CIX_HAUBENPOS, CIX_HAUBENPOS_AUTO, false);
-    ret += cix_makroparam(CIX_NUT_AUSLAUF, "YES", false);
-    ret += cix_makroparam(CIX_NUT_VERLAENGERN_START, "0", false);
-    ret += cix_makroparam(CIX_NUT_VERLAENGERN_ENDE, "0", false);
     ret += cix_makroparam(CIX_NUT_BIDIREKTIONAL, "YES", false);
     ret += cix_makroparam(CIX_NUT_SCHNITTUMKEHR_VERHINDERN, "YES", false);
     ret += cix_makroparam(CIX_NUT_SCHNITTRICHTUNG_UMKEHREN, "NO", false);
