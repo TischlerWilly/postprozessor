@@ -287,4 +287,37 @@
 #define CIX_NUT_SCHNITTRICHTUNG_UMKEHREN "NRV"
 #define CIX_NUT_VERLAENGERN_START "DIN" //Maßangabe zum Verlängern der Nut an Start
 #define CIX_NUT_VERLAENGERN_ENDE "DOU" //Maßangabe zum Verlängern der Nut an Ende
+
+//-----------------------------------------------------GEO und FKON:
+#define CIX_POINT_X "X"
+#define CIX_POINT_Y "Y"
+#define CIX_POINT_Z "Z"
+#define CIX_LINIE_ZS "ZS"
+#define CIX_LINIE_XE "XE"
+#define CIX_LINIE_YE "YE"
+#define CIX_LINIE_ZE "ZE"
+#define CIX_LINIE_SCHARFE_KANNTE    "SC"
+    //Eingabe der scharfen Kante. Ermöglicht zu definieren, dass der Schnittpunkt
+    //zwischen der Linie und dem folgenden Element so bearbeitet werden muss, daß die scharfe Kante
+    //erhalten bleibt
+    #define CIX_LINIE_SCHARFE_KANNTE_AUS    "scOFF"
+#define CIX_LINIE_VORSCHUB "FD"
+#define CIX_LINIE_DREHZAHL "SP"
+#define CIX_FKON_TI "DP"    //Frästiefe
+#define CIX_FKON_REVERS "RV" //kehrt die Richtung des programmierten geometrischen Profils um
+    //der Startpunkt der Geometrie wird somit zum Endpunkt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #endif // DEF_CIX_H

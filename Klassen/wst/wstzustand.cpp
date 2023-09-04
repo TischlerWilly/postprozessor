@@ -9433,6 +9433,8 @@ void wstzustand::cix_dateitext(int index)
     wkz_magazin wkzmag = Wkzm.at(index);
     dubosplitten(bearb, wkzmag);
 
+    uint lfdnr_kontur = 1; //Laufende Nummer Konturzug
+
     QString msg;
 
     //Version:
@@ -9596,6 +9598,33 @@ void wstzustand::cix_dateitext(int index)
                 Export_moeglich.append(false);
                 return;
             }
+        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
+        {
+            uint startindex = i;
+            fraeseraufruf fa(zeile.text());            //Geometrie einfügen:
+            msg += cix_beginn_poly(fa, double_to_qstring(lfdnr_kontur));
+            i++;
+            for( ; i<bearb.count() ; i++)//i ist bereits bekannt
+            {
+                zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+                if(zeile.at(0) == BEARBART_FRAESERGERADE)
+                {
+                    fraesergerade fg(zeile.text());
+                    msg += cix_linie_ep(fg, cix_id(i));
+                }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                {
+
+                }else
+                {                    
+                    break;
+                }
+            }
+            msg += cix_ende_poly(cix_id(i));//gibt hier evlt Probleme mit index in cix weil das der
+                                            //index der nächsten Bearbeitung ist!!!
+            //Fräsbearbeitung einfügen:
+            //...
+
+            lfdnr_kontur++;
         }
     }
 
@@ -9908,6 +9937,110 @@ QString wstzustand::cix_nut(nut nu, QString id, QString wkz)
     ret += cix_makroparam("KDT", "NO", false); //???
     ret += cix_makroparam("IMS", "0", false);  //???
 
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::cix_beginn_poly(fraeseraufruf fa, QString id)
+{
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=GEO";
+    ret += "\n";
+    QString exportid = "Konturzug ";
+    exportid += id;
+    ret += cix_makroparam(CIX_BEARB_ID, exportid, true);
+    ret += cix_makroparam(CIX_NUT_LAYER,"GEO",true);
+    if(fa.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_OBSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }
+    ret += cix_makroparam(CIX_FKON_TI, fa.tiefe_qstring(), false);
+    ret += cix_makroparam(CIX_WDH_TYP,CIX_WDH_TYP_KEIN,false);
+    ret += cix_makroparam(CIX_WDH_DREHZENTRUM_X,"0",false);
+    ret += cix_makroparam(CIX_WDH_DREHZENTRUM_Y,"0",false);
+    ret += cix_makroparam(CIX_WDH_ABST_X, "0", false);
+    ret += cix_makroparam(CIX_WDH_ABST_Y, "0", false);
+    ret += cix_makroparam(CIX_WDH_RAD, "0", false);
+    ret += cix_makroparam(CIX_WDH_STARTWINKEL, "0", false);
+    ret += cix_makroparam(CIX_WDH_WINKEL, "0", false);
+    ret += cix_makroparam(CIX_WDH_RADIAL, "NO", false);
+    ret += cix_makroparam(CIX_WDH_ANZAHL, "0", false);
+    ret += cix_makroparam(CIX_WDH_GERADENWINKEL, "0", false);
+    ret += cix_makroparam(CIX_WDH_ABST, "0", false);
+    ret += cix_makroparam(CIX_FKON_REVERS, "NO", false);
+    if(fa.radkor() == FRKOR_L)
+    {
+        ret += cix_makroparam(CIX_RADKOR, CIX_RADKOR_LI, false);
+    }else if(fa.radkor() == FRKOR_R)
+    {
+        ret += cix_makroparam(CIX_RADKOR, CIX_RADKOR_RE, false);
+    }else //FRKOR_M
+    {
+        ret += cix_makroparam(CIX_RADKOR, CIX_RADKOR_KEIN, false);
+    }
+    ret += cix_makroparam("ER","YES",false);   //gibt die erste Bohrung ER als Anfangsbohrung der Wiederholung frei
+    ret += cix_makroparam("COW","NO",false);            //nur für die Maschine “Skipper”
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+    //------------------------Startpunkt:
+    ret += "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=START_POINT";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID,id,true);
+    if(fa.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_POINT_X, fa.x_qstring(), false);
+        ret += cix_makroparam(CIX_POINT_Y, fa.y_qstring(), false);
+        ret += cix_makroparam(CIX_POINT_Z, "0", false);
+    }
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::cix_linie_ep(fraesergerade fg, QString id)
+{
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=LINE_EP";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID,id,true);
+    if(fg.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_LINIE_XE, fg.xe_qstring(),false);
+        ret += cix_makroparam(CIX_LINIE_YE, fg.ye_qstring(),false);
+        ret += cix_makroparam(CIX_LINIE_ZS, "0",false);
+        ret += cix_makroparam(CIX_LINIE_ZE, "0",false);
+    }
+    ret += cix_makroparam(CIX_LINIE_SCHARFE_KANNTE, CIX_LINIE_SCHARFE_KANNTE_AUS, false);
+    ret += cix_makroparam(CIX_LINIE_VORSCHUB, "0", false);
+    ret += cix_makroparam(CIX_LINIE_DREHZAHL, "0", false);
+    ret += cix_makroparam("SOL", "0", false);//Lösung; an der Linie anwendbare Lösungen,
+        //je nach den zuvor eingegebenen Daten. Eine der verfügbaren Optionen wählen
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::cix_ende_poly(QString id)
+{
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=ENDPATH";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID, id, true);
     ret += "END MACRO";
     ret += "\n";
     ret += "\n";
