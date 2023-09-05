@@ -5,6 +5,7 @@
 
 #include "Klassen/text_zw.h"
 #include "Klassen/geo/punkt3d.h"
+#include "Klassen/geo/bogen.h"
 #include "Funktionen/umwandeln.h"
 #include "Defines/def_bearbeitungen.h"
 
@@ -62,6 +63,7 @@ public:
     QString rad_qstring();
     bool    uzs();
     QString uzs_qstring();
+    bogen   bog();
 
     inline punkt3d stapu()
     {

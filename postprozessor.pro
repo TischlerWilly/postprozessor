@@ -47,6 +47,7 @@ SOURCES += main.cpp\
     Klassen/wkz/wkz_magazin.cpp \
     Klassen/wkz/wkz_saege.cpp \
     Klassen/einstellung_fmc.cpp \
+    Klassen/wst/cix_index.cpp \
     Klassen/wst/fraeseraufruf.cpp \
     Klassen/wst/gehrung.cpp \
     Klassen/wst/wstzustand.cpp \
@@ -126,6 +127,7 @@ HEADERS  += mainwindow.h \
     Klassen/wkz/wkz_magazin.h \
     Klassen/wkz/wkz_saege.h \
     Klassen/einstellung_fmc.h \
+    Klassen/wst/cix_index.h \
     Klassen/wst/fraeseraufruf.h \
     Klassen/wst/gehrung.h \
     Klassen/wst/wstzustand.h \

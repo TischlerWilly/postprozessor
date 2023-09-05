@@ -182,6 +182,12 @@ QString fraeserbogen::uzs_qstring()
     }
 }
 
+bogen fraeserbogen::bog()
+{
+    bogen b(stapu(), endpu(), rad(), uzs());
+    return b;
+}
+
 punkt3d fraeserbogen::sp()
 {
     return Startpunkt;

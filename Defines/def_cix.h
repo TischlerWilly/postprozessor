@@ -289,13 +289,15 @@
 #define CIX_NUT_VERLAENGERN_ENDE "DOU" //Maßangabe zum Verlängern der Nut an Ende
 
 //-----------------------------------------------------GEO und FKON:
-#define CIX_POINT_X "X"
-#define CIX_POINT_Y "Y"
-#define CIX_POINT_Z "Z"
-#define CIX_LINIE_ZS "ZS"
-#define CIX_LINIE_XE "XE"
-#define CIX_LINIE_YE "YE"
-#define CIX_LINIE_ZE "ZE"
+#define CIX_X "X"
+#define CIX_Y "Y"
+#define CIX_Z "Z"
+#define CIX_ZS "ZS"
+#define CIX_XE "XE"
+#define CIX_YE "YE"
+#define CIX_ZE "ZE"
+#define CIX_MIPU_X "XC"
+#define CIX_MIPU_Y "YC"
 #define CIX_LINIE_SCHARFE_KANNTE    "SC"
     //Eingabe der scharfen Kante. Ermöglicht zu definieren, dass der Schnittpunkt
     //zwischen der Linie und dem folgenden Element so bearbeitet werden muss, daß die scharfe Kante
@@ -303,6 +305,9 @@
     #define CIX_LINIE_SCHARFE_KANNTE_AUS    "scOFF"
 #define CIX_LINIE_VORSCHUB "FD"
 #define CIX_LINIE_DREHZAHL "SP"
+#define CIX_BOGEN_RICHTUNG "DIR"
+    #define CIX_BOGEN_RICHTUNG_UZS "dirCW"
+    #define CIX_BOGEN_RICHTUNG_GUZS "dirCCW"
 #define CIX_FKON_TI "DP"    //Frästiefe
 #define CIX_FKON_REVERS "RV" //kehrt die Richtung des programmierten geometrischen Profils um
     //der Startpunkt der Geometrie wird somit zum Endpunkt

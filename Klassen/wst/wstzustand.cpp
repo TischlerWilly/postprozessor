@@ -9561,6 +9561,7 @@ void wstzustand::cix_dateitext(int index)
     msg += "\n";
 
     //Bearbeitungen:
+    cix_index id;
     for(uint i=0 ; i<bearb.count() ; i++)
     {
         text_zw zeile;
@@ -9574,7 +9575,7 @@ void wstzustand::cix_dateitext(int index)
             if(!tnummer.isEmpty())
             {
                 //Werkzeug wurde gefunden, Bohrung kann gebohrt werden:
-                msg += cix_bohrung(bo, cix_id(i), bohrerdm);
+                msg += cix_bohrung(bo, id.index_QString(), bohrerdm);
             }else
             {
                 //BuBoSplitten etc.
@@ -9588,7 +9589,7 @@ void wstzustand::cix_dateitext(int index)
             QString tnummer = wkzmag.wkznummer(WKZ_TYP_SAEGE, 0, nu.tiefe(), Dicke, bezug);
             if(!tnummer.isEmpty())
             {
-                msg += cix_nut(nu, cix_id(i), tnummer);
+                msg += cix_nut(nu, id.index_QString(), tnummer);
             }else
             {
                 //Mit Fehlermeldung abbrechen:
@@ -9610,17 +9611,17 @@ void wstzustand::cix_dateitext(int index)
                 if(zeile.at(0) == BEARBART_FRAESERGERADE)
                 {
                     fraesergerade fg(zeile.text());
-                    msg += cix_linie_ep(fg, cix_id(i));
+                    msg += cix_linie_ep(fg, id.index_QString());
                 }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                 {
-
+                    fraeserbogen fb(zeile.text());
+                    msg += cix_bogen_ep_mipu(fb, id.index_QString());
                 }else
                 {                    
                     break;
                 }
             }
-            msg += cix_ende_poly(cix_id(i));//gibt hier evlt Probleme mit index in cix weil das der
-                                            //index der nächsten Bearbeitung ist!!!
+            msg += cix_ende_poly(id.index_QString());
             //Fräsbearbeitung einfügen:
             //...
 
@@ -9649,16 +9650,6 @@ QString wstzustand::cix_makroparam(QString name, QString wert, bool als_text)
         ret += "\"";
     }
     ret += "\n";
-    return ret;
-}
-QString wstzustand::cix_id(uint i)
-{
-    //an diese Funktion soll das i aus der For-Schleife übergeben werden
-    //welche die Bearbeitungen des WST durchlaufen lässt
-    //Die erste ID im Programm hat die Nummer "P1001"
-    uint id = 1001 + i;
-    QString ret = "P";
-    ret += int_to_qstring(id);
     return ret;
 }
 QString wstzustand::cix_bohrung(bohrung bo, QString id, QString bohrerdm)
@@ -9997,9 +9988,9 @@ QString wstzustand::cix_beginn_poly(fraeseraufruf fa, QString id)
     ret += cix_makroparam(CIX_BEARB_ID,id,true);
     if(fa.bezug() == WST_BEZUG_OBSEI)
     {
-        ret += cix_makroparam(CIX_POINT_X, fa.x_qstring(), false);
-        ret += cix_makroparam(CIX_POINT_Y, fa.y_qstring(), false);
-        ret += cix_makroparam(CIX_POINT_Z, "0", false);
+        ret += cix_makroparam(CIX_X, fa.x_qstring(), false);
+        ret += cix_makroparam(CIX_Y, fa.y_qstring(), false);
+        ret += cix_makroparam(CIX_Z, "0", false);
     }
     ret += "END MACRO";
     ret += "\n";
@@ -10017,16 +10008,46 @@ QString wstzustand::cix_linie_ep(fraesergerade fg, QString id)
     ret += cix_makroparam(CIX_BEARB_ID,id,true);
     if(fg.bezug() == WST_BEZUG_OBSEI)
     {
-        ret += cix_makroparam(CIX_LINIE_XE, fg.xe_qstring(),false);
-        ret += cix_makroparam(CIX_LINIE_YE, fg.ye_qstring(),false);
-        ret += cix_makroparam(CIX_LINIE_ZS, "0",false);
-        ret += cix_makroparam(CIX_LINIE_ZE, "0",false);
+        ret += cix_makroparam(CIX_XE, fg.xe_qstring(),false);
+        ret += cix_makroparam(CIX_YE, fg.ye_qstring(),false);
+        ret += cix_makroparam(CIX_ZS, "0",false);
+        ret += cix_makroparam(CIX_ZE, "0",false);
     }
     ret += cix_makroparam(CIX_LINIE_SCHARFE_KANNTE, CIX_LINIE_SCHARFE_KANNTE_AUS, false);
     ret += cix_makroparam(CIX_LINIE_VORSCHUB, "0", false);
     ret += cix_makroparam(CIX_LINIE_DREHZAHL, "0", false);
     ret += cix_makroparam("SOL", "0", false);//Lösung; an der Linie anwendbare Lösungen,
         //je nach den zuvor eingegebenen Daten. Eine der verfügbaren Optionen wählen
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::cix_bogen_ep_mipu(fraeserbogen fb, QString id)
+{
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=ARC_EPCE";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID,id,true);
+    if(fb.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_XE, fb.xe_qstring(),false);
+        ret += cix_makroparam(CIX_YE, fb.ye_qstring(),false);
+        ret += cix_makroparam(CIX_ZE, "0",false);
+        bogen b = fb.bog();
+        ret += cix_makroparam(CIX_MIPU_X, b.mitte().x_QString(),false);
+        ret += cix_makroparam(CIX_MIPU_Y, b.mitte().y_QString(),false);
+    }
+    if(fb.uzs() == true)
+    {
+        ret += cix_makroparam(CIX_BOGEN_RICHTUNG, CIX_BOGEN_RICHTUNG_UZS, false);
+    }else
+    {
+        ret += cix_makroparam(CIX_BOGEN_RICHTUNG, CIX_BOGEN_RICHTUNG_GUZS, false);
+    }
     ret += "END MACRO";
     ret += "\n";
     ret += "\n";
