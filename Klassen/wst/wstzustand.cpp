@@ -9623,8 +9623,8 @@ void wstzustand::cix_dateitext(int index)
             }
             msg += cix_ende_poly(id.index_QString());
             //Fräsbearbeitung einfügen:
-            //...
-
+            msg += cix_fkon(fa, double_to_qstring(lfdnr_kontur));
+            msg += cix_ende_poly(id.index_QString());
             lfdnr_kontur++;
         }
     }
@@ -9933,7 +9933,7 @@ QString wstzustand::cix_nut(nut nu, QString id, QString wkz)
     ret += "\n";
     return ret;
 }
-QString wstzustand::cix_beginn_poly(fraeseraufruf fa, QString id)
+QString wstzustand::cix_beginn_poly(fraeseraufruf fa, QString geo_id)
 {
     QString ret;
     ret  = "BEGIN MACRO";
@@ -9942,7 +9942,7 @@ QString wstzustand::cix_beginn_poly(fraeseraufruf fa, QString id)
     ret += "NAME=GEO";
     ret += "\n";
     QString exportid = "Konturzug ";
-    exportid += id;
+    exportid += geo_id;
     ret += cix_makroparam(CIX_BEARB_ID, exportid, true);
     ret += cix_makroparam(CIX_NUT_LAYER,"GEO",true);
     if(fa.bezug() == WST_BEZUG_OBSEI)
@@ -9985,7 +9985,7 @@ QString wstzustand::cix_beginn_poly(fraeseraufruf fa, QString id)
     ret += "\t";
     ret += "NAME=START_POINT";
     ret += "\n";
-    ret += cix_makroparam(CIX_BEARB_ID,id,true);
+    ret += cix_makroparam(CIX_BEARB_ID,geo_id,true);
     if(fa.bezug() == WST_BEZUG_OBSEI)
     {
         ret += cix_makroparam(CIX_X, fa.x_qstring(), false);
@@ -10062,6 +10062,58 @@ QString wstzustand::cix_ende_poly(QString id)
     ret += "NAME=ENDPATH";
     ret += "\n";
     ret += cix_makroparam(CIX_BEARB_ID, id, true);
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::cix_fkon(fraeseraufruf fa, QString geo_id)
+{
+    QString exportid = "Konturzug ";
+    exportid += geo_id;
+    QString erw = "_1";
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=ROUTG";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID, exportid+erw, true);
+    ret += cix_makroparam(CIX_FKON_GEO_ID, exportid, true);
+    ret += cix_makroparam(CIX_SPEED, "0", false);
+    ret += cix_makroparam(CIX_WKZ, fa.wkznum(), true);
+    if(fa.radkor() == FRKOR_L)
+    {
+        ret += cix_makroparam(CIX_RADKOR, CIX_RADKOR_LI, false);
+    }else if(fa.radkor() == FRKOR_R)
+    {
+        ret += cix_makroparam(CIX_RADKOR, CIX_RADKOR_RE, false);
+    }else //FRKOR_M
+    {
+        ret += cix_makroparam(CIX_RADKOR, CIX_RADKOR_KEIN, false);
+    }
+    ret += cix_makroparam(CIX_FKON_TI, fa.tiefe_qstring(), false);
+    ret += cix_makroparam(CIX_FKON_ANZ_TIZUST, "1", false);
+    ret += cix_makroparam(CIX_FKON_BREITENZUGABE, "0", false);
+    ret += cix_makroparam(CIX_FKON_EINTYP, CIX_FKON_EINTYP_KEIN, false);
+    ret += cix_makroparam(CIX_FKON_AUSTYP, CIX_FKON_EINTYP_KEIN, false);
+    ret += cix_makroparam(CIX_FKON_EINWI, "45", false);
+    ret += cix_makroparam(CIX_FKON_AUSWI, "45", false);
+    ret += cix_makroparam(CIX_FKON_VERLAENGERN_START, "30", false);
+    ret += cix_makroparam(CIX_FKON_VERLAENGERN_ENDE, "30", false);
+    ret += cix_makroparam(CIX_FKON_EINKOR, "NO", false);
+    ret += cix_makroparam(CIX_FKON_AUSKOR, "NO", false);
+    ret += cix_makroparam(CIX_FKON_GIN, "0", false);
+    ret += cix_makroparam(CIX_FKON_GOU, "0", false);
+    ret += cix_makroparam(CIX_FKON_TBI, "NO", false);
+    ret += cix_makroparam(CIX_FKON_TBO, "NO", false);
+    ret += cix_makroparam("TLI", "0", false);//hat was mit TBI zu tun
+    ret += cix_makroparam("TLO", "0", false);//hat was mit TBI zu tun
+    ret += cix_makroparam("TQI", "0", false);//hat was mit TBI zu tun
+    ret += cix_makroparam("TQO", "0", false);//hat was mit TBI zu tun
+    ret += cix_makroparam(CIX_FKON_EINAUSRADPROZENT, "0", false);
+    ret += cix_makroparam(CIX_HAUBENPOS, CIX_HAUBENPOS_AUTO, false);
+    ret += cix_makroparam(CIX_ABWEISER, "NO", false);
     ret += "END MACRO";
     ret += "\n";
     ret += "\n";

@@ -150,6 +150,9 @@
     #define CIX_HAUBENPOS_AUTO "0"//automatisch
     // 1 = ganz oben
     // 6 = ganz unten
+#define CIX_ABWEISER    "UDT"
+    //gibt die Verwendung des Späneleitblechs frei. Das markierte und deaktivierte
+    //Kästchen zeigt an, dass eine Fräse mit eingebautem Späneleitblech programmiert wurde
 #define CIX_KENNCODE_ARBEITSZENTRUM_MASCHINE    "CEN"
     //Kenncode des Arbeitszentrums der Maschine, das für die Bearbeitung verwendet werden soll
     //Die Zahl zwischen Anführungszeichen setzen
@@ -311,16 +314,80 @@
 #define CIX_FKON_TI "DP"    //Frästiefe
 #define CIX_FKON_REVERS "RV" //kehrt die Richtung des programmierten geometrischen Profils um
     //der Startpunkt der Geometrie wird somit zum Endpunkt
-
-
-
-
-
-
-
-
-
-
+#define CIX_FKON_GEO_ID  "GID"   //ID der Geometrie für die Fräskontur
+#define CIX_FKON_EINTYP "TIN" //Eintauchtyp Siehe Handbuch cix Seite 408
+#define CIX_FKON_AUSTYP "TOU" //Eintauchtyp Siehe Handbuch cix Seite 408
+    #define CIX_FKON_EINTYP_KEIN  "0"  //kein
+        //Werkzeug sinkt im rechten Winkel direkt auf den Startpunkt der Bearbeitung
+    #define CIX_FKON_EINTYP_BOG   "1"  //Bogen
+        //Werkzeug sinkt über eine im rechten Winkel zur Flanke stehende Linie, dringt ins
+        //Werkstück ein und erreicht den Startpunkt der Bearbeitung über eine
+        //kurze, bogenförmige Strecke, auf der es die Korrektur vornimmt. Durch Aktivierung des
+        //Kästchens der Marker Korrekt. in der Luft korrigiert das Werkzeug seine Position bevor es
+        //sinkt und erstellt somit eine kurze gerade Strecke, die parallel zur Flanke ist
+    #define CIX_FKON_EINTYP_LINIE "2"  //Linie
+        //Werkzeug sinkt über eine im rechten Winkel zur Flanke stehende Linie, dringt ins
+        //Werkstück ein und erreicht den Startpunkt der Bearbeitung über eine
+        //kurze, gerade Strecke, auf der es die Korrektur vornimmt. Durch Aktivierung des Kästchens
+        //der Marker Korrekt. in der Luft korrigiert das Werkzeug seine Position bevor es sinkt und
+        //erstellt somit eine kurze gerade Strecke, die parallel zur Flanke ist
+    #define CIX_FKON_EINTYP_LIBOTG "3" //Linie-Bogen Tangential
+        //Werkzeug sinkt über eine zur Flanke im rechten Winkel stehende Linie,
+        //dringt ins Werkstück ein und erreicht den Startpunkt der Bearbeitung
+        //über eine Linie und einen Bogen, die sich berühren und an denen es seine Position korrigiert
+    #define CIX_FKON_EINTYP_SCHRAUB "5" //Schraubenlinie
+        //Werkzeug erstellt in der Luft eine Parallele zur Flanke, entlang der es die
+        //Korrektur vornimmt, sinkt über eine schraubenförmige Strecke und dringt ins Werkstück direkt
+        //am Startpunkt der Bearbeitung ein
+    #define CIX_FKON_EINTYP_LIBO3D  "6" //Linie-Bogen 3D
+        //Werkzeug sinkt über eine schräge Linie, dringt ins Werkstück ein und
+        //erreicht den Startpunkt der Bearbeitung
+    #define CIX_FKON_EINTYP_LI3DKOR "7" //Linie 3D korrigiert
+        //Werkzeug erstellt in der Luft eine Parallele zur Flanke, entlang der es
+        //die Korrektur vornimmt, sinkt über eine schräge Linie und dringt ins Werkstück direkt am
+        //Startpunkt der Bearbeitung ein
+    #define CIX_FKON_EINTYP_BO3DKOR "8" //Bogen 3D korrigiert
+        //Werkzeug erstellt in der Luft eine Parallele zur Flanke, entlang der es
+        //die Korrektur vornimmt, sinkt über eine bogenförmige Strecke und dringt ins Werkstück direkt
+        //am Startpunkt der Bearbeitung ein
+    #define CIX_FKON_EINTYP_LIKOR   "9" //Linie korrigiert
+        //Werkzeug erstellt in der Luft eine Parallele zur Flanke, entlang der es die
+        //Korrektur vornimmt, sinkt über eine im rechten Winkel zur Ebene stehende Linie und dringt ins
+        //Werkstück direkt am Startpunkt der Bearbeitung ein
+    #define CIX_FKON_EINTYP_PROFIL3D "14" //Profil 3D
+        //Werkzeug sinkt über eine schräge Linie und dringt ins Werkstück direkt am
+        //Startpunkt der Bearbeitung ein. Die Verwendung dieses Eintritts ist
+        //nur auf geschlossenen Profilen gewährt.
+#define CIX_FKON_EINWI  "AIN"   //Eintrittswinkel des Werkzeugs
+#define CIX_FKON_AUSWI  "AOU"   //Austrittswinkel des Werkzeugs
+#define CIX_FKON_VERLAENGERN_START "DIN" //Maßangabe zum Verlängern der Nut an Start
+#define CIX_FKON_VERLAENGERN_ENDE "DOU" //Maßangabe zum Verlängern der Nut an Ende
+#define CIX_FKON_EINKOR "CIN" //Korrektug in der Luft fürs Eintauchen
+#define CIX_FKON_AUSKOR "COU" //Korrektug in der Luft fürs Eintauchen
+#define CIX_FKON_GIN "GIN"
+    //Abstand in Millimetern vom Startpunkt der Bearbeitung zur Verschiebung des
+    //Werkzeugs, so daß es leicht schräg sinkt. Dieser Wert kann nur mit Eintrittstyp Linie3D korrigiert
+    //oder Typ Bogen3D korrigiert verwendet werden
+#define CIX_FKON_GOU "GOU"
+#define CIX_FKON_TBI "TBI"
+    //Eingabe Tabbing; ermöglicht ein gerades Verschieben des Werkzeugs innerhalb des
+    //Eintrittsstrecke, um eine kurze Stufe zu bilden, die an der Tiefe A  der programmierten
+    //Bearbeitung berechnet werden kann (Abbildung 216). Dieser Wert kann nur mit dem
+    //Ausgangstyp: Linie3D korrigiert
+#define CIX_FKON_TBO "TBO"
+#define CIX_FKON_EINAUSRADPROZENT "PRP"
+    //Wert in Prozenten für die Veränderung des Radius der Ein- und Austritte
+#define CIX_FKON_BREITENZUGABE   "OVM"
+    //Wert der Materialzugabe, die bei der Bearbeitung des Profils belassen werden
+    //soll. Der in diesem Feld eingegeben Wert ist an die Art der Korrektur gebunden
+    //- Mit linker oder rechter Korrektur nimmt das Werkzeug bei Einstellung eines negativen Werts
+    //  mehr Material weg, bei Einstellung eines positiven Werts, nimmt es weniger Material weg.
+    //- Bei mittlerer Korrektur wird die Bearbeitung bei Eingabe eines negativen Werts rechterhand,
+    //  bei Eingabe eines positiven Werts linkerhand der programmierten Bahn verschoben.
+#define CIX_FKON_ANZ_TIZUST  "VTR"   //Anzahl der Tiefen-Zustellungen
+    //Anzahl der Durchgänge, die sich auf die Tiefe der programmierten
+    //Bearbeitung auswirken. Durch Eingabe der Zahl 2 wird die Bearbeitung
+    //in 2 Teile aufgeteilt, bis die im Feld Tiefe angegebene Tiefe erreicht ist
 
 
 
