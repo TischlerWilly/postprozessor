@@ -797,19 +797,16 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
         }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb(zeile.text());
-            bogen b;
-            b.set_startpunkt(fb.stapu());
-            b.set_endpunkt(fb.endpu());
+            bogen b = fb.bog();
             b.verschieben_um(versatz_x, versatz_y);
             kreis k;
             k.set_radius(fraeserdm/2);
             if(fb.bezug() == WST_BEZUG_OBSEI)
             {
-                b.set_radius(fb.rad(), fb.uzs());
                 k.set_farbe(FARBE_BLAU);
             }else
             {
-                b.set_radius(fb.rad(), !fb.uzs());
+                b.set_radius(b.rad(), !b.im_uzs());
                 k.set_farbe(farbe_unterseite);
                 k.set_stil(STIL_GESTRICHELT);
             }
@@ -825,25 +822,50 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
                 k.set_mittelpunkt(s.endpu());
             }else
             {
-                if(radkor == FRKOR_L)
+                if(fb.bezug() == WST_BEZUG_OBSEI)
                 {
-                    if(b.im_uzs())
+                    if(radkor == FRKOR_L)
                     {
-                        s.set_laenge_2d(b.rad()+fraeserdm/2, strecke_bezugspunkt_start);
-                    }else
+                        if(b.im_uzs())
+                        {
+                            s.set_laenge_2d(b.rad()+fraeserdm/2, strecke_bezugspunkt_start);
+                        }else
+                        {
+                            s.set_laenge_2d(b.rad()-fraeserdm/2, strecke_bezugspunkt_start);
+                        }
+                    }else //if(radkor == FRKOR_R)
                     {
-                        s.set_laenge_2d(b.rad()-fraeserdm/2, strecke_bezugspunkt_start);
+                        if(b.im_uzs())
+                        {
+                            s.set_laenge_2d(b.rad()-fraeserdm/2, strecke_bezugspunkt_start);
+                        }else
+                        {
+                            s.set_laenge_2d(b.rad()+fraeserdm/2, strecke_bezugspunkt_start);
+                        }
                     }
-                }else //if(radkor == FRKOR_R)
+                }else if(fb.bezug() == WST_BEZUG_UNSEI)
                 {
-                    if(b.im_uzs())
+                    if(radkor == FRKOR_R)
                     {
-                        s.set_laenge_2d(b.rad()-fraeserdm/2, strecke_bezugspunkt_start);
-                    }else
+                        if(b.im_uzs())
+                        {
+                            s.set_laenge_2d(b.rad()+fraeserdm/2, strecke_bezugspunkt_start);
+                        }else
+                        {
+                            s.set_laenge_2d(b.rad()-fraeserdm/2, strecke_bezugspunkt_start);
+                        }
+                    }else //if(radkor == FRKOR_L)
                     {
-                        s.set_laenge_2d(b.rad()+fraeserdm/2, strecke_bezugspunkt_start);
+                        if(b.im_uzs())
+                        {
+                            s.set_laenge_2d(b.rad()-fraeserdm/2, strecke_bezugspunkt_start);
+                        }else
+                        {
+                            s.set_laenge_2d(b.rad()+fraeserdm/2, strecke_bezugspunkt_start);
+                        }
                     }
                 }
+
                 k.set_mittelpunkt(s.endpu());
             }
             gt.add_kreis(k);

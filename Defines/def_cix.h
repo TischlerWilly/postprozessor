@@ -191,8 +191,8 @@
     #define CIX_BEZUG_SIABST_WSTOBSEI "YES" // 1 = bezieht sich auf WST-Oberseite
 #define CIX_RADKOR  "CRC"   //Radiuskorrektur
     #define CIX_RADKOR_KEIN "0"
-    #define CIX_RADKOR_RE   "1"
-    #define CIX_RADKOR_LI   "2"
+    #define CIX_RADKOR_LI   "1"
+    #define CIX_RADKOR_RE   "2"
     #define CIX_RADKOR_INTERN   "5" //innerhalb des geschlossenen Profils
     #define CIX_RADKOR_EXTERN   "6" //außerhalb des geschlossenen Profils
     #define CIX_RADKOR_GEO      "7"
