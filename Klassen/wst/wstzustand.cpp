@@ -9433,9 +9433,10 @@ void wstzustand::cix_dateitext(int index)
     wkz_magazin wkzmag = Wkzm.at(index);
     dubosplitten(bearb, wkzmag);
 
-    uint lfdnr_kontur = 1; //Laufende Nummer Konturzug
-
     QString msg;
+    cix_index id;
+    cix_index_geo id_g;
+    int min_kta_dm_ausraeumen_false = 200; //Durchmesser ab dem Kreistaschen nicht ausgeräumt werden
 
     //Version:
     msg += "BEGIN ID CID3";
@@ -9561,7 +9562,7 @@ void wstzustand::cix_dateitext(int index)
     msg += "\n";
 
     //Bearbeitungen:
-    cix_index id;
+
     for(uint i=0 ; i<bearb.count() ; i++)
     {
         text_zw zeile;
@@ -9578,9 +9579,58 @@ void wstzustand::cix_dateitext(int index)
                 msg += cix_bohrung(bo, id.index_QString(), bohrerdm);
             }else
             {
-                //BuBoSplitten etc.
-                //Bohrung als KTA möglich?
-                //...
+                //Kein Werkzeug wurde gefunden.
+                //Kann Bohrung als Kreistasche gefräst werden?:
+                //Ist direkt ein WKZ definiert?
+                if(bo.bezug() == WST_BEZUG_OBSEI  ||  bo.bezug() == WST_BEZUG_UNSEI)
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_VERT);
+                }else
+                {
+                    tnummer = wkzmag.wkznummer_von_alias(bo.wkznum(), WKZ_HORI);
+                }
+                if(tnummer.isEmpty())
+                {
+                    tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, bo.dm(), bo.tiefe(), Dicke, bezug);
+                }
+                if(!tnummer.isEmpty())
+                {
+                    double zustellmas = bo.zustellmass();
+                    if(zustellmas <= 0)
+                    {
+                        zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
+                    }
+                    bool ausraeumen = true;
+                    if(bo.dm() > 2*wkzmag.dm(tnummer).toDouble()+20)
+                    {
+                        if(bo.tiefe() < 0  ||  bo.tiefe() > dicke())
+                        {
+                            ausraeumen = false;
+                        }
+                    }
+                    if(bo.dm() > min_kta_dm_ausraeumen_false)
+                    {
+                        ausraeumen = false;
+                    }
+                    //Kreistasche fräsen:
+                    QString geo_id = "Kreis ";
+                    geo_id += id_g.index_QString();
+                    msg += cix_kreis(bo, geo_id);
+                    msg += cix_ende_poly(id.index_QString());
+                    msg += cix_fkon(bo, geo_id, tnummer);
+                    msg += cix_ende_poly(id.index_QString());
+                    //Ausräumen...
+                    //...
+                    //...
+                }else
+                {
+                    //Mit Fehlermeldung abbrechen:
+                    QString msg = fehler_kein_WKZ("fmc", zeile);
+                    Fehler_kein_wkz.append(msg);
+                    Exporttext.append(msg);
+                    Export_moeglich.append(false);
+                    return;
+                }
             }
         }else if(zeile.at(0) == BEARBART_NUT)
         {
@@ -9603,7 +9653,10 @@ void wstzustand::cix_dateitext(int index)
         {
             fraeseraufruf fa(zeile.text());
             //Geometrie einfügen:
-            msg += cix_beginn_poly(fa, double_to_qstring(lfdnr_kontur));
+            QString geo_id = "Konturzug ";
+            geo_id += id_g.index_QString();
+
+            msg += cix_beginn_poly(fa, geo_id);
             i++;
             for(uint ii=i ; ii<bearb.count() ; ii++)
             {
@@ -9623,9 +9676,8 @@ void wstzustand::cix_dateitext(int index)
             }
             msg += cix_ende_poly(id.index_QString());
             //Fräsbearbeitung einfügen:
-            msg += cix_fkon(fa, double_to_qstring(lfdnr_kontur));
+            msg += cix_fkon(fa, geo_id);
             msg += cix_ende_poly(id.index_QString());
-            lfdnr_kontur++;
         }
     }
 
@@ -9941,9 +9993,7 @@ QString wstzustand::cix_beginn_poly(fraeseraufruf fa, QString geo_id)
     ret += "\t";
     ret += "NAME=GEO";
     ret += "\n";
-    QString exportid = "Konturzug ";
-    exportid += geo_id;
-    ret += cix_makroparam(CIX_BEARB_ID, exportid, true);
+    ret += cix_makroparam(CIX_BEARB_ID, geo_id, true);
     ret += cix_makroparam(CIX_NUT_LAYER,"GEO",true);
     if(fa.bezug() == WST_BEZUG_OBSEI)
     {
@@ -10100,8 +10150,6 @@ QString wstzustand::cix_ende_poly(QString id)
 }
 QString wstzustand::cix_fkon(fraeseraufruf fa, QString geo_id)
 {
-    QString exportid = "Konturzug ";
-    exportid += geo_id;
     QString erw = "_1";
     QString ret;
     ret  = "BEGIN MACRO";
@@ -10109,8 +10157,8 @@ QString wstzustand::cix_fkon(fraeseraufruf fa, QString geo_id)
     ret += "\t";
     ret += "NAME=ROUTG";
     ret += "\n";
-    ret += cix_makroparam(CIX_BEARB_ID, exportid+erw, true);
-    ret += cix_makroparam(CIX_FKON_GEO_ID, exportid, true);
+    ret += cix_makroparam(CIX_BEARB_ID, geo_id+erw, true);
+    ret += cix_makroparam(CIX_FKON_GEO_ID, geo_id, true);
     ret += cix_makroparam(CIX_SPEED, "0", false);
     ret += cix_makroparam(CIX_WKZ, fa.wkznum(), true);
     if(fa.radkor() == FRKOR_L)
@@ -10145,6 +10193,103 @@ QString wstzustand::cix_fkon(fraeseraufruf fa, QString geo_id)
     ret += cix_makroparam(CIX_FKON_EINAUSRADPROZENT, "0", false);
     ret += cix_makroparam(CIX_HAUBENPOS, CIX_HAUBENPOS_AUTO, false);
     ret += cix_makroparam(CIX_ABWEISER, "NO", false);
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::cix_fkon(bohrung bo, QString geo_id, QString wkz)
+{
+    fraeseraufruf fa;
+    fa.set_wkznum(wkz);
+    fa.set_radkor(FRKOR_R);
+    fa.set_tiefe(bo.tiefe());
+    fa.set_bezug(bo.bezug());
+    return cix_fkon(fa, geo_id);
+}
+QString wstzustand::cix_kreis(bohrung bo, QString geo_id)
+{
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=GEO";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID, geo_id, true);
+    ret += cix_makroparam(CIX_NUT_LAYER,"GEO",true);
+    if(bo.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_OBSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }else if(bo.bezug() == WST_BEZUG_UNSEI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_UNSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+    }else if(bo.bezug() == WST_BEZUG_LI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_LI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+    }else if(bo.bezug() == WST_BEZUG_RE)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_RE,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }else if(bo.bezug() == WST_BEZUG_VO)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_VO,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }else if(bo.bezug() == WST_BEZUG_HI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_HI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+    }
+    ret += cix_makroparam(CIX_KREIS_REVERS, "0", false);
+    ret += cix_makroparam(CIX_RADKOR, CIX_RADKOR_INTERN, false);
+    ret += cix_makroparam("DP", "0", false);
+    ret += cix_makroparam(CIX_WDH_TYP,CIX_WDH_TYP_KEIN,false);
+    ret += cix_makroparam(CIX_WDH_ANZAHL, "0", false);
+    ret += cix_makroparam(CIX_WDH_ABST_X, "0", false);
+    ret += cix_makroparam(CIX_WDH_ABST_Y, "0", false);
+    ret += cix_makroparam("COW","NO",false);            //nur für die Maschine “Skipper”
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+
+    ret += "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=CIRCLE_CR";
+    ret += "\n";
+    ret += cix_makroparam(CIX_NUT_LAYER,"GEO",true);
+    if(bo.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,bo.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,bo.y_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_UNSEI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,bo.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,bo.y_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_LI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,bo.y_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,bo.z_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_RE)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,bo.y_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,bo.z_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_VO)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,bo.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,bo.z_qstring(),false);
+    }else if(bo.bezug() == WST_BEZUG_HI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,bo.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,bo.z_qstring(),false);
+    }
+    ret += cix_makroparam(CIX_KREIS_RAD, double_to_qstring(bo.dm()/2), false);
+    ret += cix_makroparam(CIX_KREIS_STARTWI, "90", false);
+    ret += cix_makroparam(CIX_KREIS_RICHTUNG, CIX_KREIS_RICHTUNG_UZS, false);
+    ret += cix_makroparam(CIX_KREIS_VORSCHUB, "0", false);
+    ret += cix_makroparam(CIX_KREIS_DREHZAHL, "0", false);
     ret += "END MACRO";
     ret += "\n";
     ret += "\n";

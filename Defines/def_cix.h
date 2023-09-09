@@ -205,7 +205,15 @@
 #define CIX_BO_Z    "Z"     //Z-Position
 #define CIX_BO_BOTI "DP"    //Bohrtiefe
 #define CIX_BO_DM   "DIA"   //Bohrdurchmesser
-
+#define CIX_KREIS_REVERS  "RV" //kehrt die Richtung des programmierten geometrischen Profils um;
+    //der Startpunkt der Geometrie wird somit zum Endpunkt
+#define CIX_KREIS_RAD "R"
+#define CIX_KREIS_STARTWI "AS"
+#define CIX_KREIS_RICHTUNG "DIR"
+    #define CIX_KREIS_RICHTUNG_UZS "dirCW"
+    #define CIX_KREIS_RICHTUNG_GUZS "dirCCW"
+#define CIX_KREIS_VORSCHUB "FD"
+#define CIX_KREIS_DREHZAHL "SP"
 
 #define CIX_BO_WKZ_NEIGUNG  "AZ"    //Neigungswinkel des Werkzeugs
     //Neigungswinkel der Drehachse der Spindel im Vergleich zur Ebene X, Y
@@ -391,5 +399,5 @@
 
 
 
-
+//ret += cix_makroparam("COW","NO",false);            //nur für die Maschine “Skipper”
 #endif // DEF_CIX_H

@@ -22,6 +22,7 @@
 #include "Funktionen/umwandeln.h"
 #include "Klassen/wst/ganx_gruppen.h"
 #include "Klassen/wst/cix_index.h"
+#include "Klassen/wst/cix_index_geo.h"
 #include "Funktionen/runden.h"
 #include "Klassen/einstellung_ganx.h"
 
@@ -219,6 +220,8 @@ private:
     QString cix_ende_poly(QString id);
     QString cix_bogen_ep_mipu(fraeserbogen fb, QString id);
     QString cix_fkon(fraeseraufruf fa, QString geo_id);
+    QString cix_fkon(bohrung bo, QString geo_id, QString wkz);//für KTAs
+    QString cix_kreis(bohrung bo, QString geo_id);
 
     void geo(int index);
     QString kante_vo(QString drewi);
