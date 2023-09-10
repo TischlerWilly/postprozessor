@@ -7,8 +7,8 @@
 #define WKZ_TYP_FRAESER             "M"
 #define WKZ_TRENNZ                  '\t'
 
-#define WKZ_PARAMETER_LAGE_HORI     "hori"
-#define WKZ_PARAMETER_LAGE_VERT     "vert"
+#define WKZ_HORI     "hori"
+#define WKZ_VERT     "vert"
 
 
 

@@ -461,7 +461,7 @@
         <x>530</x>
         <y>200</y>
         <width>131</width>
-        <height>111</height>
+        <height>141</height>
        </rect>
       </property>
       <property name="title">
@@ -472,8 +472,8 @@
         <rect>
          <x>20</x>
          <y>20</y>
-         <width>51</width>
-         <height>88</height>
+         <width>84</width>
+         <height>111</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -503,6 +503,13 @@
           </property>
           <property name="shortcut">
            <string>Ctrl+G</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioButton_vorschau_cix">
+          <property name="text">
+           <string>cix</string>
           </property>
          </widget>
         </item>
@@ -609,7 +616,7 @@
       <property name="geometry">
        <rect>
         <x>550</x>
-        <y>320</y>
+        <y>350</y>
         <width>111</width>
         <height>23</height>
        </rect>
@@ -628,7 +635,7 @@
       <property name="geometry">
        <rect>
         <x>550</x>
-        <y>350</y>
+        <y>380</y>
         <width>111</width>
         <height>23</height>
        </rect>
@@ -647,7 +654,7 @@
       <property name="geometry">
        <rect>
         <x>560</x>
-        <y>380</y>
+        <y>410</y>
         <width>91</width>
         <height>16</height>
        </rect>
@@ -691,7 +698,7 @@
       <property name="geometry">
        <rect>
         <x>550</x>
-        <y>400</y>
+        <y>430</y>
         <width>111</width>
         <height>20</height>
        </rect>
@@ -719,9 +726,11 @@
     <property name="title">
      <string>Werkzeug</string>
     </property>
+    <addaction name="actionWerkzeug_Postprozessor"/>
     <addaction name="actionWerkzeug_ganx_anzeigen"/>
     <addaction name="actionWerkzeug_fmc_anzeigen"/>
     <addaction name="actionWerkzeug_ggf_anzeigen"/>
+    <addaction name="actionWerkzeug_cix_anzeigen"/>
    </widget>
    <widget class="QMenu" name="menuExtras">
     <property name="title">
@@ -741,6 +750,7 @@
     <addaction name="actionEntwicklermodus"/>
     <addaction name="actionEinstellung_pfade"/>
     <addaction name="actionStandard_Namen_anzeigen"/>
+    <addaction name="actionEinstellung_fmc"/>
     <addaction name="actionEinstellung_ganx"/>
     <addaction name="actionEinstellung_dxf"/>
     <addaction name="actionEinstellung_dxf_klassen"/>
@@ -776,7 +786,7 @@
   </action>
   <action name="actionEinstellung_ganx">
    <property name="text">
-    <string>ganx</string>
+    <string>GANX-Grundeinstellung</string>
    </property>
   </action>
   <action name="actionEinstellung_pfade">
@@ -829,6 +839,21 @@
   <action name="actionTestfunktion">
    <property name="text">
     <string>Testfunktion</string>
+   </property>
+  </action>
+  <action name="actionEinstellung_fmc">
+   <property name="text">
+    <string>FMC-Grundeinstellung</string>
+   </property>
+  </action>
+  <action name="actionWerkzeug_cix_anzeigen">
+   <property name="text">
+    <string>Werkzeug cix bearbeiten</string>
+   </property>
+  </action>
+  <action name="actionWerkzeug_Postprozessor">
+   <property name="text">
+    <string>Werkzeug Postprozessor</string>
    </property>
   </action>
  </widget>

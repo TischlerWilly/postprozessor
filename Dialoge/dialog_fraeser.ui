@@ -52,81 +52,27 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_vors">
-      <property name="text">
-       <string>Vorschub</string>
-      </property>
-     </widget>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_dm"/>
     </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label_nr">
-      <property name="text">
-       <string>Werkzeugnummer</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_zustm">
-      <property name="text">
-       <string>Zustellmaß</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="label_spiegel">
-      <property name="text">
-       <string>Spiegelwerkzeug</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="1">
+    <item row="11" column="1">
      <widget class="QCheckBox" name="checkBox_ist_hori">
       <property name="text">
        <string>kann horizontal fräsen</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit_nr"/>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="lineEdit_zust_min"/>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="lineEdit_voers"/>
-    </item>
-    <item row="7" column="1">
-     <widget class="QLineEdit" name="lineEdit_spiegel"/>
-    </item>
-    <item row="12" column="1">
-     <widget class="QCheckBox" name="checkBox_ist_aktiv">
-      <property name="text">
-       <string>ist aktiv</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_zust_min">
-      <property name="text">
-       <string>Mind. Zustellung</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_dm"/>
-    </item>
-    <item row="8" column="1">
+    <item row="9" column="1">
      <widget class="QCheckBox" name="checkBox_nur_direkt_zuweisbar">
       <property name="text">
        <string>Nur direkt zuweisbar</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_alias">
-      <property name="text">
-       <string>Alias-Name</string>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="lineEdit_alias">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ein Alias-Name ist ein zweiter Name für das selbe Werkzeug. Wird mehr als ein Alias-Name benötigt, so kann das Werkzeug dupliziert werden und dem Duplikat ein anderer Alias-Name zugewiesen werden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>
@@ -137,16 +83,39 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_zustm"/>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEdit_zust_min"/>
     </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_nutzl"/>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_zustmassvert"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_nr"/>
+    </item>
+    <item row="8" column="1">
+     <widget class="QLineEdit" name="lineEdit_spiegel"/>
     </item>
     <item row="6" column="1">
-     <widget class="QLineEdit" name="lineEdit_alias">
-      <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ein Alias-Name ist ein zweiter Name für das selbe Werkzeug. Wird mehr als ein Alias-Name benötigt, so kann das Werkzeug dupliziert werden und dem Duplikat ein anderer Alias-Name zugewiesen werden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <widget class="QLineEdit" name="lineEdit_voers"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_zust_min">
+      <property name="text">
+       <string>Mind. Zustellung</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_vors">
+      <property name="text">
+       <string>Vorschub</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_zustm">
+      <property name="text">
+       <string>Zustellmaß vertikal</string>
       </property>
      </widget>
     </item>
@@ -157,10 +126,51 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="1">
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_alias">
+      <property name="text">
+       <string>Alias-Name</string>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="1">
+     <widget class="QCheckBox" name="checkBox_ist_aktiv">
+      <property name="text">
+       <string>ist aktiv</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_nutzl"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_nr">
+      <property name="text">
+       <string>Werkzeugnummer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_spiegel">
+      <property name="text">
+       <string>Spiegelwerkzeug</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
      <widget class="QCheckBox" name="checkBox_ist_veti">
       <property name="text">
        <string>kann vertikal fräsen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit_zustmasshori"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_zustmass">
+      <property name="text">
+       <string>Zustellmaß horizontal</string>
       </property>
      </widget>
     </item>
@@ -171,7 +181,8 @@
   <tabstop>lineEdit_nr</tabstop>
   <tabstop>lineEdit_dm</tabstop>
   <tabstop>lineEdit_nutzl</tabstop>
-  <tabstop>lineEdit_zustm</tabstop>
+  <tabstop>lineEdit_zustmassvert</tabstop>
+  <tabstop>lineEdit_zustmasshori</tabstop>
   <tabstop>lineEdit_zust_min</tabstop>
   <tabstop>lineEdit_voers</tabstop>
   <tabstop>lineEdit_alias</tabstop>

@@ -31,6 +31,7 @@ void Dialog_Einstellung_pfade::slot_einstellungen(einstellung e)
     ui->lineEdit_ziel_lokal->setText(Einstellung.verzeichnis_ziel_lokal());
     ui->lineEdit_root_ganx->setText(Einstellung.verzeichnis_root_ganx());
     ui->lineEdit_root_fmc->setText(Einstellung.verzeichnis_root_fmc());
+    ui->lineEdit_root_cix->setText(Einstellung.verzeichnis_root_cix());
     this->show();
 }
 
@@ -99,6 +100,19 @@ void Dialog_Einstellung_pfade::on_pushButton_root_fmc_clicked()
         ui->lineEdit_root_fmc->setText(tmp);
     }
 }
+void Dialog_Einstellung_pfade::on_pushButton_root_cix_clicked()
+{
+    if(Einstellung.verzeichnis_root_cix().isEmpty())
+    {
+        Einstellung.set_verzeichnis_root_cix("./");
+    }
+    QString tmp = QFileDialog::getExistingDirectory(this, tr("Wurzelverzeichnis cix"), Einstellung.verzeichnis_root_cix());
+    if(!tmp.isEmpty())
+    {
+        Einstellung.set_verzeichnis_root_cix(tmp);
+        ui->lineEdit_root_cix->setText(tmp);
+    }
+}
 
 void Dialog_Einstellung_pfade::on_lineEdit_quelle_editingFinished()
 {
@@ -160,6 +174,21 @@ void Dialog_Einstellung_pfade::on_lineEdit_root_fmc_editingFinished()
         Einstellung.set_verzeichnis_root_fmc(eingabe);
     }
 }
+void Dialog_Einstellung_pfade::on_lineEdit_root_cix_editingFinished()
+{
+    QString eingabe = ui->lineEdit_root_cix->text();
+    if(!QDir(eingabe).exists())
+    {
+        QMessageBox::warning(this,"Fehler","Verzeichniss \"" + eingabe + "\" nicht gefunden!",QMessageBox::Ok);
+        ui->lineEdit_root_cix->setText(Einstellung.verzeichnis_root_cix());
+    }else
+    {
+        Einstellung.set_verzeichnis_root_cix(eingabe);
+    }
+}
+
+
+
 
 
 

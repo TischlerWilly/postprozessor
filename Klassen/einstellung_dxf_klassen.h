@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QMessageBox>
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Funktionen/umwandeln.h"
 
 class einstellung_dxf_klassen

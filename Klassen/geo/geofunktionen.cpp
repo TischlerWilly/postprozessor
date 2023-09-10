@@ -272,8 +272,8 @@ void trimmen(QString *geo1, QString *geo2)
 
             schnittpunkt.set_x(x);
             schnittpunkt.set_y(y);
-            s1.set_ende(schnittpunkt);
-            s2.set_start(schnittpunkt);
+            s1.set_endpu(schnittpunkt);
+            s2.set_stapu(schnittpunkt);
         }else
         {
             if(s1.stapu().x()==s1.endpu().x()  &&  s2.stapu().x()!=s2.endpu().x())//s1 ist senkrecht
@@ -289,8 +289,8 @@ void trimmen(QString *geo1, QString *geo2)
 
                 schnittpunkt.set_x(x);
                 schnittpunkt.set_y(y);
-                s1.set_ende(schnittpunkt);
-                s2.set_start(schnittpunkt);
+                s1.set_endpu(schnittpunkt);
+                s2.set_stapu(schnittpunkt);
             }else if(s1.stapu().x()!=s1.endpu().x()  &&  s2.stapu().x()==s2.endpu().x())//s2 ist senkrecht
             {
                 //heißt x von s2 ist bekannt
@@ -304,8 +304,8 @@ void trimmen(QString *geo1, QString *geo2)
 
                 schnittpunkt.set_x(x);
                 schnittpunkt.set_y(y);
-                s1.set_ende(schnittpunkt);
-                s2.set_start(schnittpunkt);
+                s1.set_endpu(schnittpunkt);
+                s2.set_stapu(schnittpunkt);
             }else
             {
                 //beide geraden sind senkrecht
@@ -376,7 +376,7 @@ void trimmen(QString *geo1, QString *geo2)
             punkt3d p3d = s.endpu();
             p3d.set_x(var_x);
             p3d.set_y(var_y);
-            s.set_ende(p3d);
+            s.set_endpu(p3d);
             b.set_startpunkt(p3d);
 
         }else if(var_e > 0)
@@ -422,11 +422,11 @@ void trimmen(QString *geo1, QString *geo2)
             }
             if(diff_1 < diff_2)
             {
-                s.set_ende(p3d1);
+                s.set_endpu(p3d1);
                 b.set_startpunkt(p3d1);
             }else
             {
-                s.set_ende(p3d2);
+                s.set_endpu(p3d2);
                 b.set_startpunkt(p3d2);
             }
         }
@@ -492,7 +492,7 @@ void trimmen(QString *geo1, QString *geo2)
             punkt3d p3d = s.stapu();
             p3d.set_x(var_x);
             p3d.set_y(var_y);
-            s.set_start(p3d);
+            s.set_stapu(p3d);
             b.set_endpunkt(p3d);
 
         }else if(var_e > 0)
@@ -538,11 +538,11 @@ void trimmen(QString *geo1, QString *geo2)
             }
             if(diff_1 < diff_2)
             {
-                s.set_start(p3d1);
+                s.set_stapu(p3d1);
                 b.set_endpunkt(p3d1);
             }else
             {
-                s.set_start(p3d2);
+                s.set_stapu(p3d2);
                 b.set_endpunkt(p3d2);
             }
         }
@@ -579,10 +579,10 @@ void trimmen(QString *geo1, QString *geo2)
         punkt3d tmp;
         tmp.set_x(b1.mitte().x());
         tmp.set_y(b1.mitte().y());
-        s.set_start(tmp);
+        s.set_stapu(tmp);
         tmp.set_x(b2.mitte().x());
         tmp.set_y(b2.mitte().y());
-        s.set_ende(tmp);
+        s.set_endpu(tmp);
         double abst = s.laenge2d();
 
         if(abst > r1+r2)//Kreise liegen zu weit auseinander
@@ -697,3 +697,4 @@ bool cagleich(double p1, double p2, double tolleranz = 0.1)
         return false;
     }
 }
+

@@ -30,6 +30,7 @@ MainWin_wst_bearbeiten::~MainWin_wst_bearbeiten()
 void MainWin_wst_bearbeiten::clear()
 {
     Wst = nullptr;
+    Wkz = nullptr;
     ui->listWidget_prgtext->clear();
 }
 
@@ -78,88 +79,102 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
     Wst = w;
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
-    UnReDo.clear();
-    UnReDo.neu(Wst->bearb());
-    sendVorschauAktualisieren(*Wst, 0);
+    unredo_clear();
+    sendVorschauAktualisieren(*Wst, -1);
+    letzte_wst_l = Wst->laenge();
+    letzte_wst_b = Wst->breite();
+    letzte_wst_d = Wst->dicke();
+    unredo_neu();
+}
+void MainWin_wst_bearbeiten::set_wkz(wkz_magazin *w)
+{
+    Wkz = w;
 }
 
 void MainWin_wst_bearbeiten::update_listwidget()
 {
+    int currentRow = ui->listWidget_prgtext->currentRow();
     ui->listWidget_prgtext->clear();
     //Programmkopf als erste Zeile einfügen:
-    text_zeilenweise pkopf;
-    pkopf.set_trennzeichen(TRENNZ_BEARB_PARAM);
+    text_zw pkopf;
+    pkopf.set_trenz(TRENNZ_BEARB_PARAM);
     QString param;
     param  = "L=";
     param += Wst->laenge_qstring();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param  = "B=";
     param += Wst->breite_qstring();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param  = "D=";
     param += Wst->dicke_qstring();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param = "KaVo=";
     param += Wst->kante_vo();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param = "KaHi=";
     param += Wst->kante_hi();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param = "KaLi=";
     param += Wst->kante_li();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     param = "KaRe=";
     param += Wst->kante_re();
-    pkopf.zeile_anhaengen(param);
+    pkopf.add_hi(param);
     ui->listWidget_prgtext->addItem(pkopf.text());
     //Bearbeitungen ab 2. Zeile einfügen:
-    text_zeilenweise tmp_bearb = Wst->bearb();
-    for(uint i=1; i<=tmp_bearb.zeilenanzahl() ;i++)
+    text_zw tmp_bearb = Wst->bearb();
+    for(uint i=0; i<tmp_bearb.count() ;i++)
     {
-        QString bearb = tmp_bearb.zeile(i);
-        text_zeilenweise zeile;
-        zeile.set_trennzeichen(TRENNZ_BEARB_PARAM);
-        zeile.set_text(bearb);
-        if(zeile.zeile(1) == BEARBART_BOHR)
+        QString bearb = tmp_bearb.at(i);
+        text_zw zeile;
+        zeile.set_text(bearb,TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
         {
-            bearb = bohr_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_BOHRRASTER)
+            bearb = bohr_zu_prgzei(zeile.text());
+        }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
-            bearb = bohrRaster_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_NUT)
+            bearb = bohrRaster_zu_prgzei(zeile.text());
+        }else if(zeile.at(0) == BEARBART_NUT)
         {
-            bearb = nut_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_RTA)
+            bearb = nut_zu_prgzei(zeile.text());
+        }else if(zeile.at(0) == BEARBART_RTA)
         {
-            bearb = rta_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_FRAESERAUFRUF)
+            bearb = rta_zu_prgzei(zeile.text());
+        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
-            bearb = fauf_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_FRAESERGERADE)
+            bearb = fauf_zu_prgzei(zeile.text());
+        }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
-            bearb = fgerade_zu_prgeile(zeile.text());
-        }else if(zeile.zeile(1) == BEARBART_FRAESERBOGEN)
+            bearb = fgerade_zu_prgzei(zeile.text());
+        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
-            bearb = fbogen_zu_prgeile(zeile.text());
+            bearb = fbogen_zu_prgzei(zeile.text());
+        }else if(zeile.at(0) == BEARBART_GEHRUNG)
+        {
+            bearb = gehr_zu_prgzei(zeile.text());
         }
         ui->listWidget_prgtext->addItem(bearb);
     }
     ui->listWidget_prgtext->addItem("...");
+    if(currentRow < ui->listWidget_prgtext->count())
+    {
+        ui->listWidget_prgtext->setCurrentRow(currentRow);
+    }
 }
 void MainWin_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
 {
     if((int)nr < ui->listWidget_prgtext->count())
     {
-        ui->listWidget_prgtext->setCurrentRow(nr-1);
+        ui->listWidget_prgtext->setCurrentRow(nr);
         if(bearbeiten == true)
         {
-            zeile_bearbeiten(nr-1);
+            zeile_bearbeiten(nr);
         }
     }
 }
 void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int currentRow)
 {
-    emit signalIndexChange(currentRow+1);
+    emit signalIndexChange(currentRow);
 }
 void MainWin_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
 {
@@ -175,70 +190,73 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
 {
     if(zeile == 0)
     {
+        letzte_wst_l = Wst->laenge();
+        letzte_wst_b = Wst->breite();
+        letzte_wst_d = Wst->dicke();
         Dialog_bearb_pkopf dlg;
         dlg.setModal(true);
         dlg.set_data(Wst);
         dlg.exec();
-        text_zeilenweise bearb_alt = Wst->bearb();
-        text_zeilenweise bearb_neu;
-        for (uint i = 1; i<=bearb_alt.zeilenanzahl() ; i++)
+        text_zw bearb_alt = Wst->bearb();
+        text_zw bearb_neu;
+        for (uint i = 0; i<bearb_alt.count() ; i++)
         {
-            if(i==1)
+            if(i==0)
             {
-                bearb_neu.set_text(verschiebe_einen(bearb_alt.zeile(i), 0, 0, 0));
+                bearb_neu.set_text(verschiebe_einen(bearb_alt.at(i), 0, 0, 0), bearb_alt.trennz());
                 //0,0,0 verschiebt die bearb auf die Wst-kanten
             }else
             {
-                bearb_neu.zeile_anhaengen(verschiebe_einen(bearb_alt.zeile(i), 0, 0, 0));
+                bearb_neu.add_hi(verschiebe_einen(bearb_alt.at(i), 0, 0, 0));
                 //0,0,0 verschiebt die bearb auf die Wst-kanten
             }
         }
         Wst->set_bearb(bearb_neu);
-        update_listwidget();
+        unredo_neu();
+        update_listwidget();        
         emit sendVorschauAktualisieren(*Wst, 0);
         return;
     }
     //Zeile Auslesen:
-    text_zeilenweise bearb;
-    bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    bearb.set_text(Wst->bearb_ptr()->zeile(zeile));
+    text_zw bearb;
+    bearb.set_text(Wst->bearb_ptr()->at(zeile-1),TRENNZ_BEARB_PARAM);
     //Dialogfenster aufrufen:
-    if(bearb.zeile(1) == BEARBART_RTA)
+    if(bearb.at(0) == BEARBART_RTA)
     {
         Dialog_bearb_rta dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
         dlg.set_data(bearb.text(), Wst);
         dlg.exec();
-    }else if(bearb.zeile(1) == BEARBART_BOHR)
+    }else if(bearb.at(0) == BEARBART_BOHR)
     {
         Dialog_bearb_bohrung dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_bo(bohrung)));
         dlg.set_data(bearb.text(), Wst);
         dlg.exec();
-    }else if(bearb.zeile(1) == BEARBART_NUT)
+    }else if(bearb.at(0) == BEARBART_NUT)
     {
         Dialog_bearb_nut dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_nut(nut)), this, SLOT(slot_nut(nut)));
         dlg.set_data(bearb.text(), Wst);
         dlg.exec();
-    }else if(bearb.zeile(1) == BEARBART_FRAESERAUFRUF)
+    }else if(bearb.at(0) == BEARBART_FRAESERAUFRUF)
     {
         Dialog_bearb_faufruf dlg;
         dlg.setModal(true);
-        connect(&dlg, SIGNAL(signal_faufruf(fraueseraufruf)), this, SLOT(slot_faufruf(fraueseraufruf)));
+        connect(&dlg, SIGNAL(signal_faufruf(fraeseraufruf)), this, SLOT(slot_faufruf(fraeseraufruf)));
         dlg.set_data(bearb.text(), Wst);
         dlg.exec();
-    }else if(bearb.zeile(1) == BEARBART_FRAESERGERADE)
+    }else if(bearb.at(0) == BEARBART_FRAESERGERADE)
     {
         Dialog_bearb_fgerade dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_fgerade(fraesergerade)), this, SLOT(slot_fgerade(fraesergerade)));
         dlg.set_data(bearb.text(), Wst);
         dlg.exec();
-    }else if(bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+    }else if(bearb.at(0) == BEARBART_FRAESERBOGEN)
     {
         Dialog_bearb_fbogen dlg;
         dlg.setModal(true);
@@ -248,57 +266,61 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
     }
 }
 
-void MainWin_wst_bearbeiten::zeile_aendern(int index, QString bearb)
+void MainWin_wst_bearbeiten::zeile_aendern(int index, QString bearb, bool unredor_verwenden)
 {
-    //index ist der indes des list-widgets
+    //index ist der indes der Bearbeitung
     //bearb ist eine Zeile der Bearbeitugen
-    text_zeilenweise bearbeitungen = Wst->bearb();
-    bearbeitungen.zeile_ersaetzen(index, bearb);
-    Wst->bearb_ptr()->zeile_ersaetzen(index, bearbeitungen.zeile(index));
+    text_zw bearbeitungen = Wst->bearb();
+    bearbeitungen.edit(index, bearb);
+    Wst->bearb_ptr()->edit(index, bearbeitungen.at(index));
+    if(unredor_verwenden == true)
+    {
+        unredo_neu();
+    }
     update_listwidget();
     emit sendVorschauAktualisieren(*Wst, index+1);
 }
 void MainWin_wst_bearbeiten::slot_rta(rechtecktasche rta)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = rta.text();
-    ui->listWidget_prgtext->item(index)->setText(rta_zu_prgeile(bearb));
-    zeile_aendern(index, bearb);
+    ui->listWidget_prgtext->item(index)->setText(rta_zu_prgzei(bearb));
+    zeile_aendern(index, bearb, true);
 }
 void MainWin_wst_bearbeiten::slot_bo(bohrung bo)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = bo.text();
-    ui->listWidget_prgtext->item(index)->setText(bohr_zu_prgeile(bearb));
-    zeile_aendern(index, bearb);
+    ui->listWidget_prgtext->item(index)->setText(bohr_zu_prgzei(bearb));
+    zeile_aendern(index, bearb, true);
 }
 void MainWin_wst_bearbeiten::slot_nut(nut nu)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = nu.text();
-    ui->listWidget_prgtext->item(index)->setText(nut_zu_prgeile(bearb));
-    zeile_aendern(index, bearb);
+    ui->listWidget_prgtext->item(index)->setText(nut_zu_prgzei(bearb));
+    zeile_aendern(index, bearb, true);
 }
-void MainWin_wst_bearbeiten::slot_faufruf(fraueseraufruf fa)
+void MainWin_wst_bearbeiten::slot_faufruf(fraeseraufruf fa)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = fa.text();
-    ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgeile(bearb));
-    zeile_aendern(index, bearb);
+    ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgzei(bearb));
+    zeile_aendern(index, bearb, true);
 }
 void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = fg.text();
-    ui->listWidget_prgtext->item(index)->setText(fgerade_zu_prgeile(bearb));
-    zeile_aendern(index, bearb);
+    ui->listWidget_prgtext->item(index)->setText(fgerade_zu_prgzei(bearb));
+    zeile_aendern(index, bearb, true);
 }
 void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = fb.text();
-    ui->listWidget_prgtext->item(index)->setText(fbogen_zu_prgeile(bearb));
-    zeile_aendern(index, bearb);
+    ui->listWidget_prgtext->item(index)->setText(fbogen_zu_prgzei(bearb));
+    zeile_aendern(index, bearb, true);
 }
 
 //----------------------------------Make:
@@ -336,16 +358,16 @@ void MainWin_wst_bearbeiten::slot_make(QString bearb)
     //Werte zurück speichern:
     if(index == 0)
     {
-        Wst->bearb_ptr()->zeile_vorwegsetzen(bearb);
+        Wst->bearb_ptr()->add_vo(bearb);
     }else if(index+1 < ui->listWidget_prgtext->count())
     {
-        Wst->bearb_ptr()->zeile_einfuegen(index-1, bearb);
+        Wst->bearb_ptr()->add_mi(index, bearb);
     }else
     {
-        Wst->bearb_ptr()->zeile_anhaengen(bearb);
+        Wst->bearb_ptr()->add_hi(bearb);
     }
     update_listwidget();
-    UnReDo.neu(Wst->bearb());
+    unredo_neu();
     emit sendVorschauAktualisieren(*Wst, index);
 }
 void MainWin_wst_bearbeiten::slot_make_bo(bohrung bo)
@@ -363,13 +385,19 @@ void MainWin_wst_bearbeiten::slot_make_nut(nut nu)
 //----------------------------------Bearbeiten:
 void MainWin_wst_bearbeiten::on_actionUndo_triggered()
 {
+    Wst->set_laenge(UnReDo_L.undo());
+    Wst->set_breite(UnReDo_B.undo());
+    Wst->set_dicke(UnReDo_D.undo());
     Wst->set_bearb(UnReDo.undo());
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
-    sendVorschauAktualisieren(*Wst, 0);
+    sendVorschauAktualisieren(*Wst, ui->listWidget_prgtext->count()-1);
 }
 void MainWin_wst_bearbeiten::on_actionRedo_triggered()
 {
+    Wst->set_laenge(UnReDo_L.redo());
+    Wst->set_breite(UnReDo_B.redo());
+    Wst->set_dicke(UnReDo_D.redo());
     Wst->set_bearb(UnReDo.redo());
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
@@ -377,48 +405,50 @@ void MainWin_wst_bearbeiten::on_actionRedo_triggered()
 }
 void MainWin_wst_bearbeiten::on_actionEntf_triggered()
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index_liwid = ui->listWidget_prgtext->currentRow();
+    int index_bearb = index_liwid-1;
     if((ui->listWidget_prgtext->currentIndex().isValid())  &&  \
        (ui->listWidget_prgtext->currentItem()->isSelected())    )
-    {
+    {        
         QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
         int items_menge = items.count();
-        int row_erstes = 0;//Nummer des ersten Elementes
+        int row_erstes_liwid = 0;//Nummer des ersten Elementes
         for(int i=0; i<ui->listWidget_prgtext->count() ;i++)
         {
             if(ui->listWidget_prgtext->item(i)->isSelected())
             {
-                row_erstes = i;
+                row_erstes_liwid = i;
                 break;
             }
         }
+        int row_erstes_bearb = row_erstes_liwid-1;
         if(items_menge==1)
         {
-            if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
+            if(index_liwid > 0  &&  index_liwid+1 < ui->listWidget_prgtext->count())
             {
-                Wst->bearb_ptr()->zeile_loeschen(index);
+                Wst->bearb_ptr()->entf(index_bearb);
                 update_listwidget();
-                UnReDo.neu(Wst->bearb());
-                ui->listWidget_prgtext->setCurrentRow(index-1);
-                emit sendVorschauAktualisieren(*Wst, index);
+                unredo_neu();
+                ui->listWidget_prgtext->setCurrentRow(index_liwid);
+                emit sendVorschauAktualisieren(*Wst, index_liwid);
             }
         }else
         {
-            index = row_erstes;
-            if(index == 0)
+            if(row_erstes_liwid == 0)//Programmkopf
             {
-                index = 1;
+                row_erstes_liwid = 1;
+                row_erstes_bearb = row_erstes_liwid-1;
                 items_menge = items_menge-1;
             }
-            if(index+items_menge >= ui->listWidget_prgtext->count())
+            if(row_erstes_liwid+items_menge >= ui->listWidget_prgtext->count())
             {
-                items_menge = ui->listWidget_prgtext->count()-index-1;
+                items_menge = ui->listWidget_prgtext->count()-row_erstes_liwid-1;
             }
-            Wst->bearb_ptr()->zeilen_loeschen(index, items_menge);
+            Wst->bearb_ptr()->entf(row_erstes_bearb, items_menge);
             update_listwidget();
-            UnReDo.neu(Wst->bearb());
-            ui->listWidget_prgtext->setCurrentRow(index-1);
-            emit sendVorschauAktualisieren(*Wst, index);
+            unredo_neu();
+            ui->listWidget_prgtext->setCurrentRow(row_erstes_liwid);
+            emit sendVorschauAktualisieren(*Wst, row_erstes_liwid);
         }
     } else
     {
@@ -429,40 +459,42 @@ void MainWin_wst_bearbeiten::on_actionEntf_triggered()
 }
 void MainWin_wst_bearbeiten::on_actionKopieren_triggered()
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index_liwid = ui->listWidget_prgtext->currentRow();
+    int index_bearb = index_liwid-1;
     if((ui->listWidget_prgtext->currentIndex().isValid())  &&  \
        (ui->listWidget_prgtext->currentItem()->isSelected())    )
     {
         QList<QListWidgetItem*> items = ui->listWidget_prgtext->selectedItems();
         int items_menge = items.count();
-        int row_erstes = 0;//Nummer des ersten Elementes
+        int row_erstes_liwid = 0;//Nummer des ersten Elementes
         for(int i=0; i<ui->listWidget_prgtext->count() ;i++)
         {
             if(ui->listWidget_prgtext->item(i)->isSelected())
             {
-                row_erstes = i;
+                row_erstes_liwid = i;
                 break;
             }
         }
+        int row_erstes_bearb = row_erstes_liwid-1;
         if(items_menge==1)
         {
-            if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
+            if(index_liwid > 0  &&  index_liwid+1 < ui->listWidget_prgtext->count())
             {
-                KopierterEintrag = Wst->bearb_ptr()->zeile(index);
+                KopierterEintrag = Wst->bearb_ptr()->at(index_bearb);
             }
         }else
         {
-            index = row_erstes;
-            if(index == 0)
+            if(row_erstes_liwid == 0)//Programmkopf
             {
-                index = 1;
+                row_erstes_liwid = 1;
+                row_erstes_bearb = row_erstes_liwid-1;
                 items_menge = items_menge-1;
             }
-            if(index+items_menge >= ui->listWidget_prgtext->count())
+            if(row_erstes_liwid+items_menge >= ui->listWidget_prgtext->count())
             {
-                items_menge = ui->listWidget_prgtext->count()-index-1;
+                items_menge = ui->listWidget_prgtext->count()-row_erstes_liwid-1;
             }
-            QString tmp = Wst->bearb_ptr()->zeilen(index, items_menge);
+            QString tmp = Wst->bearb_ptr()->at(row_erstes_bearb, items_menge);
             KopierterEintrag = tmp;
         }
     }else
@@ -476,23 +508,40 @@ void MainWin_wst_bearbeiten::on_actionEinfuegen_triggered()
 {
     if(!KopierterEintrag.isEmpty())
     {
-        int index = ui->listWidget_prgtext->currentRow();
-        if(index == 0)
+        int index_liwid = ui->listWidget_prgtext->currentRow();
+        if(index_liwid == 0)//Programmkopf
         {
-            index = 1;
+            index_liwid = 1;
         }
-        if(index == ui->listWidget_prgtext->count()-1)
+        if(index_liwid == 1)
         {
-            Wst->bearb_ptr()->zeilen_anhaengen(KopierterEintrag);
+            Wst->bearb_ptr()->add_vo(KopierterEintrag);
+        }else if(index_liwid == ui->listWidget_prgtext->count()-1)
+        {
+            Wst->bearb_ptr()->add_hi(KopierterEintrag);
         }else
         {
-            Wst->bearb_ptr()->zeilen_einfuegen(index-1, KopierterEintrag);
+            Wst->bearb_ptr()->add_mi(index_liwid-2, KopierterEintrag);
         }
         update_listwidget();
-        UnReDo.neu(Wst->bearb());
-        ui->listWidget_prgtext->setCurrentRow(index);
-        emit sendVorschauAktualisieren(*Wst, index+1);
+        unredo_neu();
+        ui->listWidget_prgtext->setCurrentRow(index_liwid);
+        emit sendVorschauAktualisieren(*Wst, index_liwid);
     }
+}
+void MainWin_wst_bearbeiten::unredo_neu()
+{
+    UnReDo_L.neu((Wst->laenge()));
+    UnReDo_B.neu(Wst->breite());
+    UnReDo_D.neu(Wst->dicke());
+    UnReDo.neu(Wst->bearb());
+}
+void MainWin_wst_bearbeiten::unredo_clear()
+{
+    UnReDo_L.clear();
+    UnReDo_B.clear();
+    UnReDo_D.clear();
+    UnReDo.clear();
 }
 //----------------------------------Manipulation:
 int MainWin_wst_bearbeiten::auswahl_erster()
@@ -528,14 +577,13 @@ void MainWin_wst_bearbeiten::on_actionVerschieben_triggered()
         //Prüfen ob Fräsbahnen durch das Verschieben geteilt werden:
         bool gesund = true;
         //--Prüfen ob eine Fräsbahn nach der Auswahl weiter geht:
-        if(auswahl_letzter() < ui->listWidget_prgtext->count()-2)
+        if(auswahl_letzter() < ui->listWidget_prgtext->count())
         {
-            int zeile_dannach = auswahl_letzter()+1;//index von QListwidget
-            text_zeilenweise bearb;
-            bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            bearb.set_text(Wst->bearb_ptr()->zeile(zeile_dannach));
-            if(bearb.zeile(1) == BEARBART_FRAESERGERADE  || \
-               bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+            int zeile_dannach = auswahl_letzter();//index von QListwidget
+            text_zw bearb;
+            bearb.set_text(Wst->bearb_ptr()->at(zeile_dannach),TRENNZ_BEARB_PARAM);
+            if(bearb.at(0) == BEARBART_FRAESERGERADE  || \
+               bearb.at(0) == BEARBART_FRAESERBOGEN)
             {
                 gesund = false;
             }
@@ -544,17 +592,15 @@ void MainWin_wst_bearbeiten::on_actionVerschieben_triggered()
         if(auswahl_erster() >= 2)
         {
             int zeile_davor = auswahl_erster()-1;//index von QListwidget
-            text_zeilenweise bearb;
-            bearb.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            bearb.set_text(Wst->bearb_ptr()->zeile(zeile_davor));
-            text_zeilenweise bearb_erster;
-            bearb_erster.set_trennzeichen(TRENNZ_BEARB_PARAM);
-            bearb_erster.set_text(Wst->bearb_ptr()->zeile(auswahl_erster()));
-            if(bearb_erster.zeile(1) != BEARBART_FRAESERAUFRUF)
+            text_zw bearb;
+            bearb.set_text(Wst->bearb_ptr()->at(zeile_davor),TRENNZ_BEARB_PARAM);
+            text_zw bearb_erster;
+            bearb_erster.set_text(Wst->bearb_ptr()->at(auswahl_erster()-1),TRENNZ_BEARB_PARAM);
+            if(bearb_erster.at(0) != BEARBART_FRAESERAUFRUF)
             {
-                if(bearb.zeile(1) == BEARBART_FRAESERAUFRUF  || \
-                   bearb.zeile(1) == BEARBART_FRAESERGERADE  || \
-                   bearb.zeile(1) == BEARBART_FRAESERBOGEN)
+                if(bearb.at(0) == BEARBART_FRAESERAUFRUF  || \
+                   bearb.at(0) == BEARBART_FRAESERGERADE  || \
+                   bearb.at(0) == BEARBART_FRAESERBOGEN)
                 {
                     gesund = false;
                 }
@@ -583,24 +629,24 @@ void MainWin_wst_bearbeiten::on_actionVerschieben_triggered()
 //----------------------------------Slot_Manipulation:
 void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
 {
-    int index = ui->listWidget_prgtext->currentRow();
+    int index = ui->listWidget_prgtext->currentRow()-1;//index der Bearbeitung, nicht vom listwidget
     //Die index-Prüfung erfolgt bereits in der Funktion on_actionVerschieben_triggered()
-    int row_erstes = auswahl_erster();
+    int row_erstes = auswahl_erster()-1;//-1 weil index der Bearbeitung, nicht vom listwidget
     int items_menge = auswahl_menge();
     if(items_menge==1)
     {
-        if(index > 0  &&  index+1 < ui->listWidget_prgtext->count())
+        if(index >= 0  &&  index+1 < ui->listWidget_prgtext->count())
         {
-            QString bearb = Wst->bearb_ptr()->zeile(index);
+            QString bearb = Wst->bearb_ptr()->at(index);
             bearb = verschiebe_einen(bearb, p.x(), p.y(), p.z());
-            zeile_aendern(index, bearb);
+            zeile_aendern(index, bearb, true);
         }
     }else
     {
         index = row_erstes;
-        if(index == 0)
+        if(index < 0)
         {
-            index = 1;
+            index = 0;
             items_menge = items_menge-1;
         }
         if(index+items_menge >= ui->listWidget_prgtext->count())
@@ -609,18 +655,18 @@ void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
         }
         for (int i=0 ; i<items_menge ; i++)
         {
-            QString bearb = Wst->bearb_ptr()->zeile(index+i);
+            QString bearb = Wst->bearb_ptr()->at(index+i);
             bearb = verschiebe_einen(bearb, p.x(), p.y(), p.z());
-            zeile_aendern(index+i, bearb);
+            zeile_aendern(index+i, bearb, false);
         }
+        unredo_neu();
     }
 }
 QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, double ay, double az)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(bearb);
-    if(tz.zeile(1) == BEARBART_BOHR)
+    text_zw tz;
+    tz.set_text(bearb, TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_BOHR)
     {
         bohrung bo;
         bo.set_text(bearb);
@@ -633,27 +679,45 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
             bo.set_y(bo.y()+ay);
         }else if(bo.bezug() == WST_BEZUG_LI)
         {
-            bo.set_x(0);
+            if(bo.x() != 0)
+            {
+                bo.set_x(bo.x()+ax);
+            }
             bo.set_y(bo.y()+ay);
             bo.set_z(bo.z()+az);
         }else if(bo.bezug() == WST_BEZUG_RE)
         {
-            bo.set_x(Wst->laenge());
+            if(bo.x() == letzte_wst_l)
+            {
+                bo.set_x(Wst->laenge());
+            }else
+            {
+                bo.set_x(bo.x()+ax);
+            }
             bo.set_y(bo.y()+ay);
             bo.set_z(bo.z()+az);
         }else if(bo.bezug() == WST_BEZUG_VO)
         {
             bo.set_x(bo.x()+ax);
-            bo.set_y(0);
+            if(bo.y() != 0)
+            {
+                bo.set_y(bo.y()+ay);
+            }
             bo.set_z(bo.z()+az);
         }else if(bo.bezug() == WST_BEZUG_HI)
         {
             bo.set_x(bo.x()+ax);
-            bo.set_y(Wst->breite());
+            if(bo.y() == letzte_wst_b)
+            {
+                bo.set_y(Wst->breite());
+            }else
+            {
+                bo.set_y(bo.y()+ay);
+            }
             bo.set_z(bo.z()+az);
         }
         bearb = bo.text();
-    }else if(tz.zeile(1) == BEARBART_RTA)
+    }else if(tz.at(0) == BEARBART_RTA)
     {
         rechtecktasche rt;
         rt.set_text(bearb);
@@ -683,7 +747,7 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
             rt.set_z(rt.z()+az);
         }
         bearb = rt.text();
-    }if(tz.zeile(1) == BEARBART_NUT)
+    }if(tz.at(0) == BEARBART_NUT)
     {
         nut nu;
         nu.set_text(bearb);
@@ -727,14 +791,14 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
             nu.set_ze(nu.ze()+az);
         }
         bearb = nu.text();
-    }if(tz.zeile(1) == BEARBART_FRAESERAUFRUF)
+    }if(tz.at(0) == BEARBART_FRAESERAUFRUF)
     {
-        fraueseraufruf fa;
+        fraeseraufruf fa;
         fa.set_text(bearb);
         fa.set_x(fa.x()+ax);
         fa.set_y(fa.y()+ay);
         bearb = fa.text();
-    }if(tz.zeile(1) == BEARBART_FRAESERGERADE)
+    }if(tz.at(0) == BEARBART_FRAESERGERADE)
     {
         fraesergerade fg;
         fg.set_text(bearb);
@@ -743,7 +807,7 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
         fg.set_ys(fg.ys()+ay);
         fg.set_ye(fg.ye()+ay);
         bearb = fg.text();
-    }if(tz.zeile(1) == BEARBART_FRAESERBOGEN)
+    }if(tz.at(0) == BEARBART_FRAESERBOGEN)
     {
         fraeserbogen fb;
         fb.set_text(bearb);

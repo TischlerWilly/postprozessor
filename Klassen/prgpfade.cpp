@@ -6,10 +6,12 @@ prgpfade::prgpfade()
     StdNamen            = "namen_std.ini";
     ini_ganx            = "ganx.ini";
     ini_dxf             = "dxf.ini";
+    ini_fmc             = "fmc.ini";
     ini_dxf_klassen     = "dxf_klassen.ini";
     Wkz_fmc             = "wkz_magazin_fmc.csv";
     Wkz_ganx            = "wkz_magazin_ganx.csv";
     Wkz_ggf             = "wkz_magazin_ggf.csv";
+    Wkz_cix             = "wkz_magazin_cix.csv";
 }
 
 void prgpfade::ordner_erstellen()
@@ -39,6 +41,10 @@ QString prgpfade::name_ini_ganx()
 {
     return ini_ganx;
 }
+QString prgpfade::name_ini_fmc()
+{
+    return ini_fmc;
+}
 QString prgpfade::name_ini_dxf()
 {
     return ini_dxf;
@@ -50,6 +56,10 @@ QString prgpfade::name_ini_dxf_klassen()
 QString prgpfade::name_wkz_fmc()
 {
     return Wkz_fmc;
+}
+QString prgpfade::name_wkz_cix()
+{
+    return Wkz_cix;
 }
 QString prgpfade::name_wkz_ganx()
 {
@@ -74,7 +84,7 @@ QString prgpfade::path_user()
     QString tmp;
     tmp = QDir::homePath();
     tmp += QDir::separator();
-    tmp += ".postprozessor";
+    tmp += ".postprozessor_V4";
     return tmp;
 }
 QString prgpfade::path_inifile()
@@ -101,6 +111,14 @@ QString prgpfade::path_ini_ganx()
     tmp += ini_ganx;
     return tmp;
 }
+QString prgpfade::path_ini_fmc()
+{
+    QString tmp;
+    tmp = path_user();
+    tmp += QDir::separator();
+    tmp += ini_fmc;
+    return tmp;
+}
 QString prgpfade::path_ini_dxf()
 {
     QString tmp;
@@ -123,6 +141,14 @@ QString prgpfade::path_wkz_fmc()
     tmp = path_user();
     tmp += QDir::separator();
     tmp += Wkz_fmc;
+    return tmp;
+}
+QString prgpfade::path_wkz_cix()
+{
+    QString tmp;
+    tmp = path_user();
+    tmp += QDir::separator();
+    tmp += Wkz_cix;
     return tmp;
 }
 QString prgpfade::path_wkz_ganx()

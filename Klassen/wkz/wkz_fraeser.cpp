@@ -5,7 +5,8 @@ wkz_fraeser::wkz_fraeser()
     IstAktiv            = true;
     DM                  = 0;
     Nutzlaenge          = 0;
-    Zustellmass         = 0;
+    ZustMasVert         = 0;
+    ZustMasHori         = 0;
     MinZust             = 0;
     Vorschub            = 0;
     NurDirektZuweisen   = true;
@@ -24,7 +25,7 @@ wkz_fraeser::wkz_fraeser(text_zw wkz)
     }
     DM          = wkz.at(3).toDouble();
     Nutzlaenge  = wkz.at(4).toDouble();
-    Zustellmass = wkz.at(5).toDouble();
+    ZustMasVert = wkz.at(5).toDouble();
     MinZust     = wkz.at(6).toDouble();
     Vorschub    = wkz.at(7).toDouble();
     Alias       = wkz.at(8);
@@ -50,7 +51,7 @@ wkz_fraeser::wkz_fraeser(text_zw wkz)
     {
         IstVerti = false;
     }
-
+    ZustMasHori = wkz.at(13).toDouble();
 }
 //----------------------------------set:
 void wkz_fraeser::set_wkznr(QString nr)
@@ -75,11 +76,18 @@ void wkz_fraeser::set_nutzl(double n)
         Nutzlaenge = n;
     }
 }
-void wkz_fraeser::set_zustma(double zm)
+void wkz_fraeser::set_zustmavert(double zm)
 {
     if(zm >= 0)
     {
-        Zustellmass = zm;
+        ZustMasVert = zm;
+    }
+}
+void wkz_fraeser::set_zustmahori(double zm)
+{
+    if(zm >= 0)
+    {
+        ZustMasHori = zm;
     }
 }
 void wkz_fraeser::set_minzust(double mindestzustellung)
@@ -132,7 +140,7 @@ text_zw wkz_fraeser::daten()
     }
     wkz.add_hi(double_to_qstring(DM));          //3: Durchmesser
     wkz.add_hi(double_to_qstring(Nutzlaenge));  //4: Nutzlänge
-    wkz.add_hi(double_to_qstring(Zustellmass)); //5: Zustellmaß
+    wkz.add_hi(double_to_qstring(ZustMasVert)); //5: Zustellmaß vertikal
     wkz.add_hi(double_to_qstring(MinZust));     //6: Mindest-Zustelltiefe
     wkz.add_hi(double_to_qstring(Vorschub));    //7: Vorschub
     wkz.add_hi(Alias);                          //8: Alias-Name
@@ -158,6 +166,7 @@ text_zw wkz_fraeser::daten()
     {
         wkz.add_hi("0");
     }
+    wkz.add_hi(double_to_qstring(ZustMasHori)); //13: Zustellmaß horizontal
     return wkz;
 }
 QString wkz_fraeser::wkznr()
@@ -176,9 +185,13 @@ double wkz_fraeser::nutzl()
 {
     return Nutzlaenge;
 }
-double wkz_fraeser::zustma()
+double wkz_fraeser::zustmavert()
 {
-    return Zustellmass;
+    return ZustMasVert;
+}
+double wkz_fraeser::zustmahori()
+{
+    return ZustMasHori;
 }
 double wkz_fraeser::minzust()
 {

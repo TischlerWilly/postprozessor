@@ -18,7 +18,8 @@ public:
     void set_dmimport(double dm);
     void set_dmexport(double dm);
     void set_nutzl(double n);
-    void set_zustma(double zm);
+    void set_zustmahori(double zm);
+    void set_zustmavert(double zm);
     void set_istdubo(bool ja);
     void set_isthori(bool ja);
     void set_istverti(bool ja);
@@ -29,7 +30,8 @@ public:
     double dmimport();
     double dmexport();
     double nutzl();
-    double zustma();
+    double zustmavert();
+    double zustmahori();    
     bool istdubo();
     bool isthori();
     bool istverti();
@@ -41,10 +43,11 @@ private:
     double  DMimport;       //3: DM für den Import in den pp
     double  DMexport;       //4: DM für den Export aus dem pp
     double  Nutzlaenge;     //5: Nutzlänge
-    double  Zustellmass;    //6: Zustellmaß
+    double  ZustMasVert;    //6: Zustellmaß vertikal
     bool    IstDuBo;        //7: Ist Durchgangsbohrer
     bool    IstHori;        //8: Ist Horizontalbohrer / kann horizontal bohren
     bool    IstVerti;       //9: Ist Vertikalbohrer / kann vertikal bohren
+    double  ZustMasHori;     //10: Zustellmaß horizontal
 
 
 };

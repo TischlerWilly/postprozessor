@@ -14,12 +14,6 @@ void nut::setup()
 {
     Tiefe = 0;
     Breite = 0;
-    Pos_xs = 0;
-    Pos_ys = 0;
-    Pos_zs = 0;
-    Pos_xe = 0;
-    Pos_ye = 0;
-    Pos_ze = 0;
     Bezug = WST_BEZUG_OBSEI;
     Afb = "1";
 }
@@ -48,51 +42,59 @@ void nut::set_breite(QString b)
 }
 void nut::set_xs(double x)
 {
-    Pos_xs = x;
+    Stapu.set_x(x);
 }
 void nut::set_xs(QString x)
 {
-    set_xs(x.toDouble());
+    Stapu.set_x(x);
 }
 void nut::set_ys(double y)
 {
-    Pos_ys = y;
+    Stapu.set_y(y);
 }
 void nut::set_ys(QString y)
 {
-    set_ys(y.toDouble());
+    Stapu.set_y(y);
 }
 void nut::set_zs(double z)
 {
-    Pos_zs = z;
+    Stapu.set_z(z);
 }
 void nut::set_zs(QString z)
 {
-    set_zs(z.toDouble());
+    Stapu.set_z(z);
 }
 void nut::set_xe(double x)
 {
-    Pos_xe = x;
+    Endpu.set_x(x);
 }
 void nut::set_xe(QString x)
 {
-    set_xe(x.toDouble());
+    Endpu.set_x(x);
 }
 void nut::set_ye(double y)
 {
-    Pos_ye = y;
+    Endpu.set_y(y);
 }
 void nut::set_ye(QString y)
 {
-    set_ye(y.toDouble());
+    Endpu.set_y(y);
 }
 void nut::set_ze(double z)
 {
-    Pos_ze = z;
+    Endpu.set_z(z);
 }
 void nut::set_ze(QString z)
 {
-    set_ze(z.toDouble());
+    Endpu.set_z(z);
+}
+void nut::set_stapu(punkt3d p)
+{
+    Stapu = p;
+}
+void nut::set_endpu(punkt3d p)
+{
+    Endpu = p;
 }
 void nut::set_bezug(QString bezugsflaeche)
 {
@@ -121,51 +123,59 @@ QString nut::breite_qstring()
 }
 double nut::xs()
 {
-    return Pos_xs;
+    return Stapu.x();
 }
 QString nut::xs_qstring()
 {
-    return double_to_qstring(Pos_xs);
+    return Stapu.x_QString();
 }
 double nut::ys()
 {
-    return Pos_ys;
+    return Stapu.y();
 }
 QString nut::ys_qstring()
 {
-    return double_to_qstring(Pos_ys);
+    return Stapu.y_QString();
 }
 double nut::zs()
 {
-    return Pos_zs;
+    return Stapu.z();
 }
 QString nut::zs_qstring()
 {
-    return double_to_qstring(Pos_zs);
+    return Stapu.z_QString();
 }
 double nut::xe()
 {
-    return Pos_xe;
+    return Endpu.x();
 }
 QString nut::xe_qstring()
 {
-    return double_to_qstring(Pos_xe);
+    return Endpu.x_QString();
 }
 double nut::ye()
 {
-    return Pos_ye;
+    return Endpu.y();
 }
 QString nut::ye_qstring()
 {
-    return double_to_qstring(Pos_ye);
+    return Endpu.y_QString();
 }
 double nut::ze()
 {
-    return Pos_ze;
+    return Endpu.z();
 }
 QString nut::ze_qstring()
 {
-    return double_to_qstring(Pos_ze);
+    return Endpu.z_QString();
+}
+punkt3d nut::stapu()
+{
+    return Stapu;
+}
+punkt3d nut::endpu()
+{
+    return Endpu;
 }
 QString nut::bezug()
 {
@@ -210,21 +220,20 @@ QString nut::text()
 }
 void nut::set_text(QString text)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_NUT)
+    text_zw tz;
+    tz.set_text(text,TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_NUT)
     {
-        set_bezug(tz.zeile(2));
-        set_xs(tz.zeile(3));
-        set_ys(tz.zeile(4));
-        set_zs(tz.zeile(5));
-        set_xe(tz.zeile(6));
-        set_ye(tz.zeile(7));
-        set_ze(tz.zeile(8));
-        set_tiefe(tz.zeile(9));
-        set_breite(tz.zeile(10));
-        set_afb(tz.zeile(11));
+        set_bezug(tz.at(1));
+        set_xs(tz.at(2));
+        set_ys(tz.at(3));
+        set_zs(tz.at(4));
+        set_xe(tz.at(5));
+        set_ye(tz.at(6));
+        set_ze(tz.at(7));
+        set_tiefe(tz.at(8));
+        set_breite(tz.at(9));
+        set_afb(tz.at(10));
     }
 }
 

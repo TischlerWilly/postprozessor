@@ -3,7 +3,7 @@
 
 #include <QString>
 
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Defines/def_bearbeitungen.h"
 #include "Funktionen/umwandeln.h"
 #include "Klassen/geo/punkt3d.h"
@@ -24,6 +24,7 @@ public:
     void set_y(QString y);
     void set_z(double z);
     void set_z(QString z);
+    void set_mipu(punkt3d p);
     void set_zustellmass(double mass);
     void set_zustellmass(QString mass);
     void set_bezug(QString bezugsflaeche);
@@ -54,9 +55,7 @@ public:
 protected:
     double Durchmesser;
     double Tiefe;
-    double Pos_x;
-    double Pos_y;
-    double Pos_z;
+    punkt3d Mipu;
     QString Bezug;
     QString Afb;
     double Zustellmass;

@@ -14,6 +14,7 @@ Dialog_bearb_bohrung::Dialog_bearb_bohrung(QWidget *parent) :
     ui->comboBox_bezug->addItem("Rechts");      //3
     ui->comboBox_bezug->addItem("Vorne");       //4
     ui->comboBox_bezug->addItem("Hinten");      //5
+    ui->pushButton_invert->setText("HBE\ninvertieren");
 }
 
 Dialog_bearb_bohrung::~Dialog_bearb_bohrung()
@@ -115,4 +116,32 @@ void Dialog_bearb_bohrung::on_btn_abbrechen_clicked()
     this->close();
 }
 
-
+void Dialog_bearb_bohrung::on_pushButton_invert_clicked()
+{
+    int bezug = ui->comboBox_bezug->currentIndex();
+    if(bezug == Bezug_li)
+    {
+        ui->comboBox_bezug->setCurrentIndex(Bezug_re);
+        double x = var_zu_wert(ui->lineEdit_x->text()).toDouble();
+        x = Wst->laenge() - x;
+        ui->lineEdit_x->setText(double_to_qstring(x));
+    }else if(bezug == Bezug_re)
+    {
+        ui->comboBox_bezug->setCurrentIndex(Bezug_li);
+        double x = var_zu_wert(ui->lineEdit_x->text()).toDouble();
+        x = Wst->laenge() - x;
+        ui->lineEdit_x->setText(double_to_qstring(x));
+    }else if(bezug == Bezug_vo)
+    {
+        ui->comboBox_bezug->setCurrentIndex(Bezug_hi);
+        double y = var_zu_wert(ui->lineEdit_y->text()).toDouble();
+        y = Wst->breite() - y;
+        ui->lineEdit_y->setText(double_to_qstring(y));
+    }else if(bezug == Bezug_hi)
+    {
+        ui->comboBox_bezug->setCurrentIndex(Bezug_vo);
+        double y = var_zu_wert(ui->lineEdit_y->text()).toDouble();
+        y = Wst->breite() - y;
+        ui->lineEdit_y->setText(double_to_qstring(y));
+    }
+}

@@ -32,11 +32,13 @@ private slots:
     void on_pushButton_ziel_lokal_clicked();
     void on_pushButton_root_ganx_clicked();
     void on_pushButton_root_fmc_clicked();
+    void on_pushButton_root_cix_clicked();
     void on_lineEdit_quelle_editingFinished();
     void on_lineEdit_ziel_server_editingFinished();
     void on_lineEdit_ziel_lokal_editingFinished();
     void on_lineEdit_root_ganx_editingFinished();
     void on_lineEdit_root_fmc_editingFinished();
+    void on_lineEdit_root_cix_editingFinished();
 
 private:
     Ui::Dialog_Einstellung_pfade *ui;

@@ -3,9 +3,10 @@
 
 #include <QString>
 
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Defines/def_bearbeitungen.h"
 #include "Funktionen/umwandeln.h"
+#include "Klassen/geo/punkt3d.h"
 
 
 class nut
@@ -30,6 +31,8 @@ public:
     void set_ye(QString y);
     void set_ze(double z);
     void set_ze(QString z);
+    void set_stapu(punkt3d p);
+    void set_endpu(punkt3d p);
     void set_bezug(QString bezugsflaeche);
     void set_afb(QString ausfuehrbedingung);
 
@@ -49,6 +52,8 @@ public:
     QString ye_qstring();
     double  ze();
     QString ze_qstring();
+    punkt3d stapu();
+    punkt3d endpu();
     QString bezug();
     QString afb();
 
@@ -58,9 +63,8 @@ public:
 private:
     double Tiefe;
     double Breite;
-    double Pos_xs, Pos_xe;
-    double Pos_ys, Pos_ye;
-    double Pos_zs, Pos_ze;
+    punkt3d Stapu;
+    punkt3d Endpu;
     QString Bezug;
     QString Afb;
 

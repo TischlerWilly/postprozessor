@@ -1,7 +1,7 @@
 #ifndef DIALOG_BEARB_FAUFRUF_H
 #define DIALOG_BEARB_FAUFRUF_H
 
-#include "Klassen/wst/fraueseraufruf.h"
+#include "Klassen/wst/fraeseraufruf.h"
 #include "Klassen/formel.h"
 #include "Klassen/wst/werkstueck.h"
 #include <QDialog>
@@ -24,7 +24,7 @@ private slots:
     void on_btn_abbrechen_clicked();
 
 signals:
-    void signal_faufruf(fraueseraufruf fa);
+    void signal_faufruf(fraeseraufruf fa);
 
 private:
     Ui::Dialog_bearb_faufruf *ui;

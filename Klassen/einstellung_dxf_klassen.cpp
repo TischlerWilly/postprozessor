@@ -14,40 +14,39 @@ einstellung_dxf_klassen::einstellung_dxf_klassen()
 //--------------------------set_xy():
 void einstellung_dxf_klassen::set_text(QString t)
 {
-    text_zeilenweise tz;
-    tz.set_text(t);
-    for(uint i=1;i<=tz.zeilenanzahl();i++)
+    text_zw tz;
+    tz.set_text(t,'\n');
+    for(uint i=0;i<tz.count();i++)
     {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen('\t');
-        spalten.set_text(tz.zeile(i));
-        if(spalten.zeile(1) == "Wertkstueckklasse:")
+        text_zw spalten;
+        spalten.set_text(tz.at(i),'\t');
+        if(spalten.at(0) == "Wertkstueckklasse:")
         {
-            set_wst(spalten.zeile(2));
+            set_wst(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Bohrung vertikal:")
+        if(spalten.at(0) == "Bohrung vertikal:")
         {
-            set_bohr_vert(spalten.zeile(2));
+            set_bohr_vert(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Bohrung horizontal:")
+        if(spalten.at(0) == "Bohrung horizontal:")
         {
-            set_bohr_hori(spalten.zeile(2));
+            set_bohr_hori(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Nut vertikal:")
+        if(spalten.at(0) == "Nut vertikal:")
         {
-            set_nut_vert(spalten.zeile(2));
+            set_nut_vert(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Kreistasche:")
+        if(spalten.at(0) == "Kreistasche:")
         {
-            set_kta(spalten.zeile(2));
+            set_kta(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Rechtecktasche:")
+        if(spalten.at(0) == "Rechtecktasche:")
         {
-            set_rta(spalten.zeile(2));
+            set_rta(spalten.at(1));
         }
-        if(spalten.zeile(1) == "Fraeser vertikal:")
+        if(spalten.at(0) == "Fraeser vertikal:")
         {
-            set_fraes_vert(spalten.zeile(2));
+            set_fraes_vert(spalten.at(1));
         }
     }
 }

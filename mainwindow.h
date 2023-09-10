@@ -11,11 +11,12 @@
 
 #include "Klassen/prgpfade.h"
 #include "Defines/dateinamen.h"
-#include "Dialoge/dialog_wkz.h"
 #include "mainwin_wkzmagazin.h"
 #include "Dialoge/dialog_stdnamen.h"
+#include "Dialoge/dialog_einstellung_wkz_pp.h"
 #include "Dialoge/dialog_einstellung_pfade.h"
 #include "Dialoge/dialog_einstellung_ganx.h"
+#include "Dialoge/dialog_einstellung_fmc.h"
 #include "Dialoge/dialog_einstellung_dxf.h"
 #include "Dialoge/dialog_einstellung_dxf_klassen.h"
 #include "Dialoge/dialog_programmtext.h"
@@ -24,10 +25,8 @@
 #include "mainwin_wst_bearbeiten.h"
 
 #include "Funktionen/text.h"
-#include "Klassen/text_zeilenweise.h"
 #include "Klassen/text_zw.h"
 #include "Klassen/wst/werkstuecke.h"
-#include "Klassen/werkzeugmagazin.h"
 #include "Klassen/einstellung.h"
 #include "Klassen/einstellung_ganx.h"
 #include "Klassen/geo/vorschau.h"
@@ -59,6 +58,7 @@ private slots:
     void on_actionInfo_triggered();
     void on_pushButton_dateien_auflisten_clicked();
     void on_actionWerkzeug_fmc_anzeigen_triggered();
+    void on_actionWerkzeug_cix_anzeigen_triggered();
     void on_actionStandard_Namen_anzeigen_triggered();
     void zielordner_leeren();
     void on_radioButton_fkon_ti_quell_toggled(bool checked);
@@ -75,6 +75,7 @@ private slots:
     void on_listWidget_wste_currentRowChanged(int currentRow);
     void on_radioButton_vorschau_eigen_clicked(bool checked);
     void on_radioButton_vorschau_ganx_clicked(bool checked);
+    void on_radioButton_vorschau_cix_clicked(bool checked);
     void on_radioButton_vorschau_fmc_clicked(bool checked);
     void on_radioButton_vorschau_ggf_clicked(bool checked);
     void on_listWidget_wste_itemDoubleClicked();
@@ -92,26 +93,28 @@ private slots:
     void on_listWidget_wste_itemClicked(QListWidgetItem *item);
     void on_actionEntwicklermodus_triggered(bool checked);
     void on_actionTestfunktion_triggered();
+    void on_actionEinstellung_fmc_triggered();
+    void on_actionWerkzeug_Postprozessor_triggered();
 
 private:
     Ui::MainWindow *ui;
-    text_zeilenweise wkz_magazin_ganx;//alt
-    text_zeilenweise wkz_magazin_fmc;//alt
-    text_zeilenweise wkz_magazin_ggf;//alt
-    wkz_magazin wkz_mag_ganx;//neu
-    wkz_magazin wkz_mag_fmc;//neu
-    wkz_magazin wkz_mag_ggf;//neu
+    wkz_magazin wkz_mag_ganx;
+    wkz_magazin wkz_mag_fmc;
+    wkz_magazin wkz_mag_cix;
+    wkz_magazin wkz_mag_ggf;
+    wkz_magazin wkz_mag_pp_fr;//Fräser für Postprozessor (wst bearbeiten)
     prgpfade pf;
 
     //Variablen:
     QString tz; //Trennzeichen für Pfade (Linux '/'  Windows '\')
-    text_zeilenweise dateien_alle;
+    text_zw dateien_alle;
     werkstuecke wste;
-    text_zeilenweise namen_std_vor;         //Standard-Dateinamen von CAD
-    text_zeilenweise namen_std_nach;        //Standard-Dateinamen eigen
+    text_zw namen_std_vor;         //Standard-Dateinamen von CAD
+    text_zw namen_std_nach;        //Standard-Dateinamen eigen
     einstellung Einstellung;
     einstellung_ganx Einstellung_ganx;
     einstellung_dxf Einstellung_dxf;
+    einstellung_fmc Einstellung_fmc;
     einstellung_dxf_klassen Einstellung_dxf_klassen;
     vorschau vorschaufenster;
     QString Projektposition;
@@ -120,6 +123,7 @@ private:
 
     //Funktionen:
     void setup();
+    void setup_wkz_pp();
     void schreibe_ini();
     void dateien_erfassen();
     QString verzeichnis_ziel();
@@ -133,11 +137,12 @@ private:
     void set_prginfo();
 
     //Dialoge:
-    Dialog_WKZ dlg_wkz;//alt
-    mainwin_wkzmagazin dlg_wkzmag;//neu
+    mainwin_wkzmagazin dlg_wkzmag;
+    Dialog_einstellung_wkz_pp dlg_wkz_pp;
     Dialog_stdnamen dlg_stdnamen;
     Dialog_Einstellung_pfade dlg_Einstellung_pfade;
     Dialog_einstellung_ganx dlg_einstellung_ganx;
+    Dialog_einstellung_fmc dlg_einstellung_fmc;
     Dialog_einstellung_dxf dlg_einstellung_dxf;
     Dialog_einstellung_dxf_klassen dlg_einstellung_dxf_klassen;
     Dialog_programmtext dlg_prgtext;
@@ -145,25 +150,25 @@ private:
     MainWin_wst_bearbeiten dlg_wst_bearbeiten;    
 
 signals:
-    void sendDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);//alt
-    void sendDialogDataWKZ(QString fenstertitel, wkz_magazin werkzeugmagazin);//neu
-    void sendStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
+    void sendDialogDataWKZ(QString fenstertitel, wkz_magazin werkzeugmagazin);
+    void sendStdNamen(text_zw namen_vor, text_zw namen_nach);
     void sendEinstellungPfade(einstellung e);
     void sendEinstellungGANX(einstellung_ganx e);
+    void sendEinstellungFMC(einstellung_fmc e);
     void sendEinstellungDxf(einstellung_dxf e);
     void sendEinstellungDxfKlassen(einstellung_dxf eg, einstellung_dxf_klassen ek);
     void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
     void sendProgrammtext(werkstueck* w);
-    void signal_exporte(text_zeilenweise daten);
+    void signal_exporte(text_zw daten);
     void signal_wstexport(QString name, QString format, bool exportiert);
     void signal_wst_umbenennen(QString name_vor, QString name_nach);
     void signal_wst_ausblenden(QString name, bool ausblenden);
 
 public slots:
-    void getDialogDataWKZ(QString fenstertitel, text_zeilenweise werkzeugmagazin);
     void getDialogDataWKZ(QString fenstertitel, wkz_magazin werkzeugmagazin);
-    void getStdNamen(text_zeilenweise namen_vor, text_zeilenweise namen_nach);
+    void getStdNamen(text_zw namen_vor, text_zw namen_nach);
     void getEinstellungGANX(einstellung_ganx e);
+    void getEinstellungFMC(einstellung_fmc e);
     void getEinstellungDxf(einstellung_dxf e);
     void getEinstellungDxfKlassen(einstellung_dxf_klassen e);
     void getEinstellung(einstellung e);

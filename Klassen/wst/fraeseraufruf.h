@@ -1,18 +1,18 @@
-#ifndef FRAUESERAUFRUF_H
-#define FRAUESERAUFRUF_H
+#ifndef FRAESERAUFRUF_H
+#define FRAESERAUFRUF_H
 
 #include <QString>
 
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 #include "Defines/def_bearbeitungen.h"
 #include "Funktionen/umwandeln.h"
 #include "Klassen/geo/punkt3d.h"
 
-class fraueseraufruf
+class fraeseraufruf
 {
 public:
-    fraueseraufruf();
-    fraueseraufruf(QString text);
+    fraeseraufruf();
+    fraeseraufruf(QString text);
 
     void set_x(double x);
     void set_x(QString x);
@@ -20,6 +20,7 @@ public:
     void set_y(QString y);
     void set_z(double z);
     void set_z(QString z);
+    void set_pos(punkt3d p);
     void set_tiefe(double ti);
     void set_tiefe(QString ti);
     void set_bezug(QString bezugsflaeche);
@@ -39,15 +40,13 @@ public:
     QString afb();
     QString radkor();
     QString wkznum();
-    punkt3d pos_vertikal();
+    punkt3d pos();
 
     QString text();
     void set_text(QString text);
 
 private:
-    double Pos_x;
-    double Pos_y;
-    double Pos_z;   //für horizontale Fräseraufrufe
+    punkt3d Pos; //Der Z-Wert wird benutzt für horizontale Fräsungen
     double Tiefe;   //ist die Eintauchtiefe = Oberfläche-Wst bis gesamte Bahntiefe
     QString Bezug;
     QString Afb;
@@ -58,4 +57,4 @@ private:
 
 };
 
-#endif // FRAUESERAUFRUF_H
+#endif // FRAESERAUFRUF_H

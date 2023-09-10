@@ -2,7 +2,7 @@
 #define EINSTELLUNG_H
 
 #include <QString>
-#include "text_zeilenweise.h"
+#include "text_zw.h"
 #include "Funktionen/umwandeln.h"
 
 class einstellung
@@ -19,6 +19,7 @@ public:
     void set_verzeichnis_ziel_lokal(QString v);
     void set_verzeichnis_root_ganx(QString v);
     void set_verzeichnis_root_fmc(QString v);
+    void set_verzeichnis_root_cix(QString v);
     void set_verzeichnis_ziel_auswahl(QString abc);
     void set_quelldateien_erhalten(bool erhalten);
     void set_quelldateien_erhalten(QString erhalten);
@@ -34,15 +35,14 @@ public:
     void set_fkon_kantenschonend(bool ks);
     void set_fkon_kantenschonend(QString ks);
     bool set_gehrungen_zugabe(double zug);
-    void set_export_ganx(bool jn);
-    void set_export_ganx(QString jn);
-    void set_export_fmc(bool jn);
-    void set_export_fmc(QString jn);
-    void set_export_ggf(bool jn);
-    void set_export_ggf(QString jn);
-    void set_export_eigen(bool jn);
-    void set_export_eigen(QString jn);
-
+    void set_wkz_fr_fmc(bool jn);
+    void set_wkz_fr_fmc(QString jn);
+    void set_wkz_fr_ganx(bool jn);
+    void set_wkz_fr_ganx(QString jn);
+    void set_wkz_fr_cix(bool jn);
+    void set_wkz_fr_cix(QString jn);
+    void set_wkz_fr_ggf(bool jn);
+    void set_wkz_fr_ggf(QString jn);
 
     //get:    
     QString text();
@@ -52,6 +52,7 @@ public:
     QString verzeichnis_ziel_lokal();
     QString verzeichnis_root_ganx();
     QString verzeichnis_root_fmc();
+    QString verzeichnis_root_cix();
     QString verzeichnis_ziel_auswahl();
     bool quelldateien_erhalten();
     bool std_dateinamen_verwenden();
@@ -62,10 +63,10 @@ public:
     bool formartierungen_aufbrechen();
     bool fkon_kantenschonend();
     double gehrungen_zugabe();
-    bool export_ganx();
-    bool export_fmc();
-    bool export_ggf();
-    bool export_eigen();
+    bool wkz_fr_fmc();
+    bool wkz_fr_ganx();
+    bool wkz_fr_cix();
+    bool wkz_fr_ggf();
 
 private:
     bool Entwicklermodus;
@@ -74,6 +75,7 @@ private:
     QString Verzeichnis_ziel_lokal;
     QString Verzeichnis_root_ganx;
     QString Verzeichnis_root_fmc;
+    QString Verzeichnis_root_cix;
     QString Verzeichnis_ziel_auswahl;
     bool Quelldateien_erhalten;
     bool Std_dateinamen_verwenden;
@@ -84,10 +86,10 @@ private:
     bool Formartierungen_aufbrechen;
     bool Fkon_kantenschonend;
     double Gehrungen_zugabe;
-    bool Export_ganx;
-    bool Export_fmc;
-    bool Export_ggf;
-    bool Export_eigen;
+    bool WKZ_fr_fmc;
+    bool WKZ_fr_ganx;
+    bool WKZ_fr_cix;
+    bool WKZ_fr_ggf;
 
 };
 

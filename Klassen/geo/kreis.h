@@ -5,7 +5,7 @@
 #include "punkt2d.h"
 #include "darstellungsatribute.h"
 #include "defines_geometrie.h"
-#include "Klassen/text_zeilenweise.h"
+#include "Klassen/text_zw.h"
 
 class kreis : public darstellungsatribute
 {

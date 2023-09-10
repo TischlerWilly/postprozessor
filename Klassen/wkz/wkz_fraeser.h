@@ -17,7 +17,8 @@ public:
     void set_istaktiv(bool ja);
     void set_dm(double dm);
     void set_nutzl(double n);
-    void set_zustma(double zm);
+    void set_zustmavert(double zm);
+    void set_zustmahori(double zm);
     void set_minzust(double mindestzustellung);
     void set_vorschub(double vorschub);
     void set_alias(QString alias);
@@ -31,7 +32,8 @@ public:
     bool istaktiv();
     double dm();
     double nutzl();
-    double zustma();
+    double zustmavert();
+    double zustmahori();
     double minzust();
     double vorschub();
     QString alias();
@@ -46,7 +48,7 @@ private:
     bool    IstAktiv;           //2: Ist Aktiv
     double  DM;                 //3: Durchmesser
     double  Nutzlaenge;         //4: Nutzlänge
-    double  Zustellmass;        //5: Zustellmaß
+    double  ZustMasVert;        //5: Zustellmaß vertikal
     double  MinZust;            //6: Mindest-Zustelltiefe
     double  Vorschub;           //7: Vorschub
     QString Alias;              //8: Alias-Name
@@ -54,6 +56,7 @@ private:
     bool    NurDirektZuweisen;  //10: Ist nur direkt Zuweisbar
     bool    IstHori;            //11: Ist horizontaler Fräser / kann horizontal fräsen
     bool    IstVerti;           //12: Ist vertikaler Fräser / kann vertikal fräsen
+    double  ZustMasHori;        //13: Zustellmaß vertikal
 
 };
 

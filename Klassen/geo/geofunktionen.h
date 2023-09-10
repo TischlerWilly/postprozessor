@@ -9,8 +9,6 @@
 #include "Klassen/geo/bogen.h"
 #include "Klassen/geo/bogenac.h"
 
-
-
 punkt drehen(punkt drehzentrum, punkt alter_punkt, \
              float drehwinkel, bool drehrichtung_im_uhrzeigersinn);
 punkt2d drehen(punkt2d drehzentrum, punkt2d alter_punkt, \

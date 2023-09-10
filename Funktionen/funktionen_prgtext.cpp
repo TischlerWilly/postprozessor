@@ -25,7 +25,7 @@ QString bezug(QString b)
     return msg;
 }
 
-QString rta_zu_prgeile(QString text)
+QString rta_zu_prgzei(QString text)
 {
     QString msg = "RTA von ";
     rechtecktasche rt(text);
@@ -56,7 +56,7 @@ QString rta_zu_prgeile(QString text)
     msg += rt.wkznum();
     return msg;
 }
-QString bohr_zu_prgeile(QString text)
+QString bohr_zu_prgzei(QString text)
 {
     QString msg = "Bohr von ";
     bohrung bo(text);
@@ -79,7 +79,7 @@ QString bohr_zu_prgeile(QString text)
     msg += bo.wkznum();
     return msg;
 }
-QString bohrRaster_zu_prgeile(QString text)
+QString bohrRaster_zu_prgzei(QString text)
 {
     QString msg = "BoRa von ";
     bohrraster bo(text);
@@ -114,7 +114,7 @@ QString bohrRaster_zu_prgeile(QString text)
     msg += bo.raster_z_qstring();
     return msg;
 }
-QString nut_zu_prgeile(QString text)
+QString nut_zu_prgzei(QString text)
 {
     QString msg = "Nut von ";
     nut nu(text);
@@ -139,10 +139,10 @@ QString nut_zu_prgeile(QString text)
     msg += nu.afb();
     return msg;
 }
-QString fauf_zu_prgeile(QString text)
+QString fauf_zu_prgzei(QString text)
 {
     QString msg = "Fräser von ";
-    fraueseraufruf fa(text);
+    fraeseraufruf fa(text);
     msg += bezug(fa.bezug());
     msg += "\tX: ";
     msg += fa.x_qstring();
@@ -160,7 +160,7 @@ QString fauf_zu_prgeile(QString text)
     msg += fa.wkznum();
     return msg;
 }
-QString fgerade_zu_prgeile(QString text)
+QString fgerade_zu_prgzei(QString text)
 {
     QString msg = "Gerade von ";
     fraesergerade fg(text);
@@ -181,7 +181,7 @@ QString fgerade_zu_prgeile(QString text)
     msg += fg.afb();
     return msg;
 }
-QString fbogen_zu_prgeile(QString text)
+QString fbogen_zu_prgzei(QString text)
 {
     QString msg = "Bogen von ";
     fraeserbogen fb(text);
@@ -204,6 +204,39 @@ QString fbogen_zu_prgeile(QString text)
     msg += fb.uzs_qstring();
     msg += "\tAFB: ";
     msg += fb.afb();
+    return msg;
+}
+QString gehr_zu_prgzei(QString text)
+{
+    QString msg = "Gehrung ";
+    gehrung ge(text);
+    msg += "\tSpitze :";
+    if(ge.bezug() == WST_BEZUG_OBSEI)
+    {
+        msg += "unten";
+    }else
+    {
+        msg += "oben";
+    }
+    msg += "\tWinkel: ";
+    msg += ge.winkel_qstring();
+    msg += "\tRitztiefe: ";
+    msg += ge.riti_qstring();
+    msg += "\tSchnittiefe: ";
+    msg += ge.sti_qstring();
+    msg += "\tXS: ";
+    msg += ge.stapu().x_QString();
+    msg += "\tYS: ";
+    msg += ge.stapu().y_QString();
+    msg += "\tXE: ";
+    msg += ge.endpu().x_QString();
+    msg += "\tYE: ";
+    msg += ge.endpu().y_QString();
+    msg += "\tY: ";
+    msg += "\tAFB: ";
+    msg += ge.afb();
+    msg += "\tWKZ: ";
+    msg += ge.wkznum();
     return msg;
 }
 

@@ -31,92 +31,24 @@ void vorschau::update_cad()
     painter.setPen(Qt::black);
     painter.drawRect(0, 0, width(), height());
 
-
-/*
-    //Maschine darstellen:
-    geotext = T.maschinengeo().text_zw();
-    for(uint i=1;i<=geotext.zeilenanzahl();i++)
-    {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen(TRZ_EL_);
-        spalten.set_text(geotext.zeile(i));
-
-        for(uint ii=1;ii<=spalten.zeilenanzahl();ii++)
-        {
-            zeichneGeotext(spalten.zeile(ii), 0);
-        }
-    }
-*/
-
     //Bearbeitungen darstellen:
-    text_zeilenweise geotext = Geotext;
-    for(uint i=1;i<=geotext.zeilenanzahl();i++)
+    for(uint i=0;i<Geotext.count();i++)
     {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen(TRZ_EL_);
-        spalten.set_text(geotext.zeile(i));
-
-        for(uint ii=1;ii<=spalten.zeilenanzahl();ii++)
+        text_zw spalten = Geotext.at(i);
+        for(uint ii=0;ii<spalten.count();ii++)
         {
-            zeichneGeotext(spalten.zeile(ii), i);
+            zeichneGeotext(spalten.at(ii), i);
         }
     }
-/*
-    //Fräskontur darstellen:
-    text_zeilenweise fkontext = T.fkon().text_zw();
-    for(uint i=1;i<=fkontext.zeilenanzahl();i++)
+    //Fräser darstellen:
+    for(uint i=0;i<GeoFkon.count();i++)
     {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen(TRZ_EL_);
-        spalten.set_text(fkontext.zeile(i));
-
-        for(uint ii=1;ii<=spalten.zeilenanzahl();ii++)
+        text_zw spalten = GeoFkon.at(i);
+        for(uint ii=0;ii<spalten.count();ii++)
         {
-            zeichneFkon(spalten.zeile(ii), i);
+            zeichneGeotext(spalten.at(ii), i);
         }
     }
-
-    //Fräser darstellen, aber nur in aktueller Zeile:
-    text_zeilenweise fraeserdarsttext = T.fraeserdarst().text_zw();
-    if(Aktuelle_zeilennummer <= fraeserdarsttext.zeilenanzahl() && \
-            !T.klartext_zw().zeile(Aktuelle_zeilennummer).contains(DLG_PKOPF))
-    {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen(TRZ_EL_);
-        spalten.set_text(fraeserdarsttext.zeile(Aktuelle_zeilennummer));
-
-        for(uint ii=1;ii<=spalten.zeilenanzahl();ii++)
-        {
-            zeichneGeotext(spalten.zeile(ii), Aktuelle_zeilennummer);
-        }
-    }
-    //Aktuelle Zeile noch einmal rot überzeichen, da bereits wieder überdeckt
-    //durch deckungsgleiche Elemente in späteren Zeilen:
-    if(Aktuelle_zeilennummer <= geotext.zeilenanzahl() && \
-            !T.klartext_zw().zeile(Aktuelle_zeilennummer).contains(DLG_PKOPF))
-    {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen(TRZ_EL_);
-        spalten.set_text(geotext.zeile(Aktuelle_zeilennummer));
-
-        for(uint ii=1;ii<=spalten.zeilenanzahl();ii++)
-        {
-            zeichneGeotext(spalten.zeile(ii), Aktuelle_zeilennummer);
-        }
-    }
-    if(Aktuelle_zeilennummer <= fkontext.zeilenanzahl() && \
-            !T.klartext_zw().zeile(Aktuelle_zeilennummer).contains(DLG_PKOPF))
-    {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen(TRZ_EL_);
-        spalten.set_text(fkontext.zeile(Aktuelle_zeilennummer));
-
-        for(uint ii=1;ii<=spalten.zeilenanzahl();ii++)
-        {
-            zeichneFkon(spalten.zeile(ii), Aktuelle_zeilennummer);
-        }
-    }
-*/
     this->update();
 }
 
@@ -125,31 +57,30 @@ void vorschau::paintEvent(QPaintEvent *)
     update_cad();
 }
 
-void vorschau::zeichneGeotext(QString geometrieElement, uint i)
+void vorschau::zeichneGeotext(QString geometrieElement, int i)
 {
     QPainter painter(this);
     painter.setBrush( Qt::white);
     painter.setPen(Qt::black);
 
-    text_zeilenweise element;
-    element.set_trennzeichen(TRZ_PA_);
-    element.set_text(geometrieElement);
+    text_zw element;
+    element.set_text(geometrieElement,TRZ_PA_);
 
     if(element.text().contains(PUNKT))
     {
         punkt2d p2;
-        p2.set_x(element.zeile(2).toDouble()*Sf*Zf);
-        p2.set_y(element.zeile(3).toDouble()*Sf*Zf);
+        p2.set_x(element.at(1).toDouble()*Sf*Zf);
+        p2.set_y(element.at(2).toDouble()*Sf*Zf);
         QPen pen, pen_alt;
         pen_alt = painter.pen();
-        pen.setWidth(element.zeile(6).toInt());
+        pen.setWidth(element.at(5).toInt());
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
             pen.setWidth(pen.width()*2);
         }else
         {
-            pen.setColor(set_farbe(element.zeile(5)));
+            pen.setColor(set_farbe(element.at(4)));
         }
         pen.setCapStyle(Qt::RoundCap);
         painter.setPen(pen);
@@ -159,22 +90,22 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
     }else if(element.text().contains(STRECKE))
     {
         punkt2d startpunkt, endpunkt;
-        startpunkt.set_x(element.zeile(2).toDouble()*Sf*Zf);
-        startpunkt.set_y(element.zeile(3).toDouble()*Sf*Zf);
-        endpunkt.set_x(element.zeile(5).toDouble()*Sf*Zf);
-        endpunkt.set_y(element.zeile(6).toDouble()*Sf*Zf);
+        startpunkt.set_x(element.at(1).toDouble()*Sf*Zf);
+        startpunkt.set_y(element.at(2).toDouble()*Sf*Zf);
+        endpunkt.set_x(element.at(4).toDouble()*Sf*Zf);
+        endpunkt.set_y(element.at(5).toDouble()*Sf*Zf);
 
         QPen pen, pen_alt;
         pen_alt = painter.pen();
-        pen.setWidth(element.zeile(9).toInt());
-        pen.setStyle(set_linienstil(element.zeile(10)));
+        pen.setWidth(element.at(8).toInt());
+        pen.setStyle(set_linienstil(element.at(9)));
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
             pen.setWidth(pen.width()*2);
         }else
         {
-            pen.setColor(set_farbe(element.zeile(8)));
+            pen.setColor(set_farbe(element.at(7)));
         }
         pen.setCapStyle(Qt::RoundCap);
         painter.setPen(pen);
@@ -187,26 +118,26 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         painter.setPen(pen_alt);
     }else if(element.text().contains(BOGEN))
     {
-        double rad = element.zeile(8).toDouble()*Sf*Zf;
+        double rad = element.at(7).toDouble()*Sf*Zf;
         punkt2d mipu;
-        mipu.set_x(element.zeile(10).toDouble()*Sf*Zf);//Mittelpunkt in X
-        mipu.set_y(element.zeile(11).toDouble()*Sf*Zf);//Mittelpunkt in Y
+        mipu.set_x(element.at(9).toDouble()*Sf*Zf);//Mittelpunkt in X
+        mipu.set_y(element.at(10).toDouble()*Sf*Zf);//Mittelpunkt in Y
         punkt2d obli;
         obli.set_x(mipu.x()-rad);
         obli.set_y(mipu.y()+rad);
 
         punkt2d mp;
-        mp.set_x(element.zeile(10).toDouble());//Mittelpunkt in X
-        mp.set_y(element.zeile(11).toDouble());//Mittelpunkt in Y
+        mp.set_x(element.at(9).toDouble());//Mittelpunkt in X
+        mp.set_y(element.at(10).toDouble());//Mittelpunkt in Y
         punkt2d sp;
-        sp.set_x(element.zeile(2).toDouble());//Start in X
-        sp.set_y(element.zeile(3).toDouble());//Start in Y
+        sp.set_x(element.at(1).toDouble());//Start in X
+        sp.set_y(element.at(2).toDouble());//Start in Y
         punkt2d ep;
-        ep.set_x(element.zeile(5).toDouble());//Ende in X
-        ep.set_y(element.zeile(6).toDouble());//Ende in Y
+        ep.set_x(element.at(4).toDouble());//Ende in X
+        ep.set_y(element.at(5).toDouble());//Ende in Y
         double stawi=0, bogwi=0;
 
-        if(element.zeile(9) == "nein")//Bogen gegen den Uhrzeigersinn
+        if(element.at(8) == "nein")//Bogen gegen den Uhrzeigersinn
         {
             stawi = winkel(sp.x(),   \
                            sp.y(),   \
@@ -238,15 +169,15 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
 
         QPen pen, pen_alt;
         pen_alt = painter.pen();
-        pen.setWidth(element.zeile(13).toInt());
-        pen.setStyle(set_linienstil(element.zeile(14)));
+        pen.setWidth(element.at(12).toInt());
+        pen.setStyle(set_linienstil(element.at(13)));
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
             pen.setWidth(pen.width()*2);
         }else
         {
-            pen.setColor(set_farbe(element.zeile(12)));
+            pen.setColor(set_farbe(element.at(11)));
         }
         pen.setCapStyle(Qt::RoundCap);
         painter.setPen(pen);
@@ -261,29 +192,29 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         painter.setPen(pen_alt);
     }else if(element.text().contains(KREIS))
     {
-        double rad = element.zeile(5).toDouble()*Sf*Zf;
+        double rad = element.at(4).toDouble()*Sf*Zf;
         QPen pen, pen_alt;
         pen_alt = painter.pen();
-        pen.setWidth(element.zeile(8).toInt());
-        pen.setStyle(set_linienstil(element.zeile(9)));
+        pen.setWidth(element.at(7).toInt());
+        pen.setStyle(set_linienstil(element.at(8)));
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
             pen.setWidth(pen.width()*2);
         }else
         {
-            pen.setColor(set_farbe(element.zeile(6)));
+            pen.setColor(set_farbe(element.at(5)));
         }
         pen.setCapStyle(Qt::RoundCap);
         painter.setPen(pen);
 
         QBrush brush = painter.brush();
         QBrush brush_alt = painter.brush();
-        brush.setColor(set_farbe(element.zeile(7)));
+        brush.setColor(set_farbe(element.at(6)));
         painter.setBrush(brush);
 
-        painter.drawEllipse(N.x-Npv.x+(element.zeile(2).toDouble()*Sf*Zf)-rad,\
-                            N.y-Npv.y-(element.zeile(3).toDouble()*Sf*Zf)-rad,\
+        painter.drawEllipse(N.x-Npv.x+(element.at(1).toDouble()*Sf*Zf)-rad,\
+                            N.y-Npv.y-(element.at(2).toDouble()*Sf*Zf)-rad,\
                             rad*2,\
                             rad*2);
 
@@ -291,29 +222,29 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
         painter.setBrush(brush_alt);
     }else if(element.text().contains(ZYLINDER))
     {
-        double rad = element.zeile(5).toDouble()*Sf*Zf;
+        double rad = element.at(4).toDouble()*Sf*Zf;
         QPen pen, pen_alt;
         pen_alt = painter.pen();
-        pen.setWidth(element.zeile(9).toInt());
-        pen.setStyle(set_linienstil(element.zeile(10)));
+        pen.setWidth(element.at(8).toInt());
+        pen.setStyle(set_linienstil(element.at(9)));
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
             pen.setWidth(pen.width()*2);
         }else
         {
-            pen.setColor(set_farbe(element.zeile(7)));
+            pen.setColor(set_farbe(element.at(6)));
         }
         pen.setCapStyle(Qt::RoundCap);
         painter.setPen(pen);
 
         QBrush brush = painter.brush();
         QBrush brush_alt = painter.brush();
-        brush.setColor(set_farbe(element.zeile(8)));
+        brush.setColor(set_farbe(element.at(7)));
         painter.setBrush(brush);
 
-        painter.drawEllipse(N.x-Npv.x+(element.zeile(2).toDouble()*Sf*Zf)-rad,\
-                            N.y-Npv.y-(element.zeile(3).toDouble()*Sf*Zf)-rad,\
+        painter.drawEllipse(N.x-Npv.x+(element.at(1).toDouble()*Sf*Zf)-rad,\
+                            N.y-Npv.y-(element.at(2).toDouble()*Sf*Zf)-rad,\
                             rad*2,\
                             rad*2);
 
@@ -322,7 +253,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
     }else if(element.text().contains(RECHTECK3D))
     {
         rechteck3d r;
-        int bezpunkt = element.zeile(2).toInt();
+        int bezpunkt = element.at(1).toInt();
         if(bezpunkt == UNTEN_LINKS)
         {
             bezpunkt = OBEN_LINKS;
@@ -343,18 +274,18 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
             bezpunkt = UNTEN_RECHTS;
         }
         r.set_bezugspunkt(bezpunkt);
-        r.set_einfuegepunkt(N.x-Npv.x+element.zeile(3).toDouble()*Sf*Zf,\
-                            N.y-Npv.y-element.zeile(4).toDouble()*Sf*Zf,\
-                            element.zeile(5).toDouble()*Sf*Zf);
-        r.set_laenge(element.zeile(6).toDouble()*Sf*Zf);
-        r.set_breite(element.zeile(7).toDouble()*Sf*Zf);
-        r.set_rad(element.zeile(8).toDouble()*Sf*Zf);
-        r.set_drewi(element.zeile(9).toDouble());
+        r.set_einfuegepunkt(N.x-Npv.x+element.at(2).toDouble()*Sf*Zf,\
+                            N.y-Npv.y-element.at(3).toDouble()*Sf*Zf,\
+                            element.at(4).toDouble()*Sf*Zf);
+        r.set_laenge(element.at(5).toDouble()*Sf*Zf);
+        r.set_breite(element.at(6).toDouble()*Sf*Zf);
+        r.set_rad(element.at(7).toDouble()*Sf*Zf);
+        r.set_drewi(element.at(8).toDouble());
 
         QPen pen, pen_alt;
         pen_alt = painter.pen();
-        pen.setWidth(element.zeile(12).toInt());
-        pen.setStyle(set_linienstil(element.zeile(13)));
+        pen.setWidth(element.at(11).toInt());
+        pen.setStyle(set_linienstil(element.at(12)));
         pen.setCapStyle(Qt::RoundCap);
         if(i==Aktuelle_zeilennummer)
         {
@@ -362,13 +293,13 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
             pen.setWidth(pen.width()*2);
         }else
         {
-            pen.setColor(set_farbe(element.zeile(10)));
+            pen.setColor(set_farbe(element.at(9)));
         }
         painter.setPen(pen);
 
         QBrush brush = painter.brush();
         QBrush brush_alt = painter.brush();
-        brush.setColor(set_farbe(element.zeile(11)));
+        brush.setColor(set_farbe(element.at(10)));
         painter.setBrush(brush);
 
         if(r.rad()==0)
@@ -472,7 +403,7 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
     }else if(element.text().contains(WUERFEL))
     {
         rechteck3d r;
-        int bezpunkt = element.zeile(2).toInt();
+        int bezpunkt = element.at(1).toInt();
         if(bezpunkt == UNTEN_LINKS)
         {
             bezpunkt = OBEN_LINKS;
@@ -493,18 +424,18 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
             bezpunkt = UNTEN_RECHTS;
         }
         r.set_bezugspunkt(bezpunkt);
-        r.set_einfuegepunkt(N.x-Npv.x+element.zeile(3).toDouble()*Sf*Zf,\
-                            N.y-Npv.y-element.zeile(4).toDouble()*Sf*Zf,\
-                            element.zeile(5).toDouble()*Sf*Zf);
-        r.set_laenge(element.zeile(6).toDouble()*Sf*Zf);
-        r.set_breite(element.zeile(7).toDouble()*Sf*Zf);
-        r.set_rad(element.zeile(8).toDouble()*Sf*Zf);
-        r.set_drewi(element.zeile(9).toDouble());
+        r.set_einfuegepunkt(N.x-Npv.x+element.at(2).toDouble()*Sf*Zf,\
+                            N.y-Npv.y-element.at(3).toDouble()*Sf*Zf,\
+                            element.at(4).toDouble()*Sf*Zf);
+        r.set_laenge(element.at(5).toDouble()*Sf*Zf);
+        r.set_breite(element.at(6).toDouble()*Sf*Zf);
+        r.set_rad(element.at(7).toDouble()*Sf*Zf);
+        r.set_drewi(element.at(8).toDouble());
 
         QPen pen, pen_alt;
         pen_alt = painter.pen();
-        pen.setWidth(element.zeile(13).toInt());
-        pen.setStyle(set_linienstil(element.zeile(14)));
+        pen.setWidth(element.at(12).toInt());
+        pen.setStyle(set_linienstil(element.at(13)));
         pen.setCapStyle(Qt::RoundCap);
         if(i==Aktuelle_zeilennummer)
         {
@@ -512,13 +443,13 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
             pen.setWidth(pen.width()*2);
         }else
         {
-            pen.setColor(set_farbe(element.zeile(11)));
+            pen.setColor(set_farbe(element.at(10)));
         }
         painter.setPen(pen);
 
         QBrush brush = painter.brush();
         QBrush brush_alt = painter.brush();
-        brush.setColor(set_farbe(element.zeile(12)));
+        brush.setColor(set_farbe(element.at(11)));
         painter.setBrush(brush);
 
         if(r.rad()==0)
@@ -623,35 +554,34 @@ void vorschau::zeichneGeotext(QString geometrieElement, uint i)
 
 }
 
-void vorschau::zeichneFkon(QString geometrieElement, uint i)
+void vorschau::zeichneFkon(QString geometrieElement, int i)
 {
     QPainter painter(this);
     painter.setBrush( Qt::white);
     painter.setPen(Qt::black);
 
-    text_zeilenweise element;
-    element.set_trennzeichen(TRZ_PA_);
-    element.set_text(geometrieElement);
+    text_zw element;
+    element.set_text(geometrieElement,TRZ_PA_);
 
     if(element.text().contains(STRECKE))
     {
         punkt2d startpunkt, endpunkt;
-        startpunkt.set_x(element.zeile(2).toDouble()*Sf*Zf);
-        startpunkt.set_y(element.zeile(3).toDouble()*Sf*Zf);
-        endpunkt.set_x(element.zeile(5).toDouble()*Sf*Zf);
-        endpunkt.set_y(element.zeile(6).toDouble()*Sf*Zf);
+        startpunkt.set_x(element.at(1).toDouble()*Sf*Zf);
+        startpunkt.set_y(element.at(2).toDouble()*Sf*Zf);
+        endpunkt.set_x(element.at(4).toDouble()*Sf*Zf);
+        endpunkt.set_y(element.at(5).toDouble()*Sf*Zf);
 
         QPen pen, pen_alt;
         pen_alt = painter.pen();
-        pen.setWidth(element.zeile(9).toInt());
-        pen.setStyle(set_linienstil(element.zeile(10)));
+        pen.setWidth(element.at(8).toInt());
+        pen.setStyle(set_linienstil(element.at(9)));
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
             pen.setWidth(pen.width()*2);
         }else
         {
-            pen.setColor(set_farbe(element.zeile(8)));
+            pen.setColor(set_farbe(element.at(7)));
         }
         pen.setCapStyle(Qt::RoundCap);
         painter.setPen(pen);
@@ -664,26 +594,26 @@ void vorschau::zeichneFkon(QString geometrieElement, uint i)
         painter.setPen(pen_alt);
     }else if(element.text().contains(BOGEN))
     {
-        double rad = element.zeile(8).toDouble()*Sf*Zf;
+        double rad = element.at(7).toDouble()*Sf*Zf;
         punkt2d mipu;
-        mipu.set_x(element.zeile(10).toDouble()*Sf*Zf);//Mittelpunkt in X
-        mipu.set_y(element.zeile(11).toDouble()*Sf*Zf);//Mittelpunkt in Y
+        mipu.set_x(element.at(9).toDouble()*Sf*Zf);//Mittelpunkt in X
+        mipu.set_y(element.at(10).toDouble()*Sf*Zf);//Mittelpunkt in Y
         punkt2d obli;
         obli.set_x(mipu.x()-rad);
         obli.set_y(mipu.y()+rad);
 
         punkt2d mp;
-        mp.set_x(element.zeile(10).toDouble());//Mittelpunkt in X
-        mp.set_y(element.zeile(11).toDouble());//Mittelpunkt in Y
+        mp.set_x(element.at(9).toDouble());//Mittelpunkt in X
+        mp.set_y(element.at(10).toDouble());//Mittelpunkt in Y
         punkt2d sp;
-        sp.set_x(element.zeile(2).toDouble());//Start in X
-        sp.set_y(element.zeile(3).toDouble());//Start in Y
+        sp.set_x(element.at(1).toDouble());//Start in X
+        sp.set_y(element.at(2).toDouble());//Start in Y
         punkt2d ep;
-        ep.set_x(element.zeile(5).toDouble());//Ende in X
-        ep.set_y(element.zeile(6).toDouble());//Ende in Y
+        ep.set_x(element.at(4).toDouble());//Ende in X
+        ep.set_y(element.at(5).toDouble());//Ende in Y
         double stawi=0, bogwi=0;
 
-        if(element.zeile(9) == "nein")//Bogen gegen den Uhrzeigersinn
+        if(element.at(8) == "nein")//Bogen gegen den Uhrzeigersinn
         {
             stawi = winkel(sp.x(),   \
                            sp.y(),   \
@@ -715,15 +645,15 @@ void vorschau::zeichneFkon(QString geometrieElement, uint i)
 
         QPen pen, pen_alt;
         pen_alt = painter.pen();
-        pen.setWidth(element.zeile(13).toInt());
-        pen.setStyle(set_linienstil(element.zeile(14)));
+        pen.setWidth(element.at(12).toInt());
+        pen.setStyle(set_linienstil(element.at(13)));
         if(i==Aktuelle_zeilennummer)
         {
             pen.setColor(Qt::red);
             pen.setWidth(pen.width()*2);
         }else
         {
-            pen.setColor(set_farbe(element.zeile(12)));
+            pen.setColor(set_farbe(element.at(11)));
         }
         pen.setCapStyle(Qt::RoundCap);
         painter.setPen(pen);
@@ -743,9 +673,7 @@ void vorschau::werkstueck_darstellung_berechnen()
 {
     QString format = W.zustand().format();
     int randabstand = 10;
-    //float maximallaenge = W.max_x(format) - W.min_x(format);
     float maximallaenge = W.max_x() - W.min_x();
-    //float maximalbreite = W.max_y(format) - W.min_y(format);
     float maximalbreite = W.max_y() - W.min_y();
 
     float bildlaenge = width()-randabstand*2;
@@ -775,15 +703,14 @@ void vorschau::werkstueck_darstellung_berechnen()
     N.x = basispunkt.x - W.min_x(format)*Sf * Zf;
     N.y = basispunkt.y + W.min_y(format)*Sf * Zf;
 
-    //sende_wstmas(W.laenge(), W.breite(), W.dicke());
     sende_wstmas(W.zustand().l(), W.zustand().b(), W.dicke());
-
 }
 
 void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
-    Geotext = W.zustand().geo().text_zwei();
+    Geotext = W.zustand().geo();
+    GeoFkon = W.zustand().geofkon();
     Wst.set_laenge(w_neu.zustand().l());
     Wst.set_breite(w_neu.zustand().b());
     Aktuelle_zeilennummer = aktive_zeile;
@@ -794,7 +721,8 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 void vorschau::slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile)
 {
     W = w_neu;
-    Geotext = W.geo().text_zwei();
+    Geotext = W.geo();
+    GeoFkon = W.geofkon();
     Wst.set_laenge(w_neu.laenge());
     Wst.set_breite(w_neu.breite());
     Aktuelle_zeilennummer = aktive_zeile;
@@ -899,26 +827,22 @@ uint vorschau::zeile_von_Mauspos()
     uint zeile = 0;
     double abst = 9999999999;
     strecke s; //nehmen wir für Längenberechnung/Abstandsberechnung
-    s.set_start(mauspos_npanschlag());
-    text_zeilenweise geotext = Geotext;
+    s.set_stapu(mauspos_npanschlag());
+    geo_text geotext = Geotext;
 
-    for(uint i=1;i<=geotext.zeilenanzahl();i++)
+    for(uint i=0;i<geotext.count();i++)
     {
-        text_zeilenweise spalten;
-        spalten.set_trennzeichen(TRZ_EL_);
-        spalten.set_text(geotext.zeile(i));
-
-        for(uint ii=1;ii<=spalten.zeilenanzahl();ii++)
+        text_zw spalten = geotext.at(i);
+        for(uint ii=0;ii<spalten.count();ii++)
         {
-            text_zeilenweise element;
-            element.set_trennzeichen(TRZ_PA_);
-            element.set_text(spalten.zeile(ii));
+            text_zw element;
+            element.set_text(spalten.at(ii),TRZ_PA_);
 
             if(element.text().contains(PUNKT))
             {
                 punkt3d ep;
                 ep.set_text(element.text());
-                s.set_ende(ep);
+                s.set_endpu(ep);
                 double l = s.laenge2d();
                 if(l < abst)
                 {
@@ -945,12 +869,12 @@ uint vorschau::zeile_von_Mauspos()
                 mipu.set_x(b.mitte().x());
                 mipu.set_y(b.mitte().y());
                 strecke s1, s2, s3;
-                s1.set_start(mipu);
-                s2.set_start(mipu);
-                s3.set_start(mipu);
-                s1.set_ende(sp);
-                s2.set_ende(ep);
-                s3.set_ende(mauspos_npanschlag());
+                s1.set_stapu(mipu);
+                s2.set_stapu(mipu);
+                s3.set_stapu(mipu);
+                s1.set_endpu(sp);
+                s2.set_endpu(ep);
+                s3.set_endpu(mauspos_npanschlag());
                 double w1, w2, w3;
                 w1 = s1.wink();
                 w2 = s2.wink();
@@ -965,7 +889,7 @@ uint vorschau::zeile_von_Mauspos()
                 if(  (w1 <= w3)  &&  (w3 <= w2)  )
                 {
                     //Abstandsberechnung ähnlich wie beim Kreis:
-                    s.set_ende(mipu);
+                    s.set_endpu(mipu);
                     double l = s.laenge2d();
                     double rad = b.rad();
                     if(l > rad)
@@ -985,10 +909,10 @@ uint vorschau::zeile_von_Mauspos()
                 }else
                 {
                     strecke s1, s2;
-                    s1.set_start(sp);
-                    s2.set_start(ep);
-                    s1.set_ende(mauspos_npanschlag());
-                    s2.set_ende(mauspos_npanschlag());
+                    s1.set_stapu(sp);
+                    s2.set_stapu(ep);
+                    s1.set_endpu(mauspos_npanschlag());
+                    s2.set_endpu(mauspos_npanschlag());
                     double abst_sp, abst_ep, l;
                     abst_sp = s1.laenge2d();
                     abst_ep = s2.laenge2d();
@@ -1008,11 +932,11 @@ uint vorschau::zeile_von_Mauspos()
             }else if(  element.text().contains(KREIS)  ||  element.text().contains(ZYLINDER)  )
             {
                 punkt2d ep;
-                ep.set_x(element.zeile(2).toDouble());
-                ep.set_y(element.zeile(3).toDouble());
-                s.set_ende(ep);
+                ep.set_x(element.at(1).toDouble());
+                ep.set_y(element.at(2).toDouble());
+                s.set_endpu(ep);
                 double l = s.laenge2d();
-                double rad = element.zeile(5).toDouble();
+                double rad = element.at(4).toDouble();
                 if(l > rad)
                 {
                     l = l - rad;
@@ -1056,14 +980,14 @@ uint vorschau::zeile_von_Mauspos()
                     pur = w.unr();
                 }
                 strecke sli, sre, sob, sun;
-                sli.set_start(pul);
-                sli.set_ende(pol);
-                sre.set_start(pur);
-                sre.set_ende(por);
-                sob.set_start(pol);
-                sob.set_ende(por);
-                sun.set_start(pul);
-                sun.set_ende(pur);
+                sli.set_stapu(pul);
+                sli.set_endpu(pol);
+                sre.set_stapu(pur);
+                sre.set_endpu(por);
+                sob.set_stapu(pol);
+                sob.set_endpu(por);
+                sun.set_stapu(pul);
+                sun.set_endpu(pur);
                 double abst_li, abst_re, abst_ob, abst_un;
                 abst_li = sli.abst(mauspos_npanschlag());
                 abst_re = sre.abst(mauspos_npanschlag());
@@ -1263,7 +1187,6 @@ QColor vorschau::set_farbe(QString farbe)
     {
         qfarbe.setRgb(185,122,87);
     }
-
     return qfarbe;
 }
 

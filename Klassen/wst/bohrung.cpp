@@ -14,12 +14,10 @@ void bohrung::setup()
 {
     Durchmesser = 0;
     Tiefe = 0;
-    Pos_x = 0;
-    Pos_y = 0;
-    Pos_z = 0;
     Bezug = WST_BEZUG_OBSEI;
     Afb = "1";
     Zustellmass = 0;
+    Werkzeugnummer = "void";
 }
 
 void bohrung::set_dm(double dm)
@@ -46,27 +44,31 @@ void bohrung::set_tiefe(QString ti)
 }
 void bohrung::set_x(double x)
 {
-    Pos_x = x;
+    Mipu.set_x(x);
 }
 void bohrung::set_x(QString x)
 {
-    set_x(x.toDouble());
+    Mipu.set_x(x);
 }
 void bohrung::set_y(double y)
 {
-    Pos_y = y;
+    Mipu.set_y(y);
 }
 void bohrung::set_y(QString y)
 {
-    set_y(y.toDouble());
+    Mipu.set_y(y);
 }
 void bohrung::set_z(double z)
 {
-    Pos_z = z;
+    Mipu.set_z(z);
 }
 void bohrung::set_z(QString z)
 {
-    set_z(z.toDouble());
+    Mipu.set_z(z);
+}
+void bohrung::set_mipu(punkt3d p)
+{
+    Mipu = p;
 }
 void bohrung::set_zustellmass(double mass)
 {
@@ -110,32 +112,31 @@ QString bohrung::tiefe_qstring()
 }
 double bohrung::x()
 {
-    return Pos_x;
+    return Mipu.x();
 }
 QString bohrung::x_qstring()
 {
-    return double_to_qstring(Pos_x);
+    return Mipu.x_QString();
 }
 double bohrung::y()
 {
-    return Pos_y;
+    return Mipu.y();
 }
 QString bohrung::y_qstring()
 {
-    return double_to_qstring(Pos_y);
+    return Mipu.y_QString();
 }
 double bohrung::z()
 {
-    return Pos_z;
+    return Mipu.z();
 }
 QString bohrung::z_qstring()
 {
-    return double_to_qstring(Pos_z);
+    return Mipu.z_QString();
 }
 punkt3d bohrung::mipu()
 {
-    punkt3d p(x(),y(),z());
-    return p;
+    return Mipu;
 }
 double bohrung::zustellmass()
 {
@@ -160,44 +161,43 @@ QString bohrung::wkznum()
 
 QString bohrung::text()
 {
-    QString msg = BEARBART_BOHR;    //Zeile 1
+    QString msg = BEARBART_BOHR;    //Zeile 0
     msg += TRENNZ_BEARB_PARAM_;
-    msg += bezug();             //Zeile 2
+    msg += bezug();             //Zeile 1
     msg += TRENNZ_BEARB_PARAM_;
-    msg += dm_qstring();        //Zeile 3
+    msg += dm_qstring();        //Zeile 2
     msg += TRENNZ_BEARB_PARAM_;
-    msg += tiefe_qstring();     //Zeile 4
+    msg += tiefe_qstring();     //Zeile 3
     msg += TRENNZ_BEARB_PARAM_;
-    msg += x_qstring();         //Zeile 5
+    msg += x_qstring();         //Zeile 4
     msg += TRENNZ_BEARB_PARAM_;
-    msg += y_qstring();         //Zeile 6
+    msg += y_qstring();         //Zeile 5
     msg += TRENNZ_BEARB_PARAM_;
-    msg += z_qstring();         //Zeile 7
+    msg += z_qstring();         //Zeile 6
     msg += TRENNZ_BEARB_PARAM_;
-    msg += afb();               //Zeile 8
+    msg += afb();               //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
-    msg += zustellmass_qstring();               //Zeile 9
+    msg += zustellmass_qstring();               //Zeile 8
     msg += TRENNZ_BEARB_PARAM_;
-    msg += wkznum();            //Zeile 10
+    msg += wkznum();            //Zeile 9
 
     return msg;
 }
 void bohrung::set_text(QString text)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_BOHR)
+    text_zw tz;
+    tz.set_text(text,TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_BOHR)
     {
-        set_bezug(tz.zeile(2));
-        set_dm(tz.zeile(3));
-        set_tiefe(tz.zeile(4));
-        set_x(tz.zeile(5));
-        set_y(tz.zeile(6));
-        set_z(tz.zeile(7));
-        set_afb(tz.zeile(8));
-        set_zustellmass(tz.zeile(9));
-        set_wkznum(tz.zeile(10));
+        set_bezug(tz.at(1));
+        set_dm(tz.at(2));
+        set_tiefe(tz.at(3));
+        set_x(tz.at(4));
+        set_y(tz.at(5));
+        set_z(tz.at(6));
+        set_afb(tz.at(7));
+        set_zustellmass(tz.at(8));
+        set_wkznum(tz.at(9));
     }
 }
 

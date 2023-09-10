@@ -5,6 +5,7 @@
 #include <QListWidgetItem>
 #include "Klassen/geo/vorschau.h"
 #include "Klassen/wst/werkstueck.h"
+#include "Klassen/wkz/wkz_magazin.h"
 #include "Dialoge/dialog_bearb_pkopf.h"
 #include "Dialoge/dialog_bearb_rta.h"
 #include "Dialoge/dialog_bearb_bohrung.h"
@@ -29,13 +30,21 @@ public:
     MainWin_wst_bearbeiten(QWidget *parent = nullptr);
     ~MainWin_wst_bearbeiten();
     void set_wst(werkstueck *w);
+    void set_wkz(wkz_magazin *w);
 
 private:
     Ui::MainWin_wst_bearbeiten *ui;
     vorschau vorschaufenster;
     werkstueck *Wst;
-    undo_redo<text_zeilenweise> UnReDo;
+    wkz_magazin *Wkz;
+    undo_redo<text_zw> UnReDo;
+    undo_redo<double> UnReDo_L;
+    undo_redo<double> UnReDo_B;
+    undo_redo<double> UnReDo_D;
     QString KopierterEintrag;
+    double letzte_wst_l;
+    double letzte_wst_b;
+    double letzte_wst_d;
 
     void clear();
     void update_listwidget();
@@ -44,6 +53,8 @@ private:
     int auswahl_erster();
     int auswahl_letzter();
     int auswahl_menge();
+    void unredo_neu();
+    void unredo_clear();
 
 signals:
     void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
@@ -68,11 +79,11 @@ private slots:
 
 public slots:
     //Bearbeiten
-    void zeile_aendern(int index, QString bearb);
+    void zeile_aendern(int index, QString bearb, bool unredor_verwenden);
     void slot_rta(rechtecktasche rta);
     void slot_bo(bohrung bo);    
     void slot_nut(nut nu);
-    void slot_faufruf(fraueseraufruf fa);
+    void slot_faufruf(fraeseraufruf fa);
     void slot_fgerade(fraesergerade fg);
     void slot_fbogen(fraeserbogen fb);
     //Erstellen/Make:

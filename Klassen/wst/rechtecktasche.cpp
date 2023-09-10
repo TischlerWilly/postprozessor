@@ -16,9 +16,6 @@ void rechtecktasche::setup()
     Laenge = 0;
     Breite = 0;
     Tiefe = 0;
-    Pos_x = 0;
-    Pos_y = 0;
-    Pos_z = 0;
     Drewinkel = 0;
     Eckenradius = 0;
     Zustellmass = 0;
@@ -62,27 +59,31 @@ void rechtecktasche::set_tiefe(QString t)
 }
 void rechtecktasche::set_x(double x)
 {
-    Pos_x = x;
+    Mipu.set_x(x);
 }
 void rechtecktasche::set_x(QString x)
 {
-    set_x(x.toDouble());
+    Mipu.set_x(x);
 }
 void rechtecktasche::set_y(double y)
 {
-    Pos_y = y;
+    Mipu.set_y(y);
 }
 void rechtecktasche::set_y(QString y)
 {
-    set_y(y.toDouble());
+    Mipu.set_y(y);
 }
 void rechtecktasche::set_z(double z)
 {
-    Pos_z = z;
+    Mipu.set_z(z);
 }
 void rechtecktasche::set_z(QString z)
 {
-    set_z(z.toDouble());
+    Mipu.set_z(z);
+}
+void rechtecktasche::set_mipu(punkt3d p)
+{
+    Mipu = p;
 }
 void rechtecktasche::set_drewi(double wi)
 {
@@ -171,27 +172,31 @@ QString rechtecktasche::tiefe_qstring()
 }
 double rechtecktasche::x()
 {
-    return Pos_x;
+    return Mipu.x();
 }
 QString rechtecktasche::x_qstring()
 {
-    return double_to_qstring(Pos_x);
+    return Mipu.x_QString();
 }
 double rechtecktasche::y()
 {
-    return Pos_y;
+    return Mipu.y();
 }
 QString rechtecktasche::y_qstring()
 {
-    return double_to_qstring(Pos_y);
+    return Mipu.y_QString();
 }
 double rechtecktasche::z()
 {
-    return Pos_z;
+    return Mipu.z();
 }
 QString rechtecktasche::z_qstring()
 {
-    return double_to_qstring(Pos_z);
+    return Mipu.z_QString();
+}
+punkt3d rechtecktasche::mipu()
+{
+    return  Mipu;
 }
 double rechtecktasche::drewi()
 {
@@ -278,24 +283,23 @@ QString rechtecktasche::text()
 }
 void rechtecktasche::set_text(QString text)
 {
-    text_zeilenweise tz;
-    tz.set_trennzeichen(TRENNZ_BEARB_PARAM);
-    tz.set_text(text);
-    if(tz.zeile(1) == BEARBART_RTA)
+    text_zw tz;
+    tz.set_text(text,TRENNZ_BEARB_PARAM);
+    if(tz.at(0) == BEARBART_RTA)
     {
-        set_bezug(tz.zeile(2));
-        set_laenge(tz.zeile(3));
-        set_breite(tz.zeile(4));
-        set_tiefe(tz.zeile(5));
-        set_x(tz.zeile(6));
-        set_y(tz.zeile(7));
-        set_z(tz.zeile(8));
-        set_drewi(tz.zeile(9));
-        set_rad(tz.zeile(10));
-        set_ausraeumen(tz.zeile(11));
-        set_afb(tz.zeile(12));
-        set_zustellmass(tz.zeile(13));
-        set_wkznum(tz.zeile(14));
+        set_bezug(tz.at(1));
+        set_laenge(tz.at(2));
+        set_breite(tz.at(3));
+        set_tiefe(tz.at(4));
+        set_x(tz.at(5));
+        set_y(tz.at(6));
+        set_z(tz.at(7));
+        set_drewi(tz.at(8));
+        set_rad(tz.at(9));
+        set_ausraeumen(tz.at(10));
+        set_afb(tz.at(11));
+        set_zustellmass(tz.at(12));
+        set_wkznum(tz.at(13));
     }
 }
 

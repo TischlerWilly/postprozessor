@@ -6,27 +6,25 @@
 
 #include "Defines/werkzeug.h"
 #include "Klassen/einstellung_ganx.h"
-#include "Klassen/geo/geometrietext.h"
 #include "Klassen/wst/wstzustand.h"
 #include "Funktionen/umwandeln.h"
 #include "Funktionen/runden.h"
 #include "Funktionen/myfunktion.h"
 #include "Defines/def_fmc.h"
 #include "Defines/def_ganx.h"
-#include "Klassen/text_zeilenweise.h"
 #include "Klassen/text_zw.h"
-#include "../werkzeugmagazin.h"         //alt
-#include "Klassen/wkz/wkz_magazin.h"    //neu
+#include "Klassen/wkz/wkz_magazin.h"
 #include "bohrung.h"
 #include "rechtecktasche.h"
 #include "nut.h"
-#include "fraueseraufruf.h"
+#include "fraeseraufruf.h"
 #include "fraesergerade.h"
 #include "fraeserbogen.h"
 #include "bohrraster.h"
 #include "Defines/dateinamen.h"
 #include "ganx_gruppen.h"
 #include "gehrung.h"
+#include "Klassen/geo/geo_text.h"
 
 
 class werkstueck
@@ -43,17 +41,17 @@ public:
     void set_dicke(double d);
     void set_dicke(QString d);
     void neue_bearbeitung(QString text);
-    void set_bearb(text_zeilenweise b); //alt
-    void set_bearb(text_zw b);          //neu
+    //void set_bearb(text_zeilenweise b); //alt
+    void set_bearb(text_zw b);
     void set_kante_vo(QString artiklenummer);
     void set_kante_hi(QString artiklenummer);
     void set_kante_li(QString artiklenummer);
     void set_kante_re(QString artiklenummer);
     void set_zugabe_gehrungen(double wert);
-    void set_zustand(QString format, text_zeilenweise wkzmag, QString drehung, \
-                     bool formartierungen_aufbrechen, QString zust_fkon);       //alt
+    //void set_zustand(QString format, text_zeilenweise wkzmag, QString drehung, \
+    //                 bool formartierungen_aufbrechen, QString zust_fkon);       //alt
     void set_zustand(QString format, wkz_magazin* wkzmag, QString drehung, \
-                     bool formartierungen_aufbrechen, QString zust_fkon);       //neu
+                     bool formartierungen_aufbrechen, QString zust_fkon);
     void set_einstellung_ganx(einstellung_ganx e);
 
     inline void set_name(QString neuer_name)
@@ -72,7 +70,8 @@ public:
     double min_x();
     double max_y();
     double min_y();
-    geometrietext geo();
+    geo_text geo();
+    geo_text geofkon();
     inline double   laenge() const
     {
         return Laenge;
@@ -101,13 +100,13 @@ public:
     {
         return Name;
     }
-    inline text_zeilenweise bearb()     //alt wird noch neu
+    inline text_zw bearb()
     {
-        return Bearbeitungen;
+        return Bearb;
     }
-    inline text_zeilenweise *bearb_ptr()    //alt wird noch neu
+    inline text_zw *bearb_ptr()
     {
-        return &Bearbeitungen;
+        return &Bearb;
     }
     inline wstzustand zustand()
     {
@@ -141,8 +140,7 @@ private:
     double Laenge;  //X-Wert
     double Breite;  //Y-Wert
     double Dicke;   //Z-Wert
-    text_zeilenweise Bearbeitungen; //alt
-    text_zw Bearb;                  //neu
+    text_zw Bearb;
     QString Name;
     QString Kante_vo; //Kante an X
     QString Kante_hi;

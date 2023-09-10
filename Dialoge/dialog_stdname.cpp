@@ -22,7 +22,7 @@ void Dialog_stdname::on_pushButton_ok_clicked()
     nach.replace("\t", "");
 
     this->hide();
-    emit signal_sendData(vor, nach);
+    emit signal_sendData(vor, nach, Zeile);
 }
 
 void Dialog_stdname::on_pushButton_abbrechen_clicked()
@@ -30,9 +30,10 @@ void Dialog_stdname::on_pushButton_abbrechen_clicked()
     this->hide();
 }
 
-void Dialog_stdname::slot_getData(QString vor, QString nach)
+void Dialog_stdname::slot_getData(QString vor, QString nach, int zeile)
 {
     ui->lineEdit_vor->setText(vor);
     ui->lineEdit_nach->setText(nach);
+    Zeile = zeile;
     this->show();
 }
