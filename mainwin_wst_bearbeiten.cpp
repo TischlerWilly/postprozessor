@@ -30,6 +30,7 @@ MainWin_wst_bearbeiten::~MainWin_wst_bearbeiten()
 void MainWin_wst_bearbeiten::clear()
 {
     Wst = nullptr;
+    Wkz = nullptr;
     ui->listWidget_prgtext->clear();
 }
 
@@ -84,6 +85,10 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
     letzte_wst_b = Wst->breite();
     letzte_wst_d = Wst->dicke();
     unredo_neu();
+}
+void MainWin_wst_bearbeiten::set_wkz(wkz_magazin *w)
+{
+    Wkz = w;
 }
 
 void MainWin_wst_bearbeiten::update_listwidget()

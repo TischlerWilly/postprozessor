@@ -5,6 +5,7 @@
 #include <QListWidgetItem>
 #include "Klassen/geo/vorschau.h"
 #include "Klassen/wst/werkstueck.h"
+#include "Klassen/wkz/wkz_magazin.h"
 #include "Dialoge/dialog_bearb_pkopf.h"
 #include "Dialoge/dialog_bearb_rta.h"
 #include "Dialoge/dialog_bearb_bohrung.h"
@@ -29,11 +30,13 @@ public:
     MainWin_wst_bearbeiten(QWidget *parent = nullptr);
     ~MainWin_wst_bearbeiten();
     void set_wst(werkstueck *w);
+    void set_wkz(wkz_magazin *w);
 
 private:
     Ui::MainWin_wst_bearbeiten *ui;
     vorschau vorschaufenster;
     werkstueck *Wst;
+    wkz_magazin *Wkz;
     undo_redo<text_zw> UnReDo;
     undo_redo<double> UnReDo_L;
     undo_redo<double> UnReDo_B;

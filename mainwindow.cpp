@@ -40,10 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_einstellung_dxf_klassen, SLOT(slot_einstellung(einstellung_dxf, einstellung_dxf_klassen)));
     connect(&dlg_einstellung_dxf_klassen, SIGNAL(send_einstellung(einstellung_dxf_klassen)),\
             this, SLOT(getEinstellungDxfKlassen(einstellung_dxf_klassen )));
-
     connect(&dlg_wkz_pp, SIGNAL(send_einstellungen(einstellung)),\
             this, SLOT(getEinstellung(einstellung)));
-
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int)));
     connect(&dlg_prgtext, SIGNAL(signalIndexChange(int)),\
@@ -1625,6 +1623,7 @@ void MainWindow::on_actionWST_bearbeiten_triggered()
         werkstueck *w = wste.wst(wstindex);
         dlg_wst_bearbeiten.setWindowTitle(w->name());
         dlg_wst_bearbeiten.set_wst(w);
+        dlg_wst_bearbeiten.set_wkz(&wkz_mag_pp_fr);
         dlg_wst_bearbeiten.show();
     }
 }
