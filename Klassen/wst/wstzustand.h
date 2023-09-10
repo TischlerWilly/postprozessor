@@ -222,6 +222,9 @@ private:
     QString cix_fkon(fraeseraufruf fa, QString geo_id);
     QString cix_fkon(bohrung bo, QString geo_id, QString wkz);//für KTAs
     QString cix_kreis(bohrung bo, QString geo_id);
+    QString cix_tasche(fraeseraufruf fa, QString geo_id, double dm);
+    QString cix_tasche(bohrung bo, QString wkz, QString geo_id, double dm);
+
 
     void geo(int index);
     QString kante_vo(QString drewi);

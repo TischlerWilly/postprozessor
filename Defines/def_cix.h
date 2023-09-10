@@ -20,6 +20,14 @@
     //Zahl der Konfiguration der Maschinendaten, die in der entsprechenden Umgebung
     //der numerischen Steuerung gespeichert wurde und für die Bearbeitung des Werkstücks
     //verwendet wird
+#define CIX_WKZ_NEIGUNG  "AZ"    //Neigungswinkel des Werkzeugs
+    //Neigungswinkel der Drehachse der Spindel im Vergleich zur Ebene X, Y
+#define CIX_WKZ_DREHWI   "AR"    //Drehwinkel des Werkzeugs
+    //Drehwinkel der Spindelachse an der Ebene X, Y
+#define CIX_WKZ_DREHTYP  "CKA"   //aktiviert den Neigungstyp AR/AZ
+    #define CIX_WKZ_DREHTYP_KEIN "azrNO" // 0 = nicht gedreht/geneigt
+    // 1 = “azrABS
+    // 2 = “azrINC”
 #define CIX_WST_BENUTZERDATEN   "CUSTSTR"
     //Wird verwendet, um die kundenspezifischen Parameter anzugeben
     //Den String mit den individuell gestalteten Daten, getrennt durch Beistrich, angeben
@@ -116,12 +124,12 @@
     #define CIX_WKZGRUPPE_SAEGER  "2"  //C_Cutting
 #define CIX_WKZART "TTP" //Werkzeugart
 //Zulässige Werte bei Werkzeugklasse C_DRILLING:
-    #define CIX_WKZART_BO_STD "0" // 0 = NORMALE
+    #define CIX_WKZART_BO_STD "0" //NORMALE
     // 1 = LANCIA
     // 2 = SVASATA
     // 3 = NORMALEG
 //Zulässige Werte bei Werkzeugklasse C_ROUTING
-    // 100 = CANDELA
+    #define CIX_WKZART_FR_KERZE "100" //CANDELA
     // 101 = SAGOMATA
     // 102 = ROUT0
     // 103 = ROUT1
@@ -158,6 +166,7 @@
     //Die Zahl zwischen Anführungszeichen setzen
     //Beisp. “3” zur Kennung des Arbeitszentrums Nr. 3
 #define CIX_KENNCODE_AGGREGAT   "AGG"   //Kenncode des Aggregats
+
 //---------------------------------------------
 #define CIX_WDH_TYP "RTY"    //Wiederholungstyp
     #define CIX_WDH_TYP_KEIN "rpNO"   //-1 = Wiederholungen deaktiviert
@@ -215,14 +224,6 @@
 #define CIX_KREIS_VORSCHUB "FD"
 #define CIX_KREIS_DREHZAHL "SP"
 
-#define CIX_BO_WKZ_NEIGUNG  "AZ"    //Neigungswinkel des Werkzeugs
-    //Neigungswinkel der Drehachse der Spindel im Vergleich zur Ebene X, Y
-#define CIX_BO_WKZ_DREHWI   "AR"    //Drehwinkel des Werkzeugs
-    //Drehwinkel der Spindelachse an der Ebene X, Y
-#define CIX_BO_WKZ_DREHTYP  "CKA"   //aktiviert den Neigungstyp AR/AZ
-    #define CIX_BO_WKZ_DREHTYP_KEIN "azrNO" // 0 = nicht gedreht/geneigt
-    // 1 = “azrABS
-    // 2 = “azrINC”
 #define CIX_BO_REBOMA   "DDS"   //Restbohrmaß ab dem der Bohrer mit dem Abbremsen beginnen muss
     // 0 = Bohrer verlangsamt seine Geschwindigkeit nicht
 
@@ -396,8 +397,46 @@
     //Anzahl der Durchgänge, die sich auf die Tiefe der programmierten
     //Bearbeitung auswirken. Durch Eingabe der Zahl 2 wird die Bearbeitung
     //in 2 Teile aufgeteilt, bis die im Feld Tiefe angegebene Tiefe erreicht ist
+#define CIX_TASCHE_INSELLISTE   "ISL" //String mit der Liste der Inseln
+    //Namen der Inseln müssen zwischen Anführungszeichen gesetzt und durch
+    //Beistriche getrennt werden: z.B. "in1", "in2"
+#define CIX_TASCHE_INSELNAKTIV  "CKI"   //Aktiviert Inseln
+#define CIX_TASCHE_DM   "DIA"   //Bohrdurchmesser
+#define CIX_TASCHE_ISO "ISO"   //ISO-Anweisung
+#define CIX_TASCHE_TYP "TYP"   //Taschentyp
+    #define CIX_TASCHE_TYP_DIAGONAL "ptZIG" //0
+    #define CIX_TASCHE_TYP_ZICKZACK "ptZZ" //1
+    #define CIX_TASCHE_TYP_AzuI "ptIN"  //2 von außen nach innen räumen
+    #define CIX_TASCHE_TYP_IzuA "ptOUT" //3 von innen nach außen räumen
+    #define CIX_TASCHE_TYP_KONTUR "ptFSH" //4 nur Kontur, ohne Ausräumen
+        //TYP_KONTUR gibt es nicht mehr!!
+#define CIX_TASCHE_UEBERLAPPUNG  "DLT"   //Überlagerungen der wiederholten Fräsungen
+#define CIX_TASCHE_UEBERLAPPUNG_ "ZST"   //Überlagerungen der wiederholten Fräsungen
+#define CIX_TASCHE_KOMPENSATION "TC" //???
+        //Aktiviert andere Menüfelder?
+#define CIX_TASCHE_REVERS  "RV" //kehrt die Richtung des programmierten geometrischen Profils um;
+    //der Startpunkt der Geometrie wird somit zum Endpunkt
+#define CIX_TASCHE_REVERS_NB "RRV" //Nachbearbeitung revers
+#define CIX_TASCHE_Z "Z" //Z-Pos der obereb Taschenfläche (0)
+#define CIX_TASCHEVERLAGERUNG "SDS"
+    //Abstand zwischen dem Verlangsamungspunkt des Werkzeugs und dem Punkt der
+    //geometrischen Diskontinuität. Die Verlangsamung erfolgt sowohl beim Annähern, als auch beim
+    //Entfernen vom Punkt der geometrischen Diskontinuität. Wenn der in dieses Feld eingegebene
+    //Wert kleiner ist, als der im Feld Min.Län.Verlang.  des Setup eingegebene, verwendet das System
+    //den im Feld des Setup eingegebenen Wert. Wenn der eingegebene Wert kleiner als 0 ist,
+    //erscheint in der Optimierungsphase eine Fehlermeldung
+    #define CIX_TASCHEVERLAGERUNG_AUTO "0"
+#define CIX_TASCHE_LAYER    "LAY"   //Kennstring des der Geometrie zugeordneten Layers.
+    //Dieser String wird nicht unter den Programmierungszeilen angezeigt, sondern im
+    //Dialogfenster Layer-Verwaltung
+
+
+
 
 
 
 //ret += cix_makroparam("COW","NO",false);            //nur für die Maschine “Skipper”
+//ret += cix_makroparam("EA21","NO",false);           //aktiviert die Verwendung der Parameter A21 und S21
+//ret += cix_makroparam("A21","0",false);             //Winkel Aggr21
+//ret += cix_makroparam("S21","-1",false);            //Winkel Aggr21
 #endif // DEF_CIX_H

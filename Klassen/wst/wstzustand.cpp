@@ -9617,11 +9617,14 @@ void wstzustand::cix_dateitext(int index)
                     geo_id += id_g.index_QString();
                     msg += cix_kreis(bo, geo_id);
                     msg += cix_ende_poly(id.index_QString());
-                    msg += cix_fkon(bo, geo_id, tnummer);
-                    msg += cix_ende_poly(id.index_QString());
-                    //Ausräumen...
-                    //...
-                    //...
+                    if(ausraeumen == true)
+                    {
+                        msg += cix_tasche(bo, tnummer, geo_id, bo.dm());
+                    }else
+                    {
+                        msg += cix_fkon(bo, geo_id, tnummer);
+                        msg += cix_ende_poly(id.index_QString());
+                    }
                 }else
                 {
                     //Mit Fehlermeldung abbrechen:
@@ -9777,9 +9780,9 @@ QString wstzustand::cix_bohrung(bohrung bo, QString id, QString bohrerdm)
     ret += cix_makroparam(CIX_WDH_WINKEL,"45",false);
     ret += cix_makroparam(CIX_WDH_ANZAHL,"0",false);
     ret += cix_makroparam(CIX_BEARB_OPTIMIEREN,"YES",false);
-    ret += cix_makroparam(CIX_BO_WKZ_NEIGUNG,"0",false);
-    ret += cix_makroparam(CIX_BO_WKZ_DREHWI,"0",false);    
-    ret += cix_makroparam(CIX_BO_WKZ_DREHTYP,CIX_BO_WKZ_DREHTYP_KEIN,false);
+    ret += cix_makroparam(CIX_WKZ_NEIGUNG,"0",false);
+    ret += cix_makroparam(CIX_WKZ_DREHWI,"0",false);
+    ret += cix_makroparam(CIX_WKZ_DREHTYP,CIX_WKZ_DREHTYP_KEIN,false);
     ret += cix_makroparam(CIX_WDH_DREHZENTRUM_X,"0",false);
     ret += cix_makroparam(CIX_WDH_DREHZENTRUM_Y,"0",false);
     ret += cix_makroparam(CIX_WDH_GERADENWINKEL,"0",false);
@@ -9945,7 +9948,7 @@ QString wstzustand::cix_nut(nut nu, QString id, QString wkz)
     ret += cix_makroparam(CIX_WDH_WINKEL, "0", false);
     ret += cix_makroparam(CIX_WDH_RADIAL, "NO", false);
     ret += cix_makroparam(CIX_WDH_ANZAHL, "0", false);
-    ret += cix_makroparam(CIX_BO_WKZ_DREHTYP, CIX_BO_WKZ_DREHTYP_KEIN, false);
+    ret += cix_makroparam(CIX_WKZ_DREHTYP, CIX_WKZ_DREHTYP_KEIN, false);
     ret += cix_makroparam(CIX_BEARB_DURCHGEHEND,"NO",false);
     ret += cix_makroparam(CIX_NUT_REVERS, "NO", false);
     ret += cix_makroparam(CIX_WDH_DREHZENTRUM_X, "0", false);
@@ -10294,6 +10297,80 @@ QString wstzustand::cix_kreis(bohrung bo, QString geo_id)
     ret += "\n";
     ret += "\n";
     return ret;
+}
+QString wstzustand::cix_tasche(fraeseraufruf fa, QString geo_id, double dm)
+{
+    QString erw = "_1";
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=POCK";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID, geo_id+erw, true);
+    ret += cix_makroparam(CIX_FKON_GEO_ID, geo_id, true);
+    ret += cix_makroparam(CIX_TASCHE_LAYER, "POCK", true);
+    ret += cix_makroparam(CIX_TASCHE_TYP, CIX_TASCHE_TYP_IzuA, false);
+    ret += cix_makroparam(CIX_TASCHE_DM, double_to_qstring(dm),false);
+    ret += cix_makroparam(CIX_SPEED, "0", false);
+    ret += cix_makroparam(CIX_WKZ, fa.wkznum(), true);
+    ret += cix_makroparam(CIX_FKON_TI, fa.tiefe_qstring(), false);
+    ret += cix_makroparam(CIX_FKON_BREITENZUGABE, "0", false);
+    ret += cix_makroparam(CIX_FKON_EINTYP, CIX_FKON_EINTYP_BOG, false);
+    ret += cix_makroparam(CIX_FKON_AUSTYP, CIX_FKON_EINTYP_BOG, false);
+    ret += cix_makroparam(CIX_FKON_EINWI, "45", false);
+    ret += cix_makroparam(CIX_FKON_AUSWI, "45", false);
+    ret += cix_makroparam(CIX_FKON_VERLAENGERN_START, "14.5", false);
+    ret += cix_makroparam(CIX_FKON_VERLAENGERN_ENDE, "14.5", false);
+    ret += cix_makroparam(CIX_FKON_EINKOR, "NO", false);
+    ret += cix_makroparam(CIX_FKON_AUSKOR, "NO", false);
+    ret += cix_makroparam(CIX_FKON_EINAUSRADPROZENT, "0", false);
+    ret += cix_makroparam(CIX_HAUBENPOS, CIX_HAUBENPOS_AUTO, false);
+    ret += cix_makroparam(CIX_TASCHE_INSELLISTE, "", true);
+    ret += cix_makroparam(CIX_TASCHE_ISO, "", true);
+    ret += cix_makroparam(CIX_BEARB_OPTIMIEREN, "YES", false);
+    ret += cix_makroparam(CIX_WDH_STARTWINKEL, "0", false);
+    ret += cix_makroparam(CIX_TASCHE_KOMPENSATION, "YES", false);
+    ret += cix_makroparam(CIX_TASCHE_INSELNAKTIV, "NO", false);
+    ret += cix_makroparam(CIX_TASCHE_REVERS, "NO", false);
+    ret += cix_makroparam(CIX_TASCHE_REVERS_NB, "NO", false);
+    ret += cix_makroparam(CIX_TASCHE_Z, "0", false);
+    ret += cix_makroparam(CIX_BEZUG_SIABST, CIX_BEZUG_SIABST_BEARBGRUND, false);
+    ret += cix_makroparam(CIX_DREHZ_LETZTE_ZUST, "100", false);
+    ret += cix_makroparam(CIX_DREHZAHL, "0", false);
+    ret += cix_makroparam(CIX_SPEED_ANAB, "100", false);
+    ret += cix_makroparam(CIX_WKZART, CIX_WKZART_FR_KERZE, false);
+    ret += cix_makroparam(CIX_WKZGRUPPE, CIX_WKZGRUPPE_FRAESER, false);
+    ret += cix_makroparam(CIX_TASCHEVERLAGERUNG, CIX_TASCHEVERLAGERUNG_AUTO, false);
+    ret += cix_makroparam(CIX_WKZSPINDEL, CIX_WKZSPINDEL_AUTO, true);
+    ret += cix_makroparam(CIX_KENNCODE_ARBEITSZENTRUM_MASCHINE, "", true);
+    ret += cix_makroparam(CIX_KENNCODE_AGGREGAT, "", true);
+    ret += cix_makroparam("COW","NO",false);            //nur für die Maschine “Skipper”
+    ret += cix_makroparam("EA21","NO",false);           //aktiviert die Verwendung der Parameter A21 und S21
+    ret += cix_makroparam(CIX_WKZ_NEIGUNG,"0",false);
+    ret += cix_makroparam(CIX_WKZ_DREHWI,"0",false);
+    ret += cix_makroparam(CIX_WKZ_DREHTYP,CIX_WKZ_DREHTYP_KEIN,false);
+    ret += cix_makroparam(CIX_ABBLASEN, "NO", false);
+
+    ret += cix_makroparam(CIX_TASCHE_UEBERLAPPUNG, "2", false); //??
+    ret += cix_makroparam(CIX_TASCHE_UEBERLAPPUNG_, "0", false);//?
+    ret += cix_makroparam("N", "-1", false); //???
+    ret += cix_makroparam("A21","0",false);             //Winkel Aggr21
+    ret += cix_makroparam("S21","-1",false);            //Winkel Aggr21
+
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::cix_tasche(bohrung bo, QString wkz, QString geo_id, double dm)
+{
+    fraeseraufruf fa;
+    fa.set_wkznum(wkz);
+    fa.set_radkor(FRKOR_R);
+    fa.set_tiefe(bo.tiefe());
+    fa.set_bezug(bo.bezug());
+    return cix_tasche(fa, geo_id, dm);
 }
 
 void wstzustand::ganx_dateitext(int index)
