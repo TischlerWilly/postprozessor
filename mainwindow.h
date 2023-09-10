@@ -13,6 +13,7 @@
 #include "Defines/dateinamen.h"
 #include "mainwin_wkzmagazin.h"
 #include "Dialoge/dialog_stdnamen.h"
+#include "Dialoge/dialog_einstellung_wkz_pp.h"
 #include "Dialoge/dialog_einstellung_pfade.h"
 #include "Dialoge/dialog_einstellung_ganx.h"
 #include "Dialoge/dialog_einstellung_fmc.h"
@@ -93,6 +94,7 @@ private slots:
     void on_actionEntwicklermodus_triggered(bool checked);
     void on_actionTestfunktion_triggered();
     void on_actionEinstellung_fmc_triggered();
+    void on_actionWerkzeug_Postprozessor_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -136,6 +138,7 @@ private:
 
     //Dialoge:
     mainwin_wkzmagazin dlg_wkzmag;
+    Dialog_einstellung_wkz_pp dlg_wkz_pp;
     Dialog_stdnamen dlg_stdnamen;
     Dialog_Einstellung_pfade dlg_Einstellung_pfade;
     Dialog_einstellung_ganx dlg_einstellung_ganx;

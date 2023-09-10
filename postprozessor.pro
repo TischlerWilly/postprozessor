@@ -26,6 +26,7 @@ SOURCES += main.cpp\
     Dialoge/dialog_einstellung_fmc.cpp \
     Dialoge/dialog_einstellung_ganx.cpp \
     Dialoge/dialog_einstellung_pfade.cpp \
+    Dialoge/dialog_einstellung_wkz_pp.cpp \
     Dialoge/dialog_exportuebersicht.cpp \
     Dialoge/dialog_programmtext.cpp \
     Funktionen/funktionen_prgtext.cpp \
@@ -99,6 +100,7 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_einstellung_fmc.h \
     Dialoge/dialog_einstellung_ganx.h \
     Dialoge/dialog_einstellung_pfade.h \
+    Dialoge/dialog_einstellung_wkz_pp.h \
     Dialoge/dialog_exportuebersicht.h \
     Dialoge/dialog_programmtext.h \
     Funktionen/funktionen_prgtext.h \
@@ -179,6 +181,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_einstellung_fmc.ui \
     Dialoge/dialog_einstellung_ganx.ui \
     Dialoge/dialog_einstellung_pfade.ui \
+    Dialoge/dialog_einstellung_wkz_pp.ui \
     Dialoge/dialog_exportuebersicht.ui \
     Dialoge/dialog_programmtext.ui \
     Dialoge/dialog_bohrer.ui \

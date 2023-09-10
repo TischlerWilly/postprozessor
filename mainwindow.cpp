@@ -40,6 +40,10 @@ MainWindow::MainWindow(QWidget *parent) :
             &dlg_einstellung_dxf_klassen, SLOT(slot_einstellung(einstellung_dxf, einstellung_dxf_klassen)));
     connect(&dlg_einstellung_dxf_klassen, SIGNAL(send_einstellung(einstellung_dxf_klassen)),\
             this, SLOT(getEinstellungDxfKlassen(einstellung_dxf_klassen )));
+
+    connect(&dlg_wkz_pp, SIGNAL(send_einstellungen(einstellung)),\
+            this, SLOT(getEinstellung(einstellung)));
+
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
             &vorschaufenster, SLOT(slot_aktualisieren(werkstueck,int)));
     connect(&dlg_prgtext, SIGNAL(signalIndexChange(int)),\
@@ -1535,6 +1539,10 @@ void MainWindow::on_actionEntwicklermodus_triggered(bool checked)
     Einstellung.set_entwicklermodus(checked);
     schreibe_ini();
 }
+void MainWindow::on_actionWerkzeug_Postprozessor_triggered()
+{
+    dlg_wkz_pp.set_einstellung(Einstellung);
+}
 void MainWindow::on_actionWerkzeug_ganx_anzeigen_triggered()
 {
     dlg_wkzmag.set_wkzmag("Werkzeug GANX", wkz_mag_ganx);
@@ -2339,6 +2347,8 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
+
+
 
 
 

@@ -726,6 +726,7 @@
     <property name="title">
      <string>Werkzeug</string>
     </property>
+    <addaction name="actionWerkzeug_Postprozessor"/>
     <addaction name="actionWerkzeug_ganx_anzeigen"/>
     <addaction name="actionWerkzeug_fmc_anzeigen"/>
     <addaction name="actionWerkzeug_ggf_anzeigen"/>
@@ -848,6 +849,11 @@
   <action name="actionWerkzeug_cix_anzeigen">
    <property name="text">
     <string>Werkzeug cix bearbeiten</string>
+   </property>
+  </action>
+  <action name="actionWerkzeug_Postprozessor">
+   <property name="text">
+    <string>Werkzeug Postprozessor</string>
    </property>
   </action>
  </widget>
