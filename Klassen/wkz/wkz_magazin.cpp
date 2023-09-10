@@ -17,6 +17,22 @@ void wkz_magazin::set_text(text_zw werkzeuge)
 {
     Magazin = werkzeuge;
 }
+void wkz_magazin::add_fraeser(QString f)
+{
+    bool bekannt = false;
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        if(Magazin.at(i) == f)
+        {
+            bekannt = true;
+            break;
+        }
+    }
+    if(bekannt == false)
+    {
+        Magazin.add_hi(f);
+    }
+}
 //----------------------------------get:
 text_zw *wkz_magazin::magazin_ptr()
 {
@@ -453,6 +469,20 @@ text_zw wkz_magazin::alle_bodm_verti()
         }
     }
     return tz;
+}
+text_zw wkz_magazin::alle_fraeser()
+{
+    text_zw mag;
+    for(uint i=0; i<Magazin.count();i++)
+    {
+        text_zw zeile;
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
+        if(typ(zeile) == WKZ_TYP_FRAESER)
+        {
+            mag.add_hi(zeile.text());
+        }
+    }
+    return mag;
 }
 QString wkz_magazin::spiegelwkz(QString wkz_nr)
 {

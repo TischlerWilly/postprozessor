@@ -18,6 +18,7 @@ public:
     //----------------------------------set:
     void set_text(QString werkzeuge);
     void set_text(text_zw werkzeuge);
+    void add_fraeser(QString f);
     //----------------------------------get:
     text_zw *magazin_ptr();
     text_zw magazin();
@@ -38,6 +39,7 @@ public:
     QString nutzlaenge(QString wkz_nr);
     text_zw alle_bodm_hori();
     text_zw alle_bodm_verti();
+    text_zw alle_fraeser();
     QString spiegelwkz(QString wkz_nr);
     //----------------------------------manipulation:
     void item_down(uint index);

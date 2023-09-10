@@ -100,6 +100,7 @@ private:
     wkz_magazin wkz_mag_fmc;
     wkz_magazin wkz_mag_cix;
     wkz_magazin wkz_mag_ggf;
+    wkz_magazin wkz_mag_pp_fr;//Fräser für Postprozessor (wst bearbeiten)
     prgpfade pf;
 
     //Variablen:
@@ -120,6 +121,7 @@ private:
 
     //Funktionen:
     void setup();
+    void setup_wkz_pp();
     void schreibe_ini();
     void dateien_erfassen();
     QString verzeichnis_ziel();

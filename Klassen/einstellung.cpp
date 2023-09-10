@@ -19,6 +19,10 @@ einstellung::einstellung()
     Formartierungen_aufbrechen  = false;
     Fkon_kantenschonend         = false;
     Gehrungen_zugabe            = 20;
+    WKZ_fr_fmc                  = false;
+    WKZ_fr_ganx                 = false;
+    WKZ_fr_cix                  = false;
+    WKZ_fr_ggf                  = false;
 }
 
 //----------------------------------------set:
@@ -81,6 +85,18 @@ void einstellung::set_text(QString t)
         }else if(spalten.at(0) == "zugabemass_gehrungen:")
         {
             set_gehrungen_zugabe(spalten.at(1).toDouble());
+        }else if(spalten.at(0) == "wkz_fr_fmc:")
+        {
+            set_wkz_fr_fmc(spalten.at(1));
+        }else if(spalten.at(0) == "wkz_fr_ganx:")
+        {
+            set_wkz_fr_ganx(spalten.at(1));
+        }else if(spalten.at(0) == "wkz_fr_cix:")
+        {
+            set_wkz_fr_cix(spalten.at(1));
+        }else if(spalten.at(0) == "wkz_fr_ggf:")
+        {
+            set_wkz_fr_ggf(spalten.at(1));
         }
     }
 }
@@ -240,6 +256,63 @@ bool einstellung::set_gehrungen_zugabe(double zug)
         return false;//Fehlschlag
     }
 }
+void einstellung::set_wkz_fr_fmc(bool jn)
+{
+    WKZ_fr_fmc = jn;
+}
+void einstellung::set_wkz_fr_fmc(QString jn)
+{
+    if(jn == "ja")
+    {
+        set_wkz_fr_fmc(true);
+    }else
+    {
+        set_wkz_fr_fmc(false);
+    }
+}
+void einstellung::set_wkz_fr_ganx(bool jn)
+{
+    WKZ_fr_ganx = jn;
+}
+void einstellung::set_wkz_fr_ganx(QString jn)
+{
+    if(jn == "ja")
+    {
+        set_wkz_fr_ganx(true);
+    }else
+    {
+        set_wkz_fr_ganx(false);
+    }
+}
+void einstellung::set_wkz_fr_cix(bool jn)
+{
+    WKZ_fr_cix = jn;
+}
+void einstellung::set_wkz_fr_cix(QString jn)
+{
+    if(jn == "ja")
+    {
+        set_wkz_fr_cix(true);
+    }else
+    {
+        set_wkz_fr_cix(false);
+    }
+}
+void einstellung::set_wkz_fr_ggf(bool jn)
+{
+    WKZ_fr_ggf = jn;
+}
+void einstellung::set_wkz_fr_ggf(QString jn)
+{
+    if(jn == "ja")
+    {
+        set_wkz_fr_ggf(true);
+    }else
+    {
+        set_wkz_fr_ggf(false);
+    }
+}
+
 //----------------------------------------get:
 QString einstellung::text()
 {
@@ -361,6 +434,50 @@ QString einstellung::text()
     text += double_to_qstring(gehrungen_zugabe());
     text += "\n";
 
+    text += "wkz_fr_fmc:";
+    text += "\t";
+    if(wkz_fr_fmc() == true)
+    {
+        text += "ja";
+    }else
+    {
+        text += "nein";
+    }
+    text += "\n";
+
+    text += "wkz_fr_ganx:";
+    text += "\t";
+    if(wkz_fr_ganx() == true)
+    {
+        text += "ja";
+    }else
+    {
+        text += "nein";
+    }
+    text += "\n";
+
+    text += "wkz_fr_cix:";
+    text += "\t";
+    if(wkz_fr_cix() == true)
+    {
+        text += "ja";
+    }else
+    {
+        text += "nein";
+    }
+    text += "\n";
+
+    text += "wkz_fr_ggf:";
+    text += "\t";
+    if(wkz_fr_ggf() == true)
+    {
+        text += "ja";
+    }else
+    {
+        text += "nein";
+    }
+    text += "\n";
+
     return text;
 }
 bool einstellung::entwicklermodus()
@@ -431,7 +548,21 @@ double einstellung::gehrungen_zugabe()
 {
     return Gehrungen_zugabe;
 }
-
-
+bool einstellung::wkz_fr_fmc()
+{
+    return WKZ_fr_fmc;
+}
+bool einstellung::wkz_fr_ganx()
+{
+    return WKZ_fr_ganx;
+}
+bool einstellung::wkz_fr_cix()
+{
+    return WKZ_fr_cix;
+}
+bool einstellung::wkz_fr_ggf()
+{
+    return WKZ_fr_ggf;
+}
 
 

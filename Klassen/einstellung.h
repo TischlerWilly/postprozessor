@@ -35,6 +35,14 @@ public:
     void set_fkon_kantenschonend(bool ks);
     void set_fkon_kantenschonend(QString ks);
     bool set_gehrungen_zugabe(double zug);
+    void set_wkz_fr_fmc(bool jn);
+    void set_wkz_fr_fmc(QString jn);
+    void set_wkz_fr_ganx(bool jn);
+    void set_wkz_fr_ganx(QString jn);
+    void set_wkz_fr_cix(bool jn);
+    void set_wkz_fr_cix(QString jn);
+    void set_wkz_fr_ggf(bool jn);
+    void set_wkz_fr_ggf(QString jn);
 
     //get:    
     QString text();
@@ -55,6 +63,10 @@ public:
     bool formartierungen_aufbrechen();
     bool fkon_kantenschonend();
     double gehrungen_zugabe();
+    bool wkz_fr_fmc();
+    bool wkz_fr_ganx();
+    bool wkz_fr_cix();
+    bool wkz_fr_ggf();
 
 private:
     bool Entwicklermodus;
@@ -74,6 +86,10 @@ private:
     bool Formartierungen_aufbrechen;
     bool Fkon_kantenschonend;
     double Gehrungen_zugabe;
+    bool WKZ_fr_fmc;
+    bool WKZ_fr_ganx;
+    bool WKZ_fr_cix;
+    bool WKZ_fr_ggf;
 
 };
 

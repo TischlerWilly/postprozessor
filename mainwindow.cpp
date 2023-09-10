@@ -506,6 +506,8 @@ void MainWindow::setup()
         file.close();
     }
 
+    setup_wkz_pp();
+
     //GUI ergänzen wenn inifile von alter Programmversion:
     if(ui->lineEdit_geraden_schwellenwert->text().isEmpty())
     {
@@ -516,6 +518,42 @@ void MainWindow::setup()
         ui->lineEdit_zugabe_gehr->setText("20");
     }
     ui->radioButton_vorschau_fmc->setChecked(true);
+}
+void MainWindow::setup_wkz_pp()
+{
+    text_zw tmp_wzk;
+    if(Einstellung.wkz_fr_fmc() == true)
+    {
+        tmp_wzk = wkz_mag_fmc.alle_fraeser();
+        for(uint i=0; i<tmp_wzk.count();i++)
+        {
+            wkz_mag_pp_fr.add_fraeser(tmp_wzk.at(i));
+        }
+    }
+    if(Einstellung.wkz_fr_ganx() == true)
+    {
+        tmp_wzk = wkz_mag_ganx.alle_fraeser();
+        for(uint i=0; i<tmp_wzk.count();i++)
+        {
+            wkz_mag_pp_fr.add_fraeser(tmp_wzk.at(i));
+        }
+    }
+    if(Einstellung.wkz_fr_cix() == true)
+    {
+        tmp_wzk = wkz_mag_cix.alle_fraeser();
+        for(uint i=0; i<tmp_wzk.count();i++)
+        {
+            wkz_mag_pp_fr.add_fraeser(tmp_wzk.at(i));
+        }
+    }
+    if(Einstellung.wkz_fr_ggf() == true)
+    {
+        tmp_wzk = wkz_mag_ggf.alle_fraeser();
+        for(uint i=0; i<tmp_wzk.count();i++)
+        {
+            wkz_mag_pp_fr.add_fraeser(tmp_wzk.at(i));
+        }
+    }
 }
 void MainWindow::schreibe_ini()
 {
