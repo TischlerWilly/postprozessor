@@ -81,7 +81,7 @@ public slots:
     //Bearbeiten
     void zeile_aendern(int index, QString bearb, bool unredor_verwenden);
     void slot_rta(rechtecktasche rta);
-    void slot_bo(bohrung bo);    
+    void slot_bo(bohrung bo);
     void slot_nut(nut nu);
     void slot_faufruf(fraeseraufruf fa);
     void slot_fgerade(fraesergerade fg);

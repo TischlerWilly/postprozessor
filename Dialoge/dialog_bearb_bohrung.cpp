@@ -15,6 +15,7 @@ Dialog_bearb_bohrung::Dialog_bearb_bohrung(QWidget *parent) :
     ui->comboBox_bezug->addItem("Vorne");       //4
     ui->comboBox_bezug->addItem("Hinten");      //5
     ui->pushButton_invert->setText("HBE\ninvertieren");
+    connect(&dlg_wkzwahl, SIGNAL(send_wkz(QString)), this, SLOT(get_wkz(QString)));
 }
 
 Dialog_bearb_bohrung::~Dialog_bearb_bohrung()
@@ -22,9 +23,10 @@ Dialog_bearb_bohrung::~Dialog_bearb_bohrung()
     delete ui;
 }
 
-void Dialog_bearb_bohrung::set_data(QString d, werkstueck *w)
+void Dialog_bearb_bohrung::set_data(QString d, werkstueck *w, text_zw wkzmag)
 {
     Wst = w;
+    Wkzmag = wkzmag;
     bohrung bo;
     bo.set_text(d);
     ui->lineEdit_dm->setText(bo.dm_qstring());
@@ -105,7 +107,12 @@ void Dialog_bearb_bohrung::on_btn_ok_clicked()
         bo.set_bezug(WST_BEZUG_HI);
     }
     bo.set_afb(ui->lineEdit_afb->text());
-    bo.set_wkznum(ui->lineEdit_wkz->text());
+    QString wkznr = ui->lineEdit_wkz->text();
+    if(wkznr.isEmpty())
+    {
+        wkznr = "void";
+    }
+    bo.set_wkznum(wkznr);
 
     emit signal_bo(bo);
     this->close();
@@ -144,4 +151,13 @@ void Dialog_bearb_bohrung::on_pushButton_invert_clicked()
         y = Wst->breite() - y;
         ui->lineEdit_y->setText(double_to_qstring(y));
     }
+}
+
+void Dialog_bearb_bohrung::on_pushButton_wkzwahl_clicked()
+{
+    dlg_wkzwahl.set_wkzmag(Wkzmag);
+}
+void Dialog_bearb_bohrung::get_wkz(QString wkz)
+{
+    ui->lineEdit_wkz->setText(wkz);
 }

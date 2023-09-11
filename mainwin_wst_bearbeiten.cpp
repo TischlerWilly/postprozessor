@@ -233,7 +233,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Dialog_bearb_bohrung dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_bo(bohrung)));
-        dlg.set_data(bearb.text(), Wst);
+        dlg.set_data(bearb.text(), Wst, Wkz->text());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_NUT)
     {
@@ -329,7 +329,7 @@ void MainWin_wst_bearbeiten::on_actionMakeBohrung_triggered()
     Dialog_bearb_bohrung dlg;
     dlg.setModal(true);
     bohrung bo;//Default-Daten
-    dlg.set_data(bo.text(), Wst);
+    dlg.set_data(bo.text(), Wst, Wkz->magazin());
     connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_make_bo(bohrung)));
     dlg.exec();
 }
