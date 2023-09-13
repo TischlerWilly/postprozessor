@@ -15,18 +15,24 @@ class Dialog_fraeserauswahl : public QDialog
 public:
     explicit Dialog_fraeserauswahl(QWidget *parent = nullptr);
     ~Dialog_fraeserauswahl();
+    void update_wkztabelle();
     void set_wkzmag(text_zw wkzm);
+    void set_max_dm(double dm);
 
 signals:
     void send_wkz(QString w);
 
 private slots:
+    void resizeEvent(QResizeEvent *event);
     void on_pushButton_ok_clicked();
     void on_pushButton_abbrechen_clicked();
 
 private:
     Ui::Dialog_fraeserauswahl *ui;
     text_zw Wkzmag;
+    double Max_dm;
+
+
 };
 
 #endif // DIALOG_FRAESERAUSWAHL_H

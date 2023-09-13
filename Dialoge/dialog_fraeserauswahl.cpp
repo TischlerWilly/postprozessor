@@ -6,6 +6,9 @@ Dialog_fraeserauswahl::Dialog_fraeserauswahl(QWidget *parent) :
     ui(new Ui::Dialog_fraeserauswahl)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Fräser auswählen");
+    this->resize(750, 500);
+    Max_dm = 999;
 }
 
 Dialog_fraeserauswahl::~Dialog_fraeserauswahl()
@@ -16,23 +19,45 @@ Dialog_fraeserauswahl::~Dialog_fraeserauswahl()
 void Dialog_fraeserauswahl::on_pushButton_ok_clicked()
 {
     int i = ui->tableWidget->currentRow();
-    text_zw zeile(Wkzmag.at(i), WKZ_TRENNZ);
-    wkz_fraeser fr(zeile);
-    emit send_wkz(fr.alias());
-    this->close();
+    uint index_ret = 1;//Alias
+    if(i > 0)
+    {
+        emit send_wkz(ui->tableWidget->item(i, index_ret)->text());
+        this->close();
+    }else
+    {
+        QMessageBox mb;
+        mb.setText("Bitte zuerst einen Fräser aussuchen.");
+        mb.exec();
+    }
 }
-
 void Dialog_fraeserauswahl::on_pushButton_abbrechen_clicked()
 {
     this->close();
 }
-
-void Dialog_fraeserauswahl::set_wkzmag(text_zw wkzm)
+void Dialog_fraeserauswahl::resizeEvent(QResizeEvent *event)
 {
-    Wkzmag = wkzm;
+    ui->tableWidget->setFixedWidth(this->width()-15);
+    ui->tableWidget->setFixedHeight(this->height()-50);
+    int btn_breite = 200;
+    ui->pushButton_ok->setFixedWidth(btn_breite);
+    ui->pushButton_abbrechen->setFixedWidth(btn_breite);
+    int x = ui->tableWidget->width()/2 - ui->pushButton_ok->width() - 5;
+    int y = ui->tableWidget->pos().y() + ui->tableWidget->height() + 5;
+    ui->pushButton_ok->move(x, y);
+    x = x + btn_breite+10;
+    ui->pushButton_abbrechen->move(x, y);
+}
+
+void Dialog_fraeserauswahl::update_wkztabelle()
+{
+    for(int i=0; i<ui->tableWidget->rowCount() ;i++)//ist notwendig weil qt das clear() nicht
+    {                                               //in jedem Fall ausführt!!
+        ui->tableWidget->showRow(i);
+    }
     ui->tableWidget->clear();
     int anz_spalten = 4;
-    ui->tableWidget->setRowCount(wkzm.count());
+    ui->tableWidget->setRowCount(Wkzmag.count());
     ui->tableWidget->setColumnCount(anz_spalten);
     QStringList tabkopf;
     tabkopf << "Werkzeug-Nr." << "Alias" << "DM" << "Nutzlänge";
@@ -43,15 +68,28 @@ void Dialog_fraeserauswahl::set_wkzmag(text_zw wkzm)
     {
         text_zw zeile(Wkzmag.at(i), WKZ_TRENNZ);
         wkz_fraeser fr(zeile);
-        QMessageBox mb;
-        mb.setText(Wkzmag.at(i));
-        //mb.exec();
         ui->tableWidget->setItem(i,0, new QTableWidgetItem(fr.wkznr()));
         ui->tableWidget->setItem(i,1, new QTableWidgetItem(fr.alias()));
         ui->tableWidget->setItem(i,2, new QTableWidgetItem(double_to_qstring(fr.dm())));
         ui->tableWidget->setItem(i,3, new QTableWidgetItem(double_to_qstring(fr.nutzl())));
         ui->tableWidget->item(i,2)->setTextAlignment(Qt::AlignCenter);
         ui->tableWidget->item(i,3)->setTextAlignment(Qt::AlignCenter);
+        if(fr.dm() > Max_dm)
+        {
+            ui->tableWidget->hideRow(i);
+        }
     }
-    this->show();
+}
+void Dialog_fraeserauswahl::set_wkzmag(text_zw wkzm)
+{
+    Wkzmag = wkzm;
+}
+void Dialog_fraeserauswahl::set_max_dm(double dm)
+{
+    Max_dm = dm;
+    QString fenstertitel = "Fräser auswählen \t(DM kleiner als ";
+    fenstertitel += double_to_qstring(dm);
+    fenstertitel += "mm)";
+    this->setWindowTitle(fenstertitel);
+
 }
