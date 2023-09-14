@@ -8,7 +8,8 @@ Dialog_fraeserauswahl::Dialog_fraeserauswahl(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Fräser auswählen");
     this->resize(750, 500);
-    Max_dm = 999;
+    Max_dm      = -1;
+    Min_nutzl   = -1;
 }
 
 Dialog_fraeserauswahl::~Dialog_fraeserauswahl()
@@ -74,7 +75,11 @@ void Dialog_fraeserauswahl::update_wkztabelle()
         ui->tableWidget->setItem(i,3, new QTableWidgetItem(double_to_qstring(fr.nutzl())));
         ui->tableWidget->item(i,2)->setTextAlignment(Qt::AlignCenter);
         ui->tableWidget->item(i,3)->setTextAlignment(Qt::AlignCenter);
-        if(fr.dm() > Max_dm)
+        if(Max_dm > 0 && fr.dm() > Max_dm)
+        {
+            ui->tableWidget->hideRow(i);
+        }
+        if(Min_nutzl > 0 && fr.nutzl() < Min_nutzl)
         {
             ui->tableWidget->hideRow(i);
         }
@@ -87,9 +92,38 @@ void Dialog_fraeserauswahl::set_wkzmag(text_zw wkzm)
 void Dialog_fraeserauswahl::set_max_dm(double dm)
 {
     Max_dm = dm;
-    QString fenstertitel = "Fräser auswählen \t(DM kleiner als ";
-    fenstertitel += double_to_qstring(dm);
-    fenstertitel += "mm)";
-    this->setWindowTitle(fenstertitel);
-
+    set_fenstertitel();
 }
+void Dialog_fraeserauswahl::set_min_nutz(double nutzl)
+{
+    Min_nutzl = nutzl;
+    set_fenstertitel();
+}
+
+void Dialog_fraeserauswahl::set_fenstertitel()
+{
+    QString fenstertitel = "Fräser auswählen";
+    if(Max_dm > 0)
+    {
+        fenstertitel +=  "        DM < ";
+        fenstertitel += double_to_qstring(Max_dm);
+        fenstertitel += "mm";
+    }
+    if(Min_nutzl > 0)
+    {
+        fenstertitel +=  "        Nutzlänge > ";
+        fenstertitel += double_to_qstring(Min_nutzl);
+        fenstertitel += "mm";
+    }
+    this->setWindowTitle(fenstertitel);
+}
+
+
+
+
+
+
+
+
+
+

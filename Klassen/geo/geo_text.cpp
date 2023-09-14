@@ -749,6 +749,8 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
             fraeseraufruf fa(zeile.text());
             radkor = fa.radkor();
             gt.add_leerzeile();
+            //QString wkz = fa.wkznum();
+            //fraeserdm = wkzmag.dm(wkz).toDouble();
         }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg(zeile.text());

@@ -13,7 +13,8 @@ Dialog_bearb_faufruf::Dialog_bearb_faufruf(QWidget *parent) :
     //---
     ui->comboBox_kor->addItem("Links");  //0
     ui->comboBox_kor->addItem("Keine");  //1
-    ui->comboBox_kor->addItem("Rechts"); //2
+    ui->comboBox_kor->addItem("Rechts"); //2    
+    connect(&dlg_wkzwahl, SIGNAL(send_wkz(QString)), this, SLOT(get_wkz(QString)));
 }
 
 Dialog_bearb_faufruf::~Dialog_bearb_faufruf()
@@ -21,9 +22,10 @@ Dialog_bearb_faufruf::~Dialog_bearb_faufruf()
     delete ui;
 }
 
-void Dialog_bearb_faufruf::set_data(QString d, werkstueck *w)
+void Dialog_bearb_faufruf::set_data(QString d, werkstueck *w, text_zw wkzmag)
 {
     Wst = w;
+    Wkzmag = wkzmag;
     fraeseraufruf fa;
     fa.set_text(d);
     ui->lineEdit_ti->setText(fa.tiefe_qstring());
@@ -108,4 +110,16 @@ void Dialog_bearb_faufruf::on_btn_ok_clicked()
 void Dialog_bearb_faufruf::on_btn_abbrechen_clicked()
 {
     this->close();
+}
+
+void Dialog_bearb_faufruf::on_pushButton_wkzwahl_clicked()
+{
+    dlg_wkzwahl.set_min_nutz(ui->lineEdit_ti->text().toDouble());
+    dlg_wkzwahl.set_wkzmag(Wkzmag);
+    dlg_wkzwahl.update_wkztabelle();
+    dlg_wkzwahl.show();
+}
+void Dialog_bearb_faufruf::get_wkz(QString wkz)
+{
+    ui->lineEdit_wkz->setText(wkz);
 }

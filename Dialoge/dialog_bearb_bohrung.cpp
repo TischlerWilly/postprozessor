@@ -156,6 +156,7 @@ void Dialog_bearb_bohrung::on_pushButton_invert_clicked()
 void Dialog_bearb_bohrung::on_pushButton_wkzwahl_clicked()
 {
     dlg_wkzwahl.set_max_dm(ui->lineEdit_dm->text().toDouble());
+    dlg_wkzwahl.set_min_nutz(ui->lineEdit_ti->text().toDouble());
     dlg_wkzwahl.set_wkzmag(Wkzmag);
     dlg_wkzwahl.update_wkztabelle();
     dlg_wkzwahl.show();

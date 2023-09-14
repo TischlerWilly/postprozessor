@@ -15,6 +15,7 @@
 #include "wuerfel.h"
 #include "defines_geometrie.h"
 #include "geofunktionen.h"
+#include "Klassen/wkz/wkz_magazin.h"
 #include "Defines/def_bearbeitungen.h"
 #include "Klassen/wst/bohrung.h"
 #include "Klassen/wst/bohrraster.h"

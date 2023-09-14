@@ -18,6 +18,7 @@ public:
     void update_wkztabelle();
     void set_wkzmag(text_zw wkzm);
     void set_max_dm(double dm);
+    void set_min_nutz(double nutzl);
 
 signals:
     void send_wkz(QString w);
@@ -31,7 +32,9 @@ private:
     Ui::Dialog_fraeserauswahl *ui;
     text_zw Wkzmag;
     double Max_dm;
+    double Min_nutzl;
 
+    void set_fenstertitel();
 
 };
 

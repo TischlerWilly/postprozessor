@@ -14,6 +14,7 @@ Dialog_bearb_rta::Dialog_bearb_rta(QWidget *parent) :
     ui->comboBox_bezug->addItem("Rechts");      //3
     ui->comboBox_bezug->addItem("Vorne");       //4
     ui->comboBox_bezug->addItem("Hinten");      //5
+    connect(&dlg_wkzwahl, SIGNAL(send_wkz(QString)), this, SLOT(get_wkz(QString)));
 }
 
 Dialog_bearb_rta::~Dialog_bearb_rta()
@@ -21,9 +22,10 @@ Dialog_bearb_rta::~Dialog_bearb_rta()
     delete ui;
 }
 
-void Dialog_bearb_rta::set_data(QString d, werkstueck *w)
+void Dialog_bearb_rta::set_data(QString d, werkstueck *w, text_zw wkzmag)
 {
     Wst = w;
+    Wkzmag = wkzmag;
     rechtecktasche rta;
     rta.set_text(d);
     ui->lineEdit_l->setText(rta.laenge_qstring());
@@ -127,4 +129,27 @@ void Dialog_bearb_rta::on_btn_ok_clicked()
 
     emit signal_rta(rta);
     this->close();
+}
+
+void Dialog_bearb_rta::on_pushButton_wkzwahl_clicked()
+{
+    double tal = ui->lineEdit_l->text().toDouble();
+    double tab = ui->lineEdit_b->text().toDouble();
+    double min;
+    if(tal < tab)
+    {
+        min = tal;
+    }else
+    {
+        min = tab;
+    }
+    dlg_wkzwahl.set_max_dm(min);
+    dlg_wkzwahl.set_min_nutz(ui->lineEdit_ti->text().toDouble());
+    dlg_wkzwahl.set_wkzmag(Wkzmag);
+    dlg_wkzwahl.update_wkztabelle();
+    dlg_wkzwahl.show();
+}
+void Dialog_bearb_rta::get_wkz(QString wkz)
+{
+    ui->lineEdit_wkz->setText(wkz);
 }
