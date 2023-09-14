@@ -1621,9 +1621,9 @@ void MainWindow::on_actionWST_bearbeiten_triggered()
     {
         const int wstindex = ui->listWidget_wste->currentRow();
         werkstueck *w = wste.wst(wstindex);
-        dlg_wst_bearbeiten.setWindowTitle(w->name());
-        dlg_wst_bearbeiten.set_wst(w);
+        dlg_wst_bearbeiten.setWindowTitle(w->name());        
         dlg_wst_bearbeiten.set_wkz(&wkz_mag_pp_fr);
+        dlg_wst_bearbeiten.set_wst(w);
         dlg_wst_bearbeiten.show();
     }
 }

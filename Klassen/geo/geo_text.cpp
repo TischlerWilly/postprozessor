@@ -224,7 +224,7 @@ text_zw geo_text::at(uint index)
 //Funktionen außerhalb der Klasse:
 geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, \
                        QString kante_v, QString kante_h, QString kante_l, QString kante_r, \
-                       double versatz_x, double versatz_y)
+                       double versatz_x, double versatz_y, wkz_magazin wkzm)
 {
     //-------------------------------------------
     geo_text gt;
@@ -606,6 +606,16 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
         {
             rechtecktasche rt(zeile.text());
             rechteck3d r;
+            double wkzdm = wkzm.dm(rt.wkznum()).toDouble();
+            double eckenrad;
+            if(wkzdm > rt.rad())
+            {
+                eckenrad = wkzdm;
+            }else
+            {
+                eckenrad = rt.rad();
+            }
+
             if(  (rt.bezug() == WST_BEZUG_OBSEI) ||  (rt.bezug() == WST_BEZUG_UNSEI)  )
             {
                 r.set_bezugspunkt(MITTE);
@@ -628,7 +638,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_mipu(rt.x(), rt.y(), rt.z());
                 r.set_drewi(rt.drewi());
                 r.verschieben_um(versatz_x, versatz_y);
-                r.set_rad(rt.rad());
+                r.set_rad(eckenrad);
                 gt.add_rechteck(r);
                 if(rt.ausraeumen() == false)
                 {
@@ -749,8 +759,8 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
             fraeseraufruf fa(zeile.text());
             radkor = fa.radkor();
             gt.add_leerzeile();
-            QString wkz = fa.wkznum();
-            fraeserdm = wkzm.dm(wkz).toDouble();
+            QString wkznr = fa.wkznum();
+            fraeserdm = wkzm.dm(wkznr).toDouble();
         }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg(zeile.text());

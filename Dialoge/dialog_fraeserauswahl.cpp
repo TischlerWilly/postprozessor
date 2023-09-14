@@ -21,7 +21,7 @@ void Dialog_fraeserauswahl::on_pushButton_ok_clicked()
 {
     int i = ui->tableWidget->currentRow();
     uint index_ret = 1;//Alias
-    if(i > 0)
+    if(!ui->tableWidget->selectedItems().isEmpty())
     {
         emit send_wkz(ui->tableWidget->item(i, index_ret)->text());
         this->close();

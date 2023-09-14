@@ -67,7 +67,7 @@ public:
     double min_x();
     double max_y();
     double min_y();
-    geo_text geo();
+    geo_text geo(wkz_magazin wkzm);
     geo_text geofkon(wkz_magazin wkzm);
     inline double   laenge() const
     {

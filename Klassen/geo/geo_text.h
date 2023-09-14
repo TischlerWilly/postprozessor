@@ -69,6 +69,6 @@ private:
 
 geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, \
                        QString kante_v, QString kante_h, QString kante_l, QString kante_r, \
-                       double versatz_x, double versatz_y);
+                       double versatz_x, double versatz_y, wkz_magazin wkzm);
 
 geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wkz_magazin wkzm);

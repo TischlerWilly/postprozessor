@@ -267,7 +267,7 @@ double werkstueck::min_y()
 {
     return 0-25;
 }
-geo_text werkstueck::geo()
+geo_text werkstueck::geo(wkz_magazin wkzm)
 {
     double versatz_x = 0;
     double versatz_y = 0;
@@ -278,7 +278,7 @@ geo_text werkstueck::geo()
     //-------------------------------------------
     return geo_ermitteln(Bearb, Laenge, Breite, Dicke, \
                          kante_v, kante_h, kante_l, kante_r,\
-                         versatz_x, versatz_y);
+                         versatz_x, versatz_y, wkzm);
 }
 geo_text werkstueck::geofkon(wkz_magazin wkzm)
 {
