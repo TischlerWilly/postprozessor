@@ -41,7 +41,6 @@ public:
     void set_dicke(double d);
     void set_dicke(QString d);
     void neue_bearbeitung(QString text);
-    //void set_bearb(text_zeilenweise b); //alt
     void set_bearb(text_zw b);
     void set_kante_vo(QString artiklenummer);
     void set_kante_hi(QString artiklenummer);
@@ -69,7 +68,7 @@ public:
     double max_y();
     double min_y();
     geo_text geo();
-    geo_text geofkon();
+    geo_text geofkon(wkz_magazin wkzm);
     inline double   laenge() const
     {
         return Laenge;

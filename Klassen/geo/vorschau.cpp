@@ -718,11 +718,11 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
     this->update();
 }
 
-void vorschau::slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile)
+void vorschau::slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile, wkz_magazin wkzm)
 {
     W = w_neu;
     Geotext = W.geo();
-    GeoFkon = W.geofkon();
+    GeoFkon = W.geofkon(wkzm);
     Wst.set_laenge(w_neu.laenge());
     Wst.set_breite(w_neu.breite());
     Aktuelle_zeilennummer = aktive_zeile;

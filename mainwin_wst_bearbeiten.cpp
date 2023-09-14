@@ -10,8 +10,8 @@ MainWin_wst_bearbeiten::MainWin_wst_bearbeiten(QWidget *parent)
 
     vorschaufenster.set_bearb_erlaubt(true);
 
-    connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int)),\
-            &vorschaufenster, SLOT(slot_aktualisieren_einzelwst(werkstueck,int)));
+    connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int, wkz_magazin)),\
+            &vorschaufenster, SLOT(slot_aktualisieren_einzelwst(werkstueck,int, wkz_magazin)));
     connect(this, SIGNAL(signalIndexChange(int)),\
             &vorschaufenster, SLOT(slot_aktives_Element_einfaerben(int)));
     connect(&vorschaufenster, SIGNAL(sende_zeilennummer(uint, bool)),\
@@ -30,7 +30,7 @@ MainWin_wst_bearbeiten::~MainWin_wst_bearbeiten()
 void MainWin_wst_bearbeiten::clear()
 {
     Wst = nullptr;
-    Wkz = nullptr;
+    Wkz_ptr = nullptr;
     ui->listWidget_prgtext->clear();
 }
 
@@ -80,7 +80,7 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
     unredo_clear();
-    sendVorschauAktualisieren(*Wst, -1);
+    sendVorschauAktualisieren(*Wst, -1, Wkz_kpoie);
     letzte_wst_l = Wst->laenge();
     letzte_wst_b = Wst->breite();
     letzte_wst_d = Wst->dicke();
@@ -88,7 +88,8 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
 }
 void MainWin_wst_bearbeiten::set_wkz(wkz_magazin *w)
 {
-    Wkz = w;
+    Wkz_ptr = w;
+    Wkz_kpoie = Wkz_ptr->magazin();
 }
 
 void MainWin_wst_bearbeiten::update_listwidget()
@@ -214,7 +215,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Wst->set_bearb(bearb_neu);
         unredo_neu();
         update_listwidget();        
-        emit sendVorschauAktualisieren(*Wst, 0);
+        emit sendVorschauAktualisieren(*Wst, 0, Wkz_kpoie);
         return;
     }
     //Zeile Auslesen:
@@ -226,14 +227,14 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Dialog_bearb_rta dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
-        dlg.set_data(bearb.text(), Wst, Wkz->text());
+        dlg.set_data(bearb.text(), Wst, Wkz_ptr->text());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_BOHR)
     {
         Dialog_bearb_bohrung dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_bo(bohrung)));
-        dlg.set_data(bearb.text(), Wst, Wkz->text());
+        dlg.set_data(bearb.text(), Wst, Wkz_ptr->text());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_NUT)
     {
@@ -247,7 +248,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Dialog_bearb_faufruf dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_faufruf(fraeseraufruf)), this, SLOT(slot_faufruf(fraeseraufruf)));
-        dlg.set_data(bearb.text(), Wst, Wkz->text());
+        dlg.set_data(bearb.text(), Wst, Wkz_ptr->text());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_FRAESERGERADE)
     {
@@ -278,7 +279,7 @@ void MainWin_wst_bearbeiten::zeile_aendern(int index, QString bearb, bool unredo
         unredo_neu();
     }
     update_listwidget();
-    emit sendVorschauAktualisieren(*Wst, index+1);
+    emit sendVorschauAktualisieren(*Wst, index+1, Wkz_kpoie);
 }
 void MainWin_wst_bearbeiten::slot_rta(rechtecktasche rta)
 {
@@ -329,7 +330,7 @@ void MainWin_wst_bearbeiten::on_actionMakeBohrung_triggered()
     Dialog_bearb_bohrung dlg;
     dlg.setModal(true);
     bohrung bo;//Default-Daten
-    dlg.set_data(bo.text(), Wst, Wkz->magazin());
+    dlg.set_data(bo.text(), Wst, Wkz_ptr->magazin());
     connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_make_bo(bohrung)));
     dlg.exec();
 }
@@ -338,7 +339,7 @@ void MainWin_wst_bearbeiten::on_actionMakeRTA_triggered()
     Dialog_bearb_rta dlg;
     dlg.setModal(true);
     rechtecktasche rt;//Default-Daten
-    dlg.set_data(rt.text(), Wst, Wkz->magazin());
+    dlg.set_data(rt.text(), Wst, Wkz_ptr->magazin());
     connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_make_rta(rechtecktasche)));
     dlg.exec();
 }
@@ -368,7 +369,7 @@ void MainWin_wst_bearbeiten::slot_make(QString bearb)
     }
     update_listwidget();
     unredo_neu();
-    emit sendVorschauAktualisieren(*Wst, index);
+    emit sendVorschauAktualisieren(*Wst, index, Wkz_kpoie);
 }
 void MainWin_wst_bearbeiten::slot_make_bo(bohrung bo)
 {
@@ -391,7 +392,7 @@ void MainWin_wst_bearbeiten::on_actionUndo_triggered()
     Wst->set_bearb(UnReDo.undo());
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
-    sendVorschauAktualisieren(*Wst, ui->listWidget_prgtext->count()-1);
+    sendVorschauAktualisieren(*Wst, ui->listWidget_prgtext->count()-1, Wkz_kpoie);
 }
 void MainWin_wst_bearbeiten::on_actionRedo_triggered()
 {
@@ -401,7 +402,7 @@ void MainWin_wst_bearbeiten::on_actionRedo_triggered()
     Wst->set_bearb(UnReDo.redo());
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
-    sendVorschauAktualisieren(*Wst, 0);
+    sendVorschauAktualisieren(*Wst, 0, Wkz_kpoie);
 }
 void MainWin_wst_bearbeiten::on_actionEntf_triggered()
 {
@@ -430,7 +431,7 @@ void MainWin_wst_bearbeiten::on_actionEntf_triggered()
                 update_listwidget();
                 unredo_neu();
                 ui->listWidget_prgtext->setCurrentRow(index_liwid);
-                emit sendVorschauAktualisieren(*Wst, index_liwid);
+                emit sendVorschauAktualisieren(*Wst, index_liwid, Wkz_kpoie);
             }
         }else
         {
@@ -448,7 +449,7 @@ void MainWin_wst_bearbeiten::on_actionEntf_triggered()
             update_listwidget();
             unredo_neu();
             ui->listWidget_prgtext->setCurrentRow(row_erstes_liwid);
-            emit sendVorschauAktualisieren(*Wst, row_erstes_liwid);
+            emit sendVorschauAktualisieren(*Wst, row_erstes_liwid, Wkz_kpoie);
         }
     } else
     {
@@ -526,7 +527,7 @@ void MainWin_wst_bearbeiten::on_actionEinfuegen_triggered()
         update_listwidget();
         unredo_neu();
         ui->listWidget_prgtext->setCurrentRow(index_liwid);
-        emit sendVorschauAktualisieren(*Wst, index_liwid);
+        emit sendVorschauAktualisieren(*Wst, index_liwid, Wkz_kpoie);
     }
 }
 void MainWin_wst_bearbeiten::unredo_neu()

@@ -36,7 +36,8 @@ private:
     Ui::MainWin_wst_bearbeiten *ui;
     vorschau vorschaufenster;
     werkstueck *Wst;
-    wkz_magazin *Wkz;
+    wkz_magazin *Wkz_ptr;
+    wkz_magazin Wkz_kpoie;
     undo_redo<text_zw> UnReDo;
     undo_redo<double> UnReDo_L;
     undo_redo<double> UnReDo_B;
@@ -57,7 +58,7 @@ private:
     void unredo_clear();
 
 signals:
-    void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
+    void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile, wkz_magazin wkzm);
     void signalIndexChange(int index);
 
 private slots:

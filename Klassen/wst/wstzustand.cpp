@@ -14316,7 +14316,7 @@ void wstzustand::geo(int index)
     Geotext.append(geo_ermitteln(tmp_bearb, l, b, d, \
                                  kante_v, kante_h, kante_l, kante_r,\
                                  versatz_x, versatz_y));
-    GeoFkon.append(geofkon_ermitteln(tmp_bearb, versatz_x, versatz_y));
+    GeoFkon.append(geofkon_ermitteln(tmp_bearb, versatz_x, versatz_y, Wkzm.at(index)));
 }
 
 
