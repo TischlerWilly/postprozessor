@@ -227,14 +227,14 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Dialog_bearb_rta dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
-        dlg.set_data(bearb.text(), Wst, Wkz_ptr->text());
+        dlg.set_data(bearb.text(), Wst, Wkz_kpoie.magazin());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_BOHR)
     {
         Dialog_bearb_bohrung dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_bo(bohrung)));
-        dlg.set_data(bearb.text(), Wst, Wkz_ptr->text());
+        dlg.set_data(bearb.text(), Wst, Wkz_kpoie.magazin());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_NUT)
     {
@@ -248,7 +248,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Dialog_bearb_faufruf dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_faufruf(fraeseraufruf)), this, SLOT(slot_faufruf(fraeseraufruf)));
-        dlg.set_data(bearb.text(), Wst, Wkz_ptr->text());
+        dlg.set_data(bearb.text(), Wst, Wkz_kpoie.magazin());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_FRAESERGERADE)
     {
