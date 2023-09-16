@@ -218,9 +218,9 @@
     //der Startpunkt der Geometrie wird somit zum Endpunkt
 #define CIX_KREIS_RAD "R"
 #define CIX_KREIS_STARTWI "AS"
-#define CIX_KREIS_RICHTUNG "DIR"
-    #define CIX_KREIS_RICHTUNG_UZS "dirCW"
-    #define CIX_KREIS_RICHTUNG_GUZS "dirCCW"
+#define CIX_RICHTUNG "DIR"
+    #define CIX_RICHTUNG_UZS "dirCW"
+    #define CIX_RICHTUNG_GUZS "dirCCW"
 #define CIX_KREIS_VORSCHUB "FD"
 #define CIX_KREIS_DREHZAHL "SP"
 
@@ -429,11 +429,21 @@
 #define CIX_TASCHE_LAYER    "LAY"   //Kennstring des der Geometrie zugeordneten Layers.
     //Dieser String wird nicht unter den Programmierungszeilen angezeigt, sondern im
     //Dialogfenster Layer-Verwaltung
-
-
-
-
-
+#define CIX_RECHTECK_L "L"
+#define CIX_RECHTECK_B "H"
+#define CIX_RECHTECK_ECKENTYP "CT"
+    #define CIX_RECHTECK_ECKENTYP_ECKIG "0"
+    #define CIX_RECHTECK_ECKENTYP_FASE  "1"
+    #define CIX_RECHTECK_ECKENTYP_RUND  "2"
+#define CIX_RECHTECK_ECKENRAD "CD"
+#define CIX_RECHTECK_STARTSEITE "SS" //1|2|3|4
+#define CIX_RECHTECK_STARTABST "SD"
+#define CIX_HAELFTE "HALF"
+#define CIX_RECHTECK_DREWI "A"
+#define CIX_RECHTECK_BUZUGSPUNKT "USC"
+    #define CIX_RECHTECK_BUZUGSPUNKT_ECKE "0"
+    #define CIX_RECHTECK_BUZUGSPUNKT_MITTE "1"
+#define CIX_RECHTECK_BEZUGSECKE "CRN" //1|2|3|4
 
 //ret += cix_makroparam("COW","NO",false);            //nur für die Maschine “Skipper”
 //ret += cix_makroparam("EA21","NO",false);           //aktiviert die Verwendung der Parameter A21 und S21

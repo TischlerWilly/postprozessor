@@ -9681,6 +9681,61 @@ void wstzustand::cix_dateitext(int index)
             //Fräsbearbeitung einfügen:
             msg += cix_fkon(fa, geo_id);
             msg += cix_ende_poly(id.index_QString());
+        }else if(zeile.at(0) == BEARBART_RTA)
+        {
+            rechtecktasche rt(zeile.text());
+
+            QString tnummer;
+            //Ist direkt ei WKZ definiert?
+            if(rt.bezug() == WST_BEZUG_OBSEI  ||  rt.bezug() == WST_BEZUG_UNSEI)
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_VERT);
+            }else
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_HORI);
+            }
+            if(tnummer.isEmpty())
+            {
+                QString bezug = rt.bezug();
+                double minmass = 0;
+                if(rt.laenge() < rt.breite())
+                {
+                    minmass = rt.laenge();
+                }else
+                {
+                    minmass = rt.breite();
+                }
+                tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, bezug);
+            }
+            if(!tnummer.isEmpty())
+            {
+                double zustellmas = rt.zustellmass();
+                if(zustellmas <= 0)
+                {
+                    zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
+                }
+                //Geometrie einfügen:
+                QString geo_id = "Rechteck ";
+                geo_id += id_g.index_QString();
+                msg += cix_rechteck(rt, geo_id);
+                //Fräsbearbeitung einfügen:
+                if(rt.ausraeumen() == true)
+                {
+                    msg += cix_tasche(rt, tnummer, geo_id);
+                }else
+                {
+                    msg += cix_fkon(rt, geo_id, tnummer);
+                    msg += cix_ende_poly(id.index_QString());
+                }
+            }else
+            {
+                //Mit Fehlermeldung abbrechen:
+                QString msg = fehler_kein_WKZ("cix", zeile);
+                Fehler_kein_wkz.append(msg);
+                Exporttext.append(msg);
+                Export_moeglich.append(false);
+                return;
+            }
         }
     }
 
@@ -10210,6 +10265,15 @@ QString wstzustand::cix_fkon(bohrung bo, QString geo_id, QString wkz)
     fa.set_bezug(bo.bezug());
     return cix_fkon(fa, geo_id);
 }
+QString wstzustand::cix_fkon(rechtecktasche rt, QString geo_id, QString wkz)
+{
+    fraeseraufruf fa;
+    fa.set_wkznum(wkz);
+    fa.set_radkor(FRKOR_R);
+    fa.set_tiefe(rt.tiefe());
+    fa.set_bezug(rt.bezug());
+    return cix_fkon(fa, geo_id);
+}
 QString wstzustand::cix_kreis(bohrung bo, QString geo_id)
 {
     QString ret;
@@ -10290,7 +10354,7 @@ QString wstzustand::cix_kreis(bohrung bo, QString geo_id)
     }
     ret += cix_makroparam(CIX_KREIS_RAD, double_to_qstring(bo.dm()/2), false);
     ret += cix_makroparam(CIX_KREIS_STARTWI, "90", false);
-    ret += cix_makroparam(CIX_KREIS_RICHTUNG, CIX_KREIS_RICHTUNG_UZS, false);
+    ret += cix_makroparam(CIX_RICHTUNG, CIX_RICHTUNG_UZS, false);
     ret += cix_makroparam(CIX_KREIS_VORSCHUB, "0", false);
     ret += cix_makroparam(CIX_KREIS_DREHZAHL, "0", false);
     ret += "END MACRO";
@@ -10371,6 +10435,122 @@ QString wstzustand::cix_tasche(bohrung bo, QString wkz, QString geo_id, double d
     fa.set_tiefe(bo.tiefe());
     fa.set_bezug(bo.bezug());
     return cix_tasche(fa, geo_id, dm);
+}
+QString wstzustand::cix_tasche(rechtecktasche rt, QString wkz, QString geo_id)
+{
+    fraeseraufruf fa;
+    fa.set_wkznum(wkz);
+    fa.set_radkor(FRKOR_R);
+    fa.set_tiefe(rt.tiefe());
+    fa.set_bezug(rt.bezug());
+    return cix_tasche(fa, geo_id, 0);
+}
+QString wstzustand::cix_rechteck(rechtecktasche rt, QString geo_id)
+{
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=GEO";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID, geo_id, true);
+    ret += cix_makroparam(CIX_NUT_LAYER,"GEO",true);
+    if(rt.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_OBSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }else if(rt.bezug() == WST_BEZUG_UNSEI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_UNSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+    }else if(rt.bezug() == WST_BEZUG_LI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_LI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+    }else if(rt.bezug() == WST_BEZUG_RE)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_RE,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }else if(rt.bezug() == WST_BEZUG_VO)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_VO,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }else if(rt.bezug() == WST_BEZUG_HI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_HI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+    }
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+
+    ret += "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=RECTANGLE";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID, geo_id, true);
+    ret += cix_makroparam(CIX_NUT_LAYER,"GEO",true);
+    if(rt.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.y_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_UNSEI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.y_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_LI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.y_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.z_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_RE)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.y_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.z_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_VO)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.z_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_HI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.z_qstring(),false);
+    }
+    ret += cix_makroparam(CIX_RECHTECK_L, rt.laenge_qstring(), false);
+    ret += cix_makroparam(CIX_RECHTECK_B, rt.breite_qstring(), false);
+    ret += cix_makroparam(CIX_RICHTUNG, CIX_RICHTUNG_UZS, false);
+    ret += cix_makroparam(CIX_KREIS_VORSCHUB, "0", false);
+    ret += cix_makroparam(CIX_KREIS_DREHZAHL, "0", false);
+    if(rt.rad() == 0)
+    {
+        ret += cix_makroparam(CIX_RECHTECK_ECKENTYP, CIX_RECHTECK_ECKENTYP_ECKIG, false);
+    }else
+    {
+        ret += cix_makroparam(CIX_RECHTECK_ECKENTYP, CIX_RECHTECK_ECKENTYP_RUND, false);
+    }
+    ret += cix_makroparam(CIX_RECHTECK_ECKENRAD, rt.rad_qstring(), false);
+    ret += cix_makroparam(CIX_RECHTECK_STARTSEITE, "1", true);
+    ret += cix_makroparam(CIX_RECHTECK_STARTABST, CIX_HAELFTE, false);
+    ret += cix_makroparam(CIX_RECHTECK_DREWI, rt.drewi_qstring(), false);
+    ret += cix_makroparam(CIX_RECHTECK_BUZUGSPUNKT, CIX_RECHTECK_BUZUGSPUNKT_MITTE, false);
+    ret += cix_makroparam(CIX_RECHTECK_BEZUGSECKE, "1", false);
+    ret += cix_makroparam(CIX_ZS, "0", false);
+    ret += cix_makroparam(CIX_ZE, "0", false);
+    ret += cix_makroparam(CIX_LINIE_SCHARFE_KANNTE, CIX_LINIE_SCHARFE_KANNTE_AUS, false);
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+
+    ret += "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=ENDPATH";
+    ret += "\n";
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+
+    return ret;
 }
 
 void wstzustand::ganx_dateitext(int index)

@@ -221,10 +221,12 @@ private:
     QString cix_bogen_ep_mipu(fraeserbogen fb, QString id);
     QString cix_fkon(fraeseraufruf fa, QString geo_id);
     QString cix_fkon(bohrung bo, QString geo_id, QString wkz);//für KTAs
+    QString cix_fkon(rechtecktasche rt, QString geo_id, QString wkz);//für RTAs
     QString cix_kreis(bohrung bo, QString geo_id);
     QString cix_tasche(fraeseraufruf fa, QString geo_id, double dm);
     QString cix_tasche(bohrung bo, QString wkz, QString geo_id, double dm);
-
+    QString cix_tasche(rechtecktasche rt, QString wkz, QString geo_id);
+    QString cix_rechteck(rechtecktasche rt, QString geo_id);
 
     void geo(int index);
     QString kante_vo(QString drewi);
