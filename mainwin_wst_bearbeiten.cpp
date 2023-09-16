@@ -820,5 +820,20 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
     }
     return bearb;
 }
+void MainWin_wst_bearbeiten::on_actionDoppelteil_erzeugen_triggered()
+{
+    dlg_dt.set_wst_laenge(Wst->laenge());
+    dlg_dt.set_wst_breite(Wst->breite());
+    dlg_dt.set_bearb(Wst->bearb());
+    dlg_dt.exec();
+}
+
+
+
+
+
+
+
+
 
 

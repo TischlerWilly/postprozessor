@@ -21,6 +21,7 @@ SOURCES += main.cpp\
     Dialoge/dialog_bearb_pkopf.cpp \
     Dialoge/dialog_bearb_rta.cpp \
     Dialoge/dialog_bearb_verschieben.cpp \
+    Dialoge/dialog_doppelteil_erzeugen.cpp \
     Dialoge/dialog_einstellung_dxf.cpp \
     Dialoge/dialog_einstellung_dxf_klassen.cpp \
     Dialoge/dialog_einstellung_fmc.cpp \
@@ -96,6 +97,7 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_bearb_pkopf.h \
     Dialoge/dialog_bearb_rta.h \
     Dialoge/dialog_bearb_verschieben.h \
+    Dialoge/dialog_doppelteil_erzeugen.h \
     Dialoge/dialog_einstellung_dxf.h \
     Dialoge/dialog_einstellung_dxf_klassen.h \
     Dialoge/dialog_einstellung_fmc.h \
@@ -178,6 +180,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_bearb_pkopf.ui \
     Dialoge/dialog_bearb_rta.ui \
     Dialoge/dialog_bearb_verschieben.ui \
+    Dialoge/dialog_doppelteil_erzeugen.ui \
     Dialoge/dialog_einstellung_dxf.ui \
     Dialoge/dialog_einstellung_dxf_klassen.ui \
     Dialoge/dialog_einstellung_fmc.ui \

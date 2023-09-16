@@ -79,6 +79,7 @@
      <string>Manipulation</string>
     </property>
     <addaction name="actionVerschieben"/>
+    <addaction name="actionDoppelteil_erzeugen"/>
    </widget>
    <addaction name="menuHallo_Welt"/>
    <addaction name="menuBearbeiten"/>
@@ -154,6 +155,11 @@
    </property>
    <property name="shortcut">
     <string>Return</string>
+   </property>
+  </action>
+  <action name="actionDoppelteil_erzeugen">
+   <property name="text">
+    <string>Doppelteil erzeugen</string>
    </property>
   </action>
  </widget>

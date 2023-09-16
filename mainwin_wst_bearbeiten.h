@@ -14,6 +14,7 @@
 #include "Dialoge/dialog_bearb_fgerade.h"
 #include "Dialoge/dialog_bearb_fbogen.h"
 #include "Dialoge/dialog_bearb_verschieben.h"
+#include "Dialoge/dialog_doppelteil_erzeugen.h"
 
 #include "Funktionen/funktionen_prgtext.h"
 #include "Klassen/undo_redo.h"
@@ -46,6 +47,7 @@ private:
     double letzte_wst_l;
     double letzte_wst_b;
     double letzte_wst_d;
+    Dialog_doppelteil_erzeugen dlg_dt;
 
     void clear();
     void update_listwidget();
@@ -77,6 +79,7 @@ private slots:
     void on_actionEinfuegen_triggered();
     void on_actionVerschieben_triggered();
     void on_actionBearbeiten_triggered();
+    void on_actionDoppelteil_erzeugen_triggered();
 
 public slots:
     //Bearbeiten
