@@ -869,6 +869,43 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                         bo.set_bezug(WST_BEZUG_HI);
                     }
                     slot_make(bo.text(), false);
+                }else if(zeile.at(0) == BEARBART_NUT)
+                {
+                    nut nu(zeile.text());
+                    punkt3d sp_alt = nu.stapu();
+                    punkt3d ep_alt = nu.endpu();
+                    punkt3d sp_neu = sp_alt;
+                    punkt3d ep_neu = ep_alt;
+                    if(nu.bezug() == WST_BEZUG_OBSEI || nu.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        sp_neu.set_y(wst_b-sp_alt.y());
+                        ep_neu.set_y(wst_b-ep_alt.y());
+                        nu.set_stapu(sp_neu);
+                        nu.set_endpu(ep_neu);
+                        slot_make(nu.text(), false);
+                    }else if(nu.bezug() == WST_BEZUG_LI || nu.bezug() == WST_BEZUG_RE)
+                    {
+                        //überspringen
+                    }else //WST_BEZUG_VO,     WST_BEZUG_HI ist hier nicht möglich
+                    {
+                        //überspringen
+                    }
+                }else if(zeile.at(0) == BEARBART_RTA)
+                {
+                    rechtecktasche rt(zeile.text());
+                    if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_drewi(360-rt.drewi());
+                    }else if(rt.bezug() == WST_BEZUG_LI || rt.bezug() == WST_BEZUG_RE)
+                    {
+                        rt.set_y(wst_b-rt.y());
+                    }else //WST_BEZUG_VO,     WST_BEZUG_HI ist hier nicht möglich
+                    {
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_HI);
+                    }
+                    slot_make(rt.text(), false);
                 }
             }else //if(drehen == true)
             {
