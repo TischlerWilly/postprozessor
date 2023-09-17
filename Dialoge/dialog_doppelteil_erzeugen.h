@@ -22,6 +22,9 @@ public:
     void set_wst_breite(double b);
     void set_bearb(text_zw bearb);
 
+signals:
+    void send_dlg_einstellung(QString bezug, double wst_l, double wst_b, bool spiegeln, bool drehen);
+
 private slots:
     void on_pushButton_ok_clicked();
     void on_pushButton_abbrechen_clicked();

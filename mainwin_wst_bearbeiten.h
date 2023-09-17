@@ -38,7 +38,7 @@ private:
     vorschau vorschaufenster;
     werkstueck *Wst;
     wkz_magazin *Wkz_ptr;
-    wkz_magazin Wkz_kpoie;
+    wkz_magazin Wkz_kopie;
     undo_redo<text_zw> UnReDo;
     undo_redo<double> UnReDo_L;
     undo_redo<double> UnReDo_B;
@@ -91,11 +91,12 @@ public slots:
     void slot_fgerade(fraesergerade fg);
     void slot_fbogen(fraeserbogen fb);
     //Erstellen/Make:
-    void slot_make(QString bearb);
+    void slot_make(QString bearb, bool unredor_verwenden);
     void slot_make_bo(bohrung bo);
     void slot_make_rta(rechtecktasche rt);
     void slot_make_nut(nut nu);
     //Manipulation:
     void slot_verschieben(punkt3d p);
+    void slot_dt_erzeugen(QString bezug, double wst_l, double wst_b, bool spiegeln, bool drehen);
 };
 #endif // MAINWIN_WST_BEARBEITEN_H

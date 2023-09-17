@@ -9,6 +9,7 @@ MainWin_wst_bearbeiten::MainWin_wst_bearbeiten(QWidget *parent)
     clear();
 
     vorschaufenster.set_bearb_erlaubt(true);
+    vorschaufenster.set_modus_einzel_wst(true);
 
     connect(this, SIGNAL(sendVorschauAktualisieren(werkstueck,int, wkz_magazin)),\
             &vorschaufenster, SLOT(slot_aktualisieren_einzelwst(werkstueck,int, wkz_magazin)));
@@ -18,6 +19,9 @@ MainWin_wst_bearbeiten::MainWin_wst_bearbeiten(QWidget *parent)
             this, SLOT(slot_zeilennummer(uint, bool)));
     connect(&vorschaufenster, SIGNAL(sende_maus_pos(QPoint)),\
             this, SLOT(getMausPosXY(QPoint)));
+    connect(&dlg_dt, SIGNAL(send_dlg_einstellung(QString,double,double,bool,bool)),\
+            this, SLOT(slot_dt_erzeugen(QString,double,double,bool,bool)));
+
     this->setWindowFlags(Qt::Window);
     this->setWindowState(Qt::WindowMaximized);
 }
@@ -80,7 +84,7 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
     unredo_clear();
-    sendVorschauAktualisieren(*Wst, -1, Wkz_kpoie);
+    sendVorschauAktualisieren(*Wst, -1, Wkz_kopie);
     letzte_wst_l = Wst->laenge();
     letzte_wst_b = Wst->breite();
     letzte_wst_d = Wst->dicke();
@@ -89,7 +93,7 @@ void MainWin_wst_bearbeiten::set_wst(werkstueck *w)
 void MainWin_wst_bearbeiten::set_wkz(wkz_magazin *w)
 {
     Wkz_ptr = w;
-    Wkz_kpoie = Wkz_ptr->magazin();
+    Wkz_kopie = Wkz_ptr->magazin();
 }
 
 void MainWin_wst_bearbeiten::update_listwidget()
@@ -215,7 +219,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Wst->set_bearb(bearb_neu);
         unredo_neu();
         update_listwidget();        
-        emit sendVorschauAktualisieren(*Wst, 0, Wkz_kpoie);
+        emit sendVorschauAktualisieren(*Wst, 0, Wkz_kopie);
         return;
     }
     //Zeile Auslesen:
@@ -227,14 +231,14 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Dialog_bearb_rta dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_rta(rechtecktasche)));
-        dlg.set_data(bearb.text(), Wst, Wkz_kpoie.magazin());
+        dlg.set_data(bearb.text(), Wst, Wkz_kopie.magazin());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_BOHR)
     {
         Dialog_bearb_bohrung dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_bo(bohrung)));
-        dlg.set_data(bearb.text(), Wst, Wkz_kpoie.magazin());
+        dlg.set_data(bearb.text(), Wst, Wkz_kopie.magazin());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_NUT)
     {
@@ -248,7 +252,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
         Dialog_bearb_faufruf dlg;
         dlg.setModal(true);
         connect(&dlg, SIGNAL(signal_faufruf(fraeseraufruf)), this, SLOT(slot_faufruf(fraeseraufruf)));
-        dlg.set_data(bearb.text(), Wst, Wkz_kpoie.magazin());
+        dlg.set_data(bearb.text(), Wst, Wkz_kopie.magazin());
         dlg.exec();
     }else if(bearb.at(0) == BEARBART_FRAESERGERADE)
     {
@@ -269,7 +273,7 @@ void MainWin_wst_bearbeiten::zeile_bearbeiten(int zeile)
 
 void MainWin_wst_bearbeiten::zeile_aendern(int index, QString bearb, bool unredor_verwenden)
 {
-    //index ist der indes der Bearbeitung
+    //index ist der index der Bearbeitung
     //bearb ist eine Zeile der Bearbeitugen
     text_zw bearbeitungen = Wst->bearb();
     bearbeitungen.edit(index, bearb);
@@ -279,7 +283,7 @@ void MainWin_wst_bearbeiten::zeile_aendern(int index, QString bearb, bool unredo
         unredo_neu();
     }
     update_listwidget();
-    emit sendVorschauAktualisieren(*Wst, index+1, Wkz_kpoie);
+    emit sendVorschauAktualisieren(*Wst, index+1, Wkz_kopie);
 }
 void MainWin_wst_bearbeiten::slot_rta(rechtecktasche rta)
 {
@@ -353,7 +357,7 @@ void MainWin_wst_bearbeiten::on_actionMakeNut_triggered()
     dlg.exec();
 }
 //----------------------------------Slot_Make:
-void MainWin_wst_bearbeiten::slot_make(QString bearb)
+void MainWin_wst_bearbeiten::slot_make(QString bearb, bool unredor_verwenden)
 {
     int index = ui->listWidget_prgtext->currentRow();
     //Werte zurück speichern:
@@ -368,20 +372,23 @@ void MainWin_wst_bearbeiten::slot_make(QString bearb)
         Wst->bearb_ptr()->add_hi(bearb);
     }
     update_listwidget();
-    unredo_neu();
-    emit sendVorschauAktualisieren(*Wst, index, Wkz_kpoie);
+    if(unredor_verwenden == true)
+    {
+        unredo_neu();
+    }
+    emit sendVorschauAktualisieren(*Wst, index, Wkz_kopie);
 }
 void MainWin_wst_bearbeiten::slot_make_bo(bohrung bo)
 {
-    slot_make(bo.text());
+    slot_make(bo.text(), true);
 }
 void MainWin_wst_bearbeiten::slot_make_rta(rechtecktasche rt)
 {
-    slot_make(rt.text());
+    slot_make(rt.text(), true);
 }
 void MainWin_wst_bearbeiten::slot_make_nut(nut nu)
 {
-    slot_make(nu.text());
+    slot_make(nu.text(), true);
 }
 //----------------------------------Bearbeiten:
 void MainWin_wst_bearbeiten::on_actionUndo_triggered()
@@ -392,7 +399,7 @@ void MainWin_wst_bearbeiten::on_actionUndo_triggered()
     Wst->set_bearb(UnReDo.undo());
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
-    sendVorschauAktualisieren(*Wst, ui->listWidget_prgtext->count()-1, Wkz_kpoie);
+    sendVorschauAktualisieren(*Wst, ui->listWidget_prgtext->count()-1, Wkz_kopie);
 }
 void MainWin_wst_bearbeiten::on_actionRedo_triggered()
 {
@@ -402,7 +409,7 @@ void MainWin_wst_bearbeiten::on_actionRedo_triggered()
     Wst->set_bearb(UnReDo.redo());
     update_listwidget();
     ui->listWidget_prgtext->setCurrentRow(ui->listWidget_prgtext->count()-1);
-    sendVorschauAktualisieren(*Wst, 0, Wkz_kpoie);
+    sendVorschauAktualisieren(*Wst, 0, Wkz_kopie);
 }
 void MainWin_wst_bearbeiten::on_actionEntf_triggered()
 {
@@ -431,7 +438,7 @@ void MainWin_wst_bearbeiten::on_actionEntf_triggered()
                 update_listwidget();
                 unredo_neu();
                 ui->listWidget_prgtext->setCurrentRow(index_liwid);
-                emit sendVorschauAktualisieren(*Wst, index_liwid, Wkz_kpoie);
+                emit sendVorschauAktualisieren(*Wst, index_liwid, Wkz_kopie);
             }
         }else
         {
@@ -449,7 +456,7 @@ void MainWin_wst_bearbeiten::on_actionEntf_triggered()
             update_listwidget();
             unredo_neu();
             ui->listWidget_prgtext->setCurrentRow(row_erstes_liwid);
-            emit sendVorschauAktualisieren(*Wst, row_erstes_liwid, Wkz_kpoie);
+            emit sendVorschauAktualisieren(*Wst, row_erstes_liwid, Wkz_kopie);
         }
     } else
     {
@@ -527,7 +534,7 @@ void MainWin_wst_bearbeiten::on_actionEinfuegen_triggered()
         update_listwidget();
         unredo_neu();
         ui->listWidget_prgtext->setCurrentRow(index_liwid);
-        emit sendVorschauAktualisieren(*Wst, index_liwid, Wkz_kpoie);
+        emit sendVorschauAktualisieren(*Wst, index_liwid, Wkz_kopie);
     }
 }
 void MainWin_wst_bearbeiten::unredo_neu()
@@ -827,6 +834,92 @@ void MainWin_wst_bearbeiten::on_actionDoppelteil_erzeugen_triggered()
     dlg_dt.set_bearb(Wst->bearb());
     dlg_dt.exec();
 }
+void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, double wst_b, bool spiegeln, bool drehen)
+{
+    double ax = wst_l - Wst->laenge();//Abstand der Verschiebung der Bearbeitung in X-Richtung
+    double ay = wst_b - Wst->breite();//Abstand der Verschiebung der Bearbeitung in Y-Richtung
+    Wst->set_laenge(wst_l);
+    Wst->set_breite(wst_b);
+    sendVorschauAktualisieren(*Wst, -1, Wkz_kopie);
+    letzte_wst_l = Wst->laenge();
+    letzte_wst_b = Wst->breite();
+    letzte_wst_d = Wst->dicke();
+    if(bezug == WST_BEZUG_VO)
+    {//Wst wird nach hinten hin breiter
+        //vorhandene Bearbeitung muss nicht verschoben werden
+        text_zw bearb = Wst->bearb();
+        for(uint i=0; i<bearb.count() ;i++)
+        {
+            text_zw zeile;
+            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(spiegeln == true)
+            {
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        bo.set_y(wst_b-bo.y());
+                    }else if(bo.bezug() == WST_BEZUG_LI || bo.bezug() == WST_BEZUG_RE)
+                    {
+                        bo.set_y(wst_b-bo.y());
+                    }else //WST_BEZUG_VO,     WST_BEZUG_HI ist hier nicht möglich
+                    {
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_HI);
+                    }
+                    slot_make(bo.text(), false);
+                }
+            }else //if(drehen == true)
+            {
+                //...
+            }
+        }
+    }else if(bezug == WST_BEZUG_HI)
+    {//Wst wird nach vorne hin breiter
+        //vorhandene Bearbeitung nach hinten verschieben:
+        for(uint i=0; i<Wst->bearb().count() ;i++)
+        {
+            zeile_aendern(i, verschiebe_einen(Wst->bearb().at(i),ax,ay,0), false);
+        }
+        //...
+        //...
+    }else if(bezug == WST_BEZUG_LI)
+    {//Wst wird nach rechts hin breiter
+        //vorhandene Bearbeitung muss nicht verschoben werden
+        //...
+        //...
+    }else //if(bezug == WST_BEZUG_RE)
+    {//Wst wird nach links hin breiter
+        //vorhandene Bearbeitung nach rechts verschieben:
+        for(uint i=0; i<Wst->bearb().count() ;i++)
+        {
+            zeile_aendern(i, verschiebe_einen(Wst->bearb().at(i),ax,ay,0), false);
+        }
+        //...
+        //...
+    }
+    unredo_neu();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

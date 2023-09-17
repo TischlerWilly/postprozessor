@@ -21,7 +21,7 @@ class vorschau : public QWidget
 public:
     explicit vorschau(QWidget *parent = 0);
     void set_bearb_erlaubt(bool erlaubt);
-
+    void set_modus_einzel_wst(bool ist_einzelwst);
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -33,6 +33,7 @@ private:
     float sf();
     void set_sf(float neuer_faktor);
     void werkstueck_darstellung_berechnen();
+    void werkstueck_darstellung_berechnen_einzelwst();
     punkt drehen_arcTo(punkt oben_links, float laenge, float breite, \
                        float drehwinkel, punkt drehzentrum);
     punkt2d drehen_arcTo(punkt2d oben_links, double laenge, double breite, \
@@ -65,6 +66,7 @@ private:
     uint        Zeile_von_maus_pos;//Zum Zwischenspeichern damit Ergebnis nicht verfälscht wird wenn Maus sich bewegt
     bool        Mrg;  //Mausrad gedrückt
     bool        Bearb_erlaubt;
+    bool        Modus_einzel_wst;
     
 signals:
     void anfrage_werkstueckmasse();

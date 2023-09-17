@@ -64,8 +64,10 @@ public:
     double max_y(QString format);
     double min_y(QString format);
     double max_x();
+    double max_x_einzelwst();
     double min_x();
     double max_y();
+    double max_y_einzelwst();
     double min_y();
     geo_text geo(wkz_magazin wkzm);
     geo_text geofkon(wkz_magazin wkzm);

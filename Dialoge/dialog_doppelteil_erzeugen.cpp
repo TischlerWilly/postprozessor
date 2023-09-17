@@ -133,8 +133,27 @@ void Dialog_doppelteil_erzeugen::on_pushButton_ok_clicked()
     }
     //Es gab keine Fehler
     //Einstellungen an Parent rückmelden:
-    //...
-    //...
+    QString bezug;
+    if(ui->radioButton_vo->isChecked())
+    {
+        bezug = WST_BEZUG_VO;
+    }else if(ui->radioButton_hi->isChecked())
+    {
+        bezug = WST_BEZUG_HI;
+    }else if(ui->radioButton_li->isChecked())
+    {
+        bezug = WST_BEZUG_LI;
+    }else //if(ui->radioButton_re->isChecked())
+    {
+        bezug = WST_BEZUG_RE;
+    }
+    double wst_l = ui->lineEdit_neu_la->text().toDouble();
+    double wst_b = ui->lineEdit_neu_br->text().toDouble();
+    bool spiegeln = ui->radioButton_spiegeln->isChecked();
+    bool drehen = ui->radioButton_drehen->isChecked();
+
+    emit send_dlg_einstellung(bezug, wst_l, wst_b, spiegeln, drehen);
+    this->close();
 }
 void Dialog_doppelteil_erzeugen::on_pushButton_abbrechen_clicked()
 {

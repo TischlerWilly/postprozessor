@@ -224,6 +224,10 @@ double werkstueck::max_x()
 {
     return zustand().l()+25;
 }
+double werkstueck::max_x_einzelwst()
+{
+    return laenge()+25;
+}
 double werkstueck::min_x(QString format)
 {
     return 0-25;
@@ -258,6 +262,10 @@ double werkstueck::max_y(QString format)
 double werkstueck::max_y()
 {
     return zustand().b()+25+ay();
+}
+double werkstueck::max_y_einzelwst()
+{
+    return breite()+25+ay();
 }
 double werkstueck::min_y(QString format)
 {
