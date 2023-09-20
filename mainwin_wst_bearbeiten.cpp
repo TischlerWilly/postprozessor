@@ -847,6 +847,7 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
     if(bezug == WST_BEZUG_VO)
     {//Wst wird nach hinten hin breiter
         //vorhandene Bearbeitung muss nicht verschoben werden
+        //Bearbeitung für DT einfügen:
         text_zw bearb = Wst->bearb();
         for(uint i=0; i<bearb.count() ;i++)
         {
@@ -909,7 +910,112 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                 }
             }else //if(drehen == true)
             {
-                //...
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                    }else if(bo.bezug() == WST_BEZUG_LI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_RE);
+                    }else if(bo.bezug() == WST_BEZUG_RE)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_LI);
+                    }else //WST_BEZUG_VO,     WST_BEZUG_HI ist hier nicht möglich
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_HI);
+                    }
+                    slot_make(bo.text(), false);
+                }else if(zeile.at(0) == BEARBART_NUT)
+                {
+                    nut nu(zeile.text());
+                    punkt3d sp_alt = nu.stapu();
+                    punkt3d ep_alt = nu.endpu();
+                    punkt3d sp_neu = sp_alt;
+                    punkt3d ep_neu = ep_alt;
+                    if(nu.bezug() == WST_BEZUG_OBSEI || nu.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        sp_neu.set_x(wst_l-sp_alt.x());
+                        ep_neu.set_x(wst_l-ep_alt.x());
+                        sp_neu.set_y(wst_b-sp_alt.y());
+                        ep_neu.set_y(wst_b-ep_alt.y());
+                        nu.set_stapu(sp_neu);
+                        nu.set_endpu(ep_neu);
+                        slot_make(nu.text(), false);
+                    }else if(nu.bezug() == WST_BEZUG_LI)
+                    {
+                        //überspringen
+                    }else if(nu.bezug() == WST_BEZUG_RE)
+                    {
+                        //überspringen
+                    }else //WST_BEZUG_VO,     WST_BEZUG_HI ist hier nicht möglich
+                    {
+                        //überspringen
+                    }
+                }else if(zeile.at(0) == BEARBART_RTA)
+                {
+                    rechtecktasche rt(zeile.text());
+                    if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                    }else if(rt.bezug() == WST_BEZUG_LI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_RE);
+                    }else if(rt.bezug() == WST_BEZUG_RE)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_LI);
+                    }else //WST_BEZUG_VO,     WST_BEZUG_HI ist hier nicht möglich
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_HI);
+                    }
+                    slot_make(rt.text(), false);
+                }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
+                {
+                    fraeseraufruf fa(zeile.text());
+                    if(fa.bezug() == WST_BEZUG_OBSEI || fa.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fa.set_x(wst_l-fa.x());
+                        fa.set_y(wst_b-fa.y());
+                        slot_make(fa.text(), false);
+                    }
+                }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
+                {
+                    fraesergerade fg(zeile.text());
+                    if(fg.bezug() == WST_BEZUG_OBSEI || fg.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fg.set_xs(wst_l-fg.xs());
+                        fg.set_xe(wst_l-fg.xe());
+                        fg.set_ys(wst_b-fg.ys());
+                        fg.set_ye(wst_b-fg.ye());
+                        slot_make(fg.text(), false);
+                    }
+                }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                {
+                    fraeserbogen fb(zeile.text());
+                    if(fb.bezug() == WST_BEZUG_OBSEI || fb.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fb.set_xs(wst_l-fb.xs());
+                        fb.set_xe(wst_l-fb.xe());
+                        fb.set_ys(wst_b-fb.ys());
+                        fb.set_ye(wst_b-fb.ye());
+                        slot_make(fb.text(), false);
+                    }
+                }
             }
         }
     }else if(bezug == WST_BEZUG_HI)
@@ -919,13 +1025,351 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
         {
             zeile_aendern(i, verschiebe_einen(Wst->bearb().at(i),ax,ay,0), false);
         }
-        //...
-        //...
+        //Bearbeitung für DT einfügen:
+        text_zw bearb = Wst->bearb();
+        for(uint i=0; i<bearb.count() ;i++)
+        {
+            text_zw zeile;
+            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(spiegeln == true)
+            {
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        bo.set_y(wst_b-bo.y());
+                    }else if(bo.bezug() == WST_BEZUG_LI || bo.bezug() == WST_BEZUG_RE)
+                    {
+                        bo.set_y(wst_b-bo.y());
+                    }else //WST_BEZUG_HI,     WST_BEZUG_VO ist hier nicht möglich
+                    {
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_VO);
+                    }
+                    slot_make(bo.text(), false);
+                }else if(zeile.at(0) == BEARBART_NUT)
+                {
+                    nut nu(zeile.text());
+                    punkt3d sp_alt = nu.stapu();
+                    punkt3d ep_alt = nu.endpu();
+                    punkt3d sp_neu = sp_alt;
+                    punkt3d ep_neu = ep_alt;
+                    if(nu.bezug() == WST_BEZUG_OBSEI || nu.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        sp_neu.set_y(wst_b-sp_alt.y());
+                        ep_neu.set_y(wst_b-ep_alt.y());
+                        nu.set_stapu(sp_neu);
+                        nu.set_endpu(ep_neu);
+                        slot_make(nu.text(), false);
+                    }else if(nu.bezug() == WST_BEZUG_LI || nu.bezug() == WST_BEZUG_RE)
+                    {
+                        //überspringen
+                    }else //WST_BEZUG_HI,     WST_BEZUG_VO ist hier nicht möglich
+                    {
+                        //überspringen
+                    }
+                }else if(zeile.at(0) == BEARBART_RTA)
+                {
+                    rechtecktasche rt(zeile.text());
+                    if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_drewi(360-rt.drewi());
+                    }else if(rt.bezug() == WST_BEZUG_LI || rt.bezug() == WST_BEZUG_RE)
+                    {
+                        rt.set_y(wst_b-rt.y());
+                    }else //WST_BEZUG_HI,     WST_BEZUG_VO ist hier nicht möglich
+                    {
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_VO);
+                    }
+                    slot_make(rt.text(), false);
+                }
+            }else //if(drehen == true)
+            {
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                    }else if(bo.bezug() == WST_BEZUG_LI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_RE);
+                    }else if(bo.bezug() == WST_BEZUG_RE)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_LI);
+                    }else //WST_BEZUG_HI,     WST_BEZUG_VO ist hier nicht möglich
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_VO);
+                    }
+                    slot_make(bo.text(), false);
+                }else if(zeile.at(0) == BEARBART_NUT)
+                {
+                    nut nu(zeile.text());
+                    punkt3d sp_alt = nu.stapu();
+                    punkt3d ep_alt = nu.endpu();
+                    punkt3d sp_neu = sp_alt;
+                    punkt3d ep_neu = ep_alt;
+                    if(nu.bezug() == WST_BEZUG_OBSEI || nu.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        sp_neu.set_x(wst_l-sp_alt.x());
+                        ep_neu.set_x(wst_l-ep_alt.x());
+                        sp_neu.set_y(wst_b-sp_alt.y());
+                        ep_neu.set_y(wst_b-ep_alt.y());
+                        nu.set_stapu(sp_neu);
+                        nu.set_endpu(ep_neu);
+                        slot_make(nu.text(), false);
+                    }else if(nu.bezug() == WST_BEZUG_LI)
+                    {
+                        //überspringen
+                    }else if(nu.bezug() == WST_BEZUG_RE)
+                    {
+                        //überspringen
+                    }else //WST_BEZUG_HI,     WST_BEZUG_VO ist hier nicht möglich
+                    {
+                        //überspringen
+                    }
+                }else if(zeile.at(0) == BEARBART_RTA)
+                {
+                    rechtecktasche rt(zeile.text());
+                    if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                    }else if(rt.bezug() == WST_BEZUG_LI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_RE);
+                    }else if(rt.bezug() == WST_BEZUG_RE)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_LI);
+                    }else //WST_BEZUG_HI,     WST_BEZUG_VO ist hier nicht möglich
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_VO);
+                    }
+                    slot_make(rt.text(), false);
+                }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
+                {
+                    fraeseraufruf fa(zeile.text());
+                    if(fa.bezug() == WST_BEZUG_OBSEI || fa.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fa.set_x(wst_l-fa.x());
+                        fa.set_y(wst_b-fa.y());
+                        slot_make(fa.text(), false);
+                    }
+                }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
+                {
+                    fraesergerade fg(zeile.text());
+                    if(fg.bezug() == WST_BEZUG_OBSEI || fg.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fg.set_xs(wst_l-fg.xs());
+                        fg.set_xe(wst_l-fg.xe());
+                        fg.set_ys(wst_b-fg.ys());
+                        fg.set_ye(wst_b-fg.ye());
+                        slot_make(fg.text(), false);
+                    }
+                }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                {
+                    fraeserbogen fb(zeile.text());
+                    if(fb.bezug() == WST_BEZUG_OBSEI || fb.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fb.set_xs(wst_l-fb.xs());
+                        fb.set_xe(wst_l-fb.xe());
+                        fb.set_ys(wst_b-fb.ys());
+                        fb.set_ye(wst_b-fb.ye());
+                        slot_make(fb.text(), false);
+                    }
+                }
+            }
+        }
     }else if(bezug == WST_BEZUG_LI)
     {//Wst wird nach rechts hin breiter
         //vorhandene Bearbeitung muss nicht verschoben werden
-        //...
-        //...
+        //Bearbeitung für DT einfügen:
+        text_zw bearb = Wst->bearb();
+        for(uint i=0; i<bearb.count() ;i++)
+        {
+            text_zw zeile;
+            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(spiegeln == true)
+            {
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                    }else if(bo.bezug() == WST_BEZUG_VO || bo.bezug() == WST_BEZUG_HI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                    }else //WST_BEZUG_LI,     WST_BEZUG_RE ist hier nicht möglich
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_bezug(WST_BEZUG_RE);
+                    }
+                    slot_make(bo.text(), false);
+                }else if(zeile.at(0) == BEARBART_NUT)
+                {
+                    nut nu(zeile.text());
+                    punkt3d sp_alt = nu.stapu();
+                    punkt3d ep_alt = nu.endpu();
+                    punkt3d sp_neu = sp_alt;
+                    punkt3d ep_neu = ep_alt;
+                    if(nu.bezug() == WST_BEZUG_OBSEI || nu.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        sp_neu.set_x(wst_l-sp_alt.x());
+                        ep_neu.set_x(wst_l-ep_alt.x());
+                        nu.set_stapu(sp_neu);
+                        nu.set_endpu(ep_neu);
+                        slot_make(nu.text(), false);
+                    }else if(nu.bezug() == WST_BEZUG_VO || nu.bezug() == WST_BEZUG_HI)
+                    {
+                        //überspringen
+                    }else //WST_BEZUG_LI,     WST_BEZUG_RE ist hier nicht möglich
+                    {
+                        //überspringen
+                    }
+                }else if(zeile.at(0) == BEARBART_RTA)
+                {
+                    rechtecktasche rt(zeile.text());
+                    if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_drewi(360-rt.drewi());
+                    }else if(rt.bezug() == WST_BEZUG_VO || rt.bezug() == WST_BEZUG_HI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                    }else //WST_BEZUG_LI,     WST_BEZUG_RE ist hier nicht möglich
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_bezug(WST_BEZUG_RE);
+                    }
+                    slot_make(rt.text(), false);
+                }
+            }else //if(drehen == true)
+            {
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                    }else if(bo.bezug() == WST_BEZUG_VO)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_HI);
+                    }else if(bo.bezug() == WST_BEZUG_HI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_VO);
+                    }else //WST_BEZUG_LI,     WST_BEZUG_RE ist hier nicht möglich
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_RE);
+                    }
+                    slot_make(bo.text(), false);
+                }else if(zeile.at(0) == BEARBART_NUT)
+                {
+                    nut nu(zeile.text());
+                    punkt3d sp_alt = nu.stapu();
+                    punkt3d ep_alt = nu.endpu();
+                    punkt3d sp_neu = sp_alt;
+                    punkt3d ep_neu = ep_alt;
+                    if(nu.bezug() == WST_BEZUG_OBSEI || nu.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        sp_neu.set_x(wst_l-sp_alt.x());
+                        ep_neu.set_x(wst_l-ep_alt.x());
+                        sp_neu.set_y(wst_b-sp_alt.y());
+                        ep_neu.set_y(wst_b-ep_alt.y());
+                        nu.set_stapu(sp_neu);
+                        nu.set_endpu(ep_neu);
+                        slot_make(nu.text(), false);
+                    }else if(nu.bezug() == WST_BEZUG_VO)
+                    {
+                        //überspringen
+                    }else if(nu.bezug() == WST_BEZUG_HI)
+                    {
+                        //überspringen
+                    }else //WST_BEZUG_LI,     WST_BEZUG_RE ist hier nicht möglich
+                    {
+                        //überspringen
+                    }
+                }else if(zeile.at(0) == BEARBART_RTA)
+                {
+                    rechtecktasche rt(zeile.text());
+                    if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                    }else if(rt.bezug() == WST_BEZUG_VO)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_HI);
+                    }else if(rt.bezug() == WST_BEZUG_HI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_VO);
+                    }else //WST_BEZUG_LI,     WST_BEZUG_RE ist hier nicht möglich
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_RE);
+                    }
+                    slot_make(rt.text(), false);
+                }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
+                {
+                    fraeseraufruf fa(zeile.text());
+                    if(fa.bezug() == WST_BEZUG_OBSEI || fa.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fa.set_x(wst_l-fa.x());
+                        fa.set_y(wst_b-fa.y());
+                        slot_make(fa.text(), false);
+                    }
+                }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
+                {
+                    fraesergerade fg(zeile.text());
+                    if(fg.bezug() == WST_BEZUG_OBSEI || fg.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fg.set_xs(wst_l-fg.xs());
+                        fg.set_xe(wst_l-fg.xe());
+                        fg.set_ys(wst_b-fg.ys());
+                        fg.set_ye(wst_b-fg.ye());
+                        slot_make(fg.text(), false);
+                    }
+                }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                {
+                    fraeserbogen fb(zeile.text());
+                    if(fb.bezug() == WST_BEZUG_OBSEI || fb.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fb.set_xs(wst_l-fb.xs());
+                        fb.set_xe(wst_l-fb.xe());
+                        fb.set_ys(wst_b-fb.ys());
+                        fb.set_ye(wst_b-fb.ye());
+                        slot_make(fb.text(), false);
+                    }
+                }
+            }
+        }
     }else //if(bezug == WST_BEZUG_RE)
     {//Wst wird nach links hin breiter
         //vorhandene Bearbeitung nach rechts verschieben:
@@ -933,8 +1377,177 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
         {
             zeile_aendern(i, verschiebe_einen(Wst->bearb().at(i),ax,ay,0), false);
         }
-        //...
-        //...
+        //Bearbeitung für DT einfügen:
+        text_zw bearb = Wst->bearb();
+        for(uint i=0; i<bearb.count() ;i++)
+        {
+            text_zw zeile;
+            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(spiegeln == true)
+            {
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                    }else if(bo.bezug() == WST_BEZUG_VO || bo.bezug() == WST_BEZUG_HI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                    }else //WST_BEZUG_RE,     WST_BEZUG_LI ist hier nicht möglich
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_bezug(WST_BEZUG_LI);
+                    }
+                    slot_make(bo.text(), false);
+                }else if(zeile.at(0) == BEARBART_NUT)
+                {
+                    nut nu(zeile.text());
+                    punkt3d sp_alt = nu.stapu();
+                    punkt3d ep_alt = nu.endpu();
+                    punkt3d sp_neu = sp_alt;
+                    punkt3d ep_neu = ep_alt;
+                    if(nu.bezug() == WST_BEZUG_OBSEI || nu.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        sp_neu.set_x(wst_l-sp_alt.x());
+                        ep_neu.set_x(wst_l-ep_alt.x());
+                        nu.set_stapu(sp_neu);
+                        nu.set_endpu(ep_neu);
+                        slot_make(nu.text(), false);
+                    }else if(nu.bezug() == WST_BEZUG_VO || nu.bezug() == WST_BEZUG_HI)
+                    {
+                        //überspringen
+                    }else //WST_BEZUG_RE,     WST_BEZUG_LI ist hier nicht möglich
+                    {
+                        //überspringen
+                    }
+                }else if(zeile.at(0) == BEARBART_RTA)
+                {
+                    rechtecktasche rt(zeile.text());
+                    if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_drewi(360-rt.drewi());
+                    }else if(rt.bezug() == WST_BEZUG_VO || rt.bezug() == WST_BEZUG_HI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                    }else //WST_BEZUG_RE,     WST_BEZUG_LI ist hier nicht möglich
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_bezug(WST_BEZUG_LI);
+                    }
+                    slot_make(rt.text(), false);
+                }
+            }else //if(drehen == true)
+            {
+                if(zeile.at(0) == BEARBART_BOHR)
+                {
+                    bohrung bo(zeile.text());
+                    if(bo.bezug() == WST_BEZUG_OBSEI || bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                    }else if(bo.bezug() == WST_BEZUG_VO)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_HI);
+                    }else if(bo.bezug() == WST_BEZUG_HI)
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_VO);
+                    }else //WST_BEZUG_RE,     WST_BEZUG_LI ist hier nicht möglich
+                    {
+                        bo.set_x(wst_l-bo.x());
+                        bo.set_y(wst_b-bo.y());
+                        bo.set_bezug(WST_BEZUG_LI);
+                    }
+                    slot_make(bo.text(), false);
+                }else if(zeile.at(0) == BEARBART_NUT)
+                {
+                    nut nu(zeile.text());
+                    punkt3d sp_alt = nu.stapu();
+                    punkt3d ep_alt = nu.endpu();
+                    punkt3d sp_neu = sp_alt;
+                    punkt3d ep_neu = ep_alt;
+                    if(nu.bezug() == WST_BEZUG_OBSEI || nu.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        sp_neu.set_x(wst_l-sp_alt.x());
+                        ep_neu.set_x(wst_l-ep_alt.x());
+                        sp_neu.set_y(wst_b-sp_alt.y());
+                        ep_neu.set_y(wst_b-ep_alt.y());
+                        nu.set_stapu(sp_neu);
+                        nu.set_endpu(ep_neu);
+                        slot_make(nu.text(), false);
+                    }else if(nu.bezug() == WST_BEZUG_VO)
+                    {
+                        //überspringen
+                    }else if(nu.bezug() == WST_BEZUG_HI)
+                    {
+                        //überspringen
+                    }else //WST_BEZUG_RE,     WST_BEZUG_LI ist hier nicht möglich
+                    {
+                        //überspringen
+                    }
+                }else if(zeile.at(0) == BEARBART_RTA)
+                {
+                    rechtecktasche rt(zeile.text());
+                    if(rt.bezug() == WST_BEZUG_OBSEI || rt.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                    }else if(rt.bezug() == WST_BEZUG_VO)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_HI);
+                    }else if(rt.bezug() == WST_BEZUG_HI)
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_VO);
+                    }else //WST_BEZUG_RE,     WST_BEZUG_LI ist hier nicht möglich
+                    {
+                        rt.set_x(wst_l-rt.x());
+                        rt.set_y(wst_b-rt.y());
+                        rt.set_bezug(WST_BEZUG_LI);
+                    }
+                    slot_make(rt.text(), false);
+                }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
+                {
+                    fraeseraufruf fa(zeile.text());
+                    if(fa.bezug() == WST_BEZUG_OBSEI || fa.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fa.set_x(wst_l-fa.x());
+                        fa.set_y(wst_b-fa.y());
+                        slot_make(fa.text(), false);
+                    }
+                }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
+                {
+                    fraesergerade fg(zeile.text());
+                    if(fg.bezug() == WST_BEZUG_OBSEI || fg.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fg.set_xs(wst_l-fg.xs());
+                        fg.set_xe(wst_l-fg.xe());
+                        fg.set_ys(wst_b-fg.ys());
+                        fg.set_ye(wst_b-fg.ye());
+                        slot_make(fg.text(), false);
+                    }
+                }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                {
+                    fraeserbogen fb(zeile.text());
+                    if(fb.bezug() == WST_BEZUG_OBSEI || fb.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        fb.set_xs(wst_l-fb.xs());
+                        fb.set_xe(wst_l-fb.xe());
+                        fb.set_ys(wst_b-fb.ys());
+                        fb.set_ye(wst_b-fb.ye());
+                        slot_make(fb.text(), false);
+                    }
+                }
+            }
+        }
     }
     unredo_neu();
 }
