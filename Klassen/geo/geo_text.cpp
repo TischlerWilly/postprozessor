@@ -642,9 +642,10 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 gt.add_rechteck(r);
                 if(rt.ausraeumen() == false)
                 {
-                    r.set_laenge(r.l()/8*5);
-                    r.set_breite(r.b()/8*5);
-                    r.set_farbe_fuellung(FARBE_WEISS);
+                    r.set_laenge(r.l()-wkzdm);
+                    r.set_breite(r.b()-wkzdm);
+                    r.set_rad(eckenrad-wkzdm/2);
+                    r.set_farbe_fuellung(FARBE_GRAU);
                     gt.add_rechteck(r);
                 }
             }else

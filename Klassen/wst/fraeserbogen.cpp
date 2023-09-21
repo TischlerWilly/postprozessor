@@ -107,6 +107,14 @@ void fraeserbogen::set_afb(QString ausfuehrbedingung)
     Afb = ausfuehrbedingung;
 }
 
+void fraeserbogen::set_bogen(bogen bo)
+{
+    set_startpunkt(bo.start());
+    set_endpunkt(bo.ende());
+    set_rad(bo.rad());
+    set_uzs(bo.im_uzs());
+}
+
 double fraeserbogen::xs()
 {
     return Startpunkt.x();

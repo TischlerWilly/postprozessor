@@ -33,6 +33,7 @@ public:
     void set_rad(QString rad);
     void set_uzs(bool ist_im_uzs);
     void set_uzs(QString ist_im_uzs);
+    void set_bogen(bogen bo);
 
     inline void set_startpunkt(punkt3d p)
     {

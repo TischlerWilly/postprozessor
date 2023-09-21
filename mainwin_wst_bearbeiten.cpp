@@ -311,6 +311,50 @@ void MainWin_wst_bearbeiten::slot_faufruf(fraeseraufruf fa)
     int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = fa.text();
     ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgzei(bearb));
+    text_zw bearbeitungen = Wst->bearb();
+    //Folgezeile mit ändern?:
+    if(index+1 < bearbeitungen.count())
+    {
+        text_zw bearb_nach;
+        bearb_nach.set_text(bearbeitungen.at(index+1),TRENNZ_BEARB_PARAM);
+        if(bearb_nach.at(0) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg_nach(bearb_nach.text());
+            fg_nach.set_startpunkt(fa.pos());
+            zeile_aendern(index+1, fg_nach.text(), false);
+        }else if(bearb_nach.at(0) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb_nach(bearb_nach.text());
+            fb_nach.set_startpunkt(fa.pos());
+            zeile_aendern(index+1, fb_nach.text(), false);
+        }
+    }
+    //Bezug mit ändern?:
+    fraeseraufruf fa_alt;
+    fa_alt.set_text(bearbeitungen.at(index));
+    if(fa_alt.bezug() != fa.bezug())
+    {
+        for(uint i=index+1; i<bearbeitungen.count() ;i++)
+        {
+            text_zw bearb_ff;
+            bearb_ff.set_text(bearbeitungen.at(i),TRENNZ_BEARB_PARAM);
+            if(bearb_ff.at(0) == BEARBART_FRAESERGERADE)
+            {
+                fraesergerade fg(bearb_ff.text());
+                fg.set_bezug(fa.bezug());
+                zeile_aendern(i, fg.text(), false);
+            }else if(bearb_ff.at(0) == BEARBART_FRAESERBOGEN)
+            {
+                fraeserbogen fb(bearb_ff.text());
+                fb.set_uzs(!fb.uzs());
+                fb.set_bezug(fa.bezug());
+                zeile_aendern(i, fb.text(), false);
+            }else
+            {
+                break;//for
+            }
+        }
+    }
     zeile_aendern(index, bearb, true);
 }
 void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
@@ -318,6 +362,46 @@ void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
     int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = fg.text();
     ui->listWidget_prgtext->item(index)->setText(fgerade_zu_prgzei(bearb));
+    text_zw bearbeitungen = Wst->bearb();
+    //Zeile davor mit ändern?:
+    if(index-1 >=0)
+    {
+        text_zw bearb_vor;
+        bearb_vor.set_text(bearbeitungen.at(index-1),TRENNZ_BEARB_PARAM);
+        if(bearb_vor.at(0) == BEARBART_FRAESERAUFRUF)
+        {
+            fraeseraufruf fa_vor(bearb_vor.text());
+            fa_vor.set_pos(fg.sp());
+            zeile_aendern(index-1, fa_vor.text(), false);
+        }else if(bearb_vor.at(0) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg_vor(bearb_vor.text());
+            fg_vor.set_endpunkt(fg.sp());
+            zeile_aendern(index-1, fg_vor.text(), false);
+        }else if(bearb_vor.at(0) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb_vor(bearb_vor.text());
+            fb_vor.set_endpunkt(fg.sp());
+            zeile_aendern(index-1, fb_vor.text(), false);
+        }
+    }
+    //Folgezeile mit ändern?:
+    if(index+1 < bearbeitungen.count())
+    {
+        text_zw bearb_nach;
+        bearb_nach.set_text(bearbeitungen.at(index+1),TRENNZ_BEARB_PARAM);
+        if(bearb_nach.at(0) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg_nach(bearb_nach.text());
+            fg_nach.set_startpunkt(fg.ep());
+            zeile_aendern(index+1, fg_nach.text(), false);
+        }else if(bearb_nach.at(0) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb_nach(bearb_nach.text());
+            fb_nach.set_startpunkt(fg.ep());
+            zeile_aendern(index+1, fb_nach.text(), false);
+        }
+    }
     zeile_aendern(index, bearb, true);
 }
 void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
@@ -325,6 +409,46 @@ void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
     int index = ui->listWidget_prgtext->currentRow()-1;//Index-1 weil 1. Zeile WST-Maße sind
     QString bearb = fb.text();
     ui->listWidget_prgtext->item(index)->setText(fbogen_zu_prgzei(bearb));
+    text_zw bearbeitungen = Wst->bearb();
+    //Zeile davor mit ändern?:
+    if(index-1 >=0)
+    {
+        text_zw bearb_vor;
+        bearb_vor.set_text(bearbeitungen.at(index-1),TRENNZ_BEARB_PARAM);
+        if(bearb_vor.at(0) == BEARBART_FRAESERAUFRUF)
+        {
+            fraeseraufruf fa_vor(bearb_vor.text());
+            fa_vor.set_pos(fb.sp());
+            zeile_aendern(index-1, fa_vor.text(), false);
+        }else if(bearb_vor.at(0) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg_vor(bearb_vor.text());
+            fg_vor.set_endpunkt(fb.sp());
+            zeile_aendern(index-1, fg_vor.text(), false);
+        }else if(bearb_vor.at(0) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb_vor(bearb_vor.text());
+            fb_vor.set_endpunkt(fb.sp());
+            zeile_aendern(index-1, fb_vor.text(), false);
+        }
+    }
+    //Folgezeile mit ändern?:
+    if(index+1 < bearbeitungen.count())
+    {
+        text_zw bearb_nach;
+        bearb_nach.set_text(bearbeitungen.at(index+1),TRENNZ_BEARB_PARAM);
+        if(bearb_nach.at(0) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg_nach(bearb_nach.text());
+            fg_nach.set_startpunkt(fb.ep());
+            zeile_aendern(index+1, fg_nach.text(), false);
+        }else if(bearb_nach.at(0) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb_nach(bearb_nach.text());
+            fb_nach.set_startpunkt(fb.ep());
+            zeile_aendern(index+1, fb_nach.text(), false);
+        }
+    }
     zeile_aendern(index, bearb, true);
 }
 
@@ -634,6 +758,13 @@ void MainWin_wst_bearbeiten::on_actionVerschieben_triggered()
         mb.exec();
     }
 }
+void MainWin_wst_bearbeiten::on_actionDoppelteil_erzeugen_triggered()
+{
+    dlg_dt.set_wst_laenge(Wst->laenge());
+    dlg_dt.set_wst_breite(Wst->breite());
+    dlg_dt.set_bearb(Wst->bearb());
+    dlg_dt.exec();
+}
 //----------------------------------Slot_Manipulation:
 void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
 {
@@ -826,13 +957,6 @@ QString MainWin_wst_bearbeiten::verschiebe_einen(QString bearb, double ax, doubl
         bearb = fb.text();
     }
     return bearb;
-}
-void MainWin_wst_bearbeiten::on_actionDoppelteil_erzeugen_triggered()
-{
-    dlg_dt.set_wst_laenge(Wst->laenge());
-    dlg_dt.set_wst_breite(Wst->breite());
-    dlg_dt.set_bearb(Wst->bearb());
-    dlg_dt.exec();
 }
 void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, double wst_b, bool spiegeln, bool drehen)
 {
