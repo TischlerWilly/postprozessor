@@ -7198,7 +7198,7 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "=1\n";
                             }
                             msg += FMC_FKON_EINTYP;   //Eintauchtp
-                            msg += "=FKONEINTYP";
+                            msg += "=FKONEINTYP";//Variable siehe oben
                             msg += "\n";
                             //msg += "=1\n";
                             if(pos_z > 0)
@@ -7207,7 +7207,7 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += FMC_FKON_ANWEG;    //Anfahrwert
                                 msg += "=2*WKZR\n";
                                 msg += FMC_FKON_ABWEG;    //Abfahrwert
-                                msg += "LGEAB=2*WKZR\n";
+                                msg += "=2*WKZR\n";
                             }else
                             {
                                 //Anfahranweisung für durchgefräste Innen-Bahnen:
@@ -7224,7 +7224,7 @@ void wstzustand::fmc_dateitext(int index)
                             msg += FMC_FKON_ABTYP;    //Abfahrtyp
                             msg += "=0\n";
                             msg += FMC_FKON_EINTYP;   //Eintauchtp
-                            msg += "=FKONEINTYP";
+                            msg += "=FKONEINTYP";//Variable siehe oben
                             msg += "\n";
                             //msg += "=-1\n";
                             msg += FMC_FKON_ANWEG;    //Anfahrwert

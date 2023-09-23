@@ -13,7 +13,16 @@ Dialog_bearb_faufruf::Dialog_bearb_faufruf(QWidget *parent) :
     //---
     ui->comboBox_kor->addItem("Links");  //0
     ui->comboBox_kor->addItem("Keine");  //1
-    ui->comboBox_kor->addItem("Rechts"); //2    
+    ui->comboBox_kor->addItem("Rechts"); //2
+    //---
+    ui->comboBox_antyp->addItem("nicht definiert");  //0
+    ui->comboBox_antyp->addItem("Gerade");           //1
+    ui->comboBox_antyp->addItem("Bogen");            //2
+    //---
+    ui->comboBox_abtyp->addItem("nicht definiert");  //0
+    ui->comboBox_abtyp->addItem("Gerade");           //1
+    ui->comboBox_abtyp->addItem("Bogen");            //2
+    //---
     connect(&dlg_wkzwahl, SIGNAL(send_wkz(QString)), this, SLOT(get_wkz(QString)));
 }
 
@@ -56,6 +65,33 @@ void Dialog_bearb_faufruf::set_data(QString d, werkstueck *w, text_zw wkzmag)
     //---------
     ui->lineEdit_afb->setText(fa.afb());
     ui->lineEdit_wkz->setText(fa.wkznum());
+    //---------
+    //Anfahrtyp:
+    if(fa.anfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+    {
+        ui->comboBox_antyp->setCurrentIndex(1);
+    }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+    {
+        ui->comboBox_antyp->setCurrentIndex(2);
+    }else //FAUFRUF_ANABTYP_NDEF
+    {
+        ui->comboBox_antyp->setCurrentIndex(0);
+    }
+    //---------
+    //Abfahrtyp:
+    if(fa.abfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+    {
+        ui->comboBox_abtyp->setCurrentIndex(1);
+    }else if(fa.abfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+    {
+        ui->comboBox_abtyp->setCurrentIndex(2);
+    }else //FAUFRUF_ANABTYP_NDEF
+    {
+        ui->comboBox_abtyp->setCurrentIndex(0);
+    }
+    //---------
+    ui->lineEdit_anweg->setText(fa.anfahrweg_qstring());
+    ui->lineEdit_abweg->setText(fa.abfahrweg_qstring());
 }
 
 QString Dialog_bearb_faufruf::var_zu_wert(QString term)
@@ -102,6 +138,32 @@ void Dialog_bearb_faufruf::on_btn_ok_clicked()
     }
     fa.set_afb(ui->lineEdit_afb->text());
     fa.set_wkznum(ui->lineEdit_wkz->text());
+
+    QString antyp = ui->comboBox_antyp->currentText();
+    if(antyp == "Gerade")
+    {
+        fa.set_anfahrtyp(FAUFRUF_ANABTYP_GARADE);
+    }else if(antyp == "Bogen")
+    {
+        fa.set_anfahrtyp(FAUFRUF_ANABTYP_BOGEN);
+    }else //nicht definiert
+    {
+        fa.set_anfahrtyp(FAUFRUF_ANABTYP_NDEF);
+    }
+
+    QString abtyp = ui->comboBox_abtyp->currentText();
+    if(abtyp == "Gerade")
+    {
+        fa.set_abfahrtyp(FAUFRUF_ANABTYP_GARADE);
+    }else if(abtyp == "Bogen")
+    {
+        fa.set_abfahrtyp(FAUFRUF_ANABTYP_BOGEN);
+    }else //nicht definiert
+    {
+        fa.set_abfahrtyp(FAUFRUF_ANABTYP_NDEF);
+    }
+    fa.set_anfahrweg(ui->lineEdit_anweg->text());
+    fa.set_abfahrweg(ui->lineEdit_abweg->text());
 
     emit signal_faufruf(fa);
     this->close();

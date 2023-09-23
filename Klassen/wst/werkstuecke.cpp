@@ -2761,6 +2761,15 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         }
                         fa.set_z(0);
                     }
+                    if(fa.radkor() == FRKOR_M)
+                    {
+                        fa.set_anfahrtyp(FAUFRUF_ANABTYP_GARADE);
+                        fa.set_abfahrtyp(FAUFRUF_ANABTYP_GARADE);
+                    }else
+                    {
+                        fa.set_anfahrtyp(FAUFRUF_ANABTYP_BOGEN);
+                        fa.set_abfahrtyp(FAUFRUF_ANABTYP_BOGEN);
+                    }
                     w.neue_bearbeitung(fa.text());
                     p3dfkon = fa.pos();
                     break;

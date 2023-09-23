@@ -296,4 +296,13 @@ geo_text werkstueck::geofkon(wkz_magazin wkzm)
     return geofkon_ermitteln(Bearb, versatz_x, versatz_y, wkzm);
 }
 
+//--------------------------------------------------Manipulationen:
+
+
+
+
+
+
+
+
 

@@ -17,6 +17,10 @@ void fraeseraufruf::setup()
     Afb = "1";
     Korrektur = "M";
     Werkzeugnummer = "void";
+    Anfahrtyp = FAUFRUF_ANABTYP_NDEF;
+    Abfahrtyp = FAUFRUF_ANABTYP_NDEF;
+    Anfahrweg = FAUFRUF_ANABWEG_AUTO;
+    Abfahrweg = FAUFRUF_ANABWEG_AUTO;
 }
 
 void fraeseraufruf::set_x(double x)
@@ -78,6 +82,30 @@ void fraeseraufruf::set_wkznum(QString nummer)
 {
     Werkzeugnummer = nummer;
 }
+void fraeseraufruf::set_anfahrtyp(QString typ)
+{
+    Anfahrtyp = typ;
+}
+void fraeseraufruf::set_abfahrtyp(QString typ)
+{
+    Abfahrtyp = typ;
+}
+void fraeseraufruf::set_anfahrweg(QString laenge)
+{
+    Anfahrweg = laenge;
+}
+void fraeseraufruf::set_anfahrweg(double laenge)
+{
+    Anfahrweg = double_to_qstring(laenge);
+}
+void fraeseraufruf::set_abfahrweg(QString laenge)
+{
+    Abfahrweg = laenge;
+}
+void fraeseraufruf::set_abfahrweg(double laenge)
+{
+    Abfahrweg = double_to_qstring(laenge);
+}
 
 //------------------------------------------------------------
 double fraeseraufruf::x()
@@ -134,6 +162,30 @@ punkt3d fraeseraufruf::pos()
 {
     return Pos;
 }
+QString fraeseraufruf::anfahrtyp()
+{
+    return Anfahrtyp;
+}
+QString fraeseraufruf::abfahrtyp()
+{
+    return Abfahrtyp;
+}
+double fraeseraufruf::anfahrweg()
+{
+    return Anfahrweg.toDouble();
+}
+QString fraeseraufruf::anfahrweg_qstring()
+{
+    return Anfahrweg;
+}
+double fraeseraufruf::abfahrweg()
+{
+    return Abfahrweg.toDouble();
+}
+QString fraeseraufruf::abfahrweg_qstring()
+{
+    return Abfahrweg;
+}
 
 QString fraeseraufruf::text()
 {
@@ -154,6 +206,14 @@ QString fraeseraufruf::text()
     msg += wkznum();                     //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
     msg += afb();                        //Zeile 8
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += anfahrtyp();                  //Zeile 9
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += anfahrtyp();                  //Zeile 10
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += anfahrweg_qstring();          //Zeile 11
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += abfahrweg_qstring();          //Zeile 12
 
     return msg;
 }
@@ -171,6 +231,10 @@ void fraeseraufruf::set_text(QString text)
         set_radkor(tz.at(6));
         set_wkznum(tz.at(7));
         set_afb(tz.at(8));
+        set_anfahrtyp(tz.at(9));
+        set_abfahrtyp(tz.at(10));
+        set_anfahrweg(tz.at(11));
+        set_abfahrweg(tz.at(12));
     }
 }
 

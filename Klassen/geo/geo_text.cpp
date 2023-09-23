@@ -751,6 +751,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
     QString radkor;
     double fraeserdm = 10;
     QString farbe_unterseite = FARBE_ROSE;
+    fraeseraufruf letzter_fa;
     for(uint i=0; i<bearb.count() ;i++)
     {
         text_zw zeile;
@@ -758,10 +759,185 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
         if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             fraeseraufruf fa(zeile.text());
+            letzter_fa = fa;//wird gebraucht für die Berechnung der Abfahrwege
             radkor = fa.radkor();
             gt.add_leerzeile();
             QString wkznr = fa.wkznum();
             fraeserdm = wkzm.dm(wkznr).toDouble();
+            if(i+1 < bearb.count())
+            {
+                double anweg;
+                if(fa.anfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                {
+                    anweg = fraeserdm;
+                }else
+                {
+                    anweg = fa.anfahrweg();
+                }
+                text_zw folzei;//Folgezeile
+                folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
+                punkt3d pfa;//Punkt Fräseraufruf
+                pfa.set_x(fa.x());
+                pfa.set_y(fa.y());
+                punkt3d pein;//Eintauchpunkt
+                if(folzei.at(0) == BEARBART_FRAESERGERADE)
+                {
+                    fraesergerade fg(folzei.text());
+                    if(fa.anfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                    {
+                        strecke s = fg.strecke_();
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_ende;
+                        s.set_laenge_2d(s.laenge2d()+anweg, sb);
+                        sb = strecke_bezugspunkt_start;
+                        s.set_laenge_2d(anweg, sb);
+                        if(fa.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            s.set_farbe(FARBE_BLAU);
+                        }else
+                        {
+                            s.set_farbe(farbe_unterseite);
+                            s.set_stil(STIL_GESTRICHELT);
+                        }
+                        gt.add_strecke(s);
+                    }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                    {
+                        bogen b;
+                        //Hilfs-Strecke:
+                        strecke s = fg.strecke_();
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_ende;
+                        s.set_laenge_2d(s.laenge2d()+anweg, sb);
+                        sb = strecke_bezugspunkt_start;
+                        s.set_laenge_2d(anweg, sb);
+                        //---
+                        if(fa.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            b.set_farbe(FARBE_BLAU);
+                            if(fa.radkor() == FRKOR_L)
+                            {
+                                s.drenen_um_endpu_2d(90, true);
+                                s.drenen_um_stapu_2d(90, true);
+                                b.set_startpunkt(s.endpu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, false);
+                            }else if(fa.radkor() == FRKOR_R)
+                            {
+                                s.drenen_um_endpu_2d(90, false);
+                                s.drenen_um_stapu_2d(90, false);
+                                b.set_startpunkt(s.endpu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, true);
+                            }
+                        }else
+                        {
+                            b.set_farbe(farbe_unterseite);
+                            b.set_stil(STIL_GESTRICHELT);
+                            if(fa.radkor() == FRKOR_L)
+                            {
+                                s.drenen_um_endpu_2d(90, false);
+                                s.drenen_um_stapu_2d(90, false);
+                                b.set_startpunkt(s.endpu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, true);
+                            }else if(fa.radkor() == FRKOR_R)
+                            {
+                                s.drenen_um_endpu_2d(90, true);
+                                s.drenen_um_stapu_2d(90, true);
+                                b.set_startpunkt(s.endpu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, false);
+                            }
+                        }
+                        gt.add_bogen(b);
+                    }
+                }else if(folzei.at(0) == BEARBART_FRAESERBOGEN)
+                {
+                    fraeserbogen fb(folzei.text());
+                    if(fa.anfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                    {
+                        strecke s;
+                        s.set_stapu(fb.bog().mitte());
+                        s.set_endpu(fb.bog().start());
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_ende;
+                        s.set_laenge_2d(anweg, sb);
+                        if(fa.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            s.set_farbe(FARBE_BLAU);
+                            s.drenen_um_endpu_2d(90, fb.bog().im_uzs());
+                        }else
+                        {
+                            s.set_farbe(farbe_unterseite);
+                            s.set_stil(STIL_GESTRICHELT);
+                            s.drenen_um_endpu_2d(180, true);
+                        }
+                        gt.add_strecke(s);
+                    }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                    {
+                        bogen b;
+                        strecke s;
+                        s.set_stapu(fb.bog().ende());
+                        s.set_endpu(fb.bog().start());
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_ende;
+                        s.set_laenge_2d(anweg, sb);
+                        if(fa.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            b.set_farbe(FARBE_BLAU);
+                            s.drenen_um_endpu_2d(90, fb.bog().im_uzs());
+                            if(fa.radkor() == FRKOR_L)
+                            {
+                                if(fb.bog().im_uzs())
+                                {
+                                    s.drenen_um_endpu_2d(90, true);
+                                    s.drenen_um_stapu_2d(90, true);
+                                }
+                                b.set_startpunkt(s.stapu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, false);
+                            }else if(fa.radkor() == FRKOR_R)
+                            {
+                                if(!fb.bog().im_uzs())
+                                {
+                                    s.drenen_um_endpu_2d(90, false);
+                                    s.drenen_um_stapu_2d(90, false);
+                                }
+                                b.set_startpunkt(s.stapu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, true);
+                            }
+                        }else
+                        {
+                            b.set_farbe(farbe_unterseite);
+                            b.set_stil(STIL_GESTRICHELT);
+                            s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                            if(fa.radkor() == FRKOR_L)
+                            {
+                                if(fb.bog().im_uzs())
+                                {
+                                    s.drenen_um_endpu_2d(90, false);
+                                    s.drenen_um_stapu_2d(90, false);
+                                }
+                                b.set_startpunkt(s.stapu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, true);
+                            }else if(fa.radkor() == FRKOR_R)
+                            {
+                                if(!fb.bog().im_uzs())
+                                {
+                                    s.drenen_um_endpu_2d(90, true);
+                                    s.drenen_um_stapu_2d(90, true);
+                                }
+                                b.set_startpunkt(s.stapu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, false);
+                            }
+                        }
+                        gt.add_bogen(b);
+                    }
+                }
+            }
         }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg(zeile.text());
