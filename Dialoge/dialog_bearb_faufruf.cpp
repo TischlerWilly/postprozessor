@@ -185,3 +185,20 @@ void Dialog_bearb_faufruf::get_wkz(QString wkz)
 {
     ui->lineEdit_wkz->setText(wkz);
 }
+
+
+
+void Dialog_bearb_faufruf::on_comboBox_kor_currentTextChanged(const QString &arg1)
+{
+    if(arg1 == "Keine")
+    {
+        if(ui->comboBox_antyp->currentText() == "Bogen")
+        {
+            ui->comboBox_antyp->setCurrentIndex(1);//Gerade
+        }
+        if(ui->comboBox_abtyp->currentText() == "Bogen")
+        {
+            ui->comboBox_abtyp->setCurrentIndex(1);//Gerade
+        }
+    }
+}

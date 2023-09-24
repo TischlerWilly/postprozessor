@@ -458,7 +458,7 @@ void MainWin_wst_bearbeiten::on_actionMakeBohrung_triggered()
     Dialog_bearb_bohrung dlg;
     dlg.setModal(true);
     bohrung bo;//Default-Daten
-    dlg.set_data(bo.text(), Wst, Wkz_ptr->magazin());
+    dlg.set_data(bo.text(), Wst, Wkz_kopie.magazin());
     connect(&dlg, SIGNAL(signal_bo(bohrung)), this, SLOT(slot_make_bo(bohrung)));
     dlg.exec();
 }
@@ -467,7 +467,7 @@ void MainWin_wst_bearbeiten::on_actionMakeRTA_triggered()
     Dialog_bearb_rta dlg;
     dlg.setModal(true);
     rechtecktasche rt;//Default-Daten
-    dlg.set_data(rt.text(), Wst, Wkz_ptr->magazin());
+    dlg.set_data(rt.text(), Wst, Wkz_kopie.magazin());
     connect(&dlg, SIGNAL(signal_rta(rechtecktasche)), this, SLOT(slot_make_rta(rechtecktasche)));
     dlg.exec();
 }

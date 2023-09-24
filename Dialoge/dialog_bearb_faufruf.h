@@ -25,6 +25,8 @@ private slots:
     void on_btn_abbrechen_clicked();
     void on_pushButton_wkzwahl_clicked();
 
+    void on_comboBox_kor_currentTextChanged(const QString &arg1);
+
 public slots:
     void get_wkz(QString wkz);
 

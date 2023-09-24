@@ -22,6 +22,7 @@ void rechtecktasche::setup()
     Ausraeumen = true;
     Bezug = WST_BEZUG_OBSEI;
     Afb = "1";
+    Werkzeugnummer = "void";
 }
 
 void rechtecktasche::set_laenge(double l)

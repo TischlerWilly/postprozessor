@@ -16,6 +16,7 @@ Dialog_bearb_bohrung::Dialog_bearb_bohrung(QWidget *parent) :
     ui->comboBox_bezug->addItem("Hinten");      //5
     ui->pushButton_invert->setText("HBE\ninvertieren");
     connect(&dlg_wkzwahl, SIGNAL(send_wkz(QString)), this, SLOT(get_wkz(QString)));
+    ui->btn_ok->setFocus();
 }
 
 Dialog_bearb_bohrung::~Dialog_bearb_bohrung()

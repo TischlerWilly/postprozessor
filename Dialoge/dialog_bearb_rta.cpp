@@ -15,6 +15,7 @@ Dialog_bearb_rta::Dialog_bearb_rta(QWidget *parent) :
     ui->comboBox_bezug->addItem("Vorne");       //4
     ui->comboBox_bezug->addItem("Hinten");      //5
     connect(&dlg_wkzwahl, SIGNAL(send_wkz(QString)), this, SLOT(get_wkz(QString)));
+    ui->btn_ok->setFocus();
 }
 
 Dialog_bearb_rta::~Dialog_bearb_rta()

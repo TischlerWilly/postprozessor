@@ -209,7 +209,7 @@ QString fraeseraufruf::text()
     msg += TRENNZ_BEARB_PARAM_;
     msg += anfahrtyp();                  //Zeile 9
     msg += TRENNZ_BEARB_PARAM_;
-    msg += anfahrtyp();                  //Zeile 10
+    msg += abfahrtyp();                  //Zeile 10
     msg += TRENNZ_BEARB_PARAM_;
     msg += anfahrweg_qstring();          //Zeile 11
     msg += TRENNZ_BEARB_PARAM_;
