@@ -7102,7 +7102,28 @@ void wstzustand::fmc_dateitext(int index)
                     text_zw folzei;//Folgezeile
                     folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
                     punkt3d pein;//Eintauchpunkt
-                    int anweg = 50;
+                    double anweg = 50;
+                    QString anweg_;
+                    if(fa.anfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                    {
+                        anweg = wkzmag.dm(tnummer).toDouble();
+                        anweg_ = "2*WKZR";
+                    }else
+                    {
+                        anweg = fa.anfahrweg();
+                        anweg_ = fa.anfahrweg_qstring();
+                    }
+                    double abweg = 50;
+                    QString abweg_;
+                    if(fa.abfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                    {
+                        abweg = wkzmag.dm(tnummer).toDouble();
+                        abweg_ = "2*WKZR";
+                    }else
+                    {
+                        abweg = fa.abfahrweg();
+                        abweg_ = fa.abfahrweg_qstring();
+                    }
                     if(folzei.at(0) == BEARBART_FRAESERGERADE)
                     {
                         fraesergerade fg(folzei.text());
@@ -7184,58 +7205,51 @@ void wstzustand::fmc_dateitext(int index)
 
                         if(aufwst == true)
                         {
-                            if(radkor == "0")
-                            {
-                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                msg += "=0\n";
-                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                msg += "=0\n";
-                            }else
-                            {
-                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                msg += "=1\n";
-                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                msg += "=1\n";
-                            }
                             msg += FMC_FKON_EINTYP;   //Eintauchtp
                             msg += "=FKONEINTYP";//Variable siehe oben
                             msg += "\n";
                             //msg += "=1\n";
-                            if(pos_z > 0)
-                            {
-                                //Anfahranweisung für nicht durchgefräste Innen-Bahnen:
-                                msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                msg += "=2*WKZR\n";
-                                msg += FMC_FKON_ABWEG;    //Abfahrwert
-                                msg += "=2*WKZR\n";
-                            }else
-                            {
-                                //Anfahranweisung für durchgefräste Innen-Bahnen:
-                                msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                msg += "=50\n";
-                                msg += FMC_FKON_ABWEG;    //Abfahrwert
-                                msg += "=50\n";
-                            }
                         }else //Anfahrweg beginnt nicht auf WST
-                        {
-                            //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
-                            msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                            msg += "=0\n";
-                            msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                            msg += "=0\n";
+                        {                            
                             msg += FMC_FKON_EINTYP;   //Eintauchtp
                             msg += "=FKONEINTYP";//Variable siehe oben
                             msg += "\n";
-                            //msg += "=-1\n";
-                            msg += FMC_FKON_ANWEG;    //Anfahrwert
-                            msg += "=2*WKZR+";
-                            msg += double_to_qstring(anweg);
-                            msg += "\n";
-                            msg += FMC_FKON_ABWEG;   //Abfahrwert
-                            msg += "=2*WKZR+";
-                            msg += double_to_qstring(anweg);
-                            msg += "\n";
+                            //msg += "=-1\n";                            
                         }
+                        if(fa.anfahrtyp() == FAUFRUF_ANABTYP_NDEF)
+                        {
+                            msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                            msg += "=0\n";
+                        }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                        {
+                            msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                            msg += "=0\n";
+                        }else //if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                        {
+                            msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                            msg += "=1\n";
+                        }
+                        if(fa.abfahrtyp() == FAUFRUF_ANABTYP_NDEF)
+                        {
+                            msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                            msg += "=0\n";
+                        }else if(fa.abfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                        {
+                            msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                            msg += "=0\n";
+                        }else //if(fa.abfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                        {
+                            msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                            msg += "=1\n";
+                        }
+                        msg += FMC_FKON_ANWEG;    //Anfahrwert
+                        msg += "=";
+                        msg += anweg_;
+                        msg += "\n";
+                        msg += FMC_FKON_ABWEG;    //Abfahrwert
+                        msg += "=";
+                        msg += abweg_;
+                        msg += "\n";
 
                         msg += "FAN=AUTO\n";    //Anfahrvorschub
                         msg += "F=AUTO\n";      //Vorschub
@@ -8411,7 +8425,28 @@ void wstzustand::fmc_dateitext(int index)
                         text_zw folzei;//Folgezeile
                         folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
                         punkt3d pein;//Eintauchpunkt
-                        int anweg = 50;
+                        double anweg = 50;
+                        QString anweg_;
+                        if(fa.anfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                        {
+                            anweg = wkzmag.dm(tnummer).toDouble();
+                            anweg_ = "2*WKZR";
+                        }else
+                        {
+                            anweg = fa.anfahrweg();
+                            anweg_ = fa.anfahrweg_qstring();
+                        }
+                        double abweg = 50;
+                        QString abweg_;
+                        if(fa.abfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                        {
+                            abweg = wkzmag.dm(tnummer).toDouble();
+                            abweg_ = "2*WKZR";
+                        }else
+                        {
+                            abweg = fa.abfahrweg();
+                            abweg_ = fa.abfahrweg_qstring();
+                        }
 
                         if(folzei.at(0) == BEARBART_FRAESERGERADE)
                         {
@@ -8498,62 +8533,55 @@ void wstzustand::fmc_dateitext(int index)
                             msg += FMC_FKON_KOR;    //Fräsbaohnkorrektur
                             msg += "=";
                             msg += radkor;
-                            msg += "\n";                            
+                            msg += "\n";
 
                             if(aufwst == true)
                             {
-                                if(radkor == "0")
-                                {
-                                    msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                    msg += "=0\n";
-                                    msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                    msg += "=0\n";
-                                }else
-                                {
-                                    msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                    msg += "=1\n";
-                                    msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                    msg += "=1\n";
-                                }
                                 msg += FMC_FKON_EINTYP;   //Eintauchtp
-                                msg += "=FKONEINTYP";
+                                msg += "=FKONEINTYP";//Variable siehe oben
                                 msg += "\n";
                                 //msg += "=1\n";
-                                if(pos_z > 0)
-                                {
-                                    //Anfahranweisung für nicht durchgefräste Innen-Bahnen:
-                                    msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                    msg += "=2*WKZR\n";
-                                    msg += FMC_FKON_ABWEG;    //Abfahrwert
-                                    msg += "LGEAB=2*WKZR\n";
-                                }else
-                                {
-                                    //Anfahranweisung für durchgefräste Innen-Bahnen:
-                                    msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                    msg += "=50\n";
-                                    msg += FMC_FKON_ABWEG;    //Abfahrwert
-                                    msg += "=50\n";
-                                }
-                            }else
+                            }else //Anfahrweg beginnt nicht auf WST
                             {
-                                //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
-                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                msg += "=0\n";
-                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                msg += "=0\n";
                                 msg += FMC_FKON_EINTYP;   //Eintauchtp
-                                msg += "=FKONEINTYP";
+                                msg += "=FKONEINTYP";//Variable siehe oben
                                 msg += "\n";
                                 //msg += "=-1\n";
-                                msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                msg += "=2*WKZR+";
-                                msg += double_to_qstring(anweg);
-                                msg += "\n";
-                                msg += FMC_FKON_ABWEG;   //Abfahrwert
-                                msg += "=2*WKZR+";
-                                msg += double_to_qstring(anweg);
-                                msg += "\n";
                             }
+                            if(fa.anfahrtyp() == FAUFRUF_ANABTYP_NDEF)
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                            }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                            }else //if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=1\n";
+                            }
+                            if(fa.abfahrtyp() == FAUFRUF_ANABTYP_NDEF)
+                            {
+                                msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                            }else if(fa.abfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                            {
+                                msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                            }else //if(fa.abfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                            {
+                                msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                                msg += "=1\n";
+                            }
+                            msg += FMC_FKON_ANWEG;    //Anfahrwert
+                            msg += "=";
+                            msg += anweg_;
+                            msg += "\n";
+                            msg += FMC_FKON_ABWEG;    //Abfahrwert
+                            msg += "=";
+                            msg += abweg_;
+                            msg += "\n";
 
                             msg += "FAN=AUTO\n";    //Anfahrvorschub
                             msg += "F=AUTO\n";      //Vorschub

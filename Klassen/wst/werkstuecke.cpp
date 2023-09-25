@@ -3063,6 +3063,10 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                     }
                     fa.set_x(spx);
                     fa.set_y(spy);
+                    fa.set_anfahrtyp(FAUFRUF_ANABTYP_GARADE);
+                    fa.set_abfahrtyp(FAUFRUF_ANABTYP_GARADE);
+                    fa.set_anfahrweg(FAUFRUF_ANABWEG_AUTO);
+                    fa.set_abfahrweg(FAUFRUF_ANABWEG_AUTO);
                     fg.set_xs(spx);
                     fg.set_ys(spy);
                     fg.set_xe(epx);
