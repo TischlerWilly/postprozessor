@@ -799,6 +799,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                             s.set_farbe(farbe_unterseite);
                             s.set_stil(STIL_GESTRICHELT);
                         }
+                        s.verschieben_um(versatz_x, versatz_y);
                         gt.add_strecke(s);
                     }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
                     {
@@ -849,6 +850,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                                 b.set_radius(anweg, false);
                             }
                         }
+                        b.verschieben_um(versatz_x, versatz_y);
                         gt.add_bogen(b);
                     }
                 }else if(folzei.at(0) == BEARBART_FRAESERBOGEN)
@@ -872,6 +874,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                             s.set_stil(STIL_GESTRICHELT);
                             s.drenen_um_endpu_2d(180, true);
                         }
+                        s.verschieben_um(versatz_x, versatz_y);
                         gt.add_strecke(s);
                     }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
                     {
@@ -934,6 +937,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                                 b.set_radius(anweg, false);
                             }
                         }
+                        b.verschieben_um(versatz_x, versatz_y);
                         gt.add_bogen(b);
                     }
                 }
@@ -1024,6 +1028,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                         s.set_farbe(farbe_unterseite);
                         s.set_stil(STIL_GESTRICHELT);
                     }
+                    s.verschieben_um(versatz_x, versatz_y);
                     gt.add_strecke(s);
                 }else if(letzter_fa.abfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
                 {
@@ -1074,6 +1079,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                             b.set_radius(abweg, false);
                         }
                     }
+                    b.verschieben_um(versatz_x, versatz_y);
                     gt.add_bogen(b);
                 }
             }
@@ -1195,6 +1201,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                         s.set_stil(STIL_GESTRICHELT);
                         s.drenen_um_stapu_2d(180, true);
                     }
+                    s.verschieben_um(versatz_x, versatz_y);
                     gt.add_strecke(s);
                 }else if(letzter_fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
                 {
@@ -1257,6 +1264,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                             b.set_radius(abweg, false);
                         }
                     }
+                    b.verschieben_um(versatz_x, versatz_y);
                     gt.add_bogen(b);
                 }
             }
