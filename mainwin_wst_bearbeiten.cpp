@@ -973,6 +973,8 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
         //vorhandene Bearbeitung muss nicht verschoben werden
         //Bearbeitung für DT einfügen:
         text_zw bearb = Wst->bearb();
+        text_zw bearb_neu;
+        bearb_neu.set_trenz(bearb.trennz());
         for(uint i=0; i<bearb.count() ;i++)
         {
             text_zw zeile;
@@ -993,7 +995,8 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                         bo.set_y(wst_b-bo.y());
                         bo.set_bezug(WST_BEZUG_HI);
                     }
-                    slot_make(bo.text(), false);
+                    bearb_neu.add_hi(bo.text());
+                    //slot_make(bo.text(), false);
                 }else if(zeile.at(0) == BEARBART_NUT)
                 {
                     nut nu(zeile.text());
@@ -1007,7 +1010,8 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                         ep_neu.set_y(wst_b-ep_alt.y());
                         nu.set_stapu(sp_neu);
                         nu.set_endpu(ep_neu);
-                        slot_make(nu.text(), false);
+                        bearb_neu.add_hi(nu.text());
+                        //slot_make(nu.text(), false);
                     }else if(nu.bezug() == WST_BEZUG_LI || nu.bezug() == WST_BEZUG_RE)
                     {
                         //überspringen
@@ -1030,7 +1034,8 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                         rt.set_y(wst_b-rt.y());
                         rt.set_bezug(WST_BEZUG_HI);
                     }
-                    slot_make(rt.text(), false);
+                    bearb_neu.add_hi(rt.text());
+                    //slot_make(rt.text(), false);
                 }
             }else //if(drehen == true)
             {
@@ -1057,7 +1062,8 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                         bo.set_y(wst_b-bo.y());
                         bo.set_bezug(WST_BEZUG_HI);
                     }
-                    slot_make(bo.text(), false);
+                    bearb_neu.add_hi(bo.text());
+                    //slot_make(bo.text(), false);
                 }else if(zeile.at(0) == BEARBART_NUT)
                 {
                     nut nu(zeile.text());
@@ -1073,7 +1079,8 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                         ep_neu.set_y(wst_b-ep_alt.y());
                         nu.set_stapu(sp_neu);
                         nu.set_endpu(ep_neu);
-                        slot_make(nu.text(), false);
+                        bearb_neu.add_hi(nu.text());
+                        //slot_make(nu.text(), false);
                     }else if(nu.bezug() == WST_BEZUG_LI)
                     {
                         //überspringen
@@ -1107,7 +1114,8 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                         rt.set_y(wst_b-rt.y());
                         rt.set_bezug(WST_BEZUG_HI);
                     }
-                    slot_make(rt.text(), false);
+                    bearb_neu.add_hi(rt.text());
+                    //slot_make(rt.text(), false);
                 }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
                 {
                     fraeseraufruf fa(zeile.text());
@@ -1115,7 +1123,8 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                     {
                         fa.set_x(wst_l-fa.x());
                         fa.set_y(wst_b-fa.y());
-                        slot_make(fa.text(), false);
+                        bearb_neu.add_hi(fa.text());
+                        //slot_make(fa.text(), false);
                     }
                 }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
                 {
@@ -1126,7 +1135,8 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                         fg.set_xe(wst_l-fg.xe());
                         fg.set_ys(wst_b-fg.ys());
                         fg.set_ye(wst_b-fg.ye());
-                        slot_make(fg.text(), false);
+                        bearb_neu.add_hi(fg.text());
+                        //slot_make(fg.text(), false);
                     }
                 }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                 {
@@ -1137,11 +1147,20 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
                         fb.set_xe(wst_l-fb.xe());
                         fb.set_ys(wst_b-fb.ys());
                         fb.set_ye(wst_b-fb.ye());
-                        slot_make(fb.text(), false);
+                        bearb_neu.add_hi(fb.text());
+                        //slot_make(fb.text(), false);
                     }
                 }
             }
         }
+        for(uint i=0; i<bearb_neu.count();i++)
+        {
+            Wst->bearb_ptr()->add_hi(bearb_neu.at(i));
+        }
+        update_listwidget();
+        unredo_neu();
+        int index = ui->listWidget_prgtext->currentRow();
+        emit sendVorschauAktualisieren(*Wst, index, Wkz_kopie);
     }else if(bezug == WST_BEZUG_HI)
     {//Wst wird nach vorne hin breiter
         //vorhandene Bearbeitung nach hinten verschieben:
