@@ -28,6 +28,10 @@ void wstzustand::clear()
     Geotext.clear();
     GeoFkon.clear();
     Versatz_y.clear();
+    Zust_use_ax.clear();
+    Zust_use_ay.clear();
+    Use_ax = true;
+    Use_ay = true;
 }
 
 //----------------------------------
@@ -183,6 +187,14 @@ void wstzustand::set_einst_ganx(einstellung_ganx e)
         Eganx = e;
     }
 }
+void wstzustand::set_use_ax(bool benutzen)
+{
+    Use_ax = benutzen;
+}
+void wstzustand::set_use_ay(bool benutzen)
+{
+    Use_ay = benutzen;
+}
 
 QString wstzustand::kante_vo()
 {
@@ -264,7 +276,8 @@ void wstzustand::anfordern(QString format, wkz_magazin wkzmag, QString drehung)
     bool existiert = false;
     for(int i = 0; i<Format.count();i++)
     {
-        if(format == Format.at(i) && wkzmag == Wkzm.at(i) && drehung == Drehung.at(i))
+        if(format == Format.at(i) && wkzmag == Wkzm.at(i) && drehung == Drehung.at(i) && \
+            Use_ax == Zust_use_ax.at(i) && Use_ay == Zust_use_ay.at(i))
         {
             existiert = true;
             Akt_zust = i;
@@ -288,6 +301,8 @@ void wstzustand::erzeugen(QString format, wkz_magazin wkzmag, QString drehung)
     //  ->Wkzmag
     Drehung_bekommen.append(drehung);
     //  ->Drehung_bekommen
+    Zust_use_ax.append(Use_ax);
+    Zust_use_ay.append(Use_ay);
     finde_drehwinkel_auto_(Format.count()-1);
     //  ->Drehung
     //  ->Bewertung
@@ -4716,7 +4731,10 @@ void wstzustand::fmc_dateitext(int index)
     bool ay = false;
     if(tmp_b < Schwellenwert_ay)
      {
-         ay = true;
+        if(use_ay() == true)
+        {
+            ay = true;
+        }
      }
 
     int min_kta_dm_ausraeumen_false = 200; //Durchmesser ab dem Kreistaschen nicht ausgeräumt werden
@@ -14520,6 +14538,14 @@ void wstzustand::geo(int index)
         kante_r = kante_re(drehwinkel);
     }
     //-------------------------------------------
+    if(use_ax() == false)
+    {
+        versatz_x = 0;
+    }
+    if(use_ay() == false)
+    {
+        versatz_y = 0;
+    }
     Versatz_y.append(versatz_y);
     Geotext.append(geo_ermitteln(tmp_bearb, l, b, d, \
                                  kante_v, kante_h, kante_l, kante_r,\

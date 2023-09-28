@@ -25,6 +25,8 @@ void Dialog_bearb_pkopf::set_data(werkstueck *w)
     ui->lineEdit_khi->setText(Wst->kante_hi());
     ui->lineEdit_kli->setText(Wst->kante_li());
     ui->lineEdit_kre->setText(Wst->kante_re());
+    ui->checkBox_use_ax->setChecked(Wst->use_ax());
+    ui->checkBox_use_ay->setChecked(Wst->use_ay());
 }
 
 void Dialog_bearb_pkopf::on_pushButton_ok_clicked()
@@ -36,6 +38,8 @@ void Dialog_bearb_pkopf::on_pushButton_ok_clicked()
     Wst->set_kante_hi(ui->lineEdit_khi->text());
     Wst->set_kante_li(ui->lineEdit_kli->text());
     Wst->set_kante_re(ui->lineEdit_kre->text());
+    Wst->set_use_ax(ui->checkBox_use_ax->isChecked());
+    Wst->set_use_ay(ui->checkBox_use_ay->isChecked());
     this->close();
 }
 

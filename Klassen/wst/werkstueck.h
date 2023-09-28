@@ -50,6 +50,8 @@ public:
     void set_zustand(QString format, wkz_magazin* wkzmag, QString drehung, \
                      bool formartierungen_aufbrechen, QString zust_fkon);
     void set_einstellung_ganx(einstellung_ganx e);
+    void set_use_ax(bool benutzen);
+    void set_use_ay(bool benutzen);
 
     inline void set_name(QString neuer_name)
     {
@@ -130,6 +132,14 @@ public:
     inline QString kante_re()
     {
         return Kante_re;
+    }
+    inline bool use_ax()
+    {
+        return Zustand.use_ax();
+    }
+    inline bool use_ay()
+    {
+        return Zustand.use_ay();
     }
     //--------------------------------------------------Manipulationen:
 

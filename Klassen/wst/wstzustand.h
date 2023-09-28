@@ -44,6 +44,8 @@ public:
     void set_name(QString neuer_name);
     void set_zust_fkon(QString zust);
     void set_einst_ganx(einstellung_ganx e);
+    void set_use_ax(bool benutzen);
+    void set_use_ay(bool benutzen);
 
     //----------------------------------get_xy:
     QString kante_vo();
@@ -176,6 +178,14 @@ public:
             return 0;
         }
     }
+    inline bool use_ax()
+    {
+        return Use_ax;
+    }
+    inline bool use_ay()
+    {
+        return Use_ay;
+    }
 
     //----------------------------------Manipulationen:
     void anfordern(QString format, wkz_magazin wkzmag, QString drehung);
@@ -253,6 +263,8 @@ private:
     QVector<geo_text> Geotext;
     QVector<geo_text> GeoFkon;
     QVector<double> Versatz_y;
+    QVector<bool>   Zust_use_ax;
+    QVector<bool>   Zust_use_ay;
 
     text_zw             Bearb_bekommen;
     double              Laenge_bekommen;
@@ -269,6 +281,9 @@ private:
     QString             Zust_fkon;
     int                 Akt_zust;
     einstellung_ganx    Eganx;
+    bool                Use_ax;
+    bool                Use_ay;
+
 };
 
 #endif // WSTZUSTAND_H

@@ -118,6 +118,14 @@ void werkstueck::set_einstellung_ganx(einstellung_ganx e)
 {
     Zustand.set_einst_ganx(e);
 }
+void werkstueck::set_use_ax(bool benutzen)
+{
+    Zustand.set_use_ax(benutzen);
+}
+void werkstueck::set_use_ay(bool benutzen)
+{
+    Zustand.set_use_ay(benutzen);
+}
 //--------------------------------------------------get_xy:
 
 QString werkstueck::cad_fehler(bool kurz)
