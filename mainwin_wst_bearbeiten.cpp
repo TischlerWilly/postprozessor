@@ -765,6 +765,190 @@ void MainWin_wst_bearbeiten::on_actionDoppelteil_erzeugen_triggered()
     dlg_dt.set_bearb(Wst->bearb());
     dlg_dt.exec();
 }
+void MainWin_wst_bearbeiten::on_actionFormartierungen_aufbrechen_triggered()
+{
+    text_zw bearb = Wst->bearb();
+    double tmp_l = Wst->laenge();
+    double tmp_b = Wst->breite();
+
+    //Diese Funktion soll die vom VW ausgegebenen Poligonförmigen Formartierungen entdecken.
+    //Diese werden generiert, wenn die Grundfläche eines 3D-Bauteils kein Rechteck ist
+    //Die Bestandteile der Fräskontur, die deckungsgleich auf der Kante liegen werden nicht benötigt
+    //Und werden durch diese Funktion heraus genommen
+
+    //Prüfen ob wst eine umlaufende Formartierung enthällt:
+    for(uint i=0; i< bearb.count() ;i++)
+    {
+        text_zw param;
+        param.set_text(bearb.at(i), TRENNZ_BEARB_PARAM);
+        if(param.at(0) == BEARBART_FRAESERAUFRUF)
+        {
+            uint zeibeg = i;
+            uint zeiend = i;
+            fraeseraufruf fa(param.text());
+            double xbeg = fa.x();
+            double ybeg = fa.y();
+            double zbeg = fa.tiefe();
+            double xend = xbeg;
+            double yend = ybeg;
+            double zend = zbeg;
+            double xmin = xbeg;
+            double xmax = xbeg;
+            double ymin = ybeg;
+            double ymax = ybeg;
+            if(i< bearb.count())
+            {
+                i++;
+                for(; i< bearb.count() ;i++)
+                {
+                    param.set_text(bearb.at(i), TRENNZ_BEARB_PARAM);
+                    if(param.at(0) == BEARBART_FRAESERGERADE)
+                    {
+                        fraesergerade fg(param.text());
+                        xend = fg.xe();
+                        yend = fg.ye();
+                        zend = fg.ze();
+                        zeiend = i;
+                        if(xend > xmax)
+                        {
+                            xmax = xend;
+                        }
+                        if(xend < xmin)
+                        {
+                            xmin = xend;
+                        }
+                        if(yend > ymax)
+                        {
+                            ymax = yend;
+                        }
+                        if(yend < ymin)
+                        {
+                            ymin = yend;
+                        }
+                    }else if(param.at(0) == BEARBART_FRAESERBOGEN)
+                    {
+                        fraeserbogen fb(param.text());
+                        xend = fb.xe();
+                        yend = fb.ye();
+                        zend = fb.ze();
+                        zeiend = i;
+                        if(xend > xmax)
+                        {
+                            xmax = xend;
+                        }
+                        if(xend < xmin)
+                        {
+                            xmin = xend;
+                        }
+                        if(yend > ymax)
+                        {
+                            ymax = yend;
+                        }
+                        if(yend < ymin)
+                        {
+                            ymin = yend;
+                        }
+                    }else
+                    {
+                        break;
+                    }
+                }
+            }
+            if(zeibeg != zeiend)
+            {
+                //Prüfen ob Start- und Endpunkt gleich sind:
+                if(xbeg == xend && ybeg == yend && zbeg == zend)//evtl. ist hier cagleich nötig!!
+                {
+                    //Prüfen ob fkon Formartierung ist:
+                    if(xmin <= 0        &&\
+                                        xmax >= tmp_l    &&\
+                              ymin <= 0        &&\
+                              ymax >= tmp_b)
+                    {
+                        //Die Teile aus der Bearbeitung löschen die Deckungsgleich auf der WST-Kante liegen
+                        text_zw bearb_neu;
+                        bearb_neu.set_text(fa.text(), '\n');
+
+                        for(uint ii=zeibeg+1; ii<=zeiend ;ii++)
+                        {
+                            text_zw param;
+                            param.set_text(bearb.at(ii), TRENNZ_BEARB_PARAM);
+
+                            if(param.at(0) == BEARBART_FRAESERGERADE)
+                            {
+                                fraesergerade fg(param.text());
+                                bool loeschen = false;
+                                if((fg.xs() == fg.xe()) && (fg.ys() != fg.ye()))
+                                {
+                                    //Gerade ist senkrecht
+                                    if((fg.xs() == 0) || (fg.xs()== tmp_l))
+                                    {
+                                        //Gerade liegt auf der WST-Kante
+                                        loeschen = true;
+                                    }
+                                }else if((fg.xs() != fg.xe()) && (fg.ys() == fg.ye()))
+                                {
+                                    //Gerade ist wagerecht
+                                    if((fg.ys() == 0) || (fg.ys()== tmp_b))
+                                    {
+                                        //Gerade liegt auf der WST-Kante
+                                        loeschen = true;
+                                    }
+                                }
+                                if(loeschen == true)
+                                {
+                                    QString vorzeile = bearb_neu.at(bearb_neu.count()-1);
+                                    text_zw vorparam;
+                                    vorparam.set_text(vorzeile, TRENNZ_BEARB_PARAM);
+                                    if(vorparam.at(0) == BEARBART_FRAESERAUFRUF)
+                                    {
+                                        fraeseraufruf tmpfa(vorparam.text());
+                                        tmpfa.set_x(fg.xe());
+                                        tmpfa.set_y(fg.ye());
+                                        bearb_neu.edit(bearb_neu.count()-1, tmpfa.text());
+                                    }else
+                                    {
+                                        fa.set_x(fg.xe());
+                                        fa.set_y(fg.ye());
+                                        bearb_neu.add_hi(fa.text());
+                                    }
+                                }else
+                                {
+                                    bearb_neu.add_hi(bearb.at(ii));
+                                }
+                            }else
+                            {
+                                bearb_neu.add_hi(bearb.at(ii));
+                            }
+                        }
+                        //prüfen ob letzte Zeile von bearb_neu fa ist und ggf löschen:
+                        text_zw endparam;
+                        endparam.set_text(bearb_neu.at(bearb_neu.count()-1), TRENNZ_BEARB_PARAM);
+                        if(endparam.at(0) == BEARBART_FRAESERAUFRUF)
+                        {
+                            bearb_neu.entf(bearb_neu.count()-1);
+                        }
+                        //bearb.zeile(zeibeg bis zeiend) gegen bearb_neu austauschen:
+                        if(zeiend+1 < bearb.count())
+                        {
+                            bearb.entf(zeibeg, zeiend-zeibeg+1);
+                            bearb.add_mi(zeibeg, bearb_neu.text());
+                            i = zeibeg+bearb_neu.count()-1;
+                        }else
+                        {
+                            bearb.entf(zeibeg, zeiend-zeibeg+1);
+                            bearb.add_hi(bearb_neu.text());
+                            i = bearb.count()-1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    Wst->set_bearb(bearb);
+    sendVorschauAktualisieren(*Wst, -1, Wkz_kopie);
+    unredo_neu();
+}
 //----------------------------------Slot_Manipulation:
 void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
 {
@@ -1694,6 +1878,9 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
     }
     unredo_neu();
 }
+
+
+
 
 
 

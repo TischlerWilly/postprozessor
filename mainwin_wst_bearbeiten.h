@@ -80,6 +80,7 @@ private slots:
     void on_actionVerschieben_triggered();
     void on_actionBearbeiten_triggered();
     void on_actionDoppelteil_erzeugen_triggered();
+    void on_actionFormartierungen_aufbrechen_triggered();
 
 public slots:
     //Bearbeiten

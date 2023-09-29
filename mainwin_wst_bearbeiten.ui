@@ -50,7 +50,7 @@
      <x>0</x>
      <y>0</y>
      <width>789</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHallo_Welt">
@@ -80,6 +80,7 @@
     </property>
     <addaction name="actionVerschieben"/>
     <addaction name="actionDoppelteil_erzeugen"/>
+    <addaction name="actionFormartierungen_aufbrechen"/>
    </widget>
    <addaction name="menuHallo_Welt"/>
    <addaction name="menuBearbeiten"/>
@@ -160,6 +161,11 @@
   <action name="actionDoppelteil_erzeugen">
    <property name="text">
     <string>Doppelteil erzeugen</string>
+   </property>
+  </action>
+  <action name="actionFormartierungen_aufbrechen">
+   <property name="text">
+    <string>Formartierungen aufbrechen</string>
    </property>
   </action>
  </widget>
