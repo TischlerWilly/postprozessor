@@ -558,6 +558,29 @@ void MainWin_wst_bearbeiten::on_actionEntf_triggered()
         {
             if(index_liwid > 0  &&  index_liwid+1 < ui->listWidget_prgtext->count())
             {
+                if(index_bearb > 0)
+                {
+                    text_zw zeile;
+                    zeile.set_text(Wst->bearb().at(index_bearb),TRENNZ_BEARB_PARAM);
+                    text_zw zeile_vor;
+                    zeile_vor.set_text(Wst->bearb().at(index_bearb-1),TRENNZ_BEARB_PARAM);
+                    if(zeile_vor.at(0) == BEARBART_FRAESERAUFRUF)
+                    {
+                        fraeseraufruf fa(zeile_vor.text());
+                        if(zeile.at(0) == BEARBART_FRAESERGERADE)
+                        {
+                            fraesergerade fg(zeile.text());
+                            fa.set_pos(fg.ep());
+                            Wst->bearb_ptr()->edit(index_bearb-1, fa.text());
+                            fraeseraufruf fa(zeile_vor.text());
+                        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                        {
+                            fraeserbogen fb(zeile.text());
+                            fa.set_pos(fb.ep());
+                            Wst->bearb_ptr()->edit(index_bearb-1, fa.text());
+                        }
+                    }
+                }
                 Wst->bearb_ptr()->entf(index_bearb);
                 update_listwidget();
                 unredo_neu();
