@@ -133,32 +133,57 @@ void MainWin_wst_bearbeiten::update_listwidget()
         QString bearb = tmp_bearb.at(i);
         text_zw zeile;
         zeile.set_text(bearb,TRENNZ_BEARB_PARAM);
+        QColor farbe;
+        farbe.setRgb(255,255,255);
+        QString bezug = zeile.at(1);
         if(zeile.at(0) == BEARBART_BOHR)
         {
             bearb = bohr_zu_prgzei(zeile.text());
+            if(bezug == WST_BEZUG_OBSEI)
+            {
+                farbe.setRgb(0,240,240); //Hellblau
+            }else if(bezug == WST_BEZUG_UNSEI)
+            {
+                farbe.setRgb(255,0,128);//Rose
+            }else
+            {
+                farbe.setRgb(185,122,87);//braun
+            }
         }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
             bearb = bohrRaster_zu_prgzei(zeile.text());
         }else if(zeile.at(0) == BEARBART_NUT)
         {
             bearb = nut_zu_prgzei(zeile.text());
+            farbe.setRgb(145,145,255);//helles lila
         }else if(zeile.at(0) == BEARBART_RTA)
         {
             bearb = rta_zu_prgzei(zeile.text());
+            if(bezug == WST_BEZUG_OBSEI || bezug == WST_BEZUG_UNSEI)
+            {
+                farbe = Qt::darkGray;
+            }else
+            {
+                farbe = Qt::green;
+            }
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             bearb = fauf_zu_prgzei(zeile.text());
+            farbe.setRgb(255,128,0);//orange
         }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             bearb = fgerade_zu_prgzei(zeile.text());
+            farbe.setRgb(255,155,106);//helles orange
         }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             bearb = fbogen_zu_prgzei(zeile.text());
+            farbe.setRgb(255,155,106);//helles orange
         }else if(zeile.at(0) == BEARBART_GEHRUNG)
         {
             bearb = gehr_zu_prgzei(zeile.text());
         }
         ui->listWidget_prgtext->addItem(bearb);
+        ui->listWidget_prgtext->item(i+1)->setBackgroundColor(farbe);
     }
     ui->listWidget_prgtext->addItem("...");
     if(currentRow < ui->listWidget_prgtext->count())
@@ -179,6 +204,19 @@ void MainWin_wst_bearbeiten::slot_zeilennummer(uint nr, bool bearbeiten)
 }
 void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int currentRow)
 {
+    for(int i=0; i<ui->listWidget_prgtext->count();i++)
+    {
+        ui->listWidget_prgtext->item(i)->setTextColor(Qt::black);
+        QFont font;
+        font.setBold(false);
+        font.setPointSize(10);
+        ui->listWidget_prgtext->item(i)->setFont(font);
+    }
+    ui->listWidget_prgtext->item(currentRow)->setTextColor(Qt::red);
+    QFont font;
+    font.setBold(true);
+    font.setPointSize(13);
+    ui->listWidget_prgtext->item(currentRow)->setFont(font);
     emit signalIndexChange(currentRow);
 }
 void MainWin_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
