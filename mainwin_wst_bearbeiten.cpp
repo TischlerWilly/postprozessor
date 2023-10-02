@@ -212,11 +212,14 @@ void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int current
         font.setPointSize(10);
         ui->listWidget_prgtext->item(i)->setFont(font);
     }
-    ui->listWidget_prgtext->item(currentRow)->setTextColor(Qt::red);
-    QFont font;
-    font.setBold(true);
-    font.setPointSize(13);
-    ui->listWidget_prgtext->item(currentRow)->setFont(font);
+    if(currentRow >=0 && currentRow < ui->listWidget_prgtext->count())
+    {
+        ui->listWidget_prgtext->item(currentRow)->setTextColor(Qt::red);
+        QFont font;
+        font.setBold(true);
+        font.setPointSize(13);
+        ui->listWidget_prgtext->item(currentRow)->setFont(font);
+    }
     emit signalIndexChange(currentRow);
 }
 void MainWin_wst_bearbeiten::on_listWidget_prgtext_itemDoubleClicked(QListWidgetItem *item)
