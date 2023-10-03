@@ -683,7 +683,7 @@ void vorschau::zeichneFkon(QString geometrieElement, int i)
 void vorschau::werkstueck_darstellung_berechnen()
 {
     QString format = W.zustand().format();
-    int randabstand = 10;
+    int randabstand = 20+W.dicke();
     float maximallaenge = W.max_x() - W.min_x();
     float maximalbreite = W.max_y() - W.min_y();
 
@@ -718,7 +718,7 @@ void vorschau::werkstueck_darstellung_berechnen()
 }
 void vorschau::werkstueck_darstellung_berechnen_einzelwst()
 {
-    int randabstand = 10;
+    int randabstand = 20+W.dicke();
     float maximallaenge = W.max_x_einzelwst() - W.min_x();
     float maximalbreite = W.max_y_einzelwst() - W.min_y();
 

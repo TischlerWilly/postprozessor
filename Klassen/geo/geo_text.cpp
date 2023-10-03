@@ -226,6 +226,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                        QString kante_v, QString kante_h, QString kante_l, QString kante_r, \
                        double versatz_x, double versatz_y, wkz_magazin wkzm)
 {
+    double abst_darstel_hirnansicht = 20;
     //-------------------------------------------
     geo_text gt;
     //------------------------------
@@ -282,6 +283,54 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
+    //------------------------------
+    //WST-Hirnseite vorne:
+    punkt3d nullpunkt_vo(0,-abst_darstel_hirnansicht,0);
+    nullpunkt_vo.set_linienbreite(15);
+    gt.add_punkt(nullpunkt_vo);
+    rechteck3d rec_vo;
+    rec_vo.set_bezugspunkt(OBEN_LINKS);
+    rec_vo.set_einfuegepunkt(nullpunkt_vo.x(),nullpunkt_vo.y(),0);
+    rec_vo.set_laenge(wst_l);
+    rec_vo.set_breite(wst_d);
+    rec_vo.set_farbe_fuellung(FARBE_GRAU);
+    gt.add_rechteck(rec_vo);
+    //------------------------------
+    //WST-Hirnseite hinten:
+    punkt3d nullpunkt_hi(0,wst_b+versatz_y+abst_darstel_hirnansicht,0);
+    nullpunkt_hi.set_linienbreite(15);
+    gt.add_punkt(nullpunkt_hi);
+    rechteck3d rec_hi;
+    rec_hi.set_bezugspunkt(UNTEN_LINKS);
+    rec_hi.set_einfuegepunkt(nullpunkt_hi.x(),nullpunkt_hi.y(),0);
+    rec_hi.set_laenge(wst_l);
+    rec_hi.set_breite(wst_d);
+    rec_hi.set_farbe_fuellung(FARBE_GRAU);
+    gt.add_rechteck(rec_hi);
+    //------------------------------
+    //WST-Hirnseite links:
+    punkt3d nullpunkt_li(-abst_darstel_hirnansicht,versatz_y,0);
+    nullpunkt_li.set_linienbreite(15);
+    gt.add_punkt(nullpunkt_li);
+    rechteck3d rec_li;
+    rec_li.set_bezugspunkt(UNTEN_RECHTS);
+    rec_li.set_einfuegepunkt(nullpunkt_li.x(),nullpunkt_li.y(),0);
+    rec_li.set_laenge(wst_d);
+    rec_li.set_breite(wst_b);
+    rec_li.set_farbe_fuellung(FARBE_GRAU);
+    gt.add_rechteck(rec_li);
+    //------------------------------
+    //WST-Hirnseite rechts:
+    punkt3d nullpunkt_re(wst_l+versatz_x+abst_darstel_hirnansicht,versatz_y,0);
+    nullpunkt_re.set_linienbreite(15);
+    gt.add_punkt(nullpunkt_re);
+    rechteck3d rec_re;
+    rec_re.set_bezugspunkt(UNTEN_LINKS);
+    rec_re.set_einfuegepunkt(nullpunkt_re.x(),nullpunkt_re.y(),0);
+    rec_re.set_laenge(wst_d);
+    rec_re.set_breite(wst_b);
+    rec_re.set_farbe_fuellung(FARBE_GRAU);
+    gt.add_rechteck(rec_re);
     //------------------------------
     gt.zeilenvorschub();
     //------------------------------
@@ -351,6 +400,11 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_li.x()-bo.z(),nullpunkt_li.y()+bo.y(), 0);
+                gt.add_kreis(k);
             }else if(bo.bezug() == WST_BEZUG_RE)
             {
                 rechteck3d r;
@@ -361,6 +415,11 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_re.x()+bo.z(),nullpunkt_re.y()+bo.y(), 0);
+                gt.add_kreis(k);
             }else if(bo.bezug() == WST_BEZUG_VO)
             {
                 rechteck3d r;
@@ -371,6 +430,11 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_vo.x()+bo.x(),nullpunkt_vo.y()-bo.z(), 0);
+                gt.add_kreis(k);
             }else if(bo.bezug() == WST_BEZUG_HI)
             {
                 rechteck3d r;
@@ -381,6 +445,11 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_hi.x()+bo.x(),nullpunkt_hi.y()+bo.z(), 0);
+                gt.add_kreis(k);
             }
         }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
@@ -479,11 +548,18 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_bezugspunkt(LINKS);
                 r.set_einfuegepunkt(0, bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_li.x()-bo.z(),nullpunkt_li.y()+bo.y(), 0);
                 for(uint i=0; i<bo.anz_y() ;i++)
                 {
                     rechteck3d tmp_r = r;
                     tmp_r.verschieben_um(0, i*bo.raster_y());
                     gt.add_rechteck(tmp_r);
+                    kreis tmp_k = k;
+                    tmp_k.verschieben_um(0, i*bo.raster_y());
+                    gt.add_kreis(tmp_k);
                 }
             }else if(bo.bezug() == WST_BEZUG_RE)
             {
@@ -494,11 +570,18 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_bezugspunkt(RECHTS);
                 r.set_einfuegepunkt(wst_l, bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_re.x()+bo.z(),nullpunkt_re.y()+bo.y(), 0);
                 for(uint i=0; i<bo.anz_y() ;i++)
                 {
                     rechteck3d tmp_r = r;
                     tmp_r.verschieben_um(0, i*bo.raster_y());
                     gt.add_rechteck(tmp_r);
+                    kreis tmp_k = k;
+                    tmp_k.verschieben_um(0, i*bo.raster_y());
+                    gt.add_kreis(tmp_k);
                 }
             }else if(bo.bezug() == WST_BEZUG_VO)
             {
@@ -509,11 +592,18 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_bezugspunkt(UNTEN);
                 r.set_einfuegepunkt(bo.x(), 0, 0);
                 r.verschieben_um(versatz_x, versatz_y);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_vo.x()+bo.x(),nullpunkt_vo.y()-bo.z(), 0);
                 for(uint i=0; i<bo.anz_x() ;i++)
                 {
                     rechteck3d tmp_r = r;
                     tmp_r.verschieben_um(i*bo.raster_x(), 0);
                     gt.add_rechteck(tmp_r);
+                    kreis tmp_k = k;
+                    tmp_k.verschieben_um(i*bo.raster_x(), 0);
+                    gt.add_kreis(tmp_k);
                 }
             }else if(bo.bezug() == WST_BEZUG_HI)
             {
@@ -524,11 +614,18 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_bezugspunkt(OBEN);
                 r.set_einfuegepunkt(bo.x(), wst_b, 0);
                 r.verschieben_um(versatz_x, versatz_y);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_hi.x()+bo.x(),nullpunkt_hi.y()+bo.z(), 0);
                 for(uint i=0; i<bo.anz_x() ;i++)
                 {
                     rechteck3d tmp_r = r;
                     tmp_r.verschieben_um(i*bo.raster_x(), 0);
                     gt.add_rechteck(tmp_r);
+                    kreis tmp_k = k;
+                    tmp_k.verschieben_um(i*bo.raster_x(), 0);
+                    gt.add_kreis(tmp_k);
                 }
             }
         }else if(zeile.at(0) == BEARBART_NUT)
@@ -650,32 +747,49 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 }
             }else
             {
+                rechteck3d r_kantenansicht;
                 if(rt.bezug() == WST_BEZUG_LI)
                 {
                     r.set_bezugspunkt(LINKS);
                     r.set_laenge(rt.tiefe());
                     r.set_breite(rt.laenge());
+                    r_kantenansicht.set_laenge(rt.breite());
+                    r_kantenansicht.set_breite(rt.laenge());
+                    r_kantenansicht.set_mipu(nullpunkt_li.x()-rt.z(),nullpunkt_li.y()+rt.y(), 0);
                 }else if(rt.bezug() == WST_BEZUG_RE)
                 {
                     r.set_bezugspunkt(RECHTS);
                     r.set_laenge(rt.tiefe());
                     r.set_breite(rt.laenge());
+                    r_kantenansicht.set_laenge(rt.breite());
+                    r_kantenansicht.set_breite(rt.laenge());
+                    r_kantenansicht.set_mipu(nullpunkt_re.x()+rt.z(),nullpunkt_re.y()+rt.y(), 0);
                 }else if(rt.bezug() == WST_BEZUG_VO)
                 {
                     r.set_bezugspunkt(UNTEN);
                     r.set_laenge(rt.laenge());
                     r.set_breite(rt.tiefe());
+                    r_kantenansicht.set_laenge(rt.laenge());
+                    r_kantenansicht.set_breite(rt.breite());
+                    r_kantenansicht.set_mipu(nullpunkt_vo.x()+rt.x(),nullpunkt_vo.y()-rt.z(), 0);
                 }else if(rt.bezug() == WST_BEZUG_HI)
                 {
                     r.set_bezugspunkt(OBEN);
                     r.set_laenge(rt.laenge());
                     r.set_breite(rt.tiefe());
+                    r_kantenansicht.set_laenge(rt.laenge());
+                    r_kantenansicht.set_breite(rt.breite());
+                    r_kantenansicht.set_mipu(nullpunkt_hi.x()+rt.x(),nullpunkt_hi.y()+rt.z(), 0);
                 }
                 r.set_farbe_fuellung(FARBE_GRUEN);
                 r.set_einfuegepunkt(rt.x(), rt.y(), rt.z());
                 r.verschieben_um(versatz_x, versatz_y);
                 //r.set_rad(rt.rad()); //hier darf nicht der rad gesetzt werden weil Draufsicht
                 gt.add_rechteck(r);
+                r_kantenansicht.set_rad(eckenrad);
+                r_kantenansicht.set_farbe_fuellung(r.farbe_fuellung());
+                r_kantenansicht.set_farbe(r.farbe());
+                gt.add_rechteck(r_kantenansicht);
             }
 
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
