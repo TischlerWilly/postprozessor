@@ -286,7 +286,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
     //------------------------------
     //WST-Hirnseite vorne:
     punkt3d nullpunkt_vo(0,-abst_darstel_hirnansicht,0);
-    nullpunkt_vo.set_linienbreite(15);
+    nullpunkt_vo.set_linienbreite(10);
     gt.add_punkt(nullpunkt_vo);
     rechteck3d rec_vo;
     rec_vo.set_bezugspunkt(OBEN_LINKS);
@@ -298,7 +298,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
     //------------------------------
     //WST-Hirnseite hinten:
     punkt3d nullpunkt_hi(0,wst_b+versatz_y+abst_darstel_hirnansicht,0);
-    nullpunkt_hi.set_linienbreite(15);
+    nullpunkt_hi.set_linienbreite(10);
     gt.add_punkt(nullpunkt_hi);
     rechteck3d rec_hi;
     rec_hi.set_bezugspunkt(UNTEN_LINKS);
@@ -310,7 +310,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
     //------------------------------
     //WST-Hirnseite links:
     punkt3d nullpunkt_li(-abst_darstel_hirnansicht,versatz_y,0);
-    nullpunkt_li.set_linienbreite(15);
+    nullpunkt_li.set_linienbreite(10);
     gt.add_punkt(nullpunkt_li);
     rechteck3d rec_li;
     rec_li.set_bezugspunkt(UNTEN_RECHTS);
@@ -322,7 +322,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
     //------------------------------
     //WST-Hirnseite rechts:
     punkt3d nullpunkt_re(wst_l+versatz_x+abst_darstel_hirnansicht,versatz_y,0);
-    nullpunkt_re.set_linienbreite(15);
+    nullpunkt_re.set_linienbreite(10);
     gt.add_punkt(nullpunkt_re);
     rechteck3d rec_re;
     rec_re.set_bezugspunkt(UNTEN_LINKS);
