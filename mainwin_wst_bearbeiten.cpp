@@ -135,19 +135,20 @@ void MainWin_wst_bearbeiten::update_listwidget()
         zeile.set_text(bearb,TRENNZ_BEARB_PARAM);
         QColor farbe;
         farbe.setRgb(255,255,255);
+        int deckkraft = 160;
         QString bezug = zeile.at(1);
         if(zeile.at(0) == BEARBART_BOHR)
         {
             bearb = bohr_zu_prgzei(zeile.text());
             if(bezug == WST_BEZUG_OBSEI)
             {
-                farbe.setRgb(0,240,240); //Hellblau
+                farbe.setRgb(0,240,240,deckkraft); //Hellblau
             }else if(bezug == WST_BEZUG_UNSEI)
             {
-                farbe.setRgb(255,0,128);//Rose
+                farbe.setRgb(255,0,128,deckkraft);//Rose
             }else
             {
-                farbe.setRgb(185,122,87);//braun
+                farbe.setRgb(185,122,87,deckkraft);//braun
             }
         }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
@@ -155,29 +156,31 @@ void MainWin_wst_bearbeiten::update_listwidget()
         }else if(zeile.at(0) == BEARBART_NUT)
         {
             bearb = nut_zu_prgzei(zeile.text());
-            farbe.setRgb(145,145,255);//helles lila
+            farbe.setRgb(145,145,255,deckkraft);//helles lila
         }else if(zeile.at(0) == BEARBART_RTA)
         {
             bearb = rta_zu_prgzei(zeile.text());
             if(bezug == WST_BEZUG_OBSEI || bezug == WST_BEZUG_UNSEI)
             {
                 farbe = Qt::darkGray;
+                farbe.setAlpha(deckkraft);
             }else
             {
                 farbe = Qt::green;
+                farbe.setAlpha(deckkraft);
             }
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             bearb = fauf_zu_prgzei(zeile.text());
-            farbe.setRgb(255,128,0);//orange
+            farbe.setRgb(255,128,0,deckkraft);//orange
         }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             bearb = fgerade_zu_prgzei(zeile.text());
-            farbe.setRgb(255,155,106);//helles orange
+            farbe.setRgb(255,155,106,deckkraft);//helles orange
         }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             bearb = fbogen_zu_prgzei(zeile.text());
-            farbe.setRgb(255,155,106);//helles orange
+            farbe.setRgb(255,155,106,deckkraft);//helles orange
         }else if(zeile.at(0) == BEARBART_GEHRUNG)
         {
             bearb = gehr_zu_prgzei(zeile.text());
@@ -209,7 +212,7 @@ void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int current
         ui->listWidget_prgtext->item(i)->setTextColor(Qt::black);
         QFont font;
         font.setBold(false);
-        font.setPointSize(10);
+        //font.setPointSize(10);
         ui->listWidget_prgtext->item(i)->setFont(font);
     }
     if(currentRow >=0 && currentRow < ui->listWidget_prgtext->count())
@@ -217,7 +220,7 @@ void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int current
         ui->listWidget_prgtext->item(currentRow)->setTextColor(Qt::red);
         QFont font;
         font.setBold(true);
-        font.setPointSize(13);
+        //font.setPointSize(11);
         ui->listWidget_prgtext->item(currentRow)->setFont(font);
     }
     emit signalIndexChange(currentRow);
