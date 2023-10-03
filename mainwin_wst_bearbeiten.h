@@ -82,6 +82,8 @@ private slots:
     void on_actionDoppelteil_erzeugen_triggered();
     void on_actionFormartierungen_aufbrechen_triggered();
 
+    void on_actionFraesrichtung_umkehren_triggered();
+
 public slots:
     //Bearbeiten
     void zeile_aendern(int index, QString bearb, bool unredor_verwenden);

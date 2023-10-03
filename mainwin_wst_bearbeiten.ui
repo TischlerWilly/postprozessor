@@ -81,6 +81,7 @@
     <addaction name="actionVerschieben"/>
     <addaction name="actionDoppelteil_erzeugen"/>
     <addaction name="actionFormartierungen_aufbrechen"/>
+    <addaction name="actionFraesrichtung_umkehren"/>
    </widget>
    <addaction name="menuHallo_Welt"/>
    <addaction name="menuBearbeiten"/>
@@ -166,6 +167,14 @@
   <action name="actionFormartierungen_aufbrechen">
    <property name="text">
     <string>Formartierungen aufbrechen</string>
+   </property>
+  </action>
+  <action name="actionFraesrichtung_umkehren">
+   <property name="text">
+    <string>Fräsrichtung umkehren</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
  </widget>

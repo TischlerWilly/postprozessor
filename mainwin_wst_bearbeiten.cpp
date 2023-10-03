@@ -1013,6 +1013,96 @@ void MainWin_wst_bearbeiten::on_actionFormartierungen_aufbrechen_triggered()
     sendVorschauAktualisieren(*Wst, -1, Wkz_kopie);
     unredo_neu();
 }
+void MainWin_wst_bearbeiten::on_actionFraesrichtung_umkehren_triggered()
+{
+    if(auswahl_menge() == 0)
+    {
+        QMessageBox mb;
+        mb.setText("Bitte eine Zeile auswählen");
+        mb.setWindowTitle("Fräsrichtung umkehren");
+        mb.exec();
+        return;
+    }
+    if(auswahl_menge() > 1)
+    {
+        QMessageBox mb;
+        mb.setText("Bitte nur eine Zeile auswählen");
+        mb.setWindowTitle("Fräsrichtung umkehren");
+        mb.exec();
+        return;
+    }
+    uint index_auswahl_listwidget = auswahl_erster();
+    uint index_auswahl_bearb = index_auswahl_listwidget-1;//1. Zeile ist Prgrammkopf
+    text_zw bearb = Wst->bearb();
+    text_zw zeile;
+    zeile.set_text(bearb.at(index_auswahl_bearb),TRENNZ_BEARB_PARAM);
+    if(zeile.at(0) != BEARBART_FRAESERAUFRUF)
+    {
+        QMessageBox mb;
+        mb.setText("Die ausgewählte Ziele muss einen Fräseraufruf enthalten");
+        mb.setWindowTitle("Fräsrichtung umkehren");
+        mb.exec();
+        return;
+    }
+    fraeseraufruf fa(zeile.text());
+    text_zw bearb_fkon_gedreht;
+    punkt3d sp_fkon;
+    for(uint i=index_auswahl_bearb+1; i<bearb.count() ;i++)
+    {
+        text_zw folgezeile;
+        folgezeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(folgezeile.at(0) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg(folgezeile.text());
+            punkt3d sp = fg.sp();
+            punkt3d ep = fg.ep();
+            fg.set_startpunkt(ep);
+            fg.set_endpunkt(sp);
+            bearb_fkon_gedreht.add_vo(fg.text());
+            sp_fkon = ep;
+        }else if(folgezeile.at(0) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb(folgezeile.text());
+            punkt3d sp = fb.sp();
+            punkt3d ep = fb.ep();
+            fb.set_startpunkt(ep);
+            fb.set_endpunkt(sp);
+            fb.set_uzs(!fb.uzs());
+            bearb_fkon_gedreht.add_vo(fb.text());
+            sp_fkon = ep;
+        }else
+        {
+            break;//for
+        }
+    }
+    if(bearb_fkon_gedreht.count() > 0)
+    {
+        fa.set_pos(sp_fkon);
+        if(fa.radkor() == FRKOR_L)
+        {
+            fa.set_radkor(FRKOR_R);
+        }else if(fa.radkor() == FRKOR_R)
+        {
+            fa.set_radkor(FRKOR_L);
+        }
+        QString wkznr = fa.wkznum();
+        QString spiegelwkz = Wkz_kopie.spiegelwkz(wkznr);
+        if(!spiegelwkz.isEmpty())
+        {
+            fa.set_wkznum(spiegelwkz);
+        }
+        bearb_fkon_gedreht.add_vo(fa.text());
+        for(uint i=0; i<bearb_fkon_gedreht.count() ;i++)
+        {
+            uint index_bearb_akt = index_auswahl_bearb + i;
+            Wst->bearb_ptr()->edit(index_bearb_akt, bearb_fkon_gedreht.at(i));
+        }
+        update_listwidget();
+        unredo_neu();
+        ui->listWidget_prgtext->setCurrentRow(index_auswahl_listwidget);
+        emit sendVorschauAktualisieren(*Wst, index_auswahl_listwidget, Wkz_kopie);
+    }
+}
 //----------------------------------Slot_Manipulation:
 void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
 {
@@ -1942,6 +2032,9 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
     }
     unredo_neu();
 }
+
+
+
 
 
 
