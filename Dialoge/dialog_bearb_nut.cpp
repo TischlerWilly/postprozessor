@@ -14,6 +14,7 @@ Dialog_bearb_nut::Dialog_bearb_nut(QWidget *parent) :
     ui->comboBox_bezug->addItem("Rechts");      //3
     ui->comboBox_bezug->addItem("Vorne");       //4
     ui->comboBox_bezug->addItem("Hinten");      //5
+    ui->btn_ok->setFocus();
 }
 
 Dialog_bearb_nut::~Dialog_bearb_nut()

@@ -8,6 +8,7 @@ Dialog_bearb_pkopf::Dialog_bearb_pkopf(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Programmkopf");
     Wst = nullptr;
+    ui->pushButton_ok->setFocus();
 }
 
 Dialog_bearb_pkopf::~Dialog_bearb_pkopf()

@@ -84,6 +84,8 @@ private slots:
 
     void on_actionFraesrichtung_umkehren_triggered();
 
+    void on_actionFraesbahn_teilen_in_aktueller_Zeile_triggered();
+
 public slots:
     //Bearbeiten
     void zeile_aendern(int index, QString bearb, bool unredor_verwenden);

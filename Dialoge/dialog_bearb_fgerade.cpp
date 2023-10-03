@@ -10,6 +10,7 @@ Dialog_bearb_fgerade::Dialog_bearb_fgerade(QWidget *parent) :
     this->setWindowTitle("Gerade Fräsen");
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
+    ui->btn_ok->setFocus();
 }
 
 Dialog_bearb_fgerade::~Dialog_bearb_fgerade()

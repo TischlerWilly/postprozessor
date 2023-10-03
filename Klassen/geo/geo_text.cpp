@@ -992,15 +992,15 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                         gt.add_strecke(s);
                     }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
                     {
-                        bogen b;
-                        strecke s;
-                        s.set_stapu(fb.bog().ende());
-                        s.set_endpu(fb.bog().start());
-                        strecke_bezugspunkt sb;
-                        sb = strecke_bezugspunkt_ende;
-                        s.set_laenge_2d(anweg, sb);
+                        bogen b;                       
                         if(fa.bezug() == WST_BEZUG_OBSEI)
                         {
+                            strecke s;
+                            s.set_stapu(fb.bog().mitte());
+                            s.set_endpu(fb.stapu());
+                            strecke_bezugspunkt sb;
+                            sb = strecke_bezugspunkt_ende;
+                            s.set_laenge_2d(anweg, sb);
                             b.set_farbe(FARBE_BLAU);
                             s.drenen_um_endpu_2d(90, fb.bog().im_uzs());
                             if(fa.radkor() == FRKOR_L)
@@ -1009,46 +1009,82 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                                 {
                                     s.drenen_um_endpu_2d(90, true);
                                     s.drenen_um_stapu_2d(90, true);
-                                }
-                                b.set_startpunkt(s.stapu());
-                                b.set_endpunkt(fa.pos());
-                                b.set_radius(anweg, false);
-                            }else if(fa.radkor() == FRKOR_R)
-                            {
-                                if(!fb.bog().im_uzs())
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, false);
+                                }else
                                 {
-                                    s.drenen_um_endpu_2d(90, false);
-                                    s.drenen_um_stapu_2d(90, false);
+                                    s.drenen_um_stapu_2d(90, fb.uzs());
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, false);
                                 }
-                                b.set_startpunkt(s.stapu());
-                                b.set_endpunkt(fa.pos());
-                                b.set_radius(anweg, true);
-                            }
-                        }else
-                        {
-                            b.set_farbe(farbe_unterseite);
-                            b.set_stil(STIL_GESTRICHELT);
-                            s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
-                            if(fa.radkor() == FRKOR_L)
+                            }else if(fa.radkor() == FRKOR_R)
                             {
                                 if(fb.bog().im_uzs())
                                 {
                                     s.drenen_um_endpu_2d(90, false);
                                     s.drenen_um_stapu_2d(90, false);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, true);
+                                }else
+                                {
+                                    s.drenen_um_stapu_2d(90, true);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, true);
                                 }
-                                b.set_startpunkt(s.stapu());
-                                b.set_endpunkt(fa.pos());
-                                b.set_radius(anweg, true);
+                            }
+                        }else
+                        {
+                            strecke s;
+                            s.set_stapu(fb.bog().mitte());
+                            s.set_endpu(fb.endpu());
+                            strecke_bezugspunkt sb;
+                            sb = strecke_bezugspunkt_ende;
+                            s.set_laenge_2d(anweg, sb);
+                            strecke sehne;
+                            sehne.set_stapu(fb.stapu());
+                            sehne.set_endpu(fb.endpu());
+                            punkt3d strecke_sp = drehen(sehne.mipu(), s.stapu(), (double)180, true);
+                            punkt3d strecke_ep = drehen(sehne.mipu(), s.endpu(), (double)180, true);
+                            s.set_stapu(strecke_sp);
+                            s.set_endpu(strecke_ep);
+                            b.set_farbe(farbe_unterseite);
+                            b.set_stil(STIL_GESTRICHELT);
+                            if(fa.radkor() == FRKOR_L)
+                            {
+                                if(fb.bog().im_uzs())
+                                {
+                                    s.drenen_um_endpu_2d(180, true);
+                                    s.drenen_um_stapu_2d(90, false);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, true);
+                                }else
+                                {
+                                    s.drenen_um_stapu_2d(90, false);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, true);
+                                }
                             }else if(fa.radkor() == FRKOR_R)
                             {
-                                if(!fb.bog().im_uzs())
+                                if(fb.bog().im_uzs())
                                 {
-                                    s.drenen_um_endpu_2d(90, true);
                                     s.drenen_um_stapu_2d(90, true);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, false);
+                                }else
+                                {
+                                    s.drenen_um_endpu_2d(180, false);
+                                    s.drenen_um_stapu_2d(90, true);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, false);
                                 }
-                                b.set_startpunkt(s.stapu());
-                                b.set_endpunkt(fa.pos());
-                                b.set_radius(anweg, false);
                             }
                         }
                         b.verschieben_um(versatz_x, versatz_y);
@@ -1319,14 +1355,14 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                     gt.add_strecke(s);
                 }else if(letzter_fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
                 {
-                    bogen b;
-                    s.set_stapu(fb.bog().ende());
-                    s.set_endpu(fb.bog().mitte());
-                    strecke_bezugspunkt sb;
-                    sb = strecke_bezugspunkt_start;
-                    s.set_laenge_2d(abweg, sb);
+                    bogen b;                    
                     if(letzter_fa.bezug() == WST_BEZUG_OBSEI)
                     {
+                        s.set_stapu(fb.bog().ende());
+                        s.set_endpu(fb.bog().mitte());
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_start;
+                        s.set_laenge_2d(abweg, sb);
                         b.set_farbe(FARBE_BLAU);
                         s.drenen_um_stapu_2d(90, !fb.bog().im_uzs());
                         s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
@@ -1351,31 +1387,52 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wk
                         }
                     }else
                     {
+                        s.set_stapu(fb.bog().start());
+                        s.set_endpu(fb.bog().mitte());
+                        strecke sehne;
+                        sehne.set_stapu(fb.stapu());
+                        sehne.set_endpu(fb.endpu());
+                        punkt3d strecke_sp = drehen(sehne.mipu(), s.stapu(), (double)180, true);
+                        punkt3d strecke_ep = drehen(sehne.mipu(), s.endpu(), (double)180, true);
+                        s.set_stapu(strecke_sp);
+                        s.set_endpu(strecke_ep);
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_start;
+                        s.set_laenge_2d(abweg, sb);
                         b.set_farbe(farbe_unterseite);
                         b.set_stil(STIL_GESTRICHELT);
-                        s.drenen_um_stapu_2d(90, fb.bog().im_uzs());
-                        s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
                         if(letzter_fa.radkor() == FRKOR_L)
                         {
-                            if(fb.bog().im_uzs())
+                            if(fb.uzs())
                             {
-                                s.drenen_um_stapu_2d(90, false);
-                                s.drenen_um_endpu_2d(180, true);
+                                s.drenen_um_stapu_2d(90, fb.bog().im_uzs());
+                                s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                                b.set_startpunkt(fb.endpu());
+                                b.set_endpunkt(s.stapu());
+                                b.set_radius(abweg, fb.bog().im_uzs());
+                            }else
+                            {
+                                s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                                b.set_startpunkt(fb.endpu());
+                                b.set_endpunkt(s.stapu());
+                                b.set_radius(abweg, !fb.bog().im_uzs());
                             }
-                            b.set_startpunkt(fb.endpu());
-                            b.set_endpunkt(s.stapu());
-                            b.set_radius(abweg, true);
                         }else if(letzter_fa.radkor() == FRKOR_R)
                         {
-                            if(!fb.bog().im_uzs())
+                            if(fb.uzs())
                             {
-                                s.drenen_um_endpu_2d(90, false);
-                                s.drenen_um_stapu_2d(180, true);
-                                s.drenen_um_endpu_2d(90, false);
+                                s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                                b.set_startpunkt(fb.endpu());
+                                b.set_endpunkt(s.stapu());
+                                b.set_radius(abweg, !fb.bog().im_uzs());
+                            }else
+                            {
+                                s.drenen_um_stapu_2d(90, fb.bog().im_uzs());
+                                s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                                b.set_startpunkt(fb.endpu());
+                                b.set_endpunkt(s.stapu());
+                                b.set_radius(abweg, fb.bog().im_uzs());
                             }
-                            b.set_startpunkt(fb.endpu());
-                            b.set_endpunkt(s.stapu());
-                            b.set_radius(abweg, false);
                         }
                     }
                     b.verschieben_um(versatz_x, versatz_y);

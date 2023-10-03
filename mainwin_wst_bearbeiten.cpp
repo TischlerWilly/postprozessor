@@ -1106,6 +1106,99 @@ void MainWin_wst_bearbeiten::on_actionFraesrichtung_umkehren_triggered()
         emit sendVorschauAktualisieren(*Wst, index_auswahl_listwidget, Wkz_kopie);
     }
 }
+void MainWin_wst_bearbeiten::on_actionFraesbahn_teilen_in_aktueller_Zeile_triggered()
+{
+    if(auswahl_menge() == 0)
+    {
+        QMessageBox mb;
+        mb.setText("Bitte eine Zeile auswählen");
+        mb.setWindowTitle("Fräsbahn in aktueller Zeile teilen");
+        mb.exec();
+        return;
+    }
+    if(auswahl_menge() > 1)
+    {
+        QMessageBox mb;
+        mb.setText("Bitte nur eine Zeile auswählen");
+            mb.setWindowTitle("Fräsbahn in aktueller Zeile teilen");
+            mb.exec();
+        return;
+    }
+    uint index_auswahl_listwidget = auswahl_erster();
+    uint index_auswahl_bearb = index_auswahl_listwidget-1;//1. Zeile ist Prgrammkopf
+    text_zw bearb = Wst->bearb();
+    text_zw zeile;
+    zeile.set_text(bearb.at(index_auswahl_bearb),TRENNZ_BEARB_PARAM);
+    if(zeile.at(0) != BEARBART_FRAESERGERADE && zeile.at(0) != BEARBART_FRAESERBOGEN)
+    {
+        QMessageBox mb;
+        mb.setText("Die ausgewählte Ziele muss einen gerade oder gebogene Fräsbahn enthalten");
+       mb.setWindowTitle("Fräsbahn in aktueller Zeile teilen");
+       mb.exec();
+       return;
+    }
+    punkt3d trennpunkt;
+    fraeseraufruf fa;
+    for(int i=index_auswahl_bearb; i>=0 ;i--)
+    {
+        text_zw vorherigezeile;
+        vorherigezeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(vorherigezeile.at(0) == BEARBART_FRAESERAUFRUF)
+        {
+            fa.set_text(vorherigezeile.text());
+            break;//for
+        }
+    }
+    if(zeile.at(0) == BEARBART_FRAESERGERADE)
+    {
+        fraesergerade fg(zeile.text());
+        trennpunkt = fg.strecke_().mipu();
+        fraesergerade fg_ende = fg;
+        fg_ende.set_endpunkt(trennpunkt);
+        fraesergerade fg_start = fg;
+        fg_start.set_startpunkt(trennpunkt);
+        fa.set_pos(trennpunkt);
+        Wst->bearb_ptr()->edit(index_auswahl_bearb, fg_ende.text());
+        Wst->bearb_ptr()->add_mi(index_auswahl_bearb,fg_start.text());
+        Wst->bearb_ptr()->add_mi(index_auswahl_bearb, fa.text());
+    }else //if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+    {
+        fraeserbogen fb(zeile.text());
+        double bowi = winkel(fb.stapu(), fb.bog().mitte(), fb.endpu());
+        if(bowi < 0)
+        {
+            bowi = bowi * -1;
+        }
+        punkt3d bomipu;
+        strecke sehne;
+        sehne.set_stapu(fb.bog().start());
+        sehne.set_endpu(fb.bog().ende());
+        strecke strahl;
+        strahl.set_stapu(fb.bog().mitte());
+        strahl.set_endpu(sehne.mipu2d());
+        strahl.set_laenge_2d(fb.bog().rad(), strecke_bezugspunkt_start);
+        trennpunkt.set_x(strahl.endpu().x());
+        trennpunkt.set_y(strahl.endpu().y());
+        if(fa.bezug() == WST_BEZUG_UNSEI)
+        {
+            trennpunkt = drehen(sehne.mipu(), trennpunkt, (double)180, true);
+        }
+        double pos_z = (fb.stapu().z()+fb.endpu().z())/2;
+        trennpunkt.set_z(pos_z);
+        fraeserbogen fb_ende = fb;
+        fb_ende.set_endpunkt(trennpunkt);
+        fraeserbogen fb_start = fb;
+        fb_start.set_startpunkt(trennpunkt);
+        fa.set_pos(trennpunkt);
+        Wst->bearb_ptr()->edit(index_auswahl_bearb, fb_ende.text());
+        Wst->bearb_ptr()->add_mi(index_auswahl_bearb,fb_start.text());
+        Wst->bearb_ptr()->add_mi(index_auswahl_bearb, fa.text());
+    }
+    update_listwidget();
+    unredo_neu();
+    ui->listWidget_prgtext->setCurrentRow(index_auswahl_listwidget);
+    emit sendVorschauAktualisieren(*Wst, index_auswahl_listwidget, Wkz_kopie);
+}
 //----------------------------------Slot_Manipulation:
 void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
 {
@@ -2035,6 +2128,9 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
     }
     unredo_neu();
 }
+
+
+
 
 
 

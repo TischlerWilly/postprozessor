@@ -13,6 +13,7 @@ Dialog_bearb_fbogen::Dialog_bearb_fbogen(QWidget *parent) :
     //---
     ui->comboBox_uzs->addItem("UZS");   //0
     ui->comboBox_uzs->addItem("GUZS");  //1
+    ui->btn_ok->setFocus();
 }
 
 Dialog_bearb_fbogen::~Dialog_bearb_fbogen()

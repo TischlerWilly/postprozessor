@@ -82,6 +82,7 @@
     <addaction name="actionDoppelteil_erzeugen"/>
     <addaction name="actionFormartierungen_aufbrechen"/>
     <addaction name="actionFraesrichtung_umkehren"/>
+    <addaction name="actionFraesbahn_teilen_in_aktueller_Zeile"/>
    </widget>
    <addaction name="menuHallo_Welt"/>
    <addaction name="menuBearbeiten"/>
@@ -175,6 +176,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionFraesbahn_teilen_in_aktueller_Zeile">
+   <property name="text">
+    <string>Fräsbahn teilen in aktueller Zeile</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>

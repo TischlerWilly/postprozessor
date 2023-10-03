@@ -24,6 +24,7 @@ Dialog_bearb_faufruf::Dialog_bearb_faufruf(QWidget *parent) :
     ui->comboBox_abtyp->addItem("Bogen");            //2
     //---
     connect(&dlg_wkzwahl, SIGNAL(send_wkz(QString)), this, SLOT(get_wkz(QString)));
+    ui->btn_ok->setFocus();
 }
 
 Dialog_bearb_faufruf::~Dialog_bearb_faufruf()
