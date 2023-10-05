@@ -31,6 +31,7 @@ SOURCES += main.cpp\
     Dialoge/dialog_exportuebersicht.cpp \
     Dialoge/dialog_fraeserauswahl.cpp \
     Dialoge/dialog_programmtext.cpp \
+    Dialoge/dialog_userinput.cpp \
     Funktionen/funktionen_prgtext.cpp \
     Klassen/einstellung.cpp \
     Klassen/einstellung_dxf.cpp \
@@ -107,6 +108,7 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_exportuebersicht.h \
     Dialoge/dialog_fraeserauswahl.h \
     Dialoge/dialog_programmtext.h \
+    Dialoge/dialog_userinput.h \
     Funktionen/funktionen_prgtext.h \
     Klassen/einstellung.h \
     Klassen/einstellung_dxf.h \
@@ -195,6 +197,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_saege.ui \
     Dialoge/dialog_stdnamen.ui \
     Dialoge/dialog_stdname.ui \
+    Dialoge/dialog_userinput.ui \
     mainwin_wkzmagazin.ui \
     mainwin_wst_bearbeiten.ui
 

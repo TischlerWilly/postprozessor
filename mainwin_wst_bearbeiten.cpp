@@ -1120,19 +1120,23 @@ void MainWin_wst_bearbeiten::on_actionFraesbahn_teilen_in_aktueller_Zeile_trigge
     {
         QMessageBox mb;
         mb.setText("Bitte nur eine Zeile auswählen");
-            mb.setWindowTitle("Fräsbahn in aktueller Zeile teilen");
-            mb.exec();
+        mb.setWindowTitle("Fräsbahn in aktueller Zeile teilen");
+        mb.exec();
         return;
     }
     uint index_auswahl_listwidget = auswahl_erster();
     uint index_auswahl_bearb = index_auswahl_listwidget-1;//1. Zeile ist Prgrammkopf
     text_zw bearb = Wst->bearb();
+    if(index_auswahl_bearb >= bearb.count())
+    {
+        return;
+    }
     text_zw zeile;
     zeile.set_text(bearb.at(index_auswahl_bearb),TRENNZ_BEARB_PARAM);
     if(zeile.at(0) != BEARBART_FRAESERGERADE && zeile.at(0) != BEARBART_FRAESERBOGEN)
     {
-        QMessageBox mb;
-        mb.setText("Die ausgewählte Ziele muss einen gerade oder gebogene Fräsbahn enthalten");
+       QMessageBox mb;
+       mb.setText("Die ausgewählte Ziele muss einen gerade oder gebogene Fräsbahn enthalten");
        mb.setWindowTitle("Fräsbahn in aktueller Zeile teilen");
        mb.exec();
        return;
@@ -1198,6 +1202,71 @@ void MainWin_wst_bearbeiten::on_actionFraesbahn_teilen_in_aktueller_Zeile_trigge
     unredo_neu();
     ui->listWidget_prgtext->setCurrentRow(index_auswahl_listwidget);
     emit sendVorschauAktualisieren(*Wst, index_auswahl_listwidget, Wkz_kopie);
+}
+void MainWin_wst_bearbeiten::on_actionVerlaengern_triggered()
+{
+    if(auswahl_menge() == 0)
+    {
+        QMessageBox mb;
+        mb.setText("Sie haben noch nichts ausgewählt was verlängert werden soll!");
+        mb.setWindowTitle("Verlängern um");
+        mb.exec();
+        return;
+    }
+    if(auswahl_menge() > 1)
+    {
+        QMessageBox mb;
+        mb.setText("Bitte nur eine Zeile auswählen!");
+        mb.setWindowTitle("Verlängern um");
+        mb.exec();
+        return;
+    }
+    uint index_auswahl_listwidget = auswahl_erster();
+    uint index_auswahl_bearb = index_auswahl_listwidget-1;//1. Zeile ist Prgrammkopf
+    text_zw bearb = Wst->bearb();
+    if(index_auswahl_bearb >= bearb.count())
+    {
+        return;
+    }
+    text_zw zeile;
+    zeile.set_text(bearb.at(index_auswahl_bearb),TRENNZ_BEARB_PARAM);
+    if(zeile.at(0) == BEARBART_FRAESERGERADE)
+    {
+        bool gesund = false;
+        if(index_auswahl_bearb == bearb.count())
+        {
+            gesund = true;
+            Ist_verlaengerung_am_anfang = false;
+        }
+        if(index_auswahl_bearb+1 <= bearb.count())
+        {
+            text_zw folgezeile;
+            folgezeile.set_text(bearb.at(index_auswahl_bearb+1),TRENNZ_BEARB_PARAM);
+            if(folgezeile.at(0) != BEARBART_FRAESERGERADE  &&  folgezeile.at(0) != BEARBART_FRAESERBOGEN)
+            {
+                gesund = true;
+                Ist_verlaengerung_am_anfang = false;
+            }
+        }
+        if(gesund == false && index_auswahl_bearb > 0)
+        {
+            text_zw vorzeile;
+            vorzeile.set_text(bearb.at(index_auswahl_bearb-1),TRENNZ_BEARB_PARAM);
+            if(vorzeile.at(0) != BEARBART_FRAESERGERADE  &&  vorzeile.at(0) != BEARBART_FRAESERBOGEN)
+            {
+                gesund = true;
+                Ist_verlaengerung_am_anfang = true;
+            }
+        }
+        if(gesund == true)
+        {
+            Dialog_userinput dlg_verlaengern;
+            dlg_verlaengern.setWindowTitle("gerade Fräsbahn verlängern um");
+            dlg_verlaengern.set_default("10");
+            connect(&dlg_verlaengern, SIGNAL(send_input(QString)), this, SLOT(slot_verlaengern_fgerade(QString)));
+            dlg_verlaengern.exec();
+        }
+    }
 }
 //----------------------------------Slot_Manipulation:
 void MainWin_wst_bearbeiten::slot_verschieben(punkt3d p)
@@ -2128,6 +2197,50 @@ void MainWin_wst_bearbeiten::slot_dt_erzeugen(QString bezug, double wst_l, doubl
     }
     unredo_neu();
 }
+void MainWin_wst_bearbeiten::slot_verlaengern_fgerade(QString input)
+{
+    uint index_auswahl_listwidget = auswahl_erster();
+    uint index_auswahl_bearb = index_auswahl_listwidget-1;//1. Zeile ist Prgrammkopf
+    text_zw bearb = Wst->bearb();
+    text_zw zeile;
+    zeile.set_text(bearb.at(index_auswahl_bearb),TRENNZ_BEARB_PARAM);
+    double verlaengerungsmass = ausdruck_auswerten(input).toDouble();
+    if(zeile.at(0) == BEARBART_FRAESERGERADE)
+    {
+        fraesergerade fg(zeile.text());
+        strecke s = fg.strecke_();
+        if(Ist_verlaengerung_am_anfang == true)
+        {
+            s.set_laenge_2d(s.laenge2d()+verlaengerungsmass, strecke_bezugspunkt_ende);
+            fg.set_startpunkt(s.stapu());
+            if(index_auswahl_bearb > 0)
+            {
+                text_zw vorzeile;
+                vorzeile.set_text(bearb.at(index_auswahl_bearb-1),TRENNZ_BEARB_PARAM);
+                if(vorzeile.at(0) == BEARBART_FRAESERAUFRUF)
+                {
+                    fraeseraufruf fa(vorzeile.text());
+                    fa.set_pos(s.stapu());
+                    Wst->bearb_ptr()->edit(index_auswahl_bearb-1, fa.text());
+                }
+            }
+        }else
+        {
+            s.set_laenge_2d(s.laenge2d()+verlaengerungsmass, strecke_bezugspunkt_start);
+            fg.set_endpunkt(s.endpu());
+        }
+        Wst->bearb_ptr()->edit(index_auswahl_bearb, fg.text());
+        update_listwidget();
+        unredo_neu();
+        ui->listWidget_prgtext->setCurrentRow(index_auswahl_listwidget);
+        emit sendVorschauAktualisieren(*Wst, index_auswahl_listwidget, Wkz_kopie);
+    }
+}
+
+
+
+
+
 
 
 

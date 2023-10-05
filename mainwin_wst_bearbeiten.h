@@ -15,6 +15,7 @@
 #include "Dialoge/dialog_bearb_fbogen.h"
 #include "Dialoge/dialog_bearb_verschieben.h"
 #include "Dialoge/dialog_doppelteil_erzeugen.h"
+#include "Dialoge/dialog_userinput.h"
 
 #include "Funktionen/funktionen_prgtext.h"
 #include "Klassen/undo_redo.h"
@@ -48,6 +49,7 @@ private:
     double letzte_wst_b;
     double letzte_wst_d;
     Dialog_doppelteil_erzeugen dlg_dt;
+    bool Ist_verlaengerung_am_anfang;
 
     void clear();
     void update_listwidget();
@@ -81,10 +83,9 @@ private slots:
     void on_actionBearbeiten_triggered();
     void on_actionDoppelteil_erzeugen_triggered();
     void on_actionFormartierungen_aufbrechen_triggered();
-
     void on_actionFraesrichtung_umkehren_triggered();
-
     void on_actionFraesbahn_teilen_in_aktueller_Zeile_triggered();
+    void on_actionVerlaengern_triggered();
 
 public slots:
     //Bearbeiten
@@ -103,5 +104,6 @@ public slots:
     //Manipulation:
     void slot_verschieben(punkt3d p);
     void slot_dt_erzeugen(QString bezug, double wst_l, double wst_b, bool spiegeln, bool drehen);
+    void slot_verlaengern_fgerade(QString input);
 };
 #endif // MAINWIN_WST_BEARBEITEN_H

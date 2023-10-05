@@ -83,6 +83,7 @@
     <addaction name="actionFormartierungen_aufbrechen"/>
     <addaction name="actionFraesrichtung_umkehren"/>
     <addaction name="actionFraesbahn_teilen_in_aktueller_Zeile"/>
+    <addaction name="actionVerlaengern"/>
    </widget>
    <addaction name="menuHallo_Welt"/>
    <addaction name="menuBearbeiten"/>
@@ -184,6 +185,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionVerlaengern">
+   <property name="text">
+    <string>Verlängern um</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
    </property>
   </action>
  </widget>
