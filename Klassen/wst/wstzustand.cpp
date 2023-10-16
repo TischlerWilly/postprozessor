@@ -7292,18 +7292,17 @@ void wstzustand::fmc_dateitext(int index)
                                 fraesergerade fg(zeile.text());
                                 QString tiefe_fg = "0";
                                 double pos_z_fg = pos_z;
-                                if(fg.ze() == fa.tiefe())
+                                if(fg.zs() == fg.ze())
                                 {
-                                    tiefe_fg = "Z"; //Tiefe beibehalten
-                                                    //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                    //fmc-Programme eingelesen wurden, bei denen
-                                                    //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                    //nicht den selben Z-Wert haben!!!
-                                                    //Dieser Fall wird nicht erwartet....
+                                    tiefe_fg = "Z"; //Tiefe beibehalten                                                    
                                     pos_z_fg = pos_z;
                                 }else
                                 {
-                                    pos_z_fg = dicke()-fg.ze();
+                                    //double tiefendif_fa_fg = fa.tiefe() - fg.ze();
+                                    //pos_z_fg = pos_z - tiefendif_fa_fg;
+                                    pos_z_fg = dicke()-fg.ze();//<<<<<<<<<<<<<<<HIER muss noch
+                                        //Nachgebessert werden!!
+                                        //So wie es ist gibt es noch keine Teil-Tiefenzustellung
                                     tiefe_fg = double_to_qstring(pos_z_fg);
                                 }
 
@@ -7321,13 +7320,14 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "=";
                                 msg += tiefe_fg;
                                 msg += "\n";
+
                                 msg += "BEZB=";
+                                msg += "Gerade Z= ";
+                                msg += tiefe_fg;
                                 if(pos_z_fg < 0)
                                 {
-                                    msg += "Gerade durchgefraest";
-                                }else
-                                {
-                                    msg += "Gerade";
+
+                                    msg += " durchgefraest";
                                 }
                                 msg += "\n";
                                 msg += "\n";
@@ -7339,18 +7339,17 @@ void wstzustand::fmc_dateitext(int index)
                                 fraeserbogen fb(zeile.text());
                                 QString tiefe_fb = "0";
                                 double pos_z_fb = pos_z;
-                                if(fb.ze() == fa.tiefe())
+                                if(fb.zs() == fb.ze())
                                 {
                                     tiefe_fb = "Z"; //Tiefe beibehalten
-                                                    //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                    //fmc-Programme eingelesen wurden, bei denen
-                                                    //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                    //nicht den selben Z-Wert haben!!!
-                                                    //Dieser Fall wird nicht erwartet....
                                     pos_z_fb = pos_z;
                                 }else
                                 {
-                                    pos_z_fb = dicke()-fb.ze();
+                                    //double tiefendif_fa_fb = fa.tiefe() - fb.ze();
+                                    //pos_z_fb= pos_z - tiefendif_fa_fb;
+                                    pos_z_fb = dicke()-fb.ze(); //<<<<<<<<<<<<<<<HIER muss noch
+                                                //Nachgebessert werden!!
+                                                //So wie es ist gibt es noch keine Teil-Tiefenzustellung
                                     tiefe_fb = double_to_qstring(pos_z_fb);
                                 }
                                 QString dlg_name;
@@ -7381,12 +7380,11 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += tiefe_fb;
                                 msg += "\n";
                                 msg += "BEZB=";
+                                msg += "Bogen Z= ";
+                                msg += tiefe_fb;
                                 if(pos_z_fb < 0)
                                 {
-                                    msg += "Bogen durchgefraest";
-                                }else
-                                {
-                                    msg += "Bogen";
+                                    msg += " durchgefraest";
                                 }
                                 msg += "\n";
                                 msg += "\n";
