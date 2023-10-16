@@ -7291,6 +7291,7 @@ void wstzustand::fmc_dateitext(int index)
                                 //Gerade fräsen:
                                 fraesergerade fg(zeile.text());
                                 QString tiefe_fg = "0";
+                                double pos_z_fg = pos_z;
                                 if(fg.ze() == fa.tiefe())
                                 {
                                     tiefe_fg = "Z"; //Tiefe beibehalten
@@ -7299,9 +7300,11 @@ void wstzustand::fmc_dateitext(int index)
                                                     //die FKONs zwischen dem Fräseraufruf und dieser Gerade
                                                     //nicht den selben Z-Wert haben!!!
                                                     //Dieser Fall wird nicht erwartet....
+                                    pos_z_fg = pos_z;
                                 }else
                                 {
-                                    tiefe_fg = double_to_qstring(  dicke()-fg.ze()  );
+                                    pos_z_fg = dicke()-fg.ze();
+                                    tiefe_fg = double_to_qstring(pos_z_fg);
                                 }
 
                                 msg += FMC_FKONG;
@@ -7318,6 +7321,15 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "=";
                                 msg += tiefe_fg;
                                 msg += "\n";
+                                msg += "BEZB=";
+                                if(pos_z_fg < 0)
+                                {
+                                    msg += "Gerade durchgefraest";
+                                }else
+                                {
+                                    msg += "Gerade";
+                                }
+                                msg += "\n";
                                 msg += "\n";
                             }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                             {
@@ -7326,6 +7338,7 @@ void wstzustand::fmc_dateitext(int index)
                                 //Bogen fräsen:
                                 fraeserbogen fb(zeile.text());
                                 QString tiefe_fb = "0";
+                                double pos_z_fb = pos_z;
                                 if(fb.ze() == fa.tiefe())
                                 {
                                     tiefe_fb = "Z"; //Tiefe beibehalten
@@ -7334,9 +7347,11 @@ void wstzustand::fmc_dateitext(int index)
                                                     //die FKONs zwischen dem Fräseraufruf und dieser Gerade
                                                     //nicht den selben Z-Wert haben!!!
                                                     //Dieser Fall wird nicht erwartet....
+                                    pos_z_fb = pos_z;
                                 }else
                                 {
-                                    tiefe_fb = double_to_qstring(  dicke()-fb.ze()  );
+                                    pos_z_fb = dicke()-fb.ze();
+                                    tiefe_fb = double_to_qstring(pos_z_fb);
                                 }
                                 QString dlg_name;
                                 if(fb.uzs() == true)
@@ -7364,6 +7379,15 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += FMC_FKONBOG_ZE;
                                 msg += "=";
                                 msg += tiefe_fb;
+                                msg += "\n";
+                                msg += "BEZB=";
+                                if(pos_z_fb < 0)
+                                {
+                                    msg += "Bogen durchgefraest";
+                                }else
+                                {
+                                    msg += "Bogen";
+                                }
                                 msg += "\n";
                                 msg += "\n";
                             }else

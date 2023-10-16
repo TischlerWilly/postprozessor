@@ -1014,6 +1014,7 @@ void MainWin_wst_bearbeiten::on_actionFormartierungen_aufbrechen_triggered()
     }
     Wst->set_bearb(bearb);
     sendVorschauAktualisieren(*Wst, -1, Wkz_kopie);
+    update_listwidget();
     unredo_neu();
 }
 void MainWin_wst_bearbeiten::on_actionFraesrichtung_umkehren_triggered()
