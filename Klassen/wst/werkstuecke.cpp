@@ -2747,7 +2747,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         fa.set_x(x);
                         fa.set_y(y);
                         fa.set_z(w.dicke());
-                    }else
+                    }else//Unterseite
                     {
                         fa.set_bezug(WST_BEZUG_UNSEI);
                         if(drehtyp_L)
@@ -2825,8 +2825,8 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
             fraesergerade fg;
             double x = 0;
             double y = 0;
-            double zs = tifkon;//Der Z-Wert gibt die Tiefe an
-            double ze = 0;//Der Z-Wert gibt die Tiefe an
+            double tiSta = tifkon;
+            double tiEnd = 0;
             for(uint ii=i+1; ii<tz.count() ;ii++)
             {
                 zeile = tz.at(ii);
@@ -2841,6 +2841,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         fg.set_bezug(WST_BEZUG_OBSEI);
                         endpu.set_x(x);
                         endpu.set_y(y);
+                        endpu.set_z(w.dicke());
                     }else
                     {
                         fg.set_bezug(WST_BEZUG_UNSEI);
@@ -2853,12 +2854,13 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             endpu.set_x(x);
                             endpu.set_y(w.breite()-y);
                         }
+                        endpu.set_z(0);
                     }
                     fg.set_startpunkt(p3dfkon);
                     fg.set_endpunkt(endpu);
-                    fg.set_zs(zs);//Der Z-Wert gibt die Tiefe an
-                    fg.set_ze(ze);//Der Z-Wert gibt die Tiefe an
-                    tifkon = ze;
+                    fg.set_tiSta(tiSta);
+                    fg.set_tiEnd(tiEnd);
+                    tifkon = tiEnd;
                     p3dfkon = endpu;
                     if(Kurze_geraden_import == true)
                     {
@@ -2892,12 +2894,12 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         QString tmp = wert_nach_istgleich(zeile);
                         if(tmp == "Z")
                         {
-                            ze = zs;
+                            tiEnd = tiSta;
                         }else
                         {
                             tmp = var_einsetzen(w, tmp);
                             tmp = ausdruck_auswerten(tmp);
-                            ze = w.dicke() - tmp.toDouble();
+                            tiEnd = w.dicke() - tmp.toDouble();
                         }
                     }
                 }
@@ -2908,8 +2910,8 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
             fraeserbogen fb;
             double x = 0;
             double y = 0;
-            double zs = tifkon;//Der Z-Wert gibt die Tiefe an
-            double ze = 0;//Der Z-Wert gibt die Tiefe an
+            double tiSta = tifkon;
+            double tiEnd = 0;
             if(zeile.contains(FMC_FKONBOGUZS))
             {
                 fb.set_uzs(true);
@@ -2931,6 +2933,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         fb.set_bezug(WST_BEZUG_OBSEI);
                         endpu.set_x(x);
                         endpu.set_y(y);
+                        endpu.set_z(w.dicke());
                     }else
                     {
                         fb.set_bezug(WST_BEZUG_UNSEI);
@@ -2943,12 +2946,13 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             endpu.set_x(x);
                             endpu.set_y(w.breite()-y);
                         }
+                        endpu.set_z(0);
                     }
                     fb.set_startpunkt(p3dfkon);
                     fb.set_endpunkt(endpu);
-                    fb.set_zs(zs);//Der Z-Wert gibt die Tiefe an
-                    fb.set_ze(ze);//Der Z-Wert gibt die Tiefe an
-                    tifkon = ze;
+                    fb.set_tiSta(tiSta);
+                    fb.set_tiEnd(tiEnd);
+                    tifkon = tiEnd;
                     p3dfkon = endpu;
                     w.neue_bearbeitung(fb.text());
                     break;
@@ -2975,12 +2979,12 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         QString tmp = wert_nach_istgleich(zeile);
                         if(tmp == "Z")
                         {
-                            ze = zs;
+                            tiEnd = tiSta;
                         }else
                         {
                             tmp = var_einsetzen(w, tmp);
                             tmp = ausdruck_auswerten(tmp);
-                            ze = w.dicke() - tmp.toDouble();
+                            tiEnd = w.dicke() - tmp.toDouble();
                         }
                     }else if(schluessel == FMC_FKONBOG_RAD)
                     {
@@ -4937,6 +4941,8 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         }
                     }
                     fraesergerade fg;
+                    fg.set_tiSta(fti);
+                    fg.set_tiEnd(fti);
                     if(istOberseite)
                     {
                         if(cagleich(s.stapu(), letztepos, tolleranz))
@@ -4961,10 +4967,10 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         fg.set_bezug(WST_BEZUG_OBSEI);
                         fg.set_xs(s.stapu().x());
                         fg.set_ys(s.stapu().y());
-                        fg.set_zs(fraeserhoehe);
+                        fg.set_zs(w.dicke());
                         fg.set_xe(s.endpu().x());
                         fg.set_ye(s.endpu().y());
-                        fg.set_ze(fraeserhoehe);
+                        fg.set_ze(w.dicke());
                     }else
                     {
                         if(cagleich(s.stapu(), letztepos, tolleranz))
@@ -4998,18 +5004,18 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         {
                             fg.set_xs(w.laenge()-s.stapu().x());
                             fg.set_ys(s.stapu().y());
-                            fg.set_zs(fraeserhoehe);
+                            fg.set_zs(w.dicke());
                             fg.set_xe(w.laenge()-s.endpu().x());
                             fg.set_ye(s.endpu().y());
-                            fg.set_ze(fraeserhoehe);
+                            fg.set_ze(w.dicke());
                         }else //if(Einstellung_dxf.drehtyp_B())
                         {
                             fg.set_xs(s.stapu().x());
                             fg.set_ys(w.breite()-s.stapu().y());
-                            fg.set_zs(fraeserhoehe);
+                            fg.set_zs(w.dicke());
                             fg.set_xe(s.endpu().x());
                             fg.set_ye(w.breite()-s.endpu().y());
-                            fg.set_ze(fraeserhoehe);
+                            fg.set_ze(w.dicke());
                         }
                     }
                     w.neue_bearbeitung(fg.text());
@@ -5051,6 +5057,8 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         }
                     }
                     fraeserbogen fb;
+                    fb.set_tiSta(fti);
+                    fb.set_tiEnd(fti);
                     if(istOberseite)
                     {
                         if(cagleich(b.spu(), letztepos, tolleranz))
@@ -5076,10 +5084,10 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         fb.set_uzs(b.im_uzs());
                         fb.set_xs(b.spu().x());
                         fb.set_ys(b.spu().y());
-                        fb.set_zs(fraeserhoehe);
+                        fb.set_zs(w.dicke());
                         fb.set_xe(b.epu().x());
                         fb.set_ye(b.epu().y());
-                        fb.set_ze(fraeserhoehe);
+                        fb.set_ze(w.dicke());
                         fb.set_rad(b.rad());
                     }else
                     {
@@ -5115,18 +5123,18 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         {
                             fb.set_xs(w.laenge()-b.spu().x());
                             fb.set_ys(b.spu().y());
-                            fb.set_zs(fraeserhoehe);
+                            fb.set_zs(w.dicke());
                             fb.set_xe(w.laenge()-b.epu().x());
                             fb.set_ye(b.epu().y());
-                            fb.set_ze(fraeserhoehe);
+                            fb.set_ze(w.dicke());
                         }else //if(Einstellung_dxf.drehtyp_B())
                         {
                             fb.set_xs(b.spu().x());
                             fb.set_ys(w.breite()-b.spu().y());
-                            fb.set_zs(fraeserhoehe);
+                            fb.set_zs(w.dicke());
                             fb.set_xe(b.epu().x());
                             fb.set_ye(w.breite()-b.epu().y());
-                            fb.set_ze(fraeserhoehe);
+                            fb.set_ze(w.dicke());
                         }
                         fb.set_rad(b.rad());
                     }

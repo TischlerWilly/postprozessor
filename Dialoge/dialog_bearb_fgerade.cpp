@@ -8,6 +8,8 @@ Dialog_bearb_fgerade::Dialog_bearb_fgerade(QWidget *parent) :
     ui->setupUi(this);
     Wst = nullptr;
     this->setWindowTitle("Gerade Fräsen");
+    ui->lineEdit_zs->setEnabled(false);
+    ui->lineEdit_ze->setEnabled(false);
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
     ui->btn_ok->setFocus();
@@ -29,6 +31,8 @@ void Dialog_bearb_fgerade::set_data(QString d, werkstueck *w)
     ui->lineEdit_xe->setText(fg.xe_qstring());
     ui->lineEdit_ye->setText(fg.ye_qstring());
     ui->lineEdit_ze->setText(fg.ze_qstring());
+    ui->lineEdit_tiSta->setText(fg.tiSta_qstring());
+    ui->lineEdit_tiEnd->setText(fg.tiEnd_qstring());
     //---------
     //Bezug:
     if(fg.bezug() == WST_BEZUG_OBSEI)
@@ -67,6 +71,8 @@ void Dialog_bearb_fgerade::on_btn_ok_clicked()
     fg.set_xe(var_zu_wert(ui->lineEdit_xe->text()));
     fg.set_ye(var_zu_wert(ui->lineEdit_ye->text()));
     fg.set_ze(var_zu_wert(ui->lineEdit_ze->text()));
+    fg.set_tiSta(var_zu_wert(ui->lineEdit_tiSta->text()));
+    fg.set_tiEnd(var_zu_wert(ui->lineEdit_tiEnd->text()));
     QString bezug = ui->comboBox_bezug->currentText();
     if(bezug == "Oberseite")
     {

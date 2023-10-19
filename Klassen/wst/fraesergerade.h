@@ -28,6 +28,10 @@ public:
     void set_ze(QString z);
     void set_bezug(QString bezugsflaeche);
     void set_afb(QString ausfuehrbedingung);
+    void set_tiSta(double tiefe);
+    void set_tiSta(QString tiefe);
+    void set_tiEnd(double tiefe);
+    void set_tiEnd(QString tiefe);
 
     inline void set_startpunkt(punkt3d p)
     {
@@ -55,15 +59,20 @@ public:
     double  laenge_2d();
     QString bezug();
     QString afb();
+    double tiSta();
+    QString tiSta_qstring();
+    double tiEnd();
+    QString tiEnd_qstring();
 
     QString text();
     void set_text(QString text);
     strecke strecke_();
 
 private:
-    punkt3d Startpunkt, Endpunkt; //das Z-Maß ist die Frästiefe bezogen auf die WST-Oberfläche
+    punkt3d Startpunkt, Endpunkt;
     QString Afb;
     QString Bezug;
+    double TiSta, TiEnd;
 
     void setup();
 

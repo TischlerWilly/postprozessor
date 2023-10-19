@@ -7078,22 +7078,37 @@ void wstzustand::fmc_dateitext(int index)
             if(!tnummer.isEmpty())
             {
                 double gesamttiefe = fa.tiefe();
-                double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
-                double wkzdm = wkzmag.dm(tnummer).toDouble();
-                double zustelltiefe;
-                if(Zust_fkon == "wkz")
+                for(uint ii=i+1; ii<bearb.count(); ii++)
                 {
-                    if(zustellmass < gesamttiefe)
+                    zeile.set_text(bearb.at(ii),TRENNZ_BEARB_PARAM);
+                    if(zeile.at(0) == BEARBART_FRAESERGERADE)
                     {
-                        zustelltiefe = zustellmass;
+                        fraesergerade fg(zeile.text());
+                        if(fg.tiSta() > gesamttiefe)
+                        {
+                            gesamttiefe = fg.tiSta();
+                        }
+                        if(fg.tiEnd() > gesamttiefe)
+                        {
+                            gesamttiefe = fg.tiEnd();
+                        }
+                    }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                    {
+                        fraeserbogen fb(zeile.text());
+                        if(fb.tiSta() > gesamttiefe)
+                        {
+                            gesamttiefe = fb.tiSta();
+                        }
+                        if(fb.tiEnd() > gesamttiefe)
+                        {
+                            gesamttiefe = fb.tiEnd();
+                        }
                     }else
                     {
-                        zustelltiefe = gesamttiefe;
+                        break;//for ii
                     }
-                }else // == "orgi"
-                {
-                    zustelltiefe = gesamttiefe;
                 }
+                double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
 
                 QString radkor = fa.radkor();
                 if(radkor == FRKOR_L)
@@ -7110,9 +7125,6 @@ void wstzustand::fmc_dateitext(int index)
                 if(fa.bezug() == WST_BEZUG_OBSEI)
                 {
                     msg += kommentar_fmc("--------------------");
-
-                    double backup_i = i;
-
                     //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
                     punkt3d pfa;//Punkt Fräseraufruf
                     pfa.set_x(fa.x());
@@ -7131,15 +7143,12 @@ void wstzustand::fmc_dateitext(int index)
                         anweg = fa.anfahrweg();
                         anweg_ = fa.anfahrweg_qstring();
                     }
-                    double abweg = 50;
                     QString abweg_;
                     if(fa.abfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
                     {
-                        abweg = wkzmag.dm(tnummer).toDouble();
                         abweg_ = "2*WKZR";
                     }else
                     {
-                        abweg = fa.abfahrweg();
                         abweg_ = fa.abfahrweg_qstring();
                     }
                     if(folzei.at(0) == BEARBART_FRAESERGERADE)
@@ -7184,10 +7193,26 @@ void wstzustand::fmc_dateitext(int index)
                     }
                     msg += variable_fmc("FKONEINTYP", fkoneintyp);
 
-                    while(1)//abbruch durch breake
+                    double anz_zustellungen = 1;
+                    if(Zust_fkon == "wkz")
                     {
-                        i = backup_i;
-                        double pos_z = dicke()-zustelltiefe;
+                        anz_zustellungen = aufrunden(gesamttiefe / zustellmass);
+                    }else // == "orgi"
+                    {
+                        anz_zustellungen = 1;
+                    }
+
+                    for(uint ii=1; ii<=anz_zustellungen ;ii++)//ii=1 weil mit erster Zustellung begonnen wird
+                    {
+                        double akt_ti_fa = 0;
+                        if(ii == anz_zustellungen)//letzte Zustellung
+                        {
+                            akt_ti_fa = fa.tiefe();
+                        }else
+                        {
+                            akt_ti_fa = fa.tiefe() / anz_zustellungen * ii;
+                        }
+                        double pos_z_fa = dicke()-akt_ti_fa;
                         //--------------------------------------------
                         msg += FMC_FKON;
                         msg += "\n";
@@ -7204,11 +7229,11 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         msg += FMC_FKON_Z;
                         msg += "=";
-                        msg += double_to_qstring(pos_z);
+                        msg += double_to_qstring(pos_z_fa);
                         msg += "\n";
                         msg += "EBG=0\n";       //Eckenrunden global
                         msg += "KD=";           //Kantendicke
-                        if(zustelltiefe == gesamttiefe)
+                        if(ii == anz_zustellungen)//letzte Zustellung
                         {
                             msg += "0";     //Originalkontur fahren bei letztem Fräsgang in der Tiefe
                         }else
@@ -7280,30 +7305,27 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         //--------------------------------------------
                         //Fräsbahnen:
-                        while(i+1<bearb.count())
+                        for(uint iii=i+1; i+1<bearb.count(); iii++)
                         {
-                            zeile.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
-
+                            zeile.set_text(bearb.at(iii),TRENNZ_BEARB_PARAM);
                             if(zeile.at(0) == BEARBART_FRAESERGERADE)
                             {
-                                i++;
-                                zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-                                //Gerade fräsen:
                                 fraesergerade fg(zeile.text());
-                                QString tiefe_fg = "0";
-                                double pos_z_fg = pos_z;
-                                if(fg.zs() == fg.ze())
+                                double akt_ti_fg = 0;
+                                QString export_z_fg_Qstring = "Z";
+                                if(iii == anz_zustellungen)//letzte Zustellung
                                 {
-                                    tiefe_fg = "Z"; //Tiefe beibehalten                                                    
-                                    pos_z_fg = pos_z;
+                                    akt_ti_fg = fg.tiEnd();
                                 }else
                                 {
-                                    //double tiefendif_fa_fg = fa.tiefe() - fg.ze();
-                                    //pos_z_fg = pos_z - tiefendif_fa_fg;
-                                    pos_z_fg = dicke()-fg.ze();//<<<<<<<<<<<<<<<HIER muss noch
-                                        //Nachgebessert werden!!
-                                        //So wie es ist gibt es noch keine Teil-Tiefenzustellung
-                                    tiefe_fg = double_to_qstring(pos_z_fg);
+                                    akt_ti_fg = fg.tiEnd() / anz_zustellungen * iii;
+                                }
+                                if( cagleich( fg.tiSta(), fg.tiEnd(), 0.1) )
+                                {
+                                    export_z_fg_Qstring = "Z"; //Tiefe beibehalten
+                                }else
+                                {
+                                    export_z_fg_Qstring = double_to_qstring(dicke()-akt_ti_fg);
                                 }
 
                                 msg += FMC_FKONG;
@@ -7318,40 +7340,34 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "\n";
                                 msg += FMC_FKONG_ZE;
                                 msg += "=";
-                                msg += tiefe_fg;
+                                msg += export_z_fg_Qstring;
                                 msg += "\n";
 
                                 msg += "BEZB=";
                                 msg += "Gerade Z= ";
-                                msg += tiefe_fg;
-                                if(pos_z_fg < 0)
-                                {
-
-                                    msg += " durchgefraest";
-                                }
+                                msg += export_z_fg_Qstring;
                                 msg += "\n";
                                 msg += "\n";
                             }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                             {
-                                i++;
-                                zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-                                //Bogen fräsen:
                                 fraeserbogen fb(zeile.text());
-                                QString tiefe_fb = "0";
-                                double pos_z_fb = pos_z;
-                                if(fb.zs() == fb.ze())
+                                double akt_ti_fb = 0;
+                                QString export_z_fb_Qstring = "Z";
+                                if(iii == anz_zustellungen)//letzte Zustellung
                                 {
-                                    tiefe_fb = "Z"; //Tiefe beibehalten
-                                    pos_z_fb = pos_z;
+                                    akt_ti_fb = fb.tiEnd();
                                 }else
                                 {
-                                    //double tiefendif_fa_fb = fa.tiefe() - fb.ze();
-                                    //pos_z_fb= pos_z - tiefendif_fa_fb;
-                                    pos_z_fb = dicke()-fb.ze(); //<<<<<<<<<<<<<<<HIER muss noch
-                                                //Nachgebessert werden!!
-                                                //So wie es ist gibt es noch keine Teil-Tiefenzustellung
-                                    tiefe_fb = double_to_qstring(pos_z_fb);
+                                    akt_ti_fb = fb.tiEnd() / anz_zustellungen * iii;
                                 }
+                                if( cagleich( fb.tiSta(), fb.tiEnd(), 0.1) )
+                                {
+                                    export_z_fb_Qstring = "Z"; //Tiefe beibehalten
+                                }else
+                                {
+                                    export_z_fb_Qstring = double_to_qstring(dicke()-akt_ti_fb);
+                                }
+
                                 QString dlg_name;
                                 if(fb.uzs() == true)
                                 {
@@ -7377,15 +7393,11 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "\n";
                                 msg += FMC_FKONBOG_ZE;
                                 msg += "=";
-                                msg += tiefe_fb;
+                                msg += export_z_fb_Qstring;
                                 msg += "\n";
                                 msg += "BEZB=";
                                 msg += "Bogen Z= ";
-                                msg += tiefe_fb;
-                                if(pos_z_fb < 0)
-                                {
-                                    msg += " durchgefraest";
-                                }
+                                msg += export_z_fb_Qstring;
                                 msg += "\n";
                                 msg += "\n";
                             }else
@@ -7407,25 +7419,13 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         msg += "\n";
                         //--------------------------------------------
-                        if(zustelltiefe == gesamttiefe)
-                        {
-                            break; //letzter Schleifendurchlauf
-                        }
-                        if(zustelltiefe != gesamttiefe)
+                        if(ii < anz_zustellungen)
                         {
                             msg += kommentar_fmc("---");
-                        }
-                        if(zustelltiefe+zustellmass  <  gesamttiefe)
-                        {
-                            zustelltiefe = zustelltiefe + zustellmass;
-                        }else
-                        {
-                            zustelltiefe = gesamttiefe;
                         }
                     }
                     msg += kommentar_fmc("--------------------");
                 }
-
             }else
             {
                 //Mit Fehlermeldung abbrechen:
@@ -8423,23 +8423,39 @@ void wstzustand::fmc_dateitext(int index)
                     fa.set_y(  tmp_b - fa.y()  );
 
                     double gesamttiefe = fa.tiefe();
-                    double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
-                    double wkzdm = wkzmag.dm(tnummer).toDouble();
-                    double zustelltiefe;
-                    if(Zust_fkon == "wkz")
+                    for(uint ii=i+1; ii<bearb.count(); ii++)
                     {
-                        if(zustellmass < gesamttiefe)
+                        zeile.set_text(bearb.at(ii),TRENNZ_BEARB_PARAM);
+                        if(zeile.at(0) == BEARBART_FRAESERGERADE)
                         {
-                            zustelltiefe = zustellmass;
+                            fraesergerade fg(zeile.text());
+                            if(fg.tiSta() > gesamttiefe)
+                            {
+                                gesamttiefe = fg.tiSta();
+                            }
+                            if(fg.tiEnd() > gesamttiefe)
+                            {
+                                gesamttiefe = fg.tiEnd();
+                            }
+                        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                        {
+                            fraeserbogen fb(zeile.text());
+                            if(fb.tiSta() > gesamttiefe)
+                            {
+                                gesamttiefe = fb.tiSta();
+                            }
+                            if(fb.tiEnd() > gesamttiefe)
+                            {
+                                gesamttiefe = fb.tiEnd();
+                            }
                         }else
                         {
-                            zustelltiefe = gesamttiefe;
+                            break;//for ii
                         }
-                    }else // == "orgi"
-                    {
-                        zustelltiefe = gesamttiefe;
                     }
+                    double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
 
+                    double wkzdm = wkzmag.dm(tnummer).toDouble();                    
                     QString radkor = fa.radkor();
                     if(radkor == FRKOR_L)
                     {
@@ -8455,9 +8471,6 @@ void wstzustand::fmc_dateitext(int index)
                     if(fa.bezug() == WST_BEZUG_UNSEI)
                     {
                         msg += kommentar_fmc("--------------------");
-
-                        double backup_i = i;
-
                         //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
                         punkt3d pfa;//Punkt Fräseraufruf
                         pfa.set_x(fa.x());
@@ -8538,10 +8551,26 @@ void wstzustand::fmc_dateitext(int index)
                         }
                         msg += variable_fmc("FKONEINTYP", fkoneintyp);
 
-                        while(1)//abbruch durch breake
+                        double anz_zustellungen = 1;
+                        if(Zust_fkon == "wkz")
                         {
-                            i = backup_i;
-                            double pos_z = dicke()-zustelltiefe;
+                            anz_zustellungen = aufrunden(gesamttiefe / zustellmass);
+                        }else // == "orgi"
+                        {
+                            anz_zustellungen = 1;
+                        }
+
+                       for(uint ii=1; ii<=anz_zustellungen ;ii++)//ii=1 weil mit erster Zustellung begonnen wird
+                        {
+                            double akt_ti_fa = 0;
+                            if(ii == anz_zustellungen)//letzte Zustellung
+                            {
+                                akt_ti_fa = fa.tiefe();
+                            }else
+                            {
+                                akt_ti_fa = fa.tiefe() / anz_zustellungen * ii;
+                            }
+                            double pos_z_fa = dicke()-akt_ti_fa;
                             //--------------------------------------------
                             msg += FMC_FKON;
                             msg += "\n";
@@ -8558,11 +8587,11 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             msg += FMC_FKON_Z;
                             msg += "=";
-                            msg += double_to_qstring(pos_z);
+                            msg += double_to_qstring(pos_z_fa);
                             msg += "\n";
                             msg += "EBG=0\n";       //Eckenrunden global
                             msg += "KD=";           //Kantendicke
-                            if(zustelltiefe == gesamttiefe)
+                            if(ii == anz_zustellungen)
                             {
                                 msg += "0";     //Originalkontur fahren bei letztem Fräsgang in der Tiefe
                             }else
@@ -8634,28 +8663,29 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             //--------------------------------------------
                             //Fräsbahnen:
-                            while(i+1<bearb.count())
+                            for(uint iii=i+1; i+1<bearb.count(); iii++)
                             {
-                                zeile.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
-
+                                zeile.set_text(bearb.at(iii),TRENNZ_BEARB_PARAM);
                                 if(zeile.at(0) == BEARBART_FRAESERGERADE)
                                 {
-                                    i++;
-                                    zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-                                    //Gerade fräsen:
                                     fraesergerade fg(zeile.text());
-                                    QString tiefe_fg = 0;
-                                    if(fg.ze() == fa.tiefe())
+                                    double akt_ti_fg = 0;
+                                    QString export_z_fg_Qstring = "Z";
+                                    if(iii == anz_zustellungen)//letzte Zustellung
                                     {
-                                        tiefe_fg = "Z"; //Tiefe beibehalten
-                                                        //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                        //fmc-Programme eingelesen wurden, bei denen
-                                                        //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                        //nicht den selben Z-Wert haben!!!
-                                                        //Dieser Fall wird nicht erwartet....
+                                        akt_ti_fg = fg.tiEnd();
                                     }else
                                     {
-                                        tiefe_fg = double_to_qstring(  dicke()-fg.ze()  );
+                                        akt_ti_fg = fg.tiEnd() / anz_zustellungen * iii;
+                                    }
+                                    double pos_z_fg = dicke()-akt_ti_fg;
+                                    if( cagleich( fg.tiSta(), fg.tiEnd(), 0.1) )
+                                    {
+                                        export_z_fg_Qstring = "Z"; //Tiefe beibehalten
+                                    }else
+                                    {
+                                        pos_z_fg = dicke()-akt_ti_fg;
+                                        export_z_fg_Qstring = double_to_qstring(pos_z_fg);
                                     }
 
                                     //Beareitung auf die Oberseite drehen:
@@ -8674,28 +8704,36 @@ void wstzustand::fmc_dateitext(int index)
                                     msg += "\n";
                                     msg += FMC_FKONG_ZE;
                                     msg += "=";
-                                    msg += tiefe_fg;
+                                    msg += export_z_fg_Qstring;
+                                    msg += "\n";
+
+                                    msg += "BEZB=";
+                                    msg += "Gerade Z= ";
+                                    msg += export_z_fg_Qstring;
                                     msg += "\n";
                                     msg += "\n";
                                 }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                                 {
-                                    i++;
-                                    zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-                                    //Bogen fräsen:
                                     fraeserbogen fb(zeile.text());
-                                    QString tiefe_fb = 0;
-                                    if(fb.ze() == fa.tiefe())
+                                    double akt_ti_fb = 0;
+                                    QString export_z_fb_Qstring = "Z";
+                                    if(iii == anz_zustellungen)//letzte Zustellung
                                     {
-                                        tiefe_fb = "Z"; //Tiefe beibehalten
-                                                        //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                        //fmc-Programme eingelesen wurden, bei denen
-                                                        //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                        //nicht den selben Z-Wert haben!!!
-                                                        //Dieser Fall wird nicht erwartet....
+                                        akt_ti_fb = fb.tiEnd();
                                     }else
                                     {
-                                        tiefe_fb = double_to_qstring(  dicke()-fb.ze()  );
+                                        akt_ti_fb = fb.tiEnd() / anz_zustellungen * iii;
                                     }
+                                    double pos_z_fb = dicke()-akt_ti_fb;
+                                    if( cagleich( fb.tiSta(), fb.tiEnd(), 0.1) )
+                                    {
+                                        export_z_fb_Qstring = "Z"; //Tiefe beibehalten
+                                    }else
+                                    {
+                                        pos_z_fb = dicke()-akt_ti_fb;
+                                        export_z_fb_Qstring = double_to_qstring(pos_z_fb);
+                                    }
+
                                     QString dlg_name;
                                     if(fb.uzs() == true)
                                     {
@@ -8725,7 +8763,11 @@ void wstzustand::fmc_dateitext(int index)
                                     msg += "\n";
                                     msg += FMC_FKONBOG_ZE;
                                     msg += "=";
-                                    msg += tiefe_fb;
+                                    msg += export_z_fb_Qstring;
+                                    msg += "\n";
+                                    msg += "BEZB=";
+                                    msg += "Bogen Z= ";
+                                    msg += export_z_fb_Qstring;
                                     msg += "\n";
                                     msg += "\n";
                                 }else
@@ -8747,20 +8789,9 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             msg += "\n";
                             //--------------------------------------------
-                            if(zustelltiefe == gesamttiefe)
-                            {
-                                break; //letzter Schleifendurchlauf
-                            }
-                            if(zustelltiefe != gesamttiefe)
+                            if(ii < anz_zustellungen)
                             {
                                 msg += kommentar_fmc("---");
-                            }
-                            if(zustelltiefe+zustellmass  <  gesamttiefe)
-                            {
-                                zustelltiefe = zustelltiefe + zustellmass;
-                            }else
-                            {
-                                zustelltiefe = gesamttiefe;
                             }
                         }
                         msg += kommentar_fmc("--------------------");

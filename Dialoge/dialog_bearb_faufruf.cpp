@@ -8,6 +8,7 @@ Dialog_bearb_faufruf::Dialog_bearb_faufruf(QWidget *parent) :
     ui->setupUi(this);
     Wst = nullptr;
     this->setWindowTitle("Fräseraufruf");
+    ui->lineEdit_z->setEnabled(false);
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
     //---
@@ -187,8 +188,6 @@ void Dialog_bearb_faufruf::get_wkz(QString wkz)
     ui->lineEdit_wkz->setText(wkz);
 }
 
-
-
 void Dialog_bearb_faufruf::on_comboBox_kor_currentTextChanged(const QString &arg1)
 {
     if(arg1 == "Keine")
@@ -203,3 +202,22 @@ void Dialog_bearb_faufruf::on_comboBox_kor_currentTextChanged(const QString &arg
         }
     }
 }
+void Dialog_bearb_faufruf::on_comboBox_bezug_currentTextChanged(const QString &arg1)
+{
+    if(arg1 == "Oberseite")
+    {
+        if(Wst != nullptr)
+        {
+            ui->lineEdit_z->setText(Wst->dicke_qstring());
+        }
+    }else if(arg1 == "Unterseite")
+    {
+        ui->lineEdit_z->setText("0");
+    }
+}
+
+
+
+
+
+

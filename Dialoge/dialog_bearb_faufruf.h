@@ -27,6 +27,8 @@ private slots:
 
     void on_comboBox_kor_currentTextChanged(const QString &arg1);
 
+    void on_comboBox_bezug_currentTextChanged(const QString &arg1);
+
 public slots:
     void get_wkz(QString wkz);
 
