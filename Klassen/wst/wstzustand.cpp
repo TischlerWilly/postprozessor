@@ -3945,7 +3945,7 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
                         fraesergerade fg(param.text());
                         xend = fg.xe();
                         yend = fg.ye();
-                        zend = fg.ze();
+                        zend = fg.tiEnd();
                         zeiend = i;
                         if(xend > xmax)
                         {
@@ -3968,7 +3968,7 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
                         fraeserbogen fb(param.text());
                         xend = fb.xe();
                         yend = fb.ye();
-                        zend = fb.ze();
+                        zend = fb.tiEnd();
                         zeiend = i;
                         if(xend > xmax)
                         {
@@ -7109,6 +7109,7 @@ void wstzustand::fmc_dateitext(int index)
                     }
                 }
                 double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
+                double mind_zust = wkzmag.zustellmass_min(tnummer).toDouble();
 
                 QString radkor = fa.radkor();
                 if(radkor == FRKOR_L)
@@ -7211,6 +7212,10 @@ void wstzustand::fmc_dateitext(int index)
                         }else
                         {
                             akt_ti_fa = fa.tiefe() / anz_zustellungen * ii;
+                            if(ii==1  && gesamttiefe > mind_zust  &&  akt_ti_fa < mind_zust)
+                            {
+                                akt_ti_fa = mind_zust;
+                            }
                         }
                         double pos_z_fa = dicke()-akt_ti_fa;
                         //--------------------------------------------
@@ -7294,6 +7299,11 @@ void wstzustand::fmc_dateitext(int index)
                         msg += abweg_;
                         msg += "\n";
 
+                        msg += "BEZB=";
+                        msg += "Aufruf Fraeser Z= ";
+                        msg += double_to_qstring(pos_z_fa);
+                        msg += "\n";
+
                         msg += "FAN=AUTO\n";    //Anfahrvorschub
                         msg += "F=AUTO\n";      //Vorschub
                         //msg += "N=AUTO\n";      //Drehzahl
@@ -7319,6 +7329,10 @@ void wstzustand::fmc_dateitext(int index)
                                 }else
                                 {
                                     akt_ti_fg = fg.tiEnd() / anz_zustellungen * iii;
+                                    if(iii==1  && gesamttiefe > mind_zust  &&  akt_ti_fg < mind_zust)
+                                    {
+                                        akt_ti_fg = mind_zust;
+                                    }
                                 }
                                 if( cagleich( fg.tiSta(), fg.tiEnd(), 0.1) )
                                 {
@@ -7359,6 +7373,10 @@ void wstzustand::fmc_dateitext(int index)
                                 }else
                                 {
                                     akt_ti_fb = fb.tiEnd() / anz_zustellungen * iii;
+                                    if(iii==1  && gesamttiefe > mind_zust  &&  akt_ti_fb < mind_zust)
+                                    {
+                                        akt_ti_fb = mind_zust;
+                                    }
                                 }
                                 if( cagleich( fb.tiSta(), fb.tiEnd(), 0.1) )
                                 {
@@ -8454,6 +8472,7 @@ void wstzustand::fmc_dateitext(int index)
                         }
                     }
                     double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
+                    double mind_zust = wkzmag.zustellmass_min(tnummer).toDouble();
 
                     double wkzdm = wkzmag.dm(tnummer).toDouble();                    
                     QString radkor = fa.radkor();
@@ -8569,6 +8588,10 @@ void wstzustand::fmc_dateitext(int index)
                             }else
                             {
                                 akt_ti_fa = fa.tiefe() / anz_zustellungen * ii;
+                                if(ii==1  && gesamttiefe > mind_zust  &&  akt_ti_fa < mind_zust)
+                                {
+                                    akt_ti_fa = mind_zust;
+                                }
                             }
                             double pos_z_fa = dicke()-akt_ti_fa;
                             //--------------------------------------------
@@ -8650,6 +8673,11 @@ void wstzustand::fmc_dateitext(int index)
                             msg += FMC_FKON_ABWEG;    //Abfahrwert
                             msg += "=";
                             msg += abweg_;
+                            msg += "\n";                            
+
+                            msg += "BEZB=";
+                            msg += "Aufruf Fraeser Z= ";
+                            msg += double_to_qstring(pos_z_fa);
                             msg += "\n";
 
                             msg += "FAN=AUTO\n";    //Anfahrvorschub
@@ -8677,6 +8705,10 @@ void wstzustand::fmc_dateitext(int index)
                                     }else
                                     {
                                         akt_ti_fg = fg.tiEnd() / anz_zustellungen * iii;
+                                        if(iii==1  && gesamttiefe > mind_zust  &&  akt_ti_fg < mind_zust)
+                                        {
+                                            akt_ti_fg = mind_zust;
+                                        }
                                     }
                                     double pos_z_fg = dicke()-akt_ti_fg;
                                     if( cagleich( fg.tiSta(), fg.tiEnd(), 0.1) )
@@ -8723,6 +8755,10 @@ void wstzustand::fmc_dateitext(int index)
                                     }else
                                     {
                                         akt_ti_fb = fb.tiEnd() / anz_zustellungen * iii;
+                                        if(iii==1  && gesamttiefe > mind_zust  &&  akt_ti_fb < mind_zust)
+                                        {
+                                            akt_ti_fb = mind_zust;
+                                        }
                                     }
                                     double pos_z_fb = dicke()-akt_ti_fb;
                                     if( cagleich( fb.tiSta(), fb.tiEnd(), 0.1) )

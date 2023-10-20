@@ -874,7 +874,7 @@ void MainWin_wst_bearbeiten::on_actionFormartierungen_aufbrechen_triggered()
                         fraesergerade fg(param.text());
                         xend = fg.xe();
                         yend = fg.ye();
-                        zend = fg.ze();
+                        zend = fg.tiEnd();
                         zeiend = i;
                         if(xend > xmax)
                         {
@@ -897,7 +897,7 @@ void MainWin_wst_bearbeiten::on_actionFormartierungen_aufbrechen_triggered()
                         fraeserbogen fb(param.text());
                         xend = fb.xe();
                         yend = fb.ye();
-                        zend = fb.ze();
+                        zend = fb.tiEnd();
                         zeiend = i;
                         if(xend > xmax)
                         {
