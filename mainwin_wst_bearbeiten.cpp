@@ -365,11 +365,13 @@ void MainWin_wst_bearbeiten::slot_faufruf(fraeseraufruf fa)
         {
             fraesergerade fg_nach(bearb_nach.text());
             fg_nach.set_startpunkt(fa.pos());
+            fg_nach.set_tiSta(fa.tiefe());
             zeile_aendern(index+1, fg_nach.text(), false);
         }else if(bearb_nach.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb_nach(bearb_nach.text());
             fb_nach.set_startpunkt(fa.pos());
+            fb_nach.set_tiSta(fa.tiefe());
             zeile_aendern(index+1, fb_nach.text(), false);
         }
     }
@@ -385,13 +387,13 @@ void MainWin_wst_bearbeiten::slot_faufruf(fraeseraufruf fa)
             if(bearb_ff.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade fg(bearb_ff.text());
-                fg.set_bezug(fa.bezug());
+                fg.set_bezug(fa.bezug());                
                 zeile_aendern(i, fg.text(), false);
             }else if(bearb_ff.at(0) == BEARBART_FRAESERBOGEN)
             {
                 fraeserbogen fb(bearb_ff.text());
                 fb.set_uzs(!fb.uzs());
-                fb.set_bezug(fa.bezug());
+                fb.set_bezug(fa.bezug());                
                 zeile_aendern(i, fb.text(), false);
             }else
             {
@@ -416,16 +418,19 @@ void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
         {
             fraeseraufruf fa_vor(bearb_vor.text());
             fa_vor.set_pos(fg.sp());
+            fa_vor.set_tiefe(fg.tiSta());
             zeile_aendern(index-1, fa_vor.text(), false);
         }else if(bearb_vor.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg_vor(bearb_vor.text());
             fg_vor.set_endpunkt(fg.sp());
+            fg_vor.set_tiEnd(fg.tiSta());
             zeile_aendern(index-1, fg_vor.text(), false);
         }else if(bearb_vor.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb_vor(bearb_vor.text());
             fb_vor.set_endpunkt(fg.sp());
+            fb_vor.set_tiEnd(fg.tiSta());
             zeile_aendern(index-1, fb_vor.text(), false);
         }
     }
@@ -438,11 +443,13 @@ void MainWin_wst_bearbeiten::slot_fgerade(fraesergerade fg)
         {
             fraesergerade fg_nach(bearb_nach.text());
             fg_nach.set_startpunkt(fg.ep());
+            fg_nach.set_tiSta(fg.tiEnd());
             zeile_aendern(index+1, fg_nach.text(), false);
         }else if(bearb_nach.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb_nach(bearb_nach.text());
             fb_nach.set_startpunkt(fg.ep());
+            fb_nach.set_tiSta(fg.tiEnd());
             zeile_aendern(index+1, fb_nach.text(), false);
         }
     }
@@ -463,16 +470,19 @@ void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
         {
             fraeseraufruf fa_vor(bearb_vor.text());
             fa_vor.set_pos(fb.sp());
+            fa_vor.set_tiefe(fb.tiSta());
             zeile_aendern(index-1, fa_vor.text(), false);
         }else if(bearb_vor.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg_vor(bearb_vor.text());
             fg_vor.set_endpunkt(fb.sp());
+            fg_vor.set_tiEnd(fb.tiSta());
             zeile_aendern(index-1, fg_vor.text(), false);
         }else if(bearb_vor.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb_vor(bearb_vor.text());
             fb_vor.set_endpunkt(fb.sp());
+            fb_vor.set_tiEnd(fb.tiSta());
             zeile_aendern(index-1, fb_vor.text(), false);
         }
     }
@@ -485,11 +495,13 @@ void MainWin_wst_bearbeiten::slot_fbogen(fraeserbogen fb)
         {
             fraesergerade fg_nach(bearb_nach.text());
             fg_nach.set_startpunkt(fb.ep());
+            fg_nach.set_tiSta(fb.tiEnd());
             zeile_aendern(index+1, fg_nach.text(), false);
         }else if(bearb_nach.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb_nach(bearb_nach.text());
             fb_nach.set_startpunkt(fb.ep());
+            fb_nach.set_tiSta(fb.tiEnd());
             zeile_aendern(index+1, fb_nach.text(), false);
         }
     }

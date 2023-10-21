@@ -7203,16 +7203,16 @@ void wstzustand::fmc_dateitext(int index)
                         anz_zustellungen = 1;
                     }
 
-                    for(uint ii=1; ii<=anz_zustellungen ;ii++)//ii=1 weil mit erster Zustellung begonnen wird
+                    for(uint i_zust=1; i_zust<=anz_zustellungen ;i_zust++)//ii=1 weil mit erster Zustellung begonnen wird
                     {
                         double akt_ti_fa = 0;
-                        if(ii == anz_zustellungen)//letzte Zustellung
+                        if(i_zust == anz_zustellungen)//letzte Zustellung
                         {
                             akt_ti_fa = fa.tiefe();
                         }else
                         {
-                            akt_ti_fa = fa.tiefe() / anz_zustellungen * ii;
-                            if(ii==1  && gesamttiefe > mind_zust  &&  akt_ti_fa < mind_zust)
+                            akt_ti_fa = fa.tiefe() / anz_zustellungen * i_zust;
+                            if(i_zust==1  && fa.tiefe() > mind_zust  &&  akt_ti_fa < mind_zust)
                             {
                                 akt_ti_fa = mind_zust;
                             }
@@ -7238,7 +7238,7 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         msg += "EBG=0\n";       //Eckenrunden global
                         msg += "KD=";           //Kantendicke
-                        if(ii == anz_zustellungen)//letzte Zustellung
+                        if(i_zust == anz_zustellungen)//letzte Zustellung
                         {
                             msg += "0";     //Originalkontur fahren bei letztem Fräsgang in der Tiefe
                         }else
@@ -7315,21 +7315,21 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         //--------------------------------------------
                         //Fräsbahnen:
-                        for(uint iii=i+1; i+1<bearb.count(); iii++)
+                        for(uint i_fkon=i+1; i+1<bearb.count(); i_fkon++)
                         {
-                            zeile.set_text(bearb.at(iii),TRENNZ_BEARB_PARAM);
+                            zeile.set_text(bearb.at(i_fkon),TRENNZ_BEARB_PARAM);
                             if(zeile.at(0) == BEARBART_FRAESERGERADE)
                             {
                                 fraesergerade fg(zeile.text());
                                 double akt_ti_fg = 0;
                                 QString export_z_fg_Qstring = "Z";
-                                if(iii == anz_zustellungen)//letzte Zustellung
+                                if(i_zust == anz_zustellungen)//letzte Zustellung
                                 {
                                     akt_ti_fg = fg.tiEnd();
                                 }else
                                 {
-                                    akt_ti_fg = fg.tiEnd() / anz_zustellungen * iii;
-                                    if(iii==1  && gesamttiefe > mind_zust  &&  akt_ti_fg < mind_zust)
+                                    akt_ti_fg = fg.tiEnd() / anz_zustellungen * i_zust;
+                                    if(i_zust==1  && fg.tiEnd() > mind_zust  &&  akt_ti_fg < mind_zust)
                                     {
                                         akt_ti_fg = mind_zust;
                                     }
@@ -7367,13 +7367,13 @@ void wstzustand::fmc_dateitext(int index)
                                 fraeserbogen fb(zeile.text());
                                 double akt_ti_fb = 0;
                                 QString export_z_fb_Qstring = "Z";
-                                if(iii == anz_zustellungen)//letzte Zustellung
+                                if(i_zust == anz_zustellungen)//letzte Zustellung
                                 {
                                     akt_ti_fb = fb.tiEnd();
                                 }else
                                 {
-                                    akt_ti_fb = fb.tiEnd() / anz_zustellungen * iii;
-                                    if(iii==1  && gesamttiefe > mind_zust  &&  akt_ti_fb < mind_zust)
+                                    akt_ti_fb = fb.tiEnd() / anz_zustellungen * i_zust;
+                                    if(i_zust==1  && fb.tiEnd() > mind_zust  &&  akt_ti_fb < mind_zust)
                                     {
                                         akt_ti_fb = mind_zust;
                                     }
@@ -7437,7 +7437,7 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         msg += "\n";
                         //--------------------------------------------
-                        if(ii < anz_zustellungen)
+                        if(i_zust < anz_zustellungen)
                         {
                             msg += kommentar_fmc("---");
                         }
@@ -8579,16 +8579,16 @@ void wstzustand::fmc_dateitext(int index)
                             anz_zustellungen = 1;
                         }
 
-                       for(uint ii=1; ii<=anz_zustellungen ;ii++)//ii=1 weil mit erster Zustellung begonnen wird
+                       for(uint i_zust=1; i_zust<=anz_zustellungen ;i_zust++)//ii=1 weil mit erster Zustellung begonnen wird
                         {
                             double akt_ti_fa = 0;
-                            if(ii == anz_zustellungen)//letzte Zustellung
+                            if(i_zust == anz_zustellungen)//letzte Zustellung
                             {
                                 akt_ti_fa = fa.tiefe();
                             }else
                             {
-                                akt_ti_fa = fa.tiefe() / anz_zustellungen * ii;
-                                if(ii==1  && gesamttiefe > mind_zust  &&  akt_ti_fa < mind_zust)
+                                akt_ti_fa = fa.tiefe() / anz_zustellungen * i_zust;
+                                if(i_zust==1  && fa.tiefe() > mind_zust  &&  akt_ti_fa < mind_zust)
                                 {
                                     akt_ti_fa = mind_zust;
                                 }
@@ -8614,7 +8614,7 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             msg += "EBG=0\n";       //Eckenrunden global
                             msg += "KD=";           //Kantendicke
-                            if(ii == anz_zustellungen)
+                            if(i_zust == anz_zustellungen)
                             {
                                 msg += "0";     //Originalkontur fahren bei letztem Fräsgang in der Tiefe
                             }else
@@ -8691,21 +8691,21 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             //--------------------------------------------
                             //Fräsbahnen:
-                            for(uint iii=i+1; i+1<bearb.count(); iii++)
+                            for(uint i_fkon=i+1; i+1<bearb.count(); i_fkon++)
                             {
-                                zeile.set_text(bearb.at(iii),TRENNZ_BEARB_PARAM);
+                                zeile.set_text(bearb.at(i_fkon),TRENNZ_BEARB_PARAM);
                                 if(zeile.at(0) == BEARBART_FRAESERGERADE)
                                 {
                                     fraesergerade fg(zeile.text());
                                     double akt_ti_fg = 0;
                                     QString export_z_fg_Qstring = "Z";
-                                    if(iii == anz_zustellungen)//letzte Zustellung
+                                    if(i_zust == anz_zustellungen)//letzte Zustellung
                                     {
                                         akt_ti_fg = fg.tiEnd();
                                     }else
                                     {
-                                        akt_ti_fg = fg.tiEnd() / anz_zustellungen * iii;
-                                        if(iii==1  && gesamttiefe > mind_zust  &&  akt_ti_fg < mind_zust)
+                                        akt_ti_fg = fg.tiEnd() / anz_zustellungen * i_zust;
+                                        if(i_zust==1  && fg.tiEnd() > mind_zust  &&  akt_ti_fg < mind_zust)
                                         {
                                             akt_ti_fg = mind_zust;
                                         }
@@ -8749,13 +8749,13 @@ void wstzustand::fmc_dateitext(int index)
                                     fraeserbogen fb(zeile.text());
                                     double akt_ti_fb = 0;
                                     QString export_z_fb_Qstring = "Z";
-                                    if(iii == anz_zustellungen)//letzte Zustellung
+                                    if(i_zust == anz_zustellungen)//letzte Zustellung
                                     {
                                         akt_ti_fb = fb.tiEnd();
                                     }else
                                     {
-                                        akt_ti_fb = fb.tiEnd() / anz_zustellungen * iii;
-                                        if(iii==1  && gesamttiefe > mind_zust  &&  akt_ti_fb < mind_zust)
+                                        akt_ti_fb = fb.tiEnd() / anz_zustellungen * i_zust;
+                                        if(i_zust==1  && fb.tiEnd() > mind_zust  &&  akt_ti_fb < mind_zust)
                                         {
                                             akt_ti_fb = mind_zust;
                                         }
@@ -8825,7 +8825,7 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             msg += "\n";
                             //--------------------------------------------
-                            if(ii < anz_zustellungen)
+                            if(i_zust < anz_zustellungen)
                             {
                                 msg += kommentar_fmc("---");
                             }

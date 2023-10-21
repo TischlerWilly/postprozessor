@@ -2795,6 +2795,10 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         tmp = var_einsetzen(w, tmp);
                         tmp = ausdruck_auswerten(tmp);
                         tifkon = w.dicke() - tmp.toDouble();
+                        if(tifkon <= 0)
+                        {
+                            tifkon = (tifkon*-1) + w.dicke();
+                        }
                         fa.set_tiefe(tifkon);//Tiefe, nicht Z-Wert!!
                                             //Z-Wert ist für horizontale Fräseraufrufe gedacht
                     }else if(schluessel == FMC_FKON_KOR)
@@ -2900,6 +2904,10 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             tmp = var_einsetzen(w, tmp);
                             tmp = ausdruck_auswerten(tmp);
                             tiEnd = w.dicke() - tmp.toDouble();
+                            if(tiEnd <= 0)
+                            {
+                                tiEnd = (tiEnd*-1) + w.dicke();
+                            }
                         }
                     }
                 }
@@ -2985,6 +2993,10 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             tmp = var_einsetzen(w, tmp);
                             tmp = ausdruck_auswerten(tmp);
                             tiEnd = w.dicke() - tmp.toDouble();
+                            if(tiEnd <= 0)
+                            {
+                                tiEnd = (tiEnd*-1) + w.dicke();
+                            }
                         }
                     }else if(schluessel == FMC_FKONBOG_RAD)
                     {
