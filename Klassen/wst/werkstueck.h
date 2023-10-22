@@ -141,8 +141,12 @@ public:
     {
         return Zustand.use_ay();
     }
+    inline bool ist_gut_oben()
+    {
+        return Gut_ist_oben;
+    }
     //--------------------------------------------------Manipulationen:
-
+    void gute_seite_ermitteln();
     //--------------------------------------------------
 
 private:
@@ -158,6 +162,7 @@ private:
     QString Kante_re;
     double  Zugabe_gehrungen;
     wstzustand Zustand;
+    bool Gut_ist_oben;
 
     //Funktionen:
 

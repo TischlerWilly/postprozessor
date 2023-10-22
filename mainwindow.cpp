@@ -620,7 +620,10 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     ui->lineEdit_baugruppe->move(r.einfpunkt().x() + lx*5 + 2*5, r.einfpunkt().y());
     ui->lineEdit_baugruppe->setFixedSize(lx, ly);
     ui->lineEdit_projektpfad->move(r.einfpunkt().x(), r.einfpunkt().y() + ly*1 + 2*1);
-    ui->lineEdit_projektpfad->setFixedSize(r.l(),ly);
+    ui->lineEdit_projektpfad->setFixedSize(r.l()-150-5,ly);
+    ui->pushButton_gute_seite->move(ui->lineEdit_projektpfad->x()+ui->lineEdit_projektpfad->width()+5, \
+                                    ui->lineEdit_projektpfad->y());
+    ui->pushButton_gute_seite->setFixedWidth(150);
     //---Vorschaufenster:
     ui->label_warnungen->move(5,r.einfpunkt().y()+r.b());
     ui->label_warnungen->setFixedWidth(ui->tabWidget_main->width()-200);
@@ -1973,6 +1976,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(wste.wst(wstindex)->ist_gut_oben());
             //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
         }else if(ui->radioButton_vorschau_ganx->isChecked())
         {            
@@ -1985,6 +1989,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(!wste.wst(wstindex)->ist_gut_oben());//invertiert
         }else if(ui->radioButton_vorschau_fmc->isChecked())
         {
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -1996,6 +2001,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(wste.wst(wstindex)->ist_gut_oben());
         }else if(ui->radioButton_vorschau_cix->isChecked())
         {
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -2007,6 +2013,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(wste.wst(wstindex)->ist_gut_oben());
         }else if(ui->radioButton_vorschau_ggf->isChecked())
         {
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -2018,6 +2025,7 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(wste.wst(wstindex)->ist_gut_oben());
         }
         if(dlg_prgtext.isVisible())
         {
@@ -2346,7 +2354,16 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
-
+void MainWindow::update_btn_gute_seite(bool gut_oben)
+{
+    if(gut_oben == true)
+    {
+        ui->pushButton_gute_seite->setText("Gute Seite oben");
+    }else
+    {
+        ui->pushButton_gute_seite->setText("Gute Seite unten");
+    }
+}
 
 
 

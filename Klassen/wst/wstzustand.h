@@ -212,7 +212,7 @@ private:
     QString kommentar_fmc(QString kom);
     QString variable_fmc(QString bez, QString wert);
     QString kommentar_ggf(QString kom);
-    QString fmc_kommentar_gute_seite(text_zw& bearb);
+    QString fmc_kommentar_gute_seite(text_zw& bearb);    
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
     QString fehler_kein_WKZ(QString exportformat, text_zw bearbzeile);
     QString bearb_menschlich_lesbar(text_zw bearbzeile);

@@ -5,6 +5,7 @@ werkstueck::werkstueck()
     Laenge  = 0;
     Breite  = 0;
     Dicke   = 0;
+    Gut_ist_oben = true;
 }
 werkstueck::werkstueck(QString neuer_name)
 {
@@ -12,6 +13,7 @@ werkstueck::werkstueck(QString neuer_name)
     Laenge  = 0;
     Breite  = 0;
     Dicke   = 0;
+    Gut_ist_oben = true;
 }
 //#######################################################################
 //Public:
@@ -72,10 +74,12 @@ void werkstueck::neue_bearbeitung(QString text)
     {
         Bearb.add_hi(text);
     }
+    gute_seite_ermitteln();
 }
 void werkstueck::set_bearb(text_zw b)
 {
     Bearb = b;
+    gute_seite_ermitteln();
 }
 void werkstueck::set_kante_vo(QString artiklenummer)
 {
@@ -305,7 +309,135 @@ geo_text werkstueck::geofkon(wkz_magazin wkzm)
 }
 
 //--------------------------------------------------Manipulationen:
-
+void werkstueck::gute_seite_ermitteln()
+{
+    bool retwert = true;
+    if(Name.contains("Seite"))
+    {
+        bool hat_5er_durchgangsbohrungen = false;
+        text_zw zeile;
+        for(uint i=0; i<Bearb.count() ;i++)
+        {
+            zeile.set_text(Bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(zeile.at(0) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.text());
+                if(bo.dm() == 5)
+                {
+                    if(bo.tiefe() > Dicke  ||  bo.tiefe() < 0)
+                    {
+                        hat_5er_durchgangsbohrungen = true;
+                    }
+                }
+            }
+        }
+        if(hat_5er_durchgangsbohrungen == true)
+        {
+            retwert = true;
+        }else
+        {
+            retwert = false;
+        }
+    }else if(Name.contains("MS"))
+    {
+        retwert = true;
+    }else if(Name.contains("OB"))
+    {
+        retwert = true;
+    }else if(Name.contains("UB"))
+    {
+        int anz_obsei = 0;
+        int anz_unsei = 0;
+        text_zw zeile;
+        for(uint i=0; i<Bearb.count() ;i++)
+        {
+            zeile.set_text(Bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(zeile.at(0) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.text());
+                if(bo.dm() == 15)
+                {
+                    if(bo.bezug() == WST_BEZUG_OBSEI)
+                    {
+                        anz_obsei++;
+                    }else if(bo.bezug() == WST_BEZUG_UNSEI)
+                    {
+                        anz_unsei++;
+                    }
+                }
+            }
+        }
+        if(anz_obsei > anz_unsei)
+        {
+            retwert = false;
+        }else
+        {
+            retwert = true;
+        }
+    }else if(Name.contains("KB"))
+    {
+        retwert = false;
+    }else if(Name.contains("EB"))
+    {
+        retwert = false;
+    }else if(Name.contains("RW"))
+    {
+        retwert = false;//Wert wird ggf. weiter unten überschrieben
+        bool hat_5er_durchgangsbohrungen = false;
+        bool hat_8er_flaechenbohrungen_obsei = false;
+        text_zw zeile;
+        for(uint i=0; i<Bearb.count() ;i++)
+        {
+            zeile.set_text(Bearb.at(i),TRENNZ_BEARB_PARAM);
+            if(zeile.at(0) == BEARBART_BOHR)
+            {
+                bohrung bo(zeile.text());
+                if(bo.dm() == 5)
+                {
+                    if(bo.tiefe() > Dicke  ||  bo.tiefe() < 0)
+                    {
+                        hat_5er_durchgangsbohrungen = true;
+                    }
+                }else if(bo.dm() == 8)
+                {
+                    if(bo.tiefe() < Dicke &&  bo.bezug() == WST_BEZUG_OBSEI)
+                    {
+                        hat_8er_flaechenbohrungen_obsei = true;
+                    }
+                }
+            }
+        }
+        if(hat_8er_flaechenbohrungen_obsei)
+        {
+            if(hat_5er_durchgangsbohrungen)
+            {
+                retwert = true;
+            }
+        }
+    }else if(Name.contains("Tuer"))
+    {
+        retwert = false;
+    }else if(Name.contains("Front") || Name.contains("front"))
+    {
+        retwert = false;
+    }else if(Name.contains("Blende") || Name.contains("blende"))
+    {
+        retwert = false;
+    }else if(Name.contains("Doppel") || Name.contains("doppel"))
+    {
+        retwert = false;
+    }else if(Name.contains("Paneel") || Name.contains("paneel"))
+    {
+        retwert = false;
+    }else if(Name.contains("SF"))
+    {
+        retwert = false;
+    }else if(Name.contains("SB"))
+    {
+        retwert = false;
+    }
+    Gut_ist_oben = retwert;
+}
 
 
 

@@ -5338,6 +5338,7 @@ QString werkstuecke::stdnamen(text_zw namen_alt, text_zw namen_neu)
     {
         werkstueck w = Wste.at(i);
         w.set_name(Namen.at(i));
+        w.gute_seite_ermitteln();
         Wste.replace(i, w);
     }
     return baugruppenname;

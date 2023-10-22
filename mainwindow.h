@@ -95,6 +95,7 @@ private slots:
     void on_actionTestfunktion_triggered();
     void on_actionEinstellung_fmc_triggered();
     void on_actionWerkzeug_Postprozessor_triggered();
+    void update_btn_gute_seite(bool gut_oben);
 
 private:
     Ui::MainWindow *ui;
