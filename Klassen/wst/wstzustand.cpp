@@ -163,6 +163,17 @@ void wstzustand::set_name(QString neuer_name)
         Name = neuer_name;
     }
 }
+void wstzustand::set_gute_seite(bool ist_oben)
+{
+    if(ist_oben != Gut_ist_oben)
+    {
+        if(!Format.isEmpty())
+        {
+            clear();
+        }
+        Gut_ist_oben = ist_oben;
+    }
+}
 void wstzustand::set_zust_fkon(QString zust)
 {
     if(zust != Zust_fkon)
@@ -4218,139 +4229,6 @@ QString wstzustand::kommentar_ggf(QString kom)
     text += "\n";
     return text;
 }
-QString wstzustand::fmc_kommentar_gute_seite(text_zw& bearb)
-{
-    QString retmsg;
-    if(Name.contains("Seite"))
-    {
-        bool hat_5er_durchgangsbohrungen = false;
-        text_zw zeile;
-        for(uint i=0; i<bearb.count() ;i++)
-        {
-            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-            if(zeile.at(0) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.text());
-                if(bo.dm() == 5)
-                {
-                    if(bo.tiefe() > Dicke  ||  bo.tiefe() < 0)
-                    {
-                        hat_5er_durchgangsbohrungen = true;
-                    }
-                }
-            }
-        }
-        if(hat_5er_durchgangsbohrungen == true)
-        {
-            retmsg = "gut oben";
-        }else
-        {
-            retmsg = "gut unten";
-        }
-    }else if(Name.contains("MS"))
-    {
-        retmsg = "gut oben";
-    }else if(Name.contains("OB"))
-    {
-        retmsg = "gut oben";
-    }else if(Name.contains("UB"))
-    {
-        int anz_obsei = 0;
-        int anz_unsei = 0;
-        text_zw zeile;
-        for(uint i=0; i<bearb.count() ;i++)
-        {
-            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-            if(zeile.at(0) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.text());
-                if(bo.dm() == 15)
-                {
-                    if(bo.bezug() == WST_BEZUG_OBSEI)
-                    {
-                        anz_obsei++;
-                    }else if(bo.bezug() == WST_BEZUG_UNSEI)
-                    {
-                        anz_unsei++;
-                    }
-                }
-            }
-        }
-        if(anz_obsei > anz_unsei)
-        {
-            retmsg = "gut unten";
-        }else
-        {
-            retmsg = "gut oben";
-        }
-    }else if(Name.contains("KB"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("EB"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("RW"))
-    {
-        retmsg = "gut unten";//Wert wird ggf. weiter unten überschrieben
-        bool hat_5er_durchgangsbohrungen = false;
-        bool hat_8er_flaechenbohrungen_obsei = false;
-        text_zw zeile;
-        for(uint i=0; i<bearb.count() ;i++)
-        {
-            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-            if(zeile.at(0) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.text());
-                if(bo.dm() == 5)
-                {
-                    if(bo.tiefe() > Dicke  ||  bo.tiefe() < 0)
-                    {
-                        hat_5er_durchgangsbohrungen = true;
-                    }
-                }else if(bo.dm() == 8)
-                {
-                    if(bo.tiefe() < Dicke &&  bo.bezug() == WST_BEZUG_OBSEI)
-                    {
-                        hat_8er_flaechenbohrungen_obsei = true;
-                    }
-                }
-            }
-        }
-        if(hat_8er_flaechenbohrungen_obsei)
-        {
-            if(hat_5er_durchgangsbohrungen)
-            {
-                retmsg = "gut oben";
-            }
-        }
-    }else if(Name.contains("Tuer"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("Front") || Name.contains("front"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("Blende") || Name.contains("blende"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("Doppel") || Name.contains("doppel"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("Paneel") || Name.contains("paneel"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("SF"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("SB"))
-    {
-        retmsg = "gut unten";
-    }else
-    {
-        retmsg = "(NULL)";
-    }
-
-    return retmsg;
-}
 bool wstzustand::punkt_auf_wst(double x, double y, double l, double b, double tolleranz)
 {
     bool returnwert = true;
@@ -4772,7 +4650,15 @@ void wstzustand::fmc_dateitext(int index)
     msg += "\n";
     msg += "HOLKA=-1\n";            //Hole Kante Nr
     msg += "KOM1=";                //Kommentar 1
-    msg += fmc_kommentar_gute_seite(bearb_kopie);
+
+    if(Gut_ist_oben == true)
+    {
+        msg += "gut oben";
+    }else
+    {
+        msg += "gut unten";
+    }
+
     //msg += "(NULL)";
     msg += "\n";
     msg += "KOM2=";                 //Kommentar 2

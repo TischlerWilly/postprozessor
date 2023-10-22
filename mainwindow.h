@@ -96,6 +96,7 @@ private slots:
     void on_actionEinstellung_fmc_triggered();
     void on_actionWerkzeug_Postprozessor_triggered();
     void update_btn_gute_seite(bool gut_oben);
+    void on_pushButton_gute_seite_clicked();
 
 private:
     Ui::MainWindow *ui;

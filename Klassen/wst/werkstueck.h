@@ -58,6 +58,11 @@ public:
         Name = neuer_name;
         Zustand.set_name(neuer_name);
     }
+    inline void set_gute_seite(bool ist_oben)
+    {
+        Gut_ist_oben = ist_oben;
+        Zustand.set_gute_seite(ist_oben);
+    }
 
     //--------------------------------------------------get_xy:
     QString cad_fehler(bool kurz = false);

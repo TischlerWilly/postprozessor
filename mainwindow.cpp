@@ -1959,6 +1959,30 @@ void MainWindow::on_pushButton_umbenennen_clicked()
         mb.exec();
     }
 }
+void MainWindow::on_pushButton_gute_seite_clicked()
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        int row = ui->listWidget_wste->currentRow();
+        wste.wst(row)->set_gute_seite(!wste.wst(row)->ist_gut_oben());
+        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        if(ui->radioButton_vorschau_ganx->isChecked())
+        {
+            update_btn_gute_seite(!wste.wst(row)->ist_gut_oben());
+        }else
+        {
+            update_btn_gute_seite(wste.wst(row)->ist_gut_oben());
+        }
+    }else
+    {
+        QString msg;
+        msg = "Es ist kein Bauteil ausgewählt!";
+            QMessageBox mb;
+        mb.setText(msg);
+        mb.setWindowTitle("Gute Seite ändern");
+        mb.exec();
+    }
+}
 //-----------------------------------------------------------------------ListeWidgets:
 void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
 {    
@@ -2364,105 +2388,6 @@ void MainWindow::update_btn_gute_seite(bool gut_oben)
         ui->pushButton_gute_seite->setText("Gute Seite unten");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

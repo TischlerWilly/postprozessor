@@ -42,6 +42,7 @@ public:
     void set_zugabe_gehrungen(double zugabe);
     void set_formartierungen_aufbrechen(bool jn);
     void set_name(QString neuer_name);
+    void set_gute_seite(bool ist_oben);
     void set_zust_fkon(QString zust);
     void set_einst_ganx(einstellung_ganx e);
     void set_use_ax(bool benutzen);
@@ -212,7 +213,6 @@ private:
     QString kommentar_fmc(QString kom);
     QString variable_fmc(QString bez, QString wert);
     QString kommentar_ggf(QString kom);
-    QString fmc_kommentar_gute_seite(text_zw& bearb);    
     bool punkt_auf_wst(double x, double y, double l, double b, double tolleranz);
     QString fehler_kein_WKZ(QString exportformat, text_zw bearbzeile);
     QString bearb_menschlich_lesbar(text_zw bearbzeile);
@@ -278,6 +278,7 @@ private:
     double              Schwellenwert_ay; //für fmc-Ausgabe, bis zu dieser Breite wird mit ay-Versatz ausgegeben
     double              Dicke;
     QString             Name;
+    bool                Gut_ist_oben;
     QString             Zust_fkon;
     int                 Akt_zust;
     einstellung_ganx    Eganx;
