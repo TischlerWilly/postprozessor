@@ -8,11 +8,14 @@ Dialog_bearb_fbogen::Dialog_bearb_fbogen(QWidget *parent) :
     ui->setupUi(this);
     Wst = nullptr;
     this->setWindowTitle("Bogenfräsung");
+    ui->lineEdit_zs->setEnabled(false);
+    ui->lineEdit_ze->setEnabled(false);
     ui->comboBox_bezug->addItem("Oberseite");   //0
     ui->comboBox_bezug->addItem("Unterseite");  //1
     //---
     ui->comboBox_uzs->addItem("UZS");   //0
     ui->comboBox_uzs->addItem("GUZS");  //1
+    ui->btn_ok->setFocus();
 }
 
 Dialog_bearb_fbogen::~Dialog_bearb_fbogen()
@@ -31,6 +34,8 @@ void Dialog_bearb_fbogen::set_data(QString d, werkstueck *w)
     ui->lineEdit_xe->setText(fb.xe_qstring());
     ui->lineEdit_ye->setText(fb.ye_qstring());
     ui->lineEdit_ze->setText(fb.ze_qstring());
+    ui->lineEdit_tiSta->setText(fb.tiSta_qstring());
+    ui->lineEdit_tiEnd->setText(fb.tiEnd_qstring());
     ui->lineEdit_rad->setText(fb.rad_qstring());
     //---------
     //UZS:
@@ -79,6 +84,8 @@ void Dialog_bearb_fbogen::on_btn_ok_clicked()
     fb.set_xe(var_zu_wert(ui->lineEdit_xe->text()));
     fb.set_ye(var_zu_wert(ui->lineEdit_ye->text()));
     fb.set_ze(var_zu_wert(ui->lineEdit_ze->text()));
+    fb.set_tiSta(var_zu_wert(ui->lineEdit_tiSta->text()));
+    fb.set_tiEnd(var_zu_wert(ui->lineEdit_tiEnd->text()));
     fb.set_rad(var_zu_wert(ui->lineEdit_rad->text()));
     QString uzs = ui->comboBox_uzs->currentText();
     if(uzs == "UZS")

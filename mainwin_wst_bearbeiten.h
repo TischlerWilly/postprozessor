@@ -14,6 +14,8 @@
 #include "Dialoge/dialog_bearb_fgerade.h"
 #include "Dialoge/dialog_bearb_fbogen.h"
 #include "Dialoge/dialog_bearb_verschieben.h"
+#include "Dialoge/dialog_doppelteil_erzeugen.h"
+#include "Dialoge/dialog_userinput.h"
 
 #include "Funktionen/funktionen_prgtext.h"
 #include "Klassen/undo_redo.h"
@@ -36,7 +38,8 @@ private:
     Ui::MainWin_wst_bearbeiten *ui;
     vorschau vorschaufenster;
     werkstueck *Wst;
-    wkz_magazin *Wkz;
+    wkz_magazin *Wkz_ptr;
+    wkz_magazin Wkz_kopie;
     undo_redo<text_zw> UnReDo;
     undo_redo<double> UnReDo_L;
     undo_redo<double> UnReDo_B;
@@ -45,6 +48,8 @@ private:
     double letzte_wst_l;
     double letzte_wst_b;
     double letzte_wst_d;
+    Dialog_doppelteil_erzeugen dlg_dt;
+    bool Ist_verlaengerung_am_anfang;
 
     void clear();
     void update_listwidget();
@@ -57,7 +62,7 @@ private:
     void unredo_clear();
 
 signals:
-    void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile);
+    void sendVorschauAktualisieren(werkstueck w_neu, int aktive_zeile, wkz_magazin wkzm);
     void signalIndexChange(int index);
 
 private slots:
@@ -76,22 +81,29 @@ private slots:
     void on_actionEinfuegen_triggered();
     void on_actionVerschieben_triggered();
     void on_actionBearbeiten_triggered();
+    void on_actionDoppelteil_erzeugen_triggered();
+    void on_actionFormartierungen_aufbrechen_triggered();
+    void on_actionFraesrichtung_umkehren_triggered();
+    void on_actionFraesbahn_teilen_in_aktueller_Zeile_triggered();
+    void on_actionVerlaengern_triggered();
 
 public slots:
     //Bearbeiten
     void zeile_aendern(int index, QString bearb, bool unredor_verwenden);
     void slot_rta(rechtecktasche rta);
-    void slot_bo(bohrung bo);    
+    void slot_bo(bohrung bo);
     void slot_nut(nut nu);
     void slot_faufruf(fraeseraufruf fa);
     void slot_fgerade(fraesergerade fg);
     void slot_fbogen(fraeserbogen fb);
     //Erstellen/Make:
-    void slot_make(QString bearb);
+    void slot_make(QString bearb, bool unredor_verwenden);
     void slot_make_bo(bohrung bo);
     void slot_make_rta(rechtecktasche rt);
     void slot_make_nut(nut nu);
     //Manipulation:
     void slot_verschieben(punkt3d p);
+    void slot_dt_erzeugen(QString bezug, double wst_l, double wst_b, bool spiegeln, bool drehen);
+    void slot_verlaengern_fgerade(QString input);
 };
 #endif // MAINWIN_WST_BEARBEITEN_H

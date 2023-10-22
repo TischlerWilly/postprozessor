@@ -49,22 +49,43 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="7" column="1">
-     <widget class="QLineEdit" name="lineEdit_afb"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_4">
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_11">
       <property name="text">
-       <string>Pos X</string>
+       <string>Bezug</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_6">
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_5">
       <property name="text">
-       <string>Pos Z</string>
+       <string>Pos Y</string>
       </property>
      </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Zustellmaß</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Tiefe</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_13">
+      <property name="text">
+       <string>Werkzeugnummer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QLineEdit" name="lineEdit_wkz"/>
     </item>
     <item row="7" column="0">
      <widget class="QLabel" name="label_12">
@@ -80,64 +101,50 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_9">
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>Zustellmaß</string>
+       <string>Pos Z</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="1">
-     <widget class="QLineEdit" name="lineEdit_wkz"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_ti"/>
-    </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="label_13">
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_4">
       <property name="text">
-       <string>Werkzeugnummer</string>
+       <string>Pos X</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit_dm"/>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_y"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_3">
+    <item row="8" column="2">
+     <widget class="QPushButton" name="pushButton_wkzwahl">
       <property name="text">
-       <string>Tiefe</string>
+       <string>...</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
+    <item row="7" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_afb"/>
+    </item>
+    <item row="6" column="1" colspan="2">
      <widget class="QComboBox" name="comboBox_bezug"/>
     </item>
-    <item row="5" column="1">
+    <item row="5" column="1" colspan="2">
      <widget class="QLineEdit" name="lineEdit_zust"/>
     </item>
-    <item row="4" column="1">
+    <item row="4" column="1" colspan="2">
      <widget class="QLineEdit" name="lineEdit_z"/>
     </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Pos Y</string>
-      </property>
-     </widget>
+    <item row="3" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_y"/>
     </item>
-    <item row="2" column="1">
+    <item row="2" column="1" colspan="2">
      <widget class="QLineEdit" name="lineEdit_x"/>
     </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_11">
-      <property name="text">
-       <string>Bezug</string>
-      </property>
-     </widget>
+    <item row="1" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_ti"/>
+    </item>
+    <item row="0" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_dm"/>
     </item>
    </layout>
   </widget>

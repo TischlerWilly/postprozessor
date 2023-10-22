@@ -8,6 +8,11 @@
 #include "Funktionen/umwandeln.h"
 #include "Klassen/geo/punkt3d.h"
 
+#define FAUFRUF_ANABTYP_NDEF   "-1"
+#define FAUFRUF_ANABTYP_GARADE  "1"
+#define FAUFRUF_ANABTYP_BOGEN   "2"
+#define FAUFRUF_ANABWEG_AUTO   "AUTO"
+
 class fraeseraufruf
 {
 public:
@@ -27,6 +32,12 @@ public:
     void set_afb(QString ausfuehrbedingung);
     void set_radkor(QString kor);
     void set_wkznum(QString nummer);
+    void set_anfahrtyp(QString typ);
+    void set_abfahrtyp(QString typ);
+    void set_anfahrweg(QString laenge);
+    void set_anfahrweg(double laenge);
+    void set_abfahrweg(QString laenge);
+    void set_abfahrweg(double laenge);
 
     double  x();
     QString x_qstring();
@@ -41,6 +52,12 @@ public:
     QString radkor();
     QString wkznum();
     punkt3d pos();
+    QString anfahrtyp();
+    QString abfahrtyp();
+    double anfahrweg();
+    QString anfahrweg_qstring();
+    double abfahrweg();
+    QString abfahrweg_qstring();
 
     QString text();
     void set_text(QString text);
@@ -52,6 +69,10 @@ private:
     QString Afb;
     QString Korrektur;
     QString Werkzeugnummer;
+    QString Anfahrtyp;
+    QString Abfahrtyp;
+    QString Anfahrweg;
+    QString Abfahrweg;
 
     void setup();
 

@@ -234,18 +234,24 @@ QString wkz_magazin::dm(QString wkz_nr)
     for(uint i=0; i<Magazin.count();i++)
     {
         text_zw zeile;
-        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);
-        if(wkznr(zeile) == wkz_nr)
+        zeile.set_text(Magazin.at(i), WKZ_TRENNZ);        
+        if(typ(zeile) == WKZ_TYP_FRAESER)
         {
-            if(typ(zeile) == WKZ_TYP_FRAESER)
+            wkz_fraeser fraeser(zeile);
+            if(wkznr(zeile) == wkz_nr  ||  fraeser.alias() == wkz_nr)
             {
-                wkz_fraeser fraeser(zeile);
                 return double_to_qstring(fraeser.dm());
-            }else if(typ(zeile) == WKZ_TYP_BOHRER)
+            }
+        }else if(typ(zeile) == WKZ_TYP_BOHRER)
+        {
+            if(wkznr(zeile) == wkz_nr)
             {
                 wkz_bohrer bohrer(zeile);
                 return double_to_qstring(bohrer.dmexport());
-            }else if(typ(zeile) == WKZ_TYP_SAEGE)
+            }
+        }else if(typ(zeile) == WKZ_TYP_SAEGE)
+        {
+            if(wkznr(zeile) == wkz_nr)
             {
                 wkz_saege saege(zeile);
                 return double_to_qstring(saege.dm());

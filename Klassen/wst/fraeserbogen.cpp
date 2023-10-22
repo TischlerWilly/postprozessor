@@ -107,6 +107,30 @@ void fraeserbogen::set_afb(QString ausfuehrbedingung)
     Afb = ausfuehrbedingung;
 }
 
+void fraeserbogen::set_bogen(bogen bo)
+{
+    set_startpunkt(bo.start());
+    set_endpunkt(bo.ende());
+    set_rad(bo.rad());
+    set_uzs(bo.im_uzs());
+}
+
+void fraeserbogen::set_tiSta(double tiefe)
+{
+    TiSta = tiefe;
+}
+void fraeserbogen::set_tiSta(QString tiefe)
+{
+    set_tiSta(tiefe.toDouble());
+}
+void fraeserbogen::set_tiEnd(double tiefe)
+{
+    TiEnd = tiefe;
+}
+void fraeserbogen::set_tiEnd(QString tiefe)
+{
+    set_tiEnd(tiefe.toDouble());
+}
 double fraeserbogen::xs()
 {
     return Startpunkt.x();
@@ -206,6 +230,23 @@ QString fraeserbogen::afb()
     return Afb;
 }
 
+double fraeserbogen::tiSta()
+{
+    return TiSta;
+}
+QString fraeserbogen::tiSta_qstring()
+{
+    return double_to_qstring(TiSta);
+}
+double fraeserbogen::tiEnd()
+{
+    return TiEnd;
+}
+QString fraeserbogen::tiEnd_qstring()
+{
+    return double_to_qstring(TiEnd);
+}
+
 QString fraeserbogen::text()
 {
     QString msg = BEARBART_FRAESERBOGEN;     //Zeile 0
@@ -229,6 +270,10 @@ QString fraeserbogen::text()
     msg += uzs_qstring();                //Zeile 9
     msg += TRENNZ_BEARB_PARAM_;
     msg += afb();                        //Zeile 10
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += tiSta_qstring();              //Zeile 11
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += tiEnd_qstring();              //Zeile 12
 
     return msg;
 }
@@ -248,6 +293,8 @@ void fraeserbogen::set_text(QString text)
         set_rad(tz.at(8));
         set_uzs(tz.at(9));
         set_afb(tz.at(10));
+        set_tiSta(tz.at(11));
+        set_tiEnd(tz.at(12));
     }
 }
 

@@ -146,6 +146,23 @@ void fraesergerade::set_afb(QString ausfuehrbedingung)
     Afb = ausfuehrbedingung;
 }
 
+void fraesergerade::set_tiSta(double tiefe)
+{
+    TiSta = tiefe;
+}
+void fraesergerade::set_tiSta(QString tiefe)
+{
+    set_tiSta(tiefe.toDouble());
+}
+void fraesergerade::set_tiEnd(double tiefe)
+{
+    TiEnd = tiefe;
+}
+void fraesergerade::set_tiEnd(QString tiefe)
+{
+    set_tiEnd(tiefe.toDouble());
+}
+
 QString fraesergerade::bezug()
 {
     return Bezug;
@@ -153,6 +170,23 @@ QString fraesergerade::bezug()
 QString fraesergerade::afb()
 {
     return Afb;
+}
+
+double fraesergerade::tiSta()
+{
+    return TiSta;
+}
+QString fraesergerade::tiSta_qstring()
+{
+    return double_to_qstring(TiSta);
+}
+double fraesergerade::tiEnd()
+{
+    return TiEnd;
+}
+QString fraesergerade::tiEnd_qstring()
+{
+    return double_to_qstring(TiEnd);
 }
 
 QString fraesergerade::text()
@@ -174,6 +208,10 @@ QString fraesergerade::text()
     msg += ze_qstring();                 //Zeile 7
     msg += TRENNZ_BEARB_PARAM_;
     msg += afb();                        //Zeile 8
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += tiSta_qstring();              //Zeile 9
+    msg += TRENNZ_BEARB_PARAM_;
+    msg += tiEnd_qstring();              //Zeile 10
 
     return msg;
 }
@@ -191,6 +229,8 @@ void fraesergerade::set_text(QString text)
         set_ye(tz.at(6));
         set_ze(tz.at(7));
         set_afb(tz.at(8));
+        set_tiSta(tz.at(9));
+        set_tiEnd(tz.at(10));
     }
 }
 

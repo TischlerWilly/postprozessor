@@ -177,6 +177,10 @@ QString fgerade_zu_prgzei(QString text)
     msg += fg.ye_qstring();
     msg += "\tZE: ";
     msg += fg.ze_qstring();
+    msg += "\tTiS: ";
+    msg += fg.tiSta_qstring();
+    msg += "\tTiE: ";
+    msg += fg.tiEnd_qstring();
     msg += "\tAFB: ";
     msg += fg.afb();
     return msg;
@@ -198,6 +202,10 @@ QString fbogen_zu_prgzei(QString text)
     msg += fb.ye_qstring();
     msg += "\tZE: ";
     msg += fb.ze_qstring();
+    msg += "\tTiS: ";
+    msg += fb.tiSta_qstring();
+    msg += "\tTiE: ";
+    msg += fb.tiEnd_qstring();
     msg += "\tRAD: ";
     msg += fb.rad_qstring();
     msg += "\tUZS: ";

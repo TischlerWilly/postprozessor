@@ -13,6 +13,7 @@ vorschau::vorschau(QWidget *parent) :
     Npv.y = 0;
     Mrg = false;
     Bearb_erlaubt = false;
+    Modus_einzel_wst = false;
     this->setCursor(Qt::CrossCursor);
 }
 
@@ -20,10 +21,20 @@ void vorschau::set_bearb_erlaubt(bool erlaubt)
 {
     Bearb_erlaubt = erlaubt;
 }
+void vorschau::set_modus_einzel_wst(bool ist_einzelwst)
+{
+    Modus_einzel_wst = ist_einzelwst;
+}
 
 void vorschau::update_cad()
 {
-    werkstueck_darstellung_berechnen();
+    if(Modus_einzel_wst)
+    {
+        werkstueck_darstellung_berechnen_einzelwst();
+    }else
+    {
+        werkstueck_darstellung_berechnen();
+    }
     QPainter painter(this);
 
     //Hintergrund:
@@ -672,7 +683,7 @@ void vorschau::zeichneFkon(QString geometrieElement, int i)
 void vorschau::werkstueck_darstellung_berechnen()
 {
     QString format = W.zustand().format();
-    int randabstand = 10;
+    int randabstand = 20+W.dicke();
     float maximallaenge = W.max_x() - W.min_x();
     float maximalbreite = W.max_y() - W.min_y();
 
@@ -705,6 +716,41 @@ void vorschau::werkstueck_darstellung_berechnen()
 
     sende_wstmas(W.zustand().l(), W.zustand().b(), W.dicke());
 }
+void vorschau::werkstueck_darstellung_berechnen_einzelwst()
+{
+    int randabstand = 20+W.dicke();
+    float maximallaenge = W.max_x_einzelwst() - W.min_x();
+    float maximalbreite = W.max_y_einzelwst() - W.min_y();
+
+    float bildlaenge = width()-randabstand*2;
+    float bildbreite = height()-randabstand*2;
+
+    float faktor_laenge = bildlaenge/maximallaenge;
+    float faktor_breite = bildbreite/maximalbreite;
+
+    if(faktor_laenge < faktor_breite)
+    {
+        set_sf(faktor_laenge);
+    }else
+    {
+        set_sf(faktor_breite);
+    }
+
+    float laenge = Wst.l() * sf() * Zf;
+    float breite = Wst.b() * sf() * Zf;
+
+    Wstd.set_laenge(laenge);
+    Wstd.set_breite(breite);
+
+    punkt basispunkt;
+    basispunkt.x = randabstand;
+    basispunkt.y = height()-randabstand;
+
+    N.x = basispunkt.x - W.min_x()*Sf * Zf;
+    N.y = basispunkt.y + W.min_y()*Sf * Zf;
+
+    sende_wstmas(W.zustand().l(), W.zustand().b(), W.dicke());
+}
 
 void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
 {
@@ -718,15 +764,15 @@ void vorschau::slot_aktualisieren(werkstueck w_neu, int aktive_zeile)
     this->update();
 }
 
-void vorschau::slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile)
+void vorschau::slot_aktualisieren_einzelwst(werkstueck w_neu, int aktive_zeile, wkz_magazin wkzm)
 {
     W = w_neu;
-    Geotext = W.geo();
-    GeoFkon = W.geofkon();
+    Geotext = W.geo(wkzm);
+    GeoFkon = W.geofkon(wkzm);
     Wst.set_laenge(w_neu.laenge());
     Wst.set_breite(w_neu.breite());
     Aktuelle_zeilennummer = aktive_zeile;
-    werkstueck_darstellung_berechnen();
+    werkstueck_darstellung_berechnen_einzelwst();
     this->update();
 }
 
@@ -781,7 +827,6 @@ void vorschau::set_sf(float neuer_faktor)
 {
     Sf = neuer_faktor;
 }
-
 void vorschau::zoom(bool dichter)
 {
     if(dichter == true)
@@ -800,7 +845,6 @@ void vorschau::zoom(bool dichter)
     }
 
 }
-
 punkt2d vorschau::mauspos_npanschlag()
 {
     QPoint p = this->mapFromGlobal(QCursor::pos());
@@ -812,7 +856,6 @@ punkt2d vorschau::mauspos_npanschlag()
     p2d.set_y(abst_nullp_y/Sf*-1/Zf);
     return p2d;
 }
-
 punkt2d vorschau::mauspos_npwst()
 {
     punkt2d p;
@@ -821,7 +864,6 @@ punkt2d vorschau::mauspos_npwst()
     p.set_y(p.y()-W.zustand().ay());
     return p;
 }
-
 uint vorschau::zeile_von_Mauspos()
 {
     uint zeile = 0;
@@ -1016,7 +1058,6 @@ uint vorschau::zeile_von_Mauspos()
     }
     return zeile;
 }
-
 void vorschau::mouseMoveEvent(QMouseEvent *event)
 {
     if(Mrg)
@@ -1038,7 +1079,6 @@ void vorschau::mouseMoveEvent(QMouseEvent *event)
 
     emit sende_maus_pos(p_real);
 }
-
 void vorschau::wheelEvent(QWheelEvent *event)
 {
     QPoint mauspos = event->pos();
@@ -1072,7 +1112,6 @@ void vorschau::wheelEvent(QWheelEvent *event)
     }
     this->update();
 }
-
 void vorschau::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::MidButton)
@@ -1118,14 +1157,12 @@ void vorschau::mousePressEvent(QMouseEvent *event)
         sende_zeilennummer(Zeile_von_maus_pos, false);
     }
 }
-
 void vorschau::slot_sende_zeilennummer()
 {
     uint zeile = Zeile_von_maus_pos;
     slot_aktives_Element_einfaerben(zeile);
     emit sende_zeilennummer(zeile, true);
 }
-
 void vorschau::mouseReleaseEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::MidButton)
@@ -1133,7 +1170,6 @@ void vorschau::mouseReleaseEvent(QMouseEvent *event)
         Mrg = false;
     }
 }
-
 void vorschau::slot_zf_gleich_eins()
 {
     Zf = 1;
@@ -1141,12 +1177,10 @@ void vorschau::slot_zf_gleich_eins()
     Npv.y = 0;
     update_cad();
 }
-
 void vorschau::slot_tunix()
 {
 
 }
-
 QColor vorschau::set_farbe(QString farbe)
 {
     QColor qfarbe = Qt::black;
@@ -1189,7 +1223,6 @@ QColor vorschau::set_farbe(QString farbe)
     }
     return qfarbe;
 }
-
 Qt::PenStyle vorschau::set_linienstil(QString stil)
 {
     Qt::PenStyle style = Qt::SolidLine;
