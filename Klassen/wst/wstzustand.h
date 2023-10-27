@@ -4,6 +4,7 @@
 #include <QVector>
 #include <QMessageBox>
 
+#include "ToDo.h"
 #include "Klassen/text_zw.h"
 #include "Klassen/wkz/wkz_magazin.h"
 #include "Klassen/geo/geo_text.h"
@@ -218,6 +219,9 @@ private:
     QString bearb_menschlich_lesbar(text_zw bearbzeile);
     void fmc_dateitext(int index);
     void eigen_dateitext(int index);
+    QString eigen_export_parameter(QString bezeichner, QString wert);
+    QString eigen_export_fileinfo();
+    QString eigen_export_prgkopf(double laenge, double breite, QString drewi);
     void ganx_dateitext(int index);
     void ggf_dateitext(int index);
 

@@ -9397,6 +9397,49 @@ void wstzustand::fmc_dateitext(int index)
     Exporttext.append(msg);
     Export_moeglich.append(true);
 }
+QString wstzustand::eigen_export_parameter(QString bezeichner, QString wert)
+{
+    QString ret;
+    ret += "    ";
+    ret += "<";
+    ret += bezeichner;
+    ret += ">";
+    ret += wert;
+    ret += "</";
+    ret += bezeichner;
+    ret += ">";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_fileinfo()
+{
+    QString ret;
+    ret += "<<Datei-Information>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Programmversion", PROGRAMMVERSION);
+    ret += "<</Datei-Information>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_prgkopf(double laenge, double breite, QString drewi)
+{
+    QString ret;
+    ret += "<<Programmkopf>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Wst_Name", Name);
+    ret += eigen_export_parameter("Wst_Laenge", double_to_qstring(laenge));
+    ret += eigen_export_parameter("Wst_Breite", double_to_qstring(breite));
+    ret += eigen_export_parameter("Wst_Dicke", dicke_qstring());
+    ret += eigen_export_parameter("Wst_Kante_vo", kante_vo(drewi));
+    ret += eigen_export_parameter("Wst_Kante_hi", kante_hi(drewi));
+    ret += eigen_export_parameter("Wst_Kante_li", kante_li(drewi));
+    ret += eigen_export_parameter("Wst_Kante_re", kante_re(drewi));
+    ret += "<</Programmkopf>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
 void wstzustand::eigen_dateitext(int index)
 {
     text_zw bearb = Bearb.at(index);
@@ -9407,38 +9450,11 @@ void wstzustand::eigen_dateitext(int index)
     dubosplitten(bearb, wkzmag);
 
     QString msg;
-
-    //Programmkopf:
-    msg += Name;
-    msg += "\n";
-    msg += "L: ";
-    msg += double_to_qstring(tmp_l);
-    msg += "\n";
-    msg += "B: ";
-    msg += double_to_qstring(tmp_b);
-    msg += "\n";
-    msg += "D: ";
-    msg += dicke_qstring();
-    msg += "\n";
-    msg += "---------------";
-    msg += "\n";
-    //Kanteninfo:
-    msg += "Kante vorne: \t\"";
-    msg += kante_vo(drewi);
-    msg += "\"\n";
-    msg += "Kante hinten: \t\"";
-    msg += kante_hi(drewi);
-    msg += "\"\n";
-    msg += "Kante links: \t\"";
-    msg += kante_li(drewi);
-    msg += "\"\n";
-    msg += "Kante rechts: \t\"";
-    msg += kante_re(drewi);
-    msg += "\"\n";
-    msg += "---------------";
-    msg += "\n";
-
+    msg  = eigen_export_fileinfo();
+    msg += eigen_export_prgkopf(tmp_l, tmp_b, drewi);
+    msg += "<<<Bearbeitungen>>>\n";
     msg += bearb.text();
+    msg += "\n<<</Bearbeitungen>>>\n";
 
     Fehler_kein_wkz.append("");
     Exporttext.append(msg);
