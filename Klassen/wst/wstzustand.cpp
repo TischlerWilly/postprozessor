@@ -9422,10 +9422,10 @@ QString wstzustand::eigen_export_fileinfo()
     ret += "\n";
     return ret;
 }
-QString wstzustand::eigen_export_prgkopf(double laenge, double breite, QString drewi)
+QString wstzustand::eigen_export_wstprgkopf(double laenge, double breite, QString drewi)
 {
     QString ret;
-    ret += "<<Programmkopf>>";
+    ret += "<<Werkstueck>>";
     ret += "\n";
     ret += eigen_export_parameter("Wst_Name", Name);
     ret += eigen_export_parameter("Wst_Laenge", double_to_qstring(laenge));
@@ -9435,7 +9435,153 @@ QString wstzustand::eigen_export_prgkopf(double laenge, double breite, QString d
     ret += eigen_export_parameter("Wst_Kante_hi", kante_hi(drewi));
     ret += eigen_export_parameter("Wst_Kante_li", kante_li(drewi));
     ret += eigen_export_parameter("Wst_Kante_re", kante_re(drewi));
-    ret += "<</Programmkopf>>";
+    ret += "<</Werkstueck>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_bo(bohrung bo)
+{
+    QString ret;
+    ret += "<<Bohrung>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Bezug", bo.bezug());
+    ret += eigen_export_parameter("BO_dm", bo.dm_qstring());
+    ret += eigen_export_parameter("BO_ti", bo.tiefe_qstring());
+    ret += eigen_export_parameter("BO_x", bo.x_qstring());
+    ret += eigen_export_parameter("BO_y", bo.y_qstring());
+    ret += eigen_export_parameter("BO_z", bo.z_qstring());
+    ret += eigen_export_parameter("BO_afb", bo.afb());
+    ret += eigen_export_parameter("BO_zsm", bo.zustellmass_qstring());
+    ret += eigen_export_parameter("BO_wkz", bo.wkznum());
+    ret += "<</Bohrung>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_rta(rechtecktasche rt)
+{
+    QString ret;
+    ret += "<<Rechtecktasche>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Bezug", rt.bezug());
+    ret += eigen_export_parameter("RTA_la", rt.laenge_qstring());
+    ret += eigen_export_parameter("RTA_br", rt.breite_qstring());
+    ret += eigen_export_parameter("RTA_ti", rt.tiefe_qstring());
+    ret += eigen_export_parameter("RTA_x", rt.x_qstring());
+    ret += eigen_export_parameter("RTA_y", rt.y_qstring());
+    ret += eigen_export_parameter("RTA_z", rt.z_qstring());
+    ret += eigen_export_parameter("RTA_drwi", rt.drewi_qstring());
+    ret += eigen_export_parameter("RTA_rad", rt.rad_qstring());
+    ret += eigen_export_parameter("RTA_ausr", rt.ausraeumen_qstring());
+    ret += eigen_export_parameter("RTA_afb", rt.afb());
+    ret += eigen_export_parameter("RTA_zsm", rt.zustellmass_qstring());
+    ret += eigen_export_parameter("RTA_wkz", rt.wkznum());
+    ret += "<</Rechtecktasche>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_nut(nut nu)
+{
+    QString ret;
+    ret += "<<Nut>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Bezug", nu.bezug());
+    ret += eigen_export_parameter("NUT_xs", nu.xs_qstring());
+    ret += eigen_export_parameter("NUT_ys", nu.ys_qstring());
+    ret += eigen_export_parameter("NUT_zs", nu.zs_qstring());
+    ret += eigen_export_parameter("NUT_xe", nu.xe_qstring());
+    ret += eigen_export_parameter("NUT_ye", nu.ye_qstring());
+    ret += eigen_export_parameter("NUT_ze", nu.ze_qstring());
+    ret += eigen_export_parameter("NUT_ti", nu.tiefe_qstring());
+    ret += eigen_export_parameter("NUT_br", nu.breite_qstring());
+    ret += eigen_export_parameter("NUT_afb", nu.afb());
+    ret += "<</Nut>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_fa(fraeseraufruf fa)
+{
+    QString ret;
+    ret += "<<Fraeser-Aufruf>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Bezug", fa.bezug());
+    ret += eigen_export_parameter("FA_x", fa.x_qstring());
+    ret += eigen_export_parameter("FA_y", fa.y_qstring());
+    ret += eigen_export_parameter("FA_z", fa.z_qstring());
+    ret += eigen_export_parameter("FA_ti", fa.tiefe_qstring());
+    ret += eigen_export_parameter("FA_radkor", fa.radkor());
+    ret += eigen_export_parameter("FA_wkz", fa.wkznum());
+    ret += eigen_export_parameter("FA_afb", fa.afb());
+    ret += eigen_export_parameter("FA_antyp", fa.anfahrtyp());
+    ret += eigen_export_parameter("FA_abtyp", fa.abfahrtyp());
+    ret += eigen_export_parameter("FA_anweg", fa.anfahrweg_qstring());
+    ret += eigen_export_parameter("FA_abweg", fa.abfahrweg_qstring());
+    ret += "<</Fraeser-Aufruf>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_fg(fraesergerade fg)
+{
+    QString ret;
+    ret += "<<Gerade fraesen>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Bezug", fg.bezug());
+    ret += eigen_export_parameter("FG_xs", fg.xs_qstring());
+    ret += eigen_export_parameter("FG_ys", fg.ys_qstring());
+    ret += eigen_export_parameter("FG_zs", fg.zs_qstring());
+    ret += eigen_export_parameter("FG_xe", fg.xe_qstring());
+    ret += eigen_export_parameter("FG_ye", fg.ye_qstring());
+    ret += eigen_export_parameter("FG_ze", fg.ze_qstring());
+    ret += eigen_export_parameter("FG_afb", fg.afb());
+    ret += eigen_export_parameter("FG_tiSta", fg.tiSta_qstring());
+    ret += eigen_export_parameter("FG_tiEnd", fg.tiEnd_qstring());
+    ret += "<</Gerade fraesen>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_fb(fraeserbogen fb)
+{
+    QString ret;
+    ret += "<<Bogen fraesen>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Bezug", fb.bezug());
+    ret += eigen_export_parameter("FB_xs", fb.xs_qstring());
+    ret += eigen_export_parameter("FB_ys", fb.ys_qstring());
+    ret += eigen_export_parameter("FB_zs", fb.zs_qstring());
+    ret += eigen_export_parameter("FB_xe", fb.xe_qstring());
+    ret += eigen_export_parameter("FB_ye", fb.ye_qstring());
+    ret += eigen_export_parameter("FB_ze", fb.ze_qstring());
+    ret += eigen_export_parameter("FB_rad", fb.rad_qstring());
+    ret += eigen_export_parameter("FB_uzs", fb.uzs_qstring());
+    ret += eigen_export_parameter("FB_afb", fb.afb());
+    ret += eigen_export_parameter("FB_tiSta", fb.tiSta_qstring());
+    ret += eigen_export_parameter("FB_tiEnd", fb.tiEnd_qstring());
+    ret += "<</Bogen fraesen>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_gehr(gehrung ge)
+{
+    QString ret;
+    ret += "<<Gehrung>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Bezug", ge.bezug());
+    ret += eigen_export_parameter("GEHR_xs", ge.stapu().x_QString());
+    ret += eigen_export_parameter("GEHR_ys", ge.stapu().y_QString());
+    ret += eigen_export_parameter("GEHR_xe", ge.endpu().x_QString());
+    ret += eigen_export_parameter("GEHR_ye", ge.endpu().y_QString());
+    ret += eigen_export_parameter("GEHR_wi", ge.winkel_qstring());
+    ret += eigen_export_parameter("GEHR_afb", ge.afb());
+    ret += eigen_export_parameter("GEHR_wkz", ge.wkznum());
+    ret += eigen_export_parameter("GEHR_riti", ge.riti_qstring());
+    ret += eigen_export_parameter("GEHR_sti", ge.sti_qstring());
+    ret += "<</Gehrung>>";
     ret += "\n";
     ret += "\n";
     return ret;
@@ -9451,10 +9597,42 @@ void wstzustand::eigen_dateitext(int index)
 
     QString msg;
     msg  = eigen_export_fileinfo();
-    msg += eigen_export_prgkopf(tmp_l, tmp_b, drewi);
-    msg += "<<<Bearbeitungen>>>\n";
-    msg += bearb.text();
-    msg += "\n<<</Bearbeitungen>>>\n";
+    msg += eigen_export_wstprgkopf(tmp_l, tmp_b, drewi);
+
+    for(uint i=0; i<bearb.count() ;i++)
+    {
+        text_zw zeile;
+        zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            msg += eigen_export_bo(bo);
+        }else if(zeile.at(0) == BEARBART_RTA)
+        {
+            rechtecktasche rt(zeile.text());
+            msg += eigen_export_rta(rt);
+        }else if(zeile.at(0) == BEARBART_NUT)
+        {
+            nut nu(zeile.text());
+            msg += eigen_export_nut(nu);
+        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
+        {
+            fraeseraufruf fa(zeile.text());
+            msg += eigen_export_fa(fa);
+        }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg(zeile.text());
+            msg += eigen_export_fg(fg);
+        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb(zeile.text());
+            msg += eigen_export_fb(fb);
+        }else if(zeile.at(0) == BEARBART_GEHRUNG)
+        {
+            gehrung ge(zeile.text());
+            msg += eigen_export_gehr(ge);
+        }
+    }
 
     Fehler_kein_wkz.append("");
     Exporttext.append(msg);

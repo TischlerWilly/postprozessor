@@ -221,7 +221,14 @@ private:
     void eigen_dateitext(int index);
     QString eigen_export_parameter(QString bezeichner, QString wert);
     QString eigen_export_fileinfo();
-    QString eigen_export_prgkopf(double laenge, double breite, QString drewi);
+    QString eigen_export_wstprgkopf(double laenge, double breite, QString drewi);
+    QString eigen_export_bo(bohrung bo);
+    QString eigen_export_rta(rechtecktasche rt);
+    QString eigen_export_nut(nut nu);
+    QString eigen_export_fa(fraeseraufruf fa);
+    QString eigen_export_fb(fraeserbogen fb);
+    QString eigen_export_fg(fraesergerade fg);
+    QString eigen_export_gehr(gehrung ge);
     void ganx_dateitext(int index);
     void ggf_dateitext(int index);
 
