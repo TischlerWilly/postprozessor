@@ -983,8 +983,6 @@ void MainWindow::set_projektpfad()
         QString pfad_lokal;
         QString format;
         pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
-        pfad_lokal += QDir::separator();
-        pfad_lokal += "DetailModus";
         if(ui->radioButton_vorschau_fmc->isChecked())
         {
             pfad_lokal += QDir::separator();
@@ -1146,7 +1144,6 @@ void MainWindow::set_projektpfad()
         }
         pfad.replace("\\", QDir::separator());
         pfad.replace("/", QDir::separator());
-        //QString pfad_mit_dateinamen;
         if(!pfad.isEmpty() && !dateiname.isEmpty())
         {
             Pfad_mit_dateinamen = pfad + QDir::separator() + dateiname;
@@ -1630,6 +1627,71 @@ void MainWindow::on_actionWST_bearbeiten_triggered()
         dlg_wst_bearbeiten.show();
     }
 }
+void MainWindow::on_actionSchliessen_triggered()
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        QString name = ui->listWidget_wste->currentItem()->text();
+        if(!name.isEmpty())
+        {
+            wste.entf(name);
+            update_listwidget_wste();
+            signal_exporte(wste.namen_tz());
+        }else
+        {
+            QString msg;
+            msg = "Bauteil hat keinen Namen!";
+            QMessageBox mb;
+            mb.setText(msg);
+            mb.setWindowTitle("Datei schließen");
+                mb.exec();
+        }
+
+    }else
+    {
+        QString msg;
+        msg = "Es ist kein Bauteil ausgewählt!";
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.setWindowTitle("Datei schließen");
+        mb.exec();
+    }
+}
+void MainWindow::on_action_oeffnen_triggered()
+{
+    QString pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
+    pfad_lokal += QDir::separator();
+    pfad_lokal += "eigen";
+    pfad_lokal.replace("\\", QDir::separator());//linux style
+    pfad_lokal.replace("/", QDir::separator());//windows style
+    QStringList pfade = QFileDialog::getOpenFileNames(this, tr("Wähle PPF-Datei"), \
+                                                      pfad_lokal, tr("ppf Dateien (*.ppf)"));
+    for(int i=0; i<pfade.size() ;i++)
+    {
+        QString aktueller_pfad = pfade.at(i);
+        QFile datei(aktueller_pfad);
+        if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += aktueller_pfad;
+            tmp += "\n";
+            tmp += "in der Funktion on_action_oeffnen_triggered";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            QString inhalt = datei.readAll();
+            QFileInfo info = aktueller_pfad;
+            QString wstname = info.fileName();
+            QString dateiendung = ".ppf";
+            wstname = wstname.left(wstname.length()-dateiendung.length());
+            wste.import_ppf(wstname, inhalt);
+        }
+    }
+    werkstueck w;//leeres wst
+    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken
+    update_listwidget_wste();
+    signal_exporte(wste.namen_tz());
+}
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
 {
@@ -1650,14 +1712,18 @@ void MainWindow::on_pushButton_import_clicked()
 {
     import();
     werkstueck w;//leeres wst
-    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken    
+    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken
+    update_listwidget_wste();
+    signal_exporte(wste.namen_tz());
+}
+void MainWindow::update_listwidget_wste()
+{
     ui->listWidget_wste->clear();
 
     for(uint i=0; i<wste.anzahl() ;i++)
     {
         ui->listWidget_wste->addItem(wste.wst(i)->name());
-    }    
-    signal_exporte(wste.namen_tz());
+    }
 }
 void MainWindow::on_pushButton_einzelexport_clicked()
 {
@@ -2388,6 +2454,12 @@ void MainWindow::update_btn_gute_seite(bool gut_oben)
         ui->pushButton_gute_seite->setText("Gute Seite unten");
     }
 }
+
+
+
+
+
+
 
 
 

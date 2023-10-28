@@ -25,6 +25,35 @@ bool werkstuecke::neu(QString Werkstueckname, QString Quellformat)
     }
     return false;
 }
+bool werkstuecke::entf(QString Werkstueckname)
+{
+    int wst_index = get_index(Werkstueckname);
+    if(wst_index >= 0)
+    {
+        Namen.entf(wst_index, 1);
+        Quellformate.entf(wst_index, 1);
+        Wste.erase(Wste.begin() + wst_index);
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+bool werkstuecke::import_ppf(QString Werkstueckname, QString importtext)
+{
+    int Index = index(Werkstueckname);
+    if(Index == -1)
+    {
+        neu(Werkstueckname, GGF);
+        Index = index(Werkstueckname);
+    }
+    werkstueck w = Wste.at(Index);
+    //Einlesen
+    //...
+    //...
+    Wste.replace(Index, w);
+    return 0;
+}
 bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool istOberseite)
 {
 
@@ -5185,6 +5214,17 @@ bool werkstuecke::ist_bekannt(QString Werkstueckname)
         }
     }
     return false;
+}
+int werkstuecke::get_index(QString Werkstueckname)
+{
+    for(uint i=0; i<Namen.count() ;i++)
+    {
+        if(Werkstueckname == Namen.at(i))
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 werkstueck* werkstuecke::wst(uint index)
 {

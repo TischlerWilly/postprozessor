@@ -767,8 +767,16 @@
     <addaction name="actionEinstellung_dxf"/>
     <addaction name="actionEinstellung_dxf_klassen"/>
    </widget>
+   <widget class="QMenu" name="menuDatei">
+    <property name="title">
+     <string>Datei</string>
+    </property>
+    <addaction name="actionSchliessen"/>
+    <addaction name="action_oeffnen"/>
+   </widget>
    <addaction name="menuWerkzeug"/>
    <addaction name="menuEinstellungen"/>
+   <addaction name="menuDatei"/>
    <addaction name="menuExtras"/>
   </widget>
   <action name="actionWerkzeug_ganx_anzeigen">
@@ -866,6 +874,22 @@
   <action name="actionWerkzeug_Postprozessor">
    <property name="text">
     <string>Werkzeug Postprozessor</string>
+   </property>
+  </action>
+  <action name="actionSchliessen">
+   <property name="text">
+    <string>Schließen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="action_oeffnen">
+   <property name="text">
+    <string>Öffnen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
  </widget>

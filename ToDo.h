@@ -6,6 +6,10 @@
 #endif //PROGRAMMVERSION
 /*
 
+bool werkstuecke::import_ppf(QString Werkstueckname, QString importtext)
+
+
+
 QString wstzustand::warnungen_cix(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b)
 void wstzustand::finde_drehwinkel_auto_(int index)
 

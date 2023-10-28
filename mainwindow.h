@@ -97,6 +97,9 @@ private slots:
     void on_actionWerkzeug_Postprozessor_triggered();
     void update_btn_gute_seite(bool gut_oben);
     void on_pushButton_gute_seite_clicked();
+    void on_actionSchliessen_triggered();
+
+    void on_action_oeffnen_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -137,6 +140,7 @@ private:
     void schreibe_in_zwischenablage(QString s);
     QString fenstertitel_exportuebersicht();
     void set_prginfo();
+    void update_listwidget_wste();
 
     //Dialoge:
     mainwin_wkzmagazin dlg_wkzmag;
