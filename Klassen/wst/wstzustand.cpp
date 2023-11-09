@@ -165,14 +165,11 @@ void wstzustand::set_name(QString neuer_name)
 }
 void wstzustand::set_gute_seite(bool ist_oben)
 {
-    if(ist_oben != Gut_ist_oben)
+    if(!Format.isEmpty())
     {
-        if(!Format.isEmpty())
-        {
-            clear();
-        }
-        Gut_ist_oben = ist_oben;
+        clear();
     }
+    Gut_ist_oben = ist_oben;
 }
 void wstzustand::set_zust_fkon(QString zust)
 {
@@ -283,6 +280,7 @@ QString wstzustand::kante_re()
 //----------------------------------Manipulationen:
 void wstzustand::anfordern(QString format, wkz_magazin wkzmag, QString drehung)
 {
+    /*
     //Prüfen ob Zustand bereits existiert:
     bool existiert = false;
     for(int i = 0; i<Format.count();i++)
@@ -300,6 +298,9 @@ void wstzustand::anfordern(QString format, wkz_magazin wkzmag, QString drehung)
         erzeugen(format, wkzmag, drehung);
         Akt_zust = Format.count()-1;
     }
+    */
+    erzeugen(format, wkzmag, drehung);
+    Akt_zust = Format.count()-1;
 }
 //----------------------------------
 //Private:

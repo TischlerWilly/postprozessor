@@ -76,6 +76,17 @@ void Dialog_programmtext::slot_wst(werkstueck* w)
         param += "nein";
     }
     pkopf.add_hi(param);
+    param = "Gute Seite=";
+    if(w->zustand().ist_gut_oben() == true)
+    {
+
+        param += "oben";
+    }else
+    {
+        param += "unten";
+    }
+    pkopf.add_hi(param);
+
     ui->listWidget_prgtext->addItem(pkopf.text());
     //Bearbeitungen ab 2. Zeile einfügen:
     text_zw tmp_bearb = w->zustand().bearb();

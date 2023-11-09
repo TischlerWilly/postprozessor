@@ -54,6 +54,10 @@ public:
     QString kante_hi();
     QString kante_li();
     QString kante_re();
+    inline bool ist_gut_oben()
+    {
+        return Gut_ist_oben;
+    }
 
     inline int count()
     {
@@ -257,7 +261,7 @@ private:
     QString kante_vo_ganx(QString drewi);
     QString kante_hi_ganx(QString drewi);
     QString kante_li_ganx(QString drewi);
-    QString kante_re_ganx(QString drewi);
+    QString kante_re_ganx(QString drewi);    
 
     QVector<QString>            Format;
     QVector<wkz_magazin>        Wkzm;

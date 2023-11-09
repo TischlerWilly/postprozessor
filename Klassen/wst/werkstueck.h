@@ -48,7 +48,8 @@ public:
     void set_kante_re(QString artiklenummer);
     void set_zugabe_gehrungen(double wert);
     void set_zustand(QString format, wkz_magazin* wkzmag, QString drehung, \
-                     bool formartierungen_aufbrechen, QString zust_fkon);
+                     bool formartierungen_aufbrechen, QString zust_fkon, \
+                     bool gut_ist_oben);
     void set_einstellung_ganx(einstellung_ganx e);
     void set_use_ax(bool benutzen);
     void set_use_ay(bool benutzen);

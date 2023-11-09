@@ -2062,11 +2062,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("eigen", &wkz_mag_fmc, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            wste.wst(wstindex)->ist_gut_oben());
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
-            update_btn_gute_seite(wste.wst(wstindex)->ist_gut_oben());
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
             //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
         }else if(ui->radioButton_vorschau_ganx->isChecked())
         {            
@@ -2075,11 +2076,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ganx", &wkz_mag_ganx, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            !wste.wst(wstindex)->ist_gut_oben());//gute Seite invertiert
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
-            update_btn_gute_seite(!wste.wst(wstindex)->ist_gut_oben());//invertiert
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
         }else if(ui->radioButton_vorschau_fmc->isChecked())
         {
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -2087,11 +2089,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("fmc", &wkz_mag_fmc, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            wste.wst(wstindex)->ist_gut_oben());
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
-            update_btn_gute_seite(wste.wst(wstindex)->ist_gut_oben());
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
         }else if(ui->radioButton_vorschau_cix->isChecked())
         {
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -2099,11 +2102,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("cix", &wkz_mag_cix, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            wste.wst(wstindex)->ist_gut_oben());
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
-            update_btn_gute_seite(wste.wst(wstindex)->ist_gut_oben());
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
         }else if(ui->radioButton_vorschau_ggf->isChecked())
         {
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -2111,11 +2115,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ggf", &wkz_mag_ggf, Einstellung.drehung_wst(), \
-                     Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            wste.wst(wstindex)->ist_gut_oben());
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
-            update_btn_gute_seite(wste.wst(wstindex)->ist_gut_oben());
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
         }
         if(dlg_prgtext.isVisible())
         {

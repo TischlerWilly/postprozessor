@@ -102,7 +102,8 @@ void werkstueck::set_zugabe_gehrungen(double wert)
     Zugabe_gehrungen = wert;
 }
 void werkstueck::set_zustand(QString format, wkz_magazin* wkzmag, QString drehung, \
-                             bool formartierungen_aufbrechen, QString zust_fkon)
+                             bool formartierungen_aufbrechen, QString zust_fkon, \
+                             bool gut_ist_oben)
 {
     Zustand.set_bearb(Bearb);
     Zustand.set_laenge(laenge());
@@ -116,6 +117,7 @@ void werkstueck::set_zustand(QString format, wkz_magazin* wkzmag, QString drehun
     Zustand.set_formartierungen_aufbrechen(formartierungen_aufbrechen);
     Zustand.set_name(name());
     Zustand.set_zust_fkon(zust_fkon);
+    Zustand.set_gute_seite(gut_ist_oben);
     Zustand.anfordern(format, *wkzmag, drehung);
 }
 void werkstueck::set_einstellung_ganx(einstellung_ganx e)
@@ -436,7 +438,7 @@ void werkstueck::gute_seite_ermitteln()
     {
         retwert = false;
     }
-    Gut_ist_oben = retwert;
+    Gut_ist_oben = retwert;    
 }
 
 
