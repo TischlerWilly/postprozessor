@@ -150,7 +150,7 @@
     <item row="12" column="0">
      <widget class="QLabel" name="label_8">
       <property name="text">
-       <string>abfahrweg</string>
+       <string>Abfahrweg</string>
       </property>
      </widget>
     </item>
