@@ -760,6 +760,7 @@
      <string>Einstellungen</string>
     </property>
     <addaction name="actionEntwicklermodus"/>
+    <addaction name="actionEigenes_Format_imm_mit_exportieren"/>
     <addaction name="actionEinstellung_pfade"/>
     <addaction name="actionStandard_Namen_anzeigen"/>
     <addaction name="actionEinstellung_fmc"/>
@@ -890,6 +891,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionEigenes_Format_imm_mit_exportieren">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Eigenes Format imm mit exportieren</string>
    </property>
   </action>
  </widget>

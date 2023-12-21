@@ -168,6 +168,7 @@ void MainWindow::setup()
         {
             Einstellung.set_text(file.readAll());
             ui->actionEntwicklermodus->setChecked(Einstellung.entwicklermodus());
+            ui->actionEigenes_Format_imm_mit_exportieren->setChecked(Einstellung.eigenes_format_immer_mit_exportieren());
             ui->checkBox_quelldat_erhalt->setChecked(Einstellung.quelldateien_erhalten());
             ui->checkBox_std_namen_zuweisen->setChecked(Einstellung.std_dateinamen_verwenden());
             QString drehung = Einstellung.drehung_wst();
@@ -1223,6 +1224,110 @@ void MainWindow::set_projektpfad()
         }
     }
 }
+QString MainWindow::projektpfad_lokal_eigen()
+{
+    QString returnpfad;
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        Projektpfad_stimmt = false;
+        QString pfad;
+        QString dateiname;
+        QString pfad_lokal;
+        QString format;
+        pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
+
+        pfad_lokal += QDir::separator();
+        format = "eigen";
+        pfad_lokal += format;
+
+        pfad = pfad_lokal;
+        pfad += QDir::separator();
+
+        if(!ui->lineEdit_projekt->text().isEmpty())
+        {
+            pfad += ui->lineEdit_projekt->text();
+            if(!ui->lineEdit_pos->text().isEmpty())
+            {
+                QString tmp = ui->lineEdit_pos->text();
+                QString barcode;
+                if(tmp.contains(","))
+                {
+                    QString li = text_links(tmp, ",");
+                    QString re = text_rechts(tmp, ",");
+                    if(li.length()==4)
+                    {
+                        barcode += tmp;
+                    }else if(li.length()==3)
+                    {
+                        barcode += "0";
+                        barcode += li;
+                        barcode += ",";
+                        barcode += re;
+                    }else if(li.length()==2)
+                    {
+                        barcode += "00";
+                        barcode += li;
+                        barcode += ",";
+                        barcode += re;
+                    }else if(li.length()==1)
+                    {
+                        barcode += "000";
+                        barcode += li;
+                        barcode += ",";
+                        barcode += re;
+                    }
+                }else
+                {
+                    if(tmp.length()==4)
+                    {
+                        barcode += tmp;
+                    }else if(tmp.length()==3)
+                    {
+                        barcode += "0";
+                        barcode += tmp;
+                    }else if(tmp.length()==2)
+                    {
+                        barcode += "00";
+                        barcode += tmp;
+                    }else if(tmp.length()==1)
+                    {
+                        barcode += "000";
+                        barcode += tmp;
+                    }
+                }
+                pfad += QDir::separator();
+                pfad += barcode;
+                Projektpfad_stimmt = true;
+                if(!ui->lineEdit_baugruppe->text().isEmpty())
+                {
+                    pfad += QDir::separator();
+                    pfad += ui->lineEdit_baugruppe->text();
+                }
+                if(ui->listWidget_wste->selectedItems().count() && ui->listWidget_wste->currentItem())
+                {
+                    if(!ui->listWidget_wste->currentItem()->text().isEmpty())
+                    {
+                        dateiname = ui->listWidget_wste->currentItem()->text();
+                        dateiname += ".ppf";
+                    }
+                }
+            }else
+            {
+                pfad.clear();
+            }
+        }else
+        {
+            pfad.clear();
+        }
+        pfad.replace("\\", QDir::separator());
+        pfad.replace("/", QDir::separator());
+        if(!pfad.isEmpty() && !dateiname.isEmpty())
+        {
+            returnpfad = pfad + QDir::separator() + dateiname;
+        }
+    }
+    return returnpfad;
+}
 QString MainWindow::fenstertitel_exportuebersicht()
 {
     QString titel = "Exportübersicht ";
@@ -1537,6 +1642,11 @@ void MainWindow::on_actionEntwicklermodus_triggered(bool checked)
     Einstellung.set_entwicklermodus(checked);
     schreibe_ini();
 }
+void MainWindow::on_actionEigenes_Format_imm_mit_exportieren_triggered(bool checked)
+{
+    Einstellung.set_eigenes_format_immer_mit_exportieren(checked);
+    schreibe_ini();
+}
 void MainWindow::on_actionWerkzeug_Postprozessor_triggered()
 {
     dlg_wkz_pp.set_einstellung(Einstellung);
@@ -1744,7 +1854,7 @@ void MainWindow::update_listwidget_wste()
 }
 void MainWindow::on_pushButton_einzelexport_clicked()
 {
-    QString pfad = Pfad_mit_dateinamen;
+    QString pfad = Pfad_mit_dateinamen;    
     bool exportieren = false;
     if(!pfad.isEmpty())
     {
@@ -1752,7 +1862,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         {
             if(!ui->listWidget_wste->currentItem()->text().isEmpty())
             {
-                QString dateiname = ui->listWidget_wste->currentItem()->text();
+                QString dateiname = ui->listWidget_wste->currentItem()->text();                
                 if(ui->radioButton_vorschau_fmc->isChecked())
                 {
                     dateiname += ".fmc";
@@ -1770,7 +1880,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     dateiname += ".ppf";
                 }
                 QDir exportdir(text_links(pfad, dateiname));
-                exportdir.mkpath(text_links(pfad, dateiname));
+                exportdir.mkpath(text_links(pfad, dateiname));                
                 QFile f(pfad);
                 if(f.exists())
                 {
@@ -1843,6 +1953,37 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         {
             fkonkanschon = false;
         }
+
+        if(Einstellung.eigenes_format_immer_mit_exportieren() == true)//Exportiere immer eigenes Format mit
+        {
+            QFile file_eigen(projektpfad_lokal_eigen());
+            QFileInfo file_eigen_info(file_eigen);
+            QDir file_eigen_dir(file_eigen_info.path());
+            file_eigen_dir.mkpath(file_eigen_info.path());
+
+            int wstindex = ui->listWidget_wste->currentRow();
+            wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
+            //->set_einstellung_fmc
+            //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
+            wste.wst(wstindex)->set_zustand("eigen", &wkz_mag_fmc, Einstellung.drehung_wst(), \
+                                                                                              Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                                                           wste.wst(wstindex)->ist_gut_oben());
+            //sendVorschauAktualisieren(*wste.wst(wstindex), -1);
+            //getCADFehler(wste.wst(wstindex)->cad_fehler(true));
+            //getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            //update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
+
+            if(wste.wst(wstindex)->zustand().export_moeglich())
+            {
+                if(file_eigen.open(QIODevice::WriteOnly | QIODevice::Text))
+                {
+                    file_eigen.write(wste.wst(wstindex)->zustand().exporttext().toUtf8());
+                }
+                file_eigen.close();
+            }
+        }
+
         if(ui->radioButton_vorschau_fmc->isChecked())
         {
             int i = ui->listWidget_wste->currentRow();
@@ -2476,6 +2617,12 @@ void MainWindow::update_btn_gute_seite(bool gut_oben)
         ui->pushButton_gute_seite->setText("Gute Seite unten");
     }
 }
+
+
+
+
+
+
 
 
 

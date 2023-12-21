@@ -37,6 +37,9 @@ void einstellung::set_text(QString t)
         if(spalten.at(0) == "Entwicklermodus:")
         {
             set_entwicklermodus(spalten.at(1));
+        }else if(spalten.at(0) == "Eigenes Format immer mit exportieren:")
+        {
+            set_eigenes_format_immer_mit_exportieren(spalten.at(1));
         }else if(spalten.at(0) == "verzeichnis_quelle:")
         {
             set_verzeichnis_quelle(spalten.at(1));
@@ -112,6 +115,20 @@ void einstellung::set_entwicklermodus(QString jn)
     }else
     {
         set_entwicklermodus(false);
+    }
+}
+void einstellung::set_eigenes_format_immer_mit_exportieren(bool ja)
+{
+    Eigenes_format_immer_mit_exportieren = ja;
+}
+void einstellung::set_eigenes_format_immer_mit_exportieren(QString jn)
+{
+    if(jn == "ja")
+    {
+        set_eigenes_format_immer_mit_exportieren(true);
+    }else
+    {
+        set_eigenes_format_immer_mit_exportieren(false);
     }
 }
 void einstellung::set_verzeichnis_quelle(QString v)
@@ -329,6 +346,17 @@ QString einstellung::text()
     }
     text += "\n";
 
+    text += "Eigenes Format immer mit exportieren:";
+    text += "\t";
+    if(eigenes_format_immer_mit_exportieren() == true)
+    {
+        text += "ja";
+    }else
+    {
+        text += "nein";
+    }
+    text += "\n";
+
     text += "verzeichnis_quelle:";
     text += "\t";
     text += verzeichnis_quelle();
@@ -483,6 +511,10 @@ QString einstellung::text()
 bool einstellung::entwicklermodus()
 {
     return Entwicklermodus;
+}
+bool einstellung::eigenes_format_immer_mit_exportieren()
+{
+    return Eigenes_format_immer_mit_exportieren;
 }
 QString einstellung::verzeichnis_quelle()
 {
