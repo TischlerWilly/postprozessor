@@ -1664,12 +1664,18 @@ void MainWindow::on_action_oeffnen_triggered()
     pfad_lokal += "eigen";
     pfad_lokal.replace("\\", QDir::separator());//linux style
     pfad_lokal.replace("/", QDir::separator());//windows style
+    if(Pfad_letzte_geoeffnete_ggf_datei.isEmpty())
+    {
+        Pfad_letzte_geoeffnete_ggf_datei = pfad_lokal;
+    }
     QStringList pfade = QFileDialog::getOpenFileNames(this, tr("Wähle PPF-Datei"), \
-                                                      pfad_lokal, tr("ppf Dateien (*.ppf)"));
+                                                      Pfad_letzte_geoeffnete_ggf_datei, tr("ppf Dateien (*.ppf)"));
     for(int i=0; i<pfade.size() ;i++)
     {
         QString aktueller_pfad = pfade.at(i);
         QFile datei(aktueller_pfad);
+        QFileInfo finfo(datei);
+        Pfad_letzte_geoeffnete_ggf_datei = finfo.path();
         if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QString tmp = "Fehler beim Dateizugriff!\n";
@@ -1684,7 +1690,18 @@ void MainWindow::on_action_oeffnen_triggered()
             QString wstname = info.fileName();
             QString dateiendung = ".ppf";
             wstname = wstname.left(wstname.length()-dateiendung.length());
-            wste.import_ppf(wstname, inhalt);
+            if(wste.import_ppf(wstname, inhalt) == false)
+            {
+                QString msg;
+                msg  = "Die Datei \"";
+                msg += wstname;
+                msg += "\" konnte nich geöffnet werden, weil bereits ein Bauteil mit diesem Namen in der ";
+                msg += "Arbeitsliste vorhanden ist.";
+                QMessageBox mb;
+                mb.setWindowTitle("Datei öffnen");
+                mb.setText(msg);
+                mb.exec();
+            }
         }
     }
     werkstueck w;//leeres wst

@@ -125,6 +125,7 @@ private:
     QString Projektposition;
     bool Projektpfad_stimmt;
     QString Pfad_mit_dateinamen;
+    QString Pfad_letzte_geoeffnete_ggf_datei;
 
     //Funktionen:
     void setup();

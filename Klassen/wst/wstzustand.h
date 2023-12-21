@@ -20,6 +20,7 @@
 #include "Defines/def_fmc.h"
 #include "Defines/def_ganx.h"
 #include "Defines/def_cix.h"
+#include "Defines/def_eigen.h"
 #include "Funktionen/umwandeln.h"
 #include "Klassen/wst/ganx_gruppen.h"
 #include "Klassen/wst/cix_index.h"

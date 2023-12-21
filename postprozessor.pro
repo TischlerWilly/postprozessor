@@ -90,6 +90,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     Defines/def_cix.h \
     Defines/def_dxf.h \
+    Defines/def_eigen.h \
     Dialoge/dialog_bearb_bohrung.h \
     Dialoge/dialog_bearb_faufruf.h \
     Dialoge/dialog_bearb_fbogen.h \
