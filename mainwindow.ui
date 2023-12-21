@@ -898,7 +898,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Eigenes Format imm mit exportieren</string>
+    <string>Eigenes Format immer mit exportieren</string>
    </property>
   </action>
  </widget>
