@@ -11821,6 +11821,21 @@ void wstzustand::ganx_dateitext(int index)
                     mb.exec();
                     continue;
                 }
+                bool nuttyp_1 = false;
+                //"Typ 1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                //"Typ 2" = Nut beginnt beim Startmaß und endet am Endmaß
+                if(nu.ys() < 0 && nu.ye() > tmp_b)
+                {
+                    nu.set_ys(-2);
+                    nu.set_ye(tmp_b+2);
+                    nuttyp_1 = true;
+                }
+                if(nu.ys() > tmp_b && nu.ye() < 0)
+                {
+                    nu.set_ys(tmp_b+2);
+                    nu.set_ye(-2);
+                    nuttyp_1 = true;
+                }
                 double x = nu.xs();
                 double y;
                 double z = nu.tiefe(); //Tiefe
@@ -11849,9 +11864,14 @@ void wstzustand::ganx_dateitext(int index)
                 }
                 double wkz_dm = wkzmag.dm(tnummer).toDouble();
 
-                QString nutvariante_qstring = "Var2";
-                //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
-                //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
+                QString nutvariante_qstring;
+                if(nuttyp_1 == true)//"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                {
+                    nutvariante_qstring = "Var1";
+                }else//"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
+                {
+                    nutvariante_qstring = "Var2";
+                }
 
                 QString nutrichtung = "Y";
                 //Mögliche Werte:
@@ -13468,6 +13488,21 @@ void wstzustand::ganx_dateitext(int index)
                     */
                     continue;
                 }
+                bool nuttyp_1 = false;
+                //"Typ 1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                //"Typ 2" = Nut beginnt beim Startmaß und endet am Endmaß
+                if(nu.ys() < 0 && nu.ye() > tmp_b)
+                {
+                    nu.set_ys(-2);
+                    nu.set_ye(tmp_b+2);
+                    nuttyp_1 = true;
+                }
+                if(nu.ys() > tmp_b && nu.ye() < 0)
+                {
+                    nu.set_ys(tmp_b+2);
+                    nu.set_ye(-2);
+                    nuttyp_1 = true;
+                }
                 double x = nu.xs();
                 double y;
                 double z = nu.tiefe(); //Tiefe
@@ -13499,9 +13534,14 @@ void wstzustand::ganx_dateitext(int index)
                 }
                 //double wkz_dm = wkzmag.dm(tnummer).toDouble();
 
-                QString nutvariante_qstring = "Var2";
-                //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
-                //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
+                QString nutvariante_qstring;
+                if(nuttyp_1 == true)//"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                {
+                    nutvariante_qstring = "Var1";
+                }else//"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
+                {
+                    nutvariante_qstring = "Var2";
+                }
 
                 QString nutrichtung = "Y";
                 //Mögliche Werte:

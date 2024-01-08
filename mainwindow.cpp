@@ -1953,37 +1953,6 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         {
             fkonkanschon = false;
         }
-
-        if(Einstellung.eigenes_format_immer_mit_exportieren() == true)//Exportiere immer eigenes Format mit
-        {
-            QFile file_eigen(projektpfad_lokal_eigen());
-            QFileInfo file_eigen_info(file_eigen);
-            QDir file_eigen_dir(file_eigen_info.path());
-            file_eigen_dir.mkpath(file_eigen_info.path());
-
-            int wstindex = ui->listWidget_wste->currentRow();
-            wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
-            //->set_einstellung_fmc
-            //->set_einstellung_eigen
-            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
-            wste.wst(wstindex)->set_zustand("eigen", &wkz_mag_fmc, Einstellung.drehung_wst(), \
-                                                                                              Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
-                                                                           wste.wst(wstindex)->ist_gut_oben());
-            //sendVorschauAktualisieren(*wste.wst(wstindex), -1);
-            //getCADFehler(wste.wst(wstindex)->cad_fehler(true));
-            //getWarnungen(wste.wst(wstindex)->zustand().warnungen());
-            //update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
-
-            if(wste.wst(wstindex)->zustand().export_moeglich())
-            {
-                if(file_eigen.open(QIODevice::WriteOnly | QIODevice::Text))
-                {
-                    file_eigen.write(wste.wst(wstindex)->zustand().exporttext().toUtf8());
-                }
-                file_eigen.close();
-            }
-        }
-
         if(ui->radioButton_vorschau_fmc->isChecked())
         {
             int i = ui->listWidget_wste->currentRow();
@@ -2123,6 +2092,37 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                 mb.exec();
             }
         }
+
+        if(Einstellung.eigenes_format_immer_mit_exportieren() == true)//Exportiere immer eigenes Format mit
+        {
+            QFile file_eigen(projektpfad_lokal_eigen());
+            QFileInfo file_eigen_info(file_eigen);
+            QDir file_eigen_dir(file_eigen_info.path());
+            file_eigen_dir.mkpath(file_eigen_info.path());
+
+            int wstindex = ui->listWidget_wste->currentRow();
+            wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
+            //->set_einstellung_fmc
+            //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
+            wste.wst(wstindex)->set_zustand("eigen", &wkz_mag_fmc, Einstellung.drehung_wst(), \
+                                                                                              Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                                                           wste.wst(wstindex)->ist_gut_oben());
+            //sendVorschauAktualisieren(*wste.wst(wstindex), -1);
+            //getCADFehler(wste.wst(wstindex)->cad_fehler(true));
+            //getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            //update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
+
+            if(wste.wst(wstindex)->zustand().export_moeglich())
+            {
+                if(file_eigen.open(QIODevice::WriteOnly | QIODevice::Text))
+                {
+                    file_eigen.write(wste.wst(wstindex)->zustand().exporttext().toUtf8());
+                }
+                file_eigen.close();
+            }
+        }
+
         QApplication::restoreOverrideCursor();
     }
     set_projektpfad();//Farbänderung
