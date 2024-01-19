@@ -356,7 +356,8 @@ void MainWin_wst_bearbeiten::slot_faufruf(fraeseraufruf fa)
     QString bearb = fa.text();
     ui->listWidget_prgtext->item(index)->setText(fauf_zu_prgzei(bearb));
     text_zw bearbeitungen = Wst->bearb();
-    //Folgezeile mit ändern?:
+
+    //XY-Pos der direkten Folgezeile mit ändern:
     if(index+1 < bearbeitungen.count())
     {
         text_zw bearb_nach;
@@ -364,22 +365,27 @@ void MainWin_wst_bearbeiten::slot_faufruf(fraeseraufruf fa)
         if(bearb_nach.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg_nach(bearb_nach.text());
-            fg_nach.set_startpunkt(fa.pos());
-            fg_nach.set_tiSta(fa.tiefe());
+            fg_nach.set_xs(fa.pos().x());
+            fg_nach.set_ys(fa.pos().y());
             zeile_aendern(index+1, fg_nach.text(), false);
         }else if(bearb_nach.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb_nach(bearb_nach.text());
-            fb_nach.set_startpunkt(fa.pos());
-            fb_nach.set_tiSta(fa.tiefe());
+            fb_nach.set_xs(fa.pos().x());
+            fb_nach.set_ys(fa.pos().y());
             zeile_aendern(index+1, fb_nach.text(), false);
         }
     }
-    //Bezug mit ändern?:
+
     fraeseraufruf fa_alt;
     fa_alt.set_text(bearbeitungen.at(index));
-    if(fa_alt.bezug() != fa.bezug())
+    if(fa_alt.text() != fa.text())
     {
+        //Bezug mit ändern
+        //Frästiefe ändern
+        //Z-Pos ändern
+        double tiefe_neu = fa.tiefe();
+        double pos_z = fa.pos().z();
         for(uint i=index+1; i<bearbeitungen.count() ;i++)
         {
             text_zw bearb_ff;
@@ -387,13 +393,24 @@ void MainWin_wst_bearbeiten::slot_faufruf(fraeseraufruf fa)
             if(bearb_ff.at(0) == BEARBART_FRAESERGERADE)
             {
                 fraesergerade fg(bearb_ff.text());
-                fg.set_bezug(fa.bezug());                
+                fg.set_bezug(fa.bezug());
+                fg.set_tiSta(tiefe_neu);
+                fg.set_tiEnd(tiefe_neu);
+                fg.set_zs(pos_z);
+                fg.set_ze(pos_z);
                 zeile_aendern(i, fg.text(), false);
             }else if(bearb_ff.at(0) == BEARBART_FRAESERBOGEN)
             {
                 fraeserbogen fb(bearb_ff.text());
-                fb.set_uzs(!fb.uzs());
-                fb.set_bezug(fa.bezug());                
+                if(fa_alt.bezug() != fa.bezug())
+                {
+                    fb.set_uzs(!fb.uzs());
+                    fb.set_bezug(fa.bezug());
+                }
+                fb.set_tiSta(tiefe_neu);
+                fb.set_tiEnd(tiefe_neu);
+                fb.set_zs(pos_z);
+                fb.set_ze(pos_z);
                 zeile_aendern(i, fb.text(), false);
             }else
             {
