@@ -11,6 +11,9 @@
 #define EIGEN_PKOPF_KANTE_HI    "Wst_Kante_hi"
 #define EIGEN_PKOPF_KANTE_LI    "Wst_Kante_li"
 #define EIGEN_PKOPF_KANTE_RE    "Wst_Kante_re"
+#define EIGEN_PKOPF_GUTSEI      "Wst_GutSei"
+#define EIGEN_PKOPF_GUTSEI_OBEN "gut oben"
+#define EIGEN_PKOPF_GUTSEI_UNTEN "gut unten"
 
 #define EIGEN_BOHR              "Bohrung"
 #define EIGEN_BOHR_BEZUG        "Bezug"

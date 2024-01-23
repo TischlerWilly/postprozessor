@@ -49,6 +49,7 @@ bool werkstuecke::import_ppf(QString Werkstueckname, QString importtext)
         neu(Werkstueckname, GGF);
         Index = index(Werkstueckname);
         werkstueck w = Wste.at(Index);
+        QString gute_seite;
         //Einlesen
         text_zw tz;
         tz.set_text(importtext,'\n');
@@ -92,6 +93,9 @@ bool werkstuecke::import_ppf(QString Werkstueckname, QString importtext)
                     }else if(zeile.contains(EIGEN_PKOPF_KANTE_RE))
                     {
                         w.set_kante_re(eigen_import_parameter(zeile, EIGEN_PKOPF_KANTE_RE));
+                    }else if(zeile.contains(EIGEN_PKOPF_GUTSEI))
+                    {
+                        gute_seite = eigen_import_parameter(zeile, EIGEN_PKOPF_GUTSEI);
                     }
                 }
             }else if(zeile.contains(EIGEN_BOHR))
@@ -450,7 +454,25 @@ bool werkstuecke::import_ppf(QString Werkstueckname, QString importtext)
 
             }
         }
+        if(gute_seite == EIGEN_PKOPF_GUTSEI_OBEN)
+        {
+            w.set_gute_seite(true);
+        }else
+        {
+            w.set_gute_seite(false);
+        }
         Wste.replace(Index, w);
+        if(w.ist_gut_oben())
+        {
+            QMessageBox mb;
+            mb.setText("gut ist oben");
+            //mb.exec();
+        }else
+        {
+            QMessageBox mb;
+            mb.setText("gut ist unten");
+            //mb.exec();
+        }
     }
     return erfolg;
 }

@@ -9438,6 +9438,13 @@ QString wstzustand::eigen_export_wstprgkopf(double laenge, double breite, QStrin
     ret += eigen_export_parameter(EIGEN_PKOPF_KANTE_HI, kante_hi(drewi));
     ret += eigen_export_parameter(EIGEN_PKOPF_KANTE_LI, kante_li(drewi));
     ret += eigen_export_parameter(EIGEN_PKOPF_KANTE_RE, kante_re(drewi));
+    if(ist_gut_oben())
+    {
+        ret += eigen_export_parameter(EIGEN_PKOPF_GUTSEI, EIGEN_PKOPF_GUTSEI_OBEN);
+    }else
+    {
+        ret += eigen_export_parameter(EIGEN_PKOPF_GUTSEI, EIGEN_PKOPF_GUTSEI_UNTEN);
+    }
     ret += "<</";
     ret += EIGEN_PKOPF;
     ret += ">>";
