@@ -707,7 +707,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
             double eckenrad;
             if(wkzdm > rt.rad())
             {
-                eckenrad = wkzdm;
+                eckenrad = wkzdm/2;
             }else
             {
                 eckenrad = rt.rad();
