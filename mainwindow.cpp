@@ -945,7 +945,7 @@ void MainWindow::on_lineEdit_pos_editingFinished()
     eingabe.replace(",", ".");
     double eingabe_double = eingabe.toDouble();
     QString tmp = double_to_qstring(eingabe_double);
-    if(eingabe.isEmpty() | (eingabe == tmp && eingabe_double <= 9999))
+    if(eingabe.isEmpty() || (eingabe == tmp && eingabe_double <= 9999))
     {
         eingabe.replace(".", ",");
         Projektposition = eingabe;
@@ -1796,7 +1796,8 @@ void MainWindow::on_action_oeffnen_triggered()
         }else
         {
             QString inhalt = datei.readAll();
-            QFileInfo info = aktueller_pfad;
+            QFileInfo info;
+            info.setFile(aktueller_pfad);
             QString wstname = info.fileName();
             QString dateiendung = ".ppf";
             wstname = wstname.left(wstname.length()-dateiendung.length());
@@ -1937,22 +1938,6 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         QApplication::setOverrideCursor(Qt::WaitCursor);        
         //Exportieren:
         QFile f(pfad);
-        bool foauf;
-        if(Einstellung.formartierungen_aufbrechen())
-        {
-            foauf = true;
-        }else
-        {
-            foauf = false;
-        }
-        bool fkonkanschon;
-        if(Einstellung.fkon_kantenschonend())
-        {
-            fkonkanschon = true;
-        }else
-        {
-            fkonkanschon = false;
-        }
         if(ui->radioButton_vorschau_fmc->isChecked())
         {
             int i = ui->listWidget_wste->currentRow();
@@ -2160,7 +2145,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                     ui->listWidget_wste->item(row)->setText(neuer_name);
                     wste.set_name(row, neuer_name);//Namensliste in wste
                     wste.wst(row)->set_name(neuer_name);//name des konkreten wst
-                    signal_wst_umbenennen(name, neuer_name);//gui
+                    emit signal_wst_umbenennen(name, neuer_name);//gui
                     on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
                 }
             }
@@ -2303,7 +2288,8 @@ void MainWindow::on_listWidget_wste_itemDoubleClicked()
 {
     emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()));
 }
-void MainWindow::on_listWidget_wste_itemClicked(QListWidgetItem *item)
+//void MainWindow::on_listWidget_wste_itemClicked(QListWidgetItem *item)
+void MainWindow::on_listWidget_wste_itemClicked()
 {
     on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
 }
@@ -2554,7 +2540,7 @@ void MainWindow::speichere_ausgabepfad(QString pfad)
 {
     if(!pfad.isEmpty())
     {
-        if(pfad.contains(".fmc") | pfad.contains(".ganx") | pfad.contains(".ggf") | pfad.contains(".eigen"))
+        if(pfad.contains(".fmc") || pfad.contains(".ganx") || pfad.contains(".ggf") || pfad.contains(".eigen"))
         {
             QString pfad_neu = text_links(pfad, QDir::separator());;
             pfad_neu += QDir::separator();

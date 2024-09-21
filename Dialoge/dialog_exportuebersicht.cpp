@@ -175,6 +175,7 @@ void Dialog_ExportUebersicht::slot_wst_ausblenden(QString name, bool ausblenden)
     if(zeile >= 0)
     {
         QColor farbe;
+        QBrush brush;
         if(ausblenden == true)
         {
             farbe.setRgb(192,192,192);
@@ -182,12 +183,13 @@ void Dialog_ExportUebersicht::slot_wst_ausblenden(QString name, bool ausblenden)
         {
             farbe.setRgb(0,0,0);
         }
-        ui->tableWidget_exporte->item(zeile, spalte_namen)->setTextColor(farbe);
-        ui->tableWidget_exporte->item(zeile, spalte_fmc)->setTextColor(farbe);
-        ui->tableWidget_exporte->item(zeile, spalte_ganx)->setTextColor(farbe);
-        ui->tableWidget_exporte->item(zeile, spalte_ggf)->setTextColor(farbe);
-        ui->tableWidget_exporte->item(zeile, spalte_eigen)->setTextColor(farbe);
-        ui->tableWidget_exporte->item(zeile, spalte_cix)->setTextColor(farbe);
+        brush.setColor(farbe);
+        ui->tableWidget_exporte->item(zeile, spalte_namen)->setBackground(brush);
+        ui->tableWidget_exporte->item(zeile, spalte_fmc)->setBackground(brush);
+        ui->tableWidget_exporte->item(zeile, spalte_ganx)->setBackground(brush);
+        ui->tableWidget_exporte->item(zeile, spalte_ggf)->setBackground(brush);
+        ui->tableWidget_exporte->item(zeile, spalte_eigen)->setBackground(brush);
+        ui->tableWidget_exporte->item(zeile, spalte_cix)->setBackground(brush);
     }
 }
 

@@ -60,7 +60,9 @@ void mainwin_wkzmagazin::liste_aktualisieren()
         ui->listWidget->addItem(zeile);
         if(!istaktiv)
         {
-            ui->listWidget->item(ui->listWidget->count()-1)->setBackgroundColor(Qt::gray);
+            QBrush brush;
+            brush.setColor(Qt::gray);
+            ui->listWidget->item(ui->listWidget->count()-1)->setBackground(brush);
         }
     }
     ui->listWidget->addItem("...");

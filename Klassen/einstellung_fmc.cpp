@@ -98,5 +98,25 @@ bool einstellung_fmc::drehtyp_B()
 }
 
 
-
+//-------------------Funktionen nicht innerhalb der Klasse:
+bool operator ==(einstellung_fmc e1, einstellung_fmc e2)
+{
+    if(e1.text() == e2.text())
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+bool operator !=(einstellung_fmc e1, einstellung_fmc e2)
+{
+    if(e1.text() == e2.text())
+    {
+        return false;
+    }else
+    {
+        return true;
+    }
+}
 

@@ -4385,8 +4385,8 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                     {
                         QString tmp = wert_nach_istgleich(zeile);
                         tmp = var_einsetzen(w, tmp);
-                        tmp = ausdruck_auswerten(tmp).toDouble();
-                        if(tmp == 1)//Spitze auf der Unterseite
+                        tmp = ausdruck_auswerten(tmp);
+                        if(tmp == "1")//Spitze auf der Unterseite
                         {
                             bezug = WST_BEZUG_OBSEI;
                         }else//Spitze auf der Oberseite

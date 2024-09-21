@@ -189,7 +189,7 @@ void einstellung::set_std_dateinamen_verwenden(QString jn)
 }
 bool einstellung::set_drehung_wst(QString d)
 {
-    if(d =="0" | d =="90" | d=="180" | d=="270" | d=="AUTO")
+    if(d =="0" || d =="90" || d=="180" || d=="270" || d=="AUTO")
     {
         Drehung_wst = d;
         return true;//Erfolg
@@ -200,7 +200,7 @@ bool einstellung::set_drehung_wst(QString d)
 }
 bool einstellung::set_tiefeneinstellung_fkon(QString einst)
 {
-    if(einst == "orgi" | einst == "wkz")
+    if(einst == "orgi" || einst == "wkz")
     {
         Tiefeneinst_fkon = einst;
         return true;//Erfolg

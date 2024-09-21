@@ -193,7 +193,7 @@ std::vector<QString> text_zw::to_vector(QString text, char trennzeichen)
     {
         QString zeile;
         int letztes_trennzeichen = 0;
-        for(int i=0; i<text.count() ;i++)
+        for(int i=0; i<text.length() ;i++)
         {
             if(text.at(i) == trennzeichen)
             {
@@ -205,7 +205,7 @@ std::vector<QString> text_zw::to_vector(QString text, char trennzeichen)
                 zeile += text.at(i);
             }
         }
-        int anz_rest = text.count() - letztes_trennzeichen - 1;
+        int anz_rest = text.length() - letztes_trennzeichen - 1;
         if(anz_rest > 0)
         {
             v.push_back(text.right(anz_rest));
