@@ -23,10 +23,31 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_6">
+    <item row="3" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_z">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_x">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="2">
+     <widget class="QPushButton" name="pushButton_wkzwahl">
       <property name="text">
-       <string>Pos Z</string>
+       <string>...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>Bezug</string>
       </property>
      </widget>
     </item>
@@ -44,15 +65,8 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
+    <item row="7" column="1" colspan="2">
      <widget class="QLineEdit" name="lineEdit_afb"/>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_z">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-     </widget>
     </item>
     <item row="7" column="0">
      <widget class="QLabel" name="label_12">
@@ -61,22 +75,12 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_11">
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Bezug</string>
+       <string>Abfahrtyp</string>
       </property>
      </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_y">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="lineEdit_ti"/>
     </item>
     <item row="4" column="0">
      <widget class="QLabel" name="label_3">
@@ -85,22 +89,39 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_x">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-     </widget>
+    <item row="5" column="1" colspan="2">
+     <widget class="QComboBox" name="comboBox_kor"/>
     </item>
-    <item row="8" column="1">
-     <widget class="QLineEdit" name="lineEdit_wkz"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_10">
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>Korrektur</string>
+       <string>Pos Z</string>
       </property>
      </widget>
+    </item>
+    <item row="6" column="1" colspan="2">
+     <widget class="QComboBox" name="comboBox_bezug">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Anfahrweg</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Anfahrtyp</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_ti"/>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label_4">
@@ -109,11 +130,41 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
-     <widget class="QComboBox" name="comboBox_bezug"/>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>Korrektur</string>
+      </property>
+     </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QComboBox" name="comboBox_kor"/>
+    <item row="2" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_y">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QLineEdit" name="lineEdit_wkz"/>
+    </item>
+    <item row="12" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Abfahrweg</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1">
+     <widget class="QLineEdit" name="lineEdit_anweg"/>
+    </item>
+    <item row="12" column="1">
+     <widget class="QLineEdit" name="lineEdit_abweg"/>
+    </item>
+    <item row="9" column="1" colspan="2">
+     <widget class="QComboBox" name="comboBox_antyp"/>
+    </item>
+    <item row="10" column="1" colspan="2">
+     <widget class="QComboBox" name="comboBox_abtyp"/>
     </item>
    </layout>
   </widget>
@@ -153,8 +204,13 @@
   <tabstop>comboBox_bezug</tabstop>
   <tabstop>lineEdit_afb</tabstop>
   <tabstop>lineEdit_wkz</tabstop>
+  <tabstop>comboBox_antyp</tabstop>
+  <tabstop>comboBox_abtyp</tabstop>
+  <tabstop>lineEdit_anweg</tabstop>
+  <tabstop>lineEdit_abweg</tabstop>
   <tabstop>btn_ok</tabstop>
   <tabstop>btn_abbrechen</tabstop>
+  <tabstop>pushButton_wkzwahl</tabstop>
  </tabstops>
  <resources/>
  <connections/>

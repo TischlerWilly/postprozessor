@@ -168,6 +168,7 @@ void MainWindow::setup()
         {
             Einstellung.set_text(file.readAll());
             ui->actionEntwicklermodus->setChecked(Einstellung.entwicklermodus());
+            ui->actionEigenes_Format_imm_mit_exportieren->setChecked(Einstellung.eigenes_format_immer_mit_exportieren());
             ui->checkBox_quelldat_erhalt->setChecked(Einstellung.quelldateien_erhalten());
             ui->checkBox_std_namen_zuweisen->setChecked(Einstellung.std_dateinamen_verwenden());
             QString drehung = Einstellung.drehung_wst();
@@ -620,7 +621,10 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     ui->lineEdit_baugruppe->move(r.einfpunkt().x() + lx*5 + 2*5, r.einfpunkt().y());
     ui->lineEdit_baugruppe->setFixedSize(lx, ly);
     ui->lineEdit_projektpfad->move(r.einfpunkt().x(), r.einfpunkt().y() + ly*1 + 2*1);
-    ui->lineEdit_projektpfad->setFixedSize(r.l(),ly);
+    ui->lineEdit_projektpfad->setFixedSize(r.l()-150-5,ly);
+    ui->pushButton_gute_seite->move(ui->lineEdit_projektpfad->x()+ui->lineEdit_projektpfad->width()+5, \
+                                    ui->lineEdit_projektpfad->y());
+    ui->pushButton_gute_seite->setFixedWidth(150);
     //---Vorschaufenster:
     ui->label_warnungen->move(5,r.einfpunkt().y()+r.b());
     ui->label_warnungen->setFixedWidth(ui->tabWidget_main->width()-200);
@@ -980,8 +984,6 @@ void MainWindow::set_projektpfad()
         QString pfad_lokal;
         QString format;
         pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
-        pfad_lokal += QDir::separator();
-        pfad_lokal += "DetailModus";
         if(ui->radioButton_vorschau_fmc->isChecked())
         {
             pfad_lokal += QDir::separator();
@@ -1143,7 +1145,6 @@ void MainWindow::set_projektpfad()
         }
         pfad.replace("\\", QDir::separator());
         pfad.replace("/", QDir::separator());
-        //QString pfad_mit_dateinamen;
         if(!pfad.isEmpty() && !dateiname.isEmpty())
         {
             Pfad_mit_dateinamen = pfad + QDir::separator() + dateiname;
@@ -1222,6 +1223,110 @@ void MainWindow::set_projektpfad()
             ui->lineEdit_projektpfad->setPalette(palette);
         }
     }
+}
+QString MainWindow::projektpfad_lokal_eigen()
+{
+    QString returnpfad;
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        Projektpfad_stimmt = false;
+        QString pfad;
+        QString dateiname;
+        QString pfad_lokal;
+        QString format;
+        pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
+
+        pfad_lokal += QDir::separator();
+        format = "eigen";
+        pfad_lokal += format;
+
+        pfad = pfad_lokal;
+        pfad += QDir::separator();
+
+        if(!ui->lineEdit_projekt->text().isEmpty())
+        {
+            pfad += ui->lineEdit_projekt->text();
+            if(!ui->lineEdit_pos->text().isEmpty())
+            {
+                QString tmp = ui->lineEdit_pos->text();
+                QString barcode;
+                if(tmp.contains(","))
+                {
+                    QString li = text_links(tmp, ",");
+                    QString re = text_rechts(tmp, ",");
+                    if(li.length()==4)
+                    {
+                        barcode += tmp;
+                    }else if(li.length()==3)
+                    {
+                        barcode += "0";
+                        barcode += li;
+                        barcode += ",";
+                        barcode += re;
+                    }else if(li.length()==2)
+                    {
+                        barcode += "00";
+                        barcode += li;
+                        barcode += ",";
+                        barcode += re;
+                    }else if(li.length()==1)
+                    {
+                        barcode += "000";
+                        barcode += li;
+                        barcode += ",";
+                        barcode += re;
+                    }
+                }else
+                {
+                    if(tmp.length()==4)
+                    {
+                        barcode += tmp;
+                    }else if(tmp.length()==3)
+                    {
+                        barcode += "0";
+                        barcode += tmp;
+                    }else if(tmp.length()==2)
+                    {
+                        barcode += "00";
+                        barcode += tmp;
+                    }else if(tmp.length()==1)
+                    {
+                        barcode += "000";
+                        barcode += tmp;
+                    }
+                }
+                pfad += QDir::separator();
+                pfad += barcode;
+                Projektpfad_stimmt = true;
+                if(!ui->lineEdit_baugruppe->text().isEmpty())
+                {
+                    pfad += QDir::separator();
+                    pfad += ui->lineEdit_baugruppe->text();
+                }
+                if(ui->listWidget_wste->selectedItems().count() && ui->listWidget_wste->currentItem())
+                {
+                    if(!ui->listWidget_wste->currentItem()->text().isEmpty())
+                    {
+                        dateiname = ui->listWidget_wste->currentItem()->text();
+                        dateiname += ".ppf";
+                    }
+                }
+            }else
+            {
+                pfad.clear();
+            }
+        }else
+        {
+            pfad.clear();
+        }
+        pfad.replace("\\", QDir::separator());
+        pfad.replace("/", QDir::separator());
+        if(!pfad.isEmpty() && !dateiname.isEmpty())
+        {
+            returnpfad = pfad + QDir::separator() + dateiname;
+        }
+    }
+    return returnpfad;
 }
 QString MainWindow::fenstertitel_exportuebersicht()
 {
@@ -1537,6 +1642,11 @@ void MainWindow::on_actionEntwicklermodus_triggered(bool checked)
     Einstellung.set_entwicklermodus(checked);
     schreibe_ini();
 }
+void MainWindow::on_actionEigenes_Format_imm_mit_exportieren_triggered(bool checked)
+{
+    Einstellung.set_eigenes_format_immer_mit_exportieren(checked);
+    schreibe_ini();
+}
 void MainWindow::on_actionWerkzeug_Postprozessor_triggered()
 {
     dlg_wkz_pp.set_einstellung(Einstellung);
@@ -1621,11 +1731,93 @@ void MainWindow::on_actionWST_bearbeiten_triggered()
     {
         const int wstindex = ui->listWidget_wste->currentRow();
         werkstueck *w = wste.wst(wstindex);
-        dlg_wst_bearbeiten.setWindowTitle(w->name());
-        dlg_wst_bearbeiten.set_wst(w);
+        dlg_wst_bearbeiten.setWindowTitle(w->name());        
         dlg_wst_bearbeiten.set_wkz(&wkz_mag_pp_fr);
+        dlg_wst_bearbeiten.set_wst(w);
         dlg_wst_bearbeiten.show();
     }
+}
+void MainWindow::on_actionSchliessen_triggered()
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        QString name = ui->listWidget_wste->currentItem()->text();
+        if(!name.isEmpty())
+        {
+            wste.entf(name);
+            update_listwidget_wste();
+            signal_exporte(wste.namen_tz());
+        }else
+        {
+            QString msg;
+            msg = "Bauteil hat keinen Namen!";
+            QMessageBox mb;
+            mb.setText(msg);
+            mb.setWindowTitle("Datei schließen");
+                mb.exec();
+        }
+
+    }else
+    {
+        QString msg;
+        msg = "Es ist kein Bauteil ausgewählt!";
+        QMessageBox mb;
+        mb.setText(msg);
+        mb.setWindowTitle("Datei schließen");
+        mb.exec();
+    }
+}
+void MainWindow::on_action_oeffnen_triggered()
+{
+    QString pfad_lokal = Einstellung.verzeichnis_ziel_lokal();
+    pfad_lokal += QDir::separator();
+    pfad_lokal += "eigen";
+    pfad_lokal.replace("\\", QDir::separator());//linux style
+    pfad_lokal.replace("/", QDir::separator());//windows style
+    if(Pfad_letzte_geoeffnete_ggf_datei.isEmpty())
+    {
+        Pfad_letzte_geoeffnete_ggf_datei = pfad_lokal;
+    }
+    QStringList pfade = QFileDialog::getOpenFileNames(this, tr("Wähle PPF-Datei"), \
+                                                      Pfad_letzte_geoeffnete_ggf_datei, tr("ppf Dateien (*.ppf)"));
+    for(int i=0; i<pfade.size() ;i++)
+    {
+        QString aktueller_pfad = pfade.at(i);
+        QFile datei(aktueller_pfad);
+        QFileInfo finfo(datei);
+        Pfad_letzte_geoeffnete_ggf_datei = finfo.path();
+        if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QString tmp = "Fehler beim Dateizugriff!\n";
+            tmp += aktueller_pfad;
+            tmp += "\n";
+            tmp += "in der Funktion on_action_oeffnen_triggered";
+            QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+        }else
+        {
+            QString inhalt = datei.readAll();
+            QFileInfo info = aktueller_pfad;
+            QString wstname = info.fileName();
+            QString dateiendung = ".ppf";
+            wstname = wstname.left(wstname.length()-dateiendung.length());
+            if(wste.import_ppf(wstname, inhalt) == false)
+            {
+                QString msg;
+                msg  = "Die Datei \"";
+                msg += wstname;
+                msg += "\" konnte nich geöffnet werden, weil bereits ein Bauteil mit diesem Namen in der ";
+                msg += "Arbeitsliste vorhanden ist.";
+                QMessageBox mb;
+                mb.setWindowTitle("Datei öffnen");
+                mb.setText(msg);
+                mb.exec();
+            }
+        }
+    }
+    werkstueck w;//leeres wst
+    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken
+    update_listwidget_wste();
+    signal_exporte(wste.namen_tz());
 }
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
@@ -1647,18 +1839,22 @@ void MainWindow::on_pushButton_import_clicked()
 {
     import();
     werkstueck w;//leeres wst
-    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken    
+    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken
+    update_listwidget_wste();
+    signal_exporte(wste.namen_tz());
+}
+void MainWindow::update_listwidget_wste()
+{
     ui->listWidget_wste->clear();
 
     for(uint i=0; i<wste.anzahl() ;i++)
     {
         ui->listWidget_wste->addItem(wste.wst(i)->name());
-    }    
-    signal_exporte(wste.namen_tz());
+    }
 }
 void MainWindow::on_pushButton_einzelexport_clicked()
 {
-    QString pfad = Pfad_mit_dateinamen;
+    QString pfad = Pfad_mit_dateinamen;    
     bool exportieren = false;
     if(!pfad.isEmpty())
     {
@@ -1666,7 +1862,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         {
             if(!ui->listWidget_wste->currentItem()->text().isEmpty())
             {
-                QString dateiname = ui->listWidget_wste->currentItem()->text();
+                QString dateiname = ui->listWidget_wste->currentItem()->text();                
                 if(ui->radioButton_vorschau_fmc->isChecked())
                 {
                     dateiname += ".fmc";
@@ -1684,7 +1880,7 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                     dateiname += ".ppf";
                 }
                 QDir exportdir(text_links(pfad, dateiname));
-                exportdir.mkpath(text_links(pfad, dateiname));
+                exportdir.mkpath(text_links(pfad, dateiname));                
                 QFile f(pfad);
                 if(f.exists())
                 {
@@ -1896,6 +2092,37 @@ void MainWindow::on_pushButton_einzelexport_clicked()
                 mb.exec();
             }
         }
+
+        if(Einstellung.eigenes_format_immer_mit_exportieren() == true)//Exportiere immer eigenes Format mit
+        {
+            QFile file_eigen(projektpfad_lokal_eigen());
+            QFileInfo file_eigen_info(file_eigen);
+            QDir file_eigen_dir(file_eigen_info.path());
+            file_eigen_dir.mkpath(file_eigen_info.path());
+
+            int wstindex = ui->listWidget_wste->currentRow();
+            wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
+            //->set_einstellung_fmc
+            //->set_einstellung_eigen
+            wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
+            wste.wst(wstindex)->set_zustand("eigen", &wkz_mag_fmc, Einstellung.drehung_wst(), \
+                                                                                              Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                                                           wste.wst(wstindex)->ist_gut_oben());
+            //sendVorschauAktualisieren(*wste.wst(wstindex), -1);
+            //getCADFehler(wste.wst(wstindex)->cad_fehler(true));
+            //getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            //update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
+
+            if(wste.wst(wstindex)->zustand().export_moeglich())
+            {
+                if(file_eigen.open(QIODevice::WriteOnly | QIODevice::Text))
+                {
+                    file_eigen.write(wste.wst(wstindex)->zustand().exporttext().toUtf8());
+                }
+                file_eigen.close();
+            }
+        }
+
         QApplication::restoreOverrideCursor();
     }
     set_projektpfad();//Farbänderung
@@ -1956,6 +2183,30 @@ void MainWindow::on_pushButton_umbenennen_clicked()
         mb.exec();
     }
 }
+void MainWindow::on_pushButton_gute_seite_clicked()
+{
+    if(ui->listWidget_wste->selectedItems().count())
+    {
+        int row = ui->listWidget_wste->currentRow();
+        wste.wst(row)->set_gute_seite(!wste.wst(row)->ist_gut_oben());
+        on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
+        if(ui->radioButton_vorschau_ganx->isChecked())
+        {
+            update_btn_gute_seite(!wste.wst(row)->ist_gut_oben());
+        }else
+        {
+            update_btn_gute_seite(wste.wst(row)->ist_gut_oben());
+        }
+    }else
+    {
+        QString msg;
+        msg = "Es ist kein Bauteil ausgewählt!";
+            QMessageBox mb;
+        mb.setText(msg);
+        mb.setWindowTitle("Gute Seite ändern");
+        mb.exec();
+    }
+}
 //-----------------------------------------------------------------------ListeWidgets:
 void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
 {    
@@ -1969,10 +2220,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("eigen", &wkz_mag_fmc, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            wste.wst(wstindex)->ist_gut_oben());
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
             //hier übergebe ich der wkz von fmc weil wkz übergeben werden muss es aber keines gibt.
         }else if(ui->radioButton_vorschau_ganx->isChecked())
         {            
@@ -1981,10 +2234,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ganx", &wkz_mag_ganx, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            !wste.wst(wstindex)->ist_gut_oben());//gute Seite invertiert
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
         }else if(ui->radioButton_vorschau_fmc->isChecked())
         {
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -1992,10 +2247,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("fmc", &wkz_mag_fmc, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            wste.wst(wstindex)->ist_gut_oben());
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
         }else if(ui->radioButton_vorschau_cix->isChecked())
         {
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -2003,10 +2260,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("cix", &wkz_mag_cix, Einstellung.drehung_wst(), \
-                                               Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            wste.wst(wstindex)->ist_gut_oben());
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
         }else if(ui->radioButton_vorschau_ggf->isChecked())
         {
             wste.wst(wstindex)->set_einstellung_ganx(Einstellung_ganx);
@@ -2014,10 +2273,12 @@ void MainWindow::on_listWidget_wste_currentRowChanged(int currentRow)
             //->set_einstellung_eigen
             wste.wst(wstindex)->set_zugabe_gehrungen(Einstellung.gehrungen_zugabe());
             wste.wst(wstindex)->set_zustand("ggf", &wkz_mag_ggf, Einstellung.drehung_wst(), \
-                     Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon());
+                                            Einstellung.formartierungen_aufbrechen(), Einstellung.tiefeneinst_fkon(),\
+                                            wste.wst(wstindex)->ist_gut_oben());
             sendVorschauAktualisieren(*wste.wst(wstindex), -1);
             getCADFehler(wste.wst(wstindex)->cad_fehler(true));
             getWarnungen(wste.wst(wstindex)->zustand().warnungen());
+            update_btn_gute_seite(wste.wst(wstindex)->zustand().ist_gut_oben());
         }
         if(dlg_prgtext.isVisible())
         {
@@ -2346,94 +2607,16 @@ void MainWindow::schreibe_in_zwischenablage(QString s)
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(s);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void MainWindow::update_btn_gute_seite(bool gut_oben)
+{
+    if(gut_oben == true)
+    {
+        ui->pushButton_gute_seite->setText("Gute Seite oben");
+    }else
+    {
+        ui->pushButton_gute_seite->setText("Gute Seite unten");
+    }
+}
 
 
 

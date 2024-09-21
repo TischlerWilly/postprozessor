@@ -25,11 +25,14 @@ public:
 
     //--------------------------------------------------set_xy:
     bool neu(QString Werkstueckname, QString Quellformat);
+    bool import_ppf(QString Werkstueckname, QString importtext);
+    QString eigen_import_parameter(QString parameterzeile, QString parameterbezeichnung);
     bool import_fmc(QString Werkstueckname, QString importtext, bool istOberseite);
     bool import_dxf(QString Werkstueckname, QString importtext, bool istOberseite);
     void set_fkon_gerade_laenge(double wert);
     void set_kurze_geraden_importieren(bool wert);
     void set_zugabe_gehrungen(double wert);
+    bool entf(QString Werkstueckname);
 
     inline void set_einstellung_fmc(einstellung_fmc e)
     {
@@ -49,6 +52,7 @@ public:
     }
     //--------------------------------------------------get_xy:
     bool        ist_bekannt(QString Werkstueckname);
+    int        get_index(QString Werkstueckname);
     werkstueck* wst(uint index);
     QString     name(uint index);
     QString     cad_fehler();

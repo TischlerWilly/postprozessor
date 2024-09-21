@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -23,8 +23,22 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_d"/>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Dicke</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Kante vo</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QLineEdit" name="lineEdit_kre"/>
     </item>
     <item row="0" column="0">
      <widget class="QLabel" name="label">
@@ -33,42 +47,20 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_3">
+    <item row="7" column="1">
+     <widget class="QCheckBox" name="checkBox_use_ax">
       <property name="text">
-       <string>Dicke</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Breite</string>
+       <string>X-Versatz autoatisch ermitteln</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QLineEdit" name="lineEdit_b"/>
     </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="lineEdit_khi"/>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit_l"/>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLineEdit" name="lineEdit_kli"/>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_kvo"/>
-    </item>
-    <item row="6" column="1">
-     <widget class="QLineEdit" name="lineEdit_kre"/>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_4">
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_7">
       <property name="text">
-       <string>Kante vo</string>
+       <string>Kante re</string>
       </property>
      </widget>
     </item>
@@ -79,6 +71,9 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_d"/>
+    </item>
     <item row="5" column="0">
      <widget class="QLabel" name="label_6">
       <property name="text">
@@ -86,22 +81,55 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="label_7">
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="lineEdit_khi"/>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="lineEdit_kli"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_kvo"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_l"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Kante re</string>
+       <string>Breite</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QCheckBox" name="checkBox_use_ay">
+      <property name="text">
+       <string>Y-Versatz automatisch ermitteln</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>AX</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>AY</string>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>90</x>
      <y>470</y>
      <width>261</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">

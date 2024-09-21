@@ -2,9 +2,13 @@
 #define TODO_H
 
 #ifndef PROGRAMMVERSION
-#define PROGRAMMVERSION "4.2023.09.10"
+#define PROGRAMMVERSION "4.2024.05.24"
 #endif //PROGRAMMVERSION
 /*
+
+bool werkstuecke::import_ppf(QString Werkstueckname, QString importtext)
+
+
 
 QString wstzustand::warnungen_cix(text_zw bearb, wkz_magazin wkzmag, double tmp_l, double tmp_b)
 void wstzustand::finde_drehwinkel_auto_(int index)

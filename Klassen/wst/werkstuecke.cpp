@@ -25,6 +25,470 @@ bool werkstuecke::neu(QString Werkstueckname, QString Quellformat)
     }
     return false;
 }
+bool werkstuecke::entf(QString Werkstueckname)
+{
+    int wst_index = get_index(Werkstueckname);
+    if(wst_index >= 0)
+    {
+        Namen.entf(wst_index, 1);
+        Quellformate.entf(wst_index, 1);
+        Wste.erase(Wste.begin() + wst_index);
+        return true;
+    }else
+    {
+        return false;
+    }
+}
+bool werkstuecke::import_ppf(QString Werkstueckname, QString importtext)
+{
+    bool erfolg = false;
+    int Index = index(Werkstueckname);
+    if(Index == -1)
+    {
+        erfolg = true;
+        neu(Werkstueckname, GGF);
+        Index = index(Werkstueckname);
+        werkstueck w = Wste.at(Index);
+        QString gute_seite;
+        //Einlesen
+        text_zw tz;
+        tz.set_text(importtext,'\n');
+        for(uint i=0; i<tz.count() ;i++)
+        {
+            QString zeile = tz.at(i);
+            if(zeile.contains(EIGEN_PKOPF))
+            {
+                QString ende_abschnitt;
+                ende_abschnitt  = "<</";
+                ende_abschnitt += EIGEN_PKOPF;
+                ende_abschnitt += ">>";
+                for(uint ii=i+1; ii<tz.count() ;ii++)
+                {
+                    zeile = tz.at(ii);
+                    if(zeile.contains(ende_abschnitt))
+                    {
+                        i=ii+1;
+                        break;
+                    }else if(zeile.contains(EIGEN_PKOPF_NAME))
+                    {
+                        w.set_name(eigen_import_parameter(zeile, EIGEN_PKOPF_NAME));
+                    }else if(zeile.contains(EIGEN_PKOPF_L))
+                    {
+                        w.set_laenge(eigen_import_parameter(zeile, EIGEN_PKOPF_L));
+                    }else if(zeile.contains(EIGEN_PKOPF_B))
+                    {
+                        w.set_breite(eigen_import_parameter(zeile, EIGEN_PKOPF_B));
+                    }else if(zeile.contains(EIGEN_PKOPF_D))
+                    {
+                        w.set_dicke(eigen_import_parameter(zeile, EIGEN_PKOPF_D));
+                    }else if(zeile.contains(EIGEN_PKOPF_KANTE_VO))
+                    {
+                        w.set_kante_vo(eigen_import_parameter(zeile, EIGEN_PKOPF_KANTE_VO));
+                    }else if(zeile.contains(EIGEN_PKOPF_KANTE_HI))
+                    {
+                        w.set_kante_hi(eigen_import_parameter(zeile, EIGEN_PKOPF_KANTE_HI));
+                    }else if(zeile.contains(EIGEN_PKOPF_KANTE_LI))
+                    {
+                        w.set_kante_li(eigen_import_parameter(zeile, EIGEN_PKOPF_KANTE_LI));
+                    }else if(zeile.contains(EIGEN_PKOPF_KANTE_RE))
+                    {
+                        w.set_kante_re(eigen_import_parameter(zeile, EIGEN_PKOPF_KANTE_RE));
+                    }else if(zeile.contains(EIGEN_PKOPF_GUTSEI))
+                    {
+                        gute_seite = eigen_import_parameter(zeile, EIGEN_PKOPF_GUTSEI);
+                    }
+                }
+            }else if(zeile.contains(EIGEN_BOHR))
+            {
+                QString ende_abschnitt;
+                ende_abschnitt  = "<</";
+                ende_abschnitt += EIGEN_BOHR;
+                ende_abschnitt += ">>";
+                bohrung bo;
+                for(uint ii=i+1; ii<tz.count() ;ii++)
+                {
+                    zeile = tz.at(ii);
+                    if(zeile.contains(ende_abschnitt))
+                    {
+                        i=ii+1;
+                        w.neue_bearbeitung(bo.text());
+                        break;
+                    }else if(zeile.contains(EIGEN_BOHR_BEZUG))
+                    {
+                        bo.set_bezug(eigen_import_parameter(zeile, EIGEN_BOHR_BEZUG));
+                    }else if(zeile.contains(EIGEN_BOHR_DM))
+                    {
+                        bo.set_dm(eigen_import_parameter(zeile, EIGEN_BOHR_DM));
+                    }else if(zeile.contains(EIGEN_BOHR_TI))
+                    {
+                        bo.set_tiefe(eigen_import_parameter(zeile, EIGEN_BOHR_TI));
+                    }else if(zeile.contains(EIGEN_BOHR_X))
+                    {
+                        bo.set_x(eigen_import_parameter(zeile, EIGEN_BOHR_X));
+                    }else if(zeile.contains(EIGEN_BOHR_Y))
+                    {
+                        bo.set_y(eigen_import_parameter(zeile, EIGEN_BOHR_Y));
+                    }else if(zeile.contains(EIGEN_BOHR_Z))
+                    {
+                        bo.set_z(eigen_import_parameter(zeile, EIGEN_BOHR_Z));
+                    }else if(zeile.contains(EIGEN_BOHR_AFB))
+                    {
+                        bo.set_afb(eigen_import_parameter(zeile, EIGEN_BOHR_AFB));
+                    }else if(zeile.contains(EIGEN_BOHR_ZSM))
+                    {
+                        bo.set_zustellmass(eigen_import_parameter(zeile, EIGEN_BOHR_ZSM));
+                    }else if(zeile.contains(EIGEN_BOHR_WKZ))
+                    {
+                        bo.set_wkznum(eigen_import_parameter(zeile, EIGEN_BOHR_WKZ));
+                    }
+                }
+            }else if(zeile.contains(EIGEN_RTA))
+            {
+                QString ende_abschnitt;
+                ende_abschnitt  = "<</";
+                ende_abschnitt += EIGEN_RTA;
+                ende_abschnitt += ">>";
+                rechtecktasche rt;
+                for(uint ii=i+1; ii<tz.count() ;ii++)
+                {
+                    zeile = tz.at(ii);
+                    if(zeile.contains(ende_abschnitt))
+                    {
+                        i=ii+1;
+                        w.neue_bearbeitung(rt.text());
+                        break;
+                    }else if(zeile.contains(EIGEN_RTA_BEZUG))
+                    {
+                        rt.set_bezug(eigen_import_parameter(zeile, EIGEN_RTA_BEZUG));
+                    }else if(zeile.contains(EIGEN_RTA_LA))
+                    {
+                        rt.set_laenge(eigen_import_parameter(zeile, EIGEN_RTA_LA));
+                    }else if(zeile.contains(EIGEN_RTA_BR))
+                    {
+                        rt.set_breite(eigen_import_parameter(zeile, EIGEN_RTA_BR));
+                    }else if(zeile.contains(EIGEN_RTA_TI))
+                    {
+                        rt.set_tiefe(eigen_import_parameter(zeile, EIGEN_RTA_TI));
+                    }else if(zeile.contains(EIGEN_RTA_X))
+                    {
+                        rt.set_x(eigen_import_parameter(zeile, EIGEN_RTA_X));
+                    }else if(zeile.contains(EIGEN_RTA_Y))
+                    {
+                        rt.set_y(eigen_import_parameter(zeile, EIGEN_RTA_Y));
+                    }else if(zeile.contains(EIGEN_RTA_Z))
+                    {
+                        rt.set_z(eigen_import_parameter(zeile, EIGEN_RTA_Z));
+                    }else if(zeile.contains(EIGEN_RTA_DREWI))
+                    {
+                        rt.set_drewi(eigen_import_parameter(zeile, EIGEN_RTA_DREWI));
+                    }else if(zeile.contains(EIGEN_RTA_RAD))
+                    {
+                        rt.set_rad(eigen_import_parameter(zeile, EIGEN_RTA_RAD));
+                    }else if(zeile.contains(EIGEN_RTA_AUSR))
+                    {
+                        rt.set_ausraeumen(eigen_import_parameter(zeile, EIGEN_RTA_AUSR));
+                    }else if(zeile.contains(EIGEN_RTA_AFB))
+                    {
+                        rt.set_afb(eigen_import_parameter(zeile, EIGEN_RTA_AFB));
+                    }else if(zeile.contains(EIGEN_RTA_ZSM))
+                    {
+                        rt.set_zustellmass(eigen_import_parameter(zeile, EIGEN_RTA_ZSM));
+                    }else if(zeile.contains(EIGEN_RTA_WKZ))
+                    {
+                        rt.set_wkznum(eigen_import_parameter(zeile, EIGEN_RTA_WKZ));
+                    }
+                }
+            }else if(zeile.contains(EIGEN_NUT))
+            {
+                QString ende_abschnitt;
+                ende_abschnitt  = "<</";
+                ende_abschnitt += EIGEN_NUT;
+                ende_abschnitt += ">>";
+                nut nu;
+                for(uint ii=i+1; ii<tz.count() ;ii++)
+                {
+                    zeile = tz.at(ii);
+                    if(zeile.contains(ende_abschnitt))
+                    {
+                        i=ii+1;
+                        w.neue_bearbeitung(nu.text());
+                        break;
+                    }else if(zeile.contains(EIGEN_NUT_BEZUG))
+                    {
+                        nu.set_bezug(eigen_import_parameter(zeile, EIGEN_NUT_BEZUG));
+                    }else if(zeile.contains(EIGEN_NUT_XS))
+                    {
+                        nu.set_xs(eigen_import_parameter(zeile, EIGEN_NUT_XS));
+                    }else if(zeile.contains(EIGEN_NUT_YS))
+                    {
+                        nu.set_ys(eigen_import_parameter(zeile, EIGEN_NUT_YS));
+                    }else if(zeile.contains(EIGEN_NUT_ZS))
+                    {
+                        nu.set_zs(eigen_import_parameter(zeile, EIGEN_NUT_ZS));
+                    }else if(zeile.contains(EIGEN_NUT_XE))
+                    {
+                        nu.set_xe(eigen_import_parameter(zeile, EIGEN_NUT_XE));
+                    }else if(zeile.contains(EIGEN_NUT_YE))
+                    {
+                        nu.set_ye(eigen_import_parameter(zeile, EIGEN_NUT_YE));
+                    }else if(zeile.contains(EIGEN_NUT_ZE))
+                    {
+                        nu.set_ze(eigen_import_parameter(zeile, EIGEN_NUT_ZE));
+                    }else if(zeile.contains(EIGEN_NUT_TI))
+                    {
+                        nu.set_tiefe(eigen_import_parameter(zeile, EIGEN_NUT_TI));
+                    }else if(zeile.contains(EIGEN_NUT_BR))
+                    {
+                        nu.set_breite(eigen_import_parameter(zeile, EIGEN_NUT_BR));
+                    }else if(zeile.contains(EIGEN_NUT_AFB))
+                    {
+                        nu.set_afb(eigen_import_parameter(zeile, EIGEN_NUT_AFB));
+                    }
+                }
+            }else if(zeile.contains(EIGEN_FAUFRUF))
+            {
+                QString ende_abschnitt;
+                ende_abschnitt  = "<</";
+                ende_abschnitt += EIGEN_FAUFRUF;
+                ende_abschnitt += ">>";
+                fraeseraufruf fa;
+                for(uint ii=i+1; ii<tz.count() ;ii++)
+                {
+                    zeile = tz.at(ii);
+                    if(zeile.contains(ende_abschnitt))
+                    {
+                        i=ii+1;
+                        w.neue_bearbeitung(fa.text());
+                        break;
+                    }else if(zeile.contains(EIGEN_FAUFRUF_BEZUG))
+                    {
+                        fa.set_bezug(eigen_import_parameter(zeile, EIGEN_FAUFRUF_BEZUG));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_X))
+                    {
+                        fa.set_x(eigen_import_parameter(zeile, EIGEN_FAUFRUF_X));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_Y))
+                    {
+                        fa.set_y(eigen_import_parameter(zeile, EIGEN_FAUFRUF_Y));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_Z))
+                    {
+                        fa.set_z(eigen_import_parameter(zeile, EIGEN_FAUFRUF_Z));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_TI))
+                    {
+                        fa.set_tiefe(eigen_import_parameter(zeile, EIGEN_FAUFRUF_TI));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_RADKOR))
+                    {
+                        fa.set_radkor(eigen_import_parameter(zeile, EIGEN_FAUFRUF_RADKOR));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_WKZ))
+                    {
+                        fa.set_wkznum(eigen_import_parameter(zeile, EIGEN_FAUFRUF_WKZ));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_AFB))
+                    {
+                        fa.set_afb(eigen_import_parameter(zeile, EIGEN_FAUFRUF_AFB));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_ANTYP))
+                    {
+                        fa.set_anfahrtyp(eigen_import_parameter(zeile, EIGEN_FAUFRUF_ANTYP));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_ABTYP))
+                    {
+                        fa.set_abfahrtyp(eigen_import_parameter(zeile, EIGEN_FAUFRUF_ABTYP));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_ANWEG))
+                    {
+                        fa.set_anfahrweg(eigen_import_parameter(zeile, EIGEN_FAUFRUF_ANWEG));
+                    }else if(zeile.contains(EIGEN_FAUFRUF_ABWEG))
+                    {
+                        fa.set_abfahrweg(eigen_import_parameter(zeile, EIGEN_FAUFRUF_ABWEG));
+                    }
+                }
+
+            }else if(zeile.contains(EIGEN_FGERADE))
+            {
+                QString ende_abschnitt;
+                ende_abschnitt  = "<</";
+                ende_abschnitt += EIGEN_FGERADE;
+                ende_abschnitt += ">>";
+                fraesergerade fg;
+                for(uint ii=i+1; ii<tz.count() ;ii++)
+                {
+                    zeile = tz.at(ii);
+                    if(zeile.contains(ende_abschnitt))
+                    {
+                        i=ii+1;
+                        w.neue_bearbeitung(fg.text());
+                        break;
+                    }else if(zeile.contains(EIGEN_FGERADE_BEZUG))
+                    {
+                        fg.set_bezug(eigen_import_parameter(zeile, EIGEN_FGERADE_BEZUG));
+                    }else if(zeile.contains(EIGEN_FGERADE_XS))
+                    {
+                        fg.set_xs(eigen_import_parameter(zeile, EIGEN_FGERADE_XS));
+                    }else if(zeile.contains(EIGEN_FGERADE_YS))
+                    {
+                        fg.set_ys(eigen_import_parameter(zeile, EIGEN_FGERADE_YS));
+                    }else if(zeile.contains(EIGEN_FGERADE_ZS))
+                    {
+                        fg.set_zs(eigen_import_parameter(zeile, EIGEN_FGERADE_ZS));
+                    }else if(zeile.contains(EIGEN_FGERADE_XE))
+                    {
+                        fg.set_xe(eigen_import_parameter(zeile, EIGEN_FGERADE_XE));
+                    }else if(zeile.contains(EIGEN_FGERADE_YE))
+                    {
+                        fg.set_ye(eigen_import_parameter(zeile, EIGEN_FGERADE_YE));
+                    }else if(zeile.contains(EIGEN_FGERADE_ZE))
+                    {
+                        fg.set_ze(eigen_import_parameter(zeile, EIGEN_FGERADE_ZE));
+                    }else if(zeile.contains(EIGEN_FGERADE_AFB))
+                    {
+                        fg.set_afb(eigen_import_parameter(zeile, EIGEN_FGERADE_AFB));
+                    }else if(zeile.contains(EIGEN_FGERADE_TISTA))
+                    {
+                        fg.set_tiSta(eigen_import_parameter(zeile, EIGEN_FGERADE_TISTA));
+                    }else if(zeile.contains(EIGEN_FGERADE_TIEND))
+                    {
+                        fg.set_tiEnd(eigen_import_parameter(zeile, EIGEN_FGERADE_TIEND));
+                    }
+                }
+
+            }else if(zeile.contains(EIGEN_FBOGEN))
+            {
+                QString ende_abschnitt;
+                ende_abschnitt  = "<</";
+                ende_abschnitt += EIGEN_FBOGEN;
+                ende_abschnitt += ">>";
+                fraeserbogen fb;
+                for(uint ii=i+1; ii<tz.count() ;ii++)
+                {
+                    zeile = tz.at(ii);
+                    if(zeile.contains(ende_abschnitt))
+                    {
+                        i=ii+1;
+                        w.neue_bearbeitung(fb.text());
+                        break;
+                    }else if(zeile.contains(EIGEN_FBOGEN_BEZUG))
+                    {
+                        fb.set_bezug(eigen_import_parameter(zeile, EIGEN_FBOGEN_BEZUG));
+                    }else if(zeile.contains(EIGEN_FBOGEN_XS))
+                    {
+                        fb.set_xs(eigen_import_parameter(zeile, EIGEN_FBOGEN_XS));
+                    }else if(zeile.contains(EIGEN_FBOGEN_YS))
+                    {
+                        fb.set_ys(eigen_import_parameter(zeile, EIGEN_FBOGEN_YS));
+                    }else if(zeile.contains(EIGEN_FBOGEN_ZS))
+                    {
+                        fb.set_zs(eigen_import_parameter(zeile, EIGEN_FBOGEN_ZS));
+                    }else if(zeile.contains(EIGEN_FBOGEN_XE))
+                    {
+                        fb.set_xe(eigen_import_parameter(zeile, EIGEN_FBOGEN_XE));
+                    }else if(zeile.contains(EIGEN_FBOGEN_YE))
+                    {
+                        fb.set_ye(eigen_import_parameter(zeile, EIGEN_FBOGEN_YE));
+                    }else if(zeile.contains(EIGEN_FBOGEN_ZE))
+                    {
+                        fb.set_ze(eigen_import_parameter(zeile, EIGEN_FBOGEN_ZE));
+                    }else if(zeile.contains(EIGEN_FBOGEN_RAD))
+                    {
+                        fb.set_rad(eigen_import_parameter(zeile, EIGEN_FBOGEN_RAD));
+                    }else if(zeile.contains(EIGEN_FBOGEN_UZS))
+                    {
+                        fb.set_uzs(eigen_import_parameter(zeile, EIGEN_FBOGEN_UZS));
+                    }else if(zeile.contains(EIGEN_FBOGEN_AFB))
+                    {
+                        fb.set_afb(eigen_import_parameter(zeile, EIGEN_FBOGEN_AFB));
+                    }else if(zeile.contains(EIGEN_FBOGEN_TISTA))
+                    {
+                        fb.set_tiSta(eigen_import_parameter(zeile, EIGEN_FBOGEN_TISTA));
+                    }else if(zeile.contains(EIGEN_FBOGEN_TIEND))
+                    {
+                        fb.set_tiEnd(eigen_import_parameter(zeile, EIGEN_FBOGEN_TIEND));
+                    }
+                }
+
+            }else if(zeile.contains(EIGEN_GEHRUNG))
+            {
+                QString ende_abschnitt;
+                ende_abschnitt  = "<</";
+                ende_abschnitt += EIGEN_GEHRUNG;
+                ende_abschnitt += ">>";
+                gehrung ge;
+                punkt3d stapu, endpu;
+                for(uint ii=i+1; ii<tz.count() ;ii++)
+                {
+                    zeile = tz.at(ii);
+                    if(zeile.contains(ende_abschnitt))
+                    {
+                        i=ii+1;
+                        ge.set_stapu(stapu);
+                        ge.set_endpu(endpu);
+                        w.neue_bearbeitung(ge.text());
+                        break;
+                    }else if(zeile.contains(EIGEN_GEHRUNG_BEZUG))
+                    {
+                        ge.set_bezug(eigen_import_parameter(zeile, EIGEN_GEHRUNG_BEZUG));
+                    }else if(zeile.contains(EIGEN_GEHRUNG_XS))
+                    {
+                        stapu.set_x(eigen_import_parameter(zeile, EIGEN_GEHRUNG_XS));
+                    }else if(zeile.contains(EIGEN_GEHRUNG_YS))
+                    {
+                        stapu.set_y(eigen_import_parameter(zeile, EIGEN_GEHRUNG_YS));
+                    }else if(zeile.contains(EIGEN_GEHRUNG_XE))
+                    {
+                        endpu.set_x(eigen_import_parameter(zeile, EIGEN_GEHRUNG_XE));
+                    }else if(zeile.contains(EIGEN_GEHRUNG_YE))
+                    {
+                        endpu.set_y(eigen_import_parameter(zeile, EIGEN_GEHRUNG_YE));
+                    }else if(zeile.contains(EIGEN_GEHRUNG_WI))
+                    {
+                        ge.set_winkel(eigen_import_parameter(zeile, EIGEN_GEHRUNG_WI));
+                    }else if(zeile.contains(EIGEN_GEHRUNG_AFB))
+                    {
+                        ge.set_afb(eigen_import_parameter(zeile, EIGEN_GEHRUNG_AFB));
+                    }else if(zeile.contains(EIGEN_GEHRUNG_WKZ))
+                    {
+                        ge.set_wkznum(eigen_import_parameter(zeile, EIGEN_GEHRUNG_WKZ));
+                    }else if(zeile.contains(EIGEN_GEHRUNG_RITI))
+                    {
+                        ge.set_riti(eigen_import_parameter(zeile, EIGEN_GEHRUNG_RITI));
+                    }else if(zeile.contains(EIGEN_GEHRUNG_STI))
+                    {
+                        ge.set_sti(eigen_import_parameter(zeile, EIGEN_GEHRUNG_STI));
+                    }
+                }
+
+            }
+        }
+        if(gute_seite == EIGEN_PKOPF_GUTSEI_OBEN)
+        {
+            w.set_gute_seite(true);
+        }else
+        {
+            w.set_gute_seite(false);
+        }
+        Wste.replace(Index, w);
+        if(w.ist_gut_oben())
+        {
+            QMessageBox mb;
+            mb.setText("gut ist oben");
+            //mb.exec();
+        }else
+        {
+            QMessageBox mb;
+            mb.setText("gut ist unten");
+            //mb.exec();
+        }
+    }
+    return erfolg;
+}
+QString werkstuecke::eigen_import_parameter(QString parameterzeile, QString parameterbezeichnung)
+{
+    QString text_links;
+    text_links  = "<";
+    text_links += parameterbezeichnung;
+    text_links += ">";
+    QString text_rechts;
+    text_rechts  = "</";
+    text_rechts += parameterbezeichnung;
+    text_rechts += ">";
+    QString parameterwert = text_mitte(parameterzeile, text_links, text_rechts);
+    return parameterwert;
+}
 bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool istOberseite)
 {
 
@@ -2747,7 +3211,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         fa.set_x(x);
                         fa.set_y(y);
                         fa.set_z(w.dicke());
-                    }else
+                    }else//Unterseite
                     {
                         fa.set_bezug(WST_BEZUG_UNSEI);
                         if(drehtyp_L)
@@ -2760,6 +3224,15 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             fa.set_y(w.breite()-y);
                         }
                         fa.set_z(0);
+                    }
+                    if(fa.radkor() == FRKOR_M)
+                    {
+                        fa.set_anfahrtyp(FAUFRUF_ANABTYP_GARADE);
+                        fa.set_abfahrtyp(FAUFRUF_ANABTYP_GARADE);
+                    }else
+                    {
+                        fa.set_anfahrtyp(FAUFRUF_ANABTYP_BOGEN);
+                        fa.set_abfahrtyp(FAUFRUF_ANABTYP_BOGEN);
                     }
                     w.neue_bearbeitung(fa.text());
                     p3dfkon = fa.pos();
@@ -2786,6 +3259,10 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         tmp = var_einsetzen(w, tmp);
                         tmp = ausdruck_auswerten(tmp);
                         tifkon = w.dicke() - tmp.toDouble();
+                        if(tifkon <= 0)
+                        {
+                            tifkon = (tifkon*-1) + w.dicke();
+                        }
                         fa.set_tiefe(tifkon);//Tiefe, nicht Z-Wert!!
                                             //Z-Wert ist für horizontale Fräseraufrufe gedacht
                     }else if(schluessel == FMC_FKON_KOR)
@@ -2816,8 +3293,8 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
             fraesergerade fg;
             double x = 0;
             double y = 0;
-            double zs = tifkon;//Der Z-Wert gibt die Tiefe an
-            double ze = 0;//Der Z-Wert gibt die Tiefe an
+            double tiSta = tifkon;
+            double tiEnd = 0;
             for(uint ii=i+1; ii<tz.count() ;ii++)
             {
                 zeile = tz.at(ii);
@@ -2832,6 +3309,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         fg.set_bezug(WST_BEZUG_OBSEI);
                         endpu.set_x(x);
                         endpu.set_y(y);
+                        endpu.set_z(w.dicke());
                     }else
                     {
                         fg.set_bezug(WST_BEZUG_UNSEI);
@@ -2844,12 +3322,13 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             endpu.set_x(x);
                             endpu.set_y(w.breite()-y);
                         }
+                        endpu.set_z(0);
                     }
                     fg.set_startpunkt(p3dfkon);
                     fg.set_endpunkt(endpu);
-                    fg.set_zs(zs);//Der Z-Wert gibt die Tiefe an
-                    fg.set_ze(ze);//Der Z-Wert gibt die Tiefe an
-                    tifkon = ze;
+                    fg.set_tiSta(tiSta);
+                    fg.set_tiEnd(tiEnd);
+                    tifkon = tiEnd;
                     p3dfkon = endpu;
                     if(Kurze_geraden_import == true)
                     {
@@ -2883,12 +3362,16 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         QString tmp = wert_nach_istgleich(zeile);
                         if(tmp == "Z")
                         {
-                            ze = zs;
+                            tiEnd = tiSta;
                         }else
                         {
                             tmp = var_einsetzen(w, tmp);
                             tmp = ausdruck_auswerten(tmp);
-                            ze = w.dicke() - tmp.toDouble();
+                            tiEnd = w.dicke() - tmp.toDouble();
+                            if(tiEnd <= 0)
+                            {
+                                tiEnd = (tiEnd*-1) + w.dicke();
+                            }
                         }
                     }
                 }
@@ -2899,8 +3382,8 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
             fraeserbogen fb;
             double x = 0;
             double y = 0;
-            double zs = tifkon;//Der Z-Wert gibt die Tiefe an
-            double ze = 0;//Der Z-Wert gibt die Tiefe an
+            double tiSta = tifkon;
+            double tiEnd = 0;
             if(zeile.contains(FMC_FKONBOGUZS))
             {
                 fb.set_uzs(true);
@@ -2922,6 +3405,7 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         fb.set_bezug(WST_BEZUG_OBSEI);
                         endpu.set_x(x);
                         endpu.set_y(y);
+                        endpu.set_z(w.dicke());
                     }else
                     {
                         fb.set_bezug(WST_BEZUG_UNSEI);
@@ -2934,12 +3418,13 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                             endpu.set_x(x);
                             endpu.set_y(w.breite()-y);
                         }
+                        endpu.set_z(0);
                     }
                     fb.set_startpunkt(p3dfkon);
                     fb.set_endpunkt(endpu);
-                    fb.set_zs(zs);//Der Z-Wert gibt die Tiefe an
-                    fb.set_ze(ze);//Der Z-Wert gibt die Tiefe an
-                    tifkon = ze;
+                    fb.set_tiSta(tiSta);
+                    fb.set_tiEnd(tiEnd);
+                    tifkon = tiEnd;
                     p3dfkon = endpu;
                     w.neue_bearbeitung(fb.text());
                     break;
@@ -2966,12 +3451,16 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                         QString tmp = wert_nach_istgleich(zeile);
                         if(tmp == "Z")
                         {
-                            ze = zs;
+                            tiEnd = tiSta;
                         }else
                         {
                             tmp = var_einsetzen(w, tmp);
                             tmp = ausdruck_auswerten(tmp);
-                            ze = w.dicke() - tmp.toDouble();
+                            tiEnd = w.dicke() - tmp.toDouble();
+                            if(tiEnd <= 0)
+                            {
+                                tiEnd = (tiEnd*-1) + w.dicke();
+                            }
                         }
                     }else if(schluessel == FMC_FKONBOG_RAD)
                     {
@@ -3054,6 +3543,10 @@ bool werkstuecke::import_fmc(QString Werkstueckname, QString importtext, bool is
                     }
                     fa.set_x(spx);
                     fa.set_y(spy);
+                    fa.set_anfahrtyp(FAUFRUF_ANABTYP_GARADE);
+                    fa.set_abfahrtyp(FAUFRUF_ANABTYP_GARADE);
+                    fa.set_anfahrweg(FAUFRUF_ANABWEG_AUTO);
+                    fa.set_abfahrweg(FAUFRUF_ANABWEG_AUTO);
                     fg.set_xs(spx);
                     fg.set_ys(spy);
                     fg.set_xe(epx);
@@ -4924,6 +5417,8 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         }
                     }
                     fraesergerade fg;
+                    fg.set_tiSta(fti);
+                    fg.set_tiEnd(fti);
                     if(istOberseite)
                     {
                         if(cagleich(s.stapu(), letztepos, tolleranz))
@@ -4948,10 +5443,10 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         fg.set_bezug(WST_BEZUG_OBSEI);
                         fg.set_xs(s.stapu().x());
                         fg.set_ys(s.stapu().y());
-                        fg.set_zs(fraeserhoehe);
+                        fg.set_zs(w.dicke());
                         fg.set_xe(s.endpu().x());
                         fg.set_ye(s.endpu().y());
-                        fg.set_ze(fraeserhoehe);
+                        fg.set_ze(w.dicke());
                     }else
                     {
                         if(cagleich(s.stapu(), letztepos, tolleranz))
@@ -4985,18 +5480,18 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         {
                             fg.set_xs(w.laenge()-s.stapu().x());
                             fg.set_ys(s.stapu().y());
-                            fg.set_zs(fraeserhoehe);
+                            fg.set_zs(w.dicke());
                             fg.set_xe(w.laenge()-s.endpu().x());
                             fg.set_ye(s.endpu().y());
-                            fg.set_ze(fraeserhoehe);
+                            fg.set_ze(w.dicke());
                         }else //if(Einstellung_dxf.drehtyp_B())
                         {
                             fg.set_xs(s.stapu().x());
                             fg.set_ys(w.breite()-s.stapu().y());
-                            fg.set_zs(fraeserhoehe);
+                            fg.set_zs(w.dicke());
                             fg.set_xe(s.endpu().x());
                             fg.set_ye(w.breite()-s.endpu().y());
-                            fg.set_ze(fraeserhoehe);
+                            fg.set_ze(w.dicke());
                         }
                     }
                     w.neue_bearbeitung(fg.text());
@@ -5038,6 +5533,8 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         }
                     }
                     fraeserbogen fb;
+                    fb.set_tiSta(fti);
+                    fb.set_tiEnd(fti);
                     if(istOberseite)
                     {
                         if(cagleich(b.spu(), letztepos, tolleranz))
@@ -5063,10 +5560,10 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         fb.set_uzs(b.im_uzs());
                         fb.set_xs(b.spu().x());
                         fb.set_ys(b.spu().y());
-                        fb.set_zs(fraeserhoehe);
+                        fb.set_zs(w.dicke());
                         fb.set_xe(b.epu().x());
                         fb.set_ye(b.epu().y());
-                        fb.set_ze(fraeserhoehe);
+                        fb.set_ze(w.dicke());
                         fb.set_rad(b.rad());
                     }else
                     {
@@ -5102,18 +5599,18 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
                         {
                             fb.set_xs(w.laenge()-b.spu().x());
                             fb.set_ys(b.spu().y());
-                            fb.set_zs(fraeserhoehe);
+                            fb.set_zs(w.dicke());
                             fb.set_xe(w.laenge()-b.epu().x());
                             fb.set_ye(b.epu().y());
-                            fb.set_ze(fraeserhoehe);
+                            fb.set_ze(w.dicke());
                         }else //if(Einstellung_dxf.drehtyp_B())
                         {
                             fb.set_xs(b.spu().x());
                             fb.set_ys(w.breite()-b.spu().y());
-                            fb.set_zs(fraeserhoehe);
+                            fb.set_zs(w.dicke());
                             fb.set_xe(b.epu().x());
                             fb.set_ye(w.breite()-b.epu().y());
-                            fb.set_ze(fraeserhoehe);
+                            fb.set_ze(w.dicke());
                         }
                         fb.set_rad(b.rad());
                     }
@@ -5152,6 +5649,17 @@ bool werkstuecke::ist_bekannt(QString Werkstueckname)
         }
     }
     return false;
+}
+int werkstuecke::get_index(QString Werkstueckname)
+{
+    for(uint i=0; i<Namen.count() ;i++)
+    {
+        if(Werkstueckname == Namen.at(i))
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 werkstueck* werkstuecke::wst(uint index)
 {
@@ -5305,6 +5813,7 @@ QString werkstuecke::stdnamen(text_zw namen_alt, text_zw namen_neu)
     {
         werkstueck w = Wste.at(i);
         w.set_name(Namen.at(i));
+        w.gute_seite_ermitteln();
         Wste.replace(i, w);
     }
     return baugruppenname;

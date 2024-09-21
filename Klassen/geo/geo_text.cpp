@@ -224,8 +224,9 @@ text_zw geo_text::at(uint index)
 //Funktionen außerhalb der Klasse:
 geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, \
                        QString kante_v, QString kante_h, QString kante_l, QString kante_r, \
-                       double versatz_x, double versatz_y)
+                       double versatz_x, double versatz_y, wkz_magazin wkzm)
 {
+    double abst_darstel_hirnansicht = 20;
     //-------------------------------------------
     geo_text gt;
     //------------------------------
@@ -282,6 +283,54 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
         skante.verschieben_um(versatz_x, versatz_y);
         gt.add_strecke(skante);
     }
+    //------------------------------
+    //WST-Hirnseite vorne:
+    punkt3d nullpunkt_vo(0,-abst_darstel_hirnansicht,0);
+    nullpunkt_vo.set_linienbreite(10);
+    gt.add_punkt(nullpunkt_vo);
+    rechteck3d rec_vo;
+    rec_vo.set_bezugspunkt(OBEN_LINKS);
+    rec_vo.set_einfuegepunkt(nullpunkt_vo.x(),nullpunkt_vo.y(),0);
+    rec_vo.set_laenge(wst_l);
+    rec_vo.set_breite(wst_d);
+    rec_vo.set_farbe_fuellung(FARBE_GRAU);
+    gt.add_rechteck(rec_vo);
+    //------------------------------
+    //WST-Hirnseite hinten:
+    punkt3d nullpunkt_hi(0,wst_b+versatz_y+abst_darstel_hirnansicht,0);
+    nullpunkt_hi.set_linienbreite(10);
+    gt.add_punkt(nullpunkt_hi);
+    rechteck3d rec_hi;
+    rec_hi.set_bezugspunkt(UNTEN_LINKS);
+    rec_hi.set_einfuegepunkt(nullpunkt_hi.x(),nullpunkt_hi.y(),0);
+    rec_hi.set_laenge(wst_l);
+    rec_hi.set_breite(wst_d);
+    rec_hi.set_farbe_fuellung(FARBE_GRAU);
+    gt.add_rechteck(rec_hi);
+    //------------------------------
+    //WST-Hirnseite links:
+    punkt3d nullpunkt_li(-abst_darstel_hirnansicht,versatz_y,0);
+    nullpunkt_li.set_linienbreite(10);
+    gt.add_punkt(nullpunkt_li);
+    rechteck3d rec_li;
+    rec_li.set_bezugspunkt(UNTEN_RECHTS);
+    rec_li.set_einfuegepunkt(nullpunkt_li.x(),nullpunkt_li.y(),0);
+    rec_li.set_laenge(wst_d);
+    rec_li.set_breite(wst_b);
+    rec_li.set_farbe_fuellung(FARBE_GRAU);
+    gt.add_rechteck(rec_li);
+    //------------------------------
+    //WST-Hirnseite rechts:
+    punkt3d nullpunkt_re(wst_l+versatz_x+abst_darstel_hirnansicht,versatz_y,0);
+    nullpunkt_re.set_linienbreite(10);
+    gt.add_punkt(nullpunkt_re);
+    rechteck3d rec_re;
+    rec_re.set_bezugspunkt(UNTEN_LINKS);
+    rec_re.set_einfuegepunkt(nullpunkt_re.x(),nullpunkt_re.y(),0);
+    rec_re.set_laenge(wst_d);
+    rec_re.set_breite(wst_b);
+    rec_re.set_farbe_fuellung(FARBE_GRAU);
+    gt.add_rechteck(rec_re);
     //------------------------------
     gt.zeilenvorschub();
     //------------------------------
@@ -351,6 +400,11 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_li.x()-bo.z(),nullpunkt_li.y()+bo.y(), 0);
+                gt.add_kreis(k);
             }else if(bo.bezug() == WST_BEZUG_RE)
             {
                 rechteck3d r;
@@ -361,6 +415,11 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_re.x()+bo.z(),nullpunkt_re.y()+bo.y(), 0);
+                gt.add_kreis(k);
             }else if(bo.bezug() == WST_BEZUG_VO)
             {
                 rechteck3d r;
@@ -371,6 +430,11 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_vo.x()+bo.x(),nullpunkt_vo.y()-bo.z(), 0);
+                gt.add_kreis(k);
             }else if(bo.bezug() == WST_BEZUG_HI)
             {
                 rechteck3d r;
@@ -381,6 +445,11 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_einfuegepunkt(bo.x(), bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
                 gt.add_rechteck(r);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_hi.x()+bo.x(),nullpunkt_hi.y()+bo.z(), 0);
+                gt.add_kreis(k);
             }
         }else if(zeile.at(0) == BEARBART_BOHRRASTER)
         {
@@ -479,11 +548,18 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_bezugspunkt(LINKS);
                 r.set_einfuegepunkt(0, bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_li.x()-bo.z(),nullpunkt_li.y()+bo.y(), 0);
                 for(uint i=0; i<bo.anz_y() ;i++)
                 {
                     rechteck3d tmp_r = r;
                     tmp_r.verschieben_um(0, i*bo.raster_y());
                     gt.add_rechteck(tmp_r);
+                    kreis tmp_k = k;
+                    tmp_k.verschieben_um(0, i*bo.raster_y());
+                    gt.add_kreis(tmp_k);
                 }
             }else if(bo.bezug() == WST_BEZUG_RE)
             {
@@ -494,11 +570,18 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_bezugspunkt(RECHTS);
                 r.set_einfuegepunkt(wst_l, bo.y(), 0);
                 r.verschieben_um(versatz_x, versatz_y);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_re.x()+bo.z(),nullpunkt_re.y()+bo.y(), 0);
                 for(uint i=0; i<bo.anz_y() ;i++)
                 {
                     rechteck3d tmp_r = r;
                     tmp_r.verschieben_um(0, i*bo.raster_y());
                     gt.add_rechteck(tmp_r);
+                    kreis tmp_k = k;
+                    tmp_k.verschieben_um(0, i*bo.raster_y());
+                    gt.add_kreis(tmp_k);
                 }
             }else if(bo.bezug() == WST_BEZUG_VO)
             {
@@ -509,11 +592,18 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_bezugspunkt(UNTEN);
                 r.set_einfuegepunkt(bo.x(), 0, 0);
                 r.verschieben_um(versatz_x, versatz_y);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_vo.x()+bo.x(),nullpunkt_vo.y()-bo.z(), 0);
                 for(uint i=0; i<bo.anz_x() ;i++)
                 {
                     rechteck3d tmp_r = r;
                     tmp_r.verschieben_um(i*bo.raster_x(), 0);
                     gt.add_rechteck(tmp_r);
+                    kreis tmp_k = k;
+                    tmp_k.verschieben_um(i*bo.raster_x(), 0);
+                    gt.add_kreis(tmp_k);
                 }
             }else if(bo.bezug() == WST_BEZUG_HI)
             {
@@ -524,11 +614,18 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_bezugspunkt(OBEN);
                 r.set_einfuegepunkt(bo.x(), wst_b, 0);
                 r.verschieben_um(versatz_x, versatz_y);
+                kreis k;
+                k.set_farbe_fuellung(FARBE_BRAUN);
+                k.set_radius(bo.dm()/2);
+                k.set_mittelpunkt(nullpunkt_hi.x()+bo.x(),nullpunkt_hi.y()+bo.z(), 0);
                 for(uint i=0; i<bo.anz_x() ;i++)
                 {
                     rechteck3d tmp_r = r;
                     tmp_r.verschieben_um(i*bo.raster_x(), 0);
                     gt.add_rechteck(tmp_r);
+                    kreis tmp_k = k;
+                    tmp_k.verschieben_um(i*bo.raster_x(), 0);
+                    gt.add_kreis(tmp_k);
                 }
             }
         }else if(zeile.at(0) == BEARBART_NUT)
@@ -606,6 +703,16 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
         {
             rechtecktasche rt(zeile.text());
             rechteck3d r;
+            double wkzdm = wkzm.dm(rt.wkznum()).toDouble();
+            double eckenrad;
+            if(wkzdm > rt.rad())
+            {
+                eckenrad = wkzdm/2;
+            }else
+            {
+                eckenrad = rt.rad();
+            }
+
             if(  (rt.bezug() == WST_BEZUG_OBSEI) ||  (rt.bezug() == WST_BEZUG_UNSEI)  )
             {
                 r.set_bezugspunkt(MITTE);
@@ -628,43 +735,61 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
                 r.set_mipu(rt.x(), rt.y(), rt.z());
                 r.set_drewi(rt.drewi());
                 r.verschieben_um(versatz_x, versatz_y);
-                r.set_rad(rt.rad());
+                r.set_rad(eckenrad);
                 gt.add_rechteck(r);
                 if(rt.ausraeumen() == false)
                 {
-                    r.set_laenge(r.l()/8*5);
-                    r.set_breite(r.b()/8*5);
-                    r.set_farbe_fuellung(FARBE_WEISS);
+                    r.set_laenge(r.l()-wkzdm);
+                    r.set_breite(r.b()-wkzdm);
+                    r.set_rad(eckenrad-wkzdm/2);
+                    r.set_farbe_fuellung(FARBE_GRAU);
                     gt.add_rechteck(r);
                 }
             }else
             {
+                rechteck3d r_kantenansicht;
                 if(rt.bezug() == WST_BEZUG_LI)
                 {
                     r.set_bezugspunkt(LINKS);
                     r.set_laenge(rt.tiefe());
                     r.set_breite(rt.laenge());
+                    r_kantenansicht.set_laenge(rt.breite());
+                    r_kantenansicht.set_breite(rt.laenge());
+                    r_kantenansicht.set_mipu(nullpunkt_li.x()-rt.z(),nullpunkt_li.y()+rt.y(), 0);
                 }else if(rt.bezug() == WST_BEZUG_RE)
                 {
                     r.set_bezugspunkt(RECHTS);
                     r.set_laenge(rt.tiefe());
                     r.set_breite(rt.laenge());
+                    r_kantenansicht.set_laenge(rt.breite());
+                    r_kantenansicht.set_breite(rt.laenge());
+                    r_kantenansicht.set_mipu(nullpunkt_re.x()+rt.z(),nullpunkt_re.y()+rt.y(), 0);
                 }else if(rt.bezug() == WST_BEZUG_VO)
                 {
                     r.set_bezugspunkt(UNTEN);
                     r.set_laenge(rt.laenge());
                     r.set_breite(rt.tiefe());
+                    r_kantenansicht.set_laenge(rt.laenge());
+                    r_kantenansicht.set_breite(rt.breite());
+                    r_kantenansicht.set_mipu(nullpunkt_vo.x()+rt.x(),nullpunkt_vo.y()-rt.z(), 0);
                 }else if(rt.bezug() == WST_BEZUG_HI)
                 {
                     r.set_bezugspunkt(OBEN);
                     r.set_laenge(rt.laenge());
                     r.set_breite(rt.tiefe());
+                    r_kantenansicht.set_laenge(rt.laenge());
+                    r_kantenansicht.set_breite(rt.breite());
+                    r_kantenansicht.set_mipu(nullpunkt_hi.x()+rt.x(),nullpunkt_hi.y()+rt.z(), 0);
                 }
                 r.set_farbe_fuellung(FARBE_GRUEN);
                 r.set_einfuegepunkt(rt.x(), rt.y(), rt.z());
                 r.verschieben_um(versatz_x, versatz_y);
                 //r.set_rad(rt.rad()); //hier darf nicht der rad gesetzt werden weil Draufsicht
                 gt.add_rechteck(r);
+                r_kantenansicht.set_rad(eckenrad);
+                r_kantenansicht.set_farbe_fuellung(r.farbe_fuellung());
+                r_kantenansicht.set_farbe(r.farbe());
+                gt.add_rechteck(r_kantenansicht);
             }
 
         }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
@@ -729,7 +854,7 @@ geo_text geo_ermitteln(text_zw bearb, double wst_l, double wst_b, double wst_d, 
 
     return gt;
 }
-geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
+geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y, wkz_magazin wkzm)
 {
     //-------------------------------------------
     geo_text gt;
@@ -740,6 +865,7 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
     QString radkor;
     double fraeserdm = 10;
     QString farbe_unterseite = FARBE_ROSE;
+    fraeseraufruf letzter_fa;
     for(uint i=0; i<bearb.count() ;i++)
     {
         text_zw zeile;
@@ -747,8 +873,225 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
         if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
         {
             fraeseraufruf fa(zeile.text());
+            letzter_fa = fa;//wird gebraucht für die Berechnung der Abfahrwege
             radkor = fa.radkor();
             gt.add_leerzeile();
+            QString wkznr = fa.wkznum();
+            fraeserdm = wkzm.dm(wkznr).toDouble();
+            if(i+1 < bearb.count())
+            {
+                double anweg;
+                if(fa.anfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                {
+                    anweg = fraeserdm;
+                }else
+                {
+                    anweg = fa.anfahrweg();
+                }
+                text_zw folzei;//Folgezeile
+                folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
+                punkt3d pfa;//Punkt Fräseraufruf
+                pfa.set_x(fa.x());
+                pfa.set_y(fa.y());
+                punkt3d pein;//Eintauchpunkt
+                if(folzei.at(0) == BEARBART_FRAESERGERADE)
+                {
+                    fraesergerade fg(folzei.text());
+                    if(fa.anfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                    {
+                        strecke s = fg.strecke_();
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_ende;
+                        s.set_laenge_2d(s.laenge2d()+anweg, sb);
+                        sb = strecke_bezugspunkt_start;
+                        s.set_laenge_2d(anweg, sb);
+                        if(fa.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            s.set_farbe(FARBE_BLAU);
+                        }else
+                        {
+                            s.set_farbe(farbe_unterseite);
+                            s.set_stil(STIL_GESTRICHELT);
+                        }
+                        s.verschieben_um(versatz_x, versatz_y);
+                        gt.add_strecke(s);
+                    }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                    {
+                        bogen b;
+                        //Hilfs-Strecke:
+                        strecke s = fg.strecke_();
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_ende;
+                        s.set_laenge_2d(s.laenge2d()+anweg, sb);
+                        sb = strecke_bezugspunkt_start;
+                        s.set_laenge_2d(anweg, sb);
+                        //---
+                        if(fa.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            b.set_farbe(FARBE_BLAU);
+                            if(fa.radkor() == FRKOR_L)
+                            {
+                                s.drenen_um_endpu_2d(90, true);
+                                s.drenen_um_stapu_2d(90, true);
+                                b.set_startpunkt(s.endpu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, false);
+                            }else if(fa.radkor() == FRKOR_R)
+                            {
+                                s.drenen_um_endpu_2d(90, false);
+                                s.drenen_um_stapu_2d(90, false);
+                                b.set_startpunkt(s.endpu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, true);
+                            }
+                        }else
+                        {
+                            b.set_farbe(farbe_unterseite);
+                            b.set_stil(STIL_GESTRICHELT);
+                            if(fa.radkor() == FRKOR_L)
+                            {
+                                s.drenen_um_endpu_2d(90, false);
+                                s.drenen_um_stapu_2d(90, false);
+                                b.set_startpunkt(s.endpu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, true);
+                            }else if(fa.radkor() == FRKOR_R)
+                            {
+                                s.drenen_um_endpu_2d(90, true);
+                                s.drenen_um_stapu_2d(90, true);
+                                b.set_startpunkt(s.endpu());
+                                b.set_endpunkt(fa.pos());
+                                b.set_radius(anweg, false);
+                            }
+                        }
+                        b.verschieben_um(versatz_x, versatz_y);
+                        gt.add_bogen(b);
+                    }
+                }else if(folzei.at(0) == BEARBART_FRAESERBOGEN)
+                {
+                    fraeserbogen fb(folzei.text());
+                    if(fa.anfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                    {
+                        strecke s;
+                        s.set_stapu(fb.bog().mitte());
+                        s.set_endpu(fb.bog().start());
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_ende;
+                        s.set_laenge_2d(anweg, sb);
+                        if(fa.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            s.set_farbe(FARBE_BLAU);
+                            s.drenen_um_endpu_2d(90, fb.bog().im_uzs());
+                        }else
+                        {
+                            s.set_farbe(farbe_unterseite);
+                            s.set_stil(STIL_GESTRICHELT);
+                            s.drenen_um_endpu_2d(180, true);
+                        }
+                        s.verschieben_um(versatz_x, versatz_y);
+                        gt.add_strecke(s);
+                    }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                    {
+                        bogen b;                       
+                        if(fa.bezug() == WST_BEZUG_OBSEI)
+                        {
+                            strecke s;
+                            s.set_stapu(fb.bog().mitte());
+                            s.set_endpu(fb.stapu());
+                            strecke_bezugspunkt sb;
+                            sb = strecke_bezugspunkt_ende;
+                            s.set_laenge_2d(anweg, sb);
+                            b.set_farbe(FARBE_BLAU);
+                            s.drenen_um_endpu_2d(90, fb.bog().im_uzs());
+                            if(fa.radkor() == FRKOR_L)
+                            {
+                                if(fb.bog().im_uzs())
+                                {
+                                    s.drenen_um_endpu_2d(90, true);
+                                    s.drenen_um_stapu_2d(90, true);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, false);
+                                }else
+                                {
+                                    s.drenen_um_stapu_2d(90, fb.uzs());
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, false);
+                                }
+                            }else if(fa.radkor() == FRKOR_R)
+                            {
+                                if(fb.bog().im_uzs())
+                                {
+                                    s.drenen_um_endpu_2d(90, false);
+                                    s.drenen_um_stapu_2d(90, false);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, true);
+                                }else
+                                {
+                                    s.drenen_um_stapu_2d(90, true);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, true);
+                                }
+                            }
+                        }else
+                        {
+                            strecke s;
+                            s.set_stapu(fb.bog().mitte());
+                            s.set_endpu(fb.endpu());
+                            strecke_bezugspunkt sb;
+                            sb = strecke_bezugspunkt_ende;
+                            s.set_laenge_2d(anweg, sb);
+                            strecke sehne;
+                            sehne.set_stapu(fb.stapu());
+                            sehne.set_endpu(fb.endpu());
+                            punkt3d strecke_sp = drehen(sehne.mipu(), s.stapu(), (double)180, true);
+                            punkt3d strecke_ep = drehen(sehne.mipu(), s.endpu(), (double)180, true);
+                            s.set_stapu(strecke_sp);
+                            s.set_endpu(strecke_ep);
+                            b.set_farbe(farbe_unterseite);
+                            b.set_stil(STIL_GESTRICHELT);
+                            if(fa.radkor() == FRKOR_L)
+                            {
+                                if(fb.bog().im_uzs())
+                                {
+                                    s.drenen_um_endpu_2d(180, true);
+                                    s.drenen_um_stapu_2d(90, false);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, true);
+                                }else
+                                {
+                                    s.drenen_um_stapu_2d(90, false);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, true);
+                                }
+                            }else if(fa.radkor() == FRKOR_R)
+                            {
+                                if(fb.bog().im_uzs())
+                                {
+                                    s.drenen_um_stapu_2d(90, true);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, false);
+                                }else
+                                {
+                                    s.drenen_um_endpu_2d(180, false);
+                                    s.drenen_um_stapu_2d(90, true);
+                                    b.set_startpunkt(s.endpu());
+                                    b.set_endpunkt(fa.pos());
+                                    b.set_radius(anweg, false);
+                                }
+                            }
+                        }
+                        b.verschieben_um(versatz_x, versatz_y);
+                        gt.add_bogen(b);
+                    }
+                }
+            }
         }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
         {
             fraesergerade fg(zeile.text());
@@ -794,6 +1137,102 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
                 }
             }
             gt.add_kreis(k);
+            //Abfahrweg:
+            double abweg;
+            if(letzter_fa.abfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+            {
+                abweg = fraeserdm;
+            }else
+            {
+                abweg = letzter_fa.abfahrweg();
+            }
+            bool ist_konturende = false;
+            if(i+1 == bearb.count())
+            {
+                ist_konturende = true;
+            }
+            if(i+1 < bearb.count())
+            {
+                text_zw folzei;//Folgezeile
+                folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
+                if(folzei.at(0) != BEARBART_FRAESERGERADE  &&  folzei.at(0) != BEARBART_FRAESERBOGEN)
+                {
+                    ist_konturende = true;
+                }
+            }
+            if(ist_konturende == true)
+            {
+                if(letzter_fa.abfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                {
+                    strecke s = fg.strecke_();
+                    strecke_bezugspunkt sb;
+                    sb = strecke_bezugspunkt_start;
+                    s.set_laenge_2d(s.laenge2d()+abweg, sb);
+                    sb = strecke_bezugspunkt_ende;
+                    s.set_laenge_2d(abweg, sb);
+                    if(letzter_fa.bezug() == WST_BEZUG_OBSEI)
+                    {
+                        s.set_farbe(FARBE_BLAU);
+                    }else
+                    {
+                        s.set_farbe(farbe_unterseite);
+                        s.set_stil(STIL_GESTRICHELT);
+                    }
+                    s.verschieben_um(versatz_x, versatz_y);
+                    gt.add_strecke(s);
+                }else if(letzter_fa.abfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                {
+                    bogen b;
+                    //Hilfs-Strecke:
+                    strecke s = fg.strecke_();
+                    strecke_bezugspunkt sb;
+                    sb = strecke_bezugspunkt_start;
+                    s.set_laenge_2d(s.laenge2d()+abweg, sb);
+                    sb = strecke_bezugspunkt_ende;
+                    s.set_laenge_2d(abweg, sb);
+                    //---
+                    if(letzter_fa.bezug() == WST_BEZUG_OBSEI)
+                    {
+                        b.set_farbe(FARBE_BLAU);
+                        if(letzter_fa.radkor() == FRKOR_L)
+                        {
+                            s.drenen_um_endpu_2d(90, true);
+                            s.drenen_um_stapu_2d(90, true);
+                            b.set_startpunkt(fg.ep());
+                            b.set_endpunkt(s.stapu());
+                            b.set_radius(abweg, false);
+                        }else if(letzter_fa.radkor() == FRKOR_R)
+                        {
+                            s.drenen_um_endpu_2d(90, false);
+                            s.drenen_um_stapu_2d(90, false);
+                            b.set_startpunkt(fg.ep());
+                            b.set_endpunkt(s.stapu());
+                            b.set_radius(abweg, true);
+                        }
+                    }else
+                    {
+                        b.set_farbe(farbe_unterseite);
+                        b.set_stil(STIL_GESTRICHELT);
+                        if(letzter_fa.radkor() == FRKOR_L)
+                        {
+                            s.drenen_um_endpu_2d(90, false);
+                            s.drenen_um_stapu_2d(90, false);
+                            b.set_startpunkt(fg.ep());
+                            b.set_endpunkt(s.stapu());
+                            b.set_radius(abweg, true);
+                        }else if(letzter_fa.radkor() == FRKOR_R)
+                        {
+                            s.drenen_um_endpu_2d(90, true);
+                            s.drenen_um_stapu_2d(90, true);
+                            b.set_startpunkt(fg.ep());
+                            b.set_endpunkt(s.stapu());
+                            b.set_radius(abweg, false);
+                        }
+                    }
+                    b.verschieben_um(versatz_x, versatz_y);
+                    gt.add_bogen(b);
+                }
+            }
         }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
         {
             fraeserbogen fb(zeile.text());
@@ -869,6 +1308,137 @@ geo_text geofkon_ermitteln(text_zw bearb, double versatz_x, double versatz_y)
                 k.set_mittelpunkt(s.endpu());
             }
             gt.add_kreis(k);
+            //Abfahrweg:
+            double abweg;
+            if(letzter_fa.abfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+            {
+                abweg = fraeserdm;
+            }else
+            {
+                abweg = letzter_fa.abfahrweg();
+            }
+            bool ist_konturende = false;
+            if(i+1 == bearb.count())
+            {
+                ist_konturende = true;
+            }
+            if(i+1 < bearb.count())
+            {
+                text_zw folzei;//Folgezeile
+                folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
+                if(folzei.at(0) != BEARBART_FRAESERGERADE  &&  folzei.at(0) != BEARBART_FRAESERBOGEN)
+                {
+                    ist_konturende = true;
+                }
+            }
+            if(ist_konturende == true)
+            {
+                if(letzter_fa.abfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                {
+                    strecke s;
+                    s.set_stapu(fb.bog().ende());
+                    s.set_endpu(fb.bog().mitte());
+                    strecke_bezugspunkt sb;
+                    sb = strecke_bezugspunkt_start;
+                    s.set_laenge_2d(abweg, sb);
+                    if(letzter_fa.bezug() == WST_BEZUG_OBSEI)
+                    {
+                        s.set_farbe(FARBE_BLAU);
+                        s.drenen_um_stapu_2d(90, !fb.bog().im_uzs());
+                    }else
+                    {
+                        s.set_farbe(farbe_unterseite);
+                        s.set_stil(STIL_GESTRICHELT);
+                        s.drenen_um_stapu_2d(180, true);
+                    }
+                    s.verschieben_um(versatz_x, versatz_y);
+                    gt.add_strecke(s);
+                }else if(letzter_fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                {
+                    bogen b;                    
+                    if(letzter_fa.bezug() == WST_BEZUG_OBSEI)
+                    {
+                        s.set_stapu(fb.bog().ende());
+                        s.set_endpu(fb.bog().mitte());
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_start;
+                        s.set_laenge_2d(abweg, sb);
+                        b.set_farbe(FARBE_BLAU);
+                        s.drenen_um_stapu_2d(90, !fb.bog().im_uzs());
+                        s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                        if(letzter_fa.radkor() == FRKOR_L)
+                        {
+                            if(fb.bog().im_uzs())
+                            {
+                                s.drenen_um_endpu_2d(180, false);
+                            }
+                            b.set_startpunkt(fb.endpu());
+                            b.set_endpunkt(s.stapu());
+                            b.set_radius(abweg, false);
+                        }else if(letzter_fa.radkor() == FRKOR_R)
+                        {
+                            if(!fb.bog().im_uzs())
+                            {
+                                s.drenen_um_endpu_2d(180, false);
+                            }
+                            b.set_startpunkt(fb.endpu());
+                            b.set_endpunkt(s.stapu());
+                            b.set_radius(abweg, true);
+                        }
+                    }else
+                    {
+                        s.set_stapu(fb.bog().start());
+                        s.set_endpu(fb.bog().mitte());
+                        strecke sehne;
+                        sehne.set_stapu(fb.stapu());
+                        sehne.set_endpu(fb.endpu());
+                        punkt3d strecke_sp = drehen(sehne.mipu(), s.stapu(), (double)180, true);
+                        punkt3d strecke_ep = drehen(sehne.mipu(), s.endpu(), (double)180, true);
+                        s.set_stapu(strecke_sp);
+                        s.set_endpu(strecke_ep);
+                        strecke_bezugspunkt sb;
+                        sb = strecke_bezugspunkt_start;
+                        s.set_laenge_2d(abweg, sb);
+                        b.set_farbe(farbe_unterseite);
+                        b.set_stil(STIL_GESTRICHELT);
+                        if(letzter_fa.radkor() == FRKOR_L)
+                        {
+                            if(fb.uzs())
+                            {
+                                s.drenen_um_stapu_2d(90, fb.bog().im_uzs());
+                                s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                                b.set_startpunkt(fb.endpu());
+                                b.set_endpunkt(s.stapu());
+                                b.set_radius(abweg, fb.bog().im_uzs());
+                            }else
+                            {
+                                s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                                b.set_startpunkt(fb.endpu());
+                                b.set_endpunkt(s.stapu());
+                                b.set_radius(abweg, !fb.bog().im_uzs());
+                            }
+                        }else if(letzter_fa.radkor() == FRKOR_R)
+                        {
+                            if(fb.uzs())
+                            {
+                                s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                                b.set_startpunkt(fb.endpu());
+                                b.set_endpunkt(s.stapu());
+                                b.set_radius(abweg, !fb.bog().im_uzs());
+                            }else
+                            {
+                                s.drenen_um_stapu_2d(90, fb.bog().im_uzs());
+                                s.drenen_um_endpu_2d(90, !fb.bog().im_uzs());
+                                b.set_startpunkt(fb.endpu());
+                                b.set_endpunkt(s.stapu());
+                                b.set_radius(abweg, fb.bog().im_uzs());
+                            }
+                        }
+                    }
+                    b.verschieben_um(versatz_x, versatz_y);
+                    gt.add_bogen(b);
+                }
+            }
         }else
         {
             gt.add_leerzeile();

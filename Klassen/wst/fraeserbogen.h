@@ -33,6 +33,11 @@ public:
     void set_rad(QString rad);
     void set_uzs(bool ist_im_uzs);
     void set_uzs(QString ist_im_uzs);
+    void set_bogen(bogen bo);
+    void set_tiSta(double tiefe);
+    void set_tiSta(QString tiefe);
+    void set_tiEnd(double tiefe);
+    void set_tiEnd(QString tiefe);
 
     inline void set_startpunkt(punkt3d p)
     {
@@ -64,6 +69,10 @@ public:
     bool    uzs();
     QString uzs_qstring();
     bogen   bog();
+    double tiSta();
+    QString tiSta_qstring();
+    double tiEnd();
+    QString tiEnd_qstring();
 
     inline punkt3d stapu()
     {
@@ -78,11 +87,12 @@ public:
     void set_text(QString text);
 
 private:
-    punkt3d Startpunkt, Endpunkt;  //das Z-Maß ist die Frästiefe bezogen auf die WST-Oberfläche
+    punkt3d Startpunkt, Endpunkt;
     bool Uzs;
     double Radius;
     QString Afb;
     QString Bezug;
+    double TiSta, TiEnd;
 
     void setup();
 

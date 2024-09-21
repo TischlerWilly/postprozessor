@@ -28,6 +28,10 @@ void wstzustand::clear()
     Geotext.clear();
     GeoFkon.clear();
     Versatz_y.clear();
+    Zust_use_ax.clear();
+    Zust_use_ay.clear();
+    Use_ax = true;
+    Use_ay = true;
 }
 
 //----------------------------------
@@ -159,6 +163,14 @@ void wstzustand::set_name(QString neuer_name)
         Name = neuer_name;
     }
 }
+void wstzustand::set_gute_seite(bool ist_oben)
+{
+    if(!Format.isEmpty())
+    {
+        clear();
+    }
+    Gut_ist_oben = ist_oben;
+}
 void wstzustand::set_zust_fkon(QString zust)
 {
     if(zust != Zust_fkon)
@@ -182,6 +194,14 @@ void wstzustand::set_einst_ganx(einstellung_ganx e)
         }
         Eganx = e;
     }
+}
+void wstzustand::set_use_ax(bool benutzen)
+{
+    Use_ax = benutzen;
+}
+void wstzustand::set_use_ay(bool benutzen)
+{
+    Use_ay = benutzen;
 }
 
 QString wstzustand::kante_vo()
@@ -260,11 +280,13 @@ QString wstzustand::kante_re()
 //----------------------------------Manipulationen:
 void wstzustand::anfordern(QString format, wkz_magazin wkzmag, QString drehung)
 {
+    /*
     //Prüfen ob Zustand bereits existiert:
     bool existiert = false;
     for(int i = 0; i<Format.count();i++)
     {
-        if(format == Format.at(i) && wkzmag == Wkzm.at(i) && drehung == Drehung.at(i))
+        if(format == Format.at(i) && wkzmag == Wkzm.at(i) && drehung == Drehung.at(i) && \
+            Use_ax == Zust_use_ax.at(i) && Use_ay == Zust_use_ay.at(i))
         {
             existiert = true;
             Akt_zust = i;
@@ -276,6 +298,9 @@ void wstzustand::anfordern(QString format, wkz_magazin wkzmag, QString drehung)
         erzeugen(format, wkzmag, drehung);
         Akt_zust = Format.count()-1;
     }
+    */
+    erzeugen(format, wkzmag, drehung);
+    Akt_zust = Format.count()-1;
 }
 //----------------------------------
 //Private:
@@ -288,6 +313,8 @@ void wstzustand::erzeugen(QString format, wkz_magazin wkzmag, QString drehung)
     //  ->Wkzmag
     Drehung_bekommen.append(drehung);
     //  ->Drehung_bekommen
+    Zust_use_ax.append(Use_ax);
+    Zust_use_ay.append(Use_ay);
     finde_drehwinkel_auto_(Format.count()-1);
     //  ->Drehung
     //  ->Bewertung
@@ -3930,7 +3957,7 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
                         fraesergerade fg(param.text());
                         xend = fg.xe();
                         yend = fg.ye();
-                        zend = fg.ze();
+                        zend = fg.tiEnd();
                         zeiend = i;
                         if(xend > xmax)
                         {
@@ -3953,7 +3980,7 @@ void wstzustand::formartierung_zu_einzelfkon(text_zw& bearb,double tmp_l, double
                         fraeserbogen fb(param.text());
                         xend = fb.xe();
                         yend = fb.ye();
-                        zend = fb.ze();
+                        zend = fb.tiEnd();
                         zeiend = i;
                         if(xend > xmax)
                         {
@@ -4202,139 +4229,6 @@ QString wstzustand::kommentar_ggf(QString kom)
     text += ";[AFB]1;#ENDE#";
     text += "\n";
     return text;
-}
-QString wstzustand::fmc_kommentar_gute_seite(text_zw& bearb)
-{
-    QString retmsg;
-    if(Name.contains("Seite"))
-    {
-        bool hat_5er_durchgangsbohrungen = false;
-        text_zw zeile;
-        for(uint i=0; i<bearb.count() ;i++)
-        {
-            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-            if(zeile.at(0) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.text());
-                if(bo.dm() == 5)
-                {
-                    if(bo.tiefe() > Dicke  ||  bo.tiefe() < 0)
-                    {
-                        hat_5er_durchgangsbohrungen = true;
-                    }
-                }
-            }
-        }
-        if(hat_5er_durchgangsbohrungen == true)
-        {
-            retmsg = "gut oben";
-        }else
-        {
-            retmsg = "gut unten";
-        }
-    }else if(Name.contains("MS"))
-    {
-        retmsg = "gut oben";
-    }else if(Name.contains("OB"))
-    {
-        retmsg = "gut oben";
-    }else if(Name.contains("UB"))
-    {
-        int anz_obsei = 0;
-        int anz_unsei = 0;
-        text_zw zeile;
-        for(uint i=0; i<bearb.count() ;i++)
-        {
-            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-            if(zeile.at(0) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.text());
-                if(bo.dm() == 15)
-                {
-                    if(bo.bezug() == WST_BEZUG_OBSEI)
-                    {
-                        anz_obsei++;
-                    }else if(bo.bezug() == WST_BEZUG_UNSEI)
-                    {
-                        anz_unsei++;
-                    }
-                }
-            }
-        }
-        if(anz_obsei > anz_unsei)
-        {
-            retmsg = "gut unten";
-        }else
-        {
-            retmsg = "gut oben";
-        }
-    }else if(Name.contains("KB"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("EB"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("RW"))
-    {
-        retmsg = "gut unten";//Wert wird ggf. weiter unten überschrieben
-        bool hat_5er_durchgangsbohrungen = false;
-        bool hat_8er_flaechenbohrungen_obsei = false;
-        text_zw zeile;
-        for(uint i=0; i<bearb.count() ;i++)
-        {
-            zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-            if(zeile.at(0) == BEARBART_BOHR)
-            {
-                bohrung bo(zeile.text());
-                if(bo.dm() == 5)
-                {
-                    if(bo.tiefe() > Dicke  ||  bo.tiefe() < 0)
-                    {
-                        hat_5er_durchgangsbohrungen = true;
-                    }
-                }else if(bo.dm() == 8)
-                {
-                    if(bo.tiefe() < Dicke &&  bo.bezug() == WST_BEZUG_OBSEI)
-                    {
-                        hat_8er_flaechenbohrungen_obsei = true;
-                    }
-                }
-            }
-        }
-        if(hat_8er_flaechenbohrungen_obsei)
-        {
-            if(hat_5er_durchgangsbohrungen)
-            {
-                retmsg = "gut oben";
-            }
-        }
-    }else if(Name.contains("Tuer"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("Front") || Name.contains("front"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("Blende") || Name.contains("blende"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("Doppel") || Name.contains("doppel"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("Paneel") || Name.contains("paneel"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("SF"))
-    {
-        retmsg = "gut unten";
-    }else if(Name.contains("SB"))
-    {
-        retmsg = "gut unten";
-    }else
-    {
-        retmsg = "(NULL)";
-    }
-
-    return retmsg;
 }
 bool wstzustand::punkt_auf_wst(double x, double y, double l, double b, double tolleranz)
 {
@@ -4716,7 +4610,10 @@ void wstzustand::fmc_dateitext(int index)
     bool ay = false;
     if(tmp_b < Schwellenwert_ay)
      {
-         ay = true;
+        if(use_ay() == true)
+        {
+            ay = true;
+        }
      }
 
     int min_kta_dm_ausraeumen_false = 200; //Durchmesser ab dem Kreistaschen nicht ausgeräumt werden
@@ -4754,7 +4651,15 @@ void wstzustand::fmc_dateitext(int index)
     msg += "\n";
     msg += "HOLKA=-1\n";            //Hole Kante Nr
     msg += "KOM1=";                //Kommentar 1
-    msg += fmc_kommentar_gute_seite(bearb_kopie);
+
+    if(Gut_ist_oben == true)
+    {
+        msg += "gut oben";
+    }else
+    {
+        msg += "gut unten";
+    }
+
     //msg += "(NULL)";
     msg += "\n";
     msg += "KOM2=";                 //Kommentar 2
@@ -7060,22 +6965,38 @@ void wstzustand::fmc_dateitext(int index)
             if(!tnummer.isEmpty())
             {
                 double gesamttiefe = fa.tiefe();
-                double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
-                double wkzdm = wkzmag.dm(tnummer).toDouble();
-                double zustelltiefe;
-                if(Zust_fkon == "wkz")
+                for(uint ii=i+1; ii<bearb.count(); ii++)
                 {
-                    if(zustellmass < gesamttiefe)
+                    zeile.set_text(bearb.at(ii),TRENNZ_BEARB_PARAM);
+                    if(zeile.at(0) == BEARBART_FRAESERGERADE)
                     {
-                        zustelltiefe = zustellmass;
+                        fraesergerade fg(zeile.text());
+                        if(fg.tiSta() > gesamttiefe)
+                        {
+                            gesamttiefe = fg.tiSta();
+                        }
+                        if(fg.tiEnd() > gesamttiefe)
+                        {
+                            gesamttiefe = fg.tiEnd();
+                        }
+                    }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                    {
+                        fraeserbogen fb(zeile.text());
+                        if(fb.tiSta() > gesamttiefe)
+                        {
+                            gesamttiefe = fb.tiSta();
+                        }
+                        if(fb.tiEnd() > gesamttiefe)
+                        {
+                            gesamttiefe = fb.tiEnd();
+                        }
                     }else
                     {
-                        zustelltiefe = gesamttiefe;
+                        break;//for ii
                     }
-                }else // == "orgi"
-                {
-                    zustelltiefe = gesamttiefe;
                 }
+                double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
+                double mind_zust = wkzmag.zustellmass_min(tnummer).toDouble();
 
                 QString radkor = fa.radkor();
                 if(radkor == FRKOR_L)
@@ -7092,9 +7013,6 @@ void wstzustand::fmc_dateitext(int index)
                 if(fa.bezug() == WST_BEZUG_OBSEI)
                 {
                     msg += kommentar_fmc("--------------------");
-
-                    double backup_i = i;
-
                     //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
                     punkt3d pfa;//Punkt Fräseraufruf
                     pfa.set_x(fa.x());
@@ -7102,7 +7020,25 @@ void wstzustand::fmc_dateitext(int index)
                     text_zw folzei;//Folgezeile
                     folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
                     punkt3d pein;//Eintauchpunkt
-                    int anweg = 50;
+                    double anweg = 50;
+                    QString anweg_;
+                    if(fa.anfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                    {
+                        anweg = wkzmag.dm(tnummer).toDouble();
+                        anweg_ = "2*WKZR";
+                    }else
+                    {
+                        anweg = fa.anfahrweg();
+                        anweg_ = fa.anfahrweg_qstring();
+                    }
+                    QString abweg_;
+                    if(fa.abfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                    {
+                        abweg_ = "2*WKZR";
+                    }else
+                    {
+                        abweg_ = fa.abfahrweg_qstring();
+                    }
                     if(folzei.at(0) == BEARBART_FRAESERGERADE)
                     {
                         fraesergerade fg(folzei.text());
@@ -7145,10 +7081,30 @@ void wstzustand::fmc_dateitext(int index)
                     }
                     msg += variable_fmc("FKONEINTYP", fkoneintyp);
 
-                    while(1)//abbruch durch breake
+                    double anz_zustellungen = 1;
+                    if(Zust_fkon == "wkz")
                     {
-                        i = backup_i;
-                        double pos_z = dicke()-zustelltiefe;
+                        anz_zustellungen = aufrunden(gesamttiefe / zustellmass);
+                    }else // == "orgi"
+                    {
+                        anz_zustellungen = 1;
+                    }
+
+                    for(uint i_zust=1; i_zust<=anz_zustellungen ;i_zust++)//ii=1 weil mit erster Zustellung begonnen wird
+                    {
+                        double akt_ti_fa = 0;
+                        if(i_zust == anz_zustellungen)//letzte Zustellung
+                        {
+                            akt_ti_fa = fa.tiefe();
+                        }else
+                        {
+                            akt_ti_fa = fa.tiefe() / anz_zustellungen * i_zust;
+                            if(i_zust==1  && fa.tiefe() > mind_zust  &&  akt_ti_fa < mind_zust)
+                            {
+                                akt_ti_fa = mind_zust;
+                            }
+                        }
+                        double pos_z_fa = dicke()-akt_ti_fa;
                         //--------------------------------------------
                         msg += FMC_FKON;
                         msg += "\n";
@@ -7165,11 +7121,11 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         msg += FMC_FKON_Z;
                         msg += "=";
-                        msg += double_to_qstring(pos_z);
+                        msg += double_to_qstring(pos_z_fa);
                         msg += "\n";
                         msg += "EBG=0\n";       //Eckenrunden global
                         msg += "KD=";           //Kantendicke
-                        if(zustelltiefe == gesamttiefe)
+                        if(i_zust == anz_zustellungen)//letzte Zustellung
                         {
                             msg += "0";     //Originalkontur fahren bei letztem Fräsgang in der Tiefe
                         }else
@@ -7184,58 +7140,56 @@ void wstzustand::fmc_dateitext(int index)
 
                         if(aufwst == true)
                         {
-                            if(radkor == "0")
-                            {
-                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                msg += "=0\n";
-                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                msg += "=0\n";
-                            }else
-                            {
-                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                msg += "=1\n";
-                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                msg += "=1\n";
-                            }
                             msg += FMC_FKON_EINTYP;   //Eintauchtp
-                            msg += "=FKONEINTYP";
+                            msg += "=FKONEINTYP";//Variable siehe oben
                             msg += "\n";
                             //msg += "=1\n";
-                            if(pos_z > 0)
-                            {
-                                //Anfahranweisung für nicht durchgefräste Innen-Bahnen:
-                                msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                msg += "=2*WKZR\n";
-                                msg += FMC_FKON_ABWEG;    //Abfahrwert
-                                msg += "LGEAB=2*WKZR\n";
-                            }else
-                            {
-                                //Anfahranweisung für durchgefräste Innen-Bahnen:
-                                msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                msg += "=50\n";
-                                msg += FMC_FKON_ABWEG;    //Abfahrwert
-                                msg += "=50\n";
-                            }
                         }else //Anfahrweg beginnt nicht auf WST
+                        {                            
+                            msg += FMC_FKON_EINTYP;   //Eintauchtp
+                            msg += "=FKONEINTYP";//Variable siehe oben
+                            msg += "\n";
+                            //msg += "=-1\n";                            
+                        }
+                        if(fa.anfahrtyp() == FAUFRUF_ANABTYP_NDEF)
                         {
-                            //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
                             msg += FMC_FKON_ANTYP;    //Anfahrtyp
                             msg += "=0\n";
-                            msg += FMC_FKON_ABTYP;    //Abfahrtyp
+                        }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                        {
+                            msg += FMC_FKON_ANTYP;    //Anfahrtyp
                             msg += "=0\n";
-                            msg += FMC_FKON_EINTYP;   //Eintauchtp
-                            msg += "=FKONEINTYP";
-                            msg += "\n";
-                            //msg += "=-1\n";
-                            msg += FMC_FKON_ANWEG;    //Anfahrwert
-                            msg += "=2*WKZR+";
-                            msg += double_to_qstring(anweg);
-                            msg += "\n";
-                            msg += FMC_FKON_ABWEG;   //Abfahrwert
-                            msg += "=2*WKZR+";
-                            msg += double_to_qstring(anweg);
-                            msg += "\n";
+                        }else //if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                        {
+                            msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                            msg += "=1\n";
                         }
+                        if(fa.abfahrtyp() == FAUFRUF_ANABTYP_NDEF)
+                        {
+                            msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                            msg += "=0\n";
+                        }else if(fa.abfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                        {
+                            msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                            msg += "=0\n";
+                        }else //if(fa.abfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                        {
+                            msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                            msg += "=1\n";
+                        }
+                        msg += FMC_FKON_ANWEG;    //Anfahrwert
+                        msg += "=";
+                        msg += anweg_;
+                        msg += "\n";
+                        msg += FMC_FKON_ABWEG;    //Abfahrwert
+                        msg += "=";
+                        msg += abweg_;
+                        msg += "\n";
+
+                        msg += "BEZB=";
+                        msg += "Aufruf Fraeser Z= ";
+                        msg += double_to_qstring(pos_z_fa);
+                        msg += "\n";
 
                         msg += "FAN=AUTO\n";    //Anfahrvorschub
                         msg += "F=AUTO\n";      //Vorschub
@@ -7248,28 +7202,31 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         //--------------------------------------------
                         //Fräsbahnen:
-                        while(i+1<bearb.count())
+                        for(uint i_fkon=i+1; i+1<bearb.count(); i_fkon++)
                         {
-                            zeile.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
-
+                            zeile.set_text(bearb.at(i_fkon),TRENNZ_BEARB_PARAM);
                             if(zeile.at(0) == BEARBART_FRAESERGERADE)
                             {
-                                i++;
-                                zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-                                //Gerade fräsen:
                                 fraesergerade fg(zeile.text());
-                                QString tiefe_fg = "0";
-                                if(fg.ze() == fa.tiefe())
+                                double akt_ti_fg = 0;
+                                QString export_z_fg_Qstring = "Z";
+                                if(i_zust == anz_zustellungen)//letzte Zustellung
                                 {
-                                    tiefe_fg = "Z"; //Tiefe beibehalten
-                                                    //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                    //fmc-Programme eingelesen wurden, bei denen
-                                                    //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                    //nicht den selben Z-Wert haben!!!
-                                                    //Dieser Fall wird nicht erwartet....
+                                    akt_ti_fg = fg.tiEnd();
                                 }else
                                 {
-                                    tiefe_fg = double_to_qstring(  dicke()-fg.ze()  );
+                                    akt_ti_fg = fg.tiEnd() / anz_zustellungen * i_zust;
+                                    if(i_zust==1  && fg.tiEnd() > mind_zust  &&  akt_ti_fg < mind_zust)
+                                    {
+                                        akt_ti_fg = mind_zust;
+                                    }
+                                }
+                                if( cagleich( fg.tiSta(), fg.tiEnd(), 0.1) )
+                                {
+                                    export_z_fg_Qstring = "Z"; //Tiefe beibehalten
+                                }else
+                                {
+                                    export_z_fg_Qstring = double_to_qstring(dicke()-akt_ti_fg);
                                 }
 
                                 msg += FMC_FKONG;
@@ -7284,28 +7241,38 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "\n";
                                 msg += FMC_FKONG_ZE;
                                 msg += "=";
-                                msg += tiefe_fg;
+                                msg += export_z_fg_Qstring;
+                                msg += "\n";
+
+                                msg += "BEZB=";
+                                msg += "Gerade Z= ";
+                                msg += export_z_fg_Qstring;
                                 msg += "\n";
                                 msg += "\n";
                             }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                             {
-                                i++;
-                                zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-                                //Bogen fräsen:
                                 fraeserbogen fb(zeile.text());
-                                QString tiefe_fb = "0";
-                                if(fb.ze() == fa.tiefe())
+                                double akt_ti_fb = 0;
+                                QString export_z_fb_Qstring = "Z";
+                                if(i_zust == anz_zustellungen)//letzte Zustellung
                                 {
-                                    tiefe_fb = "Z"; //Tiefe beibehalten
-                                                    //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                    //fmc-Programme eingelesen wurden, bei denen
-                                                    //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                    //nicht den selben Z-Wert haben!!!
-                                                    //Dieser Fall wird nicht erwartet....
+                                    akt_ti_fb = fb.tiEnd();
                                 }else
                                 {
-                                    tiefe_fb = double_to_qstring(  dicke()-fb.ze()  );
+                                    akt_ti_fb = fb.tiEnd() / anz_zustellungen * i_zust;
+                                    if(i_zust==1  && fb.tiEnd() > mind_zust  &&  akt_ti_fb < mind_zust)
+                                    {
+                                        akt_ti_fb = mind_zust;
+                                    }
                                 }
+                                if( cagleich( fb.tiSta(), fb.tiEnd(), 0.1) )
+                                {
+                                    export_z_fb_Qstring = "Z"; //Tiefe beibehalten
+                                }else
+                                {
+                                    export_z_fb_Qstring = double_to_qstring(dicke()-akt_ti_fb);
+                                }
+
                                 QString dlg_name;
                                 if(fb.uzs() == true)
                                 {
@@ -7331,7 +7298,11 @@ void wstzustand::fmc_dateitext(int index)
                                 msg += "\n";
                                 msg += FMC_FKONBOG_ZE;
                                 msg += "=";
-                                msg += tiefe_fb;
+                                msg += export_z_fb_Qstring;
+                                msg += "\n";
+                                msg += "BEZB=";
+                                msg += "Bogen Z= ";
+                                msg += export_z_fb_Qstring;
                                 msg += "\n";
                                 msg += "\n";
                             }else
@@ -7353,25 +7324,13 @@ void wstzustand::fmc_dateitext(int index)
                         msg += "\n";
                         msg += "\n";
                         //--------------------------------------------
-                        if(zustelltiefe == gesamttiefe)
-                        {
-                            break; //letzter Schleifendurchlauf
-                        }
-                        if(zustelltiefe != gesamttiefe)
+                        if(i_zust < anz_zustellungen)
                         {
                             msg += kommentar_fmc("---");
-                        }
-                        if(zustelltiefe+zustellmass  <  gesamttiefe)
-                        {
-                            zustelltiefe = zustelltiefe + zustellmass;
-                        }else
-                        {
-                            zustelltiefe = gesamttiefe;
                         }
                     }
                     msg += kommentar_fmc("--------------------");
                 }
-
             }else
             {
                 //Mit Fehlermeldung abbrechen:
@@ -8369,23 +8328,40 @@ void wstzustand::fmc_dateitext(int index)
                     fa.set_y(  tmp_b - fa.y()  );
 
                     double gesamttiefe = fa.tiefe();
-                    double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
-                    double wkzdm = wkzmag.dm(tnummer).toDouble();
-                    double zustelltiefe;
-                    if(Zust_fkon == "wkz")
+                    for(uint ii=i+1; ii<bearb.count(); ii++)
                     {
-                        if(zustellmass < gesamttiefe)
+                        zeile.set_text(bearb.at(ii),TRENNZ_BEARB_PARAM);
+                        if(zeile.at(0) == BEARBART_FRAESERGERADE)
                         {
-                            zustelltiefe = zustellmass;
+                            fraesergerade fg(zeile.text());
+                            if(fg.tiSta() > gesamttiefe)
+                            {
+                                gesamttiefe = fg.tiSta();
+                            }
+                            if(fg.tiEnd() > gesamttiefe)
+                            {
+                                gesamttiefe = fg.tiEnd();
+                            }
+                        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+                        {
+                            fraeserbogen fb(zeile.text());
+                            if(fb.tiSta() > gesamttiefe)
+                            {
+                                gesamttiefe = fb.tiSta();
+                            }
+                            if(fb.tiEnd() > gesamttiefe)
+                            {
+                                gesamttiefe = fb.tiEnd();
+                            }
                         }else
                         {
-                            zustelltiefe = gesamttiefe;
+                            break;//for ii
                         }
-                    }else // == "orgi"
-                    {
-                        zustelltiefe = gesamttiefe;
                     }
+                    double zustellmass = wkzmag.zustmasvert(tnummer).toDouble();
+                    double mind_zust = wkzmag.zustellmass_min(tnummer).toDouble();
 
+                    double wkzdm = wkzmag.dm(tnummer).toDouble();                    
                     QString radkor = fa.radkor();
                     if(radkor == FRKOR_L)
                     {
@@ -8401,9 +8377,6 @@ void wstzustand::fmc_dateitext(int index)
                     if(fa.bezug() == WST_BEZUG_UNSEI)
                     {
                         msg += kommentar_fmc("--------------------");
-
-                        double backup_i = i;
-
                         //Prüfen ob Eintauchpunkt des Fräsers auf oder neben dem WST liegt:
                         punkt3d pfa;//Punkt Fräseraufruf
                         pfa.set_x(fa.x());
@@ -8411,7 +8384,28 @@ void wstzustand::fmc_dateitext(int index)
                         text_zw folzei;//Folgezeile
                         folzei.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
                         punkt3d pein;//Eintauchpunkt
-                        int anweg = 50;
+                        double anweg = 50;
+                        QString anweg_;
+                        if(fa.anfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                        {
+                            anweg = wkzmag.dm(tnummer).toDouble();
+                            anweg_ = "2*WKZR";
+                        }else
+                        {
+                            anweg = fa.anfahrweg();
+                            anweg_ = fa.anfahrweg_qstring();
+                        }
+                        double abweg = 50;
+                        QString abweg_;
+                        if(fa.abfahrweg_qstring() == FAUFRUF_ANABWEG_AUTO)
+                        {
+                            abweg = wkzmag.dm(tnummer).toDouble();
+                            abweg_ = "2*WKZR";
+                        }else
+                        {
+                            abweg = fa.abfahrweg();
+                            abweg_ = fa.abfahrweg_qstring();
+                        }
 
                         if(folzei.at(0) == BEARBART_FRAESERGERADE)
                         {
@@ -8463,10 +8457,30 @@ void wstzustand::fmc_dateitext(int index)
                         }
                         msg += variable_fmc("FKONEINTYP", fkoneintyp);
 
-                        while(1)//abbruch durch breake
+                        double anz_zustellungen = 1;
+                        if(Zust_fkon == "wkz")
                         {
-                            i = backup_i;
-                            double pos_z = dicke()-zustelltiefe;
+                            anz_zustellungen = aufrunden(gesamttiefe / zustellmass);
+                        }else // == "orgi"
+                        {
+                            anz_zustellungen = 1;
+                        }
+
+                       for(uint i_zust=1; i_zust<=anz_zustellungen ;i_zust++)//ii=1 weil mit erster Zustellung begonnen wird
+                        {
+                            double akt_ti_fa = 0;
+                            if(i_zust == anz_zustellungen)//letzte Zustellung
+                            {
+                                akt_ti_fa = fa.tiefe();
+                            }else
+                            {
+                                akt_ti_fa = fa.tiefe() / anz_zustellungen * i_zust;
+                                if(i_zust==1  && fa.tiefe() > mind_zust  &&  akt_ti_fa < mind_zust)
+                                {
+                                    akt_ti_fa = mind_zust;
+                                }
+                            }
+                            double pos_z_fa = dicke()-akt_ti_fa;
                             //--------------------------------------------
                             msg += FMC_FKON;
                             msg += "\n";
@@ -8483,11 +8497,11 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             msg += FMC_FKON_Z;
                             msg += "=";
-                            msg += double_to_qstring(pos_z);
+                            msg += double_to_qstring(pos_z_fa);
                             msg += "\n";
                             msg += "EBG=0\n";       //Eckenrunden global
                             msg += "KD=";           //Kantendicke
-                            if(zustelltiefe == gesamttiefe)
+                            if(i_zust == anz_zustellungen)
                             {
                                 msg += "0";     //Originalkontur fahren bei letztem Fräsgang in der Tiefe
                             }else
@@ -8498,62 +8512,60 @@ void wstzustand::fmc_dateitext(int index)
                             msg += FMC_FKON_KOR;    //Fräsbaohnkorrektur
                             msg += "=";
                             msg += radkor;
-                            msg += "\n";                            
+                            msg += "\n";
 
                             if(aufwst == true)
                             {
-                                if(radkor == "0")
-                                {
-                                    msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                    msg += "=0\n";
-                                    msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                    msg += "=0\n";
-                                }else
-                                {
-                                    msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                    msg += "=1\n";
-                                    msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                    msg += "=1\n";
-                                }
                                 msg += FMC_FKON_EINTYP;   //Eintauchtp
-                                msg += "=FKONEINTYP";
+                                msg += "=FKONEINTYP";//Variable siehe oben
                                 msg += "\n";
                                 //msg += "=1\n";
-                                if(pos_z > 0)
-                                {
-                                    //Anfahranweisung für nicht durchgefräste Innen-Bahnen:
-                                    msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                    msg += "=2*WKZR\n";
-                                    msg += FMC_FKON_ABWEG;    //Abfahrwert
-                                    msg += "LGEAB=2*WKZR\n";
-                                }else
-                                {
-                                    //Anfahranweisung für durchgefräste Innen-Bahnen:
-                                    msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                    msg += "=50\n";
-                                    msg += FMC_FKON_ABWEG;    //Abfahrwert
-                                    msg += "=50\n";
-                                }
-                            }else
+                            }else //Anfahrweg beginnt nicht auf WST
                             {
-                                //Anfahranweisung für außen-Bahnen (z.B. Formatierungen):
-                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
-                                msg += "=0\n";
-                                msg += FMC_FKON_ABTYP;    //Abfahrtyp
-                                msg += "=0\n";
                                 msg += FMC_FKON_EINTYP;   //Eintauchtp
-                                msg += "=FKONEINTYP";
+                                msg += "=FKONEINTYP";//Variable siehe oben
                                 msg += "\n";
                                 //msg += "=-1\n";
-                                msg += FMC_FKON_ANWEG;    //Anfahrwert
-                                msg += "=2*WKZR+";
-                                msg += double_to_qstring(anweg);
-                                msg += "\n";
-                                msg += FMC_FKON_ABWEG;   //Abfahrwert
-                                msg += "=2*WKZR+";
-                                msg += double_to_qstring(anweg);
-                                msg += "\n";
                             }
+                            if(fa.anfahrtyp() == FAUFRUF_ANABTYP_NDEF)
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                            }else if(fa.anfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                            }else //if(fa.anfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                            {
+                                msg += FMC_FKON_ANTYP;    //Anfahrtyp
+                                msg += "=1\n";
+                            }
+                            if(fa.abfahrtyp() == FAUFRUF_ANABTYP_NDEF)
+                            {
+                                msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                            }else if(fa.abfahrtyp() == FAUFRUF_ANABTYP_GARADE)
+                            {
+                                msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                                msg += "=0\n";
+                            }else //if(fa.abfahrtyp() == FAUFRUF_ANABTYP_BOGEN)
+                            {
+                                msg += FMC_FKON_ABTYP;    //Anfahrtyp
+                                msg += "=1\n";
+                            }
+                            msg += FMC_FKON_ANWEG;    //Anfahrwert
+                            msg += "=";
+                            msg += anweg_;
+                            msg += "\n";
+                            msg += FMC_FKON_ABWEG;    //Abfahrwert
+                            msg += "=";
+                            msg += abweg_;
+                            msg += "\n";                            
+
+                            msg += "BEZB=";
+                            msg += "Aufruf Fraeser Z= ";
+                            msg += double_to_qstring(pos_z_fa);
+                            msg += "\n";
 
                             msg += "FAN=AUTO\n";    //Anfahrvorschub
                             msg += "F=AUTO\n";      //Vorschub
@@ -8566,28 +8578,33 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             //--------------------------------------------
                             //Fräsbahnen:
-                            while(i+1<bearb.count())
+                            for(uint i_fkon=i+1; i+1<bearb.count(); i_fkon++)
                             {
-                                zeile.set_text(bearb.at(i+1),TRENNZ_BEARB_PARAM);
-
+                                zeile.set_text(bearb.at(i_fkon),TRENNZ_BEARB_PARAM);
                                 if(zeile.at(0) == BEARBART_FRAESERGERADE)
                                 {
-                                    i++;
-                                    zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-                                    //Gerade fräsen:
                                     fraesergerade fg(zeile.text());
-                                    QString tiefe_fg = 0;
-                                    if(fg.ze() == fa.tiefe())
+                                    double akt_ti_fg = 0;
+                                    QString export_z_fg_Qstring = "Z";
+                                    if(i_zust == anz_zustellungen)//letzte Zustellung
                                     {
-                                        tiefe_fg = "Z"; //Tiefe beibehalten
-                                                        //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                        //fmc-Programme eingelesen wurden, bei denen
-                                                        //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                        //nicht den selben Z-Wert haben!!!
-                                                        //Dieser Fall wird nicht erwartet....
+                                        akt_ti_fg = fg.tiEnd();
                                     }else
                                     {
-                                        tiefe_fg = double_to_qstring(  dicke()-fg.ze()  );
+                                        akt_ti_fg = fg.tiEnd() / anz_zustellungen * i_zust;
+                                        if(i_zust==1  && fg.tiEnd() > mind_zust  &&  akt_ti_fg < mind_zust)
+                                        {
+                                            akt_ti_fg = mind_zust;
+                                        }
+                                    }
+                                    double pos_z_fg = dicke()-akt_ti_fg;
+                                    if( cagleich( fg.tiSta(), fg.tiEnd(), 0.1) )
+                                    {
+                                        export_z_fg_Qstring = "Z"; //Tiefe beibehalten
+                                    }else
+                                    {
+                                        pos_z_fg = dicke()-akt_ti_fg;
+                                        export_z_fg_Qstring = double_to_qstring(pos_z_fg);
                                     }
 
                                     //Beareitung auf die Oberseite drehen:
@@ -8606,28 +8623,40 @@ void wstzustand::fmc_dateitext(int index)
                                     msg += "\n";
                                     msg += FMC_FKONG_ZE;
                                     msg += "=";
-                                    msg += tiefe_fg;
+                                    msg += export_z_fg_Qstring;
+                                    msg += "\n";
+
+                                    msg += "BEZB=";
+                                    msg += "Gerade Z= ";
+                                    msg += export_z_fg_Qstring;
                                     msg += "\n";
                                     msg += "\n";
                                 }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
                                 {
-                                    i++;
-                                    zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
-                                    //Bogen fräsen:
                                     fraeserbogen fb(zeile.text());
-                                    QString tiefe_fb = 0;
-                                    if(fb.ze() == fa.tiefe())
+                                    double akt_ti_fb = 0;
+                                    QString export_z_fb_Qstring = "Z";
+                                    if(i_zust == anz_zustellungen)//letzte Zustellung
                                     {
-                                        tiefe_fb = "Z"; //Tiefe beibehalten
-                                                        //Führt zu falschen Ergebissen, wenn manuell geschriebene
-                                                        //fmc-Programme eingelesen wurden, bei denen
-                                                        //die FKONs zwischen dem Fräseraufruf und dieser Gerade
-                                                        //nicht den selben Z-Wert haben!!!
-                                                        //Dieser Fall wird nicht erwartet....
+                                        akt_ti_fb = fb.tiEnd();
                                     }else
                                     {
-                                        tiefe_fb = double_to_qstring(  dicke()-fb.ze()  );
+                                        akt_ti_fb = fb.tiEnd() / anz_zustellungen * i_zust;
+                                        if(i_zust==1  && fb.tiEnd() > mind_zust  &&  akt_ti_fb < mind_zust)
+                                        {
+                                            akt_ti_fb = mind_zust;
+                                        }
                                     }
+                                    double pos_z_fb = dicke()-akt_ti_fb;
+                                    if( cagleich( fb.tiSta(), fb.tiEnd(), 0.1) )
+                                    {
+                                        export_z_fb_Qstring = "Z"; //Tiefe beibehalten
+                                    }else
+                                    {
+                                        pos_z_fb = dicke()-akt_ti_fb;
+                                        export_z_fb_Qstring = double_to_qstring(pos_z_fb);
+                                    }
+
                                     QString dlg_name;
                                     if(fb.uzs() == true)
                                     {
@@ -8657,7 +8686,11 @@ void wstzustand::fmc_dateitext(int index)
                                     msg += "\n";
                                     msg += FMC_FKONBOG_ZE;
                                     msg += "=";
-                                    msg += tiefe_fb;
+                                    msg += export_z_fb_Qstring;
+                                    msg += "\n";
+                                    msg += "BEZB=";
+                                    msg += "Bogen Z= ";
+                                    msg += export_z_fb_Qstring;
                                     msg += "\n";
                                     msg += "\n";
                                 }else
@@ -8679,20 +8712,9 @@ void wstzustand::fmc_dateitext(int index)
                             msg += "\n";
                             msg += "\n";
                             //--------------------------------------------
-                            if(zustelltiefe == gesamttiefe)
-                            {
-                                break; //letzter Schleifendurchlauf
-                            }
-                            if(zustelltiefe != gesamttiefe)
+                            if(i_zust < anz_zustellungen)
                             {
                                 msg += kommentar_fmc("---");
-                            }
-                            if(zustelltiefe+zustellmass  <  gesamttiefe)
-                            {
-                                zustelltiefe = zustelltiefe + zustellmass;
-                            }else
-                            {
-                                zustelltiefe = gesamttiefe;
                             }
                         }
                         msg += kommentar_fmc("--------------------");
@@ -9376,6 +9398,234 @@ void wstzustand::fmc_dateitext(int index)
     Exporttext.append(msg);
     Export_moeglich.append(true);
 }
+QString wstzustand::eigen_export_parameter(QString bezeichner, QString wert)
+{
+    QString ret;
+    ret += "    ";
+    ret += "<";
+    ret += bezeichner;
+    ret += ">";
+    ret += wert;
+    ret += "</";
+    ret += bezeichner;
+    ret += ">";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_fileinfo()
+{
+    QString ret;
+    ret += "<<Datei-Information>>";
+    ret += "\n";
+    ret += eigen_export_parameter("Programmversion", PROGRAMMVERSION);
+    ret += "<</Datei-Information>>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_wstprgkopf(double laenge, double breite, QString drewi)
+{
+    QString ret;
+    ret += "<<";
+    ret += EIGEN_PKOPF;
+    ret += ">>";
+    ret += "\n";
+    ret += eigen_export_parameter(EIGEN_PKOPF_NAME, Name);
+    ret += eigen_export_parameter(EIGEN_PKOPF_L, double_to_qstring(laenge));
+    ret += eigen_export_parameter(EIGEN_PKOPF_B, double_to_qstring(breite));
+    ret += eigen_export_parameter(EIGEN_PKOPF_D, dicke_qstring());
+    ret += eigen_export_parameter(EIGEN_PKOPF_KANTE_VO, kante_vo(drewi));
+    ret += eigen_export_parameter(EIGEN_PKOPF_KANTE_HI, kante_hi(drewi));
+    ret += eigen_export_parameter(EIGEN_PKOPF_KANTE_LI, kante_li(drewi));
+    ret += eigen_export_parameter(EIGEN_PKOPF_KANTE_RE, kante_re(drewi));
+    if(ist_gut_oben())
+    {
+        ret += eigen_export_parameter(EIGEN_PKOPF_GUTSEI, EIGEN_PKOPF_GUTSEI_OBEN);
+    }else
+    {
+        ret += eigen_export_parameter(EIGEN_PKOPF_GUTSEI, EIGEN_PKOPF_GUTSEI_UNTEN);
+    }
+    ret += "<</";
+    ret += EIGEN_PKOPF;
+    ret += ">>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_bo(bohrung bo)
+{
+    QString ret;
+    ret += "<<";
+    ret += EIGEN_BOHR;
+    ret += ">>";
+    ret += "\n";
+    ret += eigen_export_parameter(EIGEN_BOHR_BEZUG, bo.bezug());
+    ret += eigen_export_parameter(EIGEN_BOHR_DM, bo.dm_qstring());
+    ret += eigen_export_parameter(EIGEN_BOHR_TI, bo.tiefe_qstring());
+    ret += eigen_export_parameter(EIGEN_BOHR_X, bo.x_qstring());
+    ret += eigen_export_parameter(EIGEN_BOHR_Y, bo.y_qstring());
+    ret += eigen_export_parameter(EIGEN_BOHR_Z, bo.z_qstring());
+    ret += eigen_export_parameter(EIGEN_BOHR_AFB, bo.afb());
+    ret += eigen_export_parameter(EIGEN_BOHR_ZSM, bo.zustellmass_qstring());
+    ret += eigen_export_parameter(EIGEN_BOHR_WKZ, bo.wkznum());
+    ret += "<</";
+    ret += EIGEN_BOHR;
+    ret += ">>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_rta(rechtecktasche rt)
+{
+    QString ret;
+    ret += "<<";
+    ret += EIGEN_RTA;
+    ret += ">>";
+    ret += "\n";
+    ret += eigen_export_parameter(EIGEN_RTA_BEZUG, rt.bezug());
+    ret += eigen_export_parameter(EIGEN_RTA_LA, rt.laenge_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_BR, rt.breite_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_TI, rt.tiefe_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_X, rt.x_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_Y, rt.y_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_Z, rt.z_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_DREWI, rt.drewi_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_RAD, rt.rad_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_AUSR, rt.ausraeumen_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_AFB, rt.afb());
+    ret += eigen_export_parameter(EIGEN_RTA_ZSM, rt.zustellmass_qstring());
+    ret += eigen_export_parameter(EIGEN_RTA_WKZ, rt.wkznum());
+    ret += "<</";
+    ret += EIGEN_RTA;
+    ret += ">>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_nut(nut nu)
+{
+    QString ret;
+    ret += "<<";
+    ret += EIGEN_NUT;
+    ret += ">>";
+    ret += "\n";
+    ret += eigen_export_parameter(EIGEN_NUT_BEZUG, nu.bezug());
+    ret += eigen_export_parameter(EIGEN_NUT_XS, nu.xs_qstring());
+    ret += eigen_export_parameter(EIGEN_NUT_YS, nu.ys_qstring());
+    ret += eigen_export_parameter(EIGEN_NUT_ZS, nu.zs_qstring());
+    ret += eigen_export_parameter(EIGEN_NUT_XE, nu.xe_qstring());
+    ret += eigen_export_parameter(EIGEN_NUT_YE, nu.ye_qstring());
+    ret += eigen_export_parameter(EIGEN_NUT_ZE, nu.ze_qstring());
+    ret += eigen_export_parameter(EIGEN_NUT_TI, nu.tiefe_qstring());
+    ret += eigen_export_parameter(EIGEN_NUT_BR, nu.breite_qstring());
+    ret += eigen_export_parameter(EIGEN_NUT_AFB, nu.afb());
+    ret += "<</";
+    ret += EIGEN_NUT;
+    ret += ">>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_fa(fraeseraufruf fa)
+{
+    QString ret;
+    ret += "<<";
+    ret += EIGEN_FAUFRUF;
+    ret += ">>";
+    ret += "\n";
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_BEZUG, fa.bezug());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_X, fa.x_qstring());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_Y, fa.y_qstring());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_Z, fa.z_qstring());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_TI, fa.tiefe_qstring());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_RADKOR, fa.radkor());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_WKZ, fa.wkznum());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_AFB, fa.afb());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_ANTYP, fa.anfahrtyp());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_ABTYP, fa.abfahrtyp());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_ANWEG, fa.anfahrweg_qstring());
+    ret += eigen_export_parameter(EIGEN_FAUFRUF_ABWEG, fa.abfahrweg_qstring());
+    ret += "<</";
+    ret += EIGEN_FAUFRUF;
+    ret += ">>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_fg(fraesergerade fg)
+{
+    QString ret;
+    ret += "<<";
+    ret += EIGEN_FGERADE;
+    ret += ">>";
+    ret += "\n";
+    ret += eigen_export_parameter(EIGEN_FGERADE_BEZUG, fg.bezug());
+    ret += eigen_export_parameter(EIGEN_FGERADE_XS, fg.xs_qstring());
+    ret += eigen_export_parameter(EIGEN_FGERADE_YS, fg.ys_qstring());
+    ret += eigen_export_parameter(EIGEN_FGERADE_ZS, fg.zs_qstring());
+    ret += eigen_export_parameter(EIGEN_FGERADE_XE, fg.xe_qstring());
+    ret += eigen_export_parameter(EIGEN_FGERADE_YE, fg.ye_qstring());
+    ret += eigen_export_parameter(EIGEN_FGERADE_ZE, fg.ze_qstring());
+    ret += eigen_export_parameter(EIGEN_FGERADE_AFB, fg.afb());
+    ret += eigen_export_parameter(EIGEN_FGERADE_TISTA, fg.tiSta_qstring());
+    ret += eigen_export_parameter(EIGEN_FGERADE_TIEND, fg.tiEnd_qstring());
+    ret += "<</";
+    ret += EIGEN_FGERADE;
+    ret += ">>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_fb(fraeserbogen fb)
+{
+    QString ret;
+    ret += "<<";
+    ret += EIGEN_FBOGEN;
+    ret += ">>";
+    ret += "\n";
+    ret += eigen_export_parameter(EIGEN_FBOGEN_BEZUG, fb.bezug());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_XS, fb.xs_qstring());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_YS, fb.ys_qstring());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_ZS, fb.zs_qstring());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_XE, fb.xe_qstring());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_YE, fb.ye_qstring());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_ZE, fb.ze_qstring());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_RAD, fb.rad_qstring());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_UZS, fb.uzs_qstring());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_AFB, fb.afb());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_TISTA, fb.tiSta_qstring());
+    ret += eigen_export_parameter(EIGEN_FBOGEN_TIEND, fb.tiEnd_qstring());
+    ret += "<</";
+    ret += EIGEN_FBOGEN;
+    ret += ">>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
+QString wstzustand::eigen_export_gehr(gehrung ge)
+{
+    QString ret;
+    ret += "<<";
+    ret += EIGEN_GEHRUNG;
+    ret += ">>";
+    ret += "\n";
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_BEZUG, ge.bezug());
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_XS, ge.stapu().x_QString());
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_YS, ge.stapu().y_QString());
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_XE, ge.endpu().x_QString());
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_YE, ge.endpu().y_QString());
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_WI, ge.winkel_qstring());
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_AFB, ge.afb());
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_WKZ, ge.wkznum());
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_RITI, ge.riti_qstring());
+    ret += eigen_export_parameter(EIGEN_GEHRUNG_STI, ge.sti_qstring());
+    ret += "<</";
+    ret += EIGEN_GEHRUNG;
+    ret += ">>";
+    ret += "\n";
+    ret += "\n";
+    return ret;
+}
 void wstzustand::eigen_dateitext(int index)
 {
     text_zw bearb = Bearb.at(index);
@@ -9386,38 +9636,43 @@ void wstzustand::eigen_dateitext(int index)
     dubosplitten(bearb, wkzmag);
 
     QString msg;
+    msg  = eigen_export_fileinfo();
+    msg += eigen_export_wstprgkopf(tmp_l, tmp_b, drewi);
 
-    //Programmkopf:
-    msg += Name;
-    msg += "\n";
-    msg += "L: ";
-    msg += double_to_qstring(tmp_l);
-    msg += "\n";
-    msg += "B: ";
-    msg += double_to_qstring(tmp_b);
-    msg += "\n";
-    msg += "D: ";
-    msg += dicke_qstring();
-    msg += "\n";
-    msg += "---------------";
-    msg += "\n";
-    //Kanteninfo:
-    msg += "Kante vorne: \t\"";
-    msg += kante_vo(drewi);
-    msg += "\"\n";
-    msg += "Kante hinten: \t\"";
-    msg += kante_hi(drewi);
-    msg += "\"\n";
-    msg += "Kante links: \t\"";
-    msg += kante_li(drewi);
-    msg += "\"\n";
-    msg += "Kante rechts: \t\"";
-    msg += kante_re(drewi);
-    msg += "\"\n";
-    msg += "---------------";
-    msg += "\n";
-
-    msg += bearb.text();
+    for(uint i=0; i<bearb.count() ;i++)
+    {
+        text_zw zeile;
+        zeile.set_text(bearb.at(i),TRENNZ_BEARB_PARAM);
+        if(zeile.at(0) == BEARBART_BOHR)
+        {
+            bohrung bo(zeile.text());
+            msg += eigen_export_bo(bo);
+        }else if(zeile.at(0) == BEARBART_RTA)
+        {
+            rechtecktasche rt(zeile.text());
+            msg += eigen_export_rta(rt);
+        }else if(zeile.at(0) == BEARBART_NUT)
+        {
+            nut nu(zeile.text());
+            msg += eigen_export_nut(nu);
+        }else if(zeile.at(0) == BEARBART_FRAESERAUFRUF)
+        {
+            fraeseraufruf fa(zeile.text());
+            msg += eigen_export_fa(fa);
+        }else if(zeile.at(0) == BEARBART_FRAESERGERADE)
+        {
+            fraesergerade fg(zeile.text());
+            msg += eigen_export_fg(fg);
+        }else if(zeile.at(0) == BEARBART_FRAESERBOGEN)
+        {
+            fraeserbogen fb(zeile.text());
+            msg += eigen_export_fb(fb);
+        }else if(zeile.at(0) == BEARBART_GEHRUNG)
+        {
+            gehrung ge(zeile.text());
+            msg += eigen_export_gehr(ge);
+        }
+    }
 
     Fehler_kein_wkz.append("");
     Exporttext.append(msg);
@@ -9681,6 +9936,61 @@ void wstzustand::cix_dateitext(int index)
             //Fräsbearbeitung einfügen:
             msg += cix_fkon(fa, geo_id);
             msg += cix_ende_poly(id.index_QString());
+        }else if(zeile.at(0) == BEARBART_RTA)
+        {
+            rechtecktasche rt(zeile.text());
+
+            QString tnummer;
+            //Ist direkt ei WKZ definiert?
+            if(rt.bezug() == WST_BEZUG_OBSEI  ||  rt.bezug() == WST_BEZUG_UNSEI)
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_VERT);
+            }else
+            {
+                tnummer = wkzmag.wkznummer_von_alias(rt.wkznum(), WKZ_HORI);
+            }
+            if(tnummer.isEmpty())
+            {
+                QString bezug = rt.bezug();
+                double minmass = 0;
+                if(rt.laenge() < rt.breite())
+                {
+                    minmass = rt.laenge();
+                }else
+                {
+                    minmass = rt.breite();
+                }
+                tnummer = wkzmag.wkznummer(WKZ_TYP_FRAESER, minmass, rt.tiefe(), Dicke, bezug);
+            }
+            if(!tnummer.isEmpty())
+            {
+                double zustellmas = rt.zustellmass();
+                if(zustellmas <= 0)
+                {
+                    zustellmas = wkzmag.zustmasvert(tnummer).toDouble();
+                }
+                //Geometrie einfügen:
+                QString geo_id = "Rechteck ";
+                geo_id += id_g.index_QString();
+                msg += cix_rechteck(rt, geo_id);
+                //Fräsbearbeitung einfügen:
+                if(rt.ausraeumen() == true)
+                {
+                    msg += cix_tasche(rt, tnummer, geo_id);
+                }else
+                {
+                    msg += cix_fkon(rt, geo_id, tnummer);
+                    msg += cix_ende_poly(id.index_QString());
+                }
+            }else
+            {
+                //Mit Fehlermeldung abbrechen:
+                QString msg = fehler_kein_WKZ("cix", zeile);
+                Fehler_kein_wkz.append(msg);
+                Exporttext.append(msg);
+                Export_moeglich.append(false);
+                return;
+            }
         }
     }
 
@@ -10210,6 +10520,15 @@ QString wstzustand::cix_fkon(bohrung bo, QString geo_id, QString wkz)
     fa.set_bezug(bo.bezug());
     return cix_fkon(fa, geo_id);
 }
+QString wstzustand::cix_fkon(rechtecktasche rt, QString geo_id, QString wkz)
+{
+    fraeseraufruf fa;
+    fa.set_wkznum(wkz);
+    fa.set_radkor(FRKOR_R);
+    fa.set_tiefe(rt.tiefe());
+    fa.set_bezug(rt.bezug());
+    return cix_fkon(fa, geo_id);
+}
 QString wstzustand::cix_kreis(bohrung bo, QString geo_id)
 {
     QString ret;
@@ -10290,7 +10609,7 @@ QString wstzustand::cix_kreis(bohrung bo, QString geo_id)
     }
     ret += cix_makroparam(CIX_KREIS_RAD, double_to_qstring(bo.dm()/2), false);
     ret += cix_makroparam(CIX_KREIS_STARTWI, "90", false);
-    ret += cix_makroparam(CIX_KREIS_RICHTUNG, CIX_KREIS_RICHTUNG_UZS, false);
+    ret += cix_makroparam(CIX_RICHTUNG, CIX_RICHTUNG_UZS, false);
     ret += cix_makroparam(CIX_KREIS_VORSCHUB, "0", false);
     ret += cix_makroparam(CIX_KREIS_DREHZAHL, "0", false);
     ret += "END MACRO";
@@ -10371,6 +10690,122 @@ QString wstzustand::cix_tasche(bohrung bo, QString wkz, QString geo_id, double d
     fa.set_tiefe(bo.tiefe());
     fa.set_bezug(bo.bezug());
     return cix_tasche(fa, geo_id, dm);
+}
+QString wstzustand::cix_tasche(rechtecktasche rt, QString wkz, QString geo_id)
+{
+    fraeseraufruf fa;
+    fa.set_wkznum(wkz);
+    fa.set_radkor(FRKOR_R);
+    fa.set_tiefe(rt.tiefe());
+    fa.set_bezug(rt.bezug());
+    return cix_tasche(fa, geo_id, 0);
+}
+QString wstzustand::cix_rechteck(rechtecktasche rt, QString geo_id)
+{
+    QString ret;
+    ret  = "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=GEO";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID, geo_id, true);
+    ret += cix_makroparam(CIX_NUT_LAYER,"GEO",true);
+    if(rt.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_OBSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }else if(rt.bezug() == WST_BEZUG_UNSEI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_UNSEI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+    }else if(rt.bezug() == WST_BEZUG_LI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_LI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+    }else if(rt.bezug() == WST_BEZUG_RE)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_RE,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }else if(rt.bezug() == WST_BEZUG_VO)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_VO,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_UL,true);
+    }else if(rt.bezug() == WST_BEZUG_HI)
+    {
+        ret += cix_makroparam(CIX_SEITE,CIX_SEITE_HI,false);
+        ret += cix_makroparam(CIX_BEZUG,CIX_BEZUG_OR,true);
+    }
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+
+    ret += "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=RECTANGLE";
+    ret += "\n";
+    ret += cix_makroparam(CIX_BEARB_ID, geo_id, true);
+    ret += cix_makroparam(CIX_NUT_LAYER,"GEO",true);
+    if(rt.bezug() == WST_BEZUG_OBSEI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.y_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_UNSEI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.y_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_LI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.y_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.z_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_RE)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.y_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.z_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_VO)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.z_qstring(),false);
+    }else if(rt.bezug() == WST_BEZUG_HI)
+    {
+        ret += cix_makroparam(CIX_MIPU_X,rt.x_qstring(),false);
+        ret += cix_makroparam(CIX_MIPU_Y,rt.z_qstring(),false);
+    }
+    ret += cix_makroparam(CIX_RECHTECK_L, rt.laenge_qstring(), false);
+    ret += cix_makroparam(CIX_RECHTECK_B, rt.breite_qstring(), false);
+    ret += cix_makroparam(CIX_RICHTUNG, CIX_RICHTUNG_UZS, false);
+    ret += cix_makroparam(CIX_KREIS_VORSCHUB, "0", false);
+    ret += cix_makroparam(CIX_KREIS_DREHZAHL, "0", false);
+    if(rt.rad() == 0)
+    {
+        ret += cix_makroparam(CIX_RECHTECK_ECKENTYP, CIX_RECHTECK_ECKENTYP_ECKIG, false);
+    }else
+    {
+        ret += cix_makroparam(CIX_RECHTECK_ECKENTYP, CIX_RECHTECK_ECKENTYP_RUND, false);
+    }
+    ret += cix_makroparam(CIX_RECHTECK_ECKENRAD, rt.rad_qstring(), false);
+    ret += cix_makroparam(CIX_RECHTECK_STARTSEITE, "1", true);
+    ret += cix_makroparam(CIX_RECHTECK_STARTABST, CIX_HAELFTE, false);
+    ret += cix_makroparam(CIX_RECHTECK_DREWI, rt.drewi_qstring(), false);
+    ret += cix_makroparam(CIX_RECHTECK_BUZUGSPUNKT, CIX_RECHTECK_BUZUGSPUNKT_MITTE, false);
+    ret += cix_makroparam(CIX_RECHTECK_BEZUGSECKE, "1", false);
+    ret += cix_makroparam(CIX_ZS, "0", false);
+    ret += cix_makroparam(CIX_ZE, "0", false);
+    ret += cix_makroparam(CIX_LINIE_SCHARFE_KANNTE, CIX_LINIE_SCHARFE_KANNTE_AUS, false);
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+
+    ret += "BEGIN MACRO";
+    ret += "\n";
+    ret += "\t";
+    ret += "NAME=ENDPATH";
+    ret += "\n";
+    ret += "END MACRO";
+    ret += "\n";
+    ret += "\n";
+
+    return ret;
 }
 
 void wstzustand::ganx_dateitext(int index)
@@ -11393,6 +11828,21 @@ void wstzustand::ganx_dateitext(int index)
                     mb.exec();
                     continue;
                 }
+                bool nuttyp_1 = false;
+                //"Typ 1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                //"Typ 2" = Nut beginnt beim Startmaß und endet am Endmaß
+                if(nu.ys() < 0 && nu.ye() > tmp_b)
+                {
+                    nu.set_ys(-2);
+                    nu.set_ye(tmp_b+2);
+                    nuttyp_1 = true;
+                }
+                if(nu.ys() > tmp_b && nu.ye() < 0)
+                {
+                    nu.set_ys(tmp_b+2);
+                    nu.set_ye(-2);
+                    nuttyp_1 = true;
+                }
                 double x = nu.xs();
                 double y;
                 double z = nu.tiefe(); //Tiefe
@@ -11421,9 +11871,14 @@ void wstzustand::ganx_dateitext(int index)
                 }
                 double wkz_dm = wkzmag.dm(tnummer).toDouble();
 
-                QString nutvariante_qstring = "Var2";
-                //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
-                //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
+                QString nutvariante_qstring;
+                if(nuttyp_1 == true)//"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                {
+                    nutvariante_qstring = "Var1";
+                }else//"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
+                {
+                    nutvariante_qstring = "Var2";
+                }
 
                 QString nutrichtung = "Y";
                 //Mögliche Werte:
@@ -13040,6 +13495,21 @@ void wstzustand::ganx_dateitext(int index)
                     */
                     continue;
                 }
+                bool nuttyp_1 = false;
+                //"Typ 1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                //"Typ 2" = Nut beginnt beim Startmaß und endet am Endmaß
+                if(nu.ys() < 0 && nu.ye() > tmp_b)
+                {
+                    nu.set_ys(-2);
+                    nu.set_ye(tmp_b+2);
+                    nuttyp_1 = true;
+                }
+                if(nu.ys() > tmp_b && nu.ye() < 0)
+                {
+                    nu.set_ys(tmp_b+2);
+                    nu.set_ye(-2);
+                    nuttyp_1 = true;
+                }
                 double x = nu.xs();
                 double y;
                 double z = nu.tiefe(); //Tiefe
@@ -13071,9 +13541,14 @@ void wstzustand::ganx_dateitext(int index)
                 }
                 //double wkz_dm = wkzmag.dm(tnummer).toDouble();
 
-                QString nutvariante_qstring = "Var2";
-                //"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
-                //"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
+                QString nutvariante_qstring;
+                if(nuttyp_1 == true)//"Var1" = Nuttiefe wird beim Startmaß und Endmaß erreicht
+                {
+                    nutvariante_qstring = "Var1";
+                }else//"Var2" = Nut beginnt beim Startmaß und endet am Endmaß
+                {
+                    nutvariante_qstring = "Var2";
+                }
 
                 QString nutrichtung = "Y";
                 //Mögliche Werte:
@@ -14312,11 +14787,19 @@ void wstzustand::geo(int index)
         kante_r = kante_re(drehwinkel);
     }
     //-------------------------------------------
+    if(use_ax() == false)
+    {
+        versatz_x = 0;
+    }
+    if(use_ay() == false)
+    {
+        versatz_y = 0;
+    }
     Versatz_y.append(versatz_y);
     Geotext.append(geo_ermitteln(tmp_bearb, l, b, d, \
                                  kante_v, kante_h, kante_l, kante_r,\
-                                 versatz_x, versatz_y));
-    GeoFkon.append(geofkon_ermitteln(tmp_bearb, versatz_x, versatz_y));
+                                 versatz_x, versatz_y, Wkzm.at(index)));
+    GeoFkon.append(geofkon_ermitteln(tmp_bearb, versatz_x, versatz_y, Wkzm.at(index)));
 }
 
 

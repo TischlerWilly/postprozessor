@@ -21,6 +21,7 @@ SOURCES += main.cpp\
     Dialoge/dialog_bearb_pkopf.cpp \
     Dialoge/dialog_bearb_rta.cpp \
     Dialoge/dialog_bearb_verschieben.cpp \
+    Dialoge/dialog_doppelteil_erzeugen.cpp \
     Dialoge/dialog_einstellung_dxf.cpp \
     Dialoge/dialog_einstellung_dxf_klassen.cpp \
     Dialoge/dialog_einstellung_fmc.cpp \
@@ -28,7 +29,9 @@ SOURCES += main.cpp\
     Dialoge/dialog_einstellung_pfade.cpp \
     Dialoge/dialog_einstellung_wkz_pp.cpp \
     Dialoge/dialog_exportuebersicht.cpp \
+    Dialoge/dialog_fraeserauswahl.cpp \
     Dialoge/dialog_programmtext.cpp \
+    Dialoge/dialog_userinput.cpp \
     Funktionen/funktionen_prgtext.cpp \
     Klassen/einstellung.cpp \
     Klassen/einstellung_dxf.cpp \
@@ -87,6 +90,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     Defines/def_cix.h \
     Defines/def_dxf.h \
+    Defines/def_eigen.h \
     Dialoge/dialog_bearb_bohrung.h \
     Dialoge/dialog_bearb_faufruf.h \
     Dialoge/dialog_bearb_fbogen.h \
@@ -95,6 +99,7 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_bearb_pkopf.h \
     Dialoge/dialog_bearb_rta.h \
     Dialoge/dialog_bearb_verschieben.h \
+    Dialoge/dialog_doppelteil_erzeugen.h \
     Dialoge/dialog_einstellung_dxf.h \
     Dialoge/dialog_einstellung_dxf_klassen.h \
     Dialoge/dialog_einstellung_fmc.h \
@@ -102,7 +107,9 @@ HEADERS  += mainwindow.h \
     Dialoge/dialog_einstellung_pfade.h \
     Dialoge/dialog_einstellung_wkz_pp.h \
     Dialoge/dialog_exportuebersicht.h \
+    Dialoge/dialog_fraeserauswahl.h \
     Dialoge/dialog_programmtext.h \
+    Dialoge/dialog_userinput.h \
     Funktionen/funktionen_prgtext.h \
     Klassen/einstellung.h \
     Klassen/einstellung_dxf.h \
@@ -176,6 +183,7 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_bearb_pkopf.ui \
     Dialoge/dialog_bearb_rta.ui \
     Dialoge/dialog_bearb_verschieben.ui \
+    Dialoge/dialog_doppelteil_erzeugen.ui \
     Dialoge/dialog_einstellung_dxf.ui \
     Dialoge/dialog_einstellung_dxf_klassen.ui \
     Dialoge/dialog_einstellung_fmc.ui \
@@ -183,12 +191,14 @@ FORMS    += mainwindow.ui \
     Dialoge/dialog_einstellung_pfade.ui \
     Dialoge/dialog_einstellung_wkz_pp.ui \
     Dialoge/dialog_exportuebersicht.ui \
+    Dialoge/dialog_fraeserauswahl.ui \
     Dialoge/dialog_programmtext.ui \
     Dialoge/dialog_bohrer.ui \
     Dialoge/dialog_fraeser.ui \
     Dialoge/dialog_saege.ui \
     Dialoge/dialog_stdnamen.ui \
     Dialoge/dialog_stdname.ui \
+    Dialoge/dialog_userinput.ui \
     mainwin_wkzmagazin.ui \
     mainwin_wst_bearbeiten.ui
 

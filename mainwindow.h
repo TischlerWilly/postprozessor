@@ -95,6 +95,14 @@ private slots:
     void on_actionTestfunktion_triggered();
     void on_actionEinstellung_fmc_triggered();
     void on_actionWerkzeug_Postprozessor_triggered();
+    void update_btn_gute_seite(bool gut_oben);
+    void on_pushButton_gute_seite_clicked();
+    void on_actionSchliessen_triggered();
+    void on_action_oeffnen_triggered();
+
+
+
+    void on_actionEigenes_Format_imm_mit_exportieren_triggered(bool checked);
 
 private:
     Ui::MainWindow *ui;
@@ -120,6 +128,7 @@ private:
     QString Projektposition;
     bool Projektpfad_stimmt;
     QString Pfad_mit_dateinamen;
+    QString Pfad_letzte_geoeffnete_ggf_datei;
 
     //Funktionen:
     void setup();
@@ -130,11 +139,13 @@ private:
     void import();
     void closeEvent(QCloseEvent *ce);
     void set_projektpfad();
+    QString projektpfad_lokal_eigen();
     void speichere_ausgabepfad(QString pfad);
     void speichere_ausgabepfad_fmc(QString pfad);
     void schreibe_in_zwischenablage(QString s);
     QString fenstertitel_exportuebersicht();
     void set_prginfo();
+    void update_listwidget_wste();
 
     //Dialoge:
     mainwin_wkzmagazin dlg_wkzmag;

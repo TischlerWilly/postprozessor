@@ -41,23 +41,28 @@ public:
     void set_dicke(double d);
     void set_dicke(QString d);
     void neue_bearbeitung(QString text);
-    //void set_bearb(text_zeilenweise b); //alt
     void set_bearb(text_zw b);
     void set_kante_vo(QString artiklenummer);
     void set_kante_hi(QString artiklenummer);
     void set_kante_li(QString artiklenummer);
     void set_kante_re(QString artiklenummer);
     void set_zugabe_gehrungen(double wert);
-    //void set_zustand(QString format, text_zeilenweise wkzmag, QString drehung, \
-    //                 bool formartierungen_aufbrechen, QString zust_fkon);       //alt
     void set_zustand(QString format, wkz_magazin* wkzmag, QString drehung, \
-                     bool formartierungen_aufbrechen, QString zust_fkon);
+                     bool formartierungen_aufbrechen, QString zust_fkon, \
+                     bool gut_ist_oben);
     void set_einstellung_ganx(einstellung_ganx e);
+    void set_use_ax(bool benutzen);
+    void set_use_ay(bool benutzen);
 
     inline void set_name(QString neuer_name)
     {
         Name = neuer_name;
         Zustand.set_name(neuer_name);
+    }
+    inline void set_gute_seite(bool ist_oben)
+    {
+        Gut_ist_oben = ist_oben;
+        Zustand.set_gute_seite(ist_oben);
     }
 
     //--------------------------------------------------get_xy:
@@ -67,11 +72,13 @@ public:
     double max_y(QString format);
     double min_y(QString format);
     double max_x();
+    double max_x_einzelwst();
     double min_x();
     double max_y();
+    double max_y_einzelwst();
     double min_y();
-    geo_text geo();
-    geo_text geofkon();
+    geo_text geo(wkz_magazin wkzm);
+    geo_text geofkon(wkz_magazin wkzm);
     inline double   laenge() const
     {
         return Laenge;
@@ -132,7 +139,20 @@ public:
     {
         return Kante_re;
     }
+    inline bool use_ax()
+    {
+        return Zustand.use_ax();
+    }
+    inline bool use_ay()
+    {
+        return Zustand.use_ay();
+    }
+    inline bool ist_gut_oben()
+    {
+        return Gut_ist_oben;
+    }
     //--------------------------------------------------Manipulationen:
+    void gute_seite_ermitteln();
     //--------------------------------------------------
 
 private:
@@ -148,6 +168,7 @@ private:
     QString Kante_re;
     double  Zugabe_gehrungen;
     wstzustand Zustand;
+    bool Gut_ist_oben;
 
     //Funktionen:
 
