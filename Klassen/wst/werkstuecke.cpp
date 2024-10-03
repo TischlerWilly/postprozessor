@@ -5624,6 +5624,56 @@ bool werkstuecke::import_dxf(QString Werkstueckname, QString importtext, bool is
     Wste.replace(Index, w);
     return 0;
 }
+bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
+{
+    int Index = index(Werkstueckname);
+    if(Index == -1)
+    {
+        neu(Werkstueckname, EWX);
+        Index = index(Werkstueckname);
+    }
+    text_zw tz;
+    tz.set_text(importtext,'\n');
+    werkstueck w = Wste.at(Index);
+    //WST-Länge ermitteln:
+    for(uint i=0; i<tz.count() ;i++)
+    {
+        QString parname = "'Maß, Boxlänge l1':";
+        if(tz.at(i).contains(parname))
+        {
+            QString parwert = text_rechts(tz.at(i),parname);
+            parwert = text_mitte(parwert, " '", "',");
+            w.set_laenge(parwert);
+            break; //for
+        }
+    }
+    //WST-Breite ermitteln:
+    for(uint i=0; i<tz.count() ;i++)
+    {
+        QString parname = "'Maß, Boxlänge l2':";
+        if(tz.at(i).contains(parname))
+        {
+            QString parwert = text_rechts(tz.at(i),parname);
+            parwert = text_mitte(parwert, " '", "',");
+            w.set_breite(parwert);
+            break; //for
+        }
+    }
+    //WST-Breite ermitteln:
+    for(uint i=0; i<tz.count() ;i++)
+    {
+        QString parname = "'Maß, Boxlänge l3':";
+        if(tz.at(i).contains(parname))
+        {
+            QString parwert = text_rechts(tz.at(i),parname);
+            parwert = text_mitte(parwert, " '", "',");
+            w.set_dicke(parwert);
+            break; //for
+        }
+    }
+    Wste.replace(Index, w);
+    return 0;
+}
 
 void werkstuecke::set_fkon_gerade_laenge(double wert)
 {

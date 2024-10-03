@@ -2319,6 +2319,7 @@ void MainWindow::import()
     QString fmcA = FMC_PRGA;
     QString fmcB = FMC_PRGB;
     QString dxf = DXF;
+    QString ewx = EWX;
 
     //Dateien einlesen:
     text_zw nam_mit_obsei;//Liste mit allen grundnamen die Oberseite sind
@@ -2390,8 +2391,8 @@ void MainWindow::import()
                     originaldatei.remove();
                 }
             }
-        }else if(dateien_alle.at(i).right(fmc.length()) == DXF  || \
-                 dateien_alle.at(i).right(fmc.length()) == DXF_     )
+        }else if(dateien_alle.at(i).right(dxf.length()) == DXF  || \
+                 dateien_alle.at(i).right(dxf.length()) == DXF_     )
         {
             QString nam_ohn_end = dateien_alle.at(i).left(dateien_alle.at(i).length()-dxf.length());
             QString kenOb = Einstellung_dxf.kenObsei();
@@ -2426,6 +2427,30 @@ void MainWindow::import()
             {
                 QString inhalt = datei.readAll();
                 wste.import_dxf(nam_ohn_pref, inhalt, ist_oberseite);
+                datei.close();
+                if(Einstellung.quelldateien_erhalten() == false)
+                {
+                    QFile originaldatei(pfad);
+                    originaldatei.remove();
+                }
+            }
+        }else if(dateien_alle.at(i).right(ewx.length()) == EWX)
+        {
+            QString nam_ohn_end = dateien_alle.at(i).left(dateien_alle.at(i).length()-ewx.length());
+            wste.neu(nam_ohn_end, EWX);;//Wst wird nur angelegt wenn es nicht schon existiert
+            QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.at(i);
+            QFile datei(pfad);
+            if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_start_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+            }else
+            {
+                QString inhalt = datei.readAll();
+                wste.import_ewx(nam_ohn_end, inhalt);
                 datei.close();
                 if(Einstellung.quelldateien_erhalten() == false)
                 {

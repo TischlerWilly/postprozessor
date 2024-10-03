@@ -29,6 +29,7 @@ public:
     QString eigen_import_parameter(QString parameterzeile, QString parameterbezeichnung);
     bool import_fmc(QString Werkstueckname, QString importtext, bool istOberseite);
     bool import_dxf(QString Werkstueckname, QString importtext, bool istOberseite);
+    bool import_ewx(QString Werkstueckname, QString importtext);
     void set_fkon_gerade_laenge(double wert);
     void set_kurze_geraden_importieren(bool wert);
     void set_zugabe_gehrungen(double wert);
