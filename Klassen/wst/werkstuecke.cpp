@@ -5671,6 +5671,35 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             break; //for
         }
     }
+
+    //Bearbeitungen erfassen:
+    ewx_reference ref;
+    for(uint i=0; i<tz.count() ;i++)
+    {
+        QString zeile = tz.at(i);
+        if(zeile.contains(" = Reference("))
+        {
+            ref.set_text(zeile);
+        }
+        if(zeile.contains("Hole("))
+        {
+            punkt3d pos;
+            text_zw parameter;
+            parameter.set_text(selektiereEintrag(zeile, "pos=(", ")"), ',');
+            pos.set_x(parameter.at(0));
+            pos.set_y(parameter.at(1));
+            pos.set_z(parameter.at(2));
+            bohrung bo;
+            bo.set_dm(text_mitte(zeile, "diameter=", ","));
+            bo.set_tiefe(text_mitte(zeile, "depth=", ","));
+            //bo.set_bezug(...)
+            //bo.set_x(...)
+            //bo.set_y(...)
+            //bo.set_z(...)
+            w.neue_bearbeitung(bo.text());
+        }
+    }
+
     Wste.replace(Index, w);
     return 0;
 }

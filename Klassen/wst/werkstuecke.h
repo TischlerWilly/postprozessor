@@ -17,6 +17,7 @@
 #include "Klassen/einstellung_dxf_klassen.h"
 #include "Klassen/geo/geofunktionen.h"
 #include "Klassen/geo/geo_text.h"
+#include "Klassen/wst/ewx_reference.h"
 
 class werkstuecke
 {
