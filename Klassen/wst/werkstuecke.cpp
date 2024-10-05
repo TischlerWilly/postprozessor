@@ -5674,6 +5674,7 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
 
     //Bearbeitungen erfassen:
     ewx_reference ref;
+    ref.set_wst_dicke(w.dicke());
     for(uint i=0; i<tz.count() ;i++)
     {
         QString zeile = tz.at(i);
@@ -5683,19 +5684,17 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
         }
         if(zeile.contains("Hole("))
         {
-            punkt3d pos;
+            punkt3d ewxpos;
             text_zw parameter;
             parameter.set_text(selektiereEintrag(zeile, "pos=(", ")"), ',');
-            pos.set_x(parameter.at(0));
-            pos.set_y(parameter.at(1));
-            pos.set_z(parameter.at(2));
+            ewxpos.set_x(parameter.at(0));
+            ewxpos.set_y(parameter.at(1));
+            ewxpos.set_z(parameter.at(2));
             bohrung bo;
             bo.set_dm(text_mitte(zeile, "diameter=", ","));
             bo.set_tiefe(text_mitte(zeile, "depth=", ","));
-            //bo.set_bezug(...)
-            //bo.set_x(...)
-            //bo.set_y(...)
-            //bo.set_z(...)
+            bo.set_bezug(ref.bezug());
+            bo.set_mipu(ref.bearbpos(ewxpos));
             w.neue_bearbeitung(bo.text());
         }
     }
