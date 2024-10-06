@@ -5675,6 +5675,8 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
     //Bearbeitungen erfassen:
     ewx_reference ref;
     ref.set_wst_dicke(w.dicke());
+    text_zw fkon;
+    fraeseraufruf fauf;
     for(uint i=0; i<tz.count() ;i++)
     {
         QString zeile = tz.at(i);
@@ -5682,6 +5684,41 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
         {
             ref.set_text(zeile);
         }
+        if(zeile.contains("name='PYTHA_ROUTE'"))
+        {
+            fauf.set_bezug(ref.bezug());
+            w.neue_bearbeitung(fauf.text());
+            for(uint ii=0 ; ii<fkon.count() ; ii++)
+            {
+                w.neue_bearbeitung(fkon.at(ii));
+            }
+            fkon.clear();
+        }
+
+        if(zeile.contains("'tool_name':"))
+        {
+            QString name = text_rechts(zeile, "'tool_name':");
+            name = text_mitte(name, " '", "',");
+            fauf.set_wkznum(name);
+        }else if(zeile.contains("'compensation':"))
+        {
+            if(zeile.contains("'right'"))
+            {
+                fauf.set_radkor(FRKOR_R);
+            }else if(zeile.contains("'left'"))
+            {
+                fauf.set_radkor(FRKOR_L);
+            }else
+            {
+                fauf.set_radkor(FRKOR_M);
+            }
+        }else if(zeile.contains("'depth':"))
+        {
+            QString ti = text_rechts(zeile, "'depth':");
+            ti = text_mitte(ti, " ", ",");
+            fauf.set_tiefe(ti);
+        }
+
         if(zeile.contains("Hole("))
         {
             punkt3d ewxpos;
@@ -5696,6 +5733,66 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             bo.set_bezug(ref.bezug());
             bo.set_mipu(ref.bearbpos(ewxpos));
             w.neue_bearbeitung(bo.text());
+        }else if(zeile.contains("Line("))
+        {
+
+        }else if(zeile.contains("Arc("))
+        {
+            text_zw parameter;
+            fraeserbogen fb;
+            punkt3d stapu;
+            parameter.set_text(selektiereEintrag(zeile, "pt1=(", ")"), ',');
+            stapu.set_x(parameter.at(0));
+            stapu.set_y(parameter.at(1));
+            stapu.set_z(parameter.at(2));
+            stapu = ref.bearbpos(stapu);
+            fb.set_startpunkt(stapu);
+            punkt3d endpu;
+            parameter.set_text(selektiereEintrag(zeile, "pt2=(", ")"), ',');
+            endpu.set_x(parameter.at(0));
+            endpu.set_y(parameter.at(1));
+            endpu.set_z(parameter.at(2));
+            endpu = ref.bearbpos(endpu);
+            fb.set_endpunkt(endpu);
+            punkt3d mipu;
+            parameter.set_text(selektiereEintrag(zeile, "ptc=(", ")"), ',');
+            mipu.set_x(parameter.at(0));
+            mipu.set_y(parameter.at(1));
+            mipu.set_z(parameter.at(2));
+            mipu = ref.bearbpos(mipu);
+            strecke s;
+            s.set_stapu(stapu);
+            s.set_endpu(mipu);
+            double rad = s.laenge2d();
+            fb.set_rad(rad);
+            QString ti = selektiereEintrag(zeile, "thickness=", "),");
+            fb.set_tiSta(ti);
+            fb.set_tiEnd(ti);
+            QString uzs = selektiereEintrag(zeile, ", cw=", ", ");
+            bool uzs_;
+            if(uzs == "False")
+            {
+                fb.set_uzs(false);
+                uzs_ = false;
+            }else
+            {
+                fb.set_uzs(true);
+                uzs_ = true;
+            }
+            fb.set_bezug(ref.bezug());
+            if(fkon.count() == 0)
+            {
+                fauf.set_pos(stapu);
+            }
+            //Bogen muss geteilt werden, weil meine Bogenklasse keine bögen verarbeiten kann die
+            //weiter gehen als ein Halbbogen, Pytha solche Bögen jedoch teilweise exportiert:
+            punkt3d p = bogsehnmipu(stapu, endpu, mipu, uzs_);
+            fraeserbogen fb1 = fb;
+            fraeserbogen fb2 = fb;
+            fb1.set_endpunkt(p);
+            fb2.set_startpunkt(p);
+            fkon.add_hi(fb1.text());
+            fkon.add_hi(fb2.text());
         }
     }
 
