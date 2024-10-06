@@ -5677,12 +5677,29 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
     ref.set_wst_dicke(w.dicke());
     text_zw fkon;
     fraeseraufruf fauf;
+    bool wstkontur = false;
     for(uint i=0; i<tz.count() ;i++)
     {
         QString zeile = tz.at(i);
         if(zeile.contains(" = Reference("))
         {
             ref.set_text(zeile);
+        }
+        if(zeile.contains("path1 = ["))
+        {
+            wstkontur = true;
+            ref.set_text("reference2 = Reference(pt=(0.0000, 0.0000, 0.0000), vz=(0.0000, 0.0000, 1.0000), vx=(1.0000, 0.0000, 0.0000))");
+        }
+        if(wstkontur == true  &&  zeile.contains("]"))
+        {
+            fauf.set_bezug(ref.bezug());
+            w.neue_bearbeitung(fauf.text());
+            for(uint ii=0 ; ii<fkon.count() ; ii++)
+            {
+                w.neue_bearbeitung(fkon.at(ii));
+            }
+            fkon.clear();
+            wstkontur = false;
         }
         if(zeile.contains("name='PYTHA_ROUTE'"))
         {
@@ -5735,7 +5752,27 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             w.neue_bearbeitung(bo.text());
         }else if(zeile.contains("Line("))
         {
-
+            text_zw parameter;
+            fraesergerade fg;
+            punkt3d stapu;
+            parameter.set_text(selektiereEintrag(zeile, "pt1=(", ")"), ',');
+            stapu.set_x(parameter.at(0));
+            stapu.set_y(parameter.at(1));
+            stapu.set_z(parameter.at(2));
+            stapu = ref.bearbpos(stapu);
+            fg.set_startpunkt(stapu);
+            punkt3d endpu;
+            parameter.set_text(selektiereEintrag(zeile, "pt2=(", ")"), ',');
+            endpu.set_x(parameter.at(0));
+            endpu.set_y(parameter.at(1));
+            endpu.set_z(parameter.at(2));
+            endpu = ref.bearbpos(endpu);
+            fg.set_endpunkt(endpu);
+            QString ti = selektiereEintrag(zeile, "thickness=", "),");
+            fg.set_tiSta(ti);
+            fg.set_tiEnd(ti);
+            fg.set_bezug(ref.bezug());
+            fkon.add_hi(fg.text());
         }else if(zeile.contains("Arc("))
         {
             text_zw parameter;
