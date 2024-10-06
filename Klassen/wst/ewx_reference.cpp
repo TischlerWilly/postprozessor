@@ -123,6 +123,54 @@ void ewx_reference::set_text(QString text)
             //X = Refpunkt.x() - bearb.x()
             //Y = Refpunkt.y()
             //Z = Refpunkt.z() + Wst_dicke + bearb.y()
+        }else if(Vector_z.x() ==  1 && Vector_z.y() ==  0 && Vector_z.z() ==  0 && \
+                 Vector_x.x() ==  0 && Vector_x.y() == -1 && Vector_x.z() ==  0  )
+        {
+            //Reference(pt=(634.0000, 452.0000, 0.0000), vz=(1.0000, 0.0000, -0.0000), vx=(0.0000, -1.0000, 0.0000))
+            //Hole(pos=(20.0000, 9.5000, 0.0000), diameter=8.0000, depth=28.0000, passing=False),
+            //->bo.x = 634
+            //->bo.y = 30
+            //->bo.z = 9,5
+            Bezug = WST_BEZUG_RE;
+            //X = Refpunkt.x()
+            //Y = Refpunkt.y() - bearb.x()
+            //Z = Refpunkt.z() + bearb.y()
+        }else if(Vector_z.x() == -1 && Vector_z.y() ==  0 && Vector_z.z() ==  0 && \
+                 Vector_x.x() ==  0 && Vector_x.y() ==  1 && Vector_x.z() ==  0  )
+        {
+            //Reference(pt=(0.0000, 0.0000, 0.0000), vz=(-1.0000, 0.0000, 0.0000), vx=(0.0000, 1.0000, 0.0000))
+            //Hole(pos=(30.0000, 9.5000, 0.0000), diameter=8.0000, depth=28.0000, passing=False),
+            //->bo.x = 0
+            //->bo.y = 30
+            //->bo.z = 9,5
+            Bezug = WST_BEZUG_LI;
+            //X = Refpunkt.x()
+            //Y = Refpunkt.y() + bearb.x()
+            //Z = Refpunkt.z() + bearb.y()
+        }else if(Vector_z.x() ==  0 && Vector_z.y() == -1 && Vector_z.z() ==  0 && \
+                 Vector_x.x() == -1 && Vector_x.y() ==  0 && Vector_x.z() ==  0  )
+        {
+            //Reference(pt=(962.0000, 0.0000, 0.0000), vz=(0.0000, -1.0000, 0.0000), vx=(-1.0000, 0.0000, 0.0000))
+            //Hole(pos=(30.0000, 9.5000, 0.0000), diameter=8.0000, depth=28.0000, passing=False),
+            //->bo.x = 932
+            //->bo.y = 0
+            //->bo.z = 9,5
+            Bezug = WST_BEZUG_VO;
+            //X = Refpunkt.x() - bearb.x()
+            //Y = Refpunkt.y()
+            //Z = Refpunkt.z() + bearb.y()
+        }else if(Vector_z.x() ==  0 && Vector_z.y() ==  1 && Vector_z.z() ==  0 && \
+                 Vector_x.x() ==  1 && Vector_x.y() ==  0 && Vector_x.z() ==  0  )
+        {
+            //Reference(pt=(0.0000, 634.0000, 0.0000), vz=(0.0000, 1.0000, 0.0000), vx=(1.0000, -0.0000, 0.0000))
+            //Hole(pos=(30.0000, 9.5000, 0.0000), diameter=8.0000, depth=28.0000, passing=False),
+            //->bo.x = 932
+            //->bo.y = 500
+            //->bo.z = 5
+            Bezug = WST_BEZUG_HI;
+            //X = Refpunkt.x() + bearb.x()
+            //Y = Refpunkt.y()
+            //Z = Refpunkt.z() + bearb.y()
         }
     }
 }
@@ -233,6 +281,54 @@ punkt3d ewx_reference::bearbpos(punkt3d pos_in_ewx)
         retpos.set_x( Refpunkt.x() - pos_in_ewx.x() );
         retpos.set_y( Refpunkt.y() );
         retpos.set_z( Refpunkt.z() + Wst_dicke + pos_in_ewx.y() );
+    }else if(Vector_z.x() ==  1 && Vector_z.y() ==  0 && Vector_z.z() ==  0 && \
+                                                                                  Vector_x.x() ==  0 && Vector_x.y() == -1 && Vector_x.z() ==  0  )
+    {
+        //Reference(pt=(634.0000, 452.0000, 0.0000), vz=(1.0000, 0.0000, -0.0000), vx=(0.0000, -1.0000, 0.0000))
+        //Hole(pos=(20.0000, 9.5000, 0.0000), diameter=8.0000, depth=28.0000, passing=False),
+        //->bo.x = 634
+        //->bo.y = 30
+        //->bo.z = 9,5
+        //Bezug = WST_BEZUG_RE;
+        retpos.set_x( Refpunkt.x() );
+        retpos.set_y( Refpunkt.y() - pos_in_ewx.x() );
+        retpos.set_z( Refpunkt.z() + pos_in_ewx.y() );
+    }else if(Vector_z.x() == -1 && Vector_z.y() ==  0 && Vector_z.z() ==  0 && \
+             Vector_x.x() ==  0 && Vector_x.y() ==  1 && Vector_x.z() ==  0  )
+    {
+        //Reference(pt=(0.0000, 0.0000, 0.0000), vz=(-1.0000, 0.0000, 0.0000), vx=(0.0000, 1.0000, 0.0000))
+        //Hole(pos=(30.0000, 9.5000, 0.0000), diameter=8.0000, depth=28.0000, passing=False),
+        //->bo.x = 0
+        //->bo.y = 30
+        //->bo.z = 5
+        //Bezug = WST_BEZUG_LI;
+        retpos.set_x( Refpunkt.x() );
+        retpos.set_y( Refpunkt.y() + pos_in_ewx.x() );
+        retpos.set_z( Refpunkt.z() + pos_in_ewx.y() );
+    }else if(Vector_z.x() ==  0 && Vector_z.y() == -1 && Vector_z.z() ==  0 && \
+             Vector_x.x() == -1 && Vector_x.y() ==  0 && Vector_x.z() ==  0  )
+    {
+        //Reference(pt=(962.0000, 0.0000, 0.0000), vz=(0.0000, -1.0000, 0.0000), vx=(-1.0000, 0.0000, 0.0000))
+        //Hole(pos=(30.0000, 9.5000, 0.0000), diameter=8.0000, depth=28.0000, passing=False),
+        //->bo.x = 932
+        //->bo.y = 0
+        //->bo.z = 9,5
+        //Bezug = WST_BEZUG_VO;
+        retpos.set_x( Refpunkt.x() - pos_in_ewx.x() );
+        retpos.set_y( Refpunkt.y() );
+        retpos.set_z( Refpunkt.z() + pos_in_ewx.y() );
+    }else if(Vector_z.x() ==  0 && Vector_z.y() ==  1 && Vector_z.z() ==  0 && \
+             Vector_x.x() ==  1 && Vector_x.y() ==  0 && Vector_x.z() ==  0  )
+    {
+        //Reference(pt=(0.0000, 634.0000, 0.0000), vz=(0.0000, 1.0000, 0.0000), vx=(1.0000, -0.0000, 0.0000))
+        //Hole(pos=(30.0000, 9.5000, 0.0000), diameter=8.0000, depth=28.0000, passing=False),
+        //->bo.x = 932
+        //->bo.y = 500
+        //->bo.z = 5
+        //Bezug = WST_BEZUG_HI;
+        retpos.set_x( Refpunkt.x() + pos_in_ewx.x() );
+        retpos.set_y( Refpunkt.y() );
+        retpos.set_z( Refpunkt.z() + pos_in_ewx.y() );
     }
     return retpos;
 }
