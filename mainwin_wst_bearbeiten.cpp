@@ -186,9 +186,7 @@ void MainWin_wst_bearbeiten::update_listwidget()
             bearb = gehr_zu_prgzei(zeile.text());
         }
         ui->listWidget_prgtext->addItem(bearb);
-        QBrush brush;
-        brush.setColor(farbe);
-        ui->listWidget_prgtext->item(i+1)->setBackground(brush);
+        ui->listWidget_prgtext->item(i+1)->setBackground(farbe);
     }
     ui->listWidget_prgtext->addItem("...");
     if(currentRow < ui->listWidget_prgtext->count())

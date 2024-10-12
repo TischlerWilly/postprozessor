@@ -5690,9 +5690,20 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             wstkontur = true;
             ref.set_text("reference2 = Reference(pt=(0.0000, 0.0000, 0.0000), vz=(0.0000, 0.0000, 1.0000), vx=(1.0000, 0.0000, 0.0000))");
         }
-        if(wstkontur == true  &&  zeile.contains("]"))
+        if(wstkontur == true  &&  zeile.contains("]")) //Außenkontur WST
         {
             fauf.set_bezug(ref.bezug());
+            if(fkon.at(0).contains(BEARBART_FRAESERGERADE))
+            {
+                fraesergerade fg;
+                fg.set_text(fkon.at(0));
+                fauf.set_pos(fg.sp());
+            }else if(fkon.at(0).contains(BEARBART_FRAESERBOGEN))
+            {
+                fraeserbogen fb;
+                fb.set_text(fkon.at(0));
+                fauf.set_pos(fb.stapu());
+            }
             w.neue_bearbeitung(fauf.text());
             for(uint ii=0 ; ii<fkon.count() ; ii++)
             {
@@ -5701,14 +5712,83 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             fkon.clear();
             wstkontur = false;
         }
-        if(zeile.contains("name='PYTHA_ROUTE'"))
+        if(zeile.contains("name='PYTHA_ROUTE'")) //Fräsbahn
         {
+            /*
+            path3 = [
+                Line(pt1=(680.0000, 425.0000, 0.), pt2=(655.0000, 425.0000, 0.), thickness=17.0000),
+                Line(pt1=(655.0000, 425.0000, 0.), pt2=(655.0000, 406.0000, 0.), thickness=17.0000),
+                Line(pt1=(655.0000, 406.0000, 0.), pt2=(705.0000, 406.0000, 0.), thickness=17.0000),
+                Line(pt1=(705.0000, 406.0000, 0.), pt2=(705.0000, 425.0000, 0.), thickness=17.0000),
+                Line(pt1=(705.0000, 425.0000, 0.), pt2=(680.0000, 425.0000, 0.), thickness=17.0000),
+                ]
+            notes4 = {
+                'depth': 17.0000,
+                'compensation': 'right',
+                'tool_name': 'InnenKontur_W11_D12_NL23',
+                'tool': 11,
+                }
+            part1.add_layer(geometries=path3, reference=reference2, name='PYTHA_ROUTE', notes=notes4)
+            */
             fauf.set_bezug(ref.bezug());
+            fauf.set_bezug(ref.bezug());
+            if(fkon.at(0).contains(BEARBART_FRAESERGERADE))
+            {
+                fraesergerade fg;
+                fg.set_text(fkon.at(0));
+                fauf.set_pos(fg.sp());
+            }else if(fkon.at(0).contains(BEARBART_FRAESERBOGEN))
+            {
+                fraeserbogen fb;
+                fb.set_text(fkon.at(0));
+                fauf.set_pos(fb.stapu());
+            }
             w.neue_bearbeitung(fauf.text());
             for(uint ii=0 ; ii<fkon.count() ; ii++)
             {
                 w.neue_bearbeitung(fkon.at(ii));
             }
+            fkon.clear();
+        }
+        if(zeile.contains("name='PYTHA_GROOVE'")) //Nut
+        {
+            /*
+            path2 = [
+                Line(pt1=(-5.0000, 396.0000, 0.), pt2=(705.0000, 396.0000, 0.), thickness=6.5000),
+                Line(pt1=(705.0000, 396.0000, 0.), pt2=(705.0000, 404.5000, 0.), thickness=6.5000),
+                Line(pt1=(705.0000, 404.5000, 0.), pt2=(-5.0000, 404.5000, 0.), thickness=6.5000),
+                Line(pt1=(-5.0000, 404.5000, 0.), pt2=(-5.0000, 396.0000, 0.), thickness=6.5000),
+                ]
+            notes3 = {
+                'depth': 6.5000,
+                'tool_name': '11',
+                'tool': 11,
+                'extensionMode': 2,
+                'routeHint': 0,
+                }
+            part1.add_layer(geometries=path2, reference=reference2, name='PYTHA_GROOVE', notes=notes3)
+            */
+            //--------------------------------------------------------------------- ist noch falsch:
+            //--------------------------------------nicht als fkon sondern als Nut importieren!!
+            fauf.set_bezug(ref.bezug());
+            fauf.set_bezug(ref.bezug());
+            if(fkon.at(0).contains(BEARBART_FRAESERGERADE))
+            {
+                fraesergerade fg;
+                fg.set_text(fkon.at(0));
+                fauf.set_pos(fg.sp());
+            }else if(fkon.at(0).contains(BEARBART_FRAESERBOGEN))
+            {
+                fraeserbogen fb;
+                fb.set_text(fkon.at(0));
+                fauf.set_pos(fb.stapu());
+            }
+            w.neue_bearbeitung(fauf.text());
+            for(uint ii=0 ; ii<fkon.count() ; ii++)
+            {
+                w.neue_bearbeitung(fkon.at(ii));
+            }
+            //---------------------------------------------------------------------
             fkon.clear();
         }
 
@@ -5776,21 +5856,18 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
         }else if(zeile.contains("Arc("))
         {
             text_zw parameter;
-            fraeserbogen fb;
             punkt3d stapu;
             parameter.set_text(selektiereEintrag(zeile, "pt1=(", ")"), ',');
             stapu.set_x(parameter.at(0));
             stapu.set_y(parameter.at(1));
             stapu.set_z(parameter.at(2));
             stapu = ref.bearbpos(stapu);
-            fb.set_startpunkt(stapu);
             punkt3d endpu;
             parameter.set_text(selektiereEintrag(zeile, "pt2=(", ")"), ',');
             endpu.set_x(parameter.at(0));
             endpu.set_y(parameter.at(1));
             endpu.set_z(parameter.at(2));
             endpu = ref.bearbpos(endpu);
-            fb.set_endpunkt(endpu);
             punkt3d mipu;
             parameter.set_text(selektiereEintrag(zeile, "ptc=(", ")"), ',');
             mipu.set_x(parameter.at(0));
@@ -5801,33 +5878,45 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             s.set_stapu(stapu);
             s.set_endpu(mipu);
             double rad = s.laenge2d();
-            fb.set_rad(rad);
             QString ti = selektiereEintrag(zeile, "thickness=", "),");
-            fb.set_tiSta(ti);
-            fb.set_tiEnd(ti);
-            QString uzs = selektiereEintrag(zeile, ", cw=", ", ");
-            bool uzs_;
-            if(uzs == "False")
+            QString uzs_qstring = selektiereEintrag(zeile, ", cw=", ", ");
+            bool uzs;
+            if(uzs_qstring == "False")
             {
-                fb.set_uzs(false);
-                uzs_ = false;
+                uzs = false;
             }else
             {
-                fb.set_uzs(true);
-                uzs_ = true;
-            }
-            fb.set_bezug(ref.bezug());
-            if(fkon.count() == 0)
-            {
-                fauf.set_pos(stapu);
+                uzs = true;
             }
             //Bogen muss geteilt werden, weil meine Bogenklasse keine bögen verarbeiten kann die
             //weiter gehen als ein Halbbogen, Pytha solche Bögen jedoch teilweise exportiert:
-            punkt3d p = bogsehnmipu(stapu, endpu, mipu, uzs_);
-            fraeserbogen fb1 = fb;
-            fraeserbogen fb2 = fb;
+            if(ref.bezug() == WST_BEZUG_UNSEI)
+            {
+                uzs = !uzs;
+            }
+            punkt3d p = bogsehnmipu(stapu, endpu, mipu, uzs);
+            if(ref.bezug() == WST_BEZUG_UNSEI)
+            {
+                uzs = !uzs;
+            }
+            fraeserbogen fb1;
+            fb1.set_bezug(ref.bezug());
+            fb1.set_startpunkt(stapu);
             fb1.set_endpunkt(p);
+            fb1.set_tiSta(ti);
+            fb1.set_tiEnd(ti);
+            fb1.set_rad(rad);
+            fb1.set_uzs(uzs);
+
+            fraeserbogen fb2;
+            fb2.set_bezug(ref.bezug());
             fb2.set_startpunkt(p);
+            fb2.set_endpunkt(endpu);
+            fb2.set_tiSta(ti);
+            fb2.set_tiEnd(ti);
+            fb2.set_rad(rad);
+            fb2.set_uzs(uzs);
+
             fkon.add_hi(fb1.text());
             fkon.add_hi(fb2.text());
         }

@@ -520,7 +520,7 @@ void MainWindow::setup()
     {
         ui->lineEdit_zugabe_gehr->setText("20");
     }
-    ui->radioButton_vorschau_fmc->setChecked(true);
+    ui->radioButton_vorschau_eigen->setChecked(true);
 }
 void MainWindow::setup_wkz_pp()
 {
