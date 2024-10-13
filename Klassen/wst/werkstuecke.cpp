@@ -5768,27 +5768,131 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
                 }
             part1.add_layer(geometries=path2, reference=reference2, name='PYTHA_GROOVE', notes=notes3)
             */
-            //--------------------------------------------------------------------- ist noch falsch:
-            //--------------------------------------nicht als fkon sondern als Nut importieren!!
-            fauf.set_bezug(ref.bezug());
-            fauf.set_bezug(ref.bezug());
-            if(fkon.at(0).contains(BEARBART_FRAESERGERADE))
+            bool nut_gefunden = false;
+            if(fkon.count() == 4)
             {
-                fraesergerade fg;
-                fg.set_text(fkon.at(0));
-                fauf.set_pos(fg.sp());
-            }else if(fkon.at(0).contains(BEARBART_FRAESERBOGEN))
-            {
-                fraeserbogen fb;
-                fb.set_text(fkon.at(0));
-                fauf.set_pos(fb.stapu());
+                nut_gefunden = true;
+                fraesergerade fg1, fg2, fg3, fg4;
+                for(uint ii=0 ; ii<fkon.count() ; ii++)
+                {
+                    QString zeile = fkon.at(ii);
+                    if(zeile.contains(BEARBART_FRAESERGERADE))
+                    {
+                        if(ii==0)
+                        {
+                            fg1.set_text(zeile);
+                        }else if(ii==1)
+                        {
+                            fg2.set_text(zeile);
+                        }else if(ii==2)
+                        {
+                            fg3.set_text(zeile);
+                        }else if(ii==3)
+                        {
+                            fg4.set_text(zeile);
+                        }
+                    }else
+                    {
+                        nut_gefunden = false;
+                        break;//for
+                    }
+                }
+                if(nut_gefunden == true)
+                {
+                    strecke s1, s2;//Hirnenden der Nut
+                    if(fg1.strecke_().laenge2d() < fg2.strecke_().laenge2d())
+                    {
+                        s1 = fg1.strecke_();
+                        if(s1.laenge2d() == fg3.strecke_().laenge2d())
+                        {
+                            s2 = fg3.strecke_();
+                        }else if(s1.laenge2d() == fg4.strecke_().laenge2d())
+                        {
+                            s2 = fg4.strecke_();
+                        }else
+                        {
+                            nut_gefunden = false;
+                        }
+                    }else if(fg1.strecke_().laenge2d() > fg2.strecke_().laenge2d())
+                    {
+                        s1 = fg2.strecke_();
+                        if(s1.laenge2d() == fg3.strecke_().laenge2d())
+                        {
+                        }else if(s1.laenge2d() == fg4.strecke_().laenge2d())
+                        {
+                            s2 = fg4.strecke_();
+                        }else
+                        {
+                            nut_gefunden = false;
+                        }
+                    }else if(fg1.strecke_().laenge2d() == fg2.strecke_().laenge2d())
+                    {
+                        if(fg3.strecke_().laenge2d() == fg4.strecke_().laenge2d())
+                        {
+                            if(fg1.strecke_().laenge2d() < fg3.strecke_().laenge2d())
+                            {
+                                s1 = fg1.strecke_();
+                                s2 = fg2.strecke_();
+                            }else
+                            {
+                                s1 = fg3.strecke_();
+                                s2 = fg4.strecke_();
+                            }
+                        }else
+                        {
+                            nut_gefunden = false;
+                        }
+                    }else
+                    {
+                        nut_gefunden = false;
+                    }
+                    double ti;
+                    if(fg1.tiSta() == fg1.tiEnd() &&\
+                       fg1.tiSta() == fg2.tiSta() &&\
+                       fg1.tiSta() == fg2.tiEnd() &&\
+                       fg1.tiSta() == fg3.tiSta() &&\
+                       fg1.tiSta() == fg3.tiEnd() &&\
+                       fg1.tiSta() == fg4.tiSta() &&\
+                       fg1.tiSta() == fg4.tiEnd() )
+                    {
+                        ti = fg1.tiSta();
+                    }else
+                    {
+                        nut_gefunden = false;
+                    }
+                    if(nut_gefunden == true)
+                    {
+                        nut nu;
+                        nu.set_stapu(s1.mipu());
+                        nu.set_endpu(s2.mipu());
+                        nu.set_breite(s1.laenge2d());
+                        nu.set_bezug(ref.bezug());
+                        nu.set_tiefe(ti);
+                        w.neue_bearbeitung(nu.text());
+                    }
+                }
             }
-            w.neue_bearbeitung(fauf.text());
-            for(uint ii=0 ; ii<fkon.count() ; ii++)
+            if(nut_gefunden == false)
             {
-                w.neue_bearbeitung(fkon.at(ii));
+                fauf.set_bezug(ref.bezug());
+                fauf.set_bezug(ref.bezug());
+                if(fkon.at(0).contains(BEARBART_FRAESERGERADE))
+                {
+                    fraesergerade fg;
+                    fg.set_text(fkon.at(0));
+                    fauf.set_pos(fg.sp());
+                }else if(fkon.at(0).contains(BEARBART_FRAESERBOGEN))
+                {
+                    fraeserbogen fb;
+                    fb.set_text(fkon.at(0));
+                    fauf.set_pos(fb.stapu());
+                }
+                w.neue_bearbeitung(fauf.text());
+                for(uint ii=0 ; ii<fkon.count() ; ii++)
+                {
+                    w.neue_bearbeitung(fkon.at(ii));
+                }
             }
-            //---------------------------------------------------------------------
             fkon.clear();
         }
 

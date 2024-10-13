@@ -1557,6 +1557,7 @@ void MainWindow::set_prginfo()
     tmp += "  *.fmc  (IMAWOP4)\n";
     tmp += "  *.DXF mit Versionskennung AC1009\n";
     tmp += "  *.dxf mit Versionskennung AC1009\n";
+    tmp += "  *.ewx (Pytha an EasyWood)\n";
     tmp += "\n";
 
     tmp += "Hinweis zum GANX-Export:\n";
