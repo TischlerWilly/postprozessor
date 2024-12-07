@@ -5711,25 +5711,121 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             }
             fkon.clear();
             wstkontur = false;
-        }
-        if(zeile.contains("name='PYTHA_ROUTE'")) //Fräsbahn
+        }        
+        if(zeile.contains("name='PYTHA_ROUTE'")  ||  zeile.contains("name='PYTHA_POCKET'")) //Fräsbahn oder Tasche
         {
             /*
-            path3 = [
-                Line(pt1=(680.0000, 425.0000, 0.), pt2=(655.0000, 425.0000, 0.), thickness=17.0000),
-                Line(pt1=(655.0000, 425.0000, 0.), pt2=(655.0000, 406.0000, 0.), thickness=17.0000),
-                Line(pt1=(655.0000, 406.0000, 0.), pt2=(705.0000, 406.0000, 0.), thickness=17.0000),
-                Line(pt1=(705.0000, 406.0000, 0.), pt2=(705.0000, 425.0000, 0.), thickness=17.0000),
-                Line(pt1=(705.0000, 425.0000, 0.), pt2=(680.0000, 425.0000, 0.), thickness=17.0000),
+            Die PYTHA_POCKET muss keine rta oder kta sein, sondern kann auch eine Freiformtasche sein
+
+            path2 = [
+                Line(pt1=(444.0000, 32.0000, 0.), pt2=(83.0000, 32.0000, 0.), thickness=16.0000),
+                Arc(pt1=(83.0000, 32.0000, 0.), ptc=(83.0000, 57.0000, 0.), pt2=(58.0000, 57.0000, 0.), cw=True, thickness=16.0000),
+                Line(pt1=(58.0000, 57.0000, 0.), pt2=(58.0000, 418.0000, 0.), thickness=16.0000),
+                Arc(pt1=(58.0000, 418.0000, 0.), ptc=(83.0000, 418.0000, 0.), pt2=(83.0000, 443.0000, 0.), cw=True, thickness=16.0000),
+                Line(pt1=(83.0000, 443.0000, 0.), pt2=(444.0000, 443.0000, 0.), thickness=16.0000),
+                Arc(pt1=(444.0000, 443.0000, 0.), ptc=(444.0000, 418.0000, 0.), pt2=(469.0000, 418.0000, 0.), cw=True, thickness=16.0000),
+                Line(pt1=(469.0000, 418.0000, 0.), pt2=(469.0000, 57.0000, 0.), thickness=16.0000),
+                Arc(pt1=(469.0000, 57.0000, 0.), ptc=(444.0000, 57.0000, 0.), pt2=(444.0000, 32.0000, 0.), cw=True, thickness=16.0000),
                 ]
-            notes4 = {
-                'depth': 17.0000,
-                'compensation': 'right',
-                'tool_name': 'InnenKontur_W11_D12_NL23',
-                'tool': 11,
-                }
-            part1.add_layer(geometries=path3, reference=reference2, name='PYTHA_ROUTE', notes=notes4)
+            notes3 = {
+            'depth': 16.0000,
+            'tool_name': 'InnenKontur_W12_D8_NL23',
+            'tool': 12,
+            }
+            part1.add_layer(geometries=path2, reference=reference2, name='PYTHA_POCKET', notes=notes3)
             */
+            bool rta_gefunden = false;
+            if(fkon.count() == 5)
+            {
+                /*
+                path2 = [
+                    Line(pt1=(344.6575, 132.7342, 0.), pt2=(444.6575, 132.7342, 0.), thickness=4.0000),
+                    Line(pt1=(444.6575, 132.7342, 0.), pt2=(444.6575, 282.7342, 0.), thickness=4.0000),
+                    Line(pt1=(444.6575, 282.7342, 0.), pt2=(244.6575, 282.7342, 0.), thickness=4.0000),
+                    Line(pt1=(244.6575, 282.7342, 0.), pt2=(244.6575, 132.7342, 0.), thickness=4.0000),
+                    Line(pt1=(244.6575, 132.7342, 0.), pt2=(344.6575, 132.7342, 0.), thickness=4.0000),
+                    ]
+                */
+                rta_gefunden = true;
+                fraesergerade fg1, fg2, fg3, fg4, fg5;
+                for(uint ii=0 ; ii<fkon.count() ; ii++)
+                {
+                    QString zeile = fkon.at(ii);
+                    if(zeile.contains(BEARBART_FRAESERGERADE))
+                    {
+                        if(ii==0)
+                        {
+                            fg1.set_text(zeile);
+                        }else if(ii==1)
+                        {
+                            fg2.set_text(zeile);
+                        }else if(ii==2)
+                        {
+                            fg3.set_text(zeile);
+                        }else if(ii==3)
+                        {
+                            fg4.set_text(zeile);
+                        }else if(ii==4)
+                        {
+                            fg5.set_text(zeile);
+                        }
+
+                    }else
+                    {
+                        rta_gefunden = false;
+                        break;//for
+                    }
+                }
+                if(rta_gefunden == true)
+                {
+                    //Annahme: fg1 und fg5 zusammen sind eine Seite der rta
+                    strecke s1_5 = fg1.strecke_();
+                    s1_5.set_stapu(fg5.strecke_().stapu());
+                    strecke s2 = fg2.strecke_();
+                    strecke s3 = fg3.strecke_();
+                    strecke s4 =fg4.strecke_();
+                    if(s1_5.laenge2d() == s3.laenge2d() &&\
+                       s2.laenge2d() == s4.laenge2d()   )
+                    {
+                        rta_gefunden = true;
+                    }else
+                    {
+                        rta_gefunden = false;
+                    }
+                    double ti;
+                    if(fg1.tiSta() == fg1.tiEnd() &&\
+                       fg1.tiSta() == fg2.tiSta() &&\
+                       fg1.tiSta() == fg2.tiEnd() &&\
+                       fg1.tiSta() == fg3.tiSta() &&\
+                       fg1.tiSta() == fg3.tiEnd() &&\
+                       fg1.tiSta() == fg4.tiSta() &&\
+                       fg1.tiSta() == fg4.tiEnd() &&\
+                       fg1.tiSta() == fg5.tiSta() &&\
+                       fg1.tiSta() == fg5.tiEnd() )
+                    {
+                        ti = fg1.tiSta();
+                    }else
+                    {
+                        rta_gefunden = false;
+                    }
+                    if(rta_gefunden == true)
+                    {
+                        rechtecktasche rta;
+                        rta.set_wkznum(fauf.wkznum());
+                        rta.set_bezug(ref.bezug());
+                        rta.set_tiefe(ti);
+                        strecke s1_5__3;
+                        s1_5__3.set_stapu(fg1.strecke_().stapu());
+                        s1_5__3.set_endpu(s3.mipu());
+                        rta.set_mipu(s1_5__3.mipu());
+                        rta.set_drewi(s1_5__3.wink());
+                        rta.set_laenge(s2.laenge2d());
+                        rta.set_breite(s3.laenge2d());
+                        w.neue_bearbeitung(rta.text());
+                    }
+                }
+            }
+            //Auch wenn Tasche erkannt wird soll zusätzlich fkon eingelesen werden:
             fauf.set_bezug(ref.bezug());
             fauf.set_bezug(ref.bezug());
             if(fkon.at(0).contains(BEARBART_FRAESERGERADE))
@@ -5748,6 +5844,7 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             {
                 w.neue_bearbeitung(fkon.at(ii));
             }
+
             fkon.clear();
         }
         if(zeile.contains("name='PYTHA_GROOVE'")) //Nut
