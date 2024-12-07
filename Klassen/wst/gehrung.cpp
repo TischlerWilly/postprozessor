@@ -15,7 +15,7 @@ void gehrung::setup()
 {
     Winkel          = 0;
     Bezug           = WST_BEZUG_OBSEI;
-    Afb             = 1;
+    Afb             = "1";
     Werkzeugnummer  = "";
 }
 

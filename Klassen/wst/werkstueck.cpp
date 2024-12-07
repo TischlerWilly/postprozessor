@@ -150,6 +150,9 @@ QString werkstueck::cad_fehler(bool kurz)
                 if(bo.dm() == 6 && bo.tiefe() < dicke())
                 {
                     anz_asd++;
+                }else if(bo.dm() == 5 && bo.tiefe() == 14)
+                {
+                    anz_asd++;
                 }
             }
         }
@@ -174,7 +177,8 @@ QString werkstueck::cad_fehler(bool kurz)
         }
     }
     if(Name.contains("SchubFront") || \
-       Name.contains("Schubfront")      )
+       Name.contains("Schubfront") || \
+       Name.contains("SF")                )
     {
         uint anz_asd = 0; //Anzahl Aufschlagdämpfer
 
@@ -184,6 +188,9 @@ QString werkstueck::cad_fehler(bool kurz)
             {
                 bohrung bo(Bearb.at(i));
                 if(bo.dm() == 6 && bo.tiefe() < dicke())
+                {
+                    anz_asd++;
+                }else if(bo.dm() == 5 && bo.tiefe() == 14)
                 {
                     anz_asd++;
                 }

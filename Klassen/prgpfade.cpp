@@ -84,6 +84,14 @@ QString prgpfade::path_user()
     QString tmp;
     tmp = QDir::homePath();
     tmp += QDir::separator();
+
+#ifdef _WIN32
+    tmp += "AppData";
+    tmp += QDir::separator();
+    tmp += "Roaming";
+    tmp += QDir::separator();
+#endif //_WIN32
+
     tmp += ".postprozessor_V4";
     return tmp;
 }

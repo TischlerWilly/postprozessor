@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAsNeeded</enum>
+     <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
     </property>
     <property name="widgetResizable">
      <bool>true</bool>
@@ -80,7 +80,7 @@
        </rect>
       </property>
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -106,7 +106,7 @@
        </rect>
       </property>
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
      <widget class="QLabel" name="label_fkon_tiefe">
@@ -132,7 +132,7 @@
        </rect>
       </property>
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
      <widget class="QCheckBox" name="checkBox_geraden">
@@ -181,7 +181,7 @@
        </rect>
       </property>
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
      <widget class="QCheckBox" name="checkBox_formatierung_aufbrechen">
@@ -220,7 +220,7 @@
        </rect>
       </property>
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
      <widget class="QLabel" name="label_3">
@@ -259,7 +259,7 @@
        </rect>
       </property>
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
      <widget class="QWidget" name="layoutWidget">
@@ -399,7 +399,7 @@
        </rect>
       </property>
       <property name="lineWrapMode">
-       <enum>QPlainTextEdit::NoWrap</enum>
+       <enum>QPlainTextEdit::LineWrapMode::NoWrap</enum>
       </property>
       <property name="readOnly">
        <bool>true</bool>
@@ -478,6 +478,13 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
+         <widget class="QRadioButton" name="radioButton_vorschau_eigen">
+          <property name="text">
+           <string>eigen</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QRadioButton" name="radioButton_vorschau_fmc">
           <property name="toolTip">
            <string>Strg+F</string>
@@ -517,13 +524,6 @@
          <widget class="QRadioButton" name="radioButton_vorschau_ggf">
           <property name="text">
            <string>ggf</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radioButton_vorschau_eigen">
-          <property name="text">
-           <string>eigen</string>
           </property>
          </widget>
         </item>
@@ -660,13 +660,13 @@
        </rect>
       </property>
       <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
       </property>
       <property name="text">
        <string>X: / Y:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <set>Qt::AlignmentFlag::AlignCenter</set>
       </property>
      </widget>
      <widget class="QLabel" name="label_warnungen">
@@ -684,13 +684,13 @@
        </font>
       </property>
       <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
+       <enum>QFrame::Shape::NoFrame</enum>
       </property>
       <property name="text">
        <string>Warnungen</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <set>Qt::AlignmentFlag::AlignCenter</set>
       </property>
      </widget>
      <widget class="QLabel" name="label_wstmas">
@@ -706,7 +706,7 @@
        <string>L x B x D</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <set>Qt::AlignmentFlag::AlignCenter</set>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_gute_seite">

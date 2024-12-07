@@ -43,6 +43,7 @@ public:
         return Endpu;
     }
     punkt2d mitte();
+    punkt2d mitte2();
     inline punkt2d mittelpunkt()
     {
         return mitte();
@@ -98,5 +99,10 @@ private:
 
 
 };
+
+//Funktionen Außerhalb der Klasse:
+punkt2d mitte_(punkt3d stapu, punkt3d endpu, double rad, bool bogen_im_uzs);
+punkt3d bogsehnmipu(punkt3d stapu, punkt3d endpu, double rad, bool bogen_im_uzs);
+punkt3d bogsehnmipu(punkt3d stapu, punkt3d endpu, punkt3d mipu, bool bogen_im_uzs);
 
 #endif // BOGEN_H

@@ -520,7 +520,7 @@ void MainWindow::setup()
     {
         ui->lineEdit_zugabe_gehr->setText("20");
     }
-    ui->radioButton_vorschau_fmc->setChecked(true);
+    ui->radioButton_vorschau_eigen->setChecked(true);
 }
 void MainWindow::setup_wkz_pp()
 {
@@ -945,7 +945,7 @@ void MainWindow::on_lineEdit_pos_editingFinished()
     eingabe.replace(",", ".");
     double eingabe_double = eingabe.toDouble();
     QString tmp = double_to_qstring(eingabe_double);
-    if(eingabe.isEmpty() | (eingabe == tmp && eingabe_double <= 9999))
+    if(eingabe.isEmpty() || (eingabe == tmp && eingabe_double <= 9999))
     {
         eingabe.replace(".", ",");
         Projektposition = eingabe;
@@ -1557,6 +1557,7 @@ void MainWindow::set_prginfo()
     tmp += "  *.fmc  (IMAWOP4)\n";
     tmp += "  *.DXF mit Versionskennung AC1009\n";
     tmp += "  *.dxf mit Versionskennung AC1009\n";
+    tmp += "  *.ewx (Pytha an EasyWood)\n";
     tmp += "\n";
 
     tmp += "Hinweis zum GANX-Export:\n";
@@ -1796,7 +1797,8 @@ void MainWindow::on_action_oeffnen_triggered()
         }else
         {
             QString inhalt = datei.readAll();
-            QFileInfo info = aktueller_pfad;
+            QFileInfo info;
+            info.setFile(aktueller_pfad);
             QString wstname = info.fileName();
             QString dateiendung = ".ppf";
             wstname = wstname.left(wstname.length()-dateiendung.length());
@@ -1937,22 +1939,6 @@ void MainWindow::on_pushButton_einzelexport_clicked()
         QApplication::setOverrideCursor(Qt::WaitCursor);        
         //Exportieren:
         QFile f(pfad);
-        bool foauf;
-        if(Einstellung.formartierungen_aufbrechen())
-        {
-            foauf = true;
-        }else
-        {
-            foauf = false;
-        }
-        bool fkonkanschon;
-        if(Einstellung.fkon_kantenschonend())
-        {
-            fkonkanschon = true;
-        }else
-        {
-            fkonkanschon = false;
-        }
         if(ui->radioButton_vorschau_fmc->isChecked())
         {
             int i = ui->listWidget_wste->currentRow();
@@ -2160,7 +2146,7 @@ void MainWindow::on_pushButton_umbenennen_clicked()
                     ui->listWidget_wste->item(row)->setText(neuer_name);
                     wste.set_name(row, neuer_name);//Namensliste in wste
                     wste.wst(row)->set_name(neuer_name);//name des konkreten wst
-                    signal_wst_umbenennen(name, neuer_name);//gui
+                    emit signal_wst_umbenennen(name, neuer_name);//gui
                     on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
                 }
             }
@@ -2303,7 +2289,8 @@ void MainWindow::on_listWidget_wste_itemDoubleClicked()
 {
     emit sendProgrammtext(wste.wst(ui->listWidget_wste->currentRow()));
 }
-void MainWindow::on_listWidget_wste_itemClicked(QListWidgetItem *item)
+//void MainWindow::on_listWidget_wste_itemClicked(QListWidgetItem *item)
+void MainWindow::on_listWidget_wste_itemClicked()
 {
     on_listWidget_wste_currentRowChanged(ui->listWidget_wste->currentRow());
 }
@@ -2333,6 +2320,7 @@ void MainWindow::import()
     QString fmcA = FMC_PRGA;
     QString fmcB = FMC_PRGB;
     QString dxf = DXF;
+    QString ewx = EWX;
 
     //Dateien einlesen:
     text_zw nam_mit_obsei;//Liste mit allen grundnamen die Oberseite sind
@@ -2404,8 +2392,8 @@ void MainWindow::import()
                     originaldatei.remove();
                 }
             }
-        }else if(dateien_alle.at(i).right(fmc.length()) == DXF  || \
-                 dateien_alle.at(i).right(fmc.length()) == DXF_     )
+        }else if(dateien_alle.at(i).right(dxf.length()) == DXF  || \
+                 dateien_alle.at(i).right(dxf.length()) == DXF_     )
         {
             QString nam_ohn_end = dateien_alle.at(i).left(dateien_alle.at(i).length()-dxf.length());
             QString kenOb = Einstellung_dxf.kenObsei();
@@ -2440,6 +2428,30 @@ void MainWindow::import()
             {
                 QString inhalt = datei.readAll();
                 wste.import_dxf(nam_ohn_pref, inhalt, ist_oberseite);
+                datei.close();
+                if(Einstellung.quelldateien_erhalten() == false)
+                {
+                    QFile originaldatei(pfad);
+                    originaldatei.remove();
+                }
+            }
+        }else if(dateien_alle.at(i).right(ewx.length()) == EWX)
+        {
+            QString nam_ohn_end = dateien_alle.at(i).left(dateien_alle.at(i).length()-ewx.length());
+            wste.neu(nam_ohn_end, EWX);;//Wst wird nur angelegt wenn es nicht schon existiert
+            QString pfad = Einstellung.verzeichnis_quelle() + QDir::separator() + dateien_alle.at(i);
+            QFile datei(pfad);
+            if(!datei.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+                QString tmp = "Fehler beim Dateizugriff!\n";
+                tmp += pfad;
+                tmp += "\n";
+                tmp += "in der Funktion on_pushButton_start_clicked";
+                QMessageBox::warning(this,"Fehler",tmp,QMessageBox::Ok);
+            }else
+            {
+                QString inhalt = datei.readAll();
+                wste.import_ewx(nam_ohn_end, inhalt);
                 datei.close();
                 if(Einstellung.quelldateien_erhalten() == false)
                 {
@@ -2554,7 +2566,7 @@ void MainWindow::speichere_ausgabepfad(QString pfad)
 {
     if(!pfad.isEmpty())
     {
-        if(pfad.contains(".fmc") | pfad.contains(".ganx") | pfad.contains(".ggf") | pfad.contains(".eigen"))
+        if(pfad.contains(".fmc") || pfad.contains(".ganx") || pfad.contains(".ggf") || pfad.contains(".eigen"))
         {
             QString pfad_neu = text_links(pfad, QDir::separator());;
             pfad_neu += QDir::separator();

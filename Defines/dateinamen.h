@@ -16,6 +16,8 @@
 #define DXF         ".dxf"
 #define DXF_        ".DXF"
 
+#define EWX         ".ewx"
+
 
 #define EIGENES_FORMAT  ".ppf"  //Post-Prozessor-Format
 

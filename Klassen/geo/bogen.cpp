@@ -265,6 +265,49 @@ punkt2d bogen::mitte()
         return tmp;
     }
 }
+punkt2d mitte_(punkt3d stapu, punkt3d endpu, double rad, bool bogen_im_uzs)
+{
+    double dx = endpu.x() - stapu.x();
+    double dy = endpu.y() - stapu.y();
+
+    // Abstand zwischen Start- und Endpunkt
+    double chord = std::sqrt(dx * dx + dy * dy);
+
+    // Mittelpunkt der Sehne
+    punkt2d chordMidpoint;
+    chordMidpoint.set_x((stapu.x() + endpu.x()) / 2);
+    chordMidpoint.set_y((stapu.y() + endpu.y()) / 2);
+    //Point chordMidpoint = {(start.x + end.x) / 2, (start.y + end.y) / 2};
+
+    // Höhe des Kreisbogens
+    double h = std::sqrt(rad * rad - (chord / 2) * (chord / 2));
+
+    // Normalisierter Vektor senkrecht zur Sehne
+    double nx = -dy / chord;
+    double ny = dx / chord;
+
+    // Vorzeichen der Höhe basierend auf der Bogenrichtung
+    //int sign = (direction == Direction::CCW) ? 1 : -1;
+    int sign;
+    if(bogen_im_uzs)
+    {
+        sign = -1;
+    }else
+    {
+        sign = 1;
+    }
+
+    // Bogenmittelpunkt
+    punkt2d arcMidpoint;
+    arcMidpoint.set_x(chordMidpoint.x() + sign * h * nx);
+    arcMidpoint.set_y(chordMidpoint.y() + sign * h * ny);
+
+    return arcMidpoint;
+}
+punkt2d bogen::mitte2()
+{
+    return mitte_(Stapu, Endpu, Rad, Bogen_im_uzs);
+}
 
 void bogen::set_bogenwinkel(double wi, bogen_bezugspunkt bezug)
 {
@@ -332,4 +375,76 @@ void bogen::mb()
     QMessageBox mb;
     mb.setText(msg);
     mb.exec();
+}
+
+punkt3d bogsehnmipu(punkt3d stapu, punkt3d endpu, double rad, bool bogen_im_uzs)
+{
+    punkt2d mipu = mitte_(stapu, endpu, rad, bogen_im_uzs);
+
+    // Vektoren vom Mittelpunkt zum Start- und Endpunkt berechnen
+    double vx1 = stapu.x() - mipu.x();
+    double vy1 = stapu.y() - mipu.y();
+    double vx2 = endpu.x() - mipu.x();
+    double vy2 = endpu.y() - mipu.y();
+
+    // Radius berechnen
+    //double radius = std::sqrt(vx1 * vx1 + vy1 * vy1);
+
+    // Winkel zwischen den Vektoren berechnen
+    double angle = std::atan2(vy2, vx2) - std::atan2(vy1, vx1);
+    if (angle < 0) angle += 2 * M_PI;
+
+    // Halben Winkel berechnen
+    double halfAngle = angle / 2.0;
+
+    // Rotationsmatrix anwenden
+    double cosHalfAngle = std::cos(halfAngle);
+    double sinHalfAngle = std::sin(halfAngle);
+    double rotatedX = vx1 * cosHalfAngle - vy1 * sinHalfAngle;
+    double rotatedY = vx1 * sinHalfAngle + vy1 * cosHalfAngle;
+
+    // Punkt in der Mitte der Bogenlänge berechnen
+    punkt3d bomipu;
+    bomipu.set_x(mipu.x() + rotatedX);
+    bomipu.set_y(mipu.y() + rotatedY);
+
+    return bomipu;
+}
+punkt3d bogsehnmipu(punkt3d stapu, punkt3d endpu, punkt3d mipu, bool bogen_im_uzs)
+{
+    double vx1 = stapu.x() - mipu.x();
+    double vy1 = stapu.y() - mipu.y();
+    double vx2 = endpu.x() - mipu.x();
+    double vy2 = endpu.y() - mipu.y();
+
+    // Radius berechnen
+    //double radius = std::sqrt(vx1 * vx1 + vy1 * vy1);
+
+    // Winkel zwischen den Vektoren berechnen
+    double angle = std::atan2(vy2, vx2) - std::atan2(vy1, vx1);
+
+    // Winkel anpassen basierend auf der Richtung
+    if (bogen_im_uzs)
+    {
+        if (angle > 0) angle -= 2 * M_PI;
+    } else// CCW
+    {
+        if (angle < 0) angle += 2 * M_PI;
+    }
+
+    // Halben Winkel berechnen
+    double halfAngle = angle / 2.0;
+
+    // Rotationsmatrix anwenden
+    double cosHalfAngle = std::cos(halfAngle);
+    double sinHalfAngle = std::sin(halfAngle);
+    double rotatedX = vx1 * cosHalfAngle - vy1 * sinHalfAngle;
+    double rotatedY = vx1 * sinHalfAngle + vy1 * cosHalfAngle;
+
+    // Punkt in der Mitte der Bogenlänge berechnen
+    punkt3d midpoint;
+    midpoint.set_x(mipu.x() + rotatedX);
+    midpoint.set_y(mipu.y() + rotatedY);
+
+    return midpoint;
 }

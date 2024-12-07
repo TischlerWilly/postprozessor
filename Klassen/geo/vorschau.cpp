@@ -1062,10 +1062,10 @@ void vorschau::mouseMoveEvent(QMouseEvent *event)
 {
     if(Mrg)
     {
-        Npv.x = Npv.x + Maus_pos_alt_x-event->x();
-        Npv.y = Npv.y + Maus_pos_alt_y-event->y();
-        Maus_pos_alt_x = event->x();
-        Maus_pos_alt_y = event->y();
+        Npv.x = Npv.x + Maus_pos_alt_x - event->pos().x();
+        Npv.y = Npv.y + Maus_pos_alt_y - event->pos().y();
+        Maus_pos_alt_x = event->pos().x();
+        Maus_pos_alt_y = event->pos().y();
         this->update();
     }
 
@@ -1081,13 +1081,13 @@ void vorschau::mouseMoveEvent(QMouseEvent *event)
 }
 void vorschau::wheelEvent(QWheelEvent *event)
 {
-    QPoint mauspos = event->pos();
+    QPointF mauspos = event->position();
     mauspos.setY(this->height()-mauspos.y());
     QPoint wstpos;
     wstpos.setX(  (mauspos.x() - N.x+Npv.x)  /Sf/Zf  );
     wstpos.setY(  (N.x+Npv.y - mauspos.y())  /Sf/Zf  );
 
-    int i = event->delta();
+    int i = event->angleDelta().y();
     if(i<0)
     {
         zoom(false);
@@ -1114,11 +1114,11 @@ void vorschau::wheelEvent(QWheelEvent *event)
 }
 void vorschau::mousePressEvent(QMouseEvent *event)
 {
-    if(event->button() == Qt::MidButton)
+    if(event->button() == Qt::MiddleButton)
     {
         Mrg = true;
-        Maus_pos_alt_x = event->x();
-        Maus_pos_alt_y = event->y();
+        Maus_pos_alt_x = event->pos().x();
+        Maus_pos_alt_y = event->pos().y();
     }else if(event->button() == Qt::RightButton)
     {
         punkt2d pwst;
@@ -1134,18 +1134,20 @@ void vorschau::mousePressEvent(QMouseEvent *event)
         Zeile_von_maus_pos = zeile;
         slot_aktives_Element_einfaerben(zeile);
 
-        sende_zeilennummer(Zeile_von_maus_pos, false);
+        emit sende_zeilennummer(Zeile_von_maus_pos, false);
 
         QMenu m(this);
-        m.addAction("Ansicht einpassen", this, SLOT(slot_zf_gleich_eins()), 0) ;
-        m.addAction(msg_pos_wst, this, SLOT(slot_tunix()), 0) ;
+        //m.addAction("Ansicht einpassen", this, SLOT(slot_zf_gleich_eins()), 0) ;altes qt
+        m.addAction("Ansicht einpassen", 0, this, SLOT(slot_zf_gleich_eins()));
+        //m.addAction(msg_pos_wst, this, SLOT(slot_tunix()), 0) ;//altes qt
+        m.addAction(msg_pos_wst, 0, this, SLOT(slot_tunix())) ;
         if(Bearb_erlaubt == true)
         {
             QString msgedit;
             msgedit += "Zeile ";
             msgedit += int_to_qstring(zeile);
             msgedit += " bearbeiten";
-            m.addAction(msgedit, this, SLOT(slot_sende_zeilennummer()), 0) ;
+            m.addAction(msgedit, 0, this, SLOT(slot_sende_zeilennummer())) ;
         }
         m.exec(this->mapFrom(this, QCursor::pos()));
 
@@ -1165,7 +1167,7 @@ void vorschau::slot_sende_zeilennummer()
 }
 void vorschau::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(event->button() == Qt::MidButton)
+    if(event->button() == Qt::MiddleButton)
     {
         Mrg = false;
     }

@@ -186,7 +186,7 @@ void MainWin_wst_bearbeiten::update_listwidget()
             bearb = gehr_zu_prgzei(zeile.text());
         }
         ui->listWidget_prgtext->addItem(bearb);
-        ui->listWidget_prgtext->item(i+1)->setBackgroundColor(farbe);
+        ui->listWidget_prgtext->item(i+1)->setBackground(farbe);
     }
     ui->listWidget_prgtext->addItem("...");
     if(currentRow < ui->listWidget_prgtext->count())
@@ -209,7 +209,10 @@ void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int current
 {
     for(int i=0; i<ui->listWidget_prgtext->count();i++)
     {
-        ui->listWidget_prgtext->item(i)->setTextColor(Qt::black);
+        //ui->listWidget_prgtext->item(i)->setTextColor(Qt::black);//altes qt
+        QBrush brush;
+        brush.setColor(Qt::black);
+        ui->listWidget_prgtext->item(i)->setForeground(brush);
         QFont font;
         font.setBold(false);
         //font.setPointSize(10);
@@ -217,7 +220,10 @@ void MainWin_wst_bearbeiten::on_listWidget_prgtext_currentRowChanged(int current
     }
     if(currentRow >=0 && currentRow < ui->listWidget_prgtext->count())
     {
-        ui->listWidget_prgtext->item(currentRow)->setTextColor(Qt::red);
+        //ui->listWidget_prgtext->item(currentRow)->setTextColor(Qt::red);//altes qt
+        QBrush brush;
+        brush.setColor(Qt::red);
+        ui->listWidget_prgtext->item(currentRow)->setForeground(brush);
         QFont font;
         font.setBold(true);
         //font.setPointSize(11);
