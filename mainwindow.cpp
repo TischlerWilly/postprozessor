@@ -1817,9 +1817,39 @@ void MainWindow::on_action_oeffnen_triggered()
         }
     }
     werkstueck w;//leeres wst
-    sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken
+    emit sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken
     update_listwidget_wste();
-    signal_exporte(wste.namen_tz());
+    emit signal_exporte(wste.namen_tz());
+}
+void MainWindow::on_action_neu_triggered()
+{
+    QString wstname = "Neu";
+    bool name_vorhanden = false;
+    for(uint i=0;i<wste.anzahl();i++)
+    {
+        if(wstname == wste.name(i))
+        {
+            name_vorhanden = true;
+            break;
+        }
+    }
+    if(name_vorhanden == true)
+    {
+        QString msg;
+        msg  = "Ein Bauteil mit dem Namen \"Neu\" ist bereits vorhanden!\n";
+        msg += "Bitte benennen Sie das vorhandene Bauteil zunächst um.";
+        QMessageBox mb;
+        mb.setWindowTitle("Bauteil \"Neu\" erzeugen");
+        mb.setText(msg);
+        mb.exec();
+    }else
+    {
+        wste.neu(wstname, "PPneu", 500, 300, 19);
+        werkstueck w;//leeres wst
+        emit sendVorschauAktualisieren(w, 0);//leeres wst an vorschau schicken
+        update_listwidget_wste();
+        emit signal_exporte(wste.namen_tz());//an dlg mit exportübersicht
+    }
 }
 //-----------------------------------------------------------------------Buttons:
 void MainWindow::on_pushButton_dateien_auflisten_clicked()
@@ -2629,6 +2659,9 @@ void MainWindow::update_btn_gute_seite(bool gut_oben)
         ui->pushButton_gute_seite->setText("Gute Seite unten");
     }
 }
+
+
+
 
 
 

@@ -100,10 +100,8 @@ private slots:
     void on_pushButton_gute_seite_clicked();
     void on_actionSchliessen_triggered();
     void on_action_oeffnen_triggered();
-
-
-
     void on_actionEigenes_Format_imm_mit_exportieren_triggered(bool checked);
+    void on_action_neu_triggered();
 
 private:
     Ui::MainWindow *ui;

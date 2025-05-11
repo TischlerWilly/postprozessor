@@ -26,6 +26,7 @@ public:
 
     //--------------------------------------------------set_xy:
     bool neu(QString Werkstueckname, QString Quellformat);
+    bool neu(QString Werkstueckname, QString Quellformat, double laenge, double breite, double dicke);
     bool import_ppf(QString Werkstueckname, QString importtext);
     QString eigen_import_parameter(QString parameterzeile, QString parameterbezeichnung);
     bool import_fmc(QString Werkstueckname, QString importtext, bool istOberseite);

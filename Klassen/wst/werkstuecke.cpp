@@ -25,6 +25,24 @@ bool werkstuecke::neu(QString Werkstueckname, QString Quellformat)
     }
     return false;
 }
+bool werkstuecke::neu(QString Werkstueckname, QString Quellformat, double laenge, double breite, double dicke)
+{
+    if(ist_bekannt(Werkstueckname))
+    {
+        return true;//FEHLER, der Teil gibt es bereits!!!
+    }else
+    {
+        Namen.add_hi(Werkstueckname);
+        Quellformate.add_hi(Quellformat);
+        werkstueck w(Werkstueckname);
+        w.set_laenge(laenge);
+        w.set_breite(breite);
+        w.set_dicke(dicke);
+        w.set_zugabe_gehrungen(Zugabe_gehrungen);
+        Wste.append(w);
+    }
+    return false;
+}
 bool werkstuecke::entf(QString Werkstueckname)
 {
     int wst_index = get_index(Werkstueckname);

@@ -774,6 +774,7 @@
     </property>
     <addaction name="actionSchliessen"/>
     <addaction name="action_oeffnen"/>
+    <addaction name="action_neu"/>
    </widget>
    <addaction name="menuWerkzeug"/>
    <addaction name="menuEinstellungen"/>
@@ -899,6 +900,11 @@
    </property>
    <property name="text">
     <string>Eigenes Format immer mit exportieren</string>
+   </property>
+  </action>
+  <action name="action_neu">
+   <property name="text">
+    <string>Neu</string>
    </property>
   </action>
  </widget>
