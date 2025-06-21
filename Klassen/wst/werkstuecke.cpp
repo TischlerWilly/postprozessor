@@ -5718,7 +5718,7 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
                 fauf.set_pos(fg.sp());
             }else if(fkon.at(0).contains(BEARBART_FRAESERBOGEN))
             {
-                fraeserbogen fb;
+                fraeserbogen fb;                
                 fb.set_text(fkon.at(0));
                 fauf.set_pos(fb.stapu());
             }
@@ -6113,7 +6113,19 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             {
                 uzs = !uzs;
             }
-            punkt3d p = bogsehnmipu(stapu, endpu, mipu, uzs);
+            punkt3d p;
+            if(stapu != endpu)
+            {
+                p = bogsehnmipu(stapu, endpu, mipu, uzs);
+            }
+            else
+            {
+                strecke s;
+                s.set_stapu(stapu);
+                s.set_endpu(mipu);
+                s.set_laenge_2d(s.laenge2d()*2, strecke_bezugspunkt_start);
+                p = s.endpu();
+            }
             if(ref.bezug() == WST_BEZUG_UNSEI)
             {
                 uzs = !uzs;
