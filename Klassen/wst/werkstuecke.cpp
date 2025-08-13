@@ -5695,6 +5695,7 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
     ref.set_wst_dicke(w.dicke());
     text_zw fkon;
     fraeseraufruf fauf;
+    fauf.set_radkor(FRKOR_M); //Default-Wert
     bool wstkontur = false;
     for(uint i=0; i<tz.count() ;i++)
     {
@@ -5728,6 +5729,7 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
                 w.neue_bearbeitung(fkon.at(ii));
             }
             fkon.clear();
+            fauf.set_radkor(FRKOR_M); //Default-Wert
             wstkontur = false;
         }        
         if(zeile.contains("name='PYTHA_ROUTE'")  ||  zeile.contains("name='PYTHA_POCKET'")) //Fräsbahn oder Tasche
@@ -5864,6 +5866,7 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
             }
 
             fkon.clear();
+            fauf.set_radkor(FRKOR_M); //Default-Wert
         }
         if(zeile.contains("name='PYTHA_GROOVE'")) //Nut
         {
@@ -6009,6 +6012,7 @@ bool werkstuecke::import_ewx(QString Werkstueckname, QString importtext)
                 }
             }
             fkon.clear();
+            fauf.set_radkor(FRKOR_M); //Default-Wert
         }
 
         if(zeile.contains("'tool_name':"))
